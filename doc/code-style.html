@@ -1,0 +1,193 @@
+<html>
+<body>
+
+<pre>
+    <h1>CODE STYLE</h1>
+
+    <h2>Section 1. File extensions.</h2>
+
+	.cpp - C++ code
+	.c   - C code
+	.h   - C/C++ header
+	.pro - Project file
+    
+    <h2>Section 2. File names.</h2>
+
+	We tend to keep the names of a class and the file it is defined in
+    to be the same. It means, if we have a class MyClass then the file name
+    will be MyClass.{cpp,h}
+
+    <h2>Section 3. General.</h2>
+	
+	- We prefer a tab size equal to 4.
+	- #ifndef instruction in a header should go like this:
+	
+    <h3>Example:</h3>
+    <code>
+    #ifndef MYCLASS_H
+    #define MYCLASS_H
+    ...
+    #endif // MYCLASS_H
+    </code>
+    
+    <h2>Section 4. Variable and function names.</h2>
+    
+	The name of a variable/function should be clear enough to find out
+    the purpose of it. The name should start with a lower case letter. In
+    case the name consists of several words all words but first one should
+    start with an upper case letter.
+    
+    The following prefixes are used to recognize different kinds of variable:
+    - "ip" means the function's input parameter
+    - "op" means the function's output parameter
+    - "m" means the class data member
+    - "g" means that the variable is global
+    
+    As for local variable they are not prefixed.
+    
+    <h3>Example:</h3>
+    <code>
+    int localName;<br>
+    void start();<br>
+    void getFirstParent(T *ipSomeObject);<br>
+    <br>
+    class A<br>
+    {<br>
+	int mCount;<br>
+    };<br>
+    </code>
+
+    <h2>Section 5. Formating functions.</h2>
+    
+    Any function should be formatted as follows:
+    
+    return_type
+    [class_name::]functionName(parameters_list)
+    
+    If the parameters list is long enough and doesn't fit in a line ( let it
+    be 80 characters), each paramater starting from the second on that list
+    may be written on a separate line.
+    
+    <h3>Example:</h3>
+    <code>
+    int
+    doSomeAction(int ipFirstParam,
+                 int ipSecondParam,
+		 ...
+		 int ipLastParam)
+    </code>
+    
+    <h2>Section 6. Formatting classes.</h2>
+    
+	At any case each class member either function or data should have
+    its type and name separated by a single space.
+    
+	The access sections of the class must appear in the following order:
+    public, protected, private (two sections for functions and variables,
+    variables are the first, functions are the last; see example).
+
+	The rule for getters/setters names is that a setter for any member
+    is prefixed with 'set' and getter is not.
+
+	The order of getters/setters is: getter1, setter1, getter2, setter2,
+    and so on.
+
+    <h3>Example:</h3>
+    <code>
+    /*
+     * Comments about this class
+     */
+    class SomeClass {
+	public:
+	    <declare variables here>
+	public:
+	    <declare functions here>
+	    T value1() const;
+	    void setValue1(T ipParam);
+
+	    T value2() const;
+	    void setValue2(T ipParam);
+	    ...
+	protected:
+	    <declare variables here>
+	protected:
+	    <declare functions here>
+	private:
+	    <declare variables here>
+	private:
+	    <declare functions here>
+    };
+    </code>
+    
+    <h2>Section 7. Braces and parentheses.</h2>
+    
+	If a brace is an openning one for a class or a function, then it
+    should go on the next line after that has class keyword or function
+    signature.
+    
+    If a brace is an openning one for an if, for, switch, etc. then it
+    should go on the same line as the corresponding keyword.
+    
+    An openning parantheses for a function's parameters list should not be
+    separated from this function's name with a space character. However it
+    should be seperated with a single space if it goes for an if, for,
+    switch, etc., blocks.
+    
+    The expression inside the parantheses should not be separated from them
+    with any space characters.
+    
+    The closing parantheses should be separated from the opening brace with
+    a single space.
+    
+    <h3>Example:</h3>
+    <code>
+    int someFunction(...);<br>
+    <br>
+    if (some_expr) {<br>
+    ...<br>
+    }<br>
+    </code>
+
+    <h2>Section 8. Long lines.</h2>
+    
+	If a line exceeds the width limit it should be broken into several
+    parts. In case of a long if expression containing many sections between
+    ||, &&, etc. a new line-part should start with a logical operator.
+    
+    <h2>Section 9. Switch block.</h2>
+    
+	The switch-block has to look like this
+    
+    <h3>Example:</h3>
+    <code>
+    switch (some_var) {
+	case EnumElementWithLongName:
+	// (tabsize > 4) ? 1 tab : 2 tabs;
+	case OtherCase:
+	// some code
+	default:
+	// default code
+    };
+    </code>
+    
+    <h2>Section 10. Calling default constructor.</h2>
+
+	Declaring a variable on stack should be as following:
+	<code>A a;</code>
+	Declaring a variable on heap should be as following:
+	<code>A *a = new A();</code>
+
+    <h2>Section 11. Enum items.</h2>
+    
+	If a class has the enum defined inside it, then the enum item (when
+    used in code) should be prefixed with the class' name.
+    
+    <h3>Example:</h3>
+    <code>
+    case Class::ItemName: .....
+    </code>
+    
+</pre>
+
+</body>
+</html>

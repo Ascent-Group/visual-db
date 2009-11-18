@@ -1,0 +1,7 @@
+1. Installation
+
+    a) make sure you have Qt4 installed and PostgreSQL driver has been built. (Qt >= 4.4.0)
+    b) tar xfvz visual-db.tar.gz
+    c) cd visual-db
+    d) qmake
+    e) make

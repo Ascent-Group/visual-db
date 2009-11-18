@@ -1,0 +1,8 @@
+========
+VISUALDB
+========
+
+    Database structure visualization tool for Open Source DBMS, such as
+PostgreSQL, MySQL and SQLite.
+
+    Used development framework: Qt4.

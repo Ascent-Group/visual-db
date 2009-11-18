@@ -1,0 +1,39 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>visual_db_en.ts</file>
+        <file>visual_db_ru.ts</file>
+        <file>img/logo.png</file>
+        <file>img/connect_creating.png</file>
+        <file>img/filesave.png</file>
+        <file>img/exit.png</file>
+        <file>img/selectall.png</file>
+        <file>img/eraser.png</file>
+        <file>img/remove.png</file>
+        <file>img/pencil.png</file>
+        <file>img/window_new.png</file>
+        <file>img/configure.png</file>
+        <file>img/colors.png</file>
+        <file>img/adjustsize.png</file>
+        <file>img/show.png</file>
+        <file>img/hide.png</file>
+        <file>img/group.png</file>
+        <file>img/ungroup.png</file>
+        <file>img/key.png</file>
+        <file>img/foreignkey.png</file>
+        <file>img/table.png</file>
+        <file>img/field.png</file>
+        <file>img/folder.png</file>
+        <file>img/closetab.png</file>
+        <file>img/run.png</file>
+        <file>img/uparrow.png</file>
+        <file>img/downarrow.png</file>
+        <file>img/fulldownarrow.png</file>
+        <file>img/safequery.png</file>
+	<file>img/cursor-openhand.png</file>
+        <file>img/up.png</file>
+        <file>img/down.png</file>
+        <file>img/left.png</file>
+        <file>img/right.png</file>
+        <file>img/reload.png</file>
+    </qresource>
+</RCC>

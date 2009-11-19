@@ -95,6 +95,9 @@ class MainWindow : public QMainWindow
         QAction	*mUngroupItemsAction;
         QAction	*mColorizeAccordingSchemasAction;
         QAction	*mShowGridAction;
+	QAction *mAttachToGridAction;
+	QAction *mAnchorAction;
+	QAction *mWeightAnchorAction;
         QAction	*mDivideOnPagesAction;
         QAction	*mShowControlWidgetAction;
         QAction	*mShowLegendAction;

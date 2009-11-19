@@ -52,6 +52,8 @@ class GraphicsScene : public QGraphicsScene {
     Q_OBJECT
 
     public:
+	static const int LOW_GRID_DX = 10;
+	static const int LOW_GRID_DY = 10;
         static const int DEFAULT_WIDTH = 2000;
         static const int DEFAULT_HEIGHT = 1500;
 
@@ -83,6 +85,7 @@ class GraphicsScene : public QGraphicsScene {
 	void ungroupItems();
 	void colorizeAccordingSchemas();
 	void showGrid(bool);
+	void attachToGrid(bool);
 	void divideOnPages(bool);
 	void showLegend(bool);
 	void moveLegend(int, int);

@@ -241,6 +241,17 @@ void MainWindow::createActions()
     mUngroupItemsAction->setStatusTip(tr("Ungroup items"));
     connect(mUngroupItemsAction, SIGNAL(triggered()), mSceneWidget, SLOT(ungroupItems()));
 
+    // anchor for tables
+    mAnchorAction = new QAction(tr("Anchor"), this);
+    mAnchorAction->setIcon(QIcon(":img/anchor.png"));
+    mAnchorAction->setStatusTip(tr("To anchor for selected tables"));
+    connect(mAnchorAction, SIGNAL(triggered()), mSceneWidget, SLOT(anchorTables()));
+
+    // weight anchor for tables
+    mWeightAnchorAction = new QAction(tr("Weight anchor"), this);
+    mWeightAnchorAction->setStatusTip("To weight anchor for selected tables");
+    connect(mWeightAnchorAction, SIGNAL(triggered()), mSceneWidget, SLOT(weightAnchorTables()));
+
     // select all tables in schema
     mSelectAllTablesInSchemaAction = new QAction(tr("Select all tables in schema"), this);
     mSelectAllTablesInSchemaAction->setStatusTip(tr("Select all tables in schema"));
@@ -268,6 +279,13 @@ void MainWindow::createActions()
     mShowGridAction->setChecked(true);
     mShowGridAction->setStatusTip(tr("Show grid"));
     connect(mShowGridAction, SIGNAL(toggled(bool)), mSceneWidget, SLOT(showGrid(bool)));
+
+    // attach tables to the grid
+    mAttachToGridAction = new QAction(tr("Attach to grid"), this);
+    mAttachToGridAction->setCheckable(true);
+    mAttachToGridAction->setChecked(mSettings.value("View/AttachToGrid", false).toBool());
+    mAttachToGridAction->setStatusTip(tr("Attach tables to the grid"));
+    connect(mAttachToGridAction, SIGNAL(toggled(bool)), mSceneWidget, SLOT(attachToGrid(bool)));
 
     // show/hide grid
     mDivideOnPagesAction = new QAction(tr("Divide on pages"), this);
@@ -359,6 +377,7 @@ MainWindow::createMenus()
     mSchemeMenu->addAction(mSelectAllTablesAction);
     mSchemeMenu->addAction(mRemoveAllTablesAction);
     mSchemeMenu->addAction(mShowGridAction);
+    mSchemeMenu->addAction(mAttachToGridAction);
     mSchemeMenu->addAction(mDivideOnPagesAction);
     mSchemeMenu->addAction(mShowLegendAction);
     mSchemeMenu->addAction(mShowControlWidgetAction);
@@ -376,6 +395,8 @@ MainWindow::createMenus()
     mTableMenu->addAction(mAdjustTableSizeAction);
     mTableMenu->addAction(mGroupItemsAction);
     mTableMenu->addAction(mUngroupItemsAction);
+    mTableMenu->addAction(mAnchorAction);
+    mTableMenu->addAction(mWeightAnchorAction);
     mTableMenu->addAction(mSelectAllTablesInSchemaAction);
     mMenuBar->addMenu(mTableMenu);
 
@@ -978,10 +999,10 @@ MainWindow::saveSession()
     QString defaultFileName = "session_" + 
 	mSettings.value("LastSession/DbName", "undefined").toString() + "_" +
 	mSettings.value("LastSession/DbUser", "undefined").toString() + "_" + 
-	QDate::currentDate().toString(Qt::DefaultLocaleShortDate) + "_" + QTime::currentTime().toString() + ".xml";
+	QDate::currentDate().toString(Qt::DefaultLocaleShortDate) + "_" + QTime::currentTime().toString() + ".vdb";
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save session..."),
 	    mSettings.value("Preferences/SessionFolder", "./").toString() + defaultFileName,
-	    tr("Xml files (*.xml)"));
+	    tr("Xml files (*.vdb)"));
     // return if we don't select any file to save
     if (fileName == "") {
 	return;
@@ -1006,7 +1027,7 @@ MainWindow::loadSession()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open session..."),
 	    mSettings.value("Preferences/SessionFolder", "./").toString(),
-	    tr("Xml files (*.xml)"));
+	    tr("Xml files (*.vdb)"));
     if (!QFile::exists(fileName)) {
 	QMessageBox messageBox;
 	messageBox.setText("File doesn't exists");

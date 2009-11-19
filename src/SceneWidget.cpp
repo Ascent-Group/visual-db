@@ -231,6 +231,39 @@ SceneWidget::ungroupItems()
 }
 
 /*
+ * Anchor selected items
+ */
+void
+SceneWidget::anchorTables()
+{
+    setAnchor(mScene->selectedItems(), false);
+}
+
+/*
+ * Weight anchor selected items
+ */
+void
+SceneWidget::weightAnchorTables()
+{
+    setAnchor(mScene->selectedItems(), true);
+}
+
+/*
+ * Set the anchor for selected items
+ */
+void
+SceneWidget::setAnchor(QList<QGraphicsItem *> ipItems, bool ipFlag)
+{
+    foreach (QGraphicsItem *item, ipItems) {
+	if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+	    setAnchor(item->children(), ipFlag);
+	} else if (qgraphicsitem_cast<TableItem *>(item)) {
+	    item->setFlag(QGraphicsItem::ItemIsMovable, ipFlag);
+	}
+    }
+}
+
+/*
  * Colorize tables according schemas
  */
 void
@@ -246,6 +279,15 @@ void
 SceneWidget::showGrid(bool ipFlag)
 {
     mScene->showGrid(ipFlag);
+}
+
+/*
+ * Attach detach tables to the grid
+ */
+void
+SceneWidget::attachToGrid(bool ipFlag)
+{
+    mScene->attachToGrid(ipFlag);
 }
 
 /*

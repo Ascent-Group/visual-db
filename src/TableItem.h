@@ -121,10 +121,11 @@ class TableItem : public GraphicsItem
         bool mIndicesVisible;
 	QFont mFont;
 
-	QImage *tableImage;
-	QImage *keyImage;
-	QImage *foreignKeyImage;
-	QImage *fieldImage;
+	QImage *mTableImage;
+	QImage *mKeyImage;
+	QImage *mForeignKeyImage;
+	QImage *mFieldImage;
+	QImage *mAnchorImage;
 };
 
 #endif // TABLEITEM_H

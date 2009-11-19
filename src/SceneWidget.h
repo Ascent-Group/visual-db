@@ -84,13 +84,19 @@ class SceneWidget : public QWidget
 	void adjustTables();
 	void groupItems();
 	void ungroupItems();
+	void anchorTables();
+	void weightAnchorTables();
 	void colorizeAccordingSchemas();
 	void showGrid(bool);
+	void attachToGrid(bool);
 	void divideOnPages(bool);
 	void showLegend(bool);
 	void selectAllTablesInSchema();
 	void saveToImage();
 	void showControlWidget(bool);
+
+    private:
+	void setAnchor(QList<QGraphicsItem *>, bool);
 
     private:
 	GraphicsScene *mScene;

@@ -400,7 +400,6 @@ GraphicsScene::drawGrid(QPainter *ipPainter)
     // draw vertical lines
     int x1 = 0;
     int x2 = x1;
-    int dx = 10;
     while (x1 < width()) {
 	if (x1 % 50 == 0) {
 	    pen.setColor(Qt::gray);
@@ -413,13 +412,12 @@ GraphicsScene::drawGrid(QPainter *ipPainter)
        
 	// draw line between (x1, 0) and (x2, height) points
 	ipPainter->drawLine(x1, 0, x2, (int)height());
-	x1 = x2 = x1 + dx;
+	x1 = x2 = x1 + LOW_GRID_DX;
     }
 
     // draw hogizontal lines
     int y1 = 0;
     int y2 = y1;
-    int dy = 10;
     while (y1 < height()) {
 	if (y1 % 50 == 0) {
 	    pen.setColor(Qt::gray);
@@ -432,7 +430,7 @@ GraphicsScene::drawGrid(QPainter *ipPainter)
 
 	// draw line between (0, y1) and (width, y2) points
 	ipPainter->drawLine(0, y1, (int)width(), y2);
-	y1 = y2 = y1 + dy;
+	y1 = y2 = y1 + LOW_GRID_DY;
     }
 }
 
@@ -764,6 +762,15 @@ GraphicsScene::showGrid(bool ipFlag)
     // only remember given flag; all analyze will be done in scene class
     mSettings.setValue("View/ShowGrid", ipFlag);
     update(QRectF(0.0, 0.0, width(), height()));
+}
+
+/*
+ * Attach/detach tables to the grid
+ */
+void
+GraphicsScene::attachToGrid(bool ipFlag)
+{
+    mSettings.setValue("View/AttachToGrid", ipFlag);
 }
 
 /*

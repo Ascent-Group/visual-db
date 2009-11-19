@@ -125,10 +125,11 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
     // preload of images
-    tableImage = new QImage(":img/table.png");
-    keyImage = new QImage(":img/key.png");
-    foreignKeyImage = new QImage(":img/foreignkey.png");
-    fieldImage = new QImage(":img/field.png");
+    mTableImage = new QImage(":img/table.png");
+    mKeyImage = new QImage(":img/key.png");
+    mForeignKeyImage = new QImage(":img/foreignkey.png");
+    mFieldImage = new QImage(":img/field.png");
+    mAnchorImage = new QImage(":img/anchor.png");
 }
 
 /*
@@ -181,8 +182,8 @@ TableItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QW
     // draw image for table
     QRectF target((int)x() + INTERVAL, (int)y() + INTERVAL,
 	    IMG_HEIGHT + INTERVAL, IMG_HEIGHT + INTERVAL);
-    QRectF source(0.0, 0.0, tableImage->width(), tableImage->height());
-    ipPainter->drawImage(target, *tableImage, source);
+    QRectF source(0.0, 0.0, mTableImage->width(), mTableImage->height());
+    ipPainter->drawImage(target, *mTableImage, source);
 
     // draw the title aligned on the center in upper case
     ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + INTERVAL, 
@@ -197,37 +198,21 @@ TableItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QW
 	if (height() < (FIELD_HEIGHT + INTERVAL) * (i + 2) + INTERVAL) {
 	    break;
 	}
-
-//	if (i >= mTableModel->columnsCount() && !mIndicesVisible) {
-//	    continue;
-//	}
 	
-//	if (i < mTableModel->columnsCount()) {
-	    QImage *image = 0;
-	    // draw image for primary key field with margins = INTERVAL for top, bottom, left and right sizes
-	    if (mTableModel->isColumnPrimaryKey(i)) {
-		image = keyImage;
-	    } else if (mTableModel->isColumnForeignKey(i)) {
-		image = foreignKeyImage;
-	    } else {
-//		image = fieldImage;
-	    }
-	    if (image) {
-		QRectF target((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
-			IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL);
-		QRectF source(0.0, 0.0, image->width(), image->height());
-		ipPainter->drawImage(target, *image, source);
-	    }
-//	} else if (i == mTableModel->columnsCount()) {
-	    // draw line under the title
-//	    ipPainter->drawLine((int)x(), (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
-//		    (int)(x() + width()), (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL);
-//	}	
-/*
-	ipPainter->drawText((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
-		IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL, Qt::AlignCenter,
-		"FK");
-*/
+	QImage *image = 0;
+	// draw image for primary key field with margins = INTERVAL for top, bottom, left and right sizes
+	if (mTableModel->isColumnPrimaryKey(i)) {
+	    image = mKeyImage;
+	} else if (mTableModel->isColumnForeignKey(i)) {
+	    image = mForeignKeyImage;
+	}
+	if (image) {
+	    QRectF target((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
+		    IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL);
+	    QRectF source(0.0, 0.0, image->width(), image->height());
+	    ipPainter->drawImage(target, *image, source);
+	}
+
 	// draw field name with margins = INTERVAL for top, bottom, left and right sizes
 	ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL, 
 		(int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2, 
@@ -235,6 +220,7 @@ TableItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QW
 		fieldText(i));
     }
 
+    // if we need to show indeces
     if (mIndicesVisible) {
 	for (int i = 0; i < mIndexItems.size(); ++i) {
 	    // break drawing if we have reached the board
@@ -247,6 +233,13 @@ TableItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QW
 		    FIELD_HEIGHT + INTERVAL * 2, Qt::AlignLeft,
 		    mIndexItems.at(i)->toPlainText());
 	}
+    }
+
+    // if anchor was setted for this table - draw the anchor
+    if (!(flags() & QGraphicsItem::ItemIsMovable)) {
+	QRectF target(x() + width() - IMG_WIDTH - INTERVAL, y() + height() - IMG_HEIGHT - INTERVAL, IMG_WIDTH, IMG_HEIGHT);
+	QRectF source(0.0, 0.0, mAnchorImage->width(), mAnchorImage->height());
+	ipPainter->drawImage(target, *mAnchorImage, source);
     }
 }
 
@@ -355,6 +348,9 @@ TableItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 //    setZValue(0);
 
     QGraphicsItem::mouseReleaseEvent(ipEvent);
+    if (mSettings.value("View/AttachToGrid", false).toBool()) {
+	moveBy(-(int)pos().x() % GraphicsScene::LOW_GRID_DX, -(int)pos().y() % GraphicsScene::LOW_GRID_DY);
+    }
 }
 
 /*

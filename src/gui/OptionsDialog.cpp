@@ -53,21 +53,21 @@ OptionsDialog::OptionsDialog(QWidget *ipParent)
 	    
     // create appearence item
     QListWidgetItem *appearanceItem = new QListWidgetItem(mOptionsList);
-    appearanceItem->setIcon(QIcon(":img/window_new.png"));
+    appearanceItem->setIcon(QIcon(":/img/window_new.png"));
     appearanceItem->setText(tr("Appearance"));
     appearanceItem->setTextAlignment(Qt::AlignLeft);
     appearanceItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
     
     // create preferences item
     QListWidgetItem *preferencesItem = new QListWidgetItem(mOptionsList);
-    preferencesItem->setIcon(QIcon(":img/configure.png"));
+    preferencesItem->setIcon(QIcon(":/img/configure.png"));
     preferencesItem->setText(tr("Preferences"));
     preferencesItem->setTextAlignment(Qt::AlignLeft);
     preferencesItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
      
     // create color item
     QListWidgetItem *colorsItem = new QListWidgetItem(mOptionsList);
-    colorsItem->setIcon(QIcon(":img/colors.png"));
+    colorsItem->setIcon(QIcon(":/img/colors.png"));
     colorsItem->setText(tr("Colors"));
     colorsItem->setTextAlignment(Qt::AlignLeft);
     colorsItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);

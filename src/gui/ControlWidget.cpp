@@ -58,32 +58,32 @@ ControlWidget::ControlWidget(int ipMinValue, int ipMaxValue, QWidget *ipParent)
     connect(mMinusButton, SIGNAL(clicked()), this, SLOT(decreaseValue()));
 
     mMoveButton = new QPushButton();
-    mMoveButton->setIcon(QIcon(":img/cursor-openhand.png"));
+    mMoveButton->setIcon(QIcon(":/img/cursor-openhand.png"));
     mMoveButton->setMinimumSize(25, 25);
     mMoveButton->setMaximumSize(25, 25);
     mMoveButton->setCheckable(true);
     connect(mMoveButton, SIGNAL(clicked()), this, SLOT(setMoveMode()));
 
     mUpButton = new QPushButton();
-    mUpButton->setIcon(QIcon(":img/up.png"));
+    mUpButton->setIcon(QIcon(":/img/up.png"));
     mUpButton->setMinimumSize(25, 25);
     mUpButton->setMaximumSize(25, 25);
     connect(mUpButton, SIGNAL(clicked()), this, SLOT(moveUp()));
 
     mDownButton = new QPushButton();
-    mDownButton->setIcon(QIcon(":img/down.png"));
+    mDownButton->setIcon(QIcon(":/img/down.png"));
     mDownButton->setMinimumSize(25, 25);
     mDownButton->setMaximumSize(25, 25);
     connect(mDownButton, SIGNAL(clicked()), this, SLOT(moveDown()));
 
     mRightButton = new QPushButton();
-    mRightButton->setIcon(QIcon(":img/right.png"));
+    mRightButton->setIcon(QIcon(":/img/right.png"));
     mRightButton->setMinimumSize(25, 25);
     mRightButton->setMaximumSize(25, 25);
     connect(mRightButton, SIGNAL(clicked()), this, SLOT(moveRight()));
 
     mLeftButton = new QPushButton();
-    mLeftButton->setIcon(QIcon(":img/left.png"));
+    mLeftButton->setIcon(QIcon(":/img/left.png"));
     mLeftButton->setMinimumSize(25, 25);
     mLeftButton->setMaximumSize(25, 25);
     connect(mLeftButton, SIGNAL(clicked()), this, SLOT(moveLeft()));

@@ -126,21 +126,21 @@ void MainWindow::createActions()
     // exit
     mExitAction = new QAction(tr("Quit"), this);
     mExitAction->setShortcut(QString("Ctrl+Q"));
-    mExitAction->setIcon(QIcon(":img/exit.png"));
+    mExitAction->setIcon(QIcon(":/img/exit.png"));
     mExitAction->setStatusTip(tr("Quit"));
     connect(mExitAction, SIGNAL(triggered()), this, SLOT(close()));
 
     // new connection
     mNewConnectionAction = new QAction(tr("New connection..."), this);
     mNewConnectionAction->setShortcut(QString("Ctrl+N"));
-    mNewConnectionAction->setIcon(QIcon(":img/connect_creating.png"));
+    mNewConnectionAction->setIcon(QIcon(":/img/connect_creating.png"));
     mNewConnectionAction->setStatusTip(tr("Establishing of new connection"));
     connect(mNewConnectionAction, SIGNAL(triggered()), this, SLOT(showConnectionDialog()));
 
     // show options dialog
     mShowOptionsDialogAction = new QAction(tr("Options..."), this);
     mShowOptionsDialogAction->setShortcut(QString("Ctrl+O"));
-    mShowOptionsDialogAction->setIcon(QIcon(":img/configure.png"));
+    mShowOptionsDialogAction->setIcon(QIcon(":/img/configure.png"));
     mShowOptionsDialogAction->setStatusTip(tr("Edit options"));
     connect(mShowOptionsDialogAction, SIGNAL(triggered()), this, SLOT(showOptionsDialog()));
 
@@ -152,7 +152,7 @@ void MainWindow::createActions()
 
     // draw full database (all tables by one click)
     mDrawFullDBAction = new QAction(tr("Draw full DB"), this);
-    mDrawFullDBAction->setIcon(QIcon(":img/pencil.png"));
+    mDrawFullDBAction->setIcon(QIcon(":/img/pencil.png"));
     connect(mDrawFullDBAction, SIGNAL(triggered()), this, SLOT(drawFullDbScheme()));
 
     // show the preview page of the diagram
@@ -168,12 +168,12 @@ void MainWindow::createActions()
 
     // undo action
     mUndoAction = mUndoStack->createUndoAction(this, tr("Undo"));
-    mUndoAction->setIcon(QIcon(":img/undo.png"));
+    mUndoAction->setIcon(QIcon(":/img/undo.png"));
     mUndoAction->setShortcut(QString("Ctrl+Z"));
     
     // redo action
     mRedoAction = mUndoStack->createRedoAction(this, tr("Redo"));
-    mRedoAction->setIcon(QIcon(":img/redo.png"));
+    mRedoAction->setIcon(QIcon(":/img/redo.png"));
     mRedoAction->setShortcut(QString("Ctrl+Y"));
 
     // add table action
@@ -184,19 +184,19 @@ void MainWindow::createActions()
     // delete table action
     mDeleteTableAction = new QAction(tr("Delete"), this);
     mDeleteTableAction->setShortcut(QString("Delete"));
-    mDeleteTableAction->setIcon(QIcon(":img/remove.png"));
+    mDeleteTableAction->setIcon(QIcon(":/img/remove.png"));
     mDeleteTableAction->setStatusTip(tr("Delete item from the scheme"));
     connect(mDeleteTableAction, SIGNAL(triggered()), mSceneWidget, SLOT(deleteTableItem()));
 
     // show fields' types
     mShowFieldsTypesAction = new QAction(tr("Show fields' types"), this);
-    mShowFieldsTypesAction->setIcon(QIcon(":img/show.png"));
+    mShowFieldsTypesAction->setIcon(QIcon(":/img/show.png"));
     mShowFieldsTypesAction->setStatusTip(tr("Show fields' types"));
     connect(mShowFieldsTypesAction, SIGNAL(triggered()), mSceneWidget, SLOT(setFieldsTypesVisible()));
 
     // hide fields' types
     mHideFieldsTypesAction = new QAction(tr("Hide fields' types"), this);
-    mHideFieldsTypesAction->setIcon(QIcon(":img/hide.png"));
+    mHideFieldsTypesAction->setIcon(QIcon(":/img/hide.png"));
     mHideFieldsTypesAction->setStatusTip(tr("Hide fields' types"));
     connect(mHideFieldsTypesAction, SIGNAL(triggered()), mSceneWidget, SLOT(setFieldsTypesInvisible()));
 
@@ -212,7 +212,7 @@ void MainWindow::createActions()
 
     // set table color
     mSetTableColorAction = new QAction(tr("Table color..."), this);
-    mSetTableColorAction->setIcon(QIcon(":img/colors.png"));
+    mSetTableColorAction->setIcon(QIcon(":/img/colors.png"));
     mSetTableColorAction->setStatusTip(tr("Set table color"));
     connect(mSetTableColorAction, SIGNAL(triggered()), mSceneWidget, SLOT(setTableColor()));
 
@@ -224,20 +224,20 @@ void MainWindow::createActions()
 
     // remove all tables
     mRemoveAllTablesAction = new QAction(tr("Remove all tables"), this);
-    mRemoveAllTablesAction->setIcon(QIcon(":img/eraser.png"));
+    mRemoveAllTablesAction->setIcon(QIcon(":/img/eraser.png"));
     mRemoveAllTablesAction->setStatusTip(tr("Remove all tables from scheme"));
     connect(mRemoveAllTablesAction, SIGNAL(triggered()), mSceneWidget, SLOT(cleanTableSchemeScene()));
 
     // adjust all selected tables
     mAdjustTableSizeAction = new QAction(tr("Adjust"), this);
     mAdjustTableSizeAction->setShortcut(QString("Ctrl+J"));
-    mAdjustTableSizeAction->setIcon(QIcon(":img/adjustsize.png"));
+    mAdjustTableSizeAction->setIcon(QIcon(":/img/adjustsize.png"));
     mAdjustTableSizeAction->setStatusTip(tr("Select all tables"));
     connect(mAdjustTableSizeAction, SIGNAL(triggered()), mSceneWidget, SLOT(adjustTables()));
 
     // save scheme to image
     mSaveToImgAction = new QAction(tr("Save to image..."), this);
-    mSaveToImgAction->setIcon(QIcon(":img/filesave.png"));
+    mSaveToImgAction->setIcon(QIcon(":/img/filesave.png"));
     mSaveToImgAction->setStatusTip(tr("Save scheme to image"));
     mSaveToImgAction->setShortcut(QString("Ctrl+S"));
     connect(mSaveToImgAction, SIGNAL(triggered()), mSceneWidget, SLOT(saveToImage()));
@@ -245,20 +245,20 @@ void MainWindow::createActions()
     // group items
     mGroupItemsAction = new QAction(tr("Group items"), this);
     mGroupItemsAction->setShortcut(QString("Ctrl+G"));
-    mGroupItemsAction->setIcon(QIcon(":img/group.png"));
+    mGroupItemsAction->setIcon(QIcon(":/img/group.png"));
     mGroupItemsAction->setStatusTip(tr("Group items"));
     connect(mGroupItemsAction, SIGNAL(triggered()), mSceneWidget, SLOT(groupItems()));
 
     // ungroup items
     mUngroupItemsAction = new QAction(tr("Ungroup items"), this);
     mUngroupItemsAction->setShortcut(QString("Ctrl+U"));
-    mUngroupItemsAction->setIcon(QIcon(":img/ungroup.png"));
+    mUngroupItemsAction->setIcon(QIcon(":/img/ungroup.png"));
     mUngroupItemsAction->setStatusTip(tr("Ungroup items"));
     connect(mUngroupItemsAction, SIGNAL(triggered()), mSceneWidget, SLOT(ungroupItems()));
 
     // anchor for tables
     mAnchorAction = new QAction(tr("Anchor"), this);
-    mAnchorAction->setIcon(QIcon(":img/anchor.png"));
+    mAnchorAction->setIcon(QIcon(":/img/anchor.png"));
     mAnchorAction->setStatusTip(tr("To anchor for selected tables"));
     connect(mAnchorAction, SIGNAL(triggered()), mSceneWidget, SLOT(anchorTables()));
 
@@ -343,7 +343,7 @@ void MainWindow::createActions()
 
     // reload data form db
     mReloadDataAction = new QAction(tr("Reload"), this);
-    mReloadDataAction->setIcon(QIcon(":img/reload.png"));
+    mReloadDataAction->setIcon(QIcon(":/img/reload.png"));
     mReloadDataAction->setStatusTip(tr("Reload"));
     mReloadDataAction->setShortcut(QString("Ctrl+R"));
     connect(mReloadDataAction, SIGNAL(triggered()), this, SLOT(reloadData()));

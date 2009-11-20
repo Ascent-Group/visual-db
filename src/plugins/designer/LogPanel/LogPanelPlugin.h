@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LOGPANEL_PLUGIN_H
-#define LOGPANEL_PLUGIN_H
+#ifndef LOGPANELPLUGIN_H
+#define LOGPANELPLUGIN_H
 
 #include <QtGui>
 #include <QDesignerCustomWidgetInterface>
@@ -58,4 +58,4 @@ class LogPanelPlugin : public QObject, public QDesignerCustomWidgetInterface
 	bool initialized;
 };
 
-#endif // LOGPANEL_PLUGIN_H
+#endif // LOGPANELPLUGIN_H

@@ -124,11 +124,11 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 
     // preload of images
-    mTableImage = new QImage(":img/table.png");
-    mKeyImage = new QImage(":img/key.png");
-    mForeignKeyImage = new QImage(":img/foreignkey.png");
-    mFieldImage = new QImage(":img/field.png");
-    mAnchorImage = new QImage(":img/anchor.png");
+    mTableImage = new QImage(":/img/table.png");
+    mKeyImage = new QImage(":/img/key.png");
+    mForeignKeyImage = new QImage(":/img/foreignkey.png");
+    mFieldImage = new QImage(":/img/field.png");
+    mAnchorImage = new QImage(":/img/anchor.png");
 }
 
 /*

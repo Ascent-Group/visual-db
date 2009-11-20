@@ -57,7 +57,7 @@ PreferencesPage::PreferencesPage(QWidget *ipParent)
     mSessionDirectoryEdit = new QLineEdit(mSettings.value("Preferences/SessionFolder", "./").toString());
     mSessionDirectoryEdit->setReadOnly(true);
     mSessionDirectoryButton = new QPushButton();
-    mSessionDirectoryButton->setIcon(QIcon(":img/folder.png"));
+    mSessionDirectoryButton->setIcon(QIcon(":/img/folder.png"));
     connect(mSessionDirectoryButton, SIGNAL(clicked()), this, SLOT(folder()));
 
     // create check box for auto switch to a new tab

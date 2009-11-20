@@ -56,7 +56,7 @@ LogPanelPlugin::isInitialized() const
 QWidget*
 LogPanelPlugin::createWidget(QWidget *ipParent)
 {
-    return LogPanel::instance(ipParent);
+    return new LogPanel(ipParent);
 }
 
 QString

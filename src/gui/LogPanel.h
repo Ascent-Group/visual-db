@@ -41,15 +41,12 @@ class LogPanel : public QWidget
     Q_OBJECT
 
     public:
-	static LogPanel* instance(QWidget *ipParent = 0);
-	static void print(QString ipText);
-
-    protected:
 	LogPanel(QWidget *ipParent = 0);
 	~LogPanel();
 
+	void print(QString ipText);
+
     private:
-	static LogPanel *mInstance;
 	Ui::LogPanel ui;
 
     private slots:

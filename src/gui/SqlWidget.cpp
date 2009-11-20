@@ -64,7 +64,7 @@ SqlWidget::SqlWidget(QWidget *ipParent)
 
     // create checkbox
     mSafeQueryButton = new QToolButton();
-    mSafeQueryButton->setIcon(QIcon(":img/safequery.png"));
+    mSafeQueryButton->setIcon(QIcon(":/img/safequery.png"));
     mSafeQueryButton->setToolTip(tr("Safe query"));
     mSafeQueryButton->setCheckable(true);
     mSafeQueryButton->setChecked(true);
@@ -194,25 +194,25 @@ SqlWidget::createActions()
     // create action for running queries
     mRunAction = new QAction(tr("Run"), this);
     mRunAction->setShortcut(Qt::Key_F8);
-    mRunAction->setIcon(QIcon(":img/run.png"));
+    mRunAction->setIcon(QIcon(":/img/run.png"));
     mRunAction->setStatusTip(tr("Execute query (F8)"));
     connect(mRunAction, SIGNAL(triggered()), this, SLOT(runQuery()));
 
     // create action for browsing previous portion of records
     mPrevPortionAction = new QAction(tr("Previous portion"), this);
-    mPrevPortionAction->setIcon(QIcon(":img/uparrow.png"));
+    mPrevPortionAction->setIcon(QIcon(":/img/uparrow.png"));
     mPrevPortionAction->setStatusTip(tr("Show previous portion of results"));
     connect(mPrevPortionAction, SIGNAL(triggered()), this, SLOT(readPrevPortion()));
 
     // create action for browsing next portion of records
     mNextPortionAction = new QAction(tr("Next portion"), this);
-    mNextPortionAction->setIcon(QIcon(":img/downarrow.png"));
+    mNextPortionAction->setIcon(QIcon(":/img/downarrow.png"));
     mNextPortionAction->setStatusTip(tr("Show next portion of results"));
     connect(mNextPortionAction, SIGNAL(triggered()), this, SLOT(readNextPortion()));
 
     // create action for browsing full result
     mFullResultAction = new QAction(tr("Full result"), this);
-    mFullResultAction->setIcon(QIcon(":img/fulldownarrow.png"));
+    mFullResultAction->setIcon(QIcon(":/img/fulldownarrow.png"));
     mFullResultAction->setStatusTip(tr("Show full result"));
     connect(mFullResultAction, SIGNAL(triggered()), this, SLOT(readFullResult()));
 }

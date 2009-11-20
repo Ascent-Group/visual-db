@@ -31,8 +31,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-LogPanel* LogPanel::mInstance = 0;
-
 /*
  * Ctor
  */
@@ -41,7 +39,6 @@ LogPanel::LogPanel(QWidget *ipParent)
 {
     ui.setupUi(this);
 
-    connect(ui.mSaveButton, SIGNAL(clicked()), this, SLOT(saveToFile()));
 }
 
 /*
@@ -77,22 +74,8 @@ LogPanel::saveToFile()
 /*
  *
  */
-LogPanel*
-LogPanel::instance(QWidget *ipParent)
-{
-    // if not yet created => create
-    if (0 == mInstance) {
-	mInstance = new LogPanel(ipParent);
-    }
-    
-    return mInstance;
-}
-
-/*
- *
- */
 void
 LogPanel::print(QString ipText)
 {
-    instance()->ui.mOutputEdit->append(ipText);
+    ui.mOutputEdit->append(ipText);
 }

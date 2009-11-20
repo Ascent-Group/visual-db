@@ -27,54 +27,43 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
-#include <QSettings>
-#include <QTranslator>
-#include <QIcon>
+#ifndef DBPROCEDURE_H
+#define DBPROCEDURE_H
 
-#include <gui/MainWindow.h>
+#include <common/Database.h>
+#include <common/DbObject.h>
 
-int main(int argc, char **argv)
+class DbProcedure : public DbObject
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
+    public:
+        virtual ~DbProcedure();
 
-    QApplication app(argc, argv);
+        QString fullName() const;
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+        DbSchema* schema() const;
+        void setSchema(DbSchema *ipSchema);
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
+        DbRole* owner() const;
+        void setOwner(DbRole *ipRole);
 
-    QSettings settings;
-    QTranslator translator;
+        DbLanguage* language() const;
+        void setLanguage(DbLanguage *ipLang);
 
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
-    }
-    
-    //
-    app.installTranslator(&translator);
+        QString sourceCode() const;
+        void setSourceCode(const QString &ipText);
 
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+    protected:
+        QString mSchemaName; // !!! for internal use only
+        DbSchema *mSchema;
+        DbRole *mOwner;
+        DbLanguage *mLanguage;
+        QString mSourceCode;
 
-    return app.exec();
-}
+    protected:
+        DbProcedure(QString ipSchemaName, QString ipName);
+        virtual int objectId();
+        virtual void loadData() = 0;
+
+};
+
+#endif // DBPROCEDURE_H

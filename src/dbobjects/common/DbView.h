@@ -27,54 +27,42 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
-#include <QSettings>
-#include <QTranslator>
-#include <QIcon>
+#ifndef DBVIEW_H
+#define DBVIEW_H
 
-#include <gui/MainWindow.h>
+#include <common/DbObject.h>
 
-int main(int argc, char **argv)
+class DbRole;
+class DbSchema;
+
+class DbView : public DbObject
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
+    public:
+        virtual ~DbView();
 
-    QApplication app(argc, argv);
+        QString fullName() const;
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+        DbSchema *schema() const;
+        void setSchema(DbSchema *ipSchema);
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
+        DbRole* owner() const;
+        void setOwner(DbRole *ipOwner);
 
-    QSettings settings;
-    QTranslator translator;
+        QString definition() const;
+        void setDefinition(QString ipDef);
 
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
-    }
-    
-    //
-    app.installTranslator(&translator);
+        virtual void loadData() = 0;
 
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+        virtual int objectId();
 
-    return app.exec();
-}
+    protected:
+        QString mSchemaName; // for internal use only => no accessors for it
+        DbSchema *mSchema;
+        DbRole *mOwner;
+        QString mDefinition;
+
+    protected:
+        DbView(QString ipSchema, QString ipName);
+};
+
+#endif // DBVIEW_H

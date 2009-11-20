@@ -18,56 +18,56 @@ OBJECTS_DIR = .obj
 QMAKE_CXXFLAGS += -g2
 
 # Input
-HEADERS += ArrowItem.h \
-    ControlWidget.h \
-    TreeWidget.h \
-    DescriptionWidget.h \
-    GraphicsScene.h \
-    GraphicsView.h \
-    MainWindow.h \
-    SqlConnectionDialog.h \
-    DbParameters.h \
-    ProxyParameters.h \
-    SqlWidget.h \
-    OptionsDialog.h \
-    AppearancePage.h \
-    PreferencesPage.h \
-    SelectColorWidget.h \
-    ColorsPage.h \
-    GraphicsItem.h \
-    TableItem.h \
-    TableItemGroup.h \
-    TabWidget.h \
-    Legend.h \
-    SceneWidget.h \
-    MoveTableCommand.h \
-    AddTableCommand.h
+HEADERS += gui/ArrowItem.h \
+    connect/DbParameters.h \
+    connect/ProxyParameters.h \
+    gui/ControlWidget.h \
+    gui/TreeWidget.h \
+    gui/DescriptionWidget.h \
+    gui/GraphicsScene.h \
+    gui/GraphicsView.h \
+    gui/MainWindow.h \
+    gui/SqlConnectionDialog.h \
+    gui/SqlWidget.h \
+    gui/OptionsDialog.h \
+    gui/AppearancePage.h \
+    gui/PreferencesPage.h \
+    gui/SelectColorWidget.h \
+    gui/ColorsPage.h \
+    gui/GraphicsItem.h \
+    gui/TableItem.h \
+    gui/TableItemGroup.h \
+    gui/TabWidget.h \
+    gui/Legend.h \
+    gui/SceneWidget.h \
+    gui/behaviour/MoveTableCommand.h \
+    gui/behaviour/AddTableCommand.h
 
-SOURCES += ArrowItem.cpp \
-    ControlWidget.cpp \
-    TreeWidget.cpp \
-    DescriptionWidget.cpp \
-    GraphicsScene.cpp \
-    GraphicsView.cpp \
-    main.cpp \
-    MainWindow.cpp \
-    SqlConnectionDialog.cpp \
-    DbParameters.cpp \
-    ProxyParameters.cpp \
-    SqlWidget.cpp \
-    OptionsDialog.cpp \
-    AppearancePage.cpp \
-    PreferencesPage.cpp \
-    SelectColorWidget.cpp \
-    ColorsPage.cpp \
-    GraphicsItem.cpp \
-    TableItem.cpp \
-    TableItemGroup.cpp \
-    TabWidget.cpp \
-    Legend.cpp \
-    SceneWidget.cpp \
-    MoveTableCommand.cpp \
-    AddTableCommand.cpp
+SOURCES += main.cpp \
+    connect/DbParameters.cpp \
+    connect/ProxyParameters.cpp \
+    gui/ArrowItem.cpp \
+    gui/ControlWidget.cpp \
+    gui/TreeWidget.cpp \
+    gui/DescriptionWidget.cpp \
+    gui/GraphicsScene.cpp \
+    gui/GraphicsView.cpp \
+    gui/MainWindow.cpp \
+    gui/SqlConnectionDialog.cpp \
+    gui/SqlWidget.cpp \
+    gui/OptionsDialog.cpp \
+    gui/AppearancePage.cpp \
+    gui/PreferencesPage.cpp \
+    gui/SelectColorWidget.cpp \
+    gui/ColorsPage.cpp \
+    gui/GraphicsItem.cpp \
+    gui/TableItem.cpp \
+    gui/TableItemGroup.cpp \
+    gui/TabWidget.cpp \
+    gui/Legend.cpp \
+    gui/SceneWidget.cpp \
+    gui/behaviour/MoveTableCommand.cpp \
+    gui/behaviour/AddTableCommand.cpp
 
 RESOURCES += visual_db.qrc
 

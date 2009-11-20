@@ -27,54 +27,60 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
-#include <QSettings>
-#include <QTranslator>
-#include <QIcon>
+#include <QToolButton>
+#include <gui/TabWidget.h>
 
-#include <gui/MainWindow.h>
-
-int main(int argc, char **argv)
+/*
+ * Ctor
+ */
+TabWidget::TabWidget(QWidget *ipParent)
+    : QTabWidget(ipParent)
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
+#if QT_VERSION >= 0x040500
+    // at this point forbid moving tabs
+    setMovable(false);
+#endif
 
-    QApplication app(argc, argv);
+    // create button for closing tabs
+    mCloseTabButton = new QToolButton();
+    mCloseTabButton->setIcon(QIcon(":img/closetab.png"));
+    mCloseTabButton->setShortcut(QString("Ctrl+W"));
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+    setCornerWidget(mCloseTabButton);
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
+    connect(mCloseTabButton, SIGNAL(clicked()), this, SLOT(closeTabButtonClicked()));
+}
 
-    QSettings settings;
-    QTranslator translator;
+/*
+ * Dtor
+ */
+TabWidget::~TabWidget()
+{
 
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
+}
+
+/*
+ * Makes the tab with the given id active
+ */
+void
+TabWidget::setActiveTab(const int ipTabId)
+{
+    setCurrentIndex(ipTabId);
+}
+
+/*
+ * Closes the active tab
+ */
+void
+TabWidget::closeTabButtonClicked()
+{
+    // get active tab id
+    int activeTabId = currentIndex();
+
+    // lyuts: remember last tab index so we can switch to it back!!
+
+    // if id is greater than 0 = we are closing any tab except grachics scheme
+    if ( 0 < activeTabId ) {
+        removeTab(activeTabId);
     }
-    
-    //
-    app.installTranslator(&translator);
-
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-
-    return app.exec();
 }

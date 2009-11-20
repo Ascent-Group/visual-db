@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- *
+ * 
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- *
- *
+ * 
+ * 
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -27,54 +27,45 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
+#ifndef SELECTCOLORWIDGET_H
+#define SELECTCOLORWIDGET_H
+
 #include <QSettings>
-#include <QTranslator>
-#include <QIcon>
+#include <QWidget>
 
-#include <gui/MainWindow.h>
+class QColor;
+class QComboBox;
+class QGraphicsView;
+class QPushButton;
 
-int main(int argc, char **argv)
+/*
+ * Widget to provide the color selection.
+ */
+class SelectColorWidget : public QWidget
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
+    Q_OBJECT
 
-    QApplication app(argc, argv);
+    public:
+	SelectColorWidget(const QString &, const QColor &, QWidget *ipParent = 0);
+	~SelectColorWidget();
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+	QColor color() const;
+ 
+    private:
+	QSettings mSettings;
+	
+	QColor mColor;
+	QColor mDefaultColor;
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
+	QComboBox *mCombo;
+	QPushButton *mColorButton;
 
-    QSettings settings;
-    QTranslator translator;
+    private:
+        void getColorFromDialog();
 
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
-    }
-    
-    //
-    app.installTranslator(&translator);
+    private slots:
+	void colorSelectSlot(int);
+	void buttonClickSlot();
+};
 
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-
-    return app.exec();
-}
+#endif // SELECTCOLORWIDGET_H

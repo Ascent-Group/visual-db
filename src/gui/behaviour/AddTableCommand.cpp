@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- *
+ * 
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- *
- *
+ * 
+ * 
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -27,54 +27,59 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
-#include <QSettings>
-#include <QTranslator>
-#include <QIcon>
+#include <QUndoCommand>
+#include <gui/GraphicsScene.h>
+#include <gui/TableItem.h>
+#include <gui/TableItemGroup.h>
+#include <gui/behaviour/AddTableCommand.h>
 
-#include <gui/MainWindow.h>
-
-int main(int argc, char **argv)
+/*
+ * Ctor
+ */
+AddTableCommand::AddTableCommand(GraphicsScene *ipScene, TableItem *ipTable, QUndoCommand *ipParent)
+    : QUndoCommand(ipParent)
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
-
-    QApplication app(argc, argv);
-
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
-
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
-
-    QSettings settings;
-    QTranslator translator;
-
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
-    }
-    
-    //
-    app.installTranslator(&translator);
-
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-
-    return app.exec();
+    mScene = ipScene;
+    mTable = ipTable;
+    mInitialPosition = ipTable->scenePos();
+    setText(QObject::tr("Add table"));
 }
+
+/*
+ * Dtor
+ */
+AddTableCommand::~AddTableCommand()
+{
+}
+
+/*
+ * Undo add node
+ */
+void 
+AddTableCommand::undo()
+{
+    QList<QGraphicsItem *> list;
+    list << mTable;
+    mScene->deleteTableItem(list);
+    mScene->update();
+}
+
+/*
+ * Redo add node
+ */
+void 
+AddTableCommand::redo()
+{
+    mScene->addItem(mTable);
+    mTable->setPos(mInitialPosition);
+
+    // draw all relations between new table and already added ones
+    foreach (QGraphicsItem *item, mScene->items()) {
+	if (qgraphicsitem_cast<TableItem *>(item)) {
+	    mScene->createRelations(qgraphicsitem_cast<TableItem *>(item));
+	}
+    }  
+    mScene->clearSelection();
+    mScene->update();
+}
+

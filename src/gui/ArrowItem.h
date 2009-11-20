@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- *
+ * 
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- *
- *
+ * 
+ * 
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -27,54 +27,55 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
+#ifndef ARROW_H
+#define ARROW_H
+
+#include <gui/TableItem.h>
+#include <QGraphicsLineItem>
 #include <QSettings>
-#include <QTranslator>
-#include <QIcon>
 
-#include <gui/MainWindow.h>
+class QGraphicsPolygonItem;
+class QGraphicsScene;
+class QGraphicsSceneMouseEvent;
+class QPainterPath;
+class QRectF;
 
-int main(int argc, char **argv)
+/*
+ * Implement the visual relations between tables
+ */
+class ArrowItem : public QGraphicsLineItem
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
+    public:
+	enum { Type = UserType + 4 };
+        
+	static const int ARROW_SIZE = 10;
 
-    QApplication app(argc, argv);
+    public:
+	ArrowItem(TableItem *, TableItem *, QGraphicsItem *ipParent = 0, QGraphicsScene *ipScene = 0);
+	~ArrowItem();
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+	virtual int type() const;
+	QRectF boundingRect() const;
+	QPainterPath shape() const;
+	
+	TableItem *startItem() const;
+	TableItem *endItem() const;
+	
+	void updatePosition();
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
+    private:
+	
+	QSettings mSettings;
 
-    QSettings settings;
-    QTranslator translator;
+	TableItem *mStartItem;
+	TableItem *mEndItem;
+	
+	QColor mColor;
+	QPolygonF mArrowItemHead;
 
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
-    }
-    
-    //
-    app.installTranslator(&translator);
+    private:
+	QLineF makeLine() const;
+	void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *ipWidget = 0);
+};
 
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-
-    return app.exec();
-}
+#endif // ARROW_H

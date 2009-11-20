@@ -27,54 +27,56 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
-#include <QSettings>
-#include <QTranslator>
-#include <QIcon>
+#ifndef DBSCHEMA_H
+#define DBSCHEMA_H
 
-#include <gui/MainWindow.h>
+#include <QStringList>
+#include <QVector>
+#include <common/Database.h>
+#include <common/DbObject.h>
+#include <common/DbProcedure.h>
 
-int main(int argc, char **argv)
+class DbTable;
+class DbView;
+
+class DbSchema : public DbObject
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
+    public:
+        DbSchema(QString ipName);
+        virtual ~DbSchema();
 
-    QApplication app(argc, argv);
+        void addTable(DbTable *ipTable);
+        void addView(DbView *ipView);
+        void addProcedure(DbProcedure *ipProc);
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+        void tablesList(QStringList *) const;
+        int tablesCount() const;
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
+        void viewsList(QStringList *) const;
+        int viewsCount() const;
 
-    QSettings settings;
-    QTranslator translator;
+        void proceduresList(QStringList *) const;
+        int proceduresCount() const;
 
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
-    }
-    
-    //
-    app.installTranslator(&translator);
+        DbTable* findTable(const QString &ipTableName) const;
+        DbView* findView(const QString &ipViewName) const;
+        DbProcedure* findProcedure(const QString &ipProcName) const;
 
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+        void readTables();
+        void readViews();
+        void readProcedures();
 
-    return app.exec();
-}
+        void cleanup();
+
+        virtual int objectId();
+
+    private:
+        QVector<DbTable*> mTables;
+        QVector<DbView*> mViews;
+        QVector<DbProcedure*> mProcedures;
+
+    private:
+        DbObject* findObject(const QString &ipObjName, Database::Object) const;
+};
+
+#endif // DBSCHEMA_H

@@ -27,54 +27,63 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
-#include <QSettings>
-#include <QTranslator>
-#include <QIcon>
+#ifndef DBROLE_H
+#define DBROLE_H
 
-#include <gui/MainWindow.h>
+#include <QDate>
+#include <common/DbObject.h>
 
-int main(int argc, char **argv)
+class DbRole : public DbObject
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
+    public:
+        virtual ~DbRole();
 
-    QApplication app(argc, argv);
+        bool isSuperUser() const;
+        void setSuperUser(const bool ipFlag);
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+        bool inheritsPrivileges() const;
+        void setInheritsPriviligese(const bool ipFlag);
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
+        bool canCreateRole() const;
+        void setCanCreateRole(const bool ipFlag);
 
-    QSettings settings;
-    QTranslator translator;
+        bool canCreateDb() const;
+        void setCanCreateDb(const bool ipFlag);
 
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
-    }
-    
-    //
-    app.installTranslator(&translator);
+        bool canUpdateSysCat() const;
+        void setCanUpdateSysCat(const bool ipFlag);
 
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+        bool canLogin() const;
+        void setCanLogin(const bool ipFlag);
 
-    return app.exec();
-}
+        int connectionLimit() const;
+        void setConnectionLimit(const int ipLimit);
+
+        QDate expiryDate() const;
+        void setExpiryDate(const QDate ipDate);
+
+        int id() const;
+        void setId(const int ipId);
+
+        virtual void loadData() = 0;
+        // lyuts: for future use
+        // virtual void save() = 0;
+
+        virtual int objectId();
+
+    protected:
+        bool mIsSuperUser;
+        bool mInheritsPrivileges; // true if the role inherits its parent's privileges
+        bool mCanCreateRole;
+        bool mCanCreateDb;
+        bool mCanUpdateSysCat;
+        bool mCanLogin;
+        int mConnectionLimit;
+        QDate mExpiryDate;
+        int mId;
+
+    protected:
+        DbRole(QString ipName = 0);
+};
+
+#endif // DBROLE_H

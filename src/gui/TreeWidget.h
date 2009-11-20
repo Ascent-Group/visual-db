@@ -27,54 +27,41 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
-#include <QSettings>
-#include <QTranslator>
-#include <QIcon>
+#ifndef TREEWIDGET_H
+#define TREEWIDGET_H
 
-#include <gui/MainWindow.h>
+#include <QTreeWidget>
+#include <common/Database.h>
 
-int main(int argc, char **argv)
+class QContextMenuEvent;
+class QMenu;
+
+/*
+ * Tree widget. Show all database objects on this tree.
+ */
+class TreeWidget : public QTreeWidget
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
+    Q_OBJECT
 
-    QApplication app(argc, argv);
+    public:
+	TreeWidget(QMenu *);
+	~TreeWidget();
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+	void refresh();
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
+        enum Columns {
+            NameCol = 0,
+            IdCol
+        };
 
-    QSettings settings;
-    QTranslator translator;
+    protected:
+	void contextMenuEvent(QContextMenuEvent *);
 
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
-    }
-    
-    //
-    app.installTranslator(&translator);
+    private:
+        QMenu *mContextMenu;
 
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+    private:
+        void insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, Database::Object ipType);
+};
 
-    return app.exec();
-}
+#endif // TREEWIDGET_H

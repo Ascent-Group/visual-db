@@ -27,54 +27,76 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
-#include <QSettings>
-#include <QTranslator>
-#include <QIcon>
+#ifndef DBINDEX_H
+#define DBINDEX_H
 
-#include <gui/MainWindow.h>
+#include <QVector>
+#include <common/DbObject.h>
 
-int main(int argc, char **argv)
+class DbSchema;
+class DbTable;
+
+class DbIndex : public DbObject
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
+    public:
+        virtual ~DbIndex();
 
-    QApplication app(argc, argv);
+        QString tableName() const;
+        void setTableName(const QString &ipTableName);
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+        QString schemaName() const;
+        void setSchemaName(const QString &ipSchemaName);
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
+        DbTable* table() const;
+        void setTable(DbTable *ipTable);
 
-    QSettings settings;
-    QTranslator translator;
+        DbSchema* schema() const;
+        void setSchema(DbSchema *ipSchema);
 
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
-    }
-    
-    //
-    app.installTranslator(&translator);
+        int columnsCount() const;
+        void setColumnsCount(int ipCount);
 
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+        QVector<int> columnsNumbers() const;
+        void addColumnNumber(int ipNum);
 
-    return app.exec();
-}
+        bool isUnique() const;
+        void setUnique(bool ipFlag);
+
+        bool isPrimary() const;
+        void setPrimary(bool ipFlag);
+
+        bool isClustered() const;
+        void setClustered(bool ipFlag);
+
+        bool isValid() const;
+        void setValid(bool ipFlag);
+
+        bool checksXMin() const;
+        void setChecksXMin(bool ipFlag);
+
+        bool isReady() const;
+        void setReady(bool ipFlag);
+
+        virtual void loadData() = 0;
+
+        virtual int objectId();
+
+    protected:
+        QString mTableName;
+        QString mSchemaName;
+        DbTable *mTable;
+        DbSchema *mSchema;
+        int mColumnsCount;
+        QVector<int> mColumnsNumbers;
+        bool mIsUnique;
+        bool mIsPrimary;
+        bool mIsClustered;
+        bool mIsValid;
+        bool mChecksXMin;
+        bool mIsReady;
+
+    protected:
+        DbIndex(QString ipName);
+};
+
+#endif // DBINDEX_H

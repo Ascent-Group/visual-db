@@ -27,54 +27,23 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
-#include <QSettings>
-#include <QTranslator>
-#include <QIcon>
+#ifndef MYSQLTABLE_H
+#define MYSQLTABLE_H
 
-#include <gui/MainWindow.h>
+#include <common/DbTable.h>
 
-int main(int argc, char **argv)
+class MysqlTable : public DbTable
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
+    public:
+        MysqlTable(QString ipSchemaName, QString ipTableName);
+        ~MysqlTable();
 
-    QApplication app(argc, argv);
+        bool checkPrimaryKey(const QString &) const;
+        bool checkForeignKey(const QString &, QString *, QString *) const;
+        bool checkUnique(const QString &) const;
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+    private:
+        void loadData();
+};
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
-
-    QSettings settings;
-    QTranslator translator;
-
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
-    }
-    
-    //
-    app.installTranslator(&translator);
-
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-
-    return app.exec();
-}
+#endif // MYSQLTABLE_H

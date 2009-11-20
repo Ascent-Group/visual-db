@@ -27,54 +27,95 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QApplication>
-#include <QLocale>
-#include <QSettings>
-#include <QTranslator>
-#include <QIcon>
+#include <common/Database.h>
+#include <common/DbView.h>
 
-#include <gui/MainWindow.h>
+#include <QtDebug>
 
-int main(int argc, char **argv)
+/*
+ * Ctor
+ */
+DbView::DbView(QString ipSchemaName, QString ipName)
+    : DbObject(ipName), mSchemaName(ipSchemaName)
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
+    setSchema(Database::instance()->findSchema(mSchemaName));
+}
+/*
+ * Dtor
+ */
+DbView::~DbView()
+{
 
-    QApplication app(argc, argv);
+}
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+/*
+ * Returns view's full name
+ */
+QString
+DbView::fullName() const
+{
+    return QString("%1.%2").arg(mSchemaName).arg(mName);
+}
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
+/*
+ * Returns the schema containing this view
+ */
+DbSchema*
+DbView::schema() const
+{
+    return mSchema;
+}
 
-    QSettings settings;
-    QTranslator translator;
+/*
+ * Sets the schema for the view
+ */
+void
+DbView::setSchema(DbSchema *ipSchema)
+{
+    mSchema = ipSchema;
+}
 
-    // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
-	case QLocale::Russian:
-            translator.load(":visual_db_ru");
-	    break;
-	case QLocale::English:
-	default:
-            translator.load(":visual_db_en");
-    }
-    
-    //
-    app.installTranslator(&translator);
+/*
+ * Returns the owner of this view
+ */
+DbRole*
+DbView::owner() const
+{
+    return mOwner;
+}
 
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-    
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
+/*
+ * Sets the owner for this view
+ */
+void
+DbView::setOwner(DbRole *ipOwner)
+{
+    mOwner = ipOwner;
+}
 
-    return app.exec();
+/*
+ * Returns the definition (reconstructed select)
+ */
+QString
+DbView::definition() const
+{
+    return mDefinition;
+}
+
+/*
+ * Sets the definition for this view
+ */
+void
+DbView::setDefinition(QString ipDef)
+{
+    mDefinition = ipDef;
+}
+
+/*
+ * Returns the id of database object
+ */
+int
+DbView::objectId()
+{
+    return Database::ViewObject;
 }

@@ -48,7 +48,9 @@
 #include <QTime>
 #include <QToolBar>
 #include <QTreeWidgetItem>
+#include <QUndoStack>
 
+#include <AddTableCommand.h>
 #include <ArrowItem.h>
 #include <Database.h>
 #include <DbParameters.h>
@@ -58,6 +60,7 @@
 #include <GraphicsView.h>
 #include <Legend.h>
 #include <MainWindow.h>
+#include <MoveTableCommand.h>
 #include <OptionsDialog.h>
 #include <ProxyParameters.h>
 #include <SceneWidget.h>
@@ -108,6 +111,11 @@ MainWindow::MainWindow()
 
     setWindowState(Qt::WindowMaximized);
 
+    connect(mSceneWidget, SIGNAL(tableMoved(MoveTableCommand *)),
+	    this, SLOT(addCommand(MoveTableCommand *)));
+    connect(mSceneWidget, SIGNAL(tableAdded(AddTableCommand *)),
+	    this, SLOT(addCommand(AddTableCommand *)));
+
     initSession();
 }
 
@@ -156,9 +164,21 @@ void MainWindow::createActions()
     mShowPrintDialogAction = new QAction(tr("Print..."), this);
     connect(mShowPrintDialogAction, SIGNAL(triggered()), this, SLOT(showPrintDialog()));
 
+    // undo stack
+    mUndoStack = new QUndoStack();
+
+    // undo action
+    mUndoAction = mUndoStack->createUndoAction(this, tr("Undo"));
+    mUndoAction->setIcon(QIcon(":img/undo.png"));
+    mUndoAction->setShortcut(QString("Ctrl+Z"));
+    
+    // redo action
+    mRedoAction = mUndoStack->createRedoAction(this, tr("Redo"));
+    mRedoAction->setIcon(QIcon(":img/redo.png"));
+    mRedoAction->setShortcut(QString("Ctrl+Y"));
+
     // add table action
     mAddTableAction = new QAction(tr("Add"), this);
-    //mAddTableAction->setShortcut(QString("Add"));
     mAddTableAction->setStatusTip(tr("Add"));
     connect(mAddTableAction, SIGNAL(triggered()), this, SLOT(addTableItem()));
 
@@ -183,15 +203,11 @@ void MainWindow::createActions()
 
     // show/hide foreign keys
     mShowIndicesAction = new QAction(tr("Show indices"), this);
-//    mShowIndicesAction->setCheckable(true);
-//    mShowIndicesAction->setChecked(true);
     mShowIndicesAction->setStatusTip(tr("Show indices"));
     connect(mShowIndicesAction, SIGNAL(triggered()), mSceneWidget, SLOT(setIndicesVisible()));
 
     // show/hide foreign keys
     mHideIndicesAction = new QAction(tr("Hide indices"), this);
-//    mHideIndicesAction->setCheckable(true);
-//    mHideIndicesAction->setChecked(true);
     mHideIndicesAction->setStatusTip(tr("Hide indices"));
     connect(mHideIndicesAction, SIGNAL(triggered()), mSceneWidget, SLOT(setIndicesInvisible()));
 
@@ -365,6 +381,12 @@ MainWindow::createMenus()
     mFileMenu->addSeparator();
     mFileMenu->addAction(mExitAction);
     mMenuBar->addMenu(mFileMenu);
+
+    // edit menu
+    mEditMenu = new QMenu(tr("Edit"));
+    mEditMenu->addAction(mUndoAction);
+    mEditMenu->addAction(mRedoAction);
+    mMenuBar->addMenu(mEditMenu);
 
     // view menu
     mViewMenu = new QMenu(tr("&View"));
@@ -1087,4 +1109,22 @@ MainWindow::initSession()
             qDebug() << "Last session not found";
         }
     }
+}
+
+/*
+ * Move table slot
+ */
+void
+MainWindow::addCommand(MoveTableCommand *ipCommand)
+{
+    mUndoStack->push(ipCommand);
+}
+
+/*
+ * Add table slot
+ */
+void
+MainWindow::addCommand(AddTableCommand *ipCommand)
+{
+    mUndoStack->push(ipCommand);
 }

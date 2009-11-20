@@ -53,7 +53,7 @@
  * Constructor
  */
 GraphicsScene::GraphicsScene()
-    : QGraphicsScene(), mSelectionPath(), mMoveMode(false)
+    : QGraphicsScene(), mSelectionPath(), mMoveMode(false), mOldPos()
 {
     setBackgroundBrush(QBrush(mSettings.value("Color/Background", Qt::white).value<QColor>()));
     setSceneRect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -136,15 +136,16 @@ GraphicsScene::addTableItem(QString ipSchemaName, QString ipTableName, QMenu *ip
 
     // add table to the scene
     newItem = new TableItem(ipSchemaName, ipTableName, ipMenu);
-    addItem(newItem);
+//    addItem(newItem);
+//
+//    // draw all relations between new table and already added ones
+//    foreach (QGraphicsItem *item, items()) {
+//	if (qgraphicsitem_cast<TableItem *>(item)) {
+//	    createRelations(qgraphicsitem_cast<TableItem *>(item));
+//	}
+//    }  
 
-    // draw all relations between new table and already added ones
-    foreach (QGraphicsItem *item, items()) {
-	if (qgraphicsitem_cast<TableItem *>(item)) {
-	    createRelations(qgraphicsitem_cast<TableItem *>(item));
-	}
-    }  
-
+    emit tableAdded(this, newItem);
     return newItem;
 }
 
@@ -216,7 +217,9 @@ GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
 	return;
     } else {
 	// if we pressed under item - do default actions and return
-	if (itemAt(ipEvent->scenePos())) {
+	QGraphicsItem *item = itemAt(ipEvent->scenePos());
+	if (item && qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) {
+	    mOldPos = item->pos();
 	    QGraphicsScene::mousePressEvent(ipEvent);
 	    return;
 	}
@@ -237,6 +240,11 @@ GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
 void
 GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
+    QGraphicsItem *item = itemAt(ipEvent->scenePos());
+    if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item))) {
+	emit tableMoved(item, mOldPos);
+    }
+
     if (mMoveMode) {
 	QGraphicsScene::mouseReleaseEvent(ipEvent);
 	return;

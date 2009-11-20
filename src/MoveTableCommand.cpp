@@ -27,40 +27,42 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <GraphicsScene.h>
+#include <MoveTableCommand.h>
+#include <QDebug>
+#include <QGraphicsItem>
 
-#ifndef TABLEITEMGROUP_H
-#define TABLEITEMGROUP_H
-
-#include <QGraphicsItemGroup>
-
-class QDomDocument;
-class QDomElement;
-class QGraphicsSceneContextMenuEvent;
-class QMenu;
+/* 
+ * Ctor
+ */
+MoveTableCommand::MoveTableCommand(QGraphicsItem *ipItem, const QPointF &ipPos, QUndoCommand *ipParent)
+    : QUndoCommand(ipParent), mItem(ipItem) , mNewPos(ipItem->pos()), mOldPos(ipPos)
+{
+}
 
 /*
- * Graphics item, iplements group of tables.
+ * Dtor
  */
-class TableItemGroup : public QGraphicsItemGroup
+MoveTableCommand::~MoveTableCommand()
 {
-    public:
-	TableItemGroup(QGraphicsItem *parent = 0);
-	~TableItemGroup();
-	virtual int type() const;
+}
 
-	void setContextMenu(QMenu *);
-	QDomElement toXml(QDomDocument &);
+/*
+ * Undo move command
+ */
+void
+MoveTableCommand::undo()
+{
+    mItem->setPos(mOldPos);
+    setText(QObject::tr("Move table"));
+}
 
-    public:
-	enum { Type = UserType + 6 };
-
-    protected:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
-
-    private:
-	QMenu *mContextMenu;
-};
-
-bool isTableGroup(QGraphicsItem *);
-
-#endif // TABLEITEMGROUP_H
+/*
+ * Redo move command
+ */
+void
+MoveTableCommand::redo()
+{
+    mItem->setPos(mNewPos);
+    setText(QObject::tr("Move table"));
+}

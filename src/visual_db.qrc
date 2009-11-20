@@ -36,5 +36,7 @@
         <file>img/left.png</file>
         <file>img/right.png</file>
         <file>img/reload.png</file>
+        <file>img/undo.png</file>
+        <file>img/redo.png</file>
     </qresource>
 </RCC>

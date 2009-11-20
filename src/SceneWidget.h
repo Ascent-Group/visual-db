@@ -32,6 +32,10 @@
 
 #include <QWidget>
 
+class AddTableCommand;
+class ControlWidget;
+class GraphicsScene;
+class GraphicsView;
 class QDomDocument;
 class QDomElement;
 class QGraphicsItem;
@@ -39,10 +43,7 @@ class QGridLayout;
 class QMenu;
 class QPrinter;
 class QTreeWidgetItem;
-
-class ControlWidget;
-class GraphicsScene;
-class GraphicsView;
+class MoveTableCommand;
 class TableItem;
 class TableItemGroup;
 
@@ -71,6 +72,10 @@ class SceneWidget : public QWidget
 	TableItemGroup *tableGroupFromXml(QDomElement &);
 	void print(QPrinter *);
 
+    signals:
+	void tableMoved(MoveTableCommand *);
+	void tableAdded(AddTableCommand *);
+
     public slots:
 	void showOnScene(QTreeWidgetItem *, int);
 	void deleteTableItem();
@@ -97,6 +102,10 @@ class SceneWidget : public QWidget
 
     private:
 	void setAnchor(QList<QGraphicsItem *>, bool);
+
+    private slots:
+	void sendTableModed(QGraphicsItem *, const QPointF &);
+	void sendTableAdded(GraphicsScene *, TableItem *);
 
     private:
 	GraphicsScene *mScene;

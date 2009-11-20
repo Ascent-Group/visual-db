@@ -27,40 +27,31 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef ADDTABLECOMMAND_H
+#define ADDTABLECOMMAND_H
 
-#ifndef TABLEITEMGROUP_H
-#define TABLEITEMGROUP_H
+#include <QPointF>
+#include <QUndoCommand>
 
-#include <QGraphicsItemGroup>
-
-class QDomDocument;
-class QDomElement;
-class QGraphicsSceneContextMenuEvent;
-class QMenu;
+class GraphicsScene;
+class TableItem;
 
 /*
- * Graphics item, iplements group of tables.
+ * Implement add table command
  */
-class TableItemGroup : public QGraphicsItemGroup
+class AddTableCommand : public QUndoCommand
 {
     public:
-	TableItemGroup(QGraphicsItem *parent = 0);
-	~TableItemGroup();
-	virtual int type() const;
+	AddTableCommand(GraphicsScene *, TableItem *, QUndoCommand *parent = 0);
+	~AddTableCommand();
 
-	void setContextMenu(QMenu *);
-	QDomElement toXml(QDomDocument &);
-
-    public:
-	enum { Type = UserType + 6 };
-
-    protected:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
+	void undo();
+	void redo();
 
     private:
-	QMenu *mContextMenu;
+	TableItem *mTable;
+	GraphicsScene *mScene;
+	QPointF mInitialPosition;
 };
 
-bool isTableGroup(QGraphicsItem *);
-
-#endif // TABLEITEMGROUP_H
+#endif // ADDTABLECOMMAND_H

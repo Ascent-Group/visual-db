@@ -127,12 +127,20 @@ TableItemGroup::toXml(QDomDocument &ipDoc)
 {
     QDomElement element = ipDoc.createElement("tableGroup");
     foreach (QGraphicsItem *item, childItems()) {
-	if (dynamic_cast<TableItemGroup *>(item)) {
-	    element.appendChild(dynamic_cast<TableItemGroup *>(item)->toXml(ipDoc));
-	} else if (dynamic_cast<TableItem *>(item)) {
+	if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+	    element.appendChild(qgraphicsitem_cast<TableItemGroup *>(item)->toXml(ipDoc));
+	} else if (qgraphicsitem_cast<TableItem *>(item)) {
 	    element.appendChild(qgraphicsitem_cast<TableItem *>(item)->toXml(ipDoc));
 	}
     }
     return element;
 }
 
+/*
+ * Check if input graphics item is group item
+ */
+bool
+isTableGroup(QGraphicsItem *ipItem)
+{
+    return qgraphicsitem_cast<TableItemGroup *>(ipItem) != 0;
+}

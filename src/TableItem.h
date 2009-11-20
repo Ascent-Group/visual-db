@@ -128,4 +128,6 @@ class TableItem : public GraphicsItem
 	QImage *mAnchorImage;
 };
 
+bool isTable(QGraphicsItem *);
+
 #endif // TABLEITEM_H

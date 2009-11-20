@@ -27,6 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <AddTableCommand.h>
+#include <ControlWidget.h>
+#include <GraphicsScene.h>
+#include <GraphicsView.h>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFileDialog>
@@ -34,10 +38,7 @@
 #include <QImage>
 #include <QPainter>
 #include <QPrinter>
-
-#include <ControlWidget.h>
-#include <GraphicsScene.h>
-#include <GraphicsView.h>
+#include <MoveTableCommand.h>
 #include <SceneWidget.h>
 #include <TableItem.h>
 #include <TableItemGroup.h>
@@ -64,6 +65,11 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
     connect(mControlWidget, SIGNAL(movedLeft()), mScene, SLOT(moveLeft()));
     connect(mControlWidget, SIGNAL(movedRight()), mScene, SLOT(moveRight()));
     connect(mControlWidget, SIGNAL(settedMoveMode(bool)), mScene, SLOT(setMoveMode(bool)));
+
+    connect(mScene, SIGNAL(tableMoved(QGraphicsItem *, const QPointF &)), 
+	    this, SLOT(sendTableModed(QGraphicsItem *, const QPointF &)));
+    connect(mScene, SIGNAL(tableAdded(GraphicsScene *, TableItem *)),
+	    this, SLOT(sendTableAdded(GraphicsScene *, TableItem *)));
 
     mainLayout = new QGridLayout(this);
     mainLayout->setAlignment(Qt::AlignCenter);
@@ -458,6 +464,7 @@ SceneWidget::tableFromXml(QDomElement &ipElement)
     // get table's coordinates
     TableItem *newTable = mScene->addTableItem(ipElement.attribute("schema"), 
 	    ipElement.attribute("name"), mTableMenu);
+//    newTable->setPos(newTable->mapToScene(ipElement.attribute("x").toInt(), ipElement.attribute("y").toInt()));
     newTable->moveBy(ipElement.attribute("x").toInt() - newTable->x(),
 	    ipElement.attribute("y").toInt() - newTable->y());
     
@@ -520,4 +527,22 @@ SceneWidget::print(QPrinter *ipPrinter)
 	    }
     	}
     }
+}
+
+/*
+ * Send 'table moved' signal
+ */
+void
+SceneWidget::sendTableModed(QGraphicsItem *ipItem, const QPointF &ipPos)
+{
+    emit tableMoved(new MoveTableCommand(ipItem, ipPos));
+}
+
+/*
+ * Send 'table added' signal
+ */
+void
+SceneWidget::sendTableAdded(GraphicsScene *ipScene, TableItem *ipTable)
+{
+    emit tableAdded(new AddTableCommand(ipScene, ipTable));
 }

@@ -51,7 +51,7 @@ class GraphicsItem : public QGraphicsPolygonItem
 
     public:
 	GraphicsItem();
-	~GraphicsItem();
+	virtual ~GraphicsItem();
 	
 	void setX(qreal);
 	qreal x() const;

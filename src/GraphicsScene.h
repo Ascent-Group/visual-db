@@ -64,12 +64,18 @@ class GraphicsScene : public QGraphicsScene {
 	void setSchemeMenu(QMenu *);
 	void setTableMenu(QMenu *);
 	TableItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
+	void deleteTableItem(QList<QGraphicsItem *>);
 	void setAcceptsHoverEvents(bool);
 	void refreshLegend();
 	void updateLegend();
+	void createRelations(TableItem *);
 	TableItem *addTableItem(QString, QString, QMenu *);
 	void setTableColor(TableItem *, QColor);
 	bool moveMode() const;
+
+    signals:
+	void tableMoved(QGraphicsItem *, const QPointF &);
+	void tableAdded(GraphicsScene *, TableItem *);
 
     public slots:
 	void showOnScene(QTreeWidgetItem *, int);
@@ -120,9 +126,10 @@ class GraphicsScene : public QGraphicsScene {
 	QMenu *mTableMenu;
 	QVector<TableItem *> mTables;
 
+	QPointF mOldPos;
+
+    private:
 	TableItem *findTableItem(const QString &, const QString &);
-	void createRelations(TableItem *);
-	void deleteTableItem(QList<QGraphicsItem *>);
 	void setFieldsTypesVisible(QList<QGraphicsItem *>, bool);
 	void setIndicesVisible(QList<QGraphicsItem *>, bool);
 	void setTableColor(QList<QGraphicsItem *>, QColor);

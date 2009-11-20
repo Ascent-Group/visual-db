@@ -39,7 +39,9 @@ HEADERS += ArrowItem.h \
     TableItemGroup.h \
     TabWidget.h \
     Legend.h \
-    SceneWidget.h
+    SceneWidget.h \
+    MoveTableCommand.h \
+    AddTableCommand.h
 
 SOURCES += ArrowItem.cpp \
     ControlWidget.cpp \
@@ -63,7 +65,9 @@ SOURCES += ArrowItem.cpp \
     TableItemGroup.cpp \
     TabWidget.cpp \
     Legend.cpp \
-    SceneWidget.cpp
+    SceneWidget.cpp \
+    MoveTableCommand.cpp \
+    AddTableCommand.cpp
 
 RESOURCES += visual_db.qrc
 

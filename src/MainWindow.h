@@ -32,7 +32,9 @@
 
 #include <QMainWindow>
 #include <QSettings>
+#include <QPointF>
 
+class AddTableCommand;
 class DbParameters;
 class GraphicsScene;
 class GraphicsView;
@@ -46,6 +48,8 @@ class QMenuBar;
 class QPrinter;
 class QProgressBar;
 class QTreeWidgetItem;
+class QUndoStack;
+class MoveTableCommand;
 class SceneWidget;
 class TableItem;
 class TableItemGroup;
@@ -66,6 +70,7 @@ class MainWindow : public QMainWindow
         TreeWidget*mTree;
 
         QMenu *mFileMenu;
+	QMenu *mEditMenu;
         QMenu *mViewMenu;
         QMenu *mSchemeMenu;
         QMenu *mTableMenu;
@@ -79,6 +84,8 @@ class MainWindow : public QMainWindow
         QAction	*mShowDockTablesListAction;
         QAction	*mShowPrintPreviewDialogAction;
         QAction	*mShowPrintDialogAction;
+	QAction	*mUndoAction;
+	QAction	*mRedoAction;
         QAction	*mDeleteTableAction;
         QAction	*mAddTableAction;
         QAction	*mShowFieldsTypesAction;
@@ -124,6 +131,8 @@ class MainWindow : public QMainWindow
         DbParameters *mDbParameters;
 	ProxyParameters *mProxyParameters;
 
+	QUndoStack *mUndoStack;
+
         static const int STATUS_BAR_DEFAULT_WIDTH = 700;
         static const int STATUS_BAR_DEFAULT_HEIGHT = 20;
 
@@ -161,6 +170,8 @@ class MainWindow : public QMainWindow
 	void setFullScreen(bool);
 	void printPreview(QPrinter *);
 	void reloadData();
+	void addCommand(MoveTableCommand *);
+	void addCommand(AddTableCommand *);
 };
 
 #endif // MAINWINDOW_H

@@ -27,40 +27,59 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#ifndef TABLEITEMGROUP_H
-#define TABLEITEMGROUP_H
-
-#include <QGraphicsItemGroup>
-
-class QDomDocument;
-class QDomElement;
-class QGraphicsSceneContextMenuEvent;
-class QMenu;
+#include <AddTableCommand.h>
+#include <GraphicsScene.h>
+#include <QUndoCommand>
+#include <TableItem.h>
+#include <TableItemGroup.h>
 
 /*
- * Graphics item, iplements group of tables.
+ * Ctor
  */
-class TableItemGroup : public QGraphicsItemGroup
+AddTableCommand::AddTableCommand(GraphicsScene *ipScene, TableItem *ipTable, QUndoCommand *ipParent)
+    : QUndoCommand(ipParent)
 {
-    public:
-	TableItemGroup(QGraphicsItem *parent = 0);
-	~TableItemGroup();
-	virtual int type() const;
+    mScene = ipScene;
+    mTable = ipTable;
+    mInitialPosition = ipTable->scenePos();
+    setText(QObject::tr("Add table"));
+}
 
-	void setContextMenu(QMenu *);
-	QDomElement toXml(QDomDocument &);
+/*
+ * Dtor
+ */
+AddTableCommand::~AddTableCommand()
+{
+}
 
-    public:
-	enum { Type = UserType + 6 };
+/*
+ * Undo add node
+ */
+void 
+AddTableCommand::undo()
+{
+    QList<QGraphicsItem *> list;
+    list << mTable;
+    mScene->deleteTableItem(list);
+    mScene->update();
+}
 
-    protected:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
+/*
+ * Redo add node
+ */
+void 
+AddTableCommand::redo()
+{
+    mScene->addItem(mTable);
+    mTable->setPos(mInitialPosition);
 
-    private:
-	QMenu *mContextMenu;
-};
+    // draw all relations between new table and already added ones
+    foreach (QGraphicsItem *item, mScene->items()) {
+	if (qgraphicsitem_cast<TableItem *>(item)) {
+	    mScene->createRelations(qgraphicsitem_cast<TableItem *>(item));
+	}
+    }  
+    mScene->clearSelection();
+    mScene->update();
+}
 
-bool isTableGroup(QGraphicsItem *);
-
-#endif // TABLEITEMGROUP_H

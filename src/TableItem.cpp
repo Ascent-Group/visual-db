@@ -589,3 +589,12 @@ TableItem::toXml(QDomDocument &ipDoc)
     element.setAttribute("blue", itemColor().blue());
     return element;
 }
+
+/*
+ * Check if input graphics item is table item
+ */
+bool
+isTable(QGraphicsItem *ipItem)
+{
+    return qgraphicsitem_cast<TableItem *>(ipItem) != 0;
+}

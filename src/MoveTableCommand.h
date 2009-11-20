@@ -27,40 +27,34 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef MOVETABLECOMMAND_H
+#define MOVETABLECOMMAND_H
 
-#ifndef TABLEITEMGROUP_H
-#define TABLEITEMGROUP_H
+#include <QPointF>
+#include <QUndoCommand>
 
-#include <QGraphicsItemGroup>
-
-class QDomDocument;
-class QDomElement;
-class QGraphicsSceneContextMenuEvent;
-class QMenu;
+class QGraphicsItem;
 
 /*
- * Graphics item, iplements group of tables.
+ * Incapsulate move table command
  */
-class TableItemGroup : public QGraphicsItemGroup
+class MoveTableCommand : public QUndoCommand
 {
     public:
-	TableItemGroup(QGraphicsItem *parent = 0);
-	~TableItemGroup();
-	virtual int type() const;
-
-	void setContextMenu(QMenu *);
-	QDomElement toXml(QDomDocument &);
-
-    public:
-	enum { Type = UserType + 6 };
-
-    protected:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
-
+	MoveTableCommand(QGraphicsItem *, const QPointF &, QUndoCommand *parent = 0);
+//	MoveTableCommand(MoveTableCommand &);
+	~MoveTableCommand();
+	
+        enum { Id = 1234 };
+	
+	void undo();
+	void redo();
+	int id() const { return Id; }
+	
     private:
-	QMenu *mContextMenu;
+	QGraphicsItem *mItem;
+	QPointF mNewPos;
+	QPointF mOldPos;							        
 };
 
-bool isTableGroup(QGraphicsItem *);
-
-#endif // TABLEITEMGROUP_H
+#endif // MOVETABLECOMMAND_H

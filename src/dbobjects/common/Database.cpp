@@ -406,8 +406,10 @@ Database::readSchemas()
         case Database::Unknown:
 			qDebug() << "Database::readSchemas> SqlDriver was not set";
         case Database::PostgreSQL:
-			qstr = QString("SELECT nspname "
+			qstr = QString("SELECT nspname, roles.rolname, description "
 				    "FROM pg_catalog.pg_namespace pgn "
+					"left join pg_roles roles on roles.oid = pgn.nspowner "
+					"left join pg_description descr on descr.objoid = pgn.oid "
 				    "WHERE nspname NOT LIKE 'pg_%';");
 			break;
         case Database::MySQL:
@@ -443,8 +445,11 @@ Database::readSchemas()
 
     // for every retrieved row
     do {
+    	// find owner for scheme
+    	DbRole *dbRole = findRole(query.value(1).toString());
         // create new schema object
-        DbSchema *schema = new DbSchema(query.value(0).toString());
+        DbSchema *schema = new DbSchema(query.value(0).toString(), dbRole);
+        schema->setDescription(query.value(2).toString());
 
         // read tables
         schema->readTables();

@@ -45,8 +45,9 @@
 /*
  * Constructor
  */
-DbSchema::DbSchema(QString ipName)
-    :DbObject(ipName)
+DbSchema::DbSchema(QString ipName, DbRole *ipOwner)
+    :DbObject(ipName),
+    mOwner(ipOwner)
 {
     Database::instance()->addSchema(this);
 }
@@ -638,4 +639,19 @@ DbSchema::findObject(const QString &ipObjectName, Database::Object ipObjectType)
     }
 
     return object;
+}
+
+QString DbSchema::ownerName() const
+{
+	return mOwner->name();
+}
+
+QString DbSchema::description() const
+{
+	return mDescription;
+}
+
+void DbSchema::setDescription(const QString & ipDescription)
+{
+	mDescription = ipDescription;
 }

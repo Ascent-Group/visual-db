@@ -42,6 +42,10 @@
 #include <QTextEdit>
 #include <QtDebug>
 
+const QString DescriptionWidget::sCreateSchemeScript = "CREATE SCHEMA %1 \n"
+			"AUTHORIZATION %2;\n";
+const QString DescriptionWidget::sAddSchemeDecriptionScript = "\nCOMMENT ON SCHEMA public IS '%1';";
+
 /*
  * Ctor
  */
@@ -89,6 +93,45 @@ DescriptionWidget::describe(const DbSchema *ipSchema)
                 tr("Ok"));
         return;
     }
+
+    // get the Scheme data
+    QString name = ipSchema->name();
+    QString ownerName = ipSchema->ownerName();
+    QString description = ipSchema->description();
+
+    mTable->setRowCount(1);
+	mTable->setColumnCount(DescriptionWidget::DbSchemeColumnsCount);
+
+	// set column labels
+	QStringList labels;
+
+	labels << tr("Name")
+			<< tr("Owner")
+			<< tr("Description");
+
+	mTable->setHorizontalHeaderLabels(labels);
+
+	// fill table with Scheme data
+	QTableWidgetItem *nameItem = new QTableWidgetItem();
+	nameItem->setText(name);
+	mTable->setItem(0, DescriptionWidget::SchemeNameCol, nameItem);
+
+	QTableWidgetItem *ownerNameItem = new QTableWidgetItem();
+	ownerNameItem->setText(ownerName);
+	mTable->setItem(0, DescriptionWidget::SchemeOwnerNameCol, ownerNameItem);
+
+	QTableWidgetItem *descrItem = new QTableWidgetItem();
+	descrItem->setText(description);
+	mTable->setItem(0, DescriptionWidget::SchemeDescriptionCol, descrItem);
+
+	// auto resize cells
+	mTable->resizeColumnsToContents();
+
+    QString body = sCreateSchemeScript.arg(name).arg(ownerName);
+
+    if (description.length() > 0)
+    	body += sAddSchemeDecriptionScript.arg(description);
+    mBodyEdit->setText(body);
 }
 
 /*

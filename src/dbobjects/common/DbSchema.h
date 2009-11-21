@@ -42,7 +42,7 @@ class DbView;
 class DbSchema : public DbObject
 {
     public:
-        DbSchema(QString ipName);
+        DbSchema(QString ipName, DbRole *ipOwner);
         virtual ~DbSchema();
 
         void addTable(DbTable *ipTable);
@@ -70,7 +70,14 @@ class DbSchema : public DbObject
 
         virtual int objectId();
 
+        QString ownerName() const;
+
+        QString description() const;
+        void setDescription(const QString & ipDescription);
+
     private:
+        DbRole *mOwner;
+        QString mDescription;
         QVector<DbTable*> mTables;
         QVector<DbView*> mViews;
         QVector<DbProcedure*> mProcedures;

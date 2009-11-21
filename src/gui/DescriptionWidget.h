@@ -110,6 +110,13 @@ class DescriptionWidget : public QWidget
             DbTriggerColumnsCount
         };
 
+        enum DbSchemeCols {
+			SchemeNameCol = 0,
+			SchemeOwnerNameCol,
+			SchemeDescriptionCol,
+			DbSchemeColumnsCount
+		};
+
     public:
         DescriptionWidget(QWidget *ipParent = 0);
         ~DescriptionWidget();
@@ -124,6 +131,9 @@ class DescriptionWidget : public QWidget
     private:
         QTableWidget *mTable;
         QTextEdit *mBodyEdit;
+
+        static const QString sCreateSchemeScript;
+        static const QString sAddSchemeDecriptionScript;
 };
 
 #endif // DESCRIPTIONWIDGET_H

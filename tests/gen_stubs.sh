@@ -69,15 +69,28 @@ if [ "x$1" != "x" ]; then
     exit 0;
 fi
 
-for i in `ls ../src/*.h`; do
+for i in `ls ../src/gui/*.h`; do
     gen_h $i ./
-    #gen_cpp $i;
 done
 
-for i in `ls ../src/dbobjects/*.h`; do
+for i in `ls ../src/gui/behaviour/*.h`; do
     gen_h $i ./dbobjects
-    #gen_cpp $i;
 done
 
+for i in `ls ../src/connect*.h`; do
+    gen_h $i ./dbobjects
+done
+
+for i in `ls ../src/dbobjects/common/*.h`; do
+    gen_h $i ./dbobjects
+done
+
+for i in `ls ../src/dbobjects/psql/*.h`; do
+    gen_h $i ./dbobjects
+done
+
+for i in `ls ../src/dbobjects/mysql/*.h`; do
+    gen_h $i ./dbobjects
+done
 
 exit 0;

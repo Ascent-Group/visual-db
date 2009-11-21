@@ -1,48 +1,71 @@
-#include <AppearancePageTest.h>
-#include <ArrowItemTest.h>
-#include <ColorsPageTest.h>
-#include <ControlWidgetTest.h>
-#include <DbParametersTest.h>
-#include <DescriptionWidgetTest.h>
-#include <GraphicsItemTest.h>
-#include <GraphicsSceneTest.h>
-#include <GraphicsViewTest.h>
-#include <LegendTest.h>
-#include <MainWindowTest.h>
-#include <OptionsDialogTest.h>
-#include <PreferencesPageTest.h>
-#include <ProxyParametersTest.h>
-#include <SceneWidgetTest.h>
-#include <SelectColorWidgetTest.h>
-#include <SqlConnectionDialogTest.h>
-#include <SqlWidgetTest.h>
-#include <TableItemGroupTest.h>
-#include <TableItemTest.h>
-#include <TabWidgetTest.h>
-#include <TreeWidgetTest.h>
+/* connect */
+#include <connect/DbParametersTest.h>
+#include <connect/ProxyParametersTest.h>
+
+/* gui/behaviour */
+#include <gui/behaviour/AddTableCommandTest.h>
+#include <gui/behaviour/MoveTableCommandTest.h>
+
+/* gui */
+#include <gui/AppearancePageTest.h>
+#include <gui/ArrowItemTest.h>
+#include <gui/ColorsPageTest.h>
+#include <gui/ControlWidgetTest.h>
+#include <gui/DescriptionWidgetTest.h>
+#include <gui/GraphicsItemTest.h>
+#include <gui/GraphicsSceneTest.h>
+#include <gui/GraphicsViewTest.h>
+#include <gui/LegendTest.h>
+#include <gui/LogPanelTest.h>
+#include <gui/MainWindowTest.h>
+#include <gui/OptionsDialogTest.h>
+#include <gui/PreferencesPageTest.h>
+#include <gui/SceneWidgetTest.h>
+#include <gui/SelectColorWidgetTest.h>
+#include <gui/SqlConnectionDialogTest.h>
+#include <gui/SqlWidgetTest.h>
+#include <gui/TableItemGroupTest.h>
+#include <gui/TableItemTest.h>
+#include <gui/TabWidgetTest.h>
+#include <gui/TreeWidgetTest.h>
 
 /* dbobjects */
-#include <DatabaseTest.h>
-#include <DbIndexTest.h>
-#include <DbLanguageTest.h>
-#include <DbObjectTest.h>
-#include <DbProcedureTest.h>
-#include <DbRoleTest.h>
-#include <DbSchemaTest.h>
-#include <DbTableTest.h>
-#include <DbTriggerTest.h>
-#include <DbViewTest.h>
-#include <MysqlTableTest.h>
-#include <PsqlIndexTest.h>
-#include <PsqlLanguageTest.h>
-#include <PsqlProcedureTest.h>
-#include <PsqlRoleTest.h>
-#include <PsqlTableTest.h>
-#include <PsqlTriggerTest.h>
-#include <PsqlViewTest.h>
+#include <dbobjects/common/DatabaseTest.h>
+#include <dbobjects/common/DbIndexTest.h>
+#include <dbobjects/common/DbLanguageTest.h>
+#include <dbobjects/common/DbObjectTest.h>
+#include <dbobjects/common/DbProcedureTest.h>
+#include <dbobjects/common/DbRoleTest.h>
+#include <dbobjects/common/DbSchemaTest.h>
+#include <dbobjects/common/DbTableTest.h>
+#include <dbobjects/common/DbTriggerTest.h>
+#include <dbobjects/common/DbViewTest.h>
+#include <dbobjects/mysql/MysqlTableTest.h>
+#include <dbobjects/psql/PsqlIndexTest.h>
+#include <dbobjects/psql/PsqlLanguageTest.h>
+#include <dbobjects/psql/PsqlProcedureTest.h>
+#include <dbobjects/psql/PsqlRoleTest.h>
+#include <dbobjects/psql/PsqlTableTest.h>
+#include <dbobjects/psql/PsqlTriggerTest.h>
+#include <dbobjects/psql/PsqlViewTest.h>
 
 int main(int argc, char **argv)
 {
+    /* gui/behaviour */
+    AddTableCommandTest addTableCommandTest;
+    QTest::qExec(&addTableCommandTest);
+
+    MoveTableCommandTest moveTableCommandTest;
+    QTest::qExec(&moveTableCommandTest);
+
+    /* connect */
+    DbParametersTest dbParametersTest ;
+    QTest::qExec(&dbParametersTest);
+    
+    ProxyParametersTest proxyParametersTest;
+    QTest::qExec(&proxyParametersTest);
+
+    /* gui */
     AppearancePageTest appearancePageTest;
     QTest::qExec(&appearancePageTest);
 
@@ -54,9 +77,6 @@ int main(int argc, char **argv)
 
     ControlWidgetTest controlWidgetTest;
     QTest::qExec(&controlWidgetTest);
-    
-    DbParametersTest dbParametersTest ;
-    QTest::qExec(&dbParametersTest);
     
     DescriptionWidgetTest descriptionWidgetTest;
     QTest::qExec(&descriptionWidgetTest);
@@ -73,6 +93,9 @@ int main(int argc, char **argv)
     LegendTest legendTest;
     QTest::qExec(&legendTest);
 
+    LogPanelTest logPanelTest;
+    QTest::qExec(&logPanelTest);
+
     MainWindowTest mainWindowTest;
     QTest::qExec(&mainWindowTest);
     
@@ -81,9 +104,6 @@ int main(int argc, char **argv)
     
     PreferencesPageTest preferencesPageTest;
     QTest::qExec(&preferencesPageTest);
-    
-    ProxyParametersTest proxyParametersTest;
-    QTest::qExec(&proxyParametersTest);
     
     SceneWidgetTest sceneWidgetTest;
     QTest::qExec(&sceneWidgetTest);

@@ -27,37 +27,103 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SQLCONNECTIONDIALOG_H
-#define SQLCONNECTIONDIALOG_H
+#include <gui/ColorsPage.h>
+#include "ColorsPagePlugin.h"
 
-#include <gui/ui/ui_SqlConnectionDialog.h>
-#include <QDialog>
-
-class DbParameters;
-class ProxyParameters;
-
-/*
- * Dialog for connection to the database
- */
-class SqlConnectionDialog : public QDialog
+ColorsPagePlugin::ColorsPagePlugin(QObject *ipParent)
+    : QObject(ipParent)
 {
-    Q_OBJECT
+    initialized = false;
+}
 
-    public:
-	SqlConnectionDialog(DbParameters *, ProxyParameters *, bool, QWidget *ipParent = 0);
+void
+ColorsPagePlugin::initialize(QDesignerFormEditorInterface * /* core */)
+{
+    if (initialized) {
+	return;
+    }
 
-    private:
-	Ui::SqlConnectionDialog ui;
+    initialized = true;
+}
 
-	DbParameters *mDbParameters;
-	ProxyParameters *mProxyParameters;
 
-    private:
-        void createDialog(bool);
-        void initConnectionFields();
+bool
+ColorsPagePlugin::isInitialized() const
+{
+    return initialized;
+}
 
-    private slots:
-        void addConnection();
-};
+QWidget*
+ColorsPagePlugin::createWidget(QWidget *ipParent)
+{
+    return new ColorsPage(ipParent);
+}
 
-#endif // SQLCONNECTIONDIALOG_H
+QString
+ColorsPagePlugin::name() const
+{
+    return "ColorsPage";
+}
+
+QString
+ColorsPagePlugin::group() const
+{
+    return "VDB Widgets [Ascent]";
+}
+
+QIcon
+ColorsPagePlugin::icon() const
+{
+    return QIcon();
+}
+
+QString
+ColorsPagePlugin::toolTip() const
+{
+    return "";
+}
+
+
+QString
+ColorsPagePlugin::whatsThis() const
+{
+    return "";
+}
+
+bool
+ColorsPagePlugin::isContainer() const
+{
+    return false;
+}
+
+QString
+ColorsPagePlugin::domXml() const
+{
+    return "<ui language=\"c++\">\n"
+	" <widget class=\"ColorsPage\" name=\"mColorsPage\">\n"
+	"  <property name=\"geometry\">\n"
+	"   <rect>\n"
+	"    <x>0</x>\n"
+	"    <y>0</y>\n"
+	"    <width>100</width>\n"
+	"    <height>100</height>\n"
+	"   </rect>\n"
+	"  </property>\n"
+	"  <property name=\"toolTip\" >\n"
+	"   <string>Colors page</string>\n"
+	"  </property>\n"
+	"  <property name=\"whatsThis\" >\n"
+	"   <string>The widget is used in the options dialog for color features.</string>\n"
+	"  </property>\n"
+	" </widget>\n"
+	"</ui>\n";
+}
+
+QString
+ColorsPagePlugin::includeFile() const
+{
+    return "<gui/ColorsPage.h>";
+}
+
+
+Q_EXPORT_PLUGIN2(customwidgetplugin, ColorsPagePlugin)

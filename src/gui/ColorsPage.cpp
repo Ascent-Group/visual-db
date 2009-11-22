@@ -29,10 +29,9 @@
 
 #include <QColor>
 #include <QDebug>
-#include <QGridLayout>
 
-#include "ColorsPage.h"
-#include "SelectColorWidget.h"
+#include <gui/ColorsPage.h>
+#include <gui/SelectColorWidget.h>
 
 /*
  * Constructor
@@ -40,23 +39,8 @@
 ColorsPage::ColorsPage(QWidget *ipParent)
     : QWidget(ipParent)
 {
-    // create items to select given colors
-    mBackgroundWidget = new SelectColorWidget("Background", Qt::white);
-    mTableWidget = new SelectColorWidget("Table", Qt::white);
-//    mFontWidget = new SelectColorWidget("Font", Qt::black);
-    mArrowItemWidget = new SelectColorWidget("ArrowItem", Qt::black);
-    mBorderWidget = new SelectColorWidget("Border", Qt::black);
+    ui.setupUi(this);
 
-    // create mainLayout
-    QGridLayout *mainLayout = new QGridLayout(this);
-    mainLayout->setAlignment(Qt::AlignTop);
-
-    // place items on the widget
-    mainLayout->addWidget(mBackgroundWidget, 0, 0);
-    mainLayout->addWidget(mTableWidget, 1, 0);
-//    mainLayout->addWidget(mFontWidget, 2, 0);
-    mainLayout->addWidget(mArrowItemWidget, 2, 0);
-    mainLayout->addWidget(mBorderWidget, 3, 0);
 }
 
 /*
@@ -72,7 +56,7 @@ ColorsPage::~ColorsPage()
 QColor
 ColorsPage::backgroundColor() const
 {
-    return mBackgroundWidget->color();
+    return ui.mBackgroundWidget->color();
 }
 
 /*
@@ -81,7 +65,7 @@ ColorsPage::backgroundColor() const
 QColor
 ColorsPage::tableColor() const
 {
-    return mTableWidget->color();
+    return ui.mTableWidget->color();
 }
 
 /*
@@ -99,7 +83,7 @@ ColorsPage::tableColor() const
 QColor
 ColorsPage::arrowColor() const
 {
-    return mArrowItemWidget->color();
+    return ui.mArrowItemWidget->color();
 }
 
 /*
@@ -108,5 +92,5 @@ ColorsPage::arrowColor() const
 QColor
 ColorsPage::borderColor() const
 {
-    return mBorderWidget->color();
+    return ui.mBorderWidget->color();
 }

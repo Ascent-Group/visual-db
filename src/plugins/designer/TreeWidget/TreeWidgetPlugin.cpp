@@ -27,37 +27,103 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SQLCONNECTIONDIALOG_H
-#define SQLCONNECTIONDIALOG_H
+#include <gui/TreeWidget.h>
+#include "TreeWidgetPlugin.h"
 
-#include <gui/ui/ui_SqlConnectionDialog.h>
-#include <QDialog>
-
-class DbParameters;
-class ProxyParameters;
-
-/*
- * Dialog for connection to the database
- */
-class SqlConnectionDialog : public QDialog
+TreeWidgetPlugin::TreeWidgetPlugin(QObject *ipParent)
+    : QObject(ipParent)
 {
-    Q_OBJECT
+    initialized = false;
+}
 
-    public:
-	SqlConnectionDialog(DbParameters *, ProxyParameters *, bool, QWidget *ipParent = 0);
+void
+TreeWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
+{
+    if (initialized) {
+	return;
+    }
 
-    private:
-	Ui::SqlConnectionDialog ui;
+    initialized = true;
+}
 
-	DbParameters *mDbParameters;
-	ProxyParameters *mProxyParameters;
 
-    private:
-        void createDialog(bool);
-        void initConnectionFields();
+bool
+TreeWidgetPlugin::isInitialized() const
+{
+    return initialized;
+}
 
-    private slots:
-        void addConnection();
-};
+QWidget*
+TreeWidgetPlugin::createWidget(QWidget *ipParent)
+{
+    return new TreeWidget(0, ipParent);
+}
 
-#endif // SQLCONNECTIONDIALOG_H
+QString
+TreeWidgetPlugin::name() const
+{
+    return "TreeWidget";
+}
+
+QString
+TreeWidgetPlugin::group() const
+{
+    return "VDB Widgets [Ascent]";
+}
+
+QIcon
+TreeWidgetPlugin::icon() const
+{
+    return QIcon();
+}
+
+QString
+TreeWidgetPlugin::toolTip() const
+{
+    return "";
+}
+
+
+QString
+TreeWidgetPlugin::whatsThis() const
+{
+    return "";
+}
+
+bool
+TreeWidgetPlugin::isContainer() const
+{
+    return false;
+}
+
+QString
+TreeWidgetPlugin::domXml() const
+{
+    return "<ui language=\"c++\">\n"
+	" <widget class=\"TreeWidget\" name=\"mTreeWidget\">\n"
+	"  <property name=\"geometry\">\n"
+	"   <rect>\n"
+	"    <x>0</x>\n"
+	"    <y>0</y>\n"
+	"    <width>100</width>\n"
+	"    <height>100</height>\n"
+	"   </rect>\n"
+	"  </property>\n"
+	"  <property name=\"toolTip\" >\n"
+	"   <string>Tree widget</string>\n"
+	"  </property>\n"
+	"  <property name=\"whatsThis\" >\n"
+	"   <string>The tree widget is used for displaying db objects.</string>\n"
+	"  </property>\n"
+	" </widget>\n"
+	"</ui>\n";
+}
+
+QString
+TreeWidgetPlugin::includeFile() const
+{
+    return "<gui/TreeWidget.h>";
+}
+
+
+Q_EXPORT_PLUGIN2(customwidgetplugin, TreeWidgetPlugin)

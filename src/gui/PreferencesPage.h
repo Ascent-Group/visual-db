@@ -30,6 +30,7 @@
 #ifndef PREFERENCESPAGE_H
 #define PREFERENCESPAGE_H
 
+#include <gui/ui/ui_PreferencesPage.h>
 #include <QSettings>
 #include <QWidget>
 
@@ -56,13 +57,8 @@ class PreferencesPage : public QWidget
 	int countSavedSession() const;
 
     private:
+	Ui::PreferencesPage ui;
 	QSettings mSettings;
-        QCheckBox *mShowIndicesBox;
-        QCheckBox *mNewTabAutoSwitchBox;
-	QCheckBox *mLoadLastSessionBox;
-	QLineEdit *mSessionDirectoryEdit;
-	QPushButton *mSessionDirectoryButton;
-	QSpinBox *mCountSessionsSpin;
 
     private slots:
         void folder();

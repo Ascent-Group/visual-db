@@ -13,18 +13,19 @@ CONFIG += release
 
 INCLUDEPATH += $$SRC/
 
-FORMS = $$SRC/gui/ui/LogPanel.ui
+FORMS = $$SRC/gui/ui/ColorsPage.ui
 
+HEADERS = $$SRC/gui/ColorsPage.h \
+	  $$SRC/gui/SelectColorWidget.h \
+	  ColorsPagePlugin.h
 
-HEADERS = $$SRC/gui/LogPanel.h \
-	  LogPanelPlugin.h
-
-SOURCES = $$SRC/gui/LogPanel.cpp \
-	  LogPanelPlugin.cpp
+SOURCES = $$SRC/gui/ColorsPage.cpp \
+	  $$SRC/gui/SelectColorWidget.cpp \
+	  ColorsPagePlugin.cpp
 
 RESOURCES += $$SRC/visual_db.qrc
 
 target.path = $$[QT_INSTALL_PLUGINS]/designer
 sources.files = $$SOURCES $$HEADERS *.pro
-sources.path = $$[QT_INSTALL_EXAMPLES]/designer/LogPanelPlugin
+sources.path = $$[QT_INSTALL_EXAMPLES]/designer/ColorsPage
 INSTALLS += target

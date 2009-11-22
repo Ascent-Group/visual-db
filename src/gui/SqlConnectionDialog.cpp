@@ -52,6 +52,8 @@ SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
 					 QWidget *ipParent)
 	: QDialog(ipParent), mDbParameters(ipDbParameters), mProxyParameters(ipProxyParameters)
 {
+    ui.setupUi(this);
+
     createDialog(ipLoadSession);
     if (!ipDbParameters) {
 	mDbParameters = new DbParameters();
@@ -68,140 +70,50 @@ SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
 void
 SqlConnectionDialog::createDialog(bool ipLoadSession)
 {
-    setWindowTitle(tr("Connect to db"));
-
-    // driver
-    mDbDriverLabel = new QLabel(tr("Driver:"));
-    mDbDriverCombo = new QComboBox;
 
     QStringList drivers = QSqlDatabase::drivers();
-    mDbDriverCombo->addItems(drivers);
+    ui.mDbDriverCombo->addItems(drivers);
 
     /* temporary (2 mysql and odbc searches are needed) */
     QStringList redundantDrivers;
     redundantDrivers << "QMYSQL" << "QMYSQL" << "QSQLITE" << "QOCI" << "QODBC" << "QODBC" << "QTDS" << "QDB2" << "QIBASE";
 
     foreach(QString drv, redundantDrivers) {
-        int index = mDbDriverCombo->findText(drv, Qt::MatchContains);
+        int index = ui.mDbDriverCombo->findText(drv, Qt::MatchContains);
         if (-1 != index) {
-            mDbDriverCombo->removeItem(index);
+            ui.mDbDriverCombo->removeItem(index);
         }
     }
 
-    // host name
-    mDbHostLabel = new QLabel(tr("Server:"));
-    mDbHostEdit = new QLineEdit();
-
     // port
-    mDbPortLabel = new QLabel(tr("Port:"));
-    mDbPortEdit = new QLineEdit();
-    mDbPortEdit->setValidator(new QIntValidator(1, 65535, this));
+    ui.mDbPortEdit->setValidator(new QIntValidator(1, 65535, this));
 
-    // database name
-    mDbNameLabel = new QLabel(tr("Database:"));
-    mDbNameEdit = new QLineEdit();
-    
-    // user name
-    mDbUserLabel = new QLabel(tr("User:"));
-    mDbUserEdit = new QLineEdit();
-    
     // user password
-    mDbPasswordLabel = new QLabel(tr("Password:"));
-    mDbPasswordEdit = new QLineEdit();
-    mDbPasswordEdit->setEchoMode(QLineEdit::Password);
+    ui.mDbPasswordEdit->setEchoMode(QLineEdit::Password);
 
     // proxy type
-    mProxyTypeLabel = new QLabel();
-    mProxyTypeLabel->setText(tr("Type:"));
-    mProxyTypeBox = new QComboBox();
-    mProxyTypeBox->addItem(QString("Socks5"), QNetworkProxy::Socks5Proxy);
-    mProxyTypeBox->addItem(QString("Http"), QVariant(QNetworkProxy::HttpProxy));
-    mProxyTypeBox->addItem(QString("HttpCaching"), QVariant(QNetworkProxy::HttpCachingProxy));
+    ui.mProxyTypeBox->addItem(QString("Socks5"), QNetworkProxy::Socks5Proxy);
+    ui.mProxyTypeBox->addItem(QString("Http"), QVariant(QNetworkProxy::HttpProxy));
+    ui.mProxyTypeBox->addItem(QString("HttpCaching"), QVariant(QNetworkProxy::HttpCachingProxy));
 //    mProxyTypeBox->addItem(QString("FtpCaching"), QVariant(QNetworkProxy::FtpCachingProxy));
 
-    // proxy host
-    mProxyHostNameLabel = new QLabel();
-    mProxyHostNameLabel->setText(tr("Address:"));
-    mProxyHostNameEdit = new QLineEdit();
-
     // proxy port
-    mProxyPortLabel = new QLabel();
-    mProxyPortLabel->setText(tr("Port:"));
-    mProxyPortEdit = new QLineEdit();
-    mProxyPortEdit->setValidator(new QIntValidator(1, 65535, this));
+    ui.mProxyPortEdit->setValidator(new QIntValidator(1, 65535, this));
 
-    // proxy user
-    mProxyUserLabel = new QLabel();
-    mProxyUserLabel->setText(tr("User:"));
-    mProxyUserEdit = new QLineEdit();
 
     // proxy password
-    mProxyPasswordLabel = new QLabel();
-    mProxyPasswordLabel->setText(tr("Password:"));
-    mProxyPasswordEdit = new QLineEdit();
-    mProxyPasswordEdit->setEchoMode(QLineEdit::Password);
+    ui.mProxyPasswordEdit->setEchoMode(QLineEdit::Password);
 
-    QGridLayout *proxyGroupLayout = new QGridLayout();
-    proxyGroupLayout->addWidget(mProxyTypeLabel, 0, 0);
-    proxyGroupLayout->addWidget(mProxyTypeBox, 0, 1);
-    proxyGroupLayout->addWidget(mProxyHostNameLabel, 1, 0);
-    proxyGroupLayout->addWidget(mProxyHostNameEdit, 1, 1);
-    proxyGroupLayout->addWidget(mProxyPortLabel, 2, 0);
-    proxyGroupLayout->addWidget(mProxyPortEdit, 2, 1);
-    proxyGroupLayout->addWidget(mProxyUserLabel, 3, 0);
-    proxyGroupLayout->addWidget(mProxyUserEdit, 3, 1);
-    proxyGroupLayout->addWidget(mProxyPasswordLabel, 4, 0);
-    proxyGroupLayout->addWidget(mProxyPasswordEdit, 4, 1);
+    ui.mDbDriverCombo->setEnabled(!ipLoadSession);
+    ui.mDbHostEdit->setEnabled(!ipLoadSession);
+    ui.mDbPortEdit->setEnabled(!ipLoadSession);
+    ui.mDbNameEdit->setEnabled(!ipLoadSession);
+    ui.mDbUserEdit->setEnabled(!ipLoadSession);
+    ui.mProxyTypeBox->setEnabled(!ipLoadSession);
+    ui.mProxyHostNameEdit->setEnabled(!ipLoadSession);
+    ui.mProxyPortEdit->setEnabled(!ipLoadSession);
+    ui.mProxyUserEdit->setEnabled(!ipLoadSession);
 
-    // use or not proxy
-    mUseProxyBox = new QGroupBox();
-    mUseProxyBox->setTitle(tr("Proxy"));
-    mUseProxyBox->setCheckable(true);
-    mUseProxyBox->setLayout(proxyGroupLayout);
-
-    // connection button
-    mConnectButton = new QPushButton(tr("Connect"));
-
-    // cansel button
-    mCancelButton = new QPushButton(tr("Cancel"));
-
-    // layout for buttons
-    QHBoxLayout *hLayout = new QHBoxLayout();
-    hLayout->addWidget(mConnectButton);
-    hLayout->addWidget(mCancelButton);
-
-    // main layout
-    mMainLayout = new QGridLayout(this);
-
-    mMainLayout->addWidget(mDbDriverLabel, 0, 0);
-    mMainLayout->addWidget(mDbDriverCombo, 0, 1);
-    mMainLayout->addWidget(mDbHostLabel, 1, 0);
-    mMainLayout->addWidget(mDbHostEdit, 1, 1);
-    mMainLayout->addWidget(mDbPortLabel, 2, 0);
-    mMainLayout->addWidget(mDbPortEdit, 2, 1);
-    mMainLayout->addWidget(mDbNameLabel, 3, 0);
-    mMainLayout->addWidget(mDbNameEdit, 3, 1);
-    mMainLayout->addWidget(mDbUserLabel, 4, 0);
-    mMainLayout->addWidget(mDbUserEdit, 4, 1);
-    mMainLayout->addWidget(mDbPasswordLabel, 5, 0);
-    mMainLayout->addWidget(mDbPasswordEdit, 5, 1);
-    mMainLayout->addWidget(mUseProxyBox, 6, 0, 1, 2);
-
-    mMainLayout->addLayout(hLayout, 7, 0, 1, 2, Qt::AlignRight);
-
-    mDbDriverCombo->setEnabled(!ipLoadSession);
-    mDbHostEdit->setEnabled(!ipLoadSession);
-    mDbPortEdit->setEnabled(!ipLoadSession);
-    mDbNameEdit->setEnabled(!ipLoadSession);
-    mDbUserEdit->setEnabled(!ipLoadSession);
-    mProxyTypeBox->setEnabled(!ipLoadSession);
-    mProxyHostNameEdit->setEnabled(!ipLoadSession);
-    mProxyPortEdit->setEnabled(!ipLoadSession);
-    mProxyUserEdit->setEnabled(!ipLoadSession);
-
-    // connects
-    connect(mConnectButton, SIGNAL(clicked()), this, SLOT(addConnection()));
-    connect(mCancelButton, SIGNAL(clicked()), this, SLOT(reject()));
 }
 
 /*
@@ -214,17 +126,17 @@ SqlConnectionDialog::initConnectionFields()
 	return;
     }
 
-    mDbDriverCombo->setCurrentIndex(mDbDriverCombo->findText(mDbParameters->dbDriver()));
-    mDbHostEdit->setText(mDbParameters->dbHost());
-    mDbPortEdit->setText(QString::number(mDbParameters->dbPort()));
-    mDbNameEdit->setText(mDbParameters->dbName());
-    mDbUserEdit->setText(mDbParameters->dbUser());
+    ui.mDbDriverCombo->setCurrentIndex(ui.mDbDriverCombo->findText(mDbParameters->dbDriver()));
+    ui.mDbHostEdit->setText(mDbParameters->dbHost());
+    ui.mDbPortEdit->setText(QString::number(mDbParameters->dbPort()));
+    ui.mDbNameEdit->setText(mDbParameters->dbName());
+    ui.mDbUserEdit->setText(mDbParameters->dbUser());
     
-    mUseProxyBox->setChecked(mProxyParameters->useProxy());
-    mProxyTypeBox->setCurrentIndex(mProxyTypeBox->findData(mProxyParameters->proxyType()));
-    mProxyHostNameEdit->setText(mProxyParameters->proxyHost());
-    mProxyPortEdit->setText(QString::number(mProxyParameters->proxyPort()));
-    mProxyUserEdit->setText(mProxyParameters->proxyUser());
+    ui.mUseProxyBox->setChecked(mProxyParameters->useProxy());
+    ui.mProxyTypeBox->setCurrentIndex(ui.mProxyTypeBox->findData(mProxyParameters->proxyType()));
+    ui.mProxyHostNameEdit->setText(mProxyParameters->proxyHost());
+    ui.mProxyPortEdit->setText(QString::number(mProxyParameters->proxyPort()));
+    ui.mProxyUserEdit->setText(mProxyParameters->proxyUser());
 }
 
 /*
@@ -234,13 +146,13 @@ void
 SqlConnectionDialog::addConnection() 
 {
     // proxy section
-    if (mUseProxyBox->isChecked()) {
+    if (ui.mUseProxyBox->isChecked()) {
         // remember connection paramters
 	mProxyParameters->setUseProxy(true);
-	mProxyParameters->setProxyType((QNetworkProxy::ProxyType)mProxyTypeBox->itemData(mProxyTypeBox->currentIndex()).toInt());
-	mProxyParameters->setProxyHost(mProxyHostNameEdit->text());
-	mProxyParameters->setProxyPort(mProxyPortEdit->text().toInt());
-	mProxyParameters->setProxyUser(mProxyUserEdit->text());
+	mProxyParameters->setProxyType((QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toInt());
+	mProxyParameters->setProxyHost(ui.mProxyHostNameEdit->text());
+	mProxyParameters->setProxyPort(ui.mProxyPortEdit->text().toInt());
+	mProxyParameters->setProxyUser(ui.mProxyUserEdit->text());
 
 	setProxy((*mProxyParameters));
     } else {
@@ -249,12 +161,12 @@ SqlConnectionDialog::addConnection()
     // proxy section end
 
     // remember database settings
-    mDbParameters->setDbDriver(mDbDriverCombo->currentText());
-    mDbParameters->setDbHost(mDbHostEdit->text());
-    mDbParameters->setDbPort(mDbPortEdit->text().toInt());
-    mDbParameters->setDbName(mDbNameEdit->text());
-    mDbParameters->setDbUser(mDbUserEdit->text());
-    mDbParameters->setDbPassword(mDbPasswordEdit->text());
+    mDbParameters->setDbDriver(ui.mDbDriverCombo->currentText());
+    mDbParameters->setDbHost(ui.mDbHostEdit->text());
+    mDbParameters->setDbPort(ui.mDbPortEdit->text().toInt());
+    mDbParameters->setDbName(ui.mDbNameEdit->text());
+    mDbParameters->setDbUser(ui.mDbUserEdit->text());
+    mDbParameters->setDbPassword(ui.mDbPasswordEdit->text());
 
     // create connection to database
     if (createConnection((*mDbParameters))) {

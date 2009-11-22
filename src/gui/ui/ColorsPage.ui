@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ColorsPage</class>
+ <widget class="QWidget" name="ColorsPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>286</width>
+    <height>196</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="SelectColorWidget" name="mBackgroundWidget">
+     <property name="toolTip">
+      <string>The current time</string>
+     </property>
+     <property name="whatsThis">
+      <string>The widget is used for picking a color.</string>
+     </property>
+     <property name="labelText">
+      <string>Background</string>
+     </property>
+     <property name="defaultColor">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="SelectColorWidget" name="mTableWidget">
+     <property name="toolTip">
+      <string>The current time</string>
+     </property>
+     <property name="whatsThis">
+      <string>The widget is used for picking a color.</string>
+     </property>
+     <property name="labelText">
+      <string>Table</string>
+     </property>
+     <property name="defaultColor">
+      <color>
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="SelectColorWidget" name="mArrowItemWidget">
+     <property name="toolTip">
+      <string>The current time</string>
+     </property>
+     <property name="whatsThis">
+      <string>The widget is used for picking a color.</string>
+     </property>
+     <property name="labelText">
+      <string>ArrowItem</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="SelectColorWidget" name="mBorderWidget">
+     <property name="toolTip">
+      <string>The current time</string>
+     </property>
+     <property name="whatsThis">
+      <string>The widget is used for picking a color.</string>
+     </property>
+     <property name="labelText">
+      <string>Border</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SelectColorWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">gui/SelectColorWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

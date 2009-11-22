@@ -24,7 +24,12 @@ UI_HEADERS_DIR = gui/ui
 
 QMAKE_CXXFLAGS += -g2
 
-FORMS = gui/ui/LogPanel.ui
+FORMS = gui/ui/AppearancePage.ui \
+	gui/ui/ColorsPage.ui \
+	gui/ui/LogPanel.ui \
+	gui/ui/PreferencesPage.ui \
+	gui/ui/SelectColorWidget.ui \
+	gui/ui/SqlConnectionDialog.ui
 
 # Input
 HEADERS += connect/DbParameters.h \

@@ -28,9 +28,6 @@
  */
 
 #include <gui/AppearancePage.h>
-#include <QComboBox>
-#include <QGridLayout>
-#include <QLabel>
 #include <QLocale>
 
 
@@ -40,23 +37,16 @@
 AppearancePage::AppearancePage(QWidget *ipParent)
     : QWidget(ipParent)
 {
-    // create combo box to select the appropriate language 
-    mLanguageCombo = new QComboBox();
-    mLanguageCombo->addItem(tr("English"), QLocale::English);
-    mLanguageCombo->addItem(tr("Russian"), QLocale::Russian);
+    ui.setupUi(this);
+
+    // create combo box to select the appropriate language
+    ui.mLanguageCombo->addItem(tr("English"), QLocale::English);
+    ui.mLanguageCombo->addItem(tr("Russian"), QLocale::Russian);
     
     // set language to the one from settings
-    int currentIndex = mLanguageCombo->findData(mSettings.value("Appearance/Language", QLocale::English));
-    mLanguageCombo->setCurrentIndex(currentIndex);
+    int currentIndex = ui.mLanguageCombo->findData(mSettings.value("Appearance/Language", QLocale::English));
+    ui.mLanguageCombo->setCurrentIndex(currentIndex);
 
-    // create main layout
-    QGridLayout *mainLayout = new QGridLayout(this);
-    mainLayout->setAlignment(Qt::AlignTop);
-    mainLayout->addWidget(new QLabel(tr("Language:")), 0, 0);
-    mainLayout->addWidget(mLanguageCombo, 0, 1);
-
-    mainLayout->addWidget(new QLabel(tr("*In order to change the language "
-		    "you need to restart the application!")), 5, 0, 1, 2, Qt::AlignBottom);
 }
 
 /*
@@ -72,6 +62,6 @@ AppearancePage::~AppearancePage()
 int
 AppearancePage::language() const
 {
-    return mLanguageCombo->itemData(mLanguageCombo->currentIndex()).toInt();
+    return ui.mLanguageCombo->itemData(ui.mLanguageCombo->currentIndex()).toInt();
 }
 

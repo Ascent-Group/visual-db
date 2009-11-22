@@ -27,37 +27,35 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SQLCONNECTIONDIALOG_H
-#define SQLCONNECTIONDIALOG_H
+#ifndef SELECTCOLORWIDGETPLUGIN_H
+#define SELECTCOLORWIDGETPLUGIN_H
 
-#include <gui/ui/ui_SqlConnectionDialog.h>
-#include <QDialog>
+#include <QtGui>
+#include <QDesignerCustomWidgetInterface>
 
-class DbParameters;
-class ProxyParameters;
-
-/*
- * Dialog for connection to the database
- */
-class SqlConnectionDialog : public QDialog
+class SelectColorWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface
 {
     Q_OBJECT
+	
+    Q_INTERFACES(QDesignerCustomWidgetInterface)
 
     public:
-	SqlConnectionDialog(DbParameters *, ProxyParameters *, bool, QWidget *ipParent = 0);
-
+	SelectColorWidgetPlugin(QObject *parent = 0);
+	
+	bool isContainer() const;
+	bool isInitialized() const;
+	QIcon icon() const;
+	QString domXml() const;
+	QString group() const;
+	QString includeFile() const;
+	QString name() const;
+	QString toolTip() const;
+	QString whatsThis() const;
+	QWidget *createWidget(QWidget *parent);
+	void initialize(QDesignerFormEditorInterface *core);
+	
     private:
-	Ui::SqlConnectionDialog ui;
-
-	DbParameters *mDbParameters;
-	ProxyParameters *mProxyParameters;
-
-    private:
-        void createDialog(bool);
-        void initConnectionFields();
-
-    private slots:
-        void addConnection();
+	bool initialized;
 };
 
-#endif // SQLCONNECTIONDIALOG_H
+#endif // SELECTCOLORWIDGETPLUGIN_H

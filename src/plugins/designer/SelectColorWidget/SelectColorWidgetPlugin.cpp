@@ -27,17 +27,17 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/LogPanel.h>
-#include "LogPanelPlugin.h"
+#include <gui/SelectColorWidget.h>
+#include "SelectColorWidgetPlugin.h"
 
-LogPanelPlugin::LogPanelPlugin(QObject *ipParent)
+SelectColorWidgetPlugin::SelectColorWidgetPlugin(QObject *ipParent)
     : QObject(ipParent)
 {
     initialized = false;
 }
 
 void
-LogPanelPlugin::initialize(QDesignerFormEditorInterface * /* core */)
+SelectColorWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
 	return;
@@ -48,59 +48,59 @@ LogPanelPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 
 
 bool
-LogPanelPlugin::isInitialized() const
+SelectColorWidgetPlugin::isInitialized() const
 {
     return initialized;
 }
 
 QWidget*
-LogPanelPlugin::createWidget(QWidget *ipParent)
+SelectColorWidgetPlugin::createWidget(QWidget *ipParent)
 {
-    return new LogPanel(ipParent);
+    return new SelectColorWidget(ipParent);
 }
 
 QString
-LogPanelPlugin::name() const
+SelectColorWidgetPlugin::name() const
 {
-    return "LogPanel";
+    return "SelectColorWidget";
 }
 
 QString
-LogPanelPlugin::group() const
+SelectColorWidgetPlugin::group() const
 {
     return "VDB Widgets [Ascent]";
 }
 
 QIcon
-LogPanelPlugin::icon() const
+SelectColorWidgetPlugin::icon() const
 {
     return QIcon();
 }
 
 QString
-LogPanelPlugin::toolTip() const
+SelectColorWidgetPlugin::toolTip() const
 {
     return "";
 }
 
 
 QString
-LogPanelPlugin::whatsThis() const
+SelectColorWidgetPlugin::whatsThis() const
 {
     return "";
 }
 
 bool
-LogPanelPlugin::isContainer() const
+SelectColorWidgetPlugin::isContainer() const
 {
     return false;
 }
 
 QString
-LogPanelPlugin::domXml() const
+SelectColorWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-	" <widget class=\"LogPanel\" name=\"mLogPanel\">\n"
+	" <widget class=\"SelectColorWidget\" name=\"mSelectColorWidget\">\n"
 	"  <property name=\"geometry\">\n"
 	"   <rect>\n"
 	"    <x>0</x>\n"
@@ -110,20 +110,26 @@ LogPanelPlugin::domXml() const
 	"   </rect>\n"
 	"  </property>\n"
 	"  <property name=\"toolTip\" >\n"
-	"   <string>Log panel</string>\n"
+	"   <string>Select color widget</string>\n"
 	"  </property>\n"
 	"  <property name=\"whatsThis\" >\n"
-	"   <string>The log panel widget is used for displaying apps output.</string>\n"
+	"   <string>The widget is used for picking a color.</string>\n"
+	"  </property>\n"
+	"  <property name=\"labelText\" >\n"
+	"   <string></string>\n"
+	"  </property>\n"
+	"  <property name=\"defaultColor\" >\n"
+	"   <color></color>\n"
 	"  </property>\n"
 	" </widget>\n"
 	"</ui>\n";
 }
 
 QString
-LogPanelPlugin::includeFile() const
+SelectColorWidgetPlugin::includeFile() const
 {
-    return "<gui/LogPanel.h>";
+    return "<gui/SelectColorWidget.h>";
 }
 
 
-Q_EXPORT_PLUGIN2(customwidgetplugin, LogPanelPlugin)
+Q_EXPORT_PLUGIN2(customwidgetplugin, SelectColorWidgetPlugin)

@@ -28,13 +28,7 @@
  */
 
 #include <gui/PreferencesPage.h>
-#include <QCheckBox>
 #include <QFileDialog>
-#include <QGridLayout>
-#include <QLabel>
-#include <QLineEdit>
-#include <QPushButton>
-#include <QSpinBox>
 
 /*
  * Constructor
@@ -42,50 +36,23 @@
 PreferencesPage::PreferencesPage(QWidget *ipParent)
     : QWidget(ipParent)
 {
-    // create checkbox for hide/show indices
-    mShowIndicesBox = new QCheckBox();
-    mShowIndicesBox->setText(tr("Show indices"));
+    ui.setupUi(this);
+
     // set this flag to the one from settings
-    mShowIndicesBox->setChecked(mSettings.value("Preferences/ShowIndices", false).toBool());
+    ui.mShowIndicesBox->setChecked(mSettings.value("Preferences/ShowIndices", false).toBool());
 
     // create spin box to select count of saved sessions
-    mCountSessionsSpin = new QSpinBox();
-    mCountSessionsSpin->setValue(mSettings.value("Preferences/CountSavedSessions", 10).toInt());
-    mCountSessionsSpin->setMaximumWidth(50);
+    ui.mCountSessionsSpin->setValue(mSettings.value("Preferences/CountSavedSessions", 10).toInt());
 
     // choose directory where sessions will be saved
-    mSessionDirectoryEdit = new QLineEdit(mSettings.value("Preferences/SessionFolder", "./").toString());
-    mSessionDirectoryEdit->setReadOnly(true);
-    mSessionDirectoryButton = new QPushButton();
-    mSessionDirectoryButton->setIcon(QIcon(":/img/folder.png"));
-    connect(mSessionDirectoryButton, SIGNAL(clicked()), this, SLOT(folder()));
+    ui.mSessionDirectoryEdit->setText(mSettings.value("Preferences/SessionFolder", "./").toString());
 
-    // create check box for auto switch to a new tab
-    mNewTabAutoSwitchBox = new QCheckBox();
-    mNewTabAutoSwitchBox->setText(tr("Automatically switch to a new tab"));
     // set this flag to the one from settings
-    mNewTabAutoSwitchBox->setChecked(mSettings.value("Preferences/NewTabAutoSwitch", true).toBool());
+    ui.mNewTabAutoSwitchBox->setChecked(mSettings.value("Preferences/NewTabAutoSwitch", true).toBool());
 
-    // load or not last saved session
-    mLoadLastSessionBox = new QCheckBox();
-    mLoadLastSessionBox->setText(tr("Automatically load last session when open application"));
     // set this flag to the one from settings
-    mLoadLastSessionBox->setChecked(mSettings.value("Preferences/LoadLastSession", false).toBool());
+    ui.mLoadLastSessionBox->setChecked(mSettings.value("Preferences/LoadLastSession", false).toBool());
 
-    // create mainLayout
-    QGridLayout *mainLayout = new QGridLayout(this);
-
-    // populate main layout
-    mainLayout->addWidget(mShowIndicesBox, 0, 0);
-    mainLayout->addWidget(new QLabel(tr("Sessions limit")), 1, 0);
-    mainLayout->addWidget(mCountSessionsSpin, 1, 1);
-    mainLayout->addWidget(new QLabel(tr("Session directory:")), 2, 0);
-    mainLayout->addWidget(mSessionDirectoryEdit, 2, 1);
-    mainLayout->addWidget(mSessionDirectoryButton, 2, 2);
-    mainLayout->addWidget(mNewTabAutoSwitchBox, 3, 0, 1, 2);
-    mainLayout->addWidget(mLoadLastSessionBox, 4, 0, 1, 2);
-
-//    mainLayout->addWidget(new QLabel(tr("Under constrution... Sorry...")));
 }
 
 /*
@@ -101,7 +68,7 @@ PreferencesPage::~PreferencesPage()
 bool
 PreferencesPage::showIndices() const
 {
-    return mShowIndicesBox->isChecked();
+    return ui.mShowIndicesBox->isChecked();
 }
 
 /*
@@ -110,7 +77,7 @@ PreferencesPage::showIndices() const
 QString
 PreferencesPage::sessionFolder() const
 {
-    return mSessionDirectoryEdit->text();
+    return ui.mSessionDirectoryEdit->text();
 }
 
 /*
@@ -119,7 +86,7 @@ PreferencesPage::sessionFolder() const
 bool
 PreferencesPage::newTabAutoSwitch() const
 {
-    return mNewTabAutoSwitchBox->isChecked();
+    return ui.mNewTabAutoSwitchBox->isChecked();
 }
 
 /*
@@ -133,7 +100,7 @@ PreferencesPage::folder()
     QStringList fileNames;
     if (dialog.exec()) {
 	fileNames = dialog.selectedFiles();
-	mSessionDirectoryEdit->setText(fileNames.first() + "/");
+	ui.mSessionDirectoryEdit->setText(fileNames.first() + "/");
     }
 }
 
@@ -143,7 +110,7 @@ PreferencesPage::folder()
 int
 PreferencesPage::countSavedSession() const
 {
-    return mCountSessionsSpin->value();
+    return ui.mCountSessionsSpin->value();
 }
 
 /*
@@ -152,5 +119,5 @@ PreferencesPage::countSavedSession() const
 bool
 PreferencesPage::loadLastSession() const
 {
-    return mLoadLastSessionBox->isChecked();
+    return ui.mLoadLastSessionBox->isChecked();
 }

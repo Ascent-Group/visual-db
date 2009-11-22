@@ -30,13 +30,12 @@
 #ifndef SELECTCOLORWIDGET_H
 #define SELECTCOLORWIDGET_H
 
+#include <gui/ui/ui_SelectColorWidget.h>
+#include <QDynamicPropertyChangeEvent>
 #include <QSettings>
 #include <QWidget>
 
 class QColor;
-class QComboBox;
-class QGraphicsView;
-class QPushButton;
 
 /*
  * Widget to provide the color selection.
@@ -44,28 +43,35 @@ class QPushButton;
 class SelectColorWidget : public QWidget
 {
     Q_OBJECT
+    Q_PROPERTY(QString labelText READ labelText() WRITE setLabelText)
+    Q_PROPERTY(QColor defaultColor READ defaultColor() WRITE setDefaultColor)
 
     public:
-	SelectColorWidget(const QString &, const QColor &, QWidget *ipParent = 0);
+	SelectColorWidget(QWidget *ipParent = 0);
 	~SelectColorWidget();
 
 	QColor color() const;
- 
+
+	QString labelText() const;
+	void setLabelText(QString ipText);
+
+	QColor defaultColor() const;
+	void setDefaultColor(QColor ipColor);
+
     private:
+	Ui::SelectColorWidget ui;
 	QSettings mSettings;
-	
+
 	QColor mColor;
 	QColor mDefaultColor;
 
-	QComboBox *mCombo;
-	QPushButton *mColorButton;
-
     private:
+	void init();
         void getColorFromDialog();
 
     private slots:
-	void colorSelectSlot(int);
-	void buttonClickSlot();
+	void colorSelect(int);
+	void buttonClick();
 };
 
 #endif // SELECTCOLORWIDGET_H

@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SqlConnectionDialog</class>
+ <widget class="QDialog" name="SqlConnectionDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>236</width>
+    <height>424</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Connect to db</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="mDbDriverLabel">
+       <property name="text">
+        <string>Driver:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QComboBox" name="mDbDriverCombo"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="mDbHostLabel">
+       <property name="text">
+        <string>Server:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="mDbHostEdit"/>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="mDbPortLabel">
+       <property name="text">
+        <string>Port:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="mDbPortEdit"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="mDbNameLabel">
+       <property name="text">
+        <string>Database:</string>
+       </property>
+       <property name="openExternalLinks">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="mDbNameEdit"/>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="mDbUserLabel">
+       <property name="text">
+        <string>User:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="mDbUserEdit"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="mDbPasswordLabel">
+       <property name="text">
+        <string>Password:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="mDbPasswordEdit"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="mUseProxyBox">
+     <property name="title">
+      <string>Proxy</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="mProxyTypeLabel">
+        <property name="text">
+         <string>Type:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QComboBox" name="mProxyTypeBox"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="mProxyHostNameLabel">
+        <property name="text">
+         <string>Address:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="mProxyHostNameEdit"/>
+      </item>
+      <item row="2" column="1" rowspan="2">
+       <widget class="QLineEdit" name="mProxyPortEdit"/>
+      </item>
+      <item row="3" column="0" rowspan="2">
+       <widget class="QLabel" name="mProxyUserLabel">
+        <property name="text">
+         <string>User:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" rowspan="2">
+       <widget class="QLineEdit" name="mProxyUserEdit"/>
+      </item>
+      <item row="5" column="0" rowspan="2">
+       <widget class="QLabel" name="mProxyPasswordLabel">
+        <property name="text">
+         <string>Password:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="mProxyPasswordEdit"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="mProxyPortLabel">
+        <property name="text">
+         <string>Port:</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="mConnectButton">
+       <property name="text">
+        <string>Connect</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="mCancelButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>mCancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SqlConnectionDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>193</x>
+     <y>401</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>145</x>
+     <y>-18</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mConnectButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SqlConnectionDialog</receiver>
+   <slot>addConnection()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>114</x>
+     <y>406</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>69</x>
+     <y>-12</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>addConnection()</slot>
+ </slots>
+</ui>

@@ -13,18 +13,17 @@ CONFIG += release
 
 INCLUDEPATH += $$SRC/
 
-FORMS = $$SRC/gui/ui/LogPanel.ui
+FORMS = $$SRC/gui/ui/AppearancePage.ui
 
+HEADERS = $$SRC/gui/AppearancePage.h \
+	  AppearancePagePlugin.h
 
-HEADERS = $$SRC/gui/LogPanel.h \
-	  LogPanelPlugin.h
-
-SOURCES = $$SRC/gui/LogPanel.cpp \
-	  LogPanelPlugin.cpp
+SOURCES = $$SRC/gui/AppearancePage.cpp \
+	  AppearancePagePlugin.cpp
 
 RESOURCES += $$SRC/visual_db.qrc
 
 target.path = $$[QT_INSTALL_PLUGINS]/designer
 sources.files = $$SOURCES $$HEADERS *.pro
-sources.path = $$[QT_INSTALL_EXAMPLES]/designer/LogPanelPlugin
+sources.path = $$[QT_INSTALL_EXAMPLES]/designer/AppearancePage
 INSTALLS += target

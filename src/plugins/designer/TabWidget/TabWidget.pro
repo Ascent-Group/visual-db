@@ -13,18 +13,16 @@ CONFIG += release
 
 INCLUDEPATH += $$SRC/
 
-FORMS = $$SRC/gui/ui/LogPanel.ui
 
+HEADERS = $$SRC/gui/TabWidget.h \
+	  TabWidgetPlugin.h
 
-HEADERS = $$SRC/gui/LogPanel.h \
-	  LogPanelPlugin.h
-
-SOURCES = $$SRC/gui/LogPanel.cpp \
-	  LogPanelPlugin.cpp
+SOURCES = $$SRC/gui/TabWidget.cpp \
+	  TabWidgetPlugin.cpp
 
 RESOURCES += $$SRC/visual_db.qrc
 
 target.path = $$[QT_INSTALL_PLUGINS]/designer
 sources.files = $$SOURCES $$HEADERS *.pro
-sources.path = $$[QT_INSTALL_EXAMPLES]/designer/LogPanelPlugin
+sources.path = $$[QT_INSTALL_EXAMPLES]/designer/TabWidget
 INSTALLS += target

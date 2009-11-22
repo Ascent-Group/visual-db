@@ -44,7 +44,7 @@ class TreeWidget : public QTreeWidget
     Q_OBJECT
 
     public:
-	TreeWidget(QMenu *);
+	TreeWidget(QMenu *, QWidget *ipParent = 0);
 	~TreeWidget();
 
 	void refresh();

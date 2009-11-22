@@ -30,6 +30,7 @@
 #ifndef APPEARANCEPAGE_H
 #define APPEARANCEPAGE_H
 
+#include <gui/ui/ui_AppearancePage.h>
 #include <QSettings>
 #include <QWidget>
 
@@ -49,7 +50,7 @@ class AppearancePage : public QWidget
 	int language() const;
 
     private:
-	QComboBox *mLanguageCombo;
+	Ui::AppearancePage ui;
 	QSettings mSettings;
 };
 

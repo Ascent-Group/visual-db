@@ -27,17 +27,17 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/LogPanel.h>
-#include "LogPanelPlugin.h"
+#include <gui/PreferencesPage.h>
+#include "PreferencesPagePlugin.h"
 
-LogPanelPlugin::LogPanelPlugin(QObject *ipParent)
+PreferencesPagePlugin::PreferencesPagePlugin(QObject *ipParent)
     : QObject(ipParent)
 {
     initialized = false;
 }
 
 void
-LogPanelPlugin::initialize(QDesignerFormEditorInterface * /* core */)
+PreferencesPagePlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
 	return;
@@ -48,59 +48,59 @@ LogPanelPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 
 
 bool
-LogPanelPlugin::isInitialized() const
+PreferencesPagePlugin::isInitialized() const
 {
     return initialized;
 }
 
 QWidget*
-LogPanelPlugin::createWidget(QWidget *ipParent)
+PreferencesPagePlugin::createWidget(QWidget *ipParent)
 {
-    return new LogPanel(ipParent);
+    return new PreferencesPage(ipParent);
 }
 
 QString
-LogPanelPlugin::name() const
+PreferencesPagePlugin::name() const
 {
-    return "LogPanel";
+    return "PreferencesPage";
 }
 
 QString
-LogPanelPlugin::group() const
+PreferencesPagePlugin::group() const
 {
     return "VDB Widgets [Ascent]";
 }
 
 QIcon
-LogPanelPlugin::icon() const
+PreferencesPagePlugin::icon() const
 {
     return QIcon();
 }
 
 QString
-LogPanelPlugin::toolTip() const
+PreferencesPagePlugin::toolTip() const
 {
     return "";
 }
 
 
 QString
-LogPanelPlugin::whatsThis() const
+PreferencesPagePlugin::whatsThis() const
 {
     return "";
 }
 
 bool
-LogPanelPlugin::isContainer() const
+PreferencesPagePlugin::isContainer() const
 {
     return false;
 }
 
 QString
-LogPanelPlugin::domXml() const
+PreferencesPagePlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-	" <widget class=\"LogPanel\" name=\"mLogPanel\">\n"
+	" <widget class=\"PreferencesPage\" name=\"mPreferencesPage\">\n"
 	"  <property name=\"geometry\">\n"
 	"   <rect>\n"
 	"    <x>0</x>\n"
@@ -110,20 +110,20 @@ LogPanelPlugin::domXml() const
 	"   </rect>\n"
 	"  </property>\n"
 	"  <property name=\"toolTip\" >\n"
-	"   <string>Log panel</string>\n"
+	"   <string>Preferences page</string>\n"
 	"  </property>\n"
 	"  <property name=\"whatsThis\" >\n"
-	"   <string>The log panel widget is used for displaying apps output.</string>\n"
+	"   <string>The widget is used in the options dialog for preferred features.</string>\n"
 	"  </property>\n"
 	" </widget>\n"
 	"</ui>\n";
 }
 
 QString
-LogPanelPlugin::includeFile() const
+PreferencesPagePlugin::includeFile() const
 {
-    return "<gui/LogPanel.h>";
+    return "<gui/PreferencesPage.h>";
 }
 
 
-Q_EXPORT_PLUGIN2(customwidgetplugin, LogPanelPlugin)
+Q_EXPORT_PLUGIN2(customwidgetplugin, PreferencesPagePlugin)

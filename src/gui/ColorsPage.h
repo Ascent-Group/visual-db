@@ -30,10 +30,11 @@
 #ifndef COLORPAGE_H
 #define COLORPAGE_H
 
+#include <gui/ui/ui_ColorsPage.h>
+#include <gui/SelectColorWidget.h>
 #include <QWidget>
 
 class QColor;
-class SelectColorWidget;
 
 /*
  * Color page in the settings dialog
@@ -52,10 +53,7 @@ class ColorsPage : public QWidget
 	QColor borderColor() const;
 
     private:
-	SelectColorWidget *mBackgroundWidget;
-	SelectColorWidget *mTableWidget;
-	SelectColorWidget *mArrowItemWidget;
-	SelectColorWidget *mBorderWidget;
+	Ui::ColorsPage ui;
 };
 
 #endif // COLORPAGE_H

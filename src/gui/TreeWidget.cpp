@@ -42,8 +42,8 @@ static void setBold(QTreeWidgetItem *, bool);
 /*
  * Constructor
  */
-TreeWidget::TreeWidget(QMenu *ipMenu)
-    : QTreeWidget(), mContextMenu(ipMenu)
+TreeWidget::TreeWidget(QMenu *ipMenu, QWidget *ipParent)
+    : QTreeWidget(ipParent), mContextMenu(ipMenu)
 {
     setHeaderLabel(QString(""));
 }

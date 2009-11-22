@@ -30,7 +30,7 @@
 #ifndef PSQLINDEX_H
 #define PSQLINDEX_H
 
-#include <DbIndex.h>
+#include <common/DbIndex.h>
 
 class PsqlIndex : public DbIndex
 {

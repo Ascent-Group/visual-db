@@ -30,7 +30,7 @@
 #ifndef PSQLTRIGGER_H
 #define PSQLTRIGGER_H
 
-#include <DbTrigger.h>
+#include <common/DbTrigger.h>
 
 class PsqlTrigger : public DbTrigger
 {

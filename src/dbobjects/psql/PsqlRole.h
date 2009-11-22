@@ -30,7 +30,7 @@
 #ifndef PSQLROLE_H
 #define PSQLROLE_H
 
-#include <DbRole.h>
+#include <common/DbRole.h>
 #include <QDate>
 
 class PsqlRole : public DbRole

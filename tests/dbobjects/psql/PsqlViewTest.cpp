@@ -27,12 +27,13 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <dbobjects/common/DbSchema.h>
+#include <dbobjects/psql/PsqlView.h>
 #include <dbobjects/psql/PsqlViewTest.h>
 
 void
 PsqlViewTest::initTestCase()
 {
-
 }
 
 void
@@ -45,6 +46,25 @@ PsqlViewTest::cleanupTestCase()
 void
 PsqlViewTest::loadDataTest()
 {
-    QVERIFY(0);
+    QString schemaName = QString("vtunes");
+    QString viewName = QString("users_playlists");
+
+    Database *dbInst = Database::instance();
+
+    // we need this for schema parent
+    dbInst->readSchemas();
+    dbInst->readRoles();
+
+    DbView *view = dbInst->findSchema(schemaName)->findView(viewName);
+
+    QVERIFY(0 != view);
+
+    QVERIFY(QString(schemaName) == view->schema()->name());
+    QVERIFY(QString(viewName) == view->name());
+    QVERIFY(QString("%1.%2").arg(schemaName).arg(viewName) == view->fullName());
+
+    QVERIFY(Database::ViewObject == view->objectId());
+
+    QVERIFY(0 < view->definition().length());
 }
 

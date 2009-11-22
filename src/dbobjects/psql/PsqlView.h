@@ -30,7 +30,7 @@
 #ifndef PSQLVIEW_H
 #define PSQLVIEW_H
 
-#include <DbView.h>
+#include <common/DbView.h>
 
 class PsqlView : public DbView
 {

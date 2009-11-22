@@ -1,3 +1,6 @@
+#include <QSqlDatabase>
+#include <QSqlError>
+
 /* connect */
 #include <connect/DbParametersTest.h>
 #include <connect/ProxyParametersTest.h>
@@ -49,22 +52,49 @@
 #include <dbobjects/psql/PsqlTriggerTest.h>
 #include <dbobjects/psql/PsqlViewTest.h>
 
+#define DBHOST "localhost"
+#define DBNAME "music_db"
+#define DBUSER "music_user"
+
+/*
+ *
+ */
 int main(int argc, char **argv)
 {
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", "mainConnect");
+    db.setHostName(DBHOST);
+    db.setDatabaseName(DBNAME);
+    db.setUserName(DBUSER);
+
+    if (!db.open()) {
+	qDebug() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
+	    .arg(DBNAME)
+	    .arg(DBHOST)
+	    .arg(DBUSER);
+
+	return QSqlError::ConnectionError;
+    }
+
+#if TEST_BEHAVIOUR
     /* gui/behaviour */
     AddTableCommandTest addTableCommandTest;
     QTest::qExec(&addTableCommandTest);
 
     MoveTableCommandTest moveTableCommandTest;
     QTest::qExec(&moveTableCommandTest);
+#endif // TEST_BEHAVIOUR
 
+#if TEST_CONNECT
     /* connect */
     DbParametersTest dbParametersTest ;
     QTest::qExec(&dbParametersTest);
     
     ProxyParametersTest proxyParametersTest;
     QTest::qExec(&proxyParametersTest);
+#endif // TEST_CONNECT
 
+#if TEST_GUI
     /* gui */
     AppearancePageTest appearancePageTest;
     QTest::qExec(&appearancePageTest);
@@ -128,7 +158,9 @@ int main(int argc, char **argv)
     
     TreeWidgetTest treeWidgetTest;
     QTest::qExec(&treeWidgetTest);
+#endif // TEST_GUI
 
+#if TEST_DBOBJECTS
     /* dbobjects */
     DatabaseTest databaseTest;
     QTest::qExec(&databaseTest);
@@ -183,5 +215,7 @@ int main(int argc, char **argv)
     
     PsqlViewTest psqlViewTest;
     QTest::qExec(&psqlViewTest);
+#endif // TEST_DBOBJECTS
 
+    return 0;
 }

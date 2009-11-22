@@ -29,12 +29,19 @@
 
 #include <dbobjects/common/Database.h>
 #include <dbobjects/common/DatabaseTest.h>
+#include <dbobjects/common/DbLanguage.h>
+#include <dbobjects/common/DbSchema.h>
 
 #include <QSqlDatabase>
 
 void
 DatabaseTest::initTestCase()
 {
+    QString driverName = QString("QPSQL");
+
+    Database *dbInst = Database::instance();
+    dbInst->setSqlDriver(driverName);
+
 }
 
 void
@@ -143,7 +150,13 @@ DatabaseTest::indicesListTest()
 void
 DatabaseTest::instanceTest()
 {
-    QVERIFY(0);
+    Database *dbInst = Database::instance();
+
+    // the pointer should be non-zero
+    QVERIFY(0 != dbInst);
+
+    // additionaly it should be valid
+    QVERIFY(Database::PostgreSQL == dbInst->sqlDriver());
 }
 
 void
@@ -167,7 +180,14 @@ DatabaseTest::readIndicesTest()
 void
 DatabaseTest::readLanguagesTest()
 {
-    QVERIFY(0);
+    Database *dbInst = Database::instance();
+
+    // read langs
+    dbInst->readLanguages();
+
+    // plpgsql MUST be there
+    QString name = QString("plpgsql");
+    QVERIFY(name == dbInst->findLanguage(name)->name());
 }
 
 void
@@ -179,7 +199,20 @@ DatabaseTest::readRolesTest()
 void
 DatabaseTest::readSchemasTest()
 {
-    QVERIFY(0);
+    Database *dbInst = Database::instance();
+
+    // read schemas
+    dbInst->readSchemas();
+
+    // validate their names
+    QString name = QString("public");
+    QVERIFY(name == dbInst->findSchema(name)->name());
+
+    name = QString("information_schema");
+    QVERIFY(name == dbInst->findSchema(name)->name());
+
+    name = QString("vtunes");
+    QVERIFY(name == dbInst->findSchema(name)->name());
 }
 
 void
@@ -203,13 +236,25 @@ DatabaseTest::rolesListTest()
 void
 DatabaseTest::schemasCountTest()
 {
-    QVERIFY(0);
+    Database *dbInst = Database::instance();
+
+    dbInst->readSchemas();
+
+    QVERIFY(3 == dbInst->schemasCount());
 }
 
 void
 DatabaseTest::schemasListTest()
 {
-    QVERIFY(0);
+    QStringList list;
+
+    Database::instance()->schemasList(&list);
+
+    QVERIFY(3 == list.count());
+
+    QVERIFY(list.contains("public"));
+    QVERIFY(list.contains("information_schema"));
+    QVERIFY(list.contains("vtunes"));
 }
 
 void

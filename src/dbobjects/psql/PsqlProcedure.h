@@ -30,7 +30,7 @@
 #ifndef PSQLPROCEDURE_H
 #define PSQLPROCEDURE_H
 
-#include <DbProcedure.h>
+#include <common/DbProcedure.h>
 
 class PsqlProcedure : public DbProcedure
 {

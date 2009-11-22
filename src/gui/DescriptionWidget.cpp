@@ -261,6 +261,7 @@ DescriptionWidget::describe(const DbTable *ipTable)
 
     // auto resize cells
     mTable->resizeColumnsToContents();
+    mTable->resizeRowsToContents();
 
     // show generated body
     body.append("\n);");
@@ -376,6 +377,7 @@ DescriptionWidget::describe(const DbRole *ipRole)
 
     // auto resize cells
     mTable->resizeColumnsToContents();
+    mTable->resizeRowsToContents();
 
     // generate body text
     QString body = QString("CREATE ROLE %1 WITH ").arg(name);
@@ -450,6 +452,7 @@ DescriptionWidget::describe(const DbView *ipView)
 
     // auto resize cells
     mTable->resizeColumnsToContents();
+    mTable->resizeRowsToContents();
 
     // format body
     def.replace(",", ",\n\t");
@@ -595,6 +598,7 @@ DescriptionWidget::describe(const DbIndex *ipIndex)
 
     // auto resize cells
     mTable->resizeColumnsToContents();
+    mTable->resizeRowsToContents();
 
     // generate body
     QString body = QString("CREATE ");
@@ -720,4 +724,9 @@ DescriptionWidget::describe(const DbTrigger *ipTrigger)
                    .arg(tableName);
 
     body.append(QString("EXECUTE PROCEDURE %1(...);").arg(procName));
+
+    // auto resize cells
+    mTable->resizeColumnsToContents();
+    mTable->resizeRowsToContents();
+
 }

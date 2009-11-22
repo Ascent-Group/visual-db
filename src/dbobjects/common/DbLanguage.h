@@ -30,7 +30,7 @@
 #ifndef DBLANGUAGE_H
 #define DBLANGUAGE_H
 
-#include <DbObject.h>
+#include <common/DbObject.h>
 
 class DbLanguage : public DbObject
 {

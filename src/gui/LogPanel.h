@@ -30,8 +30,8 @@
 #ifndef LOGPANEL_H
 #define LOGPANEL_H
 
+#include <gui/ui/ui_LogPanel.h>
 #include <QWidget>
-#include "ui/ui_LogPanel.h"
 
 /*
  * The panel for application's output, will be docked to the bottom

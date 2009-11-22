@@ -30,7 +30,7 @@
 #ifndef PSQLLANGUAGE_H
 #define PSQLLANGUAGE_H
 
-#include <DbLanguage.h>
+#include <common/DbLanguage.h>
 
 class PsqlLanguage : public DbLanguage
 {

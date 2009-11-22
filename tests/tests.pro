@@ -1,10 +1,25 @@
+include (../src/src.pro)
+
 QT += testlib sql network xml
+CONFIG += release
+
+# We need to override old TARGET and DESTDIR
+TARGET = tests
+DESTDIR = ./
 
 MOC_DIR = .moc
 OBJECTS_DIR = .obj
 
 DEPENDPATH += . dbobjects ../src ../src/dbobjects
 INCLUDEPATH += . dbobjects ../src ../src/dbobjects
+
+LIBS += -L../src/dbobjects -ldbobjects
+
+#DEFINES = QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
+#DEFINES += TEST_BEHAVIOUR
+#DEFINES += TEST_GUI
+#DEFINES += TEST_CONNECT
+DEFINES += TEST_DBOBJECTS
 
 HEADERS += connect/DbParametersTest.h \
 	   connect/ProxyParametersTest.h \
@@ -52,8 +67,7 @@ HEADERS += connect/DbParametersTest.h \
 	   dbobjects/psql/PsqlViewTest.h
 
 
-SOURCES += main.cpp \
-	   connect/DbParametersTest.cpp \
+SOURCES += connect/DbParametersTest.cpp \
 	   connect/ProxyParametersTest.cpp \
 	   gui/behaviour/AddTableCommandTest.cpp \
 	   gui/behaviour/MoveTableCommandTest.cpp \

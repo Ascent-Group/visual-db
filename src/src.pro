@@ -35,6 +35,7 @@ FORMS = gui/ui/AppearancePage.ui \
 HEADERS += connect/DbParameters.h \
 	   connect/ProxyParameters.h \
 	   gui/behaviour/AddTableCommand.h \
+	   gui/behaviour/DeleteTableCommand.h \
 	   gui/behaviour/MoveTableCommand.h \
 	   gui/AppearancePage.h \
 	   gui/ArrowItem.h \
@@ -62,6 +63,7 @@ SOURCES += main.cpp \
 	   connect/DbParameters.cpp \
 	   connect/ProxyParameters.cpp \
 	   gui/behaviour/AddTableCommand.cpp \
+	   gui/behaviour/DeleteTableCommand.cpp \
 	   gui/behaviour/MoveTableCommand.cpp \
 	   gui/AppearancePage.cpp \
 	   gui/ArrowItem.cpp \

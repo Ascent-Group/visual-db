@@ -48,6 +48,7 @@
 #include <QTime>
 #include <QToolBar>
 #include <QTreeWidgetItem>
+#include <QUndoCommand>
 #include <QUndoStack>
 #include <common/Database.h>
 #include <common/DbSchema.h>
@@ -67,8 +68,6 @@
 #include <gui/TableItem.h>
 #include <gui/TableItemGroup.h>
 #include <gui/TreeWidget.h>
-#include <gui/behaviour/AddTableCommand.h>
-#include <gui/behaviour/MoveTableCommand.h>
 
 #include <QtDebug>
 
@@ -110,10 +109,8 @@ MainWindow::MainWindow()
 
     setWindowState(Qt::WindowMaximized);
 
-    connect(mSceneWidget, SIGNAL(tableMoved(MoveTableCommand *)),
-	    this, SLOT(addCommand(MoveTableCommand *)));
-    connect(mSceneWidget, SIGNAL(tableAdded(AddTableCommand *)),
-	    this, SLOT(addCommand(AddTableCommand *)));
+    connect(mSceneWidget, SIGNAL(tableActionDone(QUndoCommand *)),
+	    this, SLOT(addCommand(QUndoCommand *)));
 
     initSession();
 }
@@ -263,9 +260,9 @@ void MainWindow::createActions()
     connect(mAnchorAction, SIGNAL(triggered()), mSceneWidget, SLOT(anchorTables()));
 
     // weight anchor for tables
-    mWeightAnchorAction = new QAction(tr("Weight anchor"), this);
-    mWeightAnchorAction->setStatusTip("To weight anchor for selected tables");
-    connect(mWeightAnchorAction, SIGNAL(triggered()), mSceneWidget, SLOT(weightAnchorTables()));
+    mDisableAnchorAction = new QAction(tr("Disable anchor"), this);
+    mDisableAnchorAction->setStatusTip("To weight anchor for selected tables");
+    connect(mDisableAnchorAction, SIGNAL(triggered()), mSceneWidget, SLOT(weightAnchorTables()));
 
     // select all tables in schema
     mSelectAllTablesInSchemaAction = new QAction(tr("Select all tables in schema"), this);
@@ -296,10 +293,10 @@ void MainWindow::createActions()
     connect(mShowGridAction, SIGNAL(toggled(bool)), mSceneWidget, SLOT(showGrid(bool)));
 
     // attach tables to the grid
-    mAttachToGridAction = new QAction(tr("Attach to grid"), this);
+    mAttachToGridAction = new QAction(tr("Align to grid"), this);
     mAttachToGridAction->setCheckable(true);
     mAttachToGridAction->setChecked(mSettings.value("View/AttachToGrid", false).toBool());
-    mAttachToGridAction->setStatusTip(tr("Attach tables to the grid"));
+    mAttachToGridAction->setStatusTip(tr("Align tables to the grid"));
     connect(mAttachToGridAction, SIGNAL(toggled(bool)), mSceneWidget, SLOT(attachToGrid(bool)));
 
     // show/hide grid
@@ -417,7 +414,7 @@ MainWindow::createMenus()
     mTableMenu->addAction(mGroupItemsAction);
     mTableMenu->addAction(mUngroupItemsAction);
     mTableMenu->addAction(mAnchorAction);
-    mTableMenu->addAction(mWeightAnchorAction);
+    mTableMenu->addAction(mDisableAnchorAction);
     mTableMenu->addAction(mSelectAllTablesInSchemaAction);
     mMenuBar->addMenu(mTableMenu);
 
@@ -1114,16 +1111,7 @@ MainWindow::initSession()
  * Move table slot
  */
 void
-MainWindow::addCommand(MoveTableCommand *ipCommand)
-{
-    mUndoStack->push(ipCommand);
-}
-
-/*
- * Add table slot
- */
-void
-MainWindow::addCommand(AddTableCommand *ipCommand)
+MainWindow::addCommand(QUndoCommand *ipCommand)
 {
     mUndoStack->push(ipCommand);
 }

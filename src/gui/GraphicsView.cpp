@@ -60,12 +60,6 @@ GraphicsView::GraphicsView()
 GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent = 0)
     : QGraphicsView(scene, parent), mMovingNow(false)
 {
-    connect(scene, SIGNAL(movedUp()), this, SLOT(moveUp()));
-    connect(scene, SIGNAL(movedDown()), this, SLOT(moveDown()));
-    connect(scene, SIGNAL(movedLeft()), this, SLOT(moveLeft()));
-    connect(scene, SIGNAL(movedRight()), this, SLOT(moveRight()));
-    connect(scene, SIGNAL(settedMoveMode(bool)), this, SLOT(setMoveMode(bool)));
-
     centerOn(GraphicsScene::DEFAULT_WIDTH / 2, GraphicsScene::DEFAULT_HEIGHT / 2);
 }
 
@@ -244,6 +238,7 @@ GraphicsView::mouseReleaseEvent(QMouseEvent *ipEvent)
 void
 GraphicsView::setMoveMode(bool ipFlag)
 {
+    dynamic_cast<GraphicsScene *>(scene())->setMoveMode(ipFlag);
     if (ipFlag) {
 	setCursor(Qt::OpenHandCursor);
     } else {

@@ -32,7 +32,6 @@
 
 #include <QWidget>
 
-class AddTableCommand;
 class ControlWidget;
 class GraphicsScene;
 class GraphicsView;
@@ -43,7 +42,7 @@ class QGridLayout;
 class QMenu;
 class QPrinter;
 class QTreeWidgetItem;
-class MoveTableCommand;
+class QUndoCommand;
 class TableItem;
 class TableItemGroup;
 
@@ -59,53 +58,54 @@ class SceneWidget : public QWidget
 	SceneWidget(QWidget *ipParent = 0, Qt::WindowFlags ipFlags = 0);
 	~SceneWidget();
 	
+	QDomElement toXml(QDomDocument &, bool, bool, bool, bool);
+	QList<QGraphicsItem *> items () const;
+	TableItem *tableFromXml(QDomElement &);
+	TableItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
+	QList<QGraphicsItem *> tableGroupFromXml(QDomElement &);
+	void fromXml(QDomElement &);
+	void print(QPrinter *);
+	void refreshLegend();
 	void setSchemeMenu(QMenu *);
 	void setTableMenu(QMenu *);
-	void refreshLegend();
 	void updateLegend();
-	QList<QGraphicsItem *> items () const;
-	TableItem *addTableItem(QString, QString, QMenu *);
-	TableItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
-	QDomElement toXml(QDomDocument &, bool, bool, bool, bool);
-	void fromXml(QDomElement &);
-	TableItem *tableFromXml(QDomElement &);
-	TableItemGroup *tableGroupFromXml(QDomElement &);
-	void print(QPrinter *);
 
     signals:
-	void tableMoved(MoveTableCommand *);
-	void tableAdded(AddTableCommand *);
+	void movedUp();
+	void movedDown();
+	void movedLeft();
+	void movedRight();
+	void tableActionDone(QUndoCommand *);
 
     public slots:
-	void showOnScene(QTreeWidgetItem *, int);
-	void deleteTableItem();
-        void cleanTableSchemeScene();
-	void setFieldsTypesVisible();
-	void setFieldsTypesInvisible();
-	void setIndicesVisible();
-	void setIndicesInvisible();
-        void setTableColor();
-	void selectAllTables();
 	void adjustTables();
-	void groupItems();
-	void ungroupItems();
 	void anchorTables();
-	void weightAnchorTables();
-	void colorizeAccordingSchemas();
-	void showGrid(bool);
 	void attachToGrid(bool);
+	void colorizeAccordingSchemas();
+	void deleteTableItem();
 	void divideOnPages(bool);
-	void showLegend(bool);
-	void selectAllTablesInSchema();
+	void groupItems();
 	void saveToImage();
+	void selectAllTables();
+	void selectAllTablesInSchema();
+	void setFieldsTypesInvisible();
+	void setFieldsTypesVisible();
+	void setIndicesInvisible();
+	void setIndicesVisible();
 	void showControlWidget(bool);
+	void showGrid(bool);
+	void showLegend(bool);
+	void showOnScene(QTreeWidgetItem *, int);
+	void ungroupItems();
+	void weightAnchorTables();
+        void cleanTableSchemeScene();
+        void setTableColor();
 
     private:
 	void setAnchor(QList<QGraphicsItem *>, bool);
 
     private slots:
-	void sendTableModed(QGraphicsItem *, const QPointF &);
-	void sendTableAdded(GraphicsScene *, TableItem *);
+	void sendTableMoved(QGraphicsItem *, const QPointF &);
 
     private:
 	GraphicsScene *mScene;

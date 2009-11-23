@@ -42,7 +42,6 @@ class MoveTableCommand : public QUndoCommand
 {
     public:
 	MoveTableCommand(QGraphicsItem *, const QPointF &, QUndoCommand *parent = 0);
-//	MoveTableCommand(MoveTableCommand &);
 	~MoveTableCommand();
 	
         enum { Id = 1234 };

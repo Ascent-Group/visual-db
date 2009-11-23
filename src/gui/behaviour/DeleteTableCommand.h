@@ -27,43 +27,30 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QDebug>
-#include <QGraphicsItem>
-#include <gui/GraphicsScene.h>
-#include <gui/behaviour/MoveTableCommand.h>
+#ifndef DELETETABLECOMMAND_H
+#define DELETETABLECOMMAND_H
 
-/* 
- * Ctor
- */
-MoveTableCommand::MoveTableCommand(QGraphicsItem *ipItem, 
-				   const QPointF &ipPos, 
-				   QUndoCommand *ipParent)
-    : QUndoCommand(ipParent), mItem(ipItem), mNewPos(mItem->pos()), mOldPos(ipPos)
-{
-    setText(QObject::tr("Move table"));
-}
+#include <QPointF>
+#include <QUndoCommand>
+
+class GraphicsScene;
+class QGraphicsItem;
 
 /*
- * Dtor
+ * Implement add table command
  */
-MoveTableCommand::~MoveTableCommand()
+class DeleteTableCommand : public QUndoCommand
 {
-}
+    public:
+	DeleteTableCommand(GraphicsScene *, QList<QGraphicsItem *>, QUndoCommand *parent = 0);
+	~DeleteTableCommand();
 
-/*
- * Undo move command
- */
-void
-MoveTableCommand::undo()
-{
-    mItem->setPos(mOldPos);
-}
+	void undo();
+	void redo();
 
-/*
- * Redo move command
- */
-void
-MoveTableCommand::redo()
-{
-    mItem->setPos(mNewPos);
-}
+    private:
+	QList<QGraphicsItem *> mTableList;
+	GraphicsScene *mScene;
+};
+
+#endif // DELETETABLECOMMAND_H

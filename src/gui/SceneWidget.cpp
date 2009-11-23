@@ -41,6 +41,7 @@
 #include <gui/TableItem.h>
 #include <gui/TableItemGroup.h>
 #include <gui/behaviour/AddTableCommand.h>
+#include <gui/behaviour/DeleteTableCommand.h>
 #include <gui/behaviour/MoveTableCommand.h>
 
 #include <QDebug>
@@ -58,18 +59,15 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
 
     mControlWidget = new ControlWidget(GraphicsView::MINIMUM_FACTOR, GraphicsView::MAXIMUM_FACTOR);
 
-//    connect(mControlWidget, SIGNAL(valueChanged(int)), mScene, SLOT(resize(int)));
     connect(mControlWidget, SIGNAL(valueChanged(int)), mView, SLOT(scaleView(int)));
-    connect(mControlWidget, SIGNAL(movedUp()), mScene, SLOT(moveUp()));
-    connect(mControlWidget, SIGNAL(movedDown()), mScene, SLOT(moveDown()));
-    connect(mControlWidget, SIGNAL(movedLeft()), mScene, SLOT(moveLeft()));
-    connect(mControlWidget, SIGNAL(movedRight()), mScene, SLOT(moveRight()));
-    connect(mControlWidget, SIGNAL(settedMoveMode(bool)), mScene, SLOT(setMoveMode(bool)));
+    connect(mControlWidget, SIGNAL(movedUp()), mView, SLOT(moveUp()));
+    connect(mControlWidget, SIGNAL(movedDown()), mView, SLOT(moveDown()));
+    connect(mControlWidget, SIGNAL(movedLeft()), mView, SLOT(moveLeft()));
+    connect(mControlWidget, SIGNAL(movedRight()), mView, SLOT(moveRight()));
+    connect(mControlWidget, SIGNAL(settedMoveMode(bool)), mView, SLOT(setMoveMode(bool)));
 
     connect(mScene, SIGNAL(tableMoved(QGraphicsItem *, const QPointF &)), 
-	    this, SLOT(sendTableModed(QGraphicsItem *, const QPointF &)));
-    connect(mScene, SIGNAL(tableAdded(GraphicsScene *, TableItem *)),
-	    this, SLOT(sendTableAdded(GraphicsScene *, TableItem *)));
+	    this, SLOT(sendTableMoved(QGraphicsItem *, const QPointF &)));
 
     mainLayout = new QGridLayout(this);
     mainLayout->setAlignment(Qt::AlignCenter);
@@ -116,16 +114,8 @@ SceneWidget::setTableMenu(QMenu *ipMenu)
 void
 SceneWidget::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
 {
-    mScene->showOnScene(ipTreeItem, ipCol);
-}
-
-/*
- * Add table item to the scene
- */
-TableItem *
-SceneWidget::addTableItem(QString ipSchemaName, QString ipTableName, QMenu *ipMenu)
-{
-    return mScene->addTableItem(ipSchemaName, ipTableName, ipMenu);
+    QList<QGraphicsItem *> tableList = mScene->showOnScene(ipTreeItem, ipCol);
+    emit tableActionDone(new AddTableCommand(mScene, tableList));
 }
 
 /*
@@ -143,7 +133,9 @@ SceneWidget::showLegend(bool ipFlag)
 void
 SceneWidget::deleteTableItem()
 {
-    mScene->deleteTableItem();
+    if (mScene->selectedItems().count() > 0) { 
+	emit tableActionDone(new DeleteTableCommand(mScene, mScene->selectedItems()));
+    }
 }
 
 /*
@@ -152,7 +144,10 @@ SceneWidget::deleteTableItem()
 void
 SceneWidget::cleanTableSchemeScene()
 {
-    mScene->cleanTableSchemeScene();
+    if (mScene->items().count() > 0) {
+	// first send the signal to remember deleted items
+	emit tableActionDone(new DeleteTableCommand(mScene, mScene->items()));;
+    }
 }
 
 /*
@@ -410,23 +405,6 @@ SceneWidget::toXml(QDomDocument &ipDoc, bool ipShowGrid, bool ipDivideOnPages, b
 }
 
 /*
- * Convert table group to xml
- *
-QDomElement
-SceneWidget::tableGroupToXml(QDomDocument &ipDoc, TableItemGroup *ipItem)
-{
-    QDomElement element = ipDoc.createElement("tableGroup");
-    foreach (QGraphicsItem *item, ipItem->childItems()) {
-	if (dynamic_cast<TableItemGroup *>(item)) {
-	    element.appendChild(tableGroupToXml(ipDoc, qgraphicsitem_cast<TableItemGroup *>(item)));
-	} else if (dynamic_cast<TableItem *>(item)) {
-	    element.appendChild(qgraphicsitem_cast<TableItem *>(item)->toXml(ipDoc));
-	}
-    }
-    return element;
-}*/
-
-/*
  * Load scene from the xml file
  */
 void
@@ -442,17 +420,24 @@ SceneWidget::fromXml(QDomElement &ipElement)
     bool controlWidget = ipElement.attribute("controlWidget").toInt();
     showControlWidget(controlWidget);
 
+    QList<QGraphicsItem *> tableList;
+    // show all elements
     while (!child.isNull()) {
 	QDomElement element = child.toElement();
 	if (!element.isNull()) {
+	    // it's a table
 	    if (element.tagName() == "table") {
-		tableFromXml(element);
+		tableList << tableFromXml(element);
+	    // it's a table group
 	    } else if (element.tagName() == "tableGroup") {
-		tableGroupFromXml(element);
+		tableList << tableGroupFromXml(element);
 	    }
 	}
+	// go to the next element
 	child = child.nextSibling();
     }
+
+    emit tableActionDone(new AddTableCommand(mScene, tableList));
 }
 
 /*
@@ -462,9 +447,8 @@ TableItem *
 SceneWidget::tableFromXml(QDomElement &ipElement)
 {
     // get table's coordinates
-    TableItem *newTable = mScene->addTableItem(ipElement.attribute("schema"), 
+    TableItem *newTable = mScene->newTableItem(ipElement.attribute("schema"), 
 	    ipElement.attribute("name"), mTableMenu);
-//    newTable->setPos(newTable->mapToScene(ipElement.attribute("x").toInt(), ipElement.attribute("y").toInt()));
     newTable->moveBy(ipElement.attribute("x").toInt() - newTable->x(),
 	    ipElement.attribute("y").toInt() - newTable->y());
     
@@ -483,28 +467,28 @@ SceneWidget::tableFromXml(QDomElement &ipElement)
 /*
  * Load table group from the xml file
  */
-TableItemGroup *
+QList<QGraphicsItem *>
 SceneWidget::tableGroupFromXml(QDomElement &ipElement)
 {
-    QList<QGraphicsItem *> tableItems;
+    QList<QGraphicsItem *> tableList;
     // loop for all childs of this group
     QDomNode child = ipElement.firstChild();
     while (!child.isNull()) {
 	QDomElement element = child.toElement();
 	if (!element.isNull()) {
 	    if (element.tagName() == "table") {
-		tableItems << tableFromXml(element);
+		tableList << tableFromXml(element);
 	    } else if (element.tagName() == "tableGroup") {
-		tableItems << tableGroupFromXml(element);
+		tableList << tableGroupFromXml(element);
 	    }
 	}
 	child = child.nextSibling();
     }
 
-    TableItemGroup *group = mScene->createItemGroup(tableItems);
+    TableItemGroup *group = mScene->createItemGroup(tableList);
     group->setContextMenu(mTableMenu);
-    tableItems.clear();
-    return group;
+    tableList << group;
+    return tableList;
 }
 
 /*
@@ -533,16 +517,8 @@ SceneWidget::print(QPrinter *ipPrinter)
  * Send 'table moved' signal
  */
 void
-SceneWidget::sendTableModed(QGraphicsItem *ipItem, const QPointF &ipPos)
+SceneWidget::sendTableMoved(QGraphicsItem *ipItem, const QPointF &ipPos)
 {
-    emit tableMoved(new MoveTableCommand(ipItem, ipPos));
+    emit tableActionDone(new MoveTableCommand(ipItem, ipPos));
 }
 
-/*
- * Send 'table added' signal
- */
-void
-SceneWidget::sendTableAdded(GraphicsScene *ipScene, TableItem *ipTable)
-{
-    emit tableAdded(new AddTableCommand(ipScene, ipTable));
-}

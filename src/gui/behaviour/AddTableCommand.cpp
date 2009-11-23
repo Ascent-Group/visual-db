@@ -27,6 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <QDebug>
 #include <QUndoCommand>
 #include <gui/GraphicsScene.h>
 #include <gui/TableItem.h>
@@ -36,12 +37,11 @@
 /*
  * Ctor
  */
-AddTableCommand::AddTableCommand(GraphicsScene *ipScene, TableItem *ipTable, QUndoCommand *ipParent)
+AddTableCommand::AddTableCommand(GraphicsScene *ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *ipParent)
     : QUndoCommand(ipParent)
 {
     mScene = ipScene;
-    mTable = ipTable;
-    mInitialPosition = ipTable->scenePos();
+    mTableList = ipTableList;
     setText(QObject::tr("Add table"));
 }
 
@@ -58,10 +58,7 @@ AddTableCommand::~AddTableCommand()
 void 
 AddTableCommand::undo()
 {
-    QList<QGraphicsItem *> list;
-    list << mTable;
-    mScene->deleteTableItem(list);
-    mScene->update();
+    mScene->deleteTableItems(mTableList);
 }
 
 /*
@@ -70,16 +67,5 @@ AddTableCommand::undo()
 void 
 AddTableCommand::redo()
 {
-    mScene->addItem(mTable);
-    mTable->setPos(mInitialPosition);
-
-    // draw all relations between new table and already added ones
-    foreach (QGraphicsItem *item, mScene->items()) {
-	if (qgraphicsitem_cast<TableItem *>(item)) {
-	    mScene->createRelations(qgraphicsitem_cast<TableItem *>(item));
-	}
-    }  
-    mScene->clearSelection();
-    mScene->update();
+    mScene->addTableItems(mTableList);
 }
-

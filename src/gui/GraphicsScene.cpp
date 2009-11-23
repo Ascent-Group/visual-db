@@ -85,12 +85,15 @@ GraphicsScene::setTableMenu(QMenu *ipTableMenu)
 /*
  * Add table from tree event to the scene
  */
-void
+QList<QGraphicsItem *>
 GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
-{
+{ 
+    QList<QGraphicsItem *> tableList;
+
     if (0 == ipTreeItem) {
-        return;
+        return tableList;
     }
+   
     // get database object id
     int objId = ipTreeItem->text(TreeWidget::IdCol).toInt();
 
@@ -107,25 +110,27 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
                 }
             }
             // don't add schema item itself
-            return;
+            return tableList;
         }
 
-	addTableItem(ipTreeItem->parent()->parent()->text(TreeWidget::NameCol),
+	TableItem *table = newTableItem(ipTreeItem->parent()->parent()->text(TreeWidget::NameCol),
 		ipTreeItem->text(TreeWidget::NameCol), mTableMenu);
+	tableList.append(table);
 
     } else if (Database::TableNode == objId) {
-
         for (int i = 0; i < ipTreeItem->childCount(); ++i) {
             showOnScene(ipTreeItem->child(i), ipCol);
         }
     }
+
+    return tableList;
 }
 
 /*
- * Add table item to the scene
+ * Create new table item
  */
 TableItem *
-GraphicsScene::addTableItem(QString ipSchemaName, QString ipTableName, QMenu *ipMenu)
+GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ipMenu)
 {
     TableItem *newItem = findTableItem(ipSchemaName, ipTableName);
     // check if such item is already on the scene
@@ -133,19 +138,43 @@ GraphicsScene::addTableItem(QString ipSchemaName, QString ipTableName, QMenu *ip
 	return newItem;
     }
 
-    // add table to the scene
+    // create new table
     newItem = new TableItem(ipSchemaName, ipTableName, ipMenu);
-//    addItem(newItem);
-//
-//    // draw all relations between new table and already added ones
-//    foreach (QGraphicsItem *item, items()) {
-//	if (qgraphicsitem_cast<TableItem *>(item)) {
-//	    createRelations(qgraphicsitem_cast<TableItem *>(item));
-//	}
-//    }  
-
-    emit tableAdded(this, newItem);
     return newItem;
+}
+
+/*
+ * Add existent table items to the scene
+ */
+void
+GraphicsScene::addTableItems(const QList<QGraphicsItem *> &ipItems) 
+{
+    foreach (QGraphicsItem *item, ipItems) {
+	if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+	    TableItemGroup *group = qgraphicsitem_cast<TableItemGroup *>(item);
+            addTableItems(group->children());
+	    createItemGroup(group->children());
+	} else if (qgraphicsitem_cast<TableItem *>(item)) {
+	    addItem(item);
+	}
+    }
+    drawRelations();
+    clearSelection();
+    update();
+}
+
+/*
+ * Draw relations for all tables on the scene
+ */
+void
+GraphicsScene::drawRelations()
+{
+    // draw all relations between new table and already added ones
+    foreach (QGraphicsItem *item, items()) {
+	if (qgraphicsitem_cast<TableItem *>(item)) {
+	    createRelations(qgraphicsitem_cast<TableItem *>(item));
+	}
+    }  
 }
 
 /*
@@ -180,7 +209,7 @@ TableItem *
 GraphicsScene::findTableItem(const QString &ipSchemaName, const QString &ipTableName)
 {
     foreach (QGraphicsItem *item, items()) {
-	if (dynamic_cast<TableItem *>(item)) {
+	if (qgraphicsitem_cast<TableItem *>(item)) {
 	    TableItem *tableItem = qgraphicsitem_cast<TableItem *>(item);
 	    if (tableItem->schemaName() == ipSchemaName && tableItem->tableName() == ipTableName) {
 		return tableItem;
@@ -225,9 +254,6 @@ GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
      
 	clearSelection();
 	mStartSelect = ipEvent->scenePos();
-    
-	// unset handlers for mouse hover events for all items
-//	setAcceptsHoverEvents(false);
 	   
 	QGraphicsScene::mousePressEvent(ipEvent);
     }
@@ -240,7 +266,8 @@ void
 GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     QGraphicsItem *item = itemAt(ipEvent->scenePos());
-    if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item))) {
+    if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) && 
+	    ipEvent->pos() != mOldPos) {
 	emit tableMoved(item, mOldPos);
     }
 
@@ -252,9 +279,6 @@ GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 	    removeItem(mSelectionPath);
 	    mSelectionPath = 0;
 	}
-
-	// set handlers for mouse hover events for all items
-//	setAcceptsHoverEvents(true);
 
 	QGraphicsScene::mouseReleaseEvent(ipEvent);
     }
@@ -362,20 +386,6 @@ GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
 	}
     }
     return group;
-}
-
-/*
- * Set/unset handlers for mouse hover events for all items
- */
-void
-GraphicsScene::setAcceptsHoverEvents(bool ipEnabled)
-{
-    // items can mutate in the loop
-    foreach (QGraphicsItem *item, items()) {
-	if (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) {
-            (item)->setAcceptsHoverEvents(ipEnabled);
-	}
-    }
 }
 
 /*
@@ -504,48 +514,22 @@ GraphicsScene::updateLegend()
 }
 
 /*
- * Delete selected tables from scheme
- */
-void
-GraphicsScene::deleteTableItem()
-{
-    deleteTableItem(selectedItems());
-    updateLegend();
-}
-
-/*
  * Delete given items (recursivelly for groups)
  */
 void
-GraphicsScene::deleteTableItem(QList<QGraphicsItem *> ipItems)
+GraphicsScene::deleteTableItems(QList<QGraphicsItem *> ipItems)
 {
     foreach (QGraphicsItem *item, ipItems) {
         if (qgraphicsitem_cast<TableItem *>(item)) {
             qgraphicsitem_cast<TableItem *>(item)->removeArrowItems();
         } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
-            deleteTableItem(qgraphicsitem_cast<TableItemGroup *>(item)->children());
+            deleteTableItems(qgraphicsitem_cast<TableItemGroup *>(item)->children());
 	}
         removeItem(item);
     }
-}
 
-/*
- * Clean table scheme scene
- */
-void
-GraphicsScene::cleanTableSchemeScene()
-{
-    // items can mutate in the loop
-    foreach (QGraphicsItem *item, items()) {
-	if (qgraphicsitem_cast<TableItem *>(item) || 
-		qgraphicsitem_cast<TableItemGroup *>(item) ||
-		qgraphicsitem_cast<ArrowItem *>(item)) {
-	    removeItem(item);
-	}
-    }
-
-    TableItem::setSeek(0);
     updateLegend();
+    update();
 }
 
 /*
@@ -832,49 +816,12 @@ GraphicsScene::resize(int ipFactor)
 }
 
 /*
- * Move the view up (only emit the signal to the graphics view widget)
- */
-void
-GraphicsScene::moveUp()
-{
-    emit movedUp();
-}
-
-/*
- * Move the view down (only emit the signal to the graphics view widget)
- */
-void
-GraphicsScene::moveDown()
-{
-    emit movedDown();
-}
-
-/*
- * Move the view left (only emit the signal to the graphics view widget)
- */
-void
-GraphicsScene::moveLeft()
-{
-    emit movedLeft();
-}
-
-/*
- * Move the view right (only emit the signal to the graphics view widget)
- */
-void
-GraphicsScene::moveRight()
-{
-    emit movedRight();
-}
-
-/*
  * Set move mode
  */
 void
 GraphicsScene::setMoveMode(bool ipFlag)
 {
     mMoveMode = ipFlag;
-    emit settedMoveMode(ipFlag);
 }
 
 /*

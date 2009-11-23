@@ -33,6 +33,7 @@
 #include <QGraphicsScene>
 #include <QSettings>
 
+class QGraphicsItem;
 class QGraphicsPathItem;
 class QGraphicsSceneMouseEvent;
 class QMenu;
@@ -61,26 +62,25 @@ class GraphicsScene : public QGraphicsScene {
 	GraphicsScene();
 	~GraphicsScene();
 
+	void addTableItems(const QList<QGraphicsItem *> &);
 	void setSchemeMenu(QMenu *);
 	void setTableMenu(QMenu *);
 	TableItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
-	void deleteTableItem(QList<QGraphicsItem *>);
+	void deleteTableItems(QList<QGraphicsItem *>);
 	void setAcceptsHoverEvents(bool);
 	void refreshLegend();
 	void updateLegend();
+	void drawRelations();
 	void createRelations(TableItem *);
-	TableItem *addTableItem(QString, QString, QMenu *);
+	TableItem *newTableItem(QString, QString, QMenu *);
 	void setTableColor(TableItem *, QColor);
 	bool moveMode() const;
 
     signals:
 	void tableMoved(QGraphicsItem *, const QPointF &);
-	void tableAdded(GraphicsScene *, TableItem *);
 
     public slots:
-	void showOnScene(QTreeWidgetItem *, int);
-	void deleteTableItem();
-        void cleanTableSchemeScene();
+	QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int);
 	void setFieldsTypesVisible();
 	void setFieldsTypesInvisible();
 	void setIndicesVisible(bool);
@@ -97,13 +97,6 @@ class GraphicsScene : public QGraphicsScene {
 	void moveLegend(int, int);
 	void selectAllTablesInSchema();
 	void setMoveMode(bool);
-
-    signals:
-	void movedUp();
-	void movedDown();
-	void movedLeft();
-	void movedRight();
-	void settedMoveMode(bool);
 
     protected:
 	void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
@@ -141,10 +134,6 @@ class GraphicsScene : public QGraphicsScene {
 
     private slots:
 	void resize(int);
-	void moveUp();
-	void moveDown();
-	void moveLeft();
-	void moveRight();
 };
 
 #endif // GRAPHICSSCENE_H

@@ -34,7 +34,6 @@
 #include <QSettings>
 #include <QPointF>
 
-class AddTableCommand;
 class DbParameters;
 class GraphicsScene;
 class GraphicsView;
@@ -48,8 +47,8 @@ class QMenuBar;
 class QPrinter;
 class QProgressBar;
 class QTreeWidgetItem;
+class QUndoCommand;
 class QUndoStack;
-class MoveTableCommand;
 class SceneWidget;
 class TableItem;
 class TableItemGroup;
@@ -104,7 +103,7 @@ class MainWindow : public QMainWindow
         QAction	*mShowGridAction;
 	QAction *mAttachToGridAction;
 	QAction *mAnchorAction;
-	QAction *mWeightAnchorAction;
+	QAction *mDisableAnchorAction;
         QAction	*mDivideOnPagesAction;
         QAction	*mShowControlWidgetAction;
         QAction	*mShowLegendAction;
@@ -170,8 +169,7 @@ class MainWindow : public QMainWindow
 	void setFullScreen(bool);
 	void printPreview(QPrinter *);
 	void reloadData();
-	void addCommand(MoveTableCommand *);
-	void addCommand(AddTableCommand *);
+	void addCommand(QUndoCommand *);
 };
 
 #endif // MAINWINDOW_H

@@ -34,7 +34,7 @@
 #include <QUndoCommand>
 
 class GraphicsScene;
-class TableItem;
+class QGraphicsItem;
 
 /*
  * Implement add table command
@@ -42,14 +42,14 @@ class TableItem;
 class AddTableCommand : public QUndoCommand
 {
     public:
-	AddTableCommand(GraphicsScene *, TableItem *, QUndoCommand *parent = 0);
+	AddTableCommand(GraphicsScene *, QList<QGraphicsItem *>, QUndoCommand *parent = 0);
 	~AddTableCommand();
 
 	void undo();
 	void redo();
 
     private:
-	TableItem *mTable;
+	QList<QGraphicsItem *> mTableList;
 	GraphicsScene *mScene;
 	QPointF mInitialPosition;
 };

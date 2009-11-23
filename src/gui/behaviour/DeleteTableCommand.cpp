@@ -28,42 +28,44 @@
  */
 
 #include <QDebug>
-#include <QGraphicsItem>
+#include <QUndoCommand>
 #include <gui/GraphicsScene.h>
-#include <gui/behaviour/MoveTableCommand.h>
+#include <gui/TableItem.h>
+#include <gui/TableItemGroup.h>
+#include <gui/behaviour/DeleteTableCommand.h>
 
-/* 
+/*
  * Ctor
  */
-MoveTableCommand::MoveTableCommand(QGraphicsItem *ipItem, 
-				   const QPointF &ipPos, 
-				   QUndoCommand *ipParent)
-    : QUndoCommand(ipParent), mItem(ipItem), mNewPos(mItem->pos()), mOldPos(ipPos)
+DeleteTableCommand::DeleteTableCommand(GraphicsScene *ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *ipParent)
+    : QUndoCommand(ipParent)
 {
-    setText(QObject::tr("Move table"));
+    mScene = ipScene;
+    mTableList = ipTableList;
+    setText(QObject::tr("Delete table"));
 }
 
 /*
  * Dtor
  */
-MoveTableCommand::~MoveTableCommand()
+DeleteTableCommand::~DeleteTableCommand()
 {
 }
 
 /*
- * Undo move command
+ * Undo add node
  */
-void
-MoveTableCommand::undo()
+void 
+DeleteTableCommand::undo()
 {
-    mItem->setPos(mOldPos);
+    mScene->addTableItems(mTableList);
 }
 
 /*
- * Redo move command
+ * Redo add node
  */
-void
-MoveTableCommand::redo()
+void 
+DeleteTableCommand::redo()
 {
-    mItem->setPos(mNewPos);
+    mScene->deleteTableItems(mTableList);
 }

@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
- * 
+ *
+ *
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -27,57 +27,35 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CONTROLWIDGET_H
-#define CONTROLWIDGET_H
+#ifndef CONTROLWIDGETPLUGIN_H
+#define CONTROLWIDGETPLUGIN_H
 
-#include <gui/ui/ui_ControlWidget.h>
-#include <QWidget>
+#include <QtGui>
+#include <QDesignerCustomWidgetInterface>
 
-
-/*
- * Widget for contorlling the scene - move it, 
- * resize and change the drag-and-drop meaning
- */
-class ControlWidget : public QWidget
+class ControlWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface
 {
     Q_OBJECT
-    Q_PROPERTY(int minZoom READ minZoom WRITE setMinZoom)
-    Q_PROPERTY(int maxZoom READ maxZoom WRITE setMaxZoom)
-    Q_PROPERTY(int zoom READ zoom WRITE setZoom)
+	
+    Q_INTERFACES(QDesignerCustomWidgetInterface)
 
     public:
-	ControlWidget(/*int, int, */QWidget *ipParent = 0);
-	~ControlWidget();
-
-	int minZoom() const;
-	void setMinZoom(int);
-
-	int maxZoom() const;
-	void setMaxZoom(int);
-
-	int zoom() const;
-	void setZoom(int);
-
-    signals:
-	void valueChanged(int ipFactor);
-	void movedUp();
-	void movedDown();
-	void movedRight();
-	void movedLeft();
-	void moveModeSet(bool);
-
+	ControlWidgetPlugin(QObject *parent = 0);
+	
+	bool isContainer() const;
+	bool isInitialized() const;
+	QIcon icon() const;
+	QString domXml() const;
+	QString group() const;
+	QString includeFile() const;
+	QString name() const;
+	QString toolTip() const;
+	QString whatsThis() const;
+	QWidget *createWidget(QWidget *parent);
+	void initialize(QDesignerFormEditorInterface *core);
+	
     private:
-	Ui::ControlWidget ui;
-
-    private slots:
-	void changeValue(int);
-	void increaseValue();
-	void decreaseValue();
-	void moveUp();
-	void moveDown();
-	void moveLeft();
-	void moveRight();
-	void setMoveMode();
+	bool initialized;
 };
 
-#endif // CONTROLWIDGET_H
+#endif // CONTROLWIDGETPLUGIN_H

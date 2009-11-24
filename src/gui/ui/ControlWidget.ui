@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ControlWidget</class>
+ <widget class="QWidget" name="ControlWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>81</width>
+    <height>224</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>3</number>
+   </property>
+   <item row="0" column="1">
+    <widget class="QPushButton" name="mUpButton">
+     <property name="minimumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../visual_db.qrc">
+       <normaloff>:/img/up.png</normaloff>:/img/up.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="mLeftButton">
+     <property name="minimumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../visual_db.qrc">
+       <normaloff>:/img/left.png</normaloff>:/img/left.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QPushButton" name="mMoveButton">
+     <property name="minimumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../visual_db.qrc">
+       <normaloff>:/img/cursor-openhand.png</normaloff>:/img/cursor-openhand.png</iconset>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QPushButton" name="mRightButton">
+     <property name="minimumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../visual_db.qrc">
+       <normaloff>:/img/right.png</normaloff>:/img/right.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="mDownButton">
+     <property name="minimumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../visual_db.qrc">
+       <normaloff>:/img/down.png</normaloff>:/img/down.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <widget class="QPushButton" name="mPlusButton">
+     <property name="minimumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>+</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QPushButton" name="mMinusButton">
+     <property name="minimumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>25</width>
+       <height>25</height>
+      </size>
+     </property>
+     <property name="text">
+      <string>-</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QSlider" name="mScaleSlider">
+     <property name="maximum">
+      <number>10</number>
+     </property>
+     <property name="pageStep">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>5</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../visual_db.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>mScaleSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ControlWidget</receiver>
+   <slot>changeValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>52</x>
+     <y>182</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>87</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mPlusButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ControlWidget</receiver>
+   <slot>increaseValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>63</x>
+     <y>117</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>29</x>
+     <y>-8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mMinusButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ControlWidget</receiver>
+   <slot>decreaseValue()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>63</x>
+     <y>232</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>100</x>
+     <y>176</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mLeftButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ControlWidget</receiver>
+   <slot>moveLeft()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>22</x>
+     <y>52</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>7</x>
+     <y>205</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mRightButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ControlWidget</receiver>
+   <slot>moveRight()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>85</x>
+     <y>58</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>93</x>
+     <y>81</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mDownButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ControlWidget</receiver>
+   <slot>moveDown()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>87</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>11</x>
+     <y>99</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mUpButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ControlWidget</receiver>
+   <slot>moveUp()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>47</x>
+     <y>20</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>93</x>
+     <y>126</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mMoveButton</sender>
+   <signal>clicked()</signal>
+   <receiver>ControlWidget</receiver>
+   <slot>setMoveMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>58</x>
+     <y>54</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>89</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <signal>valueChanged(int)</signal>
+  <signal>movedUp()</signal>
+  <signal>movedDown()</signal>
+  <signal>movedLeft()</signal>
+  <signal>movedRight()</signal>
+  <signal>moveModeSet(bool)</signal>
+  <slot>changeValue(int)</slot>
+  <slot>increaseValue()</slot>
+  <slot>decreaseValue()</slot>
+  <slot>moveUp()</slot>
+  <slot>moveDown()</slot>
+  <slot>moveLeft()</slot>
+  <slot>moveRight()</slot>
+  <slot>setMoveMode()</slot>
+ </slots>
+</ui>

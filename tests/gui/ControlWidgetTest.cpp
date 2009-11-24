@@ -114,7 +114,7 @@ ControlWidgetTest::setMoveModeTest()
 }
 
 void
-ControlWidgetTest::settedMoveModeTest()
+ControlWidgetTest::moveModeSetTest()
 {
     QVERIFY(0);
 }

@@ -126,4 +126,4 @@ LogPanelPlugin::includeFile() const
 }
 
 
-Q_EXPORT_PLUGIN2(customwidgetplugin, LogPanelPlugin)
+Q_EXPORT_PLUGIN2(logpanelplugin, LogPanelPlugin)

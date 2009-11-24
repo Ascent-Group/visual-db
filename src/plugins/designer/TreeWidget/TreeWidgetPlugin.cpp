@@ -126,4 +126,4 @@ TreeWidgetPlugin::includeFile() const
 }
 
 
-Q_EXPORT_PLUGIN2(customwidgetplugin, TreeWidgetPlugin)
+Q_EXPORT_PLUGIN2(treewidgetplugin, TreeWidgetPlugin)

@@ -126,4 +126,4 @@ PreferencesPagePlugin::includeFile() const
 }
 
 
-Q_EXPORT_PLUGIN2(customwidgetplugin, PreferencesPagePlugin)
+Q_EXPORT_PLUGIN2(preferencespageplugin, PreferencesPagePlugin)

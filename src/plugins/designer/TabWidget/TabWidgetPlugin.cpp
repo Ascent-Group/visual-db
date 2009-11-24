@@ -126,4 +126,4 @@ TabWidgetPlugin::includeFile() const
 }
 
 
-Q_EXPORT_PLUGIN2(customwidgetplugin, TabWidgetPlugin)
+Q_EXPORT_PLUGIN2(tabwidgetplugin, TabWidgetPlugin)

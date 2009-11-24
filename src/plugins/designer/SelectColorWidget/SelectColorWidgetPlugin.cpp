@@ -132,4 +132,4 @@ SelectColorWidgetPlugin::includeFile() const
 }
 
 
-Q_EXPORT_PLUGIN2(customwidgetplugin, SelectColorWidgetPlugin)
+Q_EXPORT_PLUGIN2(selectcolorwidgetplugin, SelectColorWidgetPlugin)

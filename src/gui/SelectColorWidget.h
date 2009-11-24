@@ -43,8 +43,8 @@ class QColor;
 class SelectColorWidget : public QWidget
 {
     Q_OBJECT
-    Q_PROPERTY(QString labelText READ labelText() WRITE setLabelText)
-    Q_PROPERTY(QColor defaultColor READ defaultColor() WRITE setDefaultColor)
+    Q_PROPERTY(QString labelText READ labelText WRITE setLabelText)
+    Q_PROPERTY(QColor defaultColor READ defaultColor WRITE setDefaultColor)
 
     public:
 	SelectColorWidget(QWidget *ipParent = 0);

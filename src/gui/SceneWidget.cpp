@@ -57,14 +57,17 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
     mView = new GraphicsView(mScene, this);
     mView->centerOn(0, 0);
 
-    mControlWidget = new ControlWidget(GraphicsView::MINIMUM_FACTOR, GraphicsView::MAXIMUM_FACTOR);
+    mControlWidget = new ControlWidget(/*GraphicsView::MINIMUM_FACTOR, GraphicsView::MAXIMUM_FACTOR*/);
+    mControlWidget->setMinZoom(GraphicsView::MINIMUM_FACTOR);
+    mControlWidget->setMaxZoom(GraphicsView::MAXIMUM_FACTOR);
+    mControlWidget->setZoom((GraphicsView::MAXIMUM_FACTOR + GraphicsView::MINIMUM_FACTOR) / 2);
 
     connect(mControlWidget, SIGNAL(valueChanged(int)), mView, SLOT(scaleView(int)));
     connect(mControlWidget, SIGNAL(movedUp()), mView, SLOT(moveUp()));
     connect(mControlWidget, SIGNAL(movedDown()), mView, SLOT(moveDown()));
     connect(mControlWidget, SIGNAL(movedLeft()), mView, SLOT(moveLeft()));
     connect(mControlWidget, SIGNAL(movedRight()), mView, SLOT(moveRight()));
-    connect(mControlWidget, SIGNAL(settedMoveMode(bool)), mView, SLOT(setMoveMode(bool)));
+    connect(mControlWidget, SIGNAL(moveModeSet(bool)), mView, SLOT(setMoveMode(bool)));
 
     connect(mScene, SIGNAL(tableMoved(QGraphicsItem *, const QPointF &)), 
 	    this, SLOT(sendTableMoved(QGraphicsItem *, const QPointF &)));

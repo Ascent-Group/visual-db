@@ -27,18 +27,17 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/ColorsPage.h>
-#include <gui/SelectColorWidget.h>
-#include "ColorsPagePlugin.h"
+#include <gui/ControlWidget.h>
+#include "ControlWidgetPlugin.h"
 
-ColorsPagePlugin::ColorsPagePlugin(QObject *ipParent)
+ControlWidgetPlugin::ControlWidgetPlugin(QObject *ipParent)
     : QObject(ipParent)
 {
     initialized = false;
 }
 
 void
-ColorsPagePlugin::initialize(QDesignerFormEditorInterface * /* core */)
+ControlWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
 	return;
@@ -49,59 +48,59 @@ ColorsPagePlugin::initialize(QDesignerFormEditorInterface * /* core */)
 
 
 bool
-ColorsPagePlugin::isInitialized() const
+ControlWidgetPlugin::isInitialized() const
 {
     return initialized;
 }
 
 QWidget*
-ColorsPagePlugin::createWidget(QWidget *ipParent)
+ControlWidgetPlugin::createWidget(QWidget *ipParent)
 {
-    return new ColorsPage(ipParent);
+    return new ControlWidget(ipParent);
 }
 
 QString
-ColorsPagePlugin::name() const
+ControlWidgetPlugin::name() const
 {
-    return "ColorsPage";
+    return "ControlWidget";
 }
 
 QString
-ColorsPagePlugin::group() const
+ControlWidgetPlugin::group() const
 {
     return "VDB Widgets [Ascent]";
 }
 
 QIcon
-ColorsPagePlugin::icon() const
+ControlWidgetPlugin::icon() const
 {
     return QIcon();
 }
 
 QString
-ColorsPagePlugin::toolTip() const
+ControlWidgetPlugin::toolTip() const
 {
     return "";
 }
 
 
 QString
-ColorsPagePlugin::whatsThis() const
+ControlWidgetPlugin::whatsThis() const
 {
     return "";
 }
 
 bool
-ColorsPagePlugin::isContainer() const
+ControlWidgetPlugin::isContainer() const
 {
     return false;
 }
 
 QString
-ColorsPagePlugin::domXml() const
+ControlWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-	" <widget class=\"ColorsPage\" name=\"mColorsPage\">\n"
+	" <widget class=\"ControlWidget\" name=\"mControlWidget\">\n"
 	"  <property name=\"geometry\">\n"
 	"   <rect>\n"
 	"    <x>0</x>\n"
@@ -111,20 +110,29 @@ ColorsPagePlugin::domXml() const
 	"   </rect>\n"
 	"  </property>\n"
 	"  <property name=\"toolTip\" >\n"
-	"   <string>Colors page</string>\n"
+	"   <string>Navigation/Zoom widget</string>\n"
 	"  </property>\n"
 	"  <property name=\"whatsThis\" >\n"
-	"   <string>The widget is used in the options dialog for color features.</string>\n"
+	"   <string>The widget is used for navigating/zooming the scene.</string>\n"
+	"  </property>\n"
+	"  <property name=\"minZoom\" >\n"
+	"   <uInt>0</uInt>\n"
+	"  </property>\n"
+	"  <property name=\"maxZoom\" >\n"
+	"   <uInt>0</uInt>\n"
+	"  </property>\n"
+	"  <property name=\"zoom\" >\n"
+	"   <uInt>0</uInt>\n"
 	"  </property>\n"
 	" </widget>\n"
 	"</ui>\n";
 }
 
 QString
-ColorsPagePlugin::includeFile() const
+ControlWidgetPlugin::includeFile() const
 {
-    return "<gui/ColorsPage.h>";
+    return "<gui/ControlWidget.h>";
 }
 
 
-Q_EXPORT_PLUGIN2(colorspageplugin, ColorsPagePlugin)
+Q_EXPORT_PLUGIN2(controlwidgetplugin, ControlWidgetPlugin)

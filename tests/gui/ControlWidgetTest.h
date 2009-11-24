@@ -52,7 +52,7 @@ class ControlWidgetTest : public QObject
         void movedRightTest();
         void movedUpTest();
         void setMoveModeTest();
-        void settedMoveModeTest();
+        void moveModeSetTest();
         void valueChangedTest();
 };
 #endif // CONTROLWIDGETTEST_H

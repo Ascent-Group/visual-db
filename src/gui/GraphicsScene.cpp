@@ -155,6 +155,7 @@ GraphicsScene::addTableItems(const QList<QGraphicsItem *> &ipItems)
             addTableItems(group->children());
 	    createItemGroup(group->children());
 	} else if (qgraphicsitem_cast<TableItem *>(item)) {
+	    qDebug() << item;
 	    addItem(item);
 	}
     }

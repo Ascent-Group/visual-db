@@ -579,8 +579,8 @@ TableItem::toXml(QDomDocument &ipDoc)
     element.setAttribute("schema", schemaName());
     element.setAttribute("name", tableName());
     QPointF point = mapToScene(QPointF(x(), y()));
-    element.setAttribute("x", point.x());
-    element.setAttribute("y", point.y());
+    element.setAttribute("x", (int)point.x());
+    element.setAttribute("y", (int)point.y());
     element.setAttribute("width", width());
     element.setAttribute("height", height());
     element.setAttribute("red", itemColor().red());

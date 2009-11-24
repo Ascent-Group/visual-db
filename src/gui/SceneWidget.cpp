@@ -449,6 +449,7 @@ SceneWidget::tableFromXml(QDomElement &ipElement)
     // get table's coordinates
     TableItem *newTable = mScene->newTableItem(ipElement.attribute("schema"), 
 	    ipElement.attribute("name"), mTableMenu);
+    qDebug() << ipElement.attribute("x");
     newTable->moveBy(ipElement.attribute("x").toInt() - newTable->x(),
 	    ipElement.attribute("y").toInt() - newTable->y());
     

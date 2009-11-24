@@ -27,6 +27,7 @@ QMAKE_CXXFLAGS += -g2
 FORMS = gui/ui/AppearancePage.ui \
 	gui/ui/ColorsPage.ui \
 	gui/ui/LogPanel.ui \
+	gui/ui/OptionsDialog.ui \
 	gui/ui/PreferencesPage.ui \
 	gui/ui/SelectColorWidget.ui \
 	gui/ui/SqlConnectionDialog.ui

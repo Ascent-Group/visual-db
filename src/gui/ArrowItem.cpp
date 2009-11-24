@@ -58,7 +58,7 @@ ArrowItem::ArrowItem(TableItem *ipStartItem,
     // make arrow selectable
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     // set the style of the arrow
-    mColor = mSettings.value("Color/ArrowItem", Qt::black).value<QColor>();
+    mColor = mSettings.value("Color/Arrow", Qt::black).value<QColor>();
     setPen(QPen(mColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 }
 

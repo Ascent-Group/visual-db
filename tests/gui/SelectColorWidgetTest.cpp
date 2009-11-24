@@ -43,13 +43,13 @@ SelectColorWidgetTest::cleanupTestCase()
 
 
 void
-SelectColorWidgetTest::buttonClickSlotTest()
+SelectColorWidgetTest::buttonClickTest()
 {
     QVERIFY(0);
 }
 
 void
-SelectColorWidgetTest::colorSelectSlotTest()
+SelectColorWidgetTest::colorSelectTest()
 {
     QVERIFY(0);
 }

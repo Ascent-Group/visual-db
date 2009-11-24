@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OptionsDialog</class>
+ <widget class="QDialog" name="OptionsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>606</width>
+    <height>270</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Options</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QListWidget" name="mOptionsList">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <item>
+      <property name="text">
+       <string>Appearance</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../../visual_db.qrc">
+        <normaloff>:/img/window_new.png</normaloff>:/img/window_new.png</iconset>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Preferences</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../../visual_db.qrc">
+        <normaloff>:/img/configure.png</normaloff>:/img/configure.png</iconset>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Colors</string>
+      </property>
+      <property name="icon">
+       <iconset resource="../../visual_db.qrc">
+        <normaloff>:/img/colors.png</normaloff>:/img/colors.png</iconset>
+      </property>
+      <property name="flags">
+       <set>ItemIsSelectable|ItemIsEnabled</set>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="mApplyButton">
+       <property name="text">
+        <string>Apply</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="mCancelButton">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1">
+    <widget class="QStackedWidget" name="mOptionsPages">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="currentIndex">
+      <number>2</number>
+     </property>
+     <widget class="QWidget" name="page_1">
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <widget class="AppearancePage" name="mAppearancePage">
+         <property name="toolTip">
+          <string>Appearance page</string>
+         </property>
+         <property name="whatsThis">
+          <string>The widget is used in the options dialog for apperance features.</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2">
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="PreferencesPage" name="mPreferencesPage">
+         <property name="toolTip">
+          <string>Preferences page</string>
+         </property>
+         <property name="whatsThis">
+          <string>The widget is used in the options dialog for preferred features.</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_3">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="ColorsPage" name="mColorsPage">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="toolTip">
+          <string>Colors page</string>
+         </property>
+         <property name="whatsThis">
+          <string>The widget is used in the options dialog for color features.</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>AppearancePage</class>
+   <extends>QWidget</extends>
+   <header location="global">gui/AppearancePage.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ColorsPage</class>
+   <extends>QWidget</extends>
+   <header location="global">gui/ColorsPage.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PreferencesPage</class>
+   <extends>QWidget</extends>
+   <header location="global">gui/PreferencesPage.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../visual_db.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>mApplyButton</sender>
+   <signal>clicked()</signal>
+   <receiver>OptionsDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>526</x>
+     <y>247</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>400</x>
+     <y>0</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mCancelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>OptionsDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>615</x>
+     <y>246</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>564</x>
+     <y>-13</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mOptionsList</sender>
+   <signal>currentItemChanged(QListWidgetItem*,QListWidgetItem*)</signal>
+   <receiver>OptionsDialog</receiver>
+   <slot>changePage(QListWidgetItem*,QListWidgetItem*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>114</x>
+     <y>115</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>255</x>
+     <y>-13</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>changePage(QListWidgetItem*,QListWidgetItem*)</slot>
+ </slots>
+</ui>

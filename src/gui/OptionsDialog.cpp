@@ -31,12 +31,7 @@
 #include <gui/ColorsPage.h>
 #include <gui/OptionsDialog.h>
 #include <gui/PreferencesPage.h>
-#include <QGridLayout>
-#include <QListWidget>
-#include <QListWidgetItem>
-#include <QPushButton>
-#include <QSpacerItem>
-#include <QStackedWidget>
+
 #include <QtDebug>
 
 
@@ -46,74 +41,7 @@
 OptionsDialog::OptionsDialog(QWidget *ipParent)
     : QDialog(ipParent)
 {
-    setWindowTitle(tr("Options"));
-    
-    // create list of options
-    mOptionsList = new QListWidget();
-	    
-    // create appearence item
-    QListWidgetItem *appearanceItem = new QListWidgetItem(mOptionsList);
-    appearanceItem->setIcon(QIcon(":/img/window_new.png"));
-    appearanceItem->setText(tr("Appearance"));
-    appearanceItem->setTextAlignment(Qt::AlignLeft);
-    appearanceItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-    
-    // create preferences item
-    QListWidgetItem *preferencesItem = new QListWidgetItem(mOptionsList);
-    preferencesItem->setIcon(QIcon(":/img/configure.png"));
-    preferencesItem->setText(tr("Preferences"));
-    preferencesItem->setTextAlignment(Qt::AlignLeft);
-    preferencesItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-     
-    // create color item
-    QListWidgetItem *colorsItem = new QListWidgetItem(mOptionsList);
-    colorsItem->setIcon(QIcon(":/img/colors.png"));
-    colorsItem->setText(tr("Colors"));
-    colorsItem->setTextAlignment(Qt::AlignLeft);
-    colorsItem->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
-   
-    // create each page
-    mOptionsPages = new QStackedWidget();
-    mAppearancePage = new AppearancePage();
-    mPreferencesPage = new PreferencesPage();
-    mColorsPage = new ColorsPage();
-    
-    // add pages to the dialog
-    mOptionsPages->addWidget(mAppearancePage);
-    mOptionsPages->addWidget(mPreferencesPage);
-    mOptionsPages->addWidget(mColorsPage);
-    
-    // create apply button
-    mApplyButton = new QPushButton();
-    mApplyButton->setText(tr("Apply"));
-    
-    // create cansel button
-    mCancelButton = new QPushButton();
-    mCancelButton->setText(tr("Cancel"));
-    
-    // create horizontal layout
-    QHBoxLayout *hlayout = new QHBoxLayout();
-    // add spacer and buttons to horizontal layout
-    QSpacerItem *spacerItem = new QSpacerItem(0, 0, QSizePolicy::Expanding, QSizePolicy::Minimum);
-    hlayout->addItem(spacerItem);
-    hlayout->addWidget(mApplyButton);
-    hlayout->addWidget(mCancelButton);
-    
-    // create main layout
-    QGridLayout	*mainLayout = new QGridLayout(this);
-    // set column stretch factors
-    mainLayout->setColumnStretch(0, 1);
-    mainLayout->setColumnStretch(1, 2);
-    // add options list, options pages and horizontal layout to the main layout
-    mainLayout->addWidget(mOptionsList, 0, 0);
-    mainLayout->addWidget(mOptionsPages, 0, 1);
-    mainLayout->addLayout(hlayout, 1, 1);
-    
-    // connect signals and slots
-    connect(mApplyButton, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(mCancelButton, SIGNAL(clicked()), this, SLOT(reject()));
-    connect(mOptionsList, SIGNAL(currentItemChanged(QListWidgetItem *, QListWidgetItem *)),
-	    this, SLOT(changePage(QListWidgetItem *, QListWidgetItem*)));
+    ui.setupUi(this);
 }
 
 /*
@@ -129,17 +57,17 @@ OptionsDialog::~OptionsDialog()
 void
 OptionsDialog::writeSettings()
 {
-    mSettings.setValue("Appearance/Language", mAppearancePage->language());
-    mSettings.setValue("Preferences/SessionFolder", mPreferencesPage->sessionFolder());
-    mSettings.setValue("Preferences/NewTabAutoSwitch", mPreferencesPage->newTabAutoSwitch());
-    mSettings.setValue("Preferences/LoadLastSession", mPreferencesPage->loadLastSession());
-    mSettings.setValue("Preferences/CountSavedSessions", mPreferencesPage->countSavedSession());
-    mSettings.setValue("Preferences/ShowIndices", mPreferencesPage->showIndices());
-    mSettings.setValue("Color/Background", mColorsPage->backgroundColor());
-    mSettings.setValue("Color/Table", mColorsPage->tableColor());
-//    mSettings.setValue("Color/Font", mColorsPage->fontColor());
-    mSettings.setValue("Color/ArrowItem", mColorsPage->arrowColor());
-    mSettings.setValue("Color/Border", mColorsPage->borderColor());
+    mSettings.setValue("Appearance/Language", ui.mAppearancePage->language());
+    mSettings.setValue("Preferences/SessionFolder", ui.mPreferencesPage->sessionFolder());
+    mSettings.setValue("Preferences/NewTabAutoSwitch", ui.mPreferencesPage->newTabAutoSwitch());
+    mSettings.setValue("Preferences/LoadLastSession", ui.mPreferencesPage->loadLastSession());
+    mSettings.setValue("Preferences/CountSavedSessions", ui.mPreferencesPage->countSavedSession());
+    mSettings.setValue("Preferences/ShowIndices", ui.mPreferencesPage->showIndices());
+    mSettings.setValue("Color/Background", ui.mColorsPage->backgroundColor());
+    mSettings.setValue("Color/Table", ui.mColorsPage->tableColor());
+//    mSettings.setValue("Color/Font", ui.mColorsPage->fontColor());
+    mSettings.setValue("Color/Arrow", ui.mColorsPage->arrowColor());
+    mSettings.setValue("Color/Border", ui.mColorsPage->borderColor());
 }
 
 /*
@@ -163,5 +91,5 @@ OptionsDialog::changePage(QListWidgetItem *ipCurrent, QListWidgetItem *ipPreviou
     }
     
     // show appropriate page
-    mOptionsPages->setCurrentIndex(mOptionsList->row(ipCurrent));
+    ui.mOptionsPages->setCurrentIndex(ui.mOptionsList->row(ipCurrent));
 }

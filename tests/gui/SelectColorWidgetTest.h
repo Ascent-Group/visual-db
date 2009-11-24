@@ -40,8 +40,8 @@ class SelectColorWidgetTest : public QObject
         void initTestCase();
         void cleanupTestCase();
 
-        void buttonClickSlotTest();
-        void colorSelectSlotTest();
+        void buttonClickTest();
+        void colorSelectTest();
         void colorTest();
         void getColorFromDialogTest();
 };

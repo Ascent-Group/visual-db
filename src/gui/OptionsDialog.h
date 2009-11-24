@@ -30,17 +30,9 @@
 #ifndef OPTIONSDIALOG_H
 #define OPTIONSDIALOG_H
 
-#include <QDialog>
+#include <gui/ui/ui_OptionsDialog.h>
 #include <QSettings>
 
-class QListWidget;
-class QListWidgetItem;
-class QPushButton;
-class QStackedWidget;
-
-class AppearancePage;
-class ColorsPage;
-class PreferencesPage;
 
 /*
  * Dialog to define different options (such as color schema etc.)
@@ -54,16 +46,8 @@ class OptionsDialog : public QDialog
 	~OptionsDialog();    
     
     private:
-	QListWidget *mOptionsList;
-	QStackedWidget *mOptionsPages;
-	    
-	QPushButton *mApplyButton;
-	QPushButton *mCancelButton;
+	Ui::OptionsDialog ui;
 
-	AppearancePage *mAppearancePage;
-	PreferencesPage	*mPreferencesPage;
-	ColorsPage *mColorsPage;
-	    
 	QSettings mSettings;
 
     private:

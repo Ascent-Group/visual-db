@@ -27,52 +27,35 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SQLWIDGET_H
-#define SQLWIDGET_H
+#ifndef SQLWIDGETPLUGIN_H
+#define SQLWIDGETPLUGIN_H
 
-#include <gui/ui/ui_SqlWidget.h>
-#include <QWidget>
+#include <QtGui>
+#include <QDesignerCustomWidgetInterface>
 
-/*
- * Provide the execution of different types of queries in this widget.
- */
-class SqlWidget : public QWidget
+class SqlWidgetPlugin : public QObject, public QDesignerCustomWidgetInterface
 {
     Q_OBJECT
+	
+    Q_INTERFACES(QDesignerCustomWidgetInterface)
 
     public:
-        SqlWidget(QWidget *ipParent = 0);
-        ~SqlWidget();
-
-        void setDefaultQuery(QString ipQueryText);
-
+	SqlWidgetPlugin(QObject *parent = 0);
+	
+	bool isContainer() const;
+	bool isInitialized() const;
+	QIcon icon() const;
+	QString domXml() const;
+	QString group() const;
+	QString includeFile() const;
+	QString name() const;
+	QString toolTip() const;
+	QString whatsThis() const;
+	QWidget *createWidget(QWidget *parent);
+	void initialize(QDesignerFormEditorInterface *core);
+	
     private:
-	Ui::SqlWidget ui;
-        enum Portions {
-            PreviousPortion = 0,
-            NextPortion
-        };
-
-        enum Position {
-            InterimPage = 0,
-            LastPage,
-            EndPage
-        };
-
-        unsigned int mPortionSize;
-        int mOffset;
-        Position mPos;
-
-    private:
-        void readPortion(Portions ipDirection);
-
-    private slots:
-        void runQuery();
-        void readPrevPortion();
-        void readNextPortion();
-        void readFullResult();
+	bool initialized;
 };
 
-bool isQuerySafe(const QString &ipQueryText);
-
-#endif // SQLWIDGET_H
+#endif // SQLWIDGETPLUGIN_H

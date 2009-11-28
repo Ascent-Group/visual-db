@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SqlWidget</class>
+ <widget class="QWidget" name="SqlWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="margin">
+    <number>3</number>
+   </property>
+   <property name="spacing">
+    <number>3</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QFrame" name="mFrame">
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>3</number>
+      </property>
+      <property name="margin">
+       <number>3</number>
+      </property>
+      <item>
+       <widget class="QToolButton" name="mRunButton">
+        <property name="toolTip">
+         <string>Run</string>
+        </property>
+        <property name="statusTip">
+         <string>Execute query (F8)</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../visual_db.qrc">
+          <normaloff>:/img/run.png</normaloff>:/img/run.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>F8</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="mPrevPortionButton">
+        <property name="toolTip">
+         <string>Previous portion</string>
+        </property>
+        <property name="statusTip">
+         <string>Show previous portion of results</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../visual_db.qrc">
+          <normaloff>:/img/uparrow.png</normaloff>:/img/uparrow.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="mNextPortionButton">
+        <property name="toolTip">
+         <string>Next portion</string>
+        </property>
+        <property name="statusTip">
+         <string>Show next portion of results</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../visual_db.qrc">
+          <normaloff>:/img/downarrow.png</normaloff>:/img/downarrow.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="mFullResultButton">
+        <property name="toolTip">
+         <string>Full result</string>
+        </property>
+        <property name="statusTip">
+         <string>Show full result</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../visual_db.qrc">
+          <normaloff>:/img/fulldownarrow.png</normaloff>:/img/fulldownarrow.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="mSafeQueryButton">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="toolTip">
+         <string>SafeQuery</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../../visual_db.qrc">
+          <normaloff>:/img/safequery.png</normaloff>:/img/safequery.png</iconset>
+        </property>
+        <property name="checkable">
+         <bool>true</bool>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>491</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="childrenCollapsible">
+      <bool>false</bool>
+     </property>
+     <widget class="QTextEdit" name="mQueryEdit"/>
+     <widget class="QTableWidget" name="mTable">
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../visual_db.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>mRunButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SqlWidget</receiver>
+   <slot>runQuery()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>24</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>31</x>
+     <y>-11</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mPrevPortionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SqlWidget</receiver>
+   <slot>readPrevPortion()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>54</x>
+     <y>24</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>169</x>
+     <y>6</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mNextPortionButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SqlWidget</receiver>
+   <slot>readNextPortion()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>83</x>
+     <y>28</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>333</x>
+     <y>9</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mFullResultButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SqlWidget</receiver>
+   <slot>readFullResult()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>108</x>
+     <y>26</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>473</x>
+     <y>8</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>runQuery()</slot>
+  <slot>readPrevPortion()</slot>
+  <slot>readNextPortion()</slot>
+  <slot>readFullResult()</slot>
+ </slots>
+</ui>

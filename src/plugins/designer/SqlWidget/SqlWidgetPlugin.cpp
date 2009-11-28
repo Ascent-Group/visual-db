@@ -27,52 +27,103 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SQLWIDGET_H
-#define SQLWIDGET_H
+#include <gui/SqlWidget.h>
+#include "SqlWidgetPlugin.h"
 
-#include <gui/ui/ui_SqlWidget.h>
-#include <QWidget>
-
-/*
- * Provide the execution of different types of queries in this widget.
- */
-class SqlWidget : public QWidget
+SqlWidgetPlugin::SqlWidgetPlugin(QObject *ipParent)
+    : QObject(ipParent)
 {
-    Q_OBJECT
+    initialized = false;
+}
 
-    public:
-        SqlWidget(QWidget *ipParent = 0);
-        ~SqlWidget();
+void
+SqlWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
+{
+    if (initialized) {
+	return;
+    }
 
-        void setDefaultQuery(QString ipQueryText);
+    initialized = true;
+}
 
-    private:
-	Ui::SqlWidget ui;
-        enum Portions {
-            PreviousPortion = 0,
-            NextPortion
-        };
 
-        enum Position {
-            InterimPage = 0,
-            LastPage,
-            EndPage
-        };
+bool
+SqlWidgetPlugin::isInitialized() const
+{
+    return initialized;
+}
 
-        unsigned int mPortionSize;
-        int mOffset;
-        Position mPos;
+QWidget*
+SqlWidgetPlugin::createWidget(QWidget *ipParent)
+{
+    return new SqlWidget(ipParent);
+}
 
-    private:
-        void readPortion(Portions ipDirection);
+QString
+SqlWidgetPlugin::name() const
+{
+    return "SqlWidget";
+}
 
-    private slots:
-        void runQuery();
-        void readPrevPortion();
-        void readNextPortion();
-        void readFullResult();
-};
+QString
+SqlWidgetPlugin::group() const
+{
+    return "VDB Widgets [Ascent]";
+}
 
-bool isQuerySafe(const QString &ipQueryText);
+QIcon
+SqlWidgetPlugin::icon() const
+{
+    return QIcon();
+}
 
-#endif // SQLWIDGET_H
+QString
+SqlWidgetPlugin::toolTip() const
+{
+    return "";
+}
+
+
+QString
+SqlWidgetPlugin::whatsThis() const
+{
+    return "";
+}
+
+bool
+SqlWidgetPlugin::isContainer() const
+{
+    return false;
+}
+
+QString
+SqlWidgetPlugin::domXml() const
+{
+    return "<ui language=\"c++\">\n"
+	" <widget class=\"SqlWidget\" name=\"mSqlWidget\">\n"
+	"  <property name=\"geometry\">\n"
+	"   <rect>\n"
+	"    <x>0</x>\n"
+	"    <y>0</y>\n"
+	"    <width>100</width>\n"
+	"    <height>100</height>\n"
+	"   </rect>\n"
+	"  </property>\n"
+	"  <property name=\"toolTip\" >\n"
+	"   <string></string>\n"
+	"  </property>\n"
+	"  <property name=\"whatsThis\" >\n"
+	"   <string>The widget is used for quering tables and views</string>\n"
+	"  </property>\n"
+	" </widget>\n"
+	"</ui>\n";
+}
+
+QString
+SqlWidgetPlugin::includeFile() const
+{
+    return "<gui/SqlWidget.h>";
+}
+
+
+Q_EXPORT_PLUGIN2(sqlwidgetplugin, SqlWidgetPlugin)

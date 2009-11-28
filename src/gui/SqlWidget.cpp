@@ -29,19 +29,12 @@
 
 #include <gui/MainWindow.h>
 #include <gui/SqlWidget.h>
-#include <QAction>
-#include <QGridLayout>
 #include <QMessageBox>
-#include <QSplitter>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QStatusBar>
-#include <QTableWidget>
-#include <QTextEdit>
-#include <QToolBar>
-#include <QToolButton>
 
 #include <QtDebug>
 
@@ -51,49 +44,10 @@
 SqlWidget::SqlWidget(QWidget *ipParent)
     : QWidget(ipParent), mPortionSize(30), mOffset(-1), mPos(SqlWidget::InterimPage)
 {
-    // create tool bar
-    mToolBar = new QToolBar();
+    ui.setupUi(this);
 
-    createActions();
-
-    // populate toolbar with action
-    mToolBar->addAction(mRunAction);
-    mToolBar->addAction(mPrevPortionAction);
-    mToolBar->addAction(mNextPortionAction);
-    mToolBar->addAction(mFullResultAction);
-
-    // create checkbox
-    mSafeQueryButton = new QToolButton();
-    mSafeQueryButton->setIcon(QIcon(":/img/safequery.png"));
-    mSafeQueryButton->setToolTip(tr("Safe query"));
-    mSafeQueryButton->setCheckable(true);
-    mSafeQueryButton->setChecked(true);
-    // lyuts: temporary disable button
-    mSafeQueryButton->setEnabled(false);
-    mToolBar->addWidget(mSafeQueryButton);
-
-    // create horizontal layout
-    QHBoxLayout *hlayout = new QHBoxLayout();
-    //hlayout->addWidget(mSafeQueryBox);
-    hlayout->addWidget(mToolBar);
-
-    // create edit for query
-    mQueryEdit = new QTextEdit();
-
-    // create a table for sql result
-    mTable = new QTableWidget();
-    mTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    mTable->setAlternatingRowColors(true);
-
-    // create spliiter
-    QSplitter *splitter = new QSplitter(Qt::Vertical);
-    splitter->addWidget(mQueryEdit);
-    splitter->addWidget(mTable);
-
-    // create layout
-    QGridLayout *mainLayout = new QGridLayout(this);
-    mainLayout->addLayout(hlayout, 0, 0, Qt:: AlignLeft);
-    mainLayout->addWidget(splitter, 1, 0);
+    // we are using QFrame instead of QToolBar
+    // reason: QtDesigner doesn't support it for non-MainWindow gui
 
 }
 
@@ -111,7 +65,7 @@ SqlWidget::~SqlWidget()
 void
 SqlWidget::setDefaultQuery(QString ipQueryText)
 {
-    mQueryEdit->setText(ipQueryText);
+    ui.mQueryEdit->setText(ipQueryText);
 }
 
 /*
@@ -120,10 +74,10 @@ SqlWidget::setDefaultQuery(QString ipQueryText)
 void
 SqlWidget::runQuery()
 {
-    QString qstr = mQueryEdit->toPlainText();
+    QString qstr = ui.mQueryEdit->toPlainText();
 
     // if safe query if checked
-    if (mSafeQueryButton->isChecked()) {
+    if (ui.mSafeQueryButton->isChecked()) {
         if ( ! isQuerySafe(qstr) ) {
 
             QMessageBox::information(
@@ -181,40 +135,8 @@ SqlWidget::readFullResult()
     mPortionSize = origPortionSize;
 
     // disable buttons
-    mPrevPortionAction->setEnabled(false);
-    mNextPortionAction->setEnabled(false);
-}
-
-/*
- * Creates actions
- */
-void
-SqlWidget::createActions()
-{
-    // create action for running queries
-    mRunAction = new QAction(tr("Run"), this);
-    mRunAction->setShortcut(Qt::Key_F8);
-    mRunAction->setIcon(QIcon(":/img/run.png"));
-    mRunAction->setStatusTip(tr("Execute query (F8)"));
-    connect(mRunAction, SIGNAL(triggered()), this, SLOT(runQuery()));
-
-    // create action for browsing previous portion of records
-    mPrevPortionAction = new QAction(tr("Previous portion"), this);
-    mPrevPortionAction->setIcon(QIcon(":/img/uparrow.png"));
-    mPrevPortionAction->setStatusTip(tr("Show previous portion of results"));
-    connect(mPrevPortionAction, SIGNAL(triggered()), this, SLOT(readPrevPortion()));
-
-    // create action for browsing next portion of records
-    mNextPortionAction = new QAction(tr("Next portion"), this);
-    mNextPortionAction->setIcon(QIcon(":/img/downarrow.png"));
-    mNextPortionAction->setStatusTip(tr("Show next portion of results"));
-    connect(mNextPortionAction, SIGNAL(triggered()), this, SLOT(readNextPortion()));
-
-    // create action for browsing full result
-    mFullResultAction = new QAction(tr("Full result"), this);
-    mFullResultAction->setIcon(QIcon(":/img/fulldownarrow.png"));
-    mFullResultAction->setStatusTip(tr("Show full result"));
-    connect(mFullResultAction, SIGNAL(triggered()), this, SLOT(readFullResult()));
+    ui.mPrevPortionButton->setEnabled(false);
+    ui.mNextPortionButton->setEnabled(false);
 }
 
 /*
@@ -244,7 +166,7 @@ SqlWidget::readPortion(Portions ipDirection)
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
-    QString qstr = mQueryEdit->toPlainText().trimmed();
+    QString qstr = ui.mQueryEdit->toPlainText().trimmed();
 
     switch (ipDirection) {
         case SqlWidget::PreviousPortion:
@@ -272,9 +194,9 @@ SqlWidget::readPortion(Portions ipDirection)
     qDebug() << qstr;
 
     // renew table
-    mTable->clear();
-    mTable->setColumnCount(0);
-    mTable->setRowCount(0);
+    ui.mTable->clear();
+    ui.mTable->setColumnCount(0);
+    ui.mTable->setRowCount(0);
 
     // if query execution failed
     if (!query.exec(qstr)) {
@@ -291,7 +213,7 @@ SqlWidget::readPortion(Portions ipDirection)
 
     int columnsCount = record.count();
 
-    mTable->setColumnCount(columnsCount);
+    ui.mTable->setColumnCount(columnsCount);
 
     // set column labels
     QStringList labels;
@@ -299,7 +221,7 @@ SqlWidget::readPortion(Portions ipDirection)
         labels << record.fieldName(i);
     }
 
-    mTable->setHorizontalHeaderLabels(labels);
+    ui.mTable->setHorizontalHeaderLabels(labels);
 
     // if some data has been read
     if (query.first()) {
@@ -308,7 +230,7 @@ SqlWidget::readPortion(Portions ipDirection)
         // for each row
         do {
             // add empty row
-            mTable->insertRow(row);
+            ui.mTable->insertRow(row);
 
             // populate the new row
             for (int i = 0; i < columnsCount; ++i) {
@@ -316,7 +238,7 @@ SqlWidget::readPortion(Portions ipDirection)
 
                 item->setText(query.value(i).toString());
 
-                mTable->setItem(row, i, item);
+                ui.mTable->setItem(row, i, item);
             }
 
             ++row;
@@ -346,12 +268,12 @@ SqlWidget::readPortion(Portions ipDirection)
         disableNext = false;
     }
 
-    mNextPortionAction->setDisabled(disableNext);
-    mPrevPortionAction->setDisabled( (0 == mOffset) ? true : false);
+    ui.mNextPortionButton->setDisabled(disableNext);
+    ui.mPrevPortionButton->setDisabled( (0 == mOffset) ? true : false);
 
     query.clear();
 
-    mTable->resizeColumnsToContents();
-    mTable->resizeRowsToContents();
+    ui.mTable->resizeColumnsToContents();
+    ui.mTable->resizeRowsToContents();
 
 }

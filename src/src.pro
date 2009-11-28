@@ -32,7 +32,8 @@ FORMS = gui/ui/AppearancePage.ui \
 	gui/ui/OptionsDialog.ui \
 	gui/ui/PreferencesPage.ui \
 	gui/ui/SelectColorWidget.ui \
-	gui/ui/SqlConnectionDialog.ui
+	gui/ui/SqlConnectionDialog.ui \
+	gui/ui/SqlWidget.ui
 
 # Input
 HEADERS += connect/DbParameters.h \

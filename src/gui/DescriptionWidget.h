@@ -30,10 +30,8 @@
 #ifndef DESCRIPTIONWIDGET_H
 #define DESCRIPTIONWIDGET_H
 
+#include <gui/ui/ui_DescriptionWidget.h>
 #include <QWidget>
-
-class QTableWidget;
-class QTextEdit;
 
 class DbIndex;
 class DbRole;
@@ -110,12 +108,12 @@ class DescriptionWidget : public QWidget
             DbTriggerColumnsCount
         };
 
-        enum DbSchemeCols {
-			SchemeNameCol = 0,
-			SchemeOwnerNameCol,
-			SchemeDescriptionCol,
-			DbSchemeColumnsCount
-		};
+        enum DbSchemaCols {
+	    SchemaNameCol = 0,
+	    SchemaOwnerNameCol,
+	    SchemaDescriptionCol,
+	    DbSchemaColumnsCount
+	};
 
     public:
         DescriptionWidget(QWidget *ipParent = 0);
@@ -129,11 +127,10 @@ class DescriptionWidget : public QWidget
         void describe(const DbTrigger *ipTrigger);
 
     private:
-        QTableWidget *mTable;
-        QTextEdit *mBodyEdit;
+	Ui::DescriptionWidget ui;
 
-        static const QString sCreateSchemeScript;
-        static const QString sAddSchemeDecriptionScript;
+        static const QString sCreateSchemaScript;
+        static const QString sAddSchemaDecriptionScript;
 };
 
 #endif // DESCRIPTIONWIDGET_H

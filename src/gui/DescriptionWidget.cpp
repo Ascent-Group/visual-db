@@ -35,16 +35,13 @@
 #include <common/DbTrigger.h>
 #include <common/DbView.h>
 #include <gui/DescriptionWidget.h>
-#include <QGridLayout>
 #include <QMessageBox>
 #include <QSplitter>
-#include <QTableWidget>
-#include <QTextEdit>
 #include <QtDebug>
 
-const QString DescriptionWidget::sCreateSchemeScript = "CREATE SCHEMA %1 \n"
+const QString DescriptionWidget::sCreateSchemaScript = "CREATE SCHEMA %1 \n"
 			"AUTHORIZATION %2;\n";
-const QString DescriptionWidget::sAddSchemeDecriptionScript = "\nCOMMENT ON SCHEMA public IS '%1';";
+const QString DescriptionWidget::sAddSchemaDecriptionScript = "\nCOMMENT ON SCHEMA public IS '%1';";
 
 /*
  * Ctor
@@ -52,24 +49,7 @@ const QString DescriptionWidget::sAddSchemeDecriptionScript = "\nCOMMENT ON SCHE
 DescriptionWidget::DescriptionWidget(QWidget *ipParent)
     : QWidget(ipParent)
 {
-    // create desc table
-    mTable = new QTableWidget();
-    // lyuts: currently no edit triggers
-    mTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    mTable->setAlternatingRowColors(true);
-
-    // create desc text edit
-    mBodyEdit = new QTextEdit();
-    mBodyEdit->setReadOnly(true);
-
-    // create splitter
-    QSplitter *splitter = new QSplitter(Qt::Vertical);
-    splitter->addWidget(mTable);
-    splitter->addWidget(mBodyEdit);
-
-    // create and set layout
-    QGridLayout *mainLayout = new QGridLayout(this);
-    mainLayout->addWidget(splitter, 1, 0);
+    ui.setupUi(this);
 }
 
 /*
@@ -94,13 +74,13 @@ DescriptionWidget::describe(const DbSchema *ipSchema)
         return;
     }
 
-    // get the Scheme data
+    // get the Schema data
     QString name = ipSchema->name();
     QString ownerName = ipSchema->ownerName();
     QString description = ipSchema->description();
 
-    mTable->setRowCount(1);
-	mTable->setColumnCount(DescriptionWidget::DbSchemeColumnsCount);
+    ui.mTable->setRowCount(1);
+	ui.mTable->setColumnCount(DescriptionWidget::DbSchemaColumnsCount);
 
 	// set column labels
 	QStringList labels;
@@ -109,29 +89,31 @@ DescriptionWidget::describe(const DbSchema *ipSchema)
 			<< tr("Owner")
 			<< tr("Description");
 
-	mTable->setHorizontalHeaderLabels(labels);
+	ui.mTable->setHorizontalHeaderLabels(labels);
 
-	// fill table with Scheme data
+	// fill table with Schema data
 	QTableWidgetItem *nameItem = new QTableWidgetItem();
 	nameItem->setText(name);
-	mTable->setItem(0, DescriptionWidget::SchemeNameCol, nameItem);
+	ui.mTable->setItem(0, DescriptionWidget::SchemaNameCol, nameItem);
 
 	QTableWidgetItem *ownerNameItem = new QTableWidgetItem();
 	ownerNameItem->setText(ownerName);
-	mTable->setItem(0, DescriptionWidget::SchemeOwnerNameCol, ownerNameItem);
+	ui.mTable->setItem(0, DescriptionWidget::SchemaOwnerNameCol, ownerNameItem);
 
 	QTableWidgetItem *descrItem = new QTableWidgetItem();
 	descrItem->setText(description);
-	mTable->setItem(0, DescriptionWidget::SchemeDescriptionCol, descrItem);
+	ui.mTable->setItem(0, DescriptionWidget::SchemaDescriptionCol, descrItem);
 
 	// auto resize cells
-	mTable->resizeColumnsToContents();
+	ui.mTable->resizeColumnsToContents();
 
-    QString body = sCreateSchemeScript.arg(name).arg(ownerName);
+    QString body = sCreateSchemaScript.arg(name).arg(ownerName);
 
-    if (description.length() > 0)
-    	body += sAddSchemeDecriptionScript.arg(description);
-    mBodyEdit->setText(body);
+    if (description.length() > 0) {
+    	body += sAddSchemaDecriptionScript.arg(description);
+    }
+
+    ui.mBodyEdit->setText(body);
 }
 
 /*
@@ -152,8 +134,8 @@ DescriptionWidget::describe(const DbTable *ipTable)
     // get columns count
     int columnsCount = ipTable->columnsCount();
 
-    mTable->setRowCount(columnsCount);    
-    mTable->setColumnCount(DescriptionWidget::DbTableColumnsCount);
+    ui.mTable->setRowCount(columnsCount);    
+    ui.mTable->setColumnCount(DescriptionWidget::DbTableColumnsCount);
 
     // set column labels
     QStringList labels;
@@ -166,7 +148,7 @@ DescriptionWidget::describe(const DbTable *ipTable)
             << tr("Foreign key")
             << tr("Foreign table");
 
-    mTable->setHorizontalHeaderLabels(labels);
+    ui.mTable->setHorizontalHeaderLabels(labels);
 
     // generate body text
     QString body = QString("CREATE TABLE %1.%2 (")
@@ -189,36 +171,36 @@ DescriptionWidget::describe(const DbTable *ipTable)
         // fill column name
         QTableWidgetItem *nameItem = new QTableWidgetItem();
         nameItem->setText(name);
-        mTable->setItem(i, DescriptionWidget::TableColumnNameCol, nameItem);
+        ui.mTable->setItem(i, DescriptionWidget::TableColumnNameCol, nameItem);
 
         // fill column type
         QTableWidgetItem *typeItem = new QTableWidgetItem();
         typeItem->setText(type);
-        mTable->setItem(i, DescriptionWidget::TableTypeCol, typeItem);
+        ui.mTable->setItem(i, DescriptionWidget::TableTypeCol, typeItem);
 
         // fill nullable constraint
         QTableWidgetItem *nullableItem = new QTableWidgetItem();
         nullableItem->setTextAlignment(Qt::AlignHCenter);
         nullableItem->setText(nullable ? "Y" : "N");
-        mTable->setItem(i, DescriptionWidget::TableNullCol, nullableItem);
+        ui.mTable->setItem(i, DescriptionWidget::TableNullCol, nullableItem);
 
         // fill unique constraint
         QTableWidgetItem *uniqueItem = new QTableWidgetItem();
         uniqueItem->setTextAlignment(Qt::AlignHCenter);
         uniqueItem->setText(unique ? "Y" : "N");
-        mTable->setItem(i, DescriptionWidget::TableUniqueCol, uniqueItem);
+        ui.mTable->setItem(i, DescriptionWidget::TableUniqueCol, uniqueItem);
 
         // fill PK constraint
         QTableWidgetItem *pkItem = new QTableWidgetItem();
         pkItem->setTextAlignment(Qt::AlignHCenter);
         pkItem->setText(primary ? "Y" : "N");
-        mTable->setItem(i, DescriptionWidget::TablePKCol, pkItem);
+        ui.mTable->setItem(i, DescriptionWidget::TablePKCol, pkItem);
 
         // fill FK constraint
         QTableWidgetItem *fkItem = new QTableWidgetItem();
         fkItem->setTextAlignment(Qt::AlignHCenter);
         fkItem->setText(foreign ? "Y" : "N");
-        mTable->setItem(i, DescriptionWidget::TableFKCol, fkItem);
+        ui.mTable->setItem(i, DescriptionWidget::TableFKCol, fkItem);
 
         // fill foreign table name
         QTableWidgetItem *foreignTableItem = new QTableWidgetItem();
@@ -230,7 +212,7 @@ DescriptionWidget::describe(const DbTable *ipTable)
                                       .arg(foreignTableName));
         }
 
-        mTable->setItem(i, DescriptionWidget::TableForeignTableCol, foreignTableItem);
+        ui.mTable->setItem(i, DescriptionWidget::TableForeignTableCol, foreignTableItem);
 
         // generate body text
         body.append(QString(" \n\t%1\t%2").arg(name).arg(type));
@@ -260,12 +242,12 @@ DescriptionWidget::describe(const DbTable *ipTable)
     }
 
     // auto resize cells
-    mTable->resizeColumnsToContents();
-    mTable->resizeRowsToContents();
+    ui.mTable->resizeColumnsToContents();
+    ui.mTable->resizeRowsToContents();
 
     // show generated body
     body.append("\n);");
-    mBodyEdit->setText(body);
+    ui.mBodyEdit->setText(body);
 
 }
 
@@ -284,8 +266,8 @@ DescriptionWidget::describe(const DbRole *ipRole)
         return;
     }
 
-    mTable->setRowCount(1);
-    mTable->setColumnCount(DescriptionWidget::DbRoleColumnsCount);
+    ui.mTable->setRowCount(1);
+    ui.mTable->setColumnCount(DescriptionWidget::DbRoleColumnsCount);
 
     // set column labels
     QStringList labels;
@@ -302,7 +284,7 @@ DescriptionWidget::describe(const DbRole *ipRole)
             << tr("Expiration\ndate");
 
 
-    mTable->setHorizontalHeaderLabels(labels);
+    ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
     QString name = ipRole->name();
@@ -320,64 +302,64 @@ DescriptionWidget::describe(const DbRole *ipRole)
     // fill role name
     QTableWidgetItem *nameItem = new QTableWidgetItem();
     nameItem->setText(name);
-    mTable->setItem(0, DescriptionWidget::RoleNameCol, nameItem);
+    ui.mTable->setItem(0, DescriptionWidget::RoleNameCol, nameItem);
 
     // fill role id
     QTableWidgetItem *idItem = new QTableWidgetItem();
     idItem->setText(QString::number(id));
-    mTable->setItem(0, DescriptionWidget::RoleIdCol, idItem);
+    ui.mTable->setItem(0, DescriptionWidget::RoleIdCol, idItem);
 
     // fill super user flag
     QTableWidgetItem *superUserItem = new QTableWidgetItem();
     superUserItem->setTextAlignment(Qt::AlignHCenter);
     superUserItem->setText(superUser ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::RoleSuperUserCol, superUserItem);
+    ui.mTable->setItem(0, DescriptionWidget::RoleSuperUserCol, superUserItem);
 
     // fill inherit priv flag
     QTableWidgetItem *inheritItem = new QTableWidgetItem();
     inheritItem->setTextAlignment(Qt::AlignHCenter);
     inheritItem->setText(inherits ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::RoleInheritCol, inheritItem);
+    ui.mTable->setItem(0, DescriptionWidget::RoleInheritCol, inheritItem);
 
     // fill create role flag
     QTableWidgetItem *createRoleItem = new QTableWidgetItem();
     createRoleItem->setTextAlignment(Qt::AlignHCenter);
     createRoleItem->setText(createRole ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::RoleCreateRoleCol, createRoleItem);
+    ui.mTable->setItem(0, DescriptionWidget::RoleCreateRoleCol, createRoleItem);
 
     // fill create db flag
     QTableWidgetItem *createDbItem = new QTableWidgetItem();
     createDbItem->setTextAlignment(Qt::AlignHCenter);
     createDbItem->setText(createDb ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::RoleCreateDbCol, createDbItem);
+    ui.mTable->setItem(0, DescriptionWidget::RoleCreateDbCol, createDbItem);
 
     // fill update sys cat flag
     QTableWidgetItem *updSysCatItem = new QTableWidgetItem();
     updSysCatItem->setTextAlignment(Qt::AlignHCenter);
     updSysCatItem->setText(updateSysCat ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::RoleUpdateSysCatCol, updSysCatItem);
+    ui.mTable->setItem(0, DescriptionWidget::RoleUpdateSysCatCol, updSysCatItem);
 
     // fill login flag
     QTableWidgetItem *loginItem = new QTableWidgetItem();
     loginItem->setTextAlignment(Qt::AlignHCenter);
     loginItem->setText(login ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::RoleLoginCol, loginItem);
+    ui.mTable->setItem(0, DescriptionWidget::RoleLoginCol, loginItem);
 
     // fill connection limit
     QTableWidgetItem *connLimitItem = new QTableWidgetItem();
     connLimitItem->setTextAlignment(Qt::AlignHCenter);
     connLimitItem->setText(QString::number(connLimit));
-    mTable->setItem(0, DescriptionWidget::RoleConnectionLimitCol, connLimitItem);
+    ui.mTable->setItem(0, DescriptionWidget::RoleConnectionLimitCol, connLimitItem);
 
     // fill expiry date
     QTableWidgetItem *expiryDateItem = new QTableWidgetItem();
     expiryDateItem->setTextAlignment(Qt::AlignHCenter);
     expiryDateItem->setText(expiryDate.toString("dd-MM-yyyy"));
-    mTable->setItem(0, DescriptionWidget::RoleExpiryDateCol, expiryDateItem);
+    ui.mTable->setItem(0, DescriptionWidget::RoleExpiryDateCol, expiryDateItem);
 
     // auto resize cells
-    mTable->resizeColumnsToContents();
-    mTable->resizeRowsToContents();
+    ui.mTable->resizeColumnsToContents();
+    ui.mTable->resizeRowsToContents();
 
     // generate body text
     QString body = QString("CREATE ROLE %1 WITH ").arg(name);
@@ -397,7 +379,7 @@ DescriptionWidget::describe(const DbRole *ipRole)
 
     // show generated body
     body.append("\n;");
-    mBodyEdit->setText(body);
+    ui.mBodyEdit->setText(body);
 
 }
 
@@ -416,8 +398,8 @@ DescriptionWidget::describe(const DbView *ipView)
         return;
     }
 
-    mTable->setRowCount(1);
-    mTable->setColumnCount(DescriptionWidget::DbViewColumnsCount);
+    ui.mTable->setRowCount(1);
+    ui.mTable->setColumnCount(DescriptionWidget::DbViewColumnsCount);
 
     // set column labels
     QStringList labels;
@@ -427,7 +409,7 @@ DescriptionWidget::describe(const DbView *ipView)
             << tr("Owner");
 
 
-    mTable->setHorizontalHeaderLabels(labels);
+    ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
     QString name = ipView->name();
@@ -438,21 +420,21 @@ DescriptionWidget::describe(const DbView *ipView)
     // fill view name
     QTableWidgetItem *nameItem = new QTableWidgetItem();
     nameItem->setText(name);
-    mTable->setItem(0, DescriptionWidget::ViewNameCol, nameItem);
+    ui.mTable->setItem(0, DescriptionWidget::ViewNameCol, nameItem);
 
     // fill schema name
     QTableWidgetItem *schemaNameItem = new QTableWidgetItem();
     schemaNameItem->setText(schemaName);
-    mTable->setItem(0, DescriptionWidget::ViewSchemaCol, schemaNameItem);
+    ui.mTable->setItem(0, DescriptionWidget::ViewSchemaCol, schemaNameItem);
 
     // fill owner name
     QTableWidgetItem *ownerNameItem = new QTableWidgetItem();
     ownerNameItem->setText(ownerName);
-    mTable->setItem(0, DescriptionWidget::ViewOwnerCol, ownerNameItem);
+    ui.mTable->setItem(0, DescriptionWidget::ViewOwnerCol, ownerNameItem);
 
     // auto resize cells
-    mTable->resizeColumnsToContents();
-    mTable->resizeRowsToContents();
+    ui.mTable->resizeColumnsToContents();
+    ui.mTable->resizeRowsToContents();
 
     // format body
     def.replace(",", ",\n\t");
@@ -460,7 +442,7 @@ DescriptionWidget::describe(const DbView *ipView)
     def.replace("FROM", "\nFROM\n\t");
     def.replace("WHERE", "\nWHERE\n\t");
 
-    mBodyEdit->setText(def.trimmed());
+    ui.mBodyEdit->setText(def.trimmed());
 }
 
 /*
@@ -478,8 +460,8 @@ DescriptionWidget::describe(const DbIndex *ipIndex)
         return;
     }
 
-    mTable->setRowCount(1);
-    mTable->setColumnCount(DescriptionWidget::DbIndexColumnsCount);
+    ui.mTable->setRowCount(1);
+    ui.mTable->setColumnCount(DescriptionWidget::DbIndexColumnsCount);
 
     // set column labels
     QStringList labels;
@@ -495,7 +477,7 @@ DescriptionWidget::describe(const DbIndex *ipIndex)
             << tr("ChecksXMin")
             << tr("Ready");
 
-    mTable->setHorizontalHeaderLabels(labels);
+    ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
     QString name = ipIndex->name();
@@ -522,18 +504,18 @@ DescriptionWidget::describe(const DbIndex *ipIndex)
     // fill view name
     QTableWidgetItem *nameItem = new QTableWidgetItem();
     nameItem->setText(name);
-    mTable->setItem(0, DescriptionWidget::IndexNameCol, nameItem);
+    ui.mTable->setItem(0, DescriptionWidget::IndexNameCol, nameItem);
 
     // fill table name
     QTableWidgetItem *tableItem = new QTableWidgetItem();
     tableItem->setText(QString("%1.%2").arg(schemaName).arg(tableName));
-    mTable->setItem(0, DescriptionWidget::IndexTableCol, tableItem);
+    ui.mTable->setItem(0, DescriptionWidget::IndexTableCol, tableItem);
 
     // fill cols count
     QTableWidgetItem *colsCountItem = new QTableWidgetItem();
     colsCountItem->setTextAlignment(Qt::AlignHCenter);
     colsCountItem->setText(QString::number(colsCount));
-    mTable->setItem(0, DescriptionWidget::IndexColCountCol, colsCountItem);
+    ui.mTable->setItem(0, DescriptionWidget::IndexColCountCol, colsCountItem);
 
     // fill col nums
     QTableWidgetItem *colNumsItem = new QTableWidgetItem();
@@ -558,47 +540,47 @@ DescriptionWidget::describe(const DbIndex *ipIndex)
     colNames.chop(2);
 
     colNumsItem->setText(colNames);
-    mTable->setItem(0, DescriptionWidget::IndexColNumsCol, colNumsItem);
+    ui.mTable->setItem(0, DescriptionWidget::IndexColNumsCol, colNumsItem);
 
     // fill unique flag
     QTableWidgetItem *uniqueItem = new QTableWidgetItem();
     uniqueItem->setTextAlignment(Qt::AlignHCenter);
     uniqueItem->setText(unique ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::IndexUniqueCol, uniqueItem);
+    ui.mTable->setItem(0, DescriptionWidget::IndexUniqueCol, uniqueItem);
 
     // fill primary flag
     QTableWidgetItem *primaryItem = new QTableWidgetItem();
     primaryItem->setTextAlignment(Qt::AlignHCenter);
     primaryItem->setText(primary ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::IndexPrimaryCol, primaryItem);
+    ui.mTable->setItem(0, DescriptionWidget::IndexPrimaryCol, primaryItem);
 
     // fill clustered flag
     QTableWidgetItem *clusteredItem = new QTableWidgetItem();
     clusteredItem->setTextAlignment(Qt::AlignHCenter);
     clusteredItem->setText(clustered ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::IndexClusteredCol, clusteredItem);
+    ui.mTable->setItem(0, DescriptionWidget::IndexClusteredCol, clusteredItem);
 
     // fill valid flag
     QTableWidgetItem *validItem = new QTableWidgetItem();
     validItem->setTextAlignment(Qt::AlignHCenter);
     validItem->setText(valid ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::IndexValidCol, validItem);
+    ui.mTable->setItem(0, DescriptionWidget::IndexValidCol, validItem);
 
     // fill checkXMin flag
     QTableWidgetItem *checkXMinItem = new QTableWidgetItem();
     checkXMinItem->setTextAlignment(Qt::AlignHCenter);
     checkXMinItem->setText(checkXMin ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::IndexChecksXMinCol, checkXMinItem);
+    ui.mTable->setItem(0, DescriptionWidget::IndexChecksXMinCol, checkXMinItem);
 
     // fill ready flag
     QTableWidgetItem *readyItem = new QTableWidgetItem();
     readyItem->setTextAlignment(Qt::AlignHCenter);
     readyItem->setText(ready ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::IndexReadyCol, readyItem);
+    ui.mTable->setItem(0, DescriptionWidget::IndexReadyCol, readyItem);
 
     // auto resize cells
-    mTable->resizeColumnsToContents();
-    mTable->resizeRowsToContents();
+    ui.mTable->resizeColumnsToContents();
+    ui.mTable->resizeRowsToContents();
 
     // generate body
     QString body = QString("CREATE ");
@@ -616,7 +598,7 @@ DescriptionWidget::describe(const DbIndex *ipIndex)
     body.append(colNames);
     body.append(" };");
 
-    mBodyEdit->setText(body);
+    ui.mBodyEdit->setText(body);
 }
 
 /*
@@ -634,8 +616,8 @@ DescriptionWidget::describe(const DbTrigger *ipTrigger)
         return;
     }
 
-    mTable->setRowCount(1);
-    mTable->setColumnCount(DescriptionWidget::DbTriggerColumnsCount);
+    ui.mTable->setRowCount(1);
+    ui.mTable->setColumnCount(DescriptionWidget::DbTriggerColumnsCount);
 
     // set column labels
     QStringList labels;
@@ -650,7 +632,7 @@ DescriptionWidget::describe(const DbTrigger *ipTrigger)
             << tr("Is initially deferred")
             << tr("Number\nof\arguments");
 
-    mTable->setHorizontalHeaderLabels(labels);
+    ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
     QString name = ipTrigger->name();
@@ -667,57 +649,57 @@ DescriptionWidget::describe(const DbTrigger *ipTrigger)
     // fill name
     QTableWidgetItem *nameItem = new QTableWidgetItem();
     nameItem->setText(name);
-    mTable->setItem(0, DescriptionWidget::TriggerNameCol, nameItem);
+    ui.mTable->setItem(0, DescriptionWidget::TriggerNameCol, nameItem);
 
     // fill table
     QTableWidgetItem *tableItem = new QTableWidgetItem();
     tableItem->setText(tableName);
-    mTable->setItem(0, DescriptionWidget::TriggerTableNameCol, tableItem);
+    ui.mTable->setItem(0, DescriptionWidget::TriggerTableNameCol, tableItem);
 
     // fill proc
     QTableWidgetItem *procItem = new QTableWidgetItem();
     procItem->setText(procName);
-    mTable->setItem(0, DescriptionWidget::TriggerProcedureNameCol, procItem);
+    ui.mTable->setItem(0, DescriptionWidget::TriggerProcedureNameCol, procItem);
 
     // fill enabled
     QTableWidgetItem *enabledItem = new QTableWidgetItem();
     enabledItem->setTextAlignment(Qt::AlignHCenter);
     enabledItem->setText(enabled);
-    mTable->setItem(0, DescriptionWidget::TriggerEnabledCol, enabledItem);
+    ui.mTable->setItem(0, DescriptionWidget::TriggerEnabledCol, enabledItem);
 
     // fill isConstraint flag
     QTableWidgetItem *isConstraintItem = new QTableWidgetItem();
     isConstraintItem->setTextAlignment(Qt::AlignHCenter);
     isConstraintItem->setText(isConstraint ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::TriggerIsConstraintCol, isConstraintItem);
+    ui.mTable->setItem(0, DescriptionWidget::TriggerIsConstraintCol, isConstraintItem);
 
     // fill constraint name
     QTableWidgetItem *constraintNameItem = new QTableWidgetItem();
     constraintNameItem->setText(constraintName);
-    mTable->setItem(0, DescriptionWidget::TriggerConstraintNameCol, constraintNameItem);
+    ui.mTable->setItem(0, DescriptionWidget::TriggerConstraintNameCol, constraintNameItem);
 
     // fill referenced table
     QTableWidgetItem *refTableItem = new QTableWidgetItem();
     refTableItem->setText(refTableName);
-    mTable->setItem(0, DescriptionWidget::TriggerReferencedTableNameCol, refTableItem);
+    ui.mTable->setItem(0, DescriptionWidget::TriggerReferencedTableNameCol, refTableItem);
 
     // fill isDeferrable flag
     QTableWidgetItem *isDeferrableItem = new QTableWidgetItem();
     isDeferrableItem->setTextAlignment(Qt::AlignHCenter);
     isDeferrableItem->setText(isDeferrable ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::TriggerIsDeferrableCol, isDeferrableItem);
+    ui.mTable->setItem(0, DescriptionWidget::TriggerIsDeferrableCol, isDeferrableItem);
 
     // fill isInitiallyDeferred flag
     QTableWidgetItem *isInitiallyDeferredItem = new QTableWidgetItem();
     isInitiallyDeferredItem->setTextAlignment(Qt::AlignHCenter);
     isInitiallyDeferredItem->setText(isInitiallyDeferred ? "Y" : "N");
-    mTable->setItem(0, DescriptionWidget::TriggerIsInitiallyDeferredCol, isInitiallyDeferredItem);
+    ui.mTable->setItem(0, DescriptionWidget::TriggerIsInitiallyDeferredCol, isInitiallyDeferredItem);
 
     // fill num args
     QTableWidgetItem *numArgsItem = new QTableWidgetItem();
     numArgsItem->setTextAlignment(Qt::AlignHCenter);
     numArgsItem->setText(QString::number(numArgs));
-    mTable->setItem(0, DescriptionWidget::TriggerNumArgsCol, numArgsItem);
+    ui.mTable->setItem(0, DescriptionWidget::TriggerNumArgsCol, numArgsItem);
 
     QString body = QString("CREATE TRIGGER %1\nON %2 FOR EACH ROW\n")
                    .arg(name)
@@ -726,7 +708,7 @@ DescriptionWidget::describe(const DbTrigger *ipTrigger)
     body.append(QString("EXECUTE PROCEDURE %1(...);").arg(procName));
 
     // auto resize cells
-    mTable->resizeColumnsToContents();
-    mTable->resizeRowsToContents();
+    ui.mTable->resizeColumnsToContents();
+    ui.mTable->resizeRowsToContents();
 
 }

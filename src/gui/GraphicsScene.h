@@ -77,7 +77,7 @@ class GraphicsScene : public QGraphicsScene {
 	bool moveMode() const;
 
     signals:
-	void tableMoved(QGraphicsItem *, const QPointF &);
+	void tableMoved(QList <QGraphicsItem *>, const QPointF &);
 
     public slots:
 	QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int);

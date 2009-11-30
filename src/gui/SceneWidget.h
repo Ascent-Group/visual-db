@@ -105,7 +105,7 @@ class SceneWidget : public QWidget
 	void setAnchor(QList<QGraphicsItem *>, bool);
 
     private slots:
-	void sendTableMoved(QGraphicsItem *, const QPointF &);
+	void sendTableMoved(QList <QGraphicsItem *>, const QPointF &);
 
     private:
 	GraphicsScene *mScene;

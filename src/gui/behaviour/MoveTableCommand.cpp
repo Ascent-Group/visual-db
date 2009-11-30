@@ -35,11 +35,12 @@
 /* 
  * Ctor
  */
-MoveTableCommand::MoveTableCommand(QGraphicsItem *ipItem, 
-				   const QPointF &ipPos, 
+MoveTableCommand::MoveTableCommand(QList<QGraphicsItem *> ipTableList, 
+				   const QPointF &ipDiffPos, 
 				   QUndoCommand *ipParent)
-    : QUndoCommand(ipParent), mItem(ipItem), mNewPos(mItem->pos()), mOldPos(ipPos)
+    : QUndoCommand(ipParent), mDiffPos(ipDiffPos)
 {
+    mTableList = ipTableList;
     setText(QObject::tr("Move table"));
 }
 
@@ -56,7 +57,10 @@ MoveTableCommand::~MoveTableCommand()
 void
 MoveTableCommand::undo()
 {
-    mItem->setPos(mOldPos);
+    foreach (QGraphicsItem *item, mTableList) {
+	QPointF point = -mDiffPos;
+	item->moveBy(point.x(), point.y());
+    }
 }
 
 /*
@@ -65,5 +69,8 @@ MoveTableCommand::undo()
 void
 MoveTableCommand::redo()
 {
-    mItem->setPos(mNewPos);
+    foreach (QGraphicsItem *item, mTableList) {
+	QPointF point = mDiffPos;
+	item->moveBy(point.x(), point.y());
+    }
 }

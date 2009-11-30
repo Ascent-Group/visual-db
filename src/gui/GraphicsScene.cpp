@@ -105,7 +105,7 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
             for (int i = 0; i < ipTreeItem->childCount(); ++i) {
                 if (Database::TableNode == ipTreeItem->child(i)->text(TreeWidget::IdCol).toInt()) {
                     for (int j = 0; j < ipTreeItem->child(i)->childCount(); ++j) {
-                        showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol);
+                        tableList << showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol);
                     }
                 }
             }
@@ -155,7 +155,6 @@ GraphicsScene::addTableItems(const QList<QGraphicsItem *> &ipItems)
             addTableItems(group->children());
 	    createItemGroup(group->children());
 	} else if (qgraphicsitem_cast<TableItem *>(item)) {
-	    qDebug() << item;
 	    addItem(item);
 	}
     }
@@ -248,7 +247,7 @@ GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
 	// if we pressed under item - do default actions and return
 	QGraphicsItem *item = itemAt(ipEvent->scenePos());
 	if (item && qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) {
-	    mOldPos = item->pos();
+	    mOldPos = item->scenePos();
 	    QGraphicsScene::mousePressEvent(ipEvent);
 	    return;
 	}
@@ -267,9 +266,10 @@ void
 GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     QGraphicsItem *item = itemAt(ipEvent->scenePos());
+    qDebug() << item << mOldPos.x() << ipEvent->scenePos().x();
     if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) && 
-	    ipEvent->pos() != mOldPos) {
-	emit tableMoved(item, mOldPos);
+	    ipEvent->scenePos() != mOldPos) {
+	emit tableMoved(selectedItems(), mOldPos - item->scenePos());
     }
 
     if (mMoveMode) {

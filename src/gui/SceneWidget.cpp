@@ -69,8 +69,8 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
     connect(mControlWidget, SIGNAL(movedRight()), mView, SLOT(moveRight()));
     connect(mControlWidget, SIGNAL(moveModeSet(bool)), mView, SLOT(setMoveMode(bool)));
 
-    connect(mScene, SIGNAL(tableMoved(QGraphicsItem *, const QPointF &)), 
-	    this, SLOT(sendTableMoved(QGraphicsItem *, const QPointF &)));
+    connect(mScene, SIGNAL(tableMoved(QList <QGraphicsItem *>, const QPointF &)), 
+	    this, SLOT(sendTableMoved(QList <QGraphicsItem *>, const QPointF &)));
 
     mainLayout = new QGridLayout(this);
     mainLayout->setAlignment(Qt::AlignCenter);
@@ -151,6 +151,7 @@ SceneWidget::cleanTableSchemeScene()
 	// first send the signal to remember deleted items
 	emit tableActionDone(new DeleteTableCommand(mScene, mScene->items()));;
     }
+    TableItem::setSeek(20);
 }
 
 /*
@@ -452,7 +453,6 @@ SceneWidget::tableFromXml(QDomElement &ipElement)
     // get table's coordinates
     TableItem *newTable = mScene->newTableItem(ipElement.attribute("schema"), 
 	    ipElement.attribute("name"), mTableMenu);
-    qDebug() << ipElement.attribute("x");
     newTable->moveBy(ipElement.attribute("x").toInt() - newTable->x(),
 	    ipElement.attribute("y").toInt() - newTable->y());
     
@@ -521,8 +521,8 @@ SceneWidget::print(QPrinter *ipPrinter)
  * Send 'table moved' signal
  */
 void
-SceneWidget::sendTableMoved(QGraphicsItem *ipItem, const QPointF &ipPos)
+SceneWidget::sendTableMoved(QList <QGraphicsItem *> ipTableList, const QPointF &ipPos)
 {
-    emit tableActionDone(new MoveTableCommand(ipItem, ipPos));
+    emit tableActionDone(new MoveTableCommand(ipTableList, ipPos));
 }
 

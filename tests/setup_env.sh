@@ -7,9 +7,9 @@ DBNAME=music_db
 LANG=plpgsql
 
 # create user if it doesn't exist already
-psql template1 -c "\du" | grep $DBUSER > /dev/null
+psql template1 postgres -c "\du" | grep $DBUSER > /dev/null
 if [ $? != 0 ]; then
-    createuser --createdb --no-superuser --no-createrole $DBUSER
+    createuser -U postgres --createdb --no-superuser --no-createrole $DBUSER
 
     if [ $? != 0 ]; then
 	echo "Unable to create db user!";
@@ -18,7 +18,7 @@ if [ $? != 0 ]; then
 fi
 
 # create db if it doesn't exist already
-psql template1 -c "\l" | grep $DBNAME > /dev/null
+psql template1 postgres -c "\l" | grep $DBNAME > /dev/null
 if [ $? != 0 ]; then
     createdb --host=localhost --username=$DBUSER --template=template1 $DBNAME
 

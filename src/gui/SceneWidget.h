@@ -47,7 +47,7 @@ class TableItem;
 class TableItemGroup;
 
 /*
- * This is widget to provide the vizualization.
+ * This is widget to provide the visualization.
  * It contains graphics scene, graphics view, control widget and menus.
  */
 class SceneWidget : public QWidget

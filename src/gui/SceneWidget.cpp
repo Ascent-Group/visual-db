@@ -245,10 +245,10 @@ SceneWidget::anchorTables()
 }
 
 /*
- * Weight anchor selected items
+ * Disable anchor selected items
  */
 void
-SceneWidget::weightAnchorTables()
+SceneWidget::disableAnchorTables()
 {
     setAnchor(mScene->selectedItems(), true);
 }
@@ -287,21 +287,21 @@ SceneWidget::showGrid(bool ipFlag)
 }
 
 /*
- * Attach detach tables to the grid
+ * (Un)Align tables to the grid
  */
 void
-SceneWidget::attachToGrid(bool ipFlag)
+SceneWidget::alignToGrid(bool ipFlag)
 {
-    mScene->attachToGrid(ipFlag);
+    mScene->alignToGrid(ipFlag);
 }
 
 /*
  * Show/hide grid
  */
 void
-SceneWidget::divideOnPages(bool ipFlag)
+SceneWidget::divideIntoPages(bool ipFlag)
 {
-    mScene->divideOnPages(ipFlag);
+    mScene->divideIntoPages(ipFlag);
 }
 
 /*
@@ -387,11 +387,11 @@ SceneWidget::showControlWidget(bool ipFlag)
  * Get xml structure of scene
  */
 QDomElement
-SceneWidget::toXml(QDomDocument &ipDoc, bool ipShowGrid, bool ipDivideOnPages, bool ipShowLegend, bool ipShowControlWidget)
+SceneWidget::toXml(QDomDocument &ipDoc, bool ipShowGrid, bool ipDivideIntoPages, bool ipShowLegend, bool ipShowControlWidget)
 {
     QDomElement element = ipDoc.createElement("scene");
     element.setAttribute("grid", ipShowGrid);
-    element.setAttribute("divideOnPages", ipDivideOnPages);
+    element.setAttribute("divideIntoPages", ipDivideIntoPages);
     element.setAttribute("legend", ipShowLegend);
     element.setAttribute("controlWidget", ipShowControlWidget);
     
@@ -417,8 +417,8 @@ SceneWidget::fromXml(QDomElement &ipElement)
     QDomNode child = ipElement.firstChild();
     bool grid = ipElement.attribute("grid").toInt();
     mScene->showGrid(grid);
-    bool divideOnPages = ipElement.attribute("divideOnPages").toInt();
-    mScene->divideOnPages(divideOnPages);
+    bool divideIntoPages = ipElement.attribute("divideIntoPages").toInt();
+    mScene->divideIntoPages(divideIntoPages);
     bool legend = ipElement.attribute("legend").toInt();
     mScene->showLegend(legend);
     bool controlWidget = ipElement.attribute("controlWidget").toInt();

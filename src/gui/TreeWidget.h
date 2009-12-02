@@ -44,10 +44,12 @@ class TreeWidget : public QTreeWidget
     Q_OBJECT
 
     public:
-	TreeWidget(QMenu *, QWidget *ipParent = 0);
+	TreeWidget(/*QMenu *, */QWidget *ipParent = 0);
 	~TreeWidget();
 
 	void refresh();
+
+	void setContextMenu(QMenu *);
 
         enum Columns {
             NameCol = 0,

@@ -80,10 +80,10 @@ class SceneWidget : public QWidget
     public slots:
 	void adjustTables();
 	void anchorTables();
-	void attachToGrid(bool);
+	void alignToGrid(bool);
 	void colorizeAccordingSchemas();
 	void deleteTableItem();
-	void divideOnPages(bool);
+	void divideIntoPages(bool);
 	void groupItems();
 	void saveToImage();
 	void selectAllTables();
@@ -97,7 +97,7 @@ class SceneWidget : public QWidget
 	void showLegend(bool);
 	void showOnScene(QTreeWidgetItem *, int);
 	void ungroupItems();
-	void weightAnchorTables();
+	void disableAnchorTables();
         void cleanTableSchemeScene();
         void setTableColor();
 

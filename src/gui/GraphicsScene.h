@@ -91,8 +91,8 @@ class GraphicsScene : public QGraphicsScene {
 	void ungroupItems();
 	void colorizeAccordingSchemas();
 	void showGrid(bool);
-	void attachToGrid(bool);
-	void divideOnPages(bool);
+	void alignToGrid(bool);
+	void divideIntoPages(bool);
 	void showLegend(bool);
 	void moveLegend(int, int);
 	void selectAllTablesInSchema();
@@ -130,7 +130,7 @@ class GraphicsScene : public QGraphicsScene {
 	void groupItems(QList<QGraphicsItem *>);
 	void ungroupItems(QList<QGraphicsItem *>);
 	void drawGrid(QPainter *);
-	void divideOnPages(QPainter *);
+	void divideIntoPages(QPainter *);
 
     private slots:
 	void resize(int);

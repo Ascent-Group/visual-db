@@ -30,6 +30,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <gui/ui/ui_MainWindow.h>
 #include <QMainWindow>
 #include <QSettings>
 #include <QPointF>
@@ -38,22 +39,15 @@ class DbParameters;
 class GraphicsScene;
 class GraphicsView;
 class ProxyParameters;
-class QAction;
 class QColorDialog;
 class QFileDialog;
 class QGraphicsItem;
 class QMenu;
-class QMenuBar;
 class QPrinter;
 class QProgressBar;
 class QTreeWidgetItem;
 class QUndoCommand;
 class QUndoStack;
-class SceneWidget;
-class TableItem;
-class TableItemGroup;
-class TabWidget;
-class TreeWidget;
 
 /*
  * Main window. Container for all widgets of the application.
@@ -66,65 +60,20 @@ class MainWindow : public QMainWindow
 	MainWindow();
 
     private:
-        TreeWidget*mTree;
+	Ui::MainWindow ui;
 
-        QMenu *mFileMenu;
-	QMenu *mEditMenu;
-        QMenu *mViewMenu;
-        QMenu *mSchemeMenu;
-        QMenu *mTableMenu;
+	// These actions are undo stack actions
+	// Designer does NOT let us create them
+	// => declared here, not in designer
+	QAction *mUndoAction;
+	QAction *mRedoAction;
+
+	// These menus initially are not attached
+	// to any gui element
         QMenu *mTreeItemMenu;
         QMenu *mGroupMenu;
-        QMenu *mSessionMenu;
-
-        QAction	*mExitAction;
-        QAction	*mNewConnectionAction;
-        QAction *mShowOptionsDialogAction;
-        QAction	*mShowDockTablesListAction;
-        QAction	*mShowPrintPreviewDialogAction;
-        QAction	*mShowPrintDialogAction;
-	QAction	*mUndoAction;
-	QAction	*mRedoAction;
-        QAction	*mDeleteTableAction;
-        QAction	*mAddTableAction;
-        QAction	*mShowFieldsTypesAction;
-        QAction	*mHideFieldsTypesAction;
-        QAction	*mShowIndicesAction;
-        QAction	*mHideIndicesAction;
-        QAction	*mSetTableColorAction;
-        QAction	*mSelectAllTablesAction;
-        QAction	*mRemoveAllTablesAction;
-        QAction	*mAdjustTableSizeAction;
-        QAction	*mSaveToImgAction;
-        QAction	*mDrawFullDBAction;
-        QAction	*mGroupItemsAction;
-        QAction	*mUngroupItemsAction;
-        QAction	*mColorizeAccordingSchemasAction;
-        QAction	*mShowGridAction;
-	QAction *mAttachToGridAction;
-	QAction *mAnchorAction;
-	QAction *mDisableAnchorAction;
-        QAction	*mDivideOnPagesAction;
-        QAction	*mShowControlWidgetAction;
-        QAction	*mShowLegendAction;
-        QAction	*mSelectAllTablesInSchemaAction;
-        QAction *mDescribeObjectAction;
-        QAction *mQueryDataAction;
-        QAction *mSaveSessionAction;
-        QAction *mLoadSessionAction;
-        QAction *mLastSessionAction;
-        QAction	*mSetFullScreenAction;
-        QAction *mReloadDataAction;
-        QMenuBar *mMenuBar;
-        QToolBar *mToolBar;
 
         QProgressBar *mProgressBar;
-
-        SceneWidget *mSceneWidget;
-
-        TabWidget *mTabWidget;
-
-        QDockWidget *mDockTableListWidget;
 
         QSettings mSettings;
         DbParameters *mDbParameters;
@@ -141,35 +90,36 @@ class MainWindow : public QMainWindow
 //	void showConnectionDialog(DbParameters *, ProxyParameters *, bool);
 	void createMenus();
 	void updateSessionMenu();
-        void createToolBar();
 	void createStatusBar();
-	void createDockWindows();
 
         void closeEvent(QCloseEvent *ipEvent);
-	
+
 	void saveToXml(QString);
 	void loadFromXml(QString);
 
         void initSession();
 
     private slots:
+	// this slot is not standard that's why it is declared here
 	int showConnectionDialog(bool ipLoadSession = false);
-        void drawFullDbScheme();
-        void showOptionsDialog();
-	void showPrintPreviewDialog();
-	void showPrintDialog();
-	void setDockTableListVisible(bool);
-	void addTableItem();
-	void addTableItem(QTreeWidgetItem *, int);
-        void describeObject();
-        void queryData();
+	void addCommand(QUndoCommand*);
+	void reloadData();
 	void saveSession();
 	void loadSession();
 	void loadLastSession();
 	void setFullScreen(bool);
-	void printPreview(QPrinter *);
-	void reloadData();
-	void addCommand(QUndoCommand *);
+	void queryData();
+	void describeObject();
+	void drawFullDbScheme();
+	void addTableItem();
+	void addTableItem(QTreeWidgetItem*, int);
+	void setDockTableListVisible(bool);
+	void setDockLogPanelVisible(bool);
+	void printPreview(QPrinter*);
+	void showOptionsDialog();
+	void showPrintPreviewDialog();
+	void showPrintDialog();
+
 };
 
 #endif // MAINWINDOW_H

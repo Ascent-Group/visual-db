@@ -400,9 +400,9 @@ GraphicsScene::drawBackground(QPainter *ipPainter, const QRectF &)
 	drawGrid(ipPainter);
     }
    
-    bool needDivideOnPages = mSettings.value("View/DivideOnPages", true).value<bool>();
-    if (needDivideOnPages) {
-	divideOnPages(ipPainter);
+    bool needDivideIntoPages = mSettings.value("View/DivideIntoPages", true).value<bool>();
+    if (needDivideIntoPages) {
+	divideIntoPages(ipPainter);
     }
 }
 
@@ -456,7 +456,7 @@ GraphicsScene::drawGrid(QPainter *ipPainter)
  * Draw the page's bounds
  */
 void
-GraphicsScene::divideOnPages(QPainter *ipPainter)
+GraphicsScene::divideIntoPages(QPainter *ipPainter)
 {
     // print A4 pages grid
     QPen pen = QPen();
@@ -757,22 +757,22 @@ GraphicsScene::showGrid(bool ipFlag)
 }
 
 /*
- * Attach/detach tables to the grid
+ * (Un)Align tables to the grid
  */
 void
-GraphicsScene::attachToGrid(bool ipFlag)
+GraphicsScene::alignToGrid(bool ipFlag)
 {
-    mSettings.setValue("View/AttachToGrid", ipFlag);
+    mSettings.setValue("View/AlignToGrid", ipFlag);
 }
 
 /*
  * Show/hide grid
  */
 void
-GraphicsScene::divideOnPages(bool ipFlag)
+GraphicsScene::divideIntoPages(bool ipFlag)
 {
     // only remember given flag; all analyze will be done in scene class
-    mSettings.setValue("View/DivideOnPages", ipFlag);
+    mSettings.setValue("View/DivideIntoPages", ipFlag);
     update(QRectF(0.0, 0.0, width(), height()));
 }
 

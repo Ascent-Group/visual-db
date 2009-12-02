@@ -347,7 +347,7 @@ TableItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 //    setZValue(0);
 
     QGraphicsItem::mouseReleaseEvent(ipEvent);
-    if (mSettings.value("View/AttachToGrid", false).toBool()) {
+    if (mSettings.value("View/AlignToGrid", false).toBool()) {
 	moveBy(-(int)pos().x() % GraphicsScene::LOW_GRID_DX, -(int)pos().y() % GraphicsScene::LOW_GRID_DY);
     }
 }

@@ -29,6 +29,7 @@ FORMS = gui/ui/AppearancePage.ui \
 	gui/ui/ControlWidget.ui \
 	gui/ui/DescriptionWidget.ui \
 	gui/ui/LogPanel.ui \
+	gui/ui/MainWindow.ui \
 	gui/ui/OptionsDialog.ui \
 	gui/ui/PreferencesPage.ui \
 	gui/ui/SelectColorWidget.ui \

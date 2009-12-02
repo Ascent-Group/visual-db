@@ -2,7 +2,7 @@ CONFIG      += designer plugin
 TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
-QT += sql
+QT += sql network gui
 
 SRC	    = ../../../
 
@@ -13,7 +13,7 @@ OBJECTS_DIR = .obj
 
 CONFIG += release
 
-INCLUDEPATH += $$SRC/
+INCLUDEPATH += $$SRC/ $$SRC/dbobjects
 
 FORMS = $$SRC/gui/ui/SqlWidget.ui
 

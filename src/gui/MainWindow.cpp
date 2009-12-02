@@ -30,12 +30,9 @@
 #include <QCloseEvent>
 #include <QColor>
 #include <QDate>
-#include <QDockWidget>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFileDialog>
-#include <QMenu>
-#include <QMenuBar>
 #include <QMessageBox>
 #include <QPainter>
 #include <QPrintDialog>
@@ -46,7 +43,6 @@
 #include <QSqlDatabase>
 #include <QStatusBar>
 #include <QTime>
-#include <QToolBar>
 #include <QTreeWidgetItem>
 #include <QUndoCommand>
 #include <QUndoStack>
@@ -77,42 +73,26 @@
 MainWindow::MainWindow()
     : QMainWindow()
 {
-//    mScene = new GraphicsScene();
-    mSceneWidget = new SceneWidget();
+    ui.setupUi(this);
 
     // create menus
     createMenus();
 
-    // create tree
-    mTree = new TreeWidget(mTreeItemMenu);
-    mTree->setExpandsOnDoubleClick(false);
+    /*DO NOT DELETE ME ALEX*/
+    ui.mTree->setContextMenu(mTreeItemMenu);
 
-    createToolBar();
     createStatusBar();
-    createDockWindows();
-
-    // create tab widget with graphics view on first tab
-    mTabWidget = new TabWidget();
-
-    mTabWidget->addTab(mSceneWidget, tr("DB scheme"));
-    setCentralWidget(mTabWidget);
-
-    setWindowTitle(tr("Visual PostgreSQL editor"));
-    setMinimumSize(800, 600);
-    setAttribute(Qt::WA_DeleteOnClose);
 
     mDbParameters = new DbParameters();
     mProxyParameters = new ProxyParameters();
 
-    connect(mTree, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
-	    this, SLOT(addTableItem(QTreeWidgetItem *, int)));
-
+    // set attributes
+    setAttribute(Qt::WA_DeleteOnClose);
     setWindowState(Qt::WindowMaximized);
 
-    connect(mSceneWidget, SIGNAL(tableActionDone(QUndoCommand *)),
-	    this, SLOT(addCommand(QUndoCommand *)));
-
     initSession();
+
+    connect(ui.mNewConnectionAction, SIGNAL(triggered()), this, SLOT(showConnectionDialog()));
 }
 
 /*
@@ -120,46 +100,6 @@ MainWindow::MainWindow()
  */
 void MainWindow::createActions()
 {
-    // exit
-    mExitAction = new QAction(tr("Quit"), this);
-    mExitAction->setShortcut(QString("Ctrl+Q"));
-    mExitAction->setIcon(QIcon(":/img/exit.png"));
-    mExitAction->setStatusTip(tr("Quit"));
-    connect(mExitAction, SIGNAL(triggered()), this, SLOT(close()));
-
-    // new connection
-    mNewConnectionAction = new QAction(tr("New connection..."), this);
-    mNewConnectionAction->setShortcut(QString("Ctrl+N"));
-    mNewConnectionAction->setIcon(QIcon(":/img/connect_creating.png"));
-    mNewConnectionAction->setStatusTip(tr("Establishing of new connection"));
-    connect(mNewConnectionAction, SIGNAL(triggered()), this, SLOT(showConnectionDialog()));
-
-    // show options dialog
-    mShowOptionsDialogAction = new QAction(tr("Options..."), this);
-    mShowOptionsDialogAction->setShortcut(QString("Ctrl+O"));
-    mShowOptionsDialogAction->setIcon(QIcon(":/img/configure.png"));
-    mShowOptionsDialogAction->setStatusTip(tr("Edit options"));
-    connect(mShowOptionsDialogAction, SIGNAL(triggered()), this, SLOT(showOptionsDialog()));
-
-    // show connection dialog
-    mShowDockTablesListAction = new QAction(tr("Show tables list"), this);
-    mShowDockTablesListAction->setCheckable(true);
-    mShowDockTablesListAction->setChecked(true);
-    connect(mShowDockTablesListAction, SIGNAL(toggled(bool)), this, SLOT(setDockTableListVisible(bool)));
-
-    // draw full database (all tables by one click)
-    mDrawFullDBAction = new QAction(tr("Draw full DB"), this);
-    mDrawFullDBAction->setIcon(QIcon(":/img/pencil.png"));
-    connect(mDrawFullDBAction, SIGNAL(triggered()), this, SLOT(drawFullDbScheme()));
-
-    // show the preview page of the diagram
-    mShowPrintPreviewDialogAction = new QAction(tr("Show preview..."), this);
-    connect(mShowPrintPreviewDialogAction, SIGNAL(triggered()), this, SLOT(showPrintPreviewDialog()));
-
-    // show the print dialog
-    mShowPrintDialogAction = new QAction(tr("Print..."), this);
-    connect(mShowPrintDialogAction, SIGNAL(triggered()), this, SLOT(showPrintDialog()));
-
     // undo stack
     mUndoStack = new QUndoStack();
 
@@ -167,183 +107,14 @@ void MainWindow::createActions()
     mUndoAction = mUndoStack->createUndoAction(this, tr("Undo"));
     mUndoAction->setIcon(QIcon(":/img/undo.png"));
     mUndoAction->setShortcut(QString("Ctrl+Z"));
-    
+
     // redo action
     mRedoAction = mUndoStack->createRedoAction(this, tr("Redo"));
     mRedoAction->setIcon(QIcon(":/img/redo.png"));
     mRedoAction->setShortcut(QString("Ctrl+Y"));
 
-    // add table action
-    mAddTableAction = new QAction(tr("Add"), this);
-    mAddTableAction->setStatusTip(tr("Add"));
-    connect(mAddTableAction, SIGNAL(triggered()), this, SLOT(addTableItem()));
-
-    // delete table action
-    mDeleteTableAction = new QAction(tr("Delete"), this);
-    mDeleteTableAction->setShortcut(QString("Delete"));
-    mDeleteTableAction->setIcon(QIcon(":/img/remove.png"));
-    mDeleteTableAction->setStatusTip(tr("Delete item from the scheme"));
-    connect(mDeleteTableAction, SIGNAL(triggered()), mSceneWidget, SLOT(deleteTableItem()));
-
-    // show fields' types
-    mShowFieldsTypesAction = new QAction(tr("Show fields' types"), this);
-    mShowFieldsTypesAction->setIcon(QIcon(":/img/show.png"));
-    mShowFieldsTypesAction->setStatusTip(tr("Show fields' types"));
-    connect(mShowFieldsTypesAction, SIGNAL(triggered()), mSceneWidget, SLOT(setFieldsTypesVisible()));
-
-    // hide fields' types
-    mHideFieldsTypesAction = new QAction(tr("Hide fields' types"), this);
-    mHideFieldsTypesAction->setIcon(QIcon(":/img/hide.png"));
-    mHideFieldsTypesAction->setStatusTip(tr("Hide fields' types"));
-    connect(mHideFieldsTypesAction, SIGNAL(triggered()), mSceneWidget, SLOT(setFieldsTypesInvisible()));
-
-    // show/hide foreign keys
-    mShowIndicesAction = new QAction(tr("Show indices"), this);
-    mShowIndicesAction->setStatusTip(tr("Show indices"));
-    connect(mShowIndicesAction, SIGNAL(triggered()), mSceneWidget, SLOT(setIndicesVisible()));
-
-    // show/hide foreign keys
-    mHideIndicesAction = new QAction(tr("Hide indices"), this);
-    mHideIndicesAction->setStatusTip(tr("Hide indices"));
-    connect(mHideIndicesAction, SIGNAL(triggered()), mSceneWidget, SLOT(setIndicesInvisible()));
-
-    // set table color
-    mSetTableColorAction = new QAction(tr("Table color..."), this);
-    mSetTableColorAction->setIcon(QIcon(":/img/colors.png"));
-    mSetTableColorAction->setStatusTip(tr("Set table color"));
-    connect(mSetTableColorAction, SIGNAL(triggered()), mSceneWidget, SLOT(setTableColor()));
-
-    // select all tables
-    mSelectAllTablesAction = new QAction(tr("Select all tables"), this);
-    mSelectAllTablesAction->setShortcut(QString("Ctrl+A"));
-    mSelectAllTablesAction->setStatusTip(tr("Select all tables"));
-    connect(mSelectAllTablesAction, SIGNAL(triggered()), mSceneWidget, SLOT(selectAllTables()));
-
-    // remove all tables
-    mRemoveAllTablesAction = new QAction(tr("Remove all tables"), this);
-    mRemoveAllTablesAction->setIcon(QIcon(":/img/eraser.png"));
-    mRemoveAllTablesAction->setStatusTip(tr("Remove all tables from scheme"));
-    connect(mRemoveAllTablesAction, SIGNAL(triggered()), mSceneWidget, SLOT(cleanTableSchemeScene()));
-
-    // adjust all selected tables
-    mAdjustTableSizeAction = new QAction(tr("Adjust"), this);
-    mAdjustTableSizeAction->setShortcut(QString("Ctrl+J"));
-    mAdjustTableSizeAction->setIcon(QIcon(":/img/adjustsize.png"));
-    mAdjustTableSizeAction->setStatusTip(tr("Select all tables"));
-    connect(mAdjustTableSizeAction, SIGNAL(triggered()), mSceneWidget, SLOT(adjustTables()));
-
-    // save scheme to image
-    mSaveToImgAction = new QAction(tr("Save to image..."), this);
-    mSaveToImgAction->setIcon(QIcon(":/img/filesave.png"));
-    mSaveToImgAction->setStatusTip(tr("Save scheme to image"));
-    mSaveToImgAction->setShortcut(QString("Ctrl+S"));
-    connect(mSaveToImgAction, SIGNAL(triggered()), mSceneWidget, SLOT(saveToImage()));
-
-    // group items
-    mGroupItemsAction = new QAction(tr("Group items"), this);
-    mGroupItemsAction->setShortcut(QString("Ctrl+G"));
-    mGroupItemsAction->setIcon(QIcon(":/img/group.png"));
-    mGroupItemsAction->setStatusTip(tr("Group items"));
-    connect(mGroupItemsAction, SIGNAL(triggered()), mSceneWidget, SLOT(groupItems()));
-
-    // ungroup items
-    mUngroupItemsAction = new QAction(tr("Ungroup items"), this);
-    mUngroupItemsAction->setShortcut(QString("Ctrl+U"));
-    mUngroupItemsAction->setIcon(QIcon(":/img/ungroup.png"));
-    mUngroupItemsAction->setStatusTip(tr("Ungroup items"));
-    connect(mUngroupItemsAction, SIGNAL(triggered()), mSceneWidget, SLOT(ungroupItems()));
-
-    // anchor for tables
-    mAnchorAction = new QAction(tr("Anchor"), this);
-    mAnchorAction->setIcon(QIcon(":/img/anchor.png"));
-    mAnchorAction->setStatusTip(tr("To anchor for selected tables"));
-    connect(mAnchorAction, SIGNAL(triggered()), mSceneWidget, SLOT(anchorTables()));
-
-    // weight anchor for tables
-    mDisableAnchorAction = new QAction(tr("Disable anchor"), this);
-    mDisableAnchorAction->setStatusTip("To weight anchor for selected tables");
-    connect(mDisableAnchorAction, SIGNAL(triggered()), mSceneWidget, SLOT(weightAnchorTables()));
-
-    // select all tables in schema
-    mSelectAllTablesInSchemaAction = new QAction(tr("Select all tables in schema"), this);
-    mSelectAllTablesInSchemaAction->setStatusTip(tr("Select all tables in schema"));
-    connect(mSelectAllTablesInSchemaAction, SIGNAL(triggered()), mSceneWidget, SLOT(selectAllTablesInSchema()));
-
-    // describe table in new tab
-    mDescribeObjectAction = new QAction(tr("Describe"), this);
-    mDescribeObjectAction->setStatusTip(tr("Get object description"));
-    mDescribeObjectAction->setShortcut(QString("Alt+Enter"));
-    connect(mDescribeObjectAction, SIGNAL(triggered()), this, SLOT(describeObject()));
-
-    // query data in new tab
-    mQueryDataAction = new QAction(tr("Query data"), this);
-    mQueryDataAction->setStatusTip(tr("Run SQL command for data retrieving"));
-    connect(mQueryDataAction, SIGNAL(triggered()), this, SLOT(queryData()));
-
-    // colorize tables according schemas
-    mColorizeAccordingSchemasAction = new QAction(tr("Colorize according schemas"), this);
-    mColorizeAccordingSchemasAction->setStatusTip(tr("Colorize according schemas"));
-    connect(mColorizeAccordingSchemasAction, SIGNAL(triggered()), mSceneWidget, SLOT(colorizeAccordingSchemas()));
-
-    // show/hide grid
-    mShowGridAction = new QAction(tr("Show grid"), this);
-    mShowGridAction->setCheckable(true);
-    mShowGridAction->setChecked(true);
-    mShowGridAction->setStatusTip(tr("Show grid"));
-    connect(mShowGridAction, SIGNAL(toggled(bool)), mSceneWidget, SLOT(showGrid(bool)));
-
-    // attach tables to the grid
-    mAttachToGridAction = new QAction(tr("Align to grid"), this);
-    mAttachToGridAction->setCheckable(true);
-    mAttachToGridAction->setChecked(mSettings.value("View/AttachToGrid", false).toBool());
-    mAttachToGridAction->setStatusTip(tr("Align tables to the grid"));
-    connect(mAttachToGridAction, SIGNAL(toggled(bool)), mSceneWidget, SLOT(attachToGrid(bool)));
-
-    // show/hide grid
-    mDivideOnPagesAction = new QAction(tr("Divide on pages"), this);
-    mDivideOnPagesAction->setCheckable(true);
-    mDivideOnPagesAction->setChecked(true);
-    mDivideOnPagesAction->setStatusTip(tr("Divide on pages"));
-    connect(mDivideOnPagesAction, SIGNAL(toggled(bool)), mSceneWidget, SLOT(divideOnPages(bool)));
-
-    // show/hide control widget
-    mShowControlWidgetAction = new QAction(tr("Show control widget"), this);
-    mShowControlWidgetAction->setCheckable(true);
-    mShowControlWidgetAction->setChecked(true);
-    mShowControlWidgetAction->setStatusTip(tr("Show control widget"));
-    connect(mShowControlWidgetAction, SIGNAL(toggled(bool)), mSceneWidget, SLOT(showControlWidget(bool)));
-
-    // show/hide legend
-    mShowLegendAction = new QAction(tr("Show legend"), this);
-    mShowLegendAction->setCheckable(true);
-    mShowLegendAction->setChecked(false);
-    mShowLegendAction->setStatusTip(tr("Show legend"));
-    connect(mShowLegendAction, SIGNAL(toggled(bool)), mSceneWidget, SLOT(showLegend(bool)));
-
-    // save session
-    mSaveSessionAction = new QAction(tr("Save session"), this);
-    mSaveSessionAction->setStatusTip(tr("Save session"));
-    connect(mSaveSessionAction, SIGNAL(triggered()), this, SLOT(saveSession()));
-
-    // load session
-    mLoadSessionAction = new QAction(tr("Load session"), this);
-    mLoadSessionAction->setStatusTip(tr("Load session"));
-    connect(mLoadSessionAction, SIGNAL(triggered()), this, SLOT(loadSession()));
-
-    // set window to full screen
-    mSetFullScreenAction = new QAction(tr("Full screen"), this);
-    mSetFullScreenAction->setStatusTip(tr("Full screen"));
-    mSetFullScreenAction->setShortcut(QString("Ctrl+F"));
-    mSetFullScreenAction->setCheckable(true);
-    mSetFullScreenAction->setChecked(false);
-    connect(mSetFullScreenAction, SIGNAL(toggled(bool)), this, SLOT(setFullScreen(bool)));
-
-    // reload data form db
-    mReloadDataAction = new QAction(tr("Reload"), this);
-    mReloadDataAction->setIcon(QIcon(":/img/reload.png"));
-    mReloadDataAction->setStatusTip(tr("Reload"));
-    mReloadDataAction->setShortcut(QString("Ctrl+R"));
-    connect(mReloadDataAction, SIGNAL(triggered()), this, SLOT(reloadData()));
+    // align tables to the grid
+    ui.mAlignToGridAction->setChecked(mSettings.value("View/AlignToGrid", false).toBool());
 }
 
 /*
@@ -356,78 +127,19 @@ MainWindow::createMenus()
     createActions();
     setEnableForActions(false);
 
-    // create menu bar
-    mMenuBar = new QMenuBar();
-
-    // session menu
-    mSessionMenu = new QMenu(tr("Sessions"));
     updateSessionMenu();
 
-    // file menu
-    mFileMenu = new QMenu(tr("&File"));
-    mFileMenu->addAction(mNewConnectionAction);
-    mFileMenu->addSeparator();
-    mFileMenu->addAction(mSaveToImgAction);
-    mFileMenu->addSeparator();
-    mFileMenu->addAction(mShowOptionsDialogAction);
-    mFileMenu->addMenu(mSessionMenu);
-    mFileMenu->addSeparator();
-    mFileMenu->addAction(mShowPrintPreviewDialogAction);
-    mFileMenu->addAction(mShowPrintDialogAction);
-    mFileMenu->addSeparator();
-    mFileMenu->addAction(mExitAction);
-    mMenuBar->addMenu(mFileMenu);
-
-    // edit menu
-    mEditMenu = new QMenu(tr("Edit"));
-    mEditMenu->addAction(mUndoAction);
-    mEditMenu->addAction(mRedoAction);
-    mMenuBar->addMenu(mEditMenu);
-
-    // view menu
-    mViewMenu = new QMenu(tr("&View"));
-    mViewMenu->addAction(mSetFullScreenAction);
-    mViewMenu->addAction(mShowDockTablesListAction);
-    mMenuBar->addMenu(mViewMenu);
-
-    // scheme menu
-    mSchemeMenu = new QMenu(tr("&Scheme"));
-    mSchemeMenu->addAction(mSelectAllTablesAction);
-    mSchemeMenu->addAction(mRemoveAllTablesAction);
-    mSchemeMenu->addAction(mShowGridAction);
-    mSchemeMenu->addAction(mAttachToGridAction);
-    mSchemeMenu->addAction(mDivideOnPagesAction);
-    mSchemeMenu->addAction(mShowLegendAction);
-    mSchemeMenu->addAction(mShowControlWidgetAction);
-    mSchemeMenu->addAction(mColorizeAccordingSchemasAction);
-    mMenuBar->addMenu(mSchemeMenu);
-
-    // table menu
-    mTableMenu = new QMenu(tr("&Table"));
-    mTableMenu->addAction(mDeleteTableAction);
-    mTableMenu->addAction(mShowFieldsTypesAction);
-    mTableMenu->addAction(mHideFieldsTypesAction);
-    mTableMenu->addAction(mShowIndicesAction);
-    mTableMenu->addAction(mHideIndicesAction);
-    mTableMenu->addAction(mSetTableColorAction);
-    mTableMenu->addAction(mAdjustTableSizeAction);
-    mTableMenu->addAction(mGroupItemsAction);
-    mTableMenu->addAction(mUngroupItemsAction);
-    mTableMenu->addAction(mAnchorAction);
-    mTableMenu->addAction(mDisableAnchorAction);
-    mTableMenu->addAction(mSelectAllTablesInSchemaAction);
-    mMenuBar->addMenu(mTableMenu);
+    ui.mEditMenu->addAction(mUndoAction);
+    ui.mEditMenu->addAction(mRedoAction);
 
     // tree item menu
     mTreeItemMenu = new QMenu();
-    mTreeItemMenu->addAction(mAddTableAction);
-    mTreeItemMenu->addAction(mDescribeObjectAction);
-    mTreeItemMenu->addAction(mQueryDataAction);
+    mTreeItemMenu->addAction(ui.mAddTableAction);
+    mTreeItemMenu->addAction(ui.mDescribeObjectAction);
+    mTreeItemMenu->addAction(ui.mQueryDataAction);
 
-    setMenuBar(mMenuBar);
-
-    mSceneWidget->setSchemeMenu(mSchemeMenu);
-    mSceneWidget->setTableMenu(mTableMenu);
+    ui.mSceneWidget->setSchemeMenu(ui.mSchemeMenu);
+    ui.mSceneWidget->setTableMenu(ui.mTableMenu);
 }
 
 /*
@@ -436,24 +148,24 @@ MainWindow::createMenus()
 void
 MainWindow::updateSessionMenu()
 {
-    mSessionMenu->clear();
+    ui.mSessionMenu->clear();
 
     int countSavedSessions = mSettings.value("Preferences/CountSavedSessions", 10).toInt();
     for (int i = 0; i < countSavedSessions; ++i) {
 	// update session menu
 	if (mSettings.contains("LastSession/SavedSession" + QString().setNum(i))) {
 	    // last session
-	    mLastSessionAction = new QAction(mSettings.value("LastSession/SavedSession" + QString().setNum(i)).toString(), this);
-	    connect(mLastSessionAction, SIGNAL(triggered()), this, SLOT(loadLastSession()));
+	    QAction *lastSessionAction = new QAction(mSettings.value("LastSession/SavedSession" + QString().setNum(i)).toString(), this);
+	    connect(lastSessionAction, SIGNAL(triggered()), this, SLOT(loadLastSession()));
 
-	    mSessionMenu->addAction(mLastSessionAction);
+	    ui.mSessionMenu->addAction(lastSessionAction);
 	} else {
 	    break;
 	}
     }
-    mSessionMenu->addSeparator();
-    mSessionMenu->addAction(mLoadSessionAction);
-    mSessionMenu->addAction(mSaveSessionAction);
+    ui.mSessionMenu->addSeparator();
+    ui.mSessionMenu->addAction(ui.mLoadSessionAction);
+    ui.mSessionMenu->addAction(ui.mSaveSessionAction);
 }
 
 /*
@@ -462,51 +174,30 @@ MainWindow::updateSessionMenu()
 void
 MainWindow::setEnableForActions(bool ipFlag)
 {
-    mSaveToImgAction->setEnabled(ipFlag);
-    mDrawFullDBAction->setEnabled(ipFlag);
+    ui.mSaveToImgAction->setEnabled(ipFlag);
+    ui.mDrawFullDBAction->setEnabled(ipFlag);
 
-    mSelectAllTablesAction->setEnabled(ipFlag);
-    mRemoveAllTablesAction->setEnabled(ipFlag);
-    mShowLegendAction->setEnabled(ipFlag);
-    mColorizeAccordingSchemasAction->setEnabled(ipFlag);
+    ui.mSelectAllTablesAction->setEnabled(ipFlag);
+    ui.mRemoveAllTablesAction->setEnabled(ipFlag);
+    ui.mShowLegendAction->setEnabled(ipFlag);
+    ui.mColorizeAccordingSchemasAction->setEnabled(ipFlag);
 
-    mDeleteTableAction->setEnabled(ipFlag);
-    mShowFieldsTypesAction->setEnabled(ipFlag);
-    mHideFieldsTypesAction->setEnabled(ipFlag);
-    mSetTableColorAction->setEnabled(ipFlag);
-    mAdjustTableSizeAction->setEnabled(ipFlag);
-    mGroupItemsAction->setEnabled(ipFlag);
-    mUngroupItemsAction->setEnabled(ipFlag);
-    mDescribeObjectAction->setEnabled(ipFlag);
-    mQueryDataAction->setEnabled(ipFlag);
-    mShowIndicesAction->setEnabled(ipFlag);
-    mHideIndicesAction->setEnabled(ipFlag);
-    mSelectAllTablesInSchemaAction->setEnabled(ipFlag);
+    ui.mDeleteTableAction->setEnabled(ipFlag);
+    ui.mShowFieldsTypesAction->setEnabled(ipFlag);
+    ui.mHideFieldsTypesAction->setEnabled(ipFlag);
+    ui.mSetTableColorAction->setEnabled(ipFlag);
+    ui.mAdjustTableSizeAction->setEnabled(ipFlag);
+    ui.mGroupItemsAction->setEnabled(ipFlag);
+    ui.mUngroupItemsAction->setEnabled(ipFlag);
+    ui.mDescribeObjectAction->setEnabled(ipFlag);
+    ui.mQueryDataAction->setEnabled(ipFlag);
+    ui.mShowIndicesAction->setEnabled(ipFlag);
+    ui.mHideIndicesAction->setEnabled(ipFlag);
+    ui.mSelectAllTablesInSchemaAction->setEnabled(ipFlag);
 
-    mSaveSessionAction->setEnabled(ipFlag);
+    ui.mSaveSessionAction->setEnabled(ipFlag);
 
-    mReloadDataAction->setEnabled(ipFlag);
-}
-
-/*
- * Create toolbar
- */
-void
-MainWindow::createToolBar()
-{
-    mToolBar = new QToolBar("Toolbar");
-
-    mToolBar->addAction(mNewConnectionAction);
-    mToolBar->addAction(mSaveToImgAction);
-    mToolBar->addSeparator();
-
-    mToolBar->addAction(mReloadDataAction);
-    mToolBar->addAction(mDrawFullDBAction);
-    mToolBar->addSeparator();
-
-    mToolBar->addAction(mRemoveAllTablesAction);
-
-    addToolBar(mToolBar);
+    ui.mReloadDataAction->setEnabled(ipFlag);
 }
 
 /*
@@ -524,9 +215,9 @@ MainWindow::showConnectionDialog(bool ipLoadSession)
     }
 
     if (QSqlDatabase::database("mainConnect").open()) {
-	mSceneWidget->cleanTableSchemeScene();
-	mTree->refresh();
-	mSceneWidget->refreshLegend();
+	ui.mSceneWidget->cleanTableSchemeScene();
+	ui.mTree->refresh();
+	ui.mSceneWidget->refreshLegend();
 	setEnableForActions(true);
 	return QDialog::Accepted;
     }
@@ -572,7 +263,7 @@ MainWindow::showPrintDialog()
     QPrinter printer(QPrinter::ScreenResolution);
     QPrintDialog printDialog(&printer);
     if (printDialog.exec() == QDialog::Accepted) {
-	mSceneWidget->print(&printer);
+	ui.mSceneWidget->print(&printer);
     }
 #endif
 }
@@ -586,7 +277,7 @@ MainWindow::printPreview(QPrinter *ipPrinter)
 #ifdef QT_NO_PRINTER
     Q_UNUSED(ipPrinter);
 #else
-    mSceneWidget->print(ipPrinter);
+    ui.mSceneWidget->print(ipPrinter);
 #endif
 }
 
@@ -610,50 +301,46 @@ MainWindow::createStatusBar()
 }
 
 /*
- * Create docks
- */
-void
-MainWindow::createDockWindows()
-{
-    mDockTableListWidget = new QDockWidget(tr("Tables list"), this);
-//    mDockTableListWidget->setAttribute(Qt::WA_DeleteOnClose);
-    mDockTableListWidget->setFeatures(QDockWidget::DockWidgetMovable |
-                                      QDockWidget::DockWidgetFloatable);
-    mDockTableListWidget->setAllowedAreas(Qt::LeftDockWidgetArea |
-	    Qt::RightDockWidgetArea);
-    mDockTableListWidget->setWidget(mTree);
-    addDockWidget(Qt::LeftDockWidgetArea, mDockTableListWidget);
-}
-
-/*
  * Make docked table list (in)visible
  */
 void
 MainWindow::setDockTableListVisible(bool ipFlag)
 {
     if (ipFlag) {
-	mDockTableListWidget->show();
+	ui.mDockTableListWidget->show();
     } else {
-	mDockTableListWidget->hide();
+	ui.mDockTableListWidget->hide();
     }
 }
 
 /*
+ *  * Make docked log panel (in)visible
+ *   */
+void
+MainWindow::setDockLogPanelVisible(bool ipFlag)
+{
+    if (ipFlag) {
+	ui.mDockLogPanelWidget->show();
+    } else {
+	ui.mDockLogPanelWidget->hide();
+    }
+}
+/*
  * Add table to scene
  */
 void
-MainWindow::addTableItem() 
+MainWindow::addTableItem()
 {
-    QTreeWidgetItemIterator treeIter(mTree);
+    QTreeWidgetItemIterator treeIter(ui.mTree);
 
     while (*treeIter) {
         if ((*treeIter)->isSelected()) {
-            mSceneWidget->showOnScene((*treeIter), TreeWidget::NameCol);
+            ui.mSceneWidget->showOnScene((*treeIter), TreeWidget::NameCol);
         }
         ++treeIter;
     }
 
-    mSceneWidget->updateLegend();
+    ui.mSceneWidget->updateLegend();
 }
 
 /*
@@ -662,8 +349,8 @@ MainWindow::addTableItem()
 void
 MainWindow::addTableItem(QTreeWidgetItem *ipItem, int ipCol)
 {
-    mSceneWidget->showOnScene(ipItem, ipCol);
-    mSceneWidget->updateLegend();
+    ui.mSceneWidget->showOnScene(ipItem, ipCol);
+    ui.mSceneWidget->updateLegend();
 }
 
 /*
@@ -672,10 +359,10 @@ MainWindow::addTableItem(QTreeWidgetItem *ipItem, int ipCol)
 void
 MainWindow::drawFullDbScheme()
 {
-    int topLevelItemCount = mTree->topLevelItemCount();
+    int topLevelItemCount = ui.mTree->topLevelItemCount();
 
     for (int j = 0; j < topLevelItemCount; ++j) {
-        QTreeWidgetItem *topLevelItem = mTree->topLevelItem(j);
+        QTreeWidgetItem *topLevelItem = ui.mTree->topLevelItem(j);
 
         int childrenCount = topLevelItem->childCount();
 
@@ -689,7 +376,7 @@ MainWindow::drawFullDbScheme()
 
             // if this is a schema item
             if (Database::SchemaObject == childItem->text(TreeWidget::IdCol).toInt()) {
-                mSceneWidget->showOnScene(childItem, TreeWidget::NameCol);
+                ui.mSceneWidget->showOnScene(childItem, TreeWidget::NameCol);
             }
             //mProgressBar->setValue(mProgressBar->value() + 1);
         }
@@ -750,7 +437,7 @@ void
 MainWindow::describeObject()
 {
     // get selected item
-    QTreeWidgetItem *item = mTree->currentItem();
+    QTreeWidgetItem *item = ui.mTree->currentItem();
 
     // if no item is selected
     if (0 == item) {
@@ -849,14 +536,14 @@ MainWindow::describeObject()
     // construct the whole tab title
     tabTitle.append(objName);
     // add description widget to tab widget
-    mTabWidget->addTab(descWidget, tabTitle);
+    ui.mTabWidget->addTab(descWidget, tabTitle);
 
     bool switchToNewTab = mSettings.value("Preferences/NewTabAutoSwitch").toBool();
 
     // if auto switch enabled
     if (switchToNewTab) {
         // activate last tab
-        mTabWidget->setCurrentIndex(mTabWidget->count() - 1);
+        ui.mTabWidget->setCurrentIndex(ui.mTabWidget->count() - 1);
     }
 }
 
@@ -867,7 +554,7 @@ void
 MainWindow::queryData()
 {
     // get selected item
-    QTreeWidgetItem *item = mTree->currentItem();
+    QTreeWidgetItem *item = ui.mTree->currentItem();
 
     // if no item is selected
     if (0 == item) {
@@ -920,14 +607,14 @@ MainWindow::queryData()
     // construct the whole tab title
     tabTitle.append(objName);
     // add description widget to tab widget
-    mTabWidget->addTab(sqlWidget, tabTitle);
+    ui.mTabWidget->addTab(sqlWidget, tabTitle);
 
     bool switchToNewTab = mSettings.value("Preferences/NewTabAutoSwitch", true).toBool();
 
     // if auto switch enabled
     if ( switchToNewTab ) {
         // activate last tab
-        mTabWidget->setCurrentIndex(mTabWidget->count() - 1);
+        ui.mTabWidget->setCurrentIndex(ui.mTabWidget->count() - 1);
     }
 }
 
@@ -942,8 +629,8 @@ MainWindow::saveToXml(QString ipFileName)
     doc.appendChild(root);
     root.appendChild(mDbParameters->toXml(doc));
     root.appendChild(mProxyParameters->toXml(doc));
-    root.appendChild(mSceneWidget->toXml(doc, mShowGridAction->isChecked(), mDivideOnPagesAction->isChecked(), 
-		mShowLegendAction->isChecked(), mShowControlWidgetAction->isChecked()));
+    root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(), 
+		ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
 
     QFile file(ipFileName);
     if (!file.open(QIODevice::WriteOnly)) {
@@ -1000,7 +687,7 @@ MainWindow::loadFromXml(QString ipFileName)
 	while (!child.isNull()) {
 	    QDomElement element = child.toElement();
 	    if (element.tagName() == "scene") {
-		mSceneWidget->fromXml(element);
+		ui.mSceneWidget->fromXml(element);
 		break;
 	    }
 	    child = child.nextSibling();
@@ -1086,9 +773,9 @@ MainWindow::setFullScreen(bool ipFlag)
 void
 MainWindow::reloadData()
 {
-    mSceneWidget->cleanTableSchemeScene();
+    ui.mSceneWidget->cleanTableSchemeScene();
     Database::instance()->cleanup();
-    mTree->refresh();
+    ui.mTree->refresh();
 }
 
 /*

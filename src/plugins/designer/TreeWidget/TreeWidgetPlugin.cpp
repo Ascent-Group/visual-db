@@ -56,7 +56,7 @@ TreeWidgetPlugin::isInitialized() const
 QWidget*
 TreeWidgetPlugin::createWidget(QWidget *ipParent)
 {
-    return new TreeWidget(0, ipParent);
+    return new TreeWidget(ipParent);
 }
 
 QString

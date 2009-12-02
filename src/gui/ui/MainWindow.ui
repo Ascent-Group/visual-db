@@ -1,0 +1,1282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Visual PostgreSQL editor</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_3">
+    <property name="margin">
+     <number>3</number>
+    </property>
+    <property name="spacing">
+     <number>3</number>
+    </property>
+    <item row="0" column="0">
+     <widget class="TabWidget" name="mTabWidget">
+      <property name="toolTip">
+       <string>Tab widget</string>
+      </property>
+      <property name="whatsThis">
+       <string>The tab widget is used for displaying graphics scene and description tabs.</string>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>DB scheme</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <widget class="SceneWidget" name="mSceneWidget">
+          <property name="toolTip">
+           <string>Scene widget</string>
+          </property>
+          <property name="whatsThis">
+           <string>The wiget is used for holding graphics scene.</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="mMenuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="mFileMenu">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <widget class="QMenu" name="mSessionMenu">
+     <property name="title">
+      <string>Sessions</string>
+     </property>
+     <addaction name="mLoadSessionAction"/>
+     <addaction name="mSaveSessionAction"/>
+    </widget>
+    <addaction name="mNewConnectionAction"/>
+    <addaction name="separator"/>
+    <addaction name="mSaveToImgAction"/>
+    <addaction name="separator"/>
+    <addaction name="mShowOptionsDialogAction"/>
+    <addaction name="mSessionMenu"/>
+    <addaction name="separator"/>
+    <addaction name="mShowPrintPreviewDialogAction"/>
+    <addaction name="mShowPrintDialogAction"/>
+    <addaction name="separator"/>
+    <addaction name="mExitAction"/>
+   </widget>
+   <widget class="QMenu" name="mEditMenu">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="mViewMenu">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <addaction name="mSetFullScreenAction"/>
+    <addaction name="mShowDockTablesListAction"/>
+    <addaction name="mShowDockLogPanelAction"/>
+   </widget>
+   <widget class="QMenu" name="mSchemeMenu">
+    <property name="title">
+     <string>&amp;Scheme</string>
+    </property>
+    <addaction name="mSelectAllTablesAction"/>
+    <addaction name="mRemoveAllTablesAction"/>
+    <addaction name="mShowGridAction"/>
+    <addaction name="mAlignToGridAction"/>
+    <addaction name="mDivideIntoPagesAction"/>
+    <addaction name="mShowLegendAction"/>
+    <addaction name="mShowControlWidgetAction"/>
+    <addaction name="mColorizeAccordingSchemasAction"/>
+   </widget>
+   <widget class="QMenu" name="mTableMenu">
+    <property name="title">
+     <string>&amp;Table</string>
+    </property>
+    <addaction name="mDeleteTableAction"/>
+    <addaction name="mShowFieldsTypesAction"/>
+    <addaction name="mHideFieldsTypesAction"/>
+    <addaction name="mShowIndicesAction"/>
+    <addaction name="mHideIndicesAction"/>
+    <addaction name="mSetTableColorAction"/>
+    <addaction name="mAdjustTableSizeAction"/>
+    <addaction name="mGroupItemsAction"/>
+    <addaction name="mUngroupItemsAction"/>
+    <addaction name="mAnchorAction"/>
+    <addaction name="mDisableAnchorAction"/>
+    <addaction name="mSelectAllTablesInSchemaAction"/>
+   </widget>
+   <addaction name="mFileMenu"/>
+   <addaction name="mEditMenu"/>
+   <addaction name="mViewMenu"/>
+   <addaction name="mSchemeMenu"/>
+   <addaction name="mTableMenu"/>
+  </widget>
+  <widget class="QStatusBar" name="mStatusBar"/>
+  <widget class="QToolBar" name="mToolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="mNewConnectionAction"/>
+   <addaction name="mSaveToImgAction"/>
+   <addaction name="separator"/>
+   <addaction name="mReloadDataAction"/>
+   <addaction name="mDrawFullDBAction"/>
+   <addaction name="separator"/>
+   <addaction name="mRemoveAllTablesAction"/>
+  </widget>
+  <widget class="QDockWidget" name="mDockLogPanelWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea</set>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="mDock">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <property name="margin">
+      <number>3</number>
+     </property>
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="LogPanel" name="mLogPanel">
+       <property name="toolTip">
+        <string>Log panel</string>
+       </property>
+       <property name="whatsThis">
+        <string>The log panel widget is used for displaying apps output.</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="mDockTableListWidget">
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::BottomDockWidgetArea|Qt::LeftDockWidgetArea</set>
+   </property>
+   <property name="windowTitle">
+    <string>Objects list</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="margin">
+      <number>3</number>
+     </property>
+     <property name="spacing">
+      <number>3</number>
+     </property>
+     <item row="0" column="0">
+      <widget class="TreeWidget" name="mTree">
+       <property name="toolTip">
+        <string>Tree widget</string>
+       </property>
+       <property name="whatsThis">
+        <string>The tree widget is used for displaying db objects.</string>
+       </property>
+       <property name="expandsOnDoubleClick">
+        <bool>false</bool>
+       </property>
+       <column>
+        <property name="text">
+         <string notr="true">1</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="mNewConnectionAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/connect_creating.png</normaloff>:/img/connect_creating.png</iconset>
+   </property>
+   <property name="text">
+    <string>New connection</string>
+   </property>
+   <property name="statusTip">
+    <string>Establishing of new connection</string>
+   </property>
+   <property name="whatsThis">
+    <string/>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::TextHeuristicRole</enum>
+   </property>
+  </action>
+  <action name="mSaveToImgAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/filesave.png</normaloff>:/img/filesave.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save to image...</string>
+   </property>
+   <property name="statusTip">
+    <string>Save scheme to image</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="mShowOptionsDialogAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/configure.png</normaloff>:/img/configure.png</iconset>
+   </property>
+   <property name="text">
+    <string>Options...</string>
+   </property>
+   <property name="statusTip">
+    <string>Edit options</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="mLoadSessionAction">
+   <property name="text">
+    <string>Load session</string>
+   </property>
+  </action>
+  <action name="mSaveSessionAction">
+   <property name="text">
+    <string>Save session</string>
+   </property>
+  </action>
+  <action name="mShowPrintPreviewDialogAction">
+   <property name="text">
+    <string>Show preview...</string>
+   </property>
+  </action>
+  <action name="mShowPrintDialogAction">
+   <property name="text">
+    <string>Print...</string>
+   </property>
+  </action>
+  <action name="mExitAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/exit.png</normaloff>:/img/exit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Exit</string>
+   </property>
+   <property name="statusTip">
+    <string>Exit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="mSetFullScreenAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Full screen</string>
+   </property>
+   <property name="statusTip">
+    <string>Full screen</string>
+   </property>
+   <property name="shortcut">
+    <string>F11</string>
+   </property>
+  </action>
+  <action name="mShowDockTablesListAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show tables list</string>
+   </property>
+  </action>
+  <action name="mShowDockLogPanelAction">
+   <property name="text">
+    <string>Show log panel</string>
+   </property>
+  </action>
+  <action name="mSelectAllTablesAction">
+   <property name="text">
+    <string>Select all tables</string>
+   </property>
+   <property name="statusTip">
+    <string>Select all tables</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="mRemoveAllTablesAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/eraser.png</normaloff>:/img/eraser.png</iconset>
+   </property>
+   <property name="text">
+    <string>Remove all tables</string>
+   </property>
+   <property name="statusTip">
+    <string>Remove all tables from scheme</string>
+   </property>
+  </action>
+  <action name="mShowGridAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show grid</string>
+   </property>
+   <property name="statusTip">
+    <string>Show grid</string>
+   </property>
+  </action>
+  <action name="mAlignToGridAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Align to grid</string>
+   </property>
+   <property name="statusTip">
+    <string>Align tables to the grid</string>
+   </property>
+  </action>
+  <action name="mDivideIntoPagesAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Divide into pages</string>
+   </property>
+   <property name="statusTip">
+    <string>Divide into pages</string>
+   </property>
+  </action>
+  <action name="mShowLegendAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show legend</string>
+   </property>
+   <property name="statusTip">
+    <string>Show legend</string>
+   </property>
+  </action>
+  <action name="mShowControlWidgetAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show control widget</string>
+   </property>
+   <property name="statusTip">
+    <string>Show control widget</string>
+   </property>
+  </action>
+  <action name="mColorizeAccordingSchemasAction">
+   <property name="text">
+    <string>Colorize according schemas</string>
+   </property>
+   <property name="statusTip">
+    <string>Colorize according schemas</string>
+   </property>
+  </action>
+  <action name="mDeleteTableAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/remove.png</normaloff>:/img/remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="statusTip">
+    <string>Delete item from the scheme</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
+   </property>
+  </action>
+  <action name="mShowFieldsTypesAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/show.png</normaloff>:/img/show.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show fields' types</string>
+   </property>
+   <property name="statusTip">
+    <string>Show fields' types</string>
+   </property>
+  </action>
+  <action name="mHideFieldsTypesAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/hide.png</normaloff>:/img/hide.png</iconset>
+   </property>
+   <property name="text">
+    <string>Hide fields' types</string>
+   </property>
+   <property name="statusTip">
+    <string>Hide fields' types</string>
+   </property>
+  </action>
+  <action name="mShowIndicesAction">
+   <property name="text">
+    <string>Show indices</string>
+   </property>
+   <property name="statusTip">
+    <string>Show indices</string>
+   </property>
+  </action>
+  <action name="mHideIndicesAction">
+   <property name="text">
+    <string>Hide indices</string>
+   </property>
+   <property name="statusTip">
+    <string>Hide indices</string>
+   </property>
+  </action>
+  <action name="mSetTableColorAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/colors.png</normaloff>:/img/colors.png</iconset>
+   </property>
+   <property name="text">
+    <string>Table color...</string>
+   </property>
+   <property name="statusTip">
+    <string>Set table color</string>
+   </property>
+  </action>
+  <action name="mAdjustTableSizeAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/adjustsize.png</normaloff>:/img/adjustsize.png</iconset>
+   </property>
+   <property name="text">
+    <string>Adjust</string>
+   </property>
+   <property name="statusTip">
+    <string>Adjust tables sizes</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+J</string>
+   </property>
+  </action>
+  <action name="mGroupItemsAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/group.png</normaloff>:/img/group.png</iconset>
+   </property>
+   <property name="text">
+    <string>Group items</string>
+   </property>
+   <property name="statusTip">
+    <string>Group items</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="mUngroupItemsAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/ungroup.png</normaloff>:/img/ungroup.png</iconset>
+   </property>
+   <property name="text">
+    <string>Ungroup items</string>
+   </property>
+   <property name="statusTip">
+    <string>Ungroup items</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
+  </action>
+  <action name="mAnchorAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/anchor.png</normaloff>:/img/anchor.png</iconset>
+   </property>
+   <property name="text">
+    <string>Anchor</string>
+   </property>
+   <property name="statusTip">
+    <string>Set anchor for selected tables</string>
+   </property>
+  </action>
+  <action name="mDisableAnchorAction">
+   <property name="text">
+    <string>Disable anchor</string>
+   </property>
+   <property name="statusTip">
+    <string>Disable anchor for selected tables</string>
+   </property>
+  </action>
+  <action name="mSelectAllTablesInSchemaAction">
+   <property name="text">
+    <string>Select all tables in schema</string>
+   </property>
+  </action>
+  <action name="mReloadDataAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/reload.png</normaloff>:/img/reload.png</iconset>
+   </property>
+   <property name="text">
+    <string>mReloadDataAction</string>
+   </property>
+   <property name="statusTip">
+    <string>Reload</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="mDrawFullDBAction">
+   <property name="icon">
+    <iconset resource="../../visual_db.qrc">
+     <normaloff>:/img/pencil.png</normaloff>:/img/pencil.png</iconset>
+   </property>
+   <property name="text">
+    <string>Draw full DB</string>
+   </property>
+  </action>
+  <action name="mAddTableAction">
+   <property name="text">
+    <string>Add</string>
+   </property>
+   <property name="statusTip">
+    <string>Add</string>
+   </property>
+  </action>
+  <action name="mDescribeObjectAction">
+   <property name="text">
+    <string>mDescribeObjectAction</string>
+   </property>
+   <property name="statusTip">
+    <string>Get object description</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+Return</string>
+   </property>
+  </action>
+  <action name="mQueryDataAction">
+   <property name="text">
+    <string>mQueryDataAction</string>
+   </property>
+   <property name="statusTip">
+    <string>Run SQL command for data retrieving</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LogPanel</class>
+   <extends>QWidget</extends>
+   <header location="global">gui/LogPanel.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SceneWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">gui/SceneWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TabWidget</class>
+   <extends>QTabWidget</extends>
+   <header location="global">gui/TabWidget.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header location="global">gui/TreeWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../visual_db.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>mTree</sender>
+   <signal>itemDoubleClicked(QTreeWidgetItem*,int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addTableItem(QTreeWidgetItem*,int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>127</x>
+     <y>142</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>414</x>
+     <y>-8</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mExitAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSceneWidget</sender>
+   <signal>tableActionDone(QUndoCommand*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addCommand(QUndoCommand*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>385</x>
+     <y>192</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>363</x>
+     <y>-1</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowOptionsDialogAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showOptionsDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowDockTablesListAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setDockTableListVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowDockLogPanelAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setDockLogPanelVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mDrawFullDBAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>drawFullDbScheme()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowPrintPreviewDialogAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showPrintPreviewDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowPrintDialogAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showPrintDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mAddTableAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addTableItem()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mDeleteTableAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>deleteTableItem()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowFieldsTypesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>setFieldsTypesVisible()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mHideFieldsTypesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>setFieldsTypesInvisible()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowIndicesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>setIndicesVisible()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mHideIndicesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>setIndicesInvisible()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSetTableColorAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>setTableColor()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSelectAllTablesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>selectAllTables()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mRemoveAllTablesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>cleanTableSchemeScene()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mAdjustTableSizeAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>adjustTables()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSaveToImgAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>saveToImage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mGroupItemsAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>groupItems()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mUngroupItemsAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>ungroupItems()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mAnchorAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>anchorTables()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mDisableAnchorAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>disableAnchorTables()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSelectAllTablesInSchemaAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>selectAllTablesInSchema()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mDescribeObjectAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>describeObject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mQueryDataAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>queryData()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mColorizeAccordingSchemasAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>colorizeAccordingSchemas()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowGridAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>showGrid(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mAlignToGridAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>alignToGrid(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mDivideIntoPagesAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>divideIntoPages(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowControlWidgetAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>showControlWidget(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowLegendAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>showLegend(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSaveSessionAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>saveSession()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mLoadSessionAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>loadSession()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSetFullScreenAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>setFullScreen(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mReloadDataAction</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>reloadData()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>drawFullDbScheme()</slot>
+  <slot>showOptionsDialog()</slot>
+  <slot>showPrintPreviewDialog()</slot>
+  <slot>showPrintDialog()</slot>
+  <slot>setDockTableListVisible(bool)</slot>
+  <slot>addTableItem()</slot>
+  <slot>addTableItem(QTreeWidgetItem*,int)</slot>
+  <slot>describeObject()</slot>
+  <slot>queryData()</slot>
+  <slot>saveSession()</slot>
+  <slot>loadSession()</slot>
+  <slot>loadLastSession()</slot>
+  <slot>setFullScreen(bool)</slot>
+  <slot>printPreview(QPrinter*)</slot>
+  <slot>reloadData()</slot>
+  <slot>addCommand(QUndoCommand*)</slot>
+  <slot>setDockLogPanelVisible(bool)</slot>
+ </slots>
+</ui>

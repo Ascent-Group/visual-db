@@ -15,10 +15,14 @@ CONFIG += release
 
 INCLUDEPATH += $$SRC/ $$SRC/dbobjects
 
+LIBS += -L$$SRC/dbobjects -ldbobjects
+
 FORMS += $$SRC/gui/ui/ControlWidget.ui
 
 HEADERS = $$SRC/gui/SceneWidget.h \
+	  $$SRC/gui/ArrowItem.h \
 	  $$SRC/gui/ControlWidget.h \
+	  $$SRC/gui/GraphicsItem.h \
 	  $$SRC/gui/GraphicsScene.h \
 	  $$SRC/gui/GraphicsView.h \
 	  $$SRC/gui/Legend.h \
@@ -30,7 +34,9 @@ HEADERS = $$SRC/gui/SceneWidget.h \
 	  SceneWidgetPlugin.h
 
 SOURCES = $$SRC/gui/SceneWidget.cpp \
+	  $$SRC/gui/ArrowItem.cpp \
 	  $$SRC/gui/ControlWidget.cpp \
+	  $$SRC/gui/GraphicsItem.cpp \
 	  $$SRC/gui/GraphicsScene.cpp \
 	  $$SRC/gui/GraphicsView.cpp \
 	  $$SRC/gui/Legend.cpp \

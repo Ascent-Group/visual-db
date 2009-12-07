@@ -88,26 +88,38 @@ GraphicsView::keyPressEvent(QKeyEvent *ipEvent)
 	    break;
 	case Qt::Key_Left:
 	    foreach (QGraphicsItem *item, scene()->selectedItems()) {
-		if (item->type() == TableItem::Type || item->type() == TableItemGroup::Type) 
+                if ((item->type() == TableItem::Type
+                     || item->type() == TableItemGroup::Type)
+                     && item->flags() & QGraphicsItem::ItemIsMovable) {
 		    item->moveBy(-MOVE_STEP, 0);
+		}
 	    }
 	    break;
 	case Qt::Key_Right:
-	    foreach (QGraphicsItem *item, scene()->selectedItems()) {
-		if (item->type() == TableItem::Type || item->type() == TableItemGroup::Type) 
+            foreach (QGraphicsItem *item, scene()->selectedItems()) {
+                if ((item->type() == TableItem::Type
+                     || item->type() == TableItemGroup::Type)
+                     && item->flags() & QGraphicsItem::ItemIsMovable) {
 		    item->moveBy(MOVE_STEP, 0);
+		}
 	    }
 	    break;
 	case Qt::Key_Up:
 	    foreach (QGraphicsItem *item, scene()->selectedItems()) {
-		if (item->type() == TableItem::Type || item->type() == TableItemGroup::Type) 
+                if ((item->type() == TableItem::Type
+                     || item->type() == TableItemGroup::Type)
+                     && item->flags() & QGraphicsItem::ItemIsMovable) {
 		    item->moveBy(0, -MOVE_STEP);
+		}
 	    }
 	    break;
 	case Qt::Key_Down:
 	    foreach (QGraphicsItem *item, scene()->selectedItems()) {
-		if (item->type() == TableItem::Type || item->type() == TableItemGroup::Type) 
+                if ((item->type() == TableItem::Type
+                     || item->type() == TableItemGroup::Type)
+                     && item->flags() & QGraphicsItem::ItemIsMovable) {
 		    item->moveBy(0, MOVE_STEP);
+		}
 	    }
 	    break;
     }

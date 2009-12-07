@@ -314,8 +314,8 @@ MainWindow::setDockTableListVisible(bool ipFlag)
 }
 
 /*
- *  * Make docked log panel (in)visible
- *   */
+ * Make docked log panel (in)visible
+ */
 void
 MainWindow::setDockLogPanelVisible(bool ipFlag)
 {

@@ -269,7 +269,7 @@ GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
     qDebug() << item << mOldPos.x() << ipEvent->scenePos().x();
     if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) && 
 	    ipEvent->scenePos() != mOldPos) {
-	emit tableMoved(selectedItems(), mOldPos - item->scenePos());
+//	emit tableMoved(selectedItems(), mOldPos - item->scenePos());
     }
 
     if (mMoveMode) {

@@ -104,14 +104,17 @@ void MainWindow::createActions()
     mUndoStack = new QUndoStack();
 
     // undo action
-    mUndoAction = mUndoStack->createUndoAction(this, tr("Undo"));
-    mUndoAction->setIcon(QIcon(":/img/undo.png"));
-    mUndoAction->setShortcut(QString("Ctrl+Z"));
+    QAction *undoAction = mUndoStack->createUndoAction(this, tr("Undo"));
+    undoAction->setIcon(QIcon(":/img/undo.png"));
+    undoAction->setShortcut(QString("Ctrl+Z"));
 
     // redo action
-    mRedoAction = mUndoStack->createRedoAction(this, tr("Redo"));
-    mRedoAction->setIcon(QIcon(":/img/redo.png"));
-    mRedoAction->setShortcut(QString("Ctrl+Y"));
+    QAction *redoAction = mUndoStack->createRedoAction(this, tr("Redo"));
+    redoAction->setIcon(QIcon(":/img/redo.png"));
+    redoAction->setShortcut(QString("Ctrl+Y"));
+
+    ui.mEditMenu->addAction(undoAction);
+    ui.mEditMenu->addAction(redoAction);
 
     // align tables to the grid
     ui.mAlignToGridAction->setChecked(mSettings.value("View/AlignToGrid", false).toBool());
@@ -128,9 +131,6 @@ MainWindow::createMenus()
     setEnableForActions(false);
 
     updateSessionMenu();
-
-    ui.mEditMenu->addAction(mUndoAction);
-    ui.mEditMenu->addAction(mRedoAction);
 
     // tree item menu
     mTreeItemMenu = new QMenu();
@@ -349,6 +349,8 @@ MainWindow::addTableItem()
 void
 MainWindow::addTableItem(QTreeWidgetItem *ipItem, int ipCol)
 {
+    printMsg("Adding table '" + ipItem->text(ipCol) + "' to scene");
+
     ui.mSceneWidget->showOnScene(ipItem, ipCol);
     ui.mSceneWidget->updateLegend();
 }
@@ -801,4 +803,15 @@ void
 MainWindow::addCommand(QUndoCommand *ipCommand)
 {
     mUndoStack->push(ipCommand);
+}
+
+/*
+ * [static]
+ * Prints the message to the log panel
+ */
+void
+MainWindow::printMsg(QString ipText) const
+{
+    qDebug() << ui.mLogPanel;
+    ui.mLogPanel->print(ipText);
 }

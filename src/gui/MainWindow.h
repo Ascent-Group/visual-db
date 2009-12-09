@@ -59,14 +59,16 @@ class MainWindow : public QMainWindow
     public:
 	MainWindow();
 
+	void printMsg(QString ipText) const;
+
     private:
 	Ui::MainWindow ui;
 
 	// These actions are undo stack actions
 	// Designer does NOT let us create them
 	// => declared here, not in designer
-	QAction *mUndoAction;
-	QAction *mRedoAction;
+	//QAction *mUndoAction;
+	//QAction *mRedoAction;
 
 	// These menus initially are not attached
 	// to any gui element

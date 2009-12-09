@@ -31,6 +31,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#include <QtDebug>
+
 /*
  * Ctor
  */
@@ -58,6 +60,11 @@ LogPanel::saveToFile()
 
     if (0 < text.trimmed().length()) {
 	QString fileName = QFileDialog::getSaveFileName(this);
+
+	if (fileName.isEmpty()) {
+	    return;
+	}
+
 	QFile file(fileName);
 
 	if (!file.open(QIODevice::Text)) {

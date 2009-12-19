@@ -629,7 +629,7 @@
   </action>
   <action name="mDescribeObjectAction">
    <property name="text">
-    <string>mDescribeObjectAction</string>
+    <string>Describe</string>
    </property>
    <property name="statusTip">
     <string>Get object description</string>
@@ -640,7 +640,7 @@
   </action>
   <action name="mQueryDataAction">
    <property name="text">
-    <string>mQueryDataAction</string>
+    <string>Query data</string>
    </property>
    <property name="statusTip">
     <string>Run SQL command for data retrieving</string>

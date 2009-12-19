@@ -210,10 +210,10 @@ DbRole::setId(const int ipId)
 }
 
 /*
- * Returns the id of database object
+ * Returns the id of database object type
  */
-int
-DbRole::objectId()
+DbObject::Type
+DbRole::type()
 {
-    return Database::RoleObject;
+    return DbObject::RoleObject;
 }

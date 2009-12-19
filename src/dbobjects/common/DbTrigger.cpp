@@ -213,10 +213,10 @@ DbTrigger::setNumArgs(const int &ipNum)
 }
 
 /*
- * Returns the database object id
+ * Returns the database object type
  */
-int
-DbTrigger::objectId()
+DbObject::Type
+DbTrigger::type()
 {
-    return Database::TriggerObject;
+    return DbObject::TriggerObject;
 }

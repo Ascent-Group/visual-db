@@ -35,10 +35,23 @@
 class DbObject
 {
     public:
+
+	enum Type {
+            UnkObject = 0,
+            SchemaObject,
+            TableObject,
+            ViewObject,
+            RoleObject,
+            TriggerObject,
+            LanguageObject,
+            IndexObject,
+            ProcedureObject,
+        };
+
         QString name() const;
         void setName(const QString &ipName);
 
-        virtual int objectId() = 0;
+        virtual DbObject::Type type() = 0;
 
     protected:
         QString mName;

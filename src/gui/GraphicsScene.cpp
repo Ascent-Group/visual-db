@@ -98,12 +98,12 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
     int objId = ipTreeItem->text(TreeWidget::IdCol).toInt();
 
     // if schema or table were double clicked
-    if (Database::SchemaObject == objId || Database::TableObject == objId) {
+    if (TreeWidget::SchemaItem == objId || TreeWidget::TableItem == objId) {
         // check whether item is a schema item
-        if (Database::SchemaObject == ipTreeItem->text(TreeWidget::IdCol).toInt()) {
+        if (TreeWidget::SchemaItem == ipTreeItem->text(TreeWidget::IdCol).toInt()) {
             // add all its table children to the scene
             for (int i = 0; i < ipTreeItem->childCount(); ++i) {
-                if (Database::TableNode == ipTreeItem->child(i)->text(TreeWidget::IdCol).toInt()) {
+                if (TreeWidget::TableNode == ipTreeItem->child(i)->text(TreeWidget::IdCol).toInt()) {
                     for (int j = 0; j < ipTreeItem->child(i)->childCount(); ++j) {
                         tableList << showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol);
                     }
@@ -117,7 +117,7 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
 		ipTreeItem->text(TreeWidget::NameCol), mTableMenu);
 	tableList.append(table);
 
-    } else if (Database::TableNode == objId) {
+    } else if (TreeWidget::TableNode == objId) {
         for (int i = 0; i < ipTreeItem->childCount(); ++i) {
             showOnScene(ipTreeItem->child(i), ipCol);
         }

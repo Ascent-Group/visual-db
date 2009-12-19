@@ -22,7 +22,7 @@ OBJECTS_DIR = .obj
 UI_DIR = .uic
 UI_HEADERS_DIR = gui/ui
 
-QMAKE_CXXFLAGS += -g2
+QMAKE_CXXFLAGS += -g2 -Wextra
 
 FORMS = gui/ui/AppearancePage.ui \
 	gui/ui/ColorsPage.ui \

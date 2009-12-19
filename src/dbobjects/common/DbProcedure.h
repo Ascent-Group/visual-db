@@ -52,6 +52,8 @@ class DbProcedure : public DbObject
         QString sourceCode() const;
         void setSourceCode(const QString &ipText);
 
+        virtual DbObject::Type type();
+
     protected:
         QString mSchemaName; // !!! for internal use only
         DbSchema *mSchema;
@@ -61,7 +63,6 @@ class DbProcedure : public DbObject
 
     protected:
         DbProcedure(QString ipSchemaName, QString ipName);
-        virtual int objectId();
         virtual void loadData() = 0;
 
 };

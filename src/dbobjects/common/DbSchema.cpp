@@ -189,7 +189,7 @@ DbSchema::proceduresCount() const
 DbTable*
 DbSchema::findTable(const QString &ipTableName) const
 {
-    return dynamic_cast<DbTable*>(findObject(ipTableName, Database::TableObject));
+    return dynamic_cast<DbTable*>(findObject(ipTableName, DbObject::TableObject));
 }
 
 /*
@@ -198,7 +198,7 @@ DbSchema::findTable(const QString &ipTableName) const
 DbView*
 DbSchema::findView(const QString &ipViewName) const
 {
-    return dynamic_cast<DbView*>(findObject(ipViewName, Database::ViewObject));
+    return dynamic_cast<DbView*>(findObject(ipViewName, DbObject::ViewObject));
 }
 
 /*
@@ -207,7 +207,7 @@ DbSchema::findView(const QString &ipViewName) const
 DbProcedure*
 DbSchema::findProcedure(const QString &ipProcName) const
 {
-    return dynamic_cast<DbProcedure*>(findObject(ipProcName, Database::ProcedureObject));
+    return dynamic_cast<DbProcedure*>(findObject(ipProcName, DbObject::ProcedureObject));
 }
 
 /*
@@ -564,41 +564,41 @@ DbSchema::cleanup()
 }
 
 /*
- * Returns the id of database object
+ * Returns the id of database object type
  */
-int
-DbSchema::objectId()
+DbObject::Type
+DbSchema::type()
 {
-    return Database::SchemaObject;
+    return DbObject::SchemaObject;
 }
 
 /*
  * Searches for an object by its name
  */
 DbObject*
-DbSchema::findObject(const QString &ipObjectName, Database::Object ipObjectType) const
+DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
 {
     int count;
     QStringList list;
 
     //
     switch (ipObjectType) {
-        case Database::TableObject:
+        case DbObject::TableObject:
                 count = mTables.count();
                 tablesList(&list);
                 break;
 
-        case Database::ViewObject:
+        case DbObject::ViewObject:
                 count = mViews.count();
                 viewsList(&list);
                 break;
 
-        case Database::ProcedureObject:
+        case DbObject::ProcedureObject:
                 count = mProcedures.count();
                 proceduresList(&list);
                 break;
 
-        case Database::UnkObject:
+        case DbObject::UnkObject:
         default:
                 qDebug() << "DbSchema::findObject> Unknown object type";
                 return 0;
@@ -622,17 +622,17 @@ DbSchema::findObject(const QString &ipObjectName, Database::Object ipObjectType)
     // if lang was found
     if ( !(i == count - 1 && ipObjectName != list.at(i)) ) {
         switch (ipObjectType) {
-            case Database::TableObject:
+            case DbObject::TableObject:
                     object = mTables.at(i);
                     break;
-            case Database::ViewObject:
+            case DbObject::ViewObject:
                     object = mViews.at(i);
                     break;
-            case Database::ProcedureObject:
+            case DbObject::ProcedureObject:
                     object = mProcedures.at(i);
                     break;
             // useless - done just to remove warning
-            case Database::UnkObject:
+            case DbObject::UnkObject:
             default:
                     break;
         }

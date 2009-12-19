@@ -8,11 +8,13 @@ QT += sql
 
 CONFIG += staticlib
 
-DEPENDPATH += . common mysql psql
-INCLUDEPATH += . common psql mysql
+DEPENDPATH += .
+INCLUDEPATH += . common mysql psql
 
 MOC_DIR = .moc
 OBJECTS_DIR = .obj
+
+QMAKE_CXXFLAGS += -g2 -Wextra
 
 #DEFINES += DEBUG_QUERY
 #DEFINES += DEBUG_TRACE

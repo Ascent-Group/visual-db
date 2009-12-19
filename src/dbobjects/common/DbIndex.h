@@ -79,7 +79,7 @@ class DbIndex : public DbObject
 
         virtual void loadData() = 0;
 
-        virtual int objectId();
+        virtual DbObject::Type type();
 
     protected:
         QString mTableName;

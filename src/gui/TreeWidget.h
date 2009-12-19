@@ -47,6 +47,33 @@ class TreeWidget : public QTreeWidget
 	TreeWidget(/*QMenu *, */QWidget *ipParent = 0);
 	~TreeWidget();
 
+	// it is highly recommended that we keep the same order as
+	// in DbObject::Type enum (though we don't have to)
+	enum Item {
+	    UnkItem = DbObject::UnkObject,
+	    SchemaItem = DbObject::SchemaObject,
+	    TableItem = DbObject::TableObject,
+	    ViewItem = DbObject::ViewObject,
+	    RoleItem = DbObject::RoleObject,
+	    TriggerItem = DbObject::TriggerObject,
+	    LanguageItem = DbObject::LanguageObject,
+	    IndexItem = DbObject::IndexObject,
+	    ProcedureItem = DbObject::ProcedureObject,
+	};
+
+	// Node's values MUST NOT intersect with Item's values
+        enum Node {
+            UnkNode = 100 + UnkItem,
+            SchemaNode,
+            TableNode,
+            ViewNode,
+            RoleNode,
+            TriggerNode,
+            LanguageNode,
+            IndexNode,
+            ProcedureNode
+        };
+
 	void refresh();
 
 	void setContextMenu(QMenu *);
@@ -63,7 +90,7 @@ class TreeWidget : public QTreeWidget
         QMenu *mContextMenu;
 
     private:
-        void insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, Database::Object ipType);
+        void insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, TreeWidget::Item ipType);
 };
 
 #endif // TREEWIDGET_H

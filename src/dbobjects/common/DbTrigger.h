@@ -66,7 +66,7 @@ class DbTrigger : public DbObject
         int numArgs() const;
         void setNumArgs(const int &ipNum);
 
-        virtual int objectId();
+        virtual DbObject::Type type();
         virtual void loadData() = 0;
 
     protected:

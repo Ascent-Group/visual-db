@@ -69,7 +69,7 @@ class DbRole : public DbObject
         // lyuts: for future use
         // virtual void save() = 0;
 
-        virtual int objectId();
+        virtual DbObject::Type type();
 
     protected:
         bool mIsSuperUser;

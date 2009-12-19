@@ -42,7 +42,7 @@ class DbLanguage : public DbObject
 
         virtual void loadData() = 0;
 
-        virtual int objectId();
+        virtual DbObject::Type type();
 
     protected:
         bool mIsTrusted;

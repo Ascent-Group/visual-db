@@ -47,11 +47,12 @@ DbProcedure::~DbProcedure()
 }
 
 /*
- * Returns the id of database object
+ * Returns the id of database object type
  */
-int DbProcedure::objectId()
+DbObject::Type
+DbProcedure::type()
 {
-    return Database::ProcedureObject;
+    return DbObject::ProcedureObject;
 }
 
 /*

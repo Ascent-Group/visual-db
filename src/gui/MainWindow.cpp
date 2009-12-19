@@ -349,7 +349,7 @@ MainWindow::addTableItem()
 void
 MainWindow::addTableItem(QTreeWidgetItem *ipItem, int ipCol)
 {
-    printMsg("Adding table '" + ipItem->text(ipCol) + "' to scene");
+    //printMsg("Adding table '" + ipItem->text(ipCol) + "' to scene");
 
     ui.mSceneWidget->showOnScene(ipItem, ipCol);
     ui.mSceneWidget->updateLegend();
@@ -377,7 +377,7 @@ MainWindow::drawFullDbScheme()
             QTreeWidgetItem *childItem = topLevelItem->child(i);
 
             // if this is a schema item
-            if (Database::SchemaObject == childItem->text(TreeWidget::IdCol).toInt()) {
+            if (TreeWidget::SchemaItem == childItem->text(TreeWidget::IdCol).toInt()) {
                 ui.mSceneWidget->showOnScene(childItem, TreeWidget::NameCol);
             }
             //mProgressBar->setValue(mProgressBar->value() + 1);
@@ -472,7 +472,7 @@ MainWindow::describeObject()
 
     // find the correct object and describe
     switch ( objId ) {
-        case Database::SchemaObject:
+        case TreeWidget::SchemaItem:
                     schema = dbInst->findSchema(objName);
 
                     // no check for null pointer, describe will handle it
@@ -480,13 +480,13 @@ MainWindow::describeObject()
                     tabTitle = tr("Schema: ");
                     break;
 
-        case Database::TableObject:                   
+        case TreeWidget::TableItem:
                     // find table's schema
                     schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
 
                     schema = dbInst->findSchema(schemaName);
 
-                    if ( schema ) {                        
+                    if ( schema ) {
                         table = schema->findTable(objName);
                         // no check for null pointer, describe will handle it
                         descWidget->describe(table);
@@ -494,7 +494,7 @@ MainWindow::describeObject()
                     }
                     break;
 
-        case Database::ViewObject:
+        case TreeWidget::ViewItem:
                     // find view's schema
                     schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
 
@@ -508,7 +508,7 @@ MainWindow::describeObject()
                     }
                     break;
 
-        case Database::RoleObject:
+        case TreeWidget::RoleItem:
                     role = dbInst->findRole(objName);
 
                     // no check for null pointer, describe will handle it
@@ -516,14 +516,14 @@ MainWindow::describeObject()
                     tabTitle = tr("Role: ");
                     break;
 
-        case Database::IndexObject:
+        case TreeWidget::IndexItem:
                     index = dbInst->findIndex(objName);
 
                     descWidget->describe(index);
                     tabTitle = tr("Index: ");
                     break;
 
-        case Database::TriggerObject:
+        case TreeWidget::TriggerItem:
                     trig = dbInst->findTrigger(objName);
 
                     descWidget->describe(trig);
@@ -585,8 +585,8 @@ MainWindow::queryData()
 
     // find the correct object and query data
     switch ( objId ) {
-        case Database::TableObject:
-        case Database::ViewObject:
+        case TreeWidget::TableItem:
+        case TreeWidget::ViewItem:
 	    // find schema
 	    schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
 

@@ -282,10 +282,10 @@ DbIndex::setReady(bool ipFlag)
 }
 
 /*
- * Returns the id of database object
+ * Returns the id of database object type
  */
-int
-DbIndex::objectId()
+DbObject::Type
+DbIndex::type()
 {
-    return Database::IndexObject;
+    return DbObject::IndexObject;
 }

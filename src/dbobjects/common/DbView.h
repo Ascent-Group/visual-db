@@ -53,7 +53,7 @@ class DbView : public DbObject
 
         virtual void loadData() = 0;
 
-        virtual int objectId();
+        virtual DbObject::Type type();
 
     protected:
         QString mSchemaName; // for internal use only => no accessors for it

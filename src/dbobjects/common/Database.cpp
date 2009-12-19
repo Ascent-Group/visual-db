@@ -292,7 +292,7 @@ Database::triggersCount() const
 DbSchema*
 Database::findSchema(const QString &ipSchemaName) const
 {
-    return dynamic_cast<DbSchema*>(findObject(ipSchemaName, Database::SchemaObject));
+    return dynamic_cast<DbSchema*>(findObject(ipSchemaName, DbObject::SchemaObject));
 }
 
 /*
@@ -301,7 +301,7 @@ Database::findSchema(const QString &ipSchemaName) const
 DbRole*
 Database::findRole(const QString &ipRoleName) const
 {
-    return dynamic_cast<DbRole*>(findObject(ipRoleName, Database::RoleObject));
+    return dynamic_cast<DbRole*>(findObject(ipRoleName, DbObject::RoleObject));
 }
 
 /*
@@ -310,7 +310,7 @@ Database::findRole(const QString &ipRoleName) const
 DbIndex*
 Database::findIndex(const QString &ipIndexName) const
 {
-    return dynamic_cast<DbIndex*>(findObject(ipIndexName, Database::IndexObject));    
+    return dynamic_cast<DbIndex*>(findObject(ipIndexName, DbObject::IndexObject));
 }
 
 /*
@@ -319,7 +319,7 @@ Database::findIndex(const QString &ipIndexName) const
 DbLanguage*
 Database::findLanguage(const QString &ipLangName) const
 {
-    return dynamic_cast<DbLanguage*>(findObject(ipLangName, Database::LanguageObject));
+    return dynamic_cast<DbLanguage*>(findObject(ipLangName, DbObject::LanguageObject));
 }
 
 /*
@@ -328,7 +328,7 @@ Database::findLanguage(const QString &ipLangName) const
 DbTrigger*
 Database::findTrigger(const QString &ipTrigName) const
 {
-    return dynamic_cast<DbTrigger*>(findObject(ipTrigName, Database::TriggerObject));
+    return dynamic_cast<DbTrigger*>(findObject(ipTrigName, DbObject::TriggerObject));
 }
 
 /*
@@ -383,7 +383,7 @@ Database::setSqlDriver(const QString &ipSqlDriverName)
 /*
  * Get the type of sql driver (see enum in header)
  */
-int
+Database::SqlDriverType
 Database::sqlDriver() const
 {
     return mSqlDriver;
@@ -1204,39 +1204,39 @@ Database::cleanup()
  * Searches for an object by its name
  */
 DbObject*
-Database::findObject(const QString &ipObjectName, Database::Object ipObjectType) const
+Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
 {
     int count;
     QStringList list;
 
     //
     switch (ipObjectType) {
-        case Database::SchemaObject:
+        case DbObject::SchemaObject:
                 count = mSchemas.count();
                 schemasList(&list);
                 break;
 
-        case Database::RoleObject:
+        case DbObject::RoleObject:
                 count = mRoles.count();
                 rolesList(&list);
                 break;
 
-        case Database::IndexObject:
+        case DbObject::IndexObject:
                 count = mIndices.count();
                 indicesList(&list);
                 break;
 
-        case Database::LanguageObject:
+        case DbObject::LanguageObject:
                 count = mLanguages.count();
                 languagesList(&list);
                 break;
 
-        case Database::TriggerObject:
+        case DbObject::TriggerObject:
                 count = mTriggers.count();
                 triggersList(&list);
                 break;
 
-        case Database::UnkObject:
+        case DbObject::UnkObject:
         default:
                 qDebug() << "Database::findObject> Unknown object type";
                 return 0;
@@ -1260,23 +1260,23 @@ Database::findObject(const QString &ipObjectName, Database::Object ipObjectType)
     // if object was found
     if ( !(i == count - 1 && ipObjectName != list.at(i)) ) {
         switch (ipObjectType) {
-            case Database::SchemaObject:
+            case DbObject::SchemaObject:
                     object = mSchemas.at(i);
                     break;
-            case Database::RoleObject:
+            case DbObject::RoleObject:
                     object = mRoles.at(i);
                     break;
-            case Database::IndexObject:
+            case DbObject::IndexObject:
                     object = mIndices.at(i);
                     break;
-            case Database::LanguageObject:
+            case DbObject::LanguageObject:
                     object = mLanguages.at(i);
                     break;
-            case Database::TriggerObject:
+            case DbObject::TriggerObject:
                     object = mTriggers.at(i);
                     break;
             // actually useless - done just to remove warning
-            case Database::UnkObject:
+            case DbObject::UnkObject:
             default:
                     break;
         }

@@ -76,7 +76,7 @@ class DbTable : public DbObject
 
         int getIndices(QVector<DbIndex*> &ipIndicesList);
 
-        virtual int objectId();
+        virtual DbObject::Type type();
 
     protected:
         struct ColumnDefinition

@@ -68,7 +68,7 @@ class DbSchema : public DbObject
 
         void cleanup();
 
-        virtual int objectId();
+        virtual DbObject::Type type();
 
         QString ownerName() const;
 
@@ -83,7 +83,7 @@ class DbSchema : public DbObject
         QVector<DbProcedure*> mProcedures;
 
     private:
-        DbObject* findObject(const QString &ipObjName, Database::Object) const;
+        DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
 };
 
 #endif // DBSCHEMA_H

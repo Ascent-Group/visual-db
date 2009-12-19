@@ -86,31 +86,31 @@ TreeWidget::refresh()
     // construct the tree skeleton
     QTreeWidgetItem *rolesNode = new QTreeWidgetItem();
     rolesNode->setText(TreeWidget::NameCol, tr("Roles"));
-    rolesNode->setText(TreeWidget::IdCol, QString::number(Database::RoleNode));
+    rolesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::RoleNode));
     setBold(rolesNode, true);
     addTopLevelItem(rolesNode);
 
     QTreeWidgetItem *schemasNode = new QTreeWidgetItem();
     schemasNode->setText(TreeWidget::NameCol, tr("Schemas"));
-    schemasNode->setText(TreeWidget::IdCol, QString::number(Database::SchemaNode));
+    schemasNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::SchemaNode));
     setBold(schemasNode, true);
     addTopLevelItem(schemasNode);
 
     QTreeWidgetItem *indicesNode = new QTreeWidgetItem();
     indicesNode->setText(TreeWidget::NameCol, tr("Indices"));
-    indicesNode->setText(TreeWidget::IdCol, QString::number(Database::IndexNode));
+    indicesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::IndexNode));
     setBold(indicesNode, true);
     addTopLevelItem(indicesNode);
 
     QTreeWidgetItem *langsNode = new QTreeWidgetItem();
     langsNode->setText(TreeWidget::NameCol, tr("Languages"));
-    langsNode->setText(TreeWidget::IdCol, QString::number(Database::LanguageNode));
+    langsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::LanguageNode));
     setBold(langsNode, true);
     addTopLevelItem(langsNode);
 
     QTreeWidgetItem *trigsNode = new QTreeWidgetItem();
     trigsNode->setText(TreeWidget::NameCol, tr("Triggers"));
-    trigsNode->setText(TreeWidget::IdCol, QString::number(Database::TriggerNode));
+    trigsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TriggerNode));
     setBold(trigsNode, true);
     addTopLevelItem(trigsNode);
 
@@ -127,7 +127,7 @@ TreeWidget::refresh()
     QStringList rolesList;
     dbInst->rolesList(&rolesList);
 
-    insertItems(rolesNode, &rolesList, Database::RoleObject);
+    insertItems(rolesNode, &rolesList, TreeWidget::RoleItem);
 
 
     //// LANGS
@@ -137,7 +137,7 @@ TreeWidget::refresh()
     QStringList langsList;
     dbInst->languagesList(&langsList);
 
-    insertItems(langsNode, &langsList, Database::LanguageObject);
+    insertItems(langsNode, &langsList, TreeWidget::LanguageItem);
 
     //// SCHEMAS
     dbInst->readSchemas();
@@ -156,7 +156,7 @@ TreeWidget::refresh()
         // create an item
         QTreeWidgetItem *schemaItem = new QTreeWidgetItem(schemasNode);
         schemaItem->setText(TreeWidget::NameCol, schemaName);
-        schemaItem->setText(TreeWidget::IdCol, QString::number(Database::SchemaObject));
+        schemaItem->setText(TreeWidget::IdCol, QString::number(TreeWidget::SchemaItem));
 
         // add to the scena subtree
         //addTopLevelItem(schemaItem);
@@ -168,17 +168,17 @@ TreeWidget::refresh()
         // create tablesNode
         QTreeWidgetItem *tablesNode = new QTreeWidgetItem(schemaItem);
         tablesNode->setText(TreeWidget::NameCol, tr("Tables"));
-        tablesNode->setText(TreeWidget::IdCol, QString::number(Database::TableNode));
+        tablesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TableNode));
 	setBold(tablesNode, true);
         // create viewsNode
         QTreeWidgetItem *viewsNode = new QTreeWidgetItem(schemaItem);
         viewsNode->setText(TreeWidget::NameCol, tr("Views"));
-        viewsNode->setText(TreeWidget::IdCol, QString::number(Database::ViewNode));
+        viewsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::ViewNode));
 	setBold(viewsNode, true);
         // create procsNode
         QTreeWidgetItem *procsNode = new QTreeWidgetItem(schemaItem);
         procsNode->setText(TreeWidget::NameCol, tr("Procedures"));
-        procsNode->setText(TreeWidget::IdCol, QString::number(Database::ProcedureNode));
+        procsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::ProcedureNode));
         setBold(procsNode, true);
 
 
@@ -187,7 +187,7 @@ TreeWidget::refresh()
         QStringList tablesList;
         schema->tablesList(&tablesList);
 
-        insertItems(tablesNode, &tablesList, Database::TableObject);
+        insertItems(tablesNode, &tablesList, TreeWidget::TableItem);
 
 
         //// VIEWS
@@ -195,7 +195,7 @@ TreeWidget::refresh()
         QStringList viewsList;
         schema->viewsList(&viewsList);
 
-        insertItems(viewsNode, &viewsList, Database::ViewObject);
+        insertItems(viewsNode, &viewsList, TreeWidget::ViewItem);
 
 
         //// PROCS
@@ -203,7 +203,7 @@ TreeWidget::refresh()
         QStringList procsList;
         schema->proceduresList(&procsList);
 
-        insertItems(procsNode, &procsList, Database::ProcedureObject);
+        insertItems(procsNode, &procsList, TreeWidget::ProcedureItem);
 
 
     }
@@ -215,7 +215,7 @@ TreeWidget::refresh()
     QStringList indicesList;
     dbInst->indicesList(&indicesList);
 
-    insertItems(indicesNode, &indicesList, Database::IndexObject);
+    insertItems(indicesNode, &indicesList, TreeWidget::IndexItem);
 
     //// TRIGGERS
     dbInst->readTriggers();
@@ -223,7 +223,7 @@ TreeWidget::refresh()
     QStringList trigsList;
     dbInst->triggersList(&trigsList);
 
-    insertItems(trigsNode, &trigsList, Database::TriggerObject);
+    insertItems(trigsNode, &trigsList, TreeWidget::TriggerItem);
 
 
 }
@@ -269,7 +269,7 @@ static void setBold(QTreeWidgetItem *item, bool bold)
  * Populate tree under parent-item with triggers
  */
 void
-TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, Database::Object ipType)
+TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, TreeWidget::Item ipType)
 {
     ipList->sort();
 

@@ -318,10 +318,10 @@ DbTable::getIndices(QVector<DbIndex*> &ipIndicesList)
 }
 
 /*
- * Returns the id of database object
+ * Returns the id of database object type
  */
-int
-DbTable::objectId()
+DbObject::Type
+DbTable::type()
 {
-    return Database::TableObject;
+    return DbObject::TableObject;
 }

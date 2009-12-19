@@ -66,10 +66,10 @@ DbLanguage::setTrusted(const bool &ipFlag)
 }
 
 /*
- * Returns the id of database object
+ * Returns the id of database object type
  */
-int
-DbLanguage::objectId()
+DbObject::Type
+DbLanguage::type()
 {
-    return Database::LanguageObject;
+    return DbObject::LanguageObject;
 }

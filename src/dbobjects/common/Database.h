@@ -53,31 +53,6 @@ class Database
             SQLite
         };
 
-        enum Object {
-            UnkObject = 0,
-            SchemaObject,
-            TableObject,
-            ViewObject,
-            RoleObject,
-            TriggerObject,
-            LanguageObject,
-            IndexObject,
-            ProcedureObject,
-        };
-
-        // Node's values MUST NOT intersect with Object's values
-        enum Node {
-            UnkNode = 100,
-            SchemaNode,
-            TableNode,
-            ViewNode,
-            RoleNode,
-            TriggerNode,
-            LanguageNode,
-            IndexNode,
-            ProcedureNode
-        };
-
     public:
         void addSchema(DbSchema *);
         void addRole(DbRole *);
@@ -115,7 +90,7 @@ class Database
         int findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) const;        
 
         void setSqlDriver(const QString &ipSqlDriverName);
-        int sqlDriver() const;
+        SqlDriverType sqlDriver() const;
 
         void readSchemas();
         void readRoles();
@@ -138,12 +113,12 @@ class Database
         QVector<DbIndex*> mIndices;
         QVector<DbLanguage*> mLanguages;
         QVector<DbTrigger*> mTriggers;
-        int mSqlDriver;
+        SqlDriverType mSqlDriver;
 
 	friend class DatabaseManager;
 
     private:
-        DbObject* findObject(const QString &ipObjName, Database::Object) const;
+        DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
 };
 
 /*

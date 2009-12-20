@@ -50,13 +50,13 @@ class DbSchema : public DbObject
         void addProcedure(DbProcedure *ipProc);
 
         void tablesList(QStringList *) const;
-        int tablesCount() const;
+        quint64 tablesCount() const;
 
         void viewsList(QStringList *) const;
-        int viewsCount() const;
+        quint64 viewsCount() const;
 
         void proceduresList(QStringList *) const;
-        int proceduresCount() const;
+        quint64 proceduresCount() const;
 
         DbTable* findTable(const QString &ipTableName) const;
         DbView* findView(const QString &ipViewName) const;

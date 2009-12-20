@@ -54,7 +54,7 @@ DbTable::~DbTable()
 /*
  * Returns the number of columns
  */
-int
+quint16
 DbTable::columnsCount() const
 {
     return mColumnDefs.size();
@@ -104,7 +104,7 @@ DbTable::fullName() const
  * Returns a column name by its index
  */
 QString
-DbTable::columnName(int ipColId) const
+DbTable::columnName(qint16 ipColId) const
 {
     // if id is negative
     if (ipColId < 0) {
@@ -127,7 +127,7 @@ DbTable::columnName(int ipColId) const
  * Returns the column type by its index
  */
 QString
-DbTable::columnType(int ipColId) const
+DbTable::columnType(qint16 ipColId) const
 {
     // if id is negative
     if (ipColId < 0) {
@@ -151,7 +151,7 @@ DbTable::columnType(int ipColId) const
  * Returns true if column is nullable
  */
 bool
-DbTable::isColumnNullable(int ipColId) const
+DbTable::isColumnNullable(qint16 ipColId) const
 {
     // if id is negative
     if (ipColId < 0) {
@@ -174,7 +174,7 @@ DbTable::isColumnNullable(int ipColId) const
  * Returns true if column is a primary key
  */
 bool
-DbTable::isColumnPrimaryKey(int ipColId) const
+DbTable::isColumnPrimaryKey(qint16 ipColId) const
 {
     // if id is negative
     if (ipColId < 0) {
@@ -198,7 +198,7 @@ DbTable::isColumnPrimaryKey(int ipColId) const
  * Returns true if column is a foreign key
  */
 bool
-DbTable::isColumnForeignKey(int ipColId) const
+DbTable::isColumnForeignKey(qint16 ipColId) const
 {
     // if id is negative
     if (ipColId < 0) {
@@ -222,7 +222,7 @@ DbTable::isColumnForeignKey(int ipColId) const
  * Returns foreign table's schema name pointed by a foreign key
  */
 QString
-DbTable::foreignSchemaName(int ipColId) const
+DbTable::foreignSchemaName(qint16 ipColId) const
 {
     // if id is negative
     if (ipColId < 0) {
@@ -246,7 +246,7 @@ DbTable::foreignSchemaName(int ipColId) const
  * Returns a table name pointed to by a foregin key
  */
 QString
-DbTable::foreignTableName(int ipColId) const
+DbTable::foreignTableName(qint16 ipColId) const
 {
     // if id is negative
     if (ipColId < 0) {
@@ -270,13 +270,13 @@ DbTable::foreignTableName(int ipColId) const
  * Returns the list of referenced fields by a foreign key
  */
 QStringList
-DbTable::foreignFields(int colId) const
+DbTable::foreignFields(qint16 colId) const
 {
-    int count = mColumnDefs.at(colId).foreignFieldNames.count();
+    quint16 count = mColumnDefs.at(colId).foreignFieldNames.count();
 
     QStringList list;
 
-    for (int i = 0; i < count; ++i) {
+    for (quint16 i = 0; i < count; ++i) {
         list << mColumnDefs.at(colId).foreignFieldNames.at(i);
     }
 
@@ -287,7 +287,7 @@ DbTable::foreignFields(int colId) const
  * Returns true if column has unique constraint
  */
 bool
-DbTable::isColumnUnique(int ipColId) const
+DbTable::isColumnUnique(qint16 ipColId) const
 {
     // if id is negative
     if (ipColId < 0) {
@@ -311,7 +311,7 @@ DbTable::isColumnUnique(int ipColId) const
  * Returns the number of indices for the given table
  * and populates the input list with pointers to indices
  */
-int
+quint64
 DbTable::getIndices(QVector<DbIndex*> &ipIndicesList)
 {
     return Database::instance()->findTableIndices(this, ipIndicesList);

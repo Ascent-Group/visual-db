@@ -140,7 +140,7 @@ DbIndex::setSchema(DbSchema *ipSchema)
 /*
  * Returns the number of columns in the ginev db index
  */
-int
+quint16
 DbIndex::columnsCount() const
 {
     return mColumnsCount;
@@ -150,7 +150,7 @@ DbIndex::columnsCount() const
  * Sets the number of columns in the given index
  */
 void
-DbIndex::setColumnsCount(int ipCount)
+DbIndex::setColumnsCount(quint16 ipCount)
 {
     mColumnsCount = ipCount;
 }
@@ -158,7 +158,7 @@ DbIndex::setColumnsCount(int ipCount)
 /*
  * Returns the list of table's columns numbers
  */
-QVector<int>
+QVector<qint16>
 DbIndex::columnsNumbers() const
 {
     return mColumnsNumbers;
@@ -168,7 +168,7 @@ DbIndex::columnsNumbers() const
  * Adds a table's coolumn number
  */
 void
-DbIndex::addColumnNumber(int ipNum)
+DbIndex::addColumnNumber(qint16 ipNum)
 {
     mColumnsNumbers.push_back(ipNum);
 }

@@ -132,9 +132,9 @@ DescriptionWidget::describe(const DbTable *ipTable)
     }
 
     // get columns count
-    int columnsCount = ipTable->columnsCount();
+    quint16 columnsCount = ipTable->columnsCount();
 
-    ui.mTable->setRowCount(columnsCount);    
+    ui.mTable->setRowCount(columnsCount);
     ui.mTable->setColumnCount(DescriptionWidget::DbTableColumnsCount);
 
     // set column labels
@@ -156,7 +156,7 @@ DescriptionWidget::describe(const DbTable *ipTable)
                    .arg(ipTable->name());
 
     // for each db table's column fill the rows and generate body text
-    for (int i = 0; i < columnsCount; ++i) {
+    for (quint16 i = 0; i < columnsCount; ++i) {
         // read attributes
         QString name = ipTable->columnName(i);
         QString type = ipTable->columnType(i);
@@ -288,14 +288,14 @@ DescriptionWidget::describe(const DbRole *ipRole)
 
     // read attributes
     QString name = ipRole->name();
-    int id = ipRole->id();
+    quint64 id = ipRole->id();
     bool superUser = ipRole->isSuperUser();
     bool inherits = ipRole->inheritsPrivileges();
     bool createRole = ipRole->canCreateRole();
     bool createDb = ipRole->canCreateDb();
     bool updateSysCat = ipRole->canUpdateSysCat();
     bool login = ipRole->canLogin();
-    int connLimit = ipRole->connectionLimit();
+    quint32 connLimit = ipRole->connectionLimit();
     QDate expiryDate = ipRole->expiryDate();
 
 
@@ -483,8 +483,8 @@ DescriptionWidget::describe(const DbIndex *ipIndex)
     QString name = ipIndex->name();
     QString tableName = ipIndex->table()->name();
     QString schemaName = ipIndex->schema()->name();
-    int colsCount = ipIndex->columnsCount();
-    QVector<int> colNums = ipIndex->columnsNumbers();
+    quint16 colsCount = ipIndex->columnsCount();
+    QVector<qint16> colNums = ipIndex->columnsNumbers();
     bool unique = ipIndex->isUnique();
     bool primary = ipIndex->isPrimary();
     bool clustered = ipIndex->isClustered();
@@ -521,11 +521,11 @@ DescriptionWidget::describe(const DbIndex *ipIndex)
     QTableWidgetItem *colNumsItem = new QTableWidgetItem();
     colNumsItem->setTextAlignment(Qt::AlignHCenter);
 
-    QVector<int>::const_iterator iter;
+    QVector<qint16>::const_iterator iter;
     QString colNames;
 
     for (iter = colNums.constBegin(); iter != colNums.constEnd(); ++iter) {
-        int id = *iter - 1;
+        qint16 id = *iter - 1;
 
         // if index is not for plain column but for an expr on a column
         if (0 < id) {
@@ -644,7 +644,7 @@ DescriptionWidget::describe(const DbTrigger *ipTrigger)
     QString refTableName = ipTrigger->referencedTable()->fullName();
     bool isDeferrable = ipTrigger->isDeferrable();
     bool isInitiallyDeferred = ipTrigger->isInitiallyDeferred();
-    int numArgs = ipTrigger->numArgs();
+    quint16 numArgs = ipTrigger->numArgs();
 
     // fill name
     QTableWidgetItem *nameItem = new QTableWidgetItem();

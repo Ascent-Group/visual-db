@@ -95,7 +95,7 @@ PsqlLanguage::loadData()
         return;
     }
 
-    int colId;
+    qint32 colId;
 
     /*
     colId = query.record().indexOf("name");

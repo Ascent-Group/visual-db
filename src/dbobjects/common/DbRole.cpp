@@ -158,7 +158,7 @@ DbRole::setCanLogin(const bool ipFlag)
 /*
  * Returns the connection limit for the given role
  */
-int
+quint32
 DbRole::connectionLimit() const
 {
     return mConnectionLimit;
@@ -168,7 +168,7 @@ DbRole::connectionLimit() const
  * Sets the connection limit for the role
  */
 void
-DbRole::setConnectionLimit(const int ipLimit)
+DbRole::setConnectionLimit(const quint32 ipLimit)
 {
     mConnectionLimit = ipLimit;
 }
@@ -194,7 +194,7 @@ DbRole::setExpiryDate(const QDate ipDate)
 /*
  * Returns the id of the role
  */
-int
+quint64
 DbRole::id() const
 {
     return mId;
@@ -204,7 +204,7 @@ DbRole::id() const
  * Sets the id for the role
  */
 void
-DbRole::setId(const int ipId)
+DbRole::setId(const quint64 ipId)
 {
     mId = ipId;
 }

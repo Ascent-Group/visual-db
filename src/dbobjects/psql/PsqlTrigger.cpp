@@ -113,7 +113,7 @@ PsqlTrigger::loadData()
     // if data was found
     if (query.first()) {
         // table
-        int colId = query.record().indexOf("schema");
+        qint32 colId = query.record().indexOf("schema");
         Q_ASSERT(colId > 0);
         QString schemaName = query.value(colId).toString();
 

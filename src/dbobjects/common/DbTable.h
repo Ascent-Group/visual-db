@@ -42,7 +42,7 @@ class DbTable : public DbObject
     public:
         virtual ~DbTable();
 
-        int columnsCount() const;
+        quint16 columnsCount() const;
         
         DbSchema* schema() const;
         void setSchema(DbSchema *ipSchema);
@@ -56,15 +56,15 @@ class DbTable : public DbObject
 	// (+)id 0 1 2 3 4  5   6  7
 	// col   A B C D E  F   G  H
 	// (-)id 0 . . . . -3  -2 -1
-        QString columnName(int ipColId) const;
-        QString columnType(int ipColId) const;
-        bool isColumnNullable(int ipColId) const;
-        bool isColumnPrimaryKey(int ipColId) const;
-        bool isColumnForeignKey(int ipColId) const;
-        QString foreignSchemaName(int ipColId) const;
-        QString foreignTableName(int ipColId) const;
-        QStringList foreignFields(int ipColId) const;
-        bool isColumnUnique(int ipColId) const;
+        QString columnName(qint16 ipColId) const;
+        QString columnType(qint16 ipColId) const;
+        bool isColumnNullable(qint16 ipColId) const;
+        bool isColumnPrimaryKey(qint16 ipColId) const;
+        bool isColumnForeignKey(qint16 ipColId) const;
+        QString foreignSchemaName(qint16 ipColId) const;
+        QString foreignTableName(qint16 ipColId) const;
+        QStringList foreignFields(qint16 ipColId) const;
+        bool isColumnUnique(qint16 ipColId) const;
 
         virtual void loadData() = 0;
         // lyuts: for further functionality
@@ -74,7 +74,7 @@ class DbTable : public DbObject
         virtual bool checkForeignKey(const QString &, QString *, QString *, QStringList *) const = 0;
         virtual bool checkUnique(const QString &) const = 0;
 
-        int getIndices(QVector<DbIndex*> &ipIndicesList);
+        quint64 getIndices(QVector<DbIndex*> &ipIndicesList);
 
         virtual DbObject::Type type();
 

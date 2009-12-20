@@ -447,7 +447,8 @@ MainWindow::describeObject()
     }
 
     // get object id
-    int objId = item->text(TreeWidget::IdCol).toInt();
+    // !!!in fact it would be nice to use TreeWidget::Item/Node instead of int
+    TreeWidget::Item objId = (TreeWidget::Item)item->text(TreeWidget::IdCol).toInt();
 
     // return if item is just a node
     if ( 0 == objId ) {

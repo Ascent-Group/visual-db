@@ -244,7 +244,7 @@ Database::triggersList(QStringList *ipList) const
 /*
  * Calculate the number of schemas in a given database
  */
-int
+quint64
 Database::schemasCount() const
 {
     return mSchemas.count();
@@ -253,7 +253,7 @@ Database::schemasCount() const
 /*
  * Calculate the number of database roles
  */
-int
+quint64
 Database::rolesCount() const
 {
     return mRoles.count();
@@ -262,7 +262,7 @@ Database::rolesCount() const
 /*
  * Calculates the number of database indices
  */
-int
+quint64
 Database::indicesCount() const
 {
     return mIndices.count();
@@ -271,7 +271,7 @@ Database::indicesCount() const
 /*
  * Calculates the number of pl languages
  */
-int
+quint8
 Database::languagesCount() const
 {
     return mLanguages.count();
@@ -280,7 +280,7 @@ Database::languagesCount() const
 /*
  * Calculates the number of triggers
  */
-int
+quint16
 Database::triggersCount() const
 {
     return mTriggers.count();
@@ -334,12 +334,12 @@ Database::findTrigger(const QString &ipTrigName) const
 /*
  * Returns the number of indices found and populates the input list
  */
-int
+quint64
 Database::findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) const
 {
     ipList.clear();
 
-    int count = mIndices.count();
+    quint64 count = mIndices.count();
 
     // if we don't have any indices
     if (0 == count || 0 == ipTable) {
@@ -350,7 +350,7 @@ Database::findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) co
     QString tableName = ipTable->name();
 
     // look through index's table names
-    for (int i = 0; i < count; ++i) {
+    for (quint64 i = 0; i < count; ++i) {
         // if index is for our table -- add it
         if (tableName == mIndices.at(i)->tableName()
             && schemaName == mIndices.at(i)->schemaName()) {            
@@ -446,7 +446,7 @@ Database::readSchemas()
     // for every retrieved row
     do {
     	// get data from query
-    	int colId = query.record().indexOf("name");
+    	qint32 colId = query.record().indexOf("name");
     	QString name = query.value(colId).toString();
 
     	colId = query.record().indexOf("ownername");
@@ -567,7 +567,7 @@ Database::readRoles()
         }
 
         // set role's attributes
-        int colId = query.record().indexOf("name");
+        qint32 colId = query.record().indexOf("name");
         Q_ASSERT(colId > 0);
         role->setName(query.value(colId).toString());
 
@@ -703,7 +703,7 @@ Database::readIndices()
         // declare new index object
         DbIndex *index;
 
-        int colId;
+        qint32 colId;
 
         // choose a query depending on sql driver
         switch (mSqlDriver) {
@@ -886,7 +886,7 @@ Database::readLanguages()
         // declare new language object
         DbLanguage *lang;
 
-        int colId;
+        qint32 colId;
 
         // choose a query depending on sql driver
         switch (mSqlDriver) {
@@ -1023,10 +1023,10 @@ Database::readTriggers()
 
     // for every retrieved row
     do {
-        // declare new language object
+        // declare new trigger object
         DbTrigger *trig;
 
-        int colId;
+        qint32 colId;
 
         // choose a query depending on sql driver
         switch (mSqlDriver) {
@@ -1180,9 +1180,9 @@ Database::cleanup()
     qDebug() << "Database::cleanup> cleaning...";
 #endif
 
-    int schemasCount = mSchemas.count();
+    quint64 schemasCount = mSchemas.count();
 
-    for (int i = 0; i < schemasCount; ++i) {
+    for (quint64 i = 0; i < schemasCount; ++i) {
         mSchemas.at(i)->cleanup();
     }
 
@@ -1206,7 +1206,7 @@ Database::cleanup()
 DbObject*
 Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
 {
-    int count;
+    quint64 count;
     QStringList list;
 
     //
@@ -1251,7 +1251,7 @@ Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
         return 0;
     }
 
-    int i = 0;
+    quint64 i = 0;
     // look through objects' names
     while ( i < count && ipObjectName != list.at(i) ) {
         i++;

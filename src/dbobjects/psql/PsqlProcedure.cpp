@@ -101,7 +101,7 @@ PsqlProcedure::loadData()
     // if record was found
     if (query.first()) {
 
-        int colId = query.record().indexOf("owner");
+        qint32 colId = query.record().indexOf("owner");
         Q_ASSERT(colId > 0);
         QString ownerName = query.value(colId).toString();
         mOwner = Database::instance()->findRole(ownerName);

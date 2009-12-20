@@ -63,8 +63,8 @@ class DbTrigger : public DbObject
         bool isInitiallyDeferred() const;
         void setInitiallyDeferred(const bool ipFlag);
 
-        int numArgs() const;
-        void setNumArgs(const int &ipNum);
+        quint16 numArgs() const;
+        void setNumArgs(const quint16 &ipNum);
 
         virtual DbObject::Type type();
         virtual void loadData() = 0;
@@ -86,7 +86,7 @@ class DbTrigger : public DbObject
         //DbConstraint
         bool mIsDeferrable;
         bool mIsInitiallyDeferred;
-        int mNumArgs;
+        quint16 mNumArgs;
 
 };
 

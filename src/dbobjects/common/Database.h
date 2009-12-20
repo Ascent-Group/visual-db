@@ -61,19 +61,19 @@ class Database
         void addTrigger(DbTrigger *);
 
         void schemasList(QStringList *ipList) const;
-        int schemasCount() const;
+        quint64 schemasCount() const;
 
         void rolesList(QStringList *ipList) const;
-        int rolesCount() const;
+        quint64 rolesCount() const;
 
         void indicesList(QStringList *ipList) const;
-        int indicesCount() const;
+        quint64 indicesCount() const;
 
         void languagesList(QStringList *ipList) const;
-        int languagesCount() const;
+        quint8 languagesCount() const;
 
         void triggersList(QStringList *ipList) const;
-        int triggersCount() const;
+        quint16 triggersCount() const;
 
         DbSchema* findSchema(const QString &ipSchemaName) const;
 
@@ -87,7 +87,7 @@ class Database
         DbLanguage* findLanguage(const QString &ipLangName) const;
         DbTrigger* findTrigger(const QString &ipTrigName) const;
 
-        int findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) const;        
+        quint64 findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) const;        
 
         void setSqlDriver(const QString &ipSqlDriverName);
         SqlDriverType sqlDriver() const;

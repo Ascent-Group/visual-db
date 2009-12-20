@@ -53,11 +53,11 @@ class DbIndex : public DbObject
         DbSchema* schema() const;
         void setSchema(DbSchema *ipSchema);
 
-        int columnsCount() const;
-        void setColumnsCount(int ipCount);
+        quint16 columnsCount() const;
+        void setColumnsCount(quint16 ipCount);
 
-        QVector<int> columnsNumbers() const;
-        void addColumnNumber(int ipNum);
+        QVector<qint16> columnsNumbers() const;
+        void addColumnNumber(qint16 ipNum);
 
         bool isUnique() const;
         void setUnique(bool ipFlag);
@@ -86,8 +86,9 @@ class DbIndex : public DbObject
         QString mSchemaName;
         DbTable *mTable;
         DbSchema *mSchema;
-        int mColumnsCount;
-        QVector<int> mColumnsNumbers;
+        quint16 mColumnsCount;
+	// qint16 because columns can be addressed via negative ids
+        QVector<qint16> mColumnsNumbers;
         bool mIsUnique;
         bool mIsPrimary;
         bool mIsClustered;

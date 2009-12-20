@@ -234,7 +234,7 @@ PsqlTable::checkForeignKey(const QString &ipColumnName,
     }
 
     bool flag = false;
-    int colId;
+    qint32 colId;
 
     // if query result is empty
     if (!query.first()) {

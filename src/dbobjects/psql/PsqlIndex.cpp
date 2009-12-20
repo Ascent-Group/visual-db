@@ -103,7 +103,7 @@ void PsqlIndex::loadData()
     // if query retrieved a row
     if (query.first()) {
 
-        int colId;
+        qint32 colId;
         /*
         colId= query.record().indexOf("name");
         Q_ASSERT(colId > 0);

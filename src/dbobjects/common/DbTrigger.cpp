@@ -197,7 +197,7 @@ DbTrigger::setInitiallyDeferred(const bool ipFlag)
 /*
  * Returns the number of args passed to the trigger
  */
-int
+quint16
 DbTrigger::numArgs() const
 {
     return mNumArgs;
@@ -207,7 +207,7 @@ DbTrigger::numArgs() const
  * Sets the number of arguments passed to the trigger
  */
 void
-DbTrigger::setNumArgs(const int &ipNum)
+DbTrigger::setNumArgs(const quint16 &ipNum)
 {
     mNumArgs = ipNum;
 }

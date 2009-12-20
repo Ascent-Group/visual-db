@@ -200,6 +200,7 @@ void
 DatabaseTest::readSchemasTest()
 {
     Database *dbInst = Database::instance();
+    QVERIFY(0 != dbInst);
 
     // read schemas
     dbInst->readSchemas();

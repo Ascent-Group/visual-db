@@ -117,7 +117,7 @@ DbSchema::tablesList(QStringList *ipList) const
 /*
  * Calculate the number of tables in the given schema
  */
-int
+quint64
 DbSchema::tablesCount() const
 {
     return mTables.count();
@@ -147,7 +147,7 @@ DbSchema::viewsList(QStringList *ipList) const
 /*
  * Returns the number of views in the given schema
  */
-int
+quint64
 DbSchema::viewsCount() const
 {
     return mViews.count();
@@ -177,7 +177,7 @@ DbSchema::proceduresList(QStringList *ipList) const
 /*
  * Returns the number of procs in the given schema
  */
-int
+quint64
 DbSchema::proceduresCount() const
 {
     return mProcedures.count();
@@ -225,7 +225,7 @@ DbSchema::readTables()
     mTables.clear();
 
     // get sql driver
-    int sqlDriverType = Database::instance()->sqlDriver();
+    Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
 
     // choose a query depending on sql driver
     switch (sqlDriverType) {
@@ -306,7 +306,7 @@ DbSchema::readViews()
     mViews.clear();
 
     // get sql driver
-    int sqlDriverType = Database::instance()->sqlDriver();
+    Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
 
     // choose a query depending on sql driver
     switch (sqlDriverType) {
@@ -352,7 +352,7 @@ DbSchema::readViews()
     // for every retrieved row
     do {
 
-	int colId;
+	qint32 colId;
 
         // declare new view object
         DbView *view;
@@ -429,7 +429,7 @@ DbSchema::readProcedures()
     mProcedures.clear();
 
     // get sql driver
-    int sqlDriverType = Database::instance()->sqlDriver();
+    Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
 
         // choose a query depending on sql driver
     switch (sqlDriverType) {
@@ -482,7 +482,7 @@ DbSchema::readProcedures()
     // for every retrieved row
     do {
 
-        int colId;
+        qint32 colId;
 
         // declare new proc object
         DbProcedure *proc;
@@ -578,7 +578,7 @@ DbSchema::type()
 DbObject*
 DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
 {
-    int count;
+    quint64 count;
     QStringList list;
 
     //
@@ -613,7 +613,7 @@ DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
         return 0;
     }
 
-    int i = 0;
+    quint64 i = 0;
     // look through objects' names
     while ( i < count && ipObjectName != list.at(i) ) {
         i++;

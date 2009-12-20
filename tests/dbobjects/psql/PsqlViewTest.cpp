@@ -63,7 +63,7 @@ PsqlViewTest::loadDataTest()
     QVERIFY(QString(viewName) == view->name());
     QVERIFY(QString("%1.%2").arg(schemaName).arg(viewName) == view->fullName());
 
-    QVERIFY(Database::ViewObject == view->objectId());
+    QVERIFY(DbObject::ViewObject == view->type());
 
     QVERIFY(0 < view->definition().length());
 }

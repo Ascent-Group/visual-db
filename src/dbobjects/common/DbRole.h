@@ -56,14 +56,14 @@ class DbRole : public DbObject
         bool canLogin() const;
         void setCanLogin(const bool ipFlag);
 
-        int connectionLimit() const;
-        void setConnectionLimit(const int ipLimit);
+        quint32 connectionLimit() const;
+        void setConnectionLimit(const quint32 ipLimit);
 
         QDate expiryDate() const;
         void setExpiryDate(const QDate ipDate);
 
-        int id() const;
-        void setId(const int ipId);
+        quint64 id() const;
+        void setId(const quint64 ipId);
 
         virtual void loadData() = 0;
         // lyuts: for future use
@@ -78,9 +78,10 @@ class DbRole : public DbObject
         bool mCanCreateDb;
         bool mCanUpdateSysCat;
         bool mCanLogin;
-        int mConnectionLimit;
+	// I even doubt that any server can handle such number of connections
+        quint32 mConnectionLimit;
         QDate mExpiryDate;
-        int mId;
+        quint64 mId;
 
     protected:
         DbRole(QString ipName = 0);

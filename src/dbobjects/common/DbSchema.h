@@ -34,9 +34,10 @@
 #include <QVector>
 #include <common/Database.h>
 #include <common/DbObject.h>
-#include <common/DbProcedure.h>
 
+class DbProcedure;
 class DbTable;
+class DbTrigger;
 class DbView;
 
 class DbSchema : public DbObject
@@ -48,6 +49,7 @@ class DbSchema : public DbObject
         void addTable(DbTable *ipTable);
         void addView(DbView *ipView);
         void addProcedure(DbProcedure *ipProc);
+        void addTrigger(DbTrigger *);
 
         void tablesList(QStringList *) const;
         quint64 tablesCount() const;
@@ -58,13 +60,18 @@ class DbSchema : public DbObject
         void proceduresList(QStringList *) const;
         quint64 proceduresCount() const;
 
+        void triggersList(QStringList *ipList) const;
+        quint16 triggersCount() const;
+
         DbTable* findTable(const QString &ipTableName) const;
         DbView* findView(const QString &ipViewName) const;
         DbProcedure* findProcedure(const QString &ipProcName) const;
+        DbTrigger* findTrigger(const QString &ipTrigName) const;
 
         void readTables();
         void readViews();
         void readProcedures();
+        void readTriggers();
 
         void cleanup();
 
@@ -81,6 +88,7 @@ class DbSchema : public DbObject
         QVector<DbTable*> mTables;
         QVector<DbView*> mViews;
         QVector<DbProcedure*> mProcedures;
+        QVector<DbTrigger*> mTriggers;
 
     private:
         DbObject* findObject(const QString &ipObjName, DbObject::Type) const;

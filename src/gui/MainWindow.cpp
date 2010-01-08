@@ -525,10 +525,18 @@ MainWindow::describeObject()
                     break;
 
         case TreeWidget::TriggerItem:
-                    trig = dbInst->findTrigger(objName);
+		    // find view's schema
+                    schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
 
-                    descWidget->describe(trig);
-                    tabTitle = tr("Trigger: ");
+                    schema = dbInst->findSchema(schemaName);
+
+		    if (schema) {
+                        trig = schema->findTrigger(objName);
+                        // no check for null pointer, describe will handle it
+
+			descWidget->describe(trig);
+			tabTitle = tr("Trigger: ");
+		    }
                     break;
         default:
                     qDebug() << "MainWindow::describeObject> Unknown object!";

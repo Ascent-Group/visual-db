@@ -108,12 +108,6 @@ TreeWidget::refresh()
     setBold(langsNode, true);
     addTopLevelItem(langsNode);
 
-    QTreeWidgetItem *trigsNode = new QTreeWidgetItem();
-    trigsNode->setText(TreeWidget::NameCol, tr("Triggers"));
-    trigsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TriggerNode));
-    setBold(trigsNode, true);
-    addTopLevelItem(trigsNode);
-
     // interact with progressbar here
 
     // populate object tree
@@ -180,6 +174,11 @@ TreeWidget::refresh()
         procsNode->setText(TreeWidget::NameCol, tr("Procedures"));
         procsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::ProcedureNode));
         setBold(procsNode, true);
+	// create procsNode
+        QTreeWidgetItem *trigsNode = new QTreeWidgetItem(schemaItem);
+        trigsNode->setText(TreeWidget::NameCol, tr("Triggers"));
+        trigsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TriggerNode));
+        setBold(trigsNode, true);
 
 
         //// TABLES
@@ -205,6 +204,11 @@ TreeWidget::refresh()
 
         insertItems(procsNode, &procsList, TreeWidget::ProcedureItem);
 
+	//// TRIGGERS
+	QStringList trigsList;
+	schema->triggersList(&trigsList);
+
+	insertItems(trigsNode, &trigsList, TreeWidget::TriggerItem);
 
     }
 
@@ -217,13 +221,6 @@ TreeWidget::refresh()
 
     insertItems(indicesNode, &indicesList, TreeWidget::IndexItem);
 
-    //// TRIGGERS
-    dbInst->readTriggers();
-
-    QStringList trigsList;
-    dbInst->triggersList(&trigsList);
-
-    insertItems(trigsNode, &trigsList, TreeWidget::TriggerItem);
 
 
 }

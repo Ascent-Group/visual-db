@@ -27,15 +27,16 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <common/DbSchema.h>
 #include <common/DbTrigger.h>
 
 /*
  * Ctor
  */
-DbTrigger::DbTrigger(QString ipName)
-    : DbObject(ipName)
+DbTrigger::DbTrigger(QString ipSchemaName, QString ipName)
+    : DbObject(ipName), mSchemaName(ipSchemaName)
 {
-
+    setSchema(Database::instance()->findSchema(mSchemaName));
 }
 
 /*
@@ -44,6 +45,24 @@ DbTrigger::DbTrigger(QString ipName)
 DbTrigger::~DbTrigger()
 {
 
+}
+
+/*
+ *
+ */
+DbSchema*
+DbTrigger::schema() const
+{
+    return mSchema;
+}
+
+/*
+ *
+ */
+void
+DbTrigger::setSchema(DbSchema *ipSchema)
+{
+    mSchema = ipSchema;
 }
 
 /*
@@ -89,6 +108,28 @@ QChar
 DbTrigger::enabled() const
 {
     return mEnabled;
+}
+
+/*
+ *
+ */
+QString
+DbTrigger::schemaName() const
+{
+    if (mSchema) {
+	return mSchema->name();
+    }
+
+    return mSchemaName;
+}
+
+/*
+ *
+ */
+QString
+DbTrigger::fullName() const
+{
+    return QString("%1.%2").arg(mSchemaName).arg(mName);
 }
 
 /*

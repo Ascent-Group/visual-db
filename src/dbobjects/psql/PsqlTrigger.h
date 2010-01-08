@@ -35,7 +35,7 @@
 class PsqlTrigger : public DbTrigger
 {
     public:
-        PsqlTrigger(QString ipName);
+        PsqlTrigger(QString ipSchemaName, QString ipName);
         ~PsqlTrigger();
 
         void loadData();

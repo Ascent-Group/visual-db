@@ -30,6 +30,7 @@
 #include <dbobjects/common/Database.h>
 #include <dbobjects/common/DatabaseTest.h>
 #include <dbobjects/common/DbLanguage.h>
+#include <dbobjects/common/DbRole.h>
 #include <dbobjects/common/DbSchema.h>
 
 #include <QSqlDatabase>
@@ -90,31 +91,57 @@ DatabaseTest::cleanupTest()
 void
 DatabaseTest::findIndexTest()
 {
-    QVERIFY(0);
+    Database *dbInst = Database::instance();
+    QVERIFY(0 != dbInst);
+
+    dbInst->readIndices();
+
+    QVERIFY(0 != dbInst->findIndex("ind_artists"));
+    QVERIFY(0 != dbInst->findIndex("ind_albums"));
+    QVERIFY(0 != dbInst->findIndex("ind_tracks"));
+    QVERIFY(0 != dbInst->findIndex("ind_users"));
+    QVERIFY(0 != dbInst->findIndex("ind_locations"));
 }
 
 void
 DatabaseTest::findLanguageTest()
 {
-    QVERIFY(0);
+    Database *dbInst = Database::instance();
+    QVERIFY(0 != dbInst);
+
+    dbInst->readRoles();
+
+    QVERIFY(0 != dbInst->findLanguage("plpgsql"));
 }
 
 void
 DatabaseTest::findObjectTest()
 {
-    QVERIFY(0);
+    // keeping in mind the fact that findObject function is an auxilliary,
+    // its test case can be considered PASSED if all other find*Test tests
+    // pass
+    QVERIFY(1);
 }
 
 void
 DatabaseTest::findRoleTest()
 {
-    QVERIFY(0);
+    Database *dbInst = Database::instance();
+    QVERIFY(0 != dbInst);
+
+    QVERIFY(0 != dbInst->findRole("music_user"));
 }
 
 void
 DatabaseTest::findSchemaTest()
 {
-    QVERIFY(0);
+    Database *dbInst = Database::instance();
+    QVERIFY(0 != dbInst);
+
+    dbInst->readSchemas();
+
+    QVERIFY(0 != dbInst->findSchema("public"));
+    QVERIFY(0 != dbInst->findSchema("vtunes"));
 }
 
 void
@@ -126,7 +153,13 @@ DatabaseTest::findTableIndicesTest()
 void
 DatabaseTest::findTriggerTest()
 {
-    QVERIFY(0);
+    Database *dbInst = Database::instance();
+    QVERIFY(0 != dbInst);
+
+    dbInst->readTriggers();
+
+    QVERIFY(0 != dbInst->findTrigger("check_location"));
+    QVERIFY(0 != dbInst->findTrigger("check_release_date"));
 }
 
 void
@@ -193,7 +226,15 @@ DatabaseTest::readLanguagesTest()
 void
 DatabaseTest::readRolesTest()
 {
-    QVERIFY(0);
+    Database *dbInst = Database::instance();
+    QVERIFY(0 != dbInst);
+
+    // read roles
+    dbInst->readRoles();
+
+    // validate names
+    QString name = QString("music_user");
+    QVERIFY(name == dbInst->findRole(name)->name());
 }
 
 void

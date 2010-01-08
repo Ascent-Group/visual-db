@@ -39,6 +39,9 @@ class DbTrigger : public DbObject
     public:
         virtual ~DbTrigger();
 
+	DbSchema* schema() const;
+	void setSchema(DbSchema *ipSchema);
+
         DbTable* table() const;
         void setTable(DbTable *ipTable);
 
@@ -69,10 +72,15 @@ class DbTrigger : public DbObject
         virtual DbObject::Type type();
         virtual void loadData() = 0;
 
-    protected:
-        DbTrigger(QString ipName);
+	QString schemaName() const;
+        QString fullName() const;
 
+    protected:
+        DbTrigger(QString ipSchemaName, QString ipName);
+
+        QString mSchemaName; // for internal use only
         DbTable *mTable;
+        DbSchema *mSchema;
         DbProcedure *mProcedure;
         // controls in which session_replication_role modes the trigger fires
         // O - origin and local modes

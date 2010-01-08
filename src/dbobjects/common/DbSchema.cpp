@@ -38,6 +38,7 @@
 #include <psql/PsqlProcedure.h>
 #include <psql/PsqlRole.h>
 #include <psql/PsqlTable.h>
+#include <psql/PsqlTrigger.h>
 #include <psql/PsqlView.h>
 
 #include <QtDebug>
@@ -93,6 +94,16 @@ DbSchema::addProcedure(DbProcedure *ipProc)
     }
 }
 
+/*
+ * Add trig to a schema
+ */
+void
+DbSchema::addTrigger(DbTrigger *ipTrig)
+{
+    if (!mTriggers.contains(ipTrig)) {
+	mTriggers.push_back(ipTrig);
+    }
+}
 /*
  * Return a list of tables' names
  */
@@ -175,12 +186,42 @@ DbSchema::proceduresList(QStringList *ipList) const
 }
 
 /*
+ * Returns a list of triggers' names
+ */
+void
+DbSchema::triggersList(QStringList *ipList) const
+{
+    if (0 == ipList) {
+        return;
+    }
+
+    ipList->clear();
+
+    QVector<DbTrigger*>::const_iterator iter;
+
+    for (iter = mTriggers.constBegin(); iter != mTriggers.constEnd(); ++iter) {
+        ipList->append((*iter)->name());
+    }
+
+    //ipList->sort();
+}
+
+/*
  * Returns the number of procs in the given schema
  */
 quint64
 DbSchema::proceduresCount() const
 {
     return mProcedures.count();
+}
+
+/*
+ * Calculates the number of triggers
+ */
+quint16
+DbSchema::triggersCount() const
+{
+    return mTriggers.count();
 }
 
 /*
@@ -208,6 +249,15 @@ DbProcedure*
 DbSchema::findProcedure(const QString &ipProcName) const
 {
     return dynamic_cast<DbProcedure*>(findObject(ipProcName, DbObject::ProcedureObject));
+}
+
+/*
+ * Returns a trigger by its name
+ */
+DbTrigger*
+DbSchema::findTrigger(const QString &ipTrigName) const
+{
+    return dynamic_cast<DbTrigger*>(findObject(ipTrigName, DbObject::TriggerObject));
 }
 
 /*
@@ -543,6 +593,239 @@ DbSchema::readProcedures()
 }
 
 /*
+ * Reads triggers
+ */
+void
+DbSchema::readTriggers()
+{
+    QSqlDatabase db = QSqlDatabase::database("mainConnect");
+    QSqlQuery query(db);
+    QString qstr;
+
+    // clear triggers list
+    mTriggers.clear();
+
+    // get sql driver
+    Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
+
+    // choose a query depending on sql driver
+    switch (sqlDriverType) {
+        case Database::Unknown:
+                        qDebug() << "Database::readTriggers> SqlDriver was not set";
+                        return;
+        case Database::PostgreSQL:
+                        qstr = QString("SELECT "
+                                            "tbl_nsp.nspname AS schema, "
+                                            "tbl.relname AS table, "
+                                            "t.tgname AS name, "
+                                            "proc_nsp.nspname AS proc_schema, "
+                                            "proc.proname AS proc, "
+                                            "t.tgenabled AS enabled, "
+                                            "t.tgisconstraint AS isconstraint, "
+                                            "t.tgconstrname AS constrname, "
+                                            "ref_tbl_nsp.nspname AS ref_schema, "
+                                            "ref_tbl.relname AS ref_table, "
+                                            "t.tgdeferrable AS deferrable, "
+                                            "t.tginitdeferred AS initdeferred, "
+                                            "t.tgnargs AS nargs "
+                                       "FROM "
+                                            "pg_catalog.pg_trigger t, "
+                                            "pg_catalog.pg_class tbl, "
+                                            "pg_catalog.pg_class ref_tbl, "
+                                            "pg_catalog.pg_namespace tbl_nsp, "
+                                            "pg_catalog.pg_namespace ref_tbl_nsp, "
+                                            "pg_catalog.pg_proc proc, "
+                                            "pg_catalog.pg_namespace proc_nsp "
+                                       "WHERE "
+                                            "tbl.oid = t.tgrelid "
+                                            "AND tbl.relnamespace = tbl_nsp.oid "
+                                            "AND t.tgfoid = proc.oid "
+                                            "AND proc.pronamespace = proc_nsp.oid "
+                                            "AND ref_tbl.oid = t.tgconstrrelid "
+                                            "AND tbl_nsp.nspname NOT LIKE 'pg_%' "
+                                            "AND ref_tbl_nsp.nspname NOT LIKE 'pg_%' "
+                                            "AND proc_nsp.nspname NOT LIKE 'pg_%' "
+                                            "AND ref_tbl.relnamespace = ref_tbl_nsp.oid;");
+                        break;
+        case Database::MySQL:
+                        qstr = QString(";");
+                        break;
+        case Database::Oracle:
+        case Database::SQLite:
+        default:
+                        /* temporarily no support for these DBMS */
+                        return;
+                        break;
+    }
+
+#ifdef DEBUG_QUERY
+    qDebug() << "Database::readTriggers> "<< qstr;
+#endif
+
+    // if query failed
+    if (!query.exec(qstr)) {
+        qDebug() << query.lastError().text();
+
+        return;
+    }
+
+    // if query returned nothing
+    if (!query.first()) {
+        qDebug() << "Database::readTriggers> No triggers were found.";
+
+        return;
+    }
+
+    // for every retrieved row
+    do {
+        // declare new trigger object
+        DbTrigger *trig;
+
+        qint32 colId;
+
+        // choose a query depending on sql driver
+        switch (sqlDriverType) {
+            // lyuts: looks like this case is useless. if driver is not set then
+            // previous switch will handle this and return from function.
+            /*case Database::Unknown:
+                            qDebug() << "Database::readTriggers> SqlDriver was not set";
+                            return;
+                            */
+            case Database::PostgreSQL:
+                            colId= query.record().indexOf("name");
+                            Q_ASSERT(colId > 0);
+
+                            trig = new PsqlTrigger(mName, query.value(colId).toString());
+
+
+                            break;
+            case Database::MySQL:
+            case Database::Oracle:
+            case Database::SQLite:
+            default:
+                            qDebug() << "Database::readTriggers> SqlDriver is not supported currently!";
+                            /* temporarily no support for these DBMS */
+                            return;
+                            break;
+
+        }
+
+        // set trig's attributes
+
+        DbSchema *schema = 0;
+        DbTable *table = 0;
+
+        // table
+        colId = query.record().indexOf("schema");
+        Q_ASSERT(colId > 0);
+        QString schemaName = query.value(colId).toString();
+
+        colId = query.record().indexOf("table");
+        Q_ASSERT(colId > 0);
+        QString tableName = query.value(colId).toString();
+
+        schema = Database::instance()->findSchema(schemaName);
+
+        if (schema) {
+            table = schema->findTable(tableName);
+        }
+
+        trig->setTable(table);
+
+
+        // proc
+        colId = query.record().indexOf("proc_schema");
+        Q_ASSERT(colId > 0);
+        QString procSchemaName = query.value(colId).toString();
+
+        colId = query.record().indexOf("proc");
+        Q_ASSERT(colId > 0);
+        QString procName = query.value(colId).toString();
+
+        qDebug() << "Looking for proc_schema: " << procSchemaName;
+        schema = Database::instance()->findSchema(procSchemaName);
+        qDebug() << "proc_schema = " << schema;
+        DbProcedure *proc = 0;
+
+        if (schema) {
+            proc = schema->findProcedure(procName);
+        }
+
+        qDebug() << proc;
+
+        trig->setProcedure(proc);
+
+        // enabled
+        colId = query.record().indexOf("enabled");
+        Q_ASSERT(colId > 0);
+        trig->setEnabled(query.value(colId).toChar());
+
+        // isconstraint
+        colId = query.record().indexOf("isconstraint");
+        Q_ASSERT(colId > 0);
+        trig->setConstraint(query.value(colId).toBool());
+
+        // constrname
+        colId = query.record().indexOf("constrname");
+        Q_ASSERT(colId > 0);
+        trig->setConstraintName(query.value(colId).toString());
+
+        // ref table
+        colId = query.record().indexOf("ref_schema");
+        Q_ASSERT(colId > 0);
+        QString refSchemaName = query.value(colId).toString();
+
+        colId = query.record().indexOf("ref_table");
+        Q_ASSERT(colId > 0);
+        QString refTableName = query.value(colId).toString();
+
+        schema = Database::instance()->findSchema(refSchemaName);
+
+        if (schema) {
+            table = schema->findTable(refTableName);
+        }
+
+        qDebug() << table;
+
+        trig->setReferencedTable(table);
+
+        // deferrable
+        colId = query.record().indexOf("deferrable");
+        Q_ASSERT(colId > 0);
+        trig->setDeferrable(query.value(colId).toBool());
+
+        // initdeferred
+        colId = query.record().indexOf("initdeferred");
+        Q_ASSERT(colId > 0);
+        trig->setInitiallyDeferred(query.value(colId).toBool());
+
+        // nargs
+        colId = query.record().indexOf("nargs");
+        Q_ASSERT(colId > 0);
+        trig->setNumArgs(query.value(colId).toInt());
+
+
+        /* temporary debug output */
+#if DEBUG_TRACE
+       qDebug() << "Database::readTriggers> name = " << trig->name();
+       qDebug() << "Database::readTriggers> table = " << trig->table()->name();
+       qDebug() << "Database::readTriggers> proc = " << trig->procedure()->name();
+       qDebug() << "Database::readTriggers> enabled = " << trig->enabled();
+       qDebug() << "Database::readTriggers> isConstraint = " << trig->isConstraint();
+       qDebug() << "Database::readTriggers> constraintName = " << trig->constraintName();
+       qDebug() << "Database::readTriggers> ref_table = " << trig->referencedTable()->name();
+       qDebug() << "Database::readTriggers> isDeferrable = " << trig->isDeferrable();
+       qDebug() << "Database::readTriggers> isInitiallyDeferred = " << trig->isInitiallyDeferred();
+       qDebug() << "Database::readTriggers> nargs = " << trig->numArgs();
+#endif
+
+        // add trigger
+        addTrigger(trig);
+
+    } while (query.next());
+}
+
+/*
  * Cleanup
  */
 void
@@ -561,6 +844,9 @@ DbSchema::cleanup()
 
     qDeleteAll(mProcedures);
     mProcedures.clear();
+
+    qDeleteAll(mTriggers);
+    mTriggers.clear();
 }
 
 /*
@@ -598,6 +884,11 @@ DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
                 proceduresList(&list);
                 break;
 
+        case DbObject::TriggerObject:
+                count = mTriggers.count();
+                triggersList(&list);
+                break;
+
         case DbObject::UnkObject:
         default:
                 qDebug() << "DbSchema::findObject> Unknown object type";
@@ -631,6 +922,10 @@ DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
             case DbObject::ProcedureObject:
                     object = mProcedures.at(i);
                     break;
+	    case DbObject::TriggerObject:
+                    object = mTriggers.at(i);
+                    break;
+
             // useless - done just to remove warning
             case DbObject::UnkObject:
             default:

@@ -40,8 +40,8 @@
 /*
  * Ctor
  */
-PsqlTrigger::PsqlTrigger(QString ipName)
-    : DbTrigger(ipName)
+PsqlTrigger::PsqlTrigger(QString ipSchemaName, QString ipName)
+    : DbTrigger(ipSchemaName, ipName)
 {
 
 }

@@ -37,7 +37,6 @@ class DbIndex;
 class DbLanguage;
 class DbRole;
 class DbSchema;
-class DbTrigger;
 
 class Database
 {
@@ -58,7 +57,6 @@ class Database
         void addRole(DbRole *);
         void addIndex(DbIndex *);
         void addLanguage(DbLanguage *);
-        void addTrigger(DbTrigger *);
 
         void schemasList(QStringList *ipList) const;
         quint64 schemasCount() const;
@@ -72,9 +70,6 @@ class Database
         void languagesList(QStringList *ipList) const;
         quint8 languagesCount() const;
 
-        void triggersList(QStringList *ipList) const;
-        quint16 triggersCount() const;
-
         DbSchema* findSchema(const QString &ipSchemaName) const;
 
         // lyuts: maybe we will need this
@@ -85,7 +80,6 @@ class Database
         DbRole* findRole(const QString &ipRoleName) const;
         DbIndex* findIndex(const QString &ipIndexName) const;
         DbLanguage* findLanguage(const QString &ipLangName) const;
-        DbTrigger* findTrigger(const QString &ipTrigName) const;
 
         quint64 findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) const;        
 
@@ -96,7 +90,6 @@ class Database
         void readRoles();
         void readIndices();
         void readLanguages();
-        void readTriggers();
 
         void cleanup();
 
@@ -112,7 +105,6 @@ class Database
         QVector<DbRole*> mRoles;
         QVector<DbIndex*> mIndices;
         QVector<DbLanguage*> mLanguages;
-        QVector<DbTrigger*> mTriggers;
         SqlDriverType mSqlDriver;
 
 	friend class DatabaseManager;

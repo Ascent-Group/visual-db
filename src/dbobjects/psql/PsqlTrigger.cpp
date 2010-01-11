@@ -94,11 +94,12 @@ PsqlTrigger::loadData()
                         "AND proc.pronamespace = proc_nsp.oid "
                         "AND ref_tbl.oid = t.tgconstrrelid "
                         "AND ref_tbl.relnamespace = ref_tbl_nsp.oid "
-                        "AND tbl_nsp.nspname NOT LIKE 'pg_%' "
-                        "AND ref_tbl_nsp.nspname NOT LIKE 'pg_%' "
-                        "AND proc_nsp.nspname NOT LIKE 'pg_%' "
+                        "AND tbl_nsp.nspname = '%2' "
+                        //"AND tbl_nsp.nspname NOT LIKE 'pg_%' "
+                        //"AND ref_tbl_nsp.nspname NOT LIKE 'pg_%' "
+                        //"AND proc_nsp.nspname NOT LIKE 'pg_%' "
                         "AND t.tgname = '%1';")
-            .arg(mName);
+            .arg(mName).arg(schemaName());
 
 #ifdef DEBUG_QUERY
     qDebug() << "PsqlTrigger::loadData> " << qstr;

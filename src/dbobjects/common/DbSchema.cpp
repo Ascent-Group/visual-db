@@ -611,7 +611,7 @@ DbSchema::readTriggers()
     // choose a query depending on sql driver
     switch (sqlDriverType) {
         case Database::Unknown:
-                        qDebug() << "Database::readTriggers> SqlDriver was not set";
+                        qDebug() << "DbSchema::readTriggers> SqlDriver was not set";
                         return;
         case Database::PostgreSQL:
                         qstr = QString("SELECT "
@@ -642,10 +642,12 @@ DbSchema::readTriggers()
                                             "AND t.tgfoid = proc.oid "
                                             "AND proc.pronamespace = proc_nsp.oid "
                                             "AND ref_tbl.oid = t.tgconstrrelid "
-                                            "AND tbl_nsp.nspname NOT LIKE 'pg_%' "
-                                            "AND ref_tbl_nsp.nspname NOT LIKE 'pg_%' "
-                                            "AND proc_nsp.nspname NOT LIKE 'pg_%' "
-                                            "AND ref_tbl.relnamespace = ref_tbl_nsp.oid;");
+                                            "AND tbl_nsp.nspname = '%1' "
+                                            //"AND ref_tbl_nsp.nspname NOT LIKE 'pg_%' "
+                                            //"AND proc_nsp.nspname NOT LIKE 'pg_%' "
+                                            "AND ref_tbl.relnamespace = ref_tbl_nsp.oid;")
+											.arg(mName);
+						qDebug() << qstr;
                         break;
         case Database::MySQL:
                         qstr = QString(";");
@@ -692,7 +694,7 @@ DbSchema::readTriggers()
                             return;
                             */
             case Database::PostgreSQL:
-                            colId= query.record().indexOf("name");
+                            colId = query.record().indexOf(/*"name"*/"constrname");
                             Q_ASSERT(colId > 0);
 
                             trig = new PsqlTrigger(mName, query.value(colId).toString());
@@ -712,26 +714,20 @@ DbSchema::readTriggers()
 
         // set trig's attributes
 
-        DbSchema *schema = 0;
-        DbTable *table = 0;
 
         // table
         colId = query.record().indexOf("schema");
         Q_ASSERT(colId > 0);
         QString schemaName = query.value(colId).toString();
+		trig->setSchema(this);
 
         colId = query.record().indexOf("table");
         Q_ASSERT(colId > 0);
         QString tableName = query.value(colId).toString();
 
-        schema = Database::instance()->findSchema(schemaName);
-
-        if (schema) {
-            table = schema->findTable(tableName);
-        }
-
+        DbTable *table = 0;
+        table = findTable(tableName);
         trig->setTable(table);
-
 
         // proc
         colId = query.record().indexOf("proc_schema");
@@ -743,7 +739,7 @@ DbSchema::readTriggers()
         QString procName = query.value(colId).toString();
 
         qDebug() << "Looking for proc_schema: " << procSchemaName;
-        schema = Database::instance()->findSchema(procSchemaName);
+        DbSchema *schema = Database::instance()->findSchema(procSchemaName);
         qDebug() << "proc_schema = " << schema;
         DbProcedure *proc = 0;
 

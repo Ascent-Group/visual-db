@@ -87,7 +87,7 @@ void PsqlIndex::loadData()
                         "pgi.indrelid = rel.oid "
                         "AND pgi.indexrelid = index.oid "
                         "AND pgn.oid = rel.relnamespace "
-                        "AND index.relname NOT LIKE 'pg_%' "
+                        //"AND index.relname NOT LIKE 'pg_%' "
                         "AND index.relname = '%1';")
             .arg(mName);
 

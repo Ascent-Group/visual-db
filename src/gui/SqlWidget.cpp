@@ -92,7 +92,8 @@ SqlWidget::runQuery()
     mOffset = -1;
     readPortion(SqlWidget::NextPortion);
 
-    MainWindow *mainWindow = dynamic_cast<MainWindow*>(parentWidget()->parentWidget()->parentWidget());
+    MainWindow *mainWindow = dynamic_cast<MainWindow*>(parentWidget()->parentWidget()->parentWidget()->parentWidget());
+
     mainWindow->statusBar()->showMessage(tr("Query succeeded"));
 }
 

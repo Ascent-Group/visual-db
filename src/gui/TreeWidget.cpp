@@ -276,9 +276,9 @@ TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, Tree
     for (iter = ipList->begin(); iter != ipList->end(); ++iter) {
         QString name = *iter;
 
-        // create an item
-        QTreeWidgetItem *item = new QTreeWidgetItem(ipParentItem);
-        item->setText(TreeWidget::NameCol, name);
-        item->setText(TreeWidget::IdCol, QString::number(ipType));
+		// create an item
+		QTreeWidgetItem *item = new QTreeWidgetItem(ipParentItem);
+		item->setText(TreeWidget::NameCol, name);
+		item->setText(TreeWidget::IdCol, QString::number(ipType));
     }
 }

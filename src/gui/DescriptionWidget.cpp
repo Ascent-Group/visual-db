@@ -624,13 +624,14 @@ DescriptionWidget::describe(const DbTrigger *ipTrigger)
 
     labels << tr("Name")
             << tr("Table")
+			<< tr("Procedure")
             << tr("Enabled")
             << tr("Is constraint")
             << tr("Constraint name")
             << tr("Referenced table")
             << tr("Is deferrable")
             << tr("Is initially deferred")
-            << tr("Number\nof\arguments");
+            << tr("Number\nof\narguments");
 
     ui.mTable->setHorizontalHeaderLabels(labels);
 
@@ -664,7 +665,7 @@ DescriptionWidget::describe(const DbTrigger *ipTrigger)
     // fill enabled
     QTableWidgetItem *enabledItem = new QTableWidgetItem();
     enabledItem->setTextAlignment(Qt::AlignHCenter);
-    enabledItem->setText(enabled);
+    enabledItem->setText(QString(enabled));
     ui.mTable->setItem(0, DescriptionWidget::TriggerEnabledCol, enabledItem);
 
     // fill isConstraint flag

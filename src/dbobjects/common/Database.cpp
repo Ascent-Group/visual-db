@@ -359,7 +359,8 @@ Database::readSchemas()
 				    "FROM pg_catalog.pg_namespace pgn "
 					"left join pg_roles roles on roles.oid = pgn.nspowner "
 					"left join pg_description descr on descr.objoid = pgn.oid "
-				    "WHERE nspname NOT LIKE 'pg_%';");
+				    ";");
+				    //"WHERE nspname NOT LIKE 'pg_%';");
 			break;
         case Database::MySQL:
 			qstr = QString("SELECT schema_name "
@@ -418,8 +419,10 @@ Database::readSchemas()
         schema->readTables();
         // read views
         schema->readViews();
-	// read procs
-	schema->readProcedures();
+		// read procs
+		schema->readProcedures();
+		// read trigs
+		schema->readTriggers();
 
         // add schema - not needed anymore, done in schema's ctor
         //addSchema(schema);
@@ -615,7 +618,7 @@ Database::readIndices()
                                         "WHERE "
                                             "pgi.indrelid = rel.oid "
                                             "AND pgn.oid = rel.relnamespace "
-                                            "AND index.relname NOT LIKE 'pg_%' "
+                                            //"AND index.relname NOT LIKE 'pg_%' "
                                             "AND pgi.indexrelid = index.oid;");
                         break;
         case Database::MySQL:

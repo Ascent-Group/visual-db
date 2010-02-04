@@ -79,7 +79,7 @@ PsqlTable::loadData()
                         "SELECT pgc.oid FROM pg_catalog.pg_class pgc "
                         "LEFT JOIN pg_catalog.pg_namespace pgn ON pgn.oid = pgc.relnamespace "
                         "WHERE pgc.relname = '%1' and pgn.nspname = '%2'); ")
-//			"AND pg_catalog.pg_table_is_visible(pgc.oid));")
+//          "AND pg_catalog.pg_table_is_visible(pgc.oid));")
         .arg(mName)
         .arg(mSchemaName);
 
@@ -182,9 +182,9 @@ PsqlTable::checkPrimaryKey(const QString &ipColumnName) const
  */
 bool
 PsqlTable::checkForeignKey(const QString &ipColumnName,
-			   QString *opForeignSchemaName,
-			   QString *opForeignTableName,
-			   QStringList *opForeignFieldsNames) const
+               QString *opForeignSchemaName,
+               QString *opForeignTableName,
+               QStringList *opForeignFieldsNames) const
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -238,7 +238,7 @@ PsqlTable::checkForeignKey(const QString &ipColumnName,
 
     // if query result is empty
     if (!query.first()) {
-	return flag;
+    return flag;
     }
 
     // if we are here then the result is not empty
@@ -274,7 +274,7 @@ PsqlTable::checkUnique(const QString &ipColumnName) const
     QString qstr = QString("SELECT "
                                 "pgc.relname, "
                                 "pga.attname, "
-				"pgc.relnamespace "
+                "pgc.relnamespace "
                             "FROM "
                                 "pg_constraint constr, "
                                 "pg_class pgc, "

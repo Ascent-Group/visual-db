@@ -57,21 +57,21 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
     public:
-	MainWindow();
+    MainWindow();
 
-	void printMsg(QString ipText) const;
+    void printMsg(QString ipText) const;
 
     private:
-	Ui::MainWindow ui;
+    Ui::MainWindow ui;
 
-	// These actions are undo stack actions
-	// Designer does NOT let us create them
-	// => declared here, not in designer
-	//QAction *mUndoAction;
-	//QAction *mRedoAction;
+    // These actions are undo stack actions
+    // Designer does NOT let us create them
+    // => declared here, not in designer
+    //QAction *mUndoAction;
+    //QAction *mRedoAction;
 
-	// These menus initially are not attached
-	// to any gui element
+    // These menus initially are not attached
+    // to any gui element
         QMenu *mTreeItemMenu;
         QMenu *mGroupMenu;
 
@@ -79,48 +79,48 @@ class MainWindow : public QMainWindow
 
         QSettings mSettings;
         DbParameters *mDbParameters;
-	ProxyParameters *mProxyParameters;
+    ProxyParameters *mProxyParameters;
 
-	QUndoStack *mUndoStack;
+    QUndoStack *mUndoStack;
 
         static const int STATUS_BAR_DEFAULT_WIDTH = 700;
         static const int STATUS_BAR_DEFAULT_HEIGHT = 20;
 
     private:
-	void createActions();
-	void setEnableForActions(bool ipFlag);
-//	void showConnectionDialog(DbParameters *, ProxyParameters *, bool);
-	void createMenus();
-	void updateSessionMenu();
-	void createStatusBar();
+    void createActions();
+    void setEnableForActions(bool ipFlag);
+//  void showConnectionDialog(DbParameters *, ProxyParameters *, bool);
+    void createMenus();
+    void updateSessionMenu();
+    void createStatusBar();
 
         void closeEvent(QCloseEvent *ipEvent);
 
-	void saveToXml(QString);
-	void loadFromXml(QString);
+    void saveToXml(QString);
+    void loadFromXml(QString);
 
         void initSession();
 
     private slots:
-	// this slot is not standard that's why it is declared here
-	int showConnectionDialog(bool ipLoadSession = false);
-	void addCommand(QUndoCommand*);
-	void reloadData();
-	void saveSession();
-	void loadSession();
-	void loadLastSession();
-	void setFullScreen(bool);
-	void queryData();
-	void describeObject();
-	void drawFullDbScheme();
-	void addTableItem();
-	void addTableItem(QTreeWidgetItem*, int);
-	void setDockTableListVisible(bool);
-	void setDockLogPanelVisible(bool);
-	void printPreview(QPrinter*);
-	void showOptionsDialog();
-	void showPrintPreviewDialog();
-	void showPrintDialog();
+    // this slot is not standard that's why it is declared here
+    int showConnectionDialog(bool ipLoadSession = false);
+    void addCommand(QUndoCommand*);
+    void reloadData();
+    void saveSession();
+    void loadSession();
+    void loadLastSession();
+    void setFullScreen(bool);
+    void queryData();
+    void describeObject();
+    void drawFullDbScheme();
+    void addTableItem();
+    void addTableItem(QTreeWidgetItem*, int);
+    void setDockTableListVisible(bool);
+    void setDockLogPanelVisible(bool);
+    void printPreview(QPrinter*);
+    void showOptionsDialog();
+    void showPrintPreviewDialog();
+    void showPrintDialog();
 
 };
 

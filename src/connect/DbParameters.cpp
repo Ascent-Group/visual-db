@@ -148,23 +148,23 @@ createConnection(DbParameters &ipConnection)
         // check only if fie exists
         if (QFile::exists(ipConnection.dbName())) {
             db.open();
-	    success = true;
-	} else {
-	    success = false;
-	}
+        success = true;
+    } else {
+        success = false;
+    }
     // of other DBMS
     } else {
         // check credentials and host
         db.setHostName(ipConnection.dbHost());
         db.setUserName(ipConnection.dbUser());
         db.setPassword(ipConnection.dbPassword());
-	db.setPort(ipConnection.dbPort());
+    db.setPort(ipConnection.dbPort());
 
         if (!db.open()) {
-	    success = false;
-	} else {
-	    success = true;
-	}
+        success = false;
+    } else {
+        success = true;
+    }
     }
 
     // initialize Database for further use and get schemas

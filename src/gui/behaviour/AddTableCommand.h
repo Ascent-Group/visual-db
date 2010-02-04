@@ -42,16 +42,16 @@ class QGraphicsItem;
 class AddTableCommand : public QUndoCommand
 {
     public:
-	AddTableCommand(GraphicsScene *, QList<QGraphicsItem *>, QUndoCommand *parent = 0);
-	~AddTableCommand();
+    AddTableCommand(GraphicsScene *, QList<QGraphicsItem *>, QUndoCommand *parent = 0);
+    ~AddTableCommand();
 
-	void undo();
-	void redo();
+    void undo();
+    void redo();
 
     private:
-	QList<QGraphicsItem *> mTableList;
-	GraphicsScene *mScene;
-	QPointF mInitialPosition;
+    QList<QGraphicsItem *> mTableList;
+    GraphicsScene *mScene;
+    QPointF mInitialPosition;
 };
 
 #endif // ADDTABLECOMMAND_H

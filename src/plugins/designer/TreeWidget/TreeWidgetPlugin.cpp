@@ -40,7 +40,7 @@ void
 TreeWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-	return;
+    return;
     }
 
     initialized = true;
@@ -100,23 +100,23 @@ QString
 TreeWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-	" <widget class=\"TreeWidget\" name=\"mTreeWidget\">\n"
-	"  <property name=\"geometry\">\n"
-	"   <rect>\n"
-	"    <x>0</x>\n"
-	"    <y>0</y>\n"
-	"    <width>100</width>\n"
-	"    <height>100</height>\n"
-	"   </rect>\n"
-	"  </property>\n"
-	"  <property name=\"toolTip\" >\n"
-	"   <string>Tree widget</string>\n"
-	"  </property>\n"
-	"  <property name=\"whatsThis\" >\n"
-	"   <string>The tree widget is used for displaying db objects.</string>\n"
-	"  </property>\n"
-	" </widget>\n"
-	"</ui>\n";
+    " <widget class=\"TreeWidget\" name=\"mTreeWidget\">\n"
+    "  <property name=\"geometry\">\n"
+    "   <rect>\n"
+    "    <x>0</x>\n"
+    "    <y>0</y>\n"
+    "    <width>100</width>\n"
+    "    <height>100</height>\n"
+    "   </rect>\n"
+    "  </property>\n"
+    "  <property name=\"toolTip\" >\n"
+    "   <string>Tree widget</string>\n"
+    "  </property>\n"
+    "  <property name=\"whatsThis\" >\n"
+    "   <string>The tree widget is used for displaying db objects.</string>\n"
+    "  </property>\n"
+    " </widget>\n"
+    "</ui>\n";
 }
 
 QString

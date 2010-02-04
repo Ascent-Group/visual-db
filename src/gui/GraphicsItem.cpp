@@ -132,11 +132,11 @@ GraphicsItem::updatePolygon()
 {
     mPolygon.clear();
     mPolygon
-	<< QPointF(mLeftTopPoint)
-	<< QPointF(mRightBottomPoint.x(), mLeftTopPoint.y())
-	<< QPointF(mRightBottomPoint)
-	<< QPointF(mLeftTopPoint.x(), mRightBottomPoint.y())
-	<< QPointF(mLeftTopPoint);
+    << QPointF(mLeftTopPoint)
+    << QPointF(mRightBottomPoint.x(), mLeftTopPoint.y())
+    << QPointF(mRightBottomPoint)
+    << QPointF(mLeftTopPoint.x(), mRightBottomPoint.y())
+    << QPointF(mLeftTopPoint);
     setPolygon(mPolygon);
 }
 
@@ -387,13 +387,13 @@ GraphicsItem::adjustSize()
     // find the maximum width among the item's field
     qreal optimalWidth = MIN_WIDTH;
     if (optimalWidth < mTitleItem->document()->idealWidth()) {
-	optimalWidth = mTitleItem->document()->idealWidth();
+    optimalWidth = mTitleItem->document()->idealWidth();
     }
     for (int i = 0; i < mFieldItems.size(); ++i) {
-	QGraphicsTextItem *fieldItem = mFieldItems.at(i);
-	if (optimalWidth < fieldItem->document()->idealWidth()) {
-	    optimalWidth = fieldItem->document()->idealWidth();
-	}
+    QGraphicsTextItem *fieldItem = mFieldItems.at(i);
+    if (optimalWidth < fieldItem->document()->idealWidth()) {
+        optimalWidth = fieldItem->document()->idealWidth();
+    }
     }
 
     // calculate optimal width

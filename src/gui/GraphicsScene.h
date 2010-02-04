@@ -53,87 +53,87 @@ class GraphicsScene : public QGraphicsScene {
     Q_OBJECT
 
     public:
-	static const int LOW_GRID_DX = 10;
-	static const int LOW_GRID_DY = 10;
+    static const int LOW_GRID_DX = 10;
+    static const int LOW_GRID_DY = 10;
         static const int DEFAULT_WIDTH = 2000;
         static const int DEFAULT_HEIGHT = 1500;
 
     public:
-	GraphicsScene();
-	~GraphicsScene();
+    GraphicsScene();
+    ~GraphicsScene();
 
-	void addTableItems(const QList<QGraphicsItem *> &);
-	void setSchemeMenu(QMenu *);
-	void setTableMenu(QMenu *);
-	TableItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
-	void deleteTableItems(QList<QGraphicsItem *>);
-	void setAcceptsHoverEvents(bool);
-	void refreshLegend();
-	void updateLegend();
-	void drawRelations();
-	void createRelations(TableItem *);
-	TableItem *newTableItem(QString, QString, QMenu *);
-	void setTableColor(TableItem *, QColor);
-	bool moveMode() const;
+    void addTableItems(const QList<QGraphicsItem *> &);
+    void setSchemeMenu(QMenu *);
+    void setTableMenu(QMenu *);
+    TableItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
+    void deleteTableItems(QList<QGraphicsItem *>);
+    void setAcceptsHoverEvents(bool);
+    void refreshLegend();
+    void updateLegend();
+    void drawRelations();
+    void createRelations(TableItem *);
+    TableItem *newTableItem(QString, QString, QMenu *);
+    void setTableColor(TableItem *, QColor);
+    bool moveMode() const;
 
     signals:
-	void tableMoved(QList <QGraphicsItem *>, const QPointF &);
+    void tableMoved(QList <QGraphicsItem *>, const QPointF &);
 
     public slots:
-	QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int);
-	void setFieldsTypesVisible();
-	void setFieldsTypesInvisible();
-	void setIndicesVisible(bool);
+    QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int);
+    void setFieldsTypesVisible();
+    void setFieldsTypesInvisible();
+    void setIndicesVisible(bool);
         void setTableColor();
-	void selectAllTables();
-	void adjustTables();
-	void groupItems();
-	void ungroupItems();
-	void colorizeAccordingSchemas();
-	void showGrid(bool);
-	void alignToGrid(bool);
-	void divideIntoPages(bool);
-	void showLegend(bool);
-	void moveLegend(int, int);
-	void selectAllTablesInSchema();
-	void setMoveMode(bool);
+    void selectAllTables();
+    void adjustTables();
+    void groupItems();
+    void ungroupItems();
+    void colorizeAccordingSchemas();
+    void showGrid(bool);
+    void alignToGrid(bool);
+    void divideIntoPages(bool);
+    void showLegend(bool);
+    void moveLegend(int, int);
+    void selectAllTablesInSchema();
+    void setMoveMode(bool);
 
     protected:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
-	void mousePressEvent(QGraphicsSceneMouseEvent *);
-	void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
-	void mouseMoveEvent(QGraphicsSceneMouseEvent *);
-	void drawBackground(QPainter *, const QRectF &);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
+    void mousePressEvent(QGraphicsSceneMouseEvent *);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *);
+    void drawBackground(QPainter *, const QRectF &);
 
     private:
-	QSettings mSettings;
+    QSettings mSettings;
 
-	QPointF mStartSelect;
-	QPointF mEndSelect;
-	QGraphicsPathItem *mSelectionPath;
+    QPointF mStartSelect;
+    QPointF mEndSelect;
+    QGraphicsPathItem *mSelectionPath;
 
-	bool mMoveMode;
-	Legend *mLegend;
+    bool mMoveMode;
+    Legend *mLegend;
 
-	QMenu *mSchemeMenu;
-	QMenu *mTableMenu;
-	QVector<TableItem *> mTables;
+    QMenu *mSchemeMenu;
+    QMenu *mTableMenu;
+    QVector<TableItem *> mTables;
 
-	QPointF mOldPos;
+    QPointF mOldPos;
 
     private:
-	TableItem *findTableItem(const QString &, const QString &);
-	void setFieldsTypesVisible(QList<QGraphicsItem *>, bool);
-	void setIndicesVisible(QList<QGraphicsItem *>, bool);
-	void setTableColor(QList<QGraphicsItem *>, QColor);
-	void adjustTables(QList<QGraphicsItem *>);
-	void groupItems(QList<QGraphicsItem *>);
-	void ungroupItems(QList<QGraphicsItem *>);
-	void drawGrid(QPainter *);
-	void divideIntoPages(QPainter *);
+    TableItem *findTableItem(const QString &, const QString &);
+    void setFieldsTypesVisible(QList<QGraphicsItem *>, bool);
+    void setIndicesVisible(QList<QGraphicsItem *>, bool);
+    void setTableColor(QList<QGraphicsItem *>, QColor);
+    void adjustTables(QList<QGraphicsItem *>);
+    void groupItems(QList<QGraphicsItem *>);
+    void ungroupItems(QList<QGraphicsItem *>);
+    void drawGrid(QPainter *);
+    void divideIntoPages(QPainter *);
 
     private slots:
-	void resize(int);
+    void resize(int);
 };
 
 #endif // GRAPHICSSCENE_H

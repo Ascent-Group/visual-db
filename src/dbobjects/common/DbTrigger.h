@@ -39,8 +39,8 @@ class DbTrigger : public DbObject
     public:
         virtual ~DbTrigger();
 
-		DbSchema* schema() const;
-		void setSchema(DbSchema *ipSchema);
+        DbSchema* schema() const;
+        void setSchema(DbSchema *ipSchema);
 
         DbTable* table() const;
         void setTable(DbTable *ipTable);
@@ -72,7 +72,7 @@ class DbTrigger : public DbObject
         virtual DbObject::Type type();
         virtual void loadData() = 0;
 
-		QString schemaName() const;
+        QString schemaName() const;
         QString fullName() const;
 
     protected:

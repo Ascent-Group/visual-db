@@ -99,8 +99,8 @@ PreferencesPage::folder()
     dialog.setFileMode(QFileDialog::DirectoryOnly);
     QStringList fileNames;
     if (dialog.exec()) {
-	fileNames = dialog.selectedFiles();
-	ui.mSessionDirectoryEdit->setText(fileNames.first() + "/");
+    fileNames = dialog.selectedFiles();
+    ui.mSessionDirectoryEdit->setText(fileNames.first() + "/");
     }
 }
 

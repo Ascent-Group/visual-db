@@ -50,12 +50,12 @@ class DbTable : public DbObject
         QString schemaName() const;
         QString fullName() const;
 
-	// params: [in] int ipColId
-	// specifies the index of a column
-	//  e.g.
-	// (+)id 0 1 2 3 4  5   6  7
-	// col   A B C D E  F   G  H
-	// (-)id 0 . . . . -3  -2 -1
+    // params: [in] int ipColId
+    // specifies the index of a column
+    //  e.g.
+    // (+)id 0 1 2 3 4  5   6  7
+    // col   A B C D E  F   G  H
+    // (-)id 0 . . . . -3  -2 -1
         QString columnName(qint16 ipColId) const;
         QString columnType(qint16 ipColId) const;
         bool isColumnNullable(qint16 ipColId) const;
@@ -87,7 +87,7 @@ class DbTable : public DbObject
             bool isPrimaryKey;
             bool isForeignKey;
             QString foreignSchemaName;
-	    QString foreignTableName;
+        QString foreignTableName;
             QStringList foreignFieldNames;
             bool isUnique;
         };

@@ -77,9 +77,9 @@ void
 TableItemGroup::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     foreach (QGraphicsItem *item, children()) {
-	if (item->type() == TableItem::Type) {
-	    qgraphicsitem_cast<TableItem *>(item)->onPressEvent(ipEvent);
-	}
+    if (item->type() == TableItem::Type) {
+        qgraphicsitem_cast<TableItem *>(item)->onPressEvent(ipEvent);
+    }
     }
 }
 
@@ -87,9 +87,9 @@ void
 TableItemGroup::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     foreach (QGraphicsItem *item, children()) {
-	if (item->type() == TableItem::Type) {
-	    qgraphicsitem_cast<TableItem *>(item)->onMoveEvent(ipEvent);
-	}
+    if (item->type() == TableItem::Type) {
+        qgraphicsitem_cast<TableItem *>(item)->onMoveEvent(ipEvent);
+    }
     }
 }
 
@@ -97,9 +97,9 @@ void
 TableItemGroup::hoverMoveEvent(QGraphicsSceneHoverEvent *ipEvent)
 {
     foreach (QGraphicsItem *item, children()) {
-	if (item->type() == TableItem::Type) {
-	    qgraphicsitem_cast<TableItem *>(item)->onHoverEvent(ipEvent);
-	}
+    if (item->type() == TableItem::Type) {
+        qgraphicsitem_cast<TableItem *>(item)->onHoverEvent(ipEvent);
+    }
     }
 }
 */
@@ -111,7 +111,7 @@ void
 TableItemGroup::contextMenuEvent(QGraphicsSceneContextMenuEvent *ipEvent)
 {
     if (mContextMenu == 0) {
-	return;
+    return;
     }
 
     // show context menu
@@ -126,11 +126,11 @@ TableItemGroup::toXml(QDomDocument &ipDoc)
 {
     QDomElement element = ipDoc.createElement("tableGroup");
     foreach (QGraphicsItem *item, childItems()) {
-	if (qgraphicsitem_cast<TableItemGroup *>(item)) {
-	    element.appendChild(qgraphicsitem_cast<TableItemGroup *>(item)->toXml(ipDoc));
-	} else if (qgraphicsitem_cast<TableItem *>(item)) {
-	    element.appendChild(qgraphicsitem_cast<TableItem *>(item)->toXml(ipDoc));
-	}
+    if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+        element.appendChild(qgraphicsitem_cast<TableItemGroup *>(item)->toXml(ipDoc));
+    } else if (qgraphicsitem_cast<TableItem *>(item)) {
+        element.appendChild(qgraphicsitem_cast<TableItem *>(item)->toXml(ipDoc));
+    }
     }
     return element;
 }

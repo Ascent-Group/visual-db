@@ -59,22 +59,22 @@ LogPanel::saveToFile()
     QString text = ui.mOutputEdit->toPlainText();
 
     if (0 < text.trimmed().length()) {
-	QString fileName = QFileDialog::getSaveFileName(this);
+    QString fileName = QFileDialog::getSaveFileName(this);
 
-	if (fileName.isEmpty()) {
-	    return;
-	}
+    if (fileName.isEmpty()) {
+        return;
+    }
 
-	QFile file(fileName);
+    QFile file(fileName);
 
-	if (!file.open(QIODevice::Text)) {
-	    QMessageBox::critical(this, tr("Error"), tr("Unable to open file!"), tr("Ok"));
-	    return;
-	}
+    if (!file.open(QIODevice::Text)) {
+        QMessageBox::critical(this, tr("Error"), tr("Unable to open file!"), tr("Ok"));
+        return;
+    }
 
-	file.write(text.toLocal8Bit());
+    file.write(text.toLocal8Bit());
 
-	file.close();
+    file.close();
     }
 }
 

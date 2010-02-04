@@ -38,19 +38,19 @@
 class Legend : public GraphicsItem
 {
     public:
-	Legend();
-	~Legend();
-	virtual int type() const;
+    Legend();
+    ~Legend();
+    virtual int type() const;
 
-	void refresh();
-	void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *); 
+    void refresh();
+    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *); 
 
     public:
-	enum { Type = UserType + 7 };
+    enum { Type = UserType + 7 };
 
     private:
-	static const int DEFAULT_X = 335;
-	static const int DEFAULT_Y = 15;
+    static const int DEFAULT_X = 335;
+    static const int DEFAULT_Y = 15;
 };
 
 #endif // LEGEND_H

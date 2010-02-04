@@ -68,7 +68,7 @@ void
 DbSchema::addTable(DbTable *ipTable)
 {
     if (!mTables.contains(ipTable)) {
-	mTables.push_back(ipTable);
+    mTables.push_back(ipTable);
     }
 }
 
@@ -79,7 +79,7 @@ void
 DbSchema::addView(DbView *ipView)
 {
     if (!mViews.contains(ipView)) {
-	mViews.push_back(ipView);
+    mViews.push_back(ipView);
     }
 }
 
@@ -90,7 +90,7 @@ void
 DbSchema::addProcedure(DbProcedure *ipProc)
 {
     if (!mProcedures.contains(ipProc)) {
-	mProcedures.push_back(ipProc);
+    mProcedures.push_back(ipProc);
     }
 }
 
@@ -101,7 +101,7 @@ void
 DbSchema::addTrigger(DbTrigger *ipTrig)
 {
     if (!mTriggers.contains(ipTrig)) {
-	mTriggers.push_back(ipTrig);
+    mTriggers.push_back(ipTrig);
     }
 }
 /*
@@ -282,61 +282,61 @@ DbSchema::readTables()
         case Database::Unknown:
                         qDebug() << "DbSchema::readTables> Sql driver was not set";
                         return;
-			break;
+            break;
         case Database::PostgreSQL:
                         qstr = QString("SELECT tablename "
-				    "FROM pg_catalog.pg_tables pgt "
-				    "WHERE schemaname='%1';")
-			    .arg(mName);
-			break;
+                    "FROM pg_catalog.pg_tables pgt "
+                    "WHERE schemaname='%1';")
+                .arg(mName);
+            break;
 
         case Database::MySQL:
         case Database::Oracle:
         case Database::SQLite:
-			/* temporarily no support */
-			return;
-			break;
+            /* temporarily no support */
+            return;
+            break;
 
     }
 
     // if query execution failed
     if (!query.exec(qstr)) {
-	qDebug() << "DbSchema::readTables> Unable to read tables.";
+    qDebug() << "DbSchema::readTables> Unable to read tables.";
         qDebug() << query.lastError().text();
 
-	return;
+    return;
     }
 
     // if query returned nothing
     if (!query.first()) {
-	qDebug() << "DbSchema::readTables> No tables were found.";
+    qDebug() << "DbSchema::readTables> No tables were found.";
 
-	return;
+    return;
     }
 
     // for every retrieved row
     do {
         QString tableName = query.value(0).toString();
 
-	DbTable *table = 0;
+    DbTable *table = 0;
         // create a *table object by its name
         switch (sqlDriverType) {
             case Database::Unknown:
-			    break;
+                break;
             case Database::PostgreSQL:
-			    table = new PsqlTable(mName, tableName);
+                table = new PsqlTable(mName, tableName);
 
-			    break;
+                break;
             case Database::MySQL:
             case Database::Oracle:
             case Database::SQLite:
-	    default:
-			    /* no temporary support */
-			    return;
-			    break;
-	}
+        default:
+                /* no temporary support */
+                return;
+                break;
+    }
 
-	// add table
+    // add table
         addTable(table);
 
     } while (query.next());
@@ -402,7 +402,7 @@ DbSchema::readViews()
     // for every retrieved row
     do {
 
-	qint32 colId;
+    qint32 colId;
 
         // declare new view object
         DbView *view;
@@ -646,8 +646,8 @@ DbSchema::readTriggers()
                                             //"AND ref_tbl_nsp.nspname NOT LIKE 'pg_%' "
                                             //"AND proc_nsp.nspname NOT LIKE 'pg_%' "
                                             "AND ref_tbl.relnamespace = ref_tbl_nsp.oid;")
-											.arg(mName);
-						qDebug() << qstr;
+                                            .arg(mName);
+                        qDebug() << qstr;
                         break;
         case Database::MySQL:
                         qstr = QString(";");
@@ -719,7 +719,7 @@ DbSchema::readTriggers()
         colId = query.record().indexOf("schema");
         Q_ASSERT(colId > 0);
         QString schemaName = query.value(colId).toString();
-		trig->setSchema(this);
+        trig->setSchema(this);
 
         colId = query.record().indexOf("table");
         Q_ASSERT(colId > 0);
@@ -918,7 +918,7 @@ DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
             case DbObject::ProcedureObject:
                     object = mProcedures.at(i);
                     break;
-	    case DbObject::TriggerObject:
+        case DbObject::TriggerObject:
                     object = mTriggers.at(i);
                     break;
 
@@ -934,15 +934,15 @@ DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
 
 QString DbSchema::ownerName() const
 {
-	return mOwner->name();
+    return mOwner->name();
 }
 
 QString DbSchema::description() const
 {
-	return mDescription;
+    return mDescription;
 }
 
 void DbSchema::setDescription(const QString & ipDescription)
 {
-	mDescription = ipDescription;
+    mDescription = ipDescription;
 }

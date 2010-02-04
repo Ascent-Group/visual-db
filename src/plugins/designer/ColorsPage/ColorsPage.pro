@@ -2,7 +2,7 @@ CONFIG      += designer plugin
 TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
-SRC	    = ../../../
+SRC     = ../../../
 
 UI_DIR = .uic
 UI_HEADERS_DIR = $$SRC/gui/ui
@@ -14,15 +14,15 @@ CONFIG += release
 INCLUDEPATH += $$SRC/
 
 FORMS = $$SRC/gui/ui/ColorsPage.ui \
-	$$SRC/gui/ui/SelectColorWidget.ui
+    $$SRC/gui/ui/SelectColorWidget.ui
 
 HEADERS = $$SRC/gui/ColorsPage.h \
-	  $$SRC/gui/SelectColorWidget.h \
-	  ColorsPagePlugin.h
+      $$SRC/gui/SelectColorWidget.h \
+      ColorsPagePlugin.h
 
 SOURCES = $$SRC/gui/ColorsPage.cpp \
-	  $$SRC/gui/SelectColorWidget.cpp \
-	  ColorsPagePlugin.cpp
+      $$SRC/gui/SelectColorWidget.cpp \
+      ColorsPagePlugin.cpp
 
 RESOURCES += $$SRC/visual_db.qrc
 

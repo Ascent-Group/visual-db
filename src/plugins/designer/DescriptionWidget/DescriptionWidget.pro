@@ -2,7 +2,7 @@ CONFIG      += designer plugin
 TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
-SRC	    = ../../../
+SRC     = ../../../
 
 UI_DIR = .uic
 UI_HEADERS_DIR = $$SRC/gui/ui
@@ -16,10 +16,10 @@ INCLUDEPATH += $$SRC/ $$SRC/dbobjects
 FORMS = $$SRC/gui/ui/DescriptionWidget.ui
 
 HEADERS = $$SRC/gui/DescriptionWidget.h \
-	  DescriptionWidgetPlugin.h
+      DescriptionWidgetPlugin.h
 
 SOURCES = $$SRC/gui/DescriptionWidget.cpp \
-	  DescriptionWidgetPlugin.cpp
+      DescriptionWidgetPlugin.cpp
 
 RESOURCES += $$SRC/visual_db.qrc
 

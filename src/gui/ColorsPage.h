@@ -42,18 +42,18 @@ class QColor;
 class ColorsPage : public QWidget
 {
     Q_OBJECT
-	
+    
     public:
-	ColorsPage(QWidget *ipParent = 0);
-	~ColorsPage();
+    ColorsPage(QWidget *ipParent = 0);
+    ~ColorsPage();
 
-	QColor backgroundColor() const;
-	QColor tableColor() const;
-	QColor arrowColor() const;
-	QColor borderColor() const;
+    QColor backgroundColor() const;
+    QColor tableColor() const;
+    QColor arrowColor() const;
+    QColor borderColor() const;
 
     private:
-	Ui::ColorsPage ui;
+    Ui::ColorsPage ui;
 };
 
 #endif // COLORPAGE_H

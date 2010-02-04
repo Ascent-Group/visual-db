@@ -40,7 +40,7 @@ void
 SelectColorWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-	return;
+    return;
     }
 
     initialized = true;
@@ -100,29 +100,29 @@ QString
 SelectColorWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-	" <widget class=\"SelectColorWidget\" name=\"mSelectColorWidget\">\n"
-	"  <property name=\"geometry\">\n"
-	"   <rect>\n"
-	"    <x>0</x>\n"
-	"    <y>0</y>\n"
-	"    <width>100</width>\n"
-	"    <height>100</height>\n"
-	"   </rect>\n"
-	"  </property>\n"
-	"  <property name=\"toolTip\" >\n"
-	"   <string>Select color widget</string>\n"
-	"  </property>\n"
-	"  <property name=\"whatsThis\" >\n"
-	"   <string>The widget is used for picking a color.</string>\n"
-	"  </property>\n"
-	"  <property name=\"labelText\" >\n"
-	"   <string></string>\n"
-	"  </property>\n"
-	"  <property name=\"defaultColor\" >\n"
-	"   <color></color>\n"
-	"  </property>\n"
-	" </widget>\n"
-	"</ui>\n";
+    " <widget class=\"SelectColorWidget\" name=\"mSelectColorWidget\">\n"
+    "  <property name=\"geometry\">\n"
+    "   <rect>\n"
+    "    <x>0</x>\n"
+    "    <y>0</y>\n"
+    "    <width>100</width>\n"
+    "    <height>100</height>\n"
+    "   </rect>\n"
+    "  </property>\n"
+    "  <property name=\"toolTip\" >\n"
+    "   <string>Select color widget</string>\n"
+    "  </property>\n"
+    "  <property name=\"whatsThis\" >\n"
+    "   <string>The widget is used for picking a color.</string>\n"
+    "  </property>\n"
+    "  <property name=\"labelText\" >\n"
+    "   <string></string>\n"
+    "  </property>\n"
+    "  <property name=\"defaultColor\" >\n"
+    "   <color></color>\n"
+    "  </property>\n"
+    " </widget>\n"
+    "</ui>\n";
 }
 
 QString

@@ -40,7 +40,7 @@ void
 ControlWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-	return;
+    return;
     }
 
     initialized = true;
@@ -100,32 +100,32 @@ QString
 ControlWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-	" <widget class=\"ControlWidget\" name=\"mControlWidget\">\n"
-	"  <property name=\"geometry\">\n"
-	"   <rect>\n"
-	"    <x>0</x>\n"
-	"    <y>0</y>\n"
-	"    <width>100</width>\n"
-	"    <height>100</height>\n"
-	"   </rect>\n"
-	"  </property>\n"
-	"  <property name=\"toolTip\" >\n"
-	"   <string>Navigation/Zoom widget</string>\n"
-	"  </property>\n"
-	"  <property name=\"whatsThis\" >\n"
-	"   <string>The widget is used for navigating/zooming the scene.</string>\n"
-	"  </property>\n"
-	"  <property name=\"minZoom\" >\n"
-	"   <uInt>0</uInt>\n"
-	"  </property>\n"
-	"  <property name=\"maxZoom\" >\n"
-	"   <uInt>0</uInt>\n"
-	"  </property>\n"
-	"  <property name=\"zoom\" >\n"
-	"   <uInt>0</uInt>\n"
-	"  </property>\n"
-	" </widget>\n"
-	"</ui>\n";
+    " <widget class=\"ControlWidget\" name=\"mControlWidget\">\n"
+    "  <property name=\"geometry\">\n"
+    "   <rect>\n"
+    "    <x>0</x>\n"
+    "    <y>0</y>\n"
+    "    <width>100</width>\n"
+    "    <height>100</height>\n"
+    "   </rect>\n"
+    "  </property>\n"
+    "  <property name=\"toolTip\" >\n"
+    "   <string>Navigation/Zoom widget</string>\n"
+    "  </property>\n"
+    "  <property name=\"whatsThis\" >\n"
+    "   <string>The widget is used for navigating/zooming the scene.</string>\n"
+    "  </property>\n"
+    "  <property name=\"minZoom\" >\n"
+    "   <uInt>0</uInt>\n"
+    "  </property>\n"
+    "  <property name=\"maxZoom\" >\n"
+    "   <uInt>0</uInt>\n"
+    "  </property>\n"
+    "  <property name=\"zoom\" >\n"
+    "   <uInt>0</uInt>\n"
+    "  </property>\n"
+    " </widget>\n"
+    "</ui>\n";
 }
 
 QString

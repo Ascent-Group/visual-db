@@ -117,7 +117,7 @@ QString
 DbTrigger::schemaName() const
 {
     if (mSchema) {
-	return mSchema->name();
+    return mSchema->name();
     }
 
     return mSchemaName;

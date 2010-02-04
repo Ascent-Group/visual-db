@@ -109,11 +109,11 @@ class DescriptionWidget : public QWidget
         };
 
         enum DbSchemaCols {
-	    SchemaNameCol = 0,
-	    SchemaOwnerNameCol,
-	    SchemaDescriptionCol,
-	    DbSchemaColumnsCount
-	};
+        SchemaNameCol = 0,
+        SchemaOwnerNameCol,
+        SchemaDescriptionCol,
+        DbSchemaColumnsCount
+    };
 
     public:
         DescriptionWidget(QWidget *ipParent = 0);
@@ -127,7 +127,7 @@ class DescriptionWidget : public QWidget
         void describe(const DbTrigger *ipTrigger);
 
     private:
-	Ui::DescriptionWidget ui;
+    Ui::DescriptionWidget ui;
 
         static const QString sCreateSchemaScript;
         static const QString sAddSchemaDecriptionScript;

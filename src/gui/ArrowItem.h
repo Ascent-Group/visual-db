@@ -46,36 +46,36 @@ class QRectF;
 class ArrowItem : public QGraphicsLineItem
 {
     public:
-	enum { Type = UserType + 4 };
+    enum { Type = UserType + 4 };
         
-	static const int ARROW_SIZE = 10;
+    static const int ARROW_SIZE = 10;
 
     public:
-	ArrowItem(TableItem *, TableItem *, QGraphicsItem *ipParent = 0, QGraphicsScene *ipScene = 0);
-	~ArrowItem();
+    ArrowItem(TableItem *, TableItem *, QGraphicsItem *ipParent = 0, QGraphicsScene *ipScene = 0);
+    ~ArrowItem();
 
-	virtual int type() const;
-	QRectF boundingRect() const;
-	QPainterPath shape() const;
-	
-	TableItem *startItem() const;
-	TableItem *endItem() const;
-	
-	void updatePosition();
-
-    private:
-	
-	QSettings mSettings;
-
-	TableItem *mStartItem;
-	TableItem *mEndItem;
-	
-	QColor mColor;
-	QPolygonF mArrowItemHead;
+    virtual int type() const;
+    QRectF boundingRect() const;
+    QPainterPath shape() const;
+    
+    TableItem *startItem() const;
+    TableItem *endItem() const;
+    
+    void updatePosition();
 
     private:
-	QLineF makeLine() const;
-	void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *ipWidget = 0);
+    
+    QSettings mSettings;
+
+    TableItem *mStartItem;
+    TableItem *mEndItem;
+    
+    QColor mColor;
+    QPolygonF mArrowItemHead;
+
+    private:
+    QLineF makeLine() const;
+    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *ipWidget = 0);
 };
 
 #endif // ARROW_H

@@ -55,65 +55,65 @@ class SceneWidget : public QWidget
     Q_OBJECT
 
     public:
-	SceneWidget(QWidget *ipParent = 0, Qt::WindowFlags ipFlags = 0);
-	~SceneWidget();
-	
-	QDomElement toXml(QDomDocument &, bool, bool, bool, bool);
-	QList<QGraphicsItem *> items () const;
-	TableItem *tableFromXml(QDomElement &);
-	TableItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
-	QList<QGraphicsItem *> tableGroupFromXml(QDomElement &);
-	void fromXml(QDomElement &);
-	void print(QPrinter *);
-	void refreshLegend();
-	void setSchemeMenu(QMenu *);
-	void setTableMenu(QMenu *);
-	void updateLegend();
+    SceneWidget(QWidget *ipParent = 0, Qt::WindowFlags ipFlags = 0);
+    ~SceneWidget();
+    
+    QDomElement toXml(QDomDocument &, bool, bool, bool, bool);
+    QList<QGraphicsItem *> items () const;
+    TableItem *tableFromXml(QDomElement &);
+    TableItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
+    QList<QGraphicsItem *> tableGroupFromXml(QDomElement &);
+    void fromXml(QDomElement &);
+    void print(QPrinter *);
+    void refreshLegend();
+    void setSchemeMenu(QMenu *);
+    void setTableMenu(QMenu *);
+    void updateLegend();
 
     signals:
-	void movedUp();
-	void movedDown();
-	void movedLeft();
-	void movedRight();
-	void tableActionDone(QUndoCommand *);
+    void movedUp();
+    void movedDown();
+    void movedLeft();
+    void movedRight();
+    void tableActionDone(QUndoCommand *);
 
     public slots:
-	void adjustTables();
-	void anchorTables();
-	void alignToGrid(bool);
-	void colorizeAccordingSchemas();
-	void deleteTableItem();
-	void divideIntoPages(bool);
-	void groupItems();
-	void saveToImage();
-	void selectAllTables();
-	void selectAllTablesInSchema();
-	void setFieldsTypesInvisible();
-	void setFieldsTypesVisible();
-	void setIndicesInvisible();
-	void setIndicesVisible();
-	void showControlWidget(bool);
-	void showGrid(bool);
-	void showLegend(bool);
-	void showOnScene(QTreeWidgetItem *, int);
-	void ungroupItems();
-	void disableAnchorTables();
+    void adjustTables();
+    void anchorTables();
+    void alignToGrid(bool);
+    void colorizeAccordingSchemas();
+    void deleteTableItem();
+    void divideIntoPages(bool);
+    void groupItems();
+    void saveToImage();
+    void selectAllTables();
+    void selectAllTablesInSchema();
+    void setFieldsTypesInvisible();
+    void setFieldsTypesVisible();
+    void setIndicesInvisible();
+    void setIndicesVisible();
+    void showControlWidget(bool);
+    void showGrid(bool);
+    void showLegend(bool);
+    void showOnScene(QTreeWidgetItem *, int);
+    void ungroupItems();
+    void disableAnchorTables();
         void cleanTableSchemeScene();
         void setTableColor();
 
     private:
-	void setAnchor(QList<QGraphicsItem *>, bool);
+    void setAnchor(QList<QGraphicsItem *>, bool);
 
     private slots:
-	void sendTableMoved(QList <QGraphicsItem *>, const QPointF &);
+    void sendTableMoved(QList <QGraphicsItem *>, const QPointF &);
 
     private:
-	GraphicsScene *mScene;
-	GraphicsView *mView;
-	ControlWidget *mControlWidget;
-	QGridLayout *mainLayout;
-	QMenu *mTableMenu;
-	QMenu *mSchemeMenu;
+    GraphicsScene *mScene;
+    GraphicsView *mView;
+    ControlWidget *mControlWidget;
+    QGridLayout *mainLayout;
+    QMenu *mTableMenu;
+    QMenu *mSchemeMenu;
 };
 
 #endif // SCENEWIDGET_H

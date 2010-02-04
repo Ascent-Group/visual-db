@@ -61,8 +61,8 @@ void
 MysqlTable::loadData()
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery	 query(db);
-    QString	 qstr;
+    QSqlQuery    query(db);
+    QString  qstr;
 
     /*if (mTableName.contains(QString('.'))) {
         mSchemaName = mTableName.section('.', 0);
@@ -71,28 +71,28 @@ MysqlTable::loadData()
 
     // create a query
     qstr = QString("SELECT "
-			"c.column_name, "
-			"c.column_type, "
-			"c.is_nullable, "
-			"pkc.constraint_name as PK, "
-			"fkc.constraint_name as FK, "
-			"uc.constraint_name as UK "
-		    "FROM "
-			"information_schema.columns c "
-		    "LEFT OUTER JOIN information_schema.table_constraints pkc ON "
-			"c.column_name = pkc.constraint_name "
-			"AND c.table_name = pkc.table_name "
-			"AND UPPER(pkc.constraint_type) = 'PRIMARY KEY' "
-		    "LEFT OUTER JOIN information_schema.table_constraints fkc ON "
-			"c.column_name = fkc.constraint_name "
-			"AND c.table_name = fkc.table_name "
-			"AND UPPER(fkc.constraint_type) = 'FOREIGN KEY' "
-		    "LEFT OUTER JOIN information_schema.table_constraints uc ON "
-			"c.column_name = uc.constraint_name "
-			"AND c.table_name = uc.table_name "
-			"AND UPPER(uc.constraint_type) = 'UNIQUE' "
-		    "WHERE "
-			"c.table_name = '%1';")
+            "c.column_name, "
+            "c.column_type, "
+            "c.is_nullable, "
+            "pkc.constraint_name as PK, "
+            "fkc.constraint_name as FK, "
+            "uc.constraint_name as UK "
+            "FROM "
+            "information_schema.columns c "
+            "LEFT OUTER JOIN information_schema.table_constraints pkc ON "
+            "c.column_name = pkc.constraint_name "
+            "AND c.table_name = pkc.table_name "
+            "AND UPPER(pkc.constraint_type) = 'PRIMARY KEY' "
+            "LEFT OUTER JOIN information_schema.table_constraints fkc ON "
+            "c.column_name = fkc.constraint_name "
+            "AND c.table_name = fkc.table_name "
+            "AND UPPER(fkc.constraint_type) = 'FOREIGN KEY' "
+            "LEFT OUTER JOIN information_schema.table_constraints uc ON "
+            "c.column_name = uc.constraint_name "
+            "AND c.table_name = uc.table_name "
+            "AND UPPER(uc.constraint_type) = 'UNIQUE' "
+            "WHERE "
+            "c.table_name = '%1';")
             .arg(mName);
 
     // if query execution failed

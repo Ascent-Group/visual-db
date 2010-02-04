@@ -40,7 +40,7 @@ void
 LogPanelPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-	return;
+    return;
     }
 
     initialized = true;
@@ -100,23 +100,23 @@ QString
 LogPanelPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-	" <widget class=\"LogPanel\" name=\"mLogPanel\">\n"
-	"  <property name=\"geometry\">\n"
-	"   <rect>\n"
-	"    <x>0</x>\n"
-	"    <y>0</y>\n"
-	"    <width>100</width>\n"
-	"    <height>100</height>\n"
-	"   </rect>\n"
-	"  </property>\n"
-	"  <property name=\"toolTip\" >\n"
-	"   <string>Log panel</string>\n"
-	"  </property>\n"
-	"  <property name=\"whatsThis\" >\n"
-	"   <string>The log panel widget is used for displaying apps output.</string>\n"
-	"  </property>\n"
-	" </widget>\n"
-	"</ui>\n";
+    " <widget class=\"LogPanel\" name=\"mLogPanel\">\n"
+    "  <property name=\"geometry\">\n"
+    "   <rect>\n"
+    "    <x>0</x>\n"
+    "    <y>0</y>\n"
+    "    <width>100</width>\n"
+    "    <height>100</height>\n"
+    "   </rect>\n"
+    "  </property>\n"
+    "  <property name=\"toolTip\" >\n"
+    "   <string>Log panel</string>\n"
+    "  </property>\n"
+    "  <property name=\"whatsThis\" >\n"
+    "   <string>The log panel widget is used for displaying apps output.</string>\n"
+    "  </property>\n"
+    " </widget>\n"
+    "</ui>\n";
 }
 
 QString

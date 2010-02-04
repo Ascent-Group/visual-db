@@ -114,9 +114,9 @@ DbTable::columnName(qint16 ipColId) const
 
     // if id is out of bounds
     if (0 > ipColId || ipColId >= mColumnDefs.count()) {
-	qDebug() << QString("DbTable::columnName> For %1 id %2 is out of bounds!!!")
-	    .arg(mName)
-	    .arg(ipColId);
+    qDebug() << QString("DbTable::columnName> For %1 id %2 is out of bounds!!!")
+        .arg(mName)
+        .arg(ipColId);
         return QString("");
     }
 
@@ -136,10 +136,10 @@ DbTable::columnType(qint16 ipColId) const
     }
 
     // if id is out of bounds
-    if (0 > ipColId || ipColId >= mColumnDefs.count()) {	
-	qDebug() << QString("DbTable::columnType> For %1 id %2 is out of bounds!!!")
-	    .arg(mName)
-	    .arg(ipColId);
+    if (0 > ipColId || ipColId >= mColumnDefs.count()) {    
+    qDebug() << QString("DbTable::columnType> For %1 id %2 is out of bounds!!!")
+        .arg(mName)
+        .arg(ipColId);
 
         return QString("");
     }
@@ -161,10 +161,10 @@ DbTable::isColumnNullable(qint16 ipColId) const
 
     // if id is out of bounds
     if (0 > ipColId || ipColId >= mColumnDefs.count()) {
-	qDebug() << QString("DbTable::isColumnNullable> For %1 id %2 is out of bounds!!!")
-	    .arg(mName)
-	    .arg(ipColId);
-	return false;
+    qDebug() << QString("DbTable::isColumnNullable> For %1 id %2 is out of bounds!!!")
+        .arg(mName)
+        .arg(ipColId);
+    return false;
     }
 
     return mColumnDefs.at(ipColId).isNullable;
@@ -184,9 +184,9 @@ DbTable::isColumnPrimaryKey(qint16 ipColId) const
 
     // if id is out of bounds
     if (0 > ipColId || ipColId >= mColumnDefs.count()) {
-	qDebug() << QString("DbTable::isColumnPrimaryKey> For %1 id %2 is out of bounds!!!")
-	    .arg(mName)
-	    .arg(ipColId);
+    qDebug() << QString("DbTable::isColumnPrimaryKey> For %1 id %2 is out of bounds!!!")
+        .arg(mName)
+        .arg(ipColId);
 
         return false;
     }
@@ -208,9 +208,9 @@ DbTable::isColumnForeignKey(qint16 ipColId) const
 
     // if id is out of bounds
     if (0 > ipColId || ipColId >= mColumnDefs.count()) {
-	qDebug() << QString("DbTable::isColumnForeignKey> For %1 id %2 is out of bounds!!!")
-	    .arg(mName)
-	    .arg(ipColId);
+    qDebug() << QString("DbTable::isColumnForeignKey> For %1 id %2 is out of bounds!!!")
+        .arg(mName)
+        .arg(ipColId);
 
         return false;
     }
@@ -232,9 +232,9 @@ DbTable::foreignSchemaName(qint16 ipColId) const
 
     // if id is out of bounds
     if (0 > ipColId || ipColId >= mColumnDefs.count()) {
-	qDebug() << QString("DbTable::foreignSchemaName> For %1 id %2 is out of bounds!!!")
-	    .arg(mName)
-	    .arg(ipColId);
+    qDebug() << QString("DbTable::foreignSchemaName> For %1 id %2 is out of bounds!!!")
+        .arg(mName)
+        .arg(ipColId);
 
         return QString("");
     }
@@ -256,9 +256,9 @@ DbTable::foreignTableName(qint16 ipColId) const
 
     // if id is out of bounds
     if (0 > ipColId || ipColId >= mColumnDefs.count()) {
-	qDebug() << QString("DbTable::foreignTableName> For %1 id %2 is out of bounds!!!")
-	    .arg(mName)
-	    .arg(ipColId);
+    qDebug() << QString("DbTable::foreignTableName> For %1 id %2 is out of bounds!!!")
+        .arg(mName)
+        .arg(ipColId);
 
         return QString("");
     }
@@ -297,9 +297,9 @@ DbTable::isColumnUnique(qint16 ipColId) const
 
     // if id is out of bounds
     if (0 > ipColId || ipColId >= mColumnDefs.count()) {
-	qDebug() << QString("DbTable::isColumnUnique> For %1 id %2 is out of bounds!!!")
-	    .arg(mName)
-	    .arg(ipColId);
+    qDebug() << QString("DbTable::isColumnUnique> For %1 id %2 is out of bounds!!!")
+        .arg(mName)
+        .arg(ipColId);
 
         return false;
     }

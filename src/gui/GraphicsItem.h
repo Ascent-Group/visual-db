@@ -50,78 +50,78 @@ class GraphicsItem : public QGraphicsPolygonItem
         static const int IMG_HEIGHT = IMG_WIDTH;
 
     public:
-	GraphicsItem();
-	virtual ~GraphicsItem();
-	
-	void setX(qreal);
-	qreal x() const;
-	
-	void setY(qreal);
-	qreal y() const;
-	
-	void setWidth(qreal);
-	qreal width() const;
-	
-	void setHeight(qreal);
-	qreal height() const;
-	
-	void setItemColor(QColor);
-	QColor itemColor() const;
-	
-	void setBorderColor(QColor);
-	QColor borderColor() const;
-	
-	void setFontColor(QColor);
-	QColor fontColor() const;
-	
-	void setTitleText(QString);
-	QString titleText() const;
-	
-	void setFieldText(int, QString);
-	QString fieldText(int) const;
-	
-	void setTitleItem(QGraphicsTextItem *);
-	QGraphicsTextItem *titleItem() const;
+    GraphicsItem();
+    virtual ~GraphicsItem();
+    
+    void setX(qreal);
+    qreal x() const;
+    
+    void setY(qreal);
+    qreal y() const;
+    
+    void setWidth(qreal);
+    qreal width() const;
+    
+    void setHeight(qreal);
+    qreal height() const;
+    
+    void setItemColor(QColor);
+    QColor itemColor() const;
+    
+    void setBorderColor(QColor);
+    QColor borderColor() const;
+    
+    void setFontColor(QColor);
+    QColor fontColor() const;
+    
+    void setTitleText(QString);
+    QString titleText() const;
+    
+    void setFieldText(int, QString);
+    QString fieldText(int) const;
+    
+    void setTitleItem(QGraphicsTextItem *);
+    QGraphicsTextItem *titleItem() const;
 
-	bool isRightBottomCorner(qreal ipX, qreal ipY) const;
-	bool isLeftBottomCorner(qreal ipX, qreal ipY) const;
-	bool isLeftTopCorner(qreal ipX, qreal ipY) const;
-	bool isRightTopCorner(qreal ipX, qreal ipY) const;
+    bool isRightBottomCorner(qreal ipX, qreal ipY) const;
+    bool isLeftBottomCorner(qreal ipX, qreal ipY) const;
+    bool isLeftTopCorner(qreal ipX, qreal ipY) const;
+    bool isRightTopCorner(qreal ipX, qreal ipY) const;
 
-	bool isLeftVerticalBorder(qreal) const;
-	bool isRightVerticalBorder(qreal) const;
-	bool isTopHorizontalBorder(qreal) const;
-	bool isBottomHorizontalBorder(qreal) const;
-	
-	QPointF centerPoint() const;
+    bool isLeftVerticalBorder(qreal) const;
+    bool isRightVerticalBorder(qreal) const;
+    bool isTopHorizontalBorder(qreal) const;
+    bool isBottomHorizontalBorder(qreal) const;
+    
+    QPointF centerPoint() const;
 
-	QRectF rect() const;
-		
-	int countFields() const;
+    QRectF rect() const;
+        
+    int countFields() const;
 
-	QList<QGraphicsTextItem *> fieldItems() const;
+    QList<QGraphicsTextItem *> fieldItems() const;
 
-	void addFieldItem(QGraphicsTextItem *);
-	void clearFields();
-	void updatePolygon();
-	void adjustSize();
+    void addFieldItem(QGraphicsTextItem *);
+    void clearFields();
+    void updatePolygon();
+    void adjustSize();
 
     private:
-	QSettings mSettings;
+    QSettings mSettings;
 
-	QGraphicsTextItem *mTitleItem;
-	QList<QGraphicsTextItem *> mFieldItems;
+    QGraphicsTextItem *mTitleItem;
+    QList<QGraphicsTextItem *> mFieldItems;
 
-	QPointF mLeftTopPoint;
-	QPointF mRightBottomPoint;
-	
-	QColor mItemColor;
-	QColor mFontColor;
-	QColor mBorderColor;
+    QPointF mLeftTopPoint;
+    QPointF mRightBottomPoint;
+    
+    QColor mItemColor;
+    QColor mFontColor;
+    QColor mBorderColor;
 
-	QPolygonF mPolygon;
+    QPolygonF mPolygon;
 
-	static const int BORDER_WIDTH = 5;
+    static const int BORDER_WIDTH = 5;
 };
 
 #endif // GRAPHICSITEM_H

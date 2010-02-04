@@ -42,39 +42,39 @@ class QDomElement;
 class DbParameters
 {
     public:
-	DbParameters();
-	~DbParameters();
+    DbParameters();
+    ~DbParameters();
 
-	void setDbDriver(QString);
-	QString dbDriver() const;
-	
-	void setDbHost(QString);
-	QString dbHost() const;
-	
-	void setDbPort(int);
-	int dbPort() const;
-	
-	void setDbName(QString);
-	QString dbName() const;
-	
-	void setDbUser(QString);
-	QString dbUser() const;
-	
-	void setDbPassword(QString);
-	QString dbPassword() const;
-	
-	void fromXml(QDomElement &);
-	QDomElement toXml(QDomDocument &) const;
+    void setDbDriver(QString);
+    QString dbDriver() const;
+    
+    void setDbHost(QString);
+    QString dbHost() const;
+    
+    void setDbPort(int);
+    int dbPort() const;
+    
+    void setDbName(QString);
+    QString dbName() const;
+    
+    void setDbUser(QString);
+    QString dbUser() const;
+    
+    void setDbPassword(QString);
+    QString dbPassword() const;
+    
+    void fromXml(QDomElement &);
+    QDomElement toXml(QDomDocument &) const;
 
     private:
-	QSettings mSettings;
-	
-	QString mDbDriver;
-	QString mDbHost;
-	int mDbPort;
-	QString mDbName;
-	QString mDbUser;
-	QString mDbPassword;
+    QSettings mSettings;
+    
+    QString mDbDriver;
+    QString mDbHost;
+    int mDbPort;
+    QString mDbName;
+    QString mDbUser;
+    QString mDbPassword;
 };
 
 bool createConnection(DbParameters &);

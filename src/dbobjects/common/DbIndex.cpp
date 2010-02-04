@@ -289,3 +289,4 @@ DbIndex::type()
 {
     return DbObject::IndexObject;
 }
+

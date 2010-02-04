@@ -40,7 +40,7 @@ void
 DescriptionWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-	return;
+    return;
     }
 
     initialized = true;
@@ -100,23 +100,23 @@ QString
 DescriptionWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-	" <widget class=\"DescriptionWidget\" name=\"mDescriptionWidget\">\n"
-	"  <property name=\"geometry\">\n"
-	"   <rect>\n"
-	"    <x>0</x>\n"
-	"    <y>0</y>\n"
-	"    <width>100</width>\n"
-	"    <height>100</height>\n"
-	"   </rect>\n"
-	"  </property>\n"
-	"  <property name=\"toolTip\" >\n"
-	"   <string>Navigation/Zoom widget</string>\n"
-	"  </property>\n"
-	"  <property name=\"whatsThis\" >\n"
-	"   <string>The widget is used for displaying db objects description.</string>\n"
-	"  </property>\n"
-	" </widget>\n"
-	"</ui>\n";
+    " <widget class=\"DescriptionWidget\" name=\"mDescriptionWidget\">\n"
+    "  <property name=\"geometry\">\n"
+    "   <rect>\n"
+    "    <x>0</x>\n"
+    "    <y>0</y>\n"
+    "    <width>100</width>\n"
+    "    <height>100</height>\n"
+    "   </rect>\n"
+    "  </property>\n"
+    "  <property name=\"toolTip\" >\n"
+    "   <string>Navigation/Zoom widget</string>\n"
+    "  </property>\n"
+    "  <property name=\"whatsThis\" >\n"
+    "   <string>The widget is used for displaying db objects description.</string>\n"
+    "  </property>\n"
+    " </widget>\n"
+    "</ui>\n";
 }
 
 QString

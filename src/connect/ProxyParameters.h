@@ -43,32 +43,32 @@ class QDomElement;
 class ProxyParameters
 {
     public:
-	ProxyParameters();
-	~ProxyParameters();
-	
-	void setUseProxy(bool);
-	bool useProxy() const;
-	
-	void setProxyType(QNetworkProxy::ProxyType);
-	QNetworkProxy::ProxyType proxyType() const;
-	
-	void setProxyHost(QString);
-	QString proxyHost() const;
-	
-	void setProxyPort(int);
-	int proxyPort() const;
-	
-	void setProxyUser(QString);
-	QString proxyUser() const;
-	
-	void fromXml(QDomElement &);
-	QDomElement toXml(QDomDocument &) const;
+    ProxyParameters();
+    ~ProxyParameters();
+    
+    void setUseProxy(bool);
+    bool useProxy() const;
+    
+    void setProxyType(QNetworkProxy::ProxyType);
+    QNetworkProxy::ProxyType proxyType() const;
+    
+    void setProxyHost(QString);
+    QString proxyHost() const;
+    
+    void setProxyPort(int);
+    int proxyPort() const;
+    
+    void setProxyUser(QString);
+    QString proxyUser() const;
+    
+    void fromXml(QDomElement &);
+    QDomElement toXml(QDomDocument &) const;
 
     private:
-	QSettings mSettings;
+    QSettings mSettings;
 
-	bool mUseProxy;
-	QNetworkProxy::ProxyType mProxyType;
+    bool mUseProxy;
+    QNetworkProxy::ProxyType mProxyType;
         QString mProxyHost;
         int mProxyPort;
         QString mProxyUser;

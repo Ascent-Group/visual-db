@@ -47,19 +47,19 @@
  * Constructor
  */
 SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters, 
-					 ProxyParameters *ipProxyParameters, 
-					 bool ipLoadSession,
-					 QWidget *ipParent)
-	: QDialog(ipParent), mDbParameters(ipDbParameters), mProxyParameters(ipProxyParameters)
+                     ProxyParameters *ipProxyParameters, 
+                     bool ipLoadSession,
+                     QWidget *ipParent)
+    : QDialog(ipParent), mDbParameters(ipDbParameters), mProxyParameters(ipProxyParameters)
 {
     ui.setupUi(this);
 
     createDialog(ipLoadSession);
     if (!ipDbParameters) {
-	mDbParameters = new DbParameters();
+    mDbParameters = new DbParameters();
     }
     if (!ipProxyParameters) {
-	mProxyParameters = new ProxyParameters();
+    mProxyParameters = new ProxyParameters();
     }
     initConnectionFields();
 }
@@ -123,7 +123,7 @@ void
 SqlConnectionDialog::initConnectionFields()
 {
     if (!mDbParameters || !mProxyParameters) {
-	return;
+    return;
     }
 
     ui.mDbDriverCombo->setCurrentIndex(ui.mDbDriverCombo->findText(mDbParameters->dbDriver()));
@@ -148,15 +148,15 @@ SqlConnectionDialog::addConnection()
     // proxy section
     if (ui.mUseProxyBox->isChecked()) {
         // remember connection paramters
-	mProxyParameters->setUseProxy(true);
-	mProxyParameters->setProxyType((QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toInt());
-	mProxyParameters->setProxyHost(ui.mProxyHostNameEdit->text());
-	mProxyParameters->setProxyPort(ui.mProxyPortEdit->text().toInt());
-	mProxyParameters->setProxyUser(ui.mProxyUserEdit->text());
+    mProxyParameters->setUseProxy(true);
+    mProxyParameters->setProxyType((QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toInt());
+    mProxyParameters->setProxyHost(ui.mProxyHostNameEdit->text());
+    mProxyParameters->setProxyPort(ui.mProxyPortEdit->text().toInt());
+    mProxyParameters->setProxyUser(ui.mProxyUserEdit->text());
 
-	setProxy((*mProxyParameters));
+    setProxy((*mProxyParameters));
     } else {
-	mProxyParameters->setUseProxy(false);
+    mProxyParameters->setUseProxy(false);
     }
     // proxy section end
 
@@ -170,13 +170,13 @@ SqlConnectionDialog::addConnection()
 
     // create connection to database
     if (createConnection((*mDbParameters))) {
-	accept();
+    accept();
     } else {
-	QMessageBox::warning(
-	    this,
-	    tr("Error"),
-	    tr("Connection refused: ") + QSqlDatabase::database("mainConnect").lastError().text());
-	reject();
+    QMessageBox::warning(
+        this,
+        tr("Error"),
+        tr("Connection refused: ") + QSqlDatabase::database("mainConnect").lastError().text());
+    reject();
     }
 }
 

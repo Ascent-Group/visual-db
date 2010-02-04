@@ -47,7 +47,7 @@ class SqlWidget : public QWidget
         void setDefaultQuery(QString ipQueryText);
 
     private:
-	Ui::SqlWidget ui;
+    Ui::SqlWidget ui;
         enum Portions {
             PreviousPortion = 0,
             NextPortion

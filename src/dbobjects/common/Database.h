@@ -100,14 +100,14 @@ class Database
         virtual ~Database();
 
     private:
-        static Database	*mInstance;
+        static Database *mInstance;
         QVector<DbSchema*> mSchemas;
         QVector<DbRole*> mRoles;
         QVector<DbIndex*> mIndices;
         QVector<DbLanguage*> mLanguages;
         SqlDriverType mSqlDriver;
 
-	friend class DatabaseManager;
+    friend class DatabaseManager;
 
     private:
         DbObject* findObject(const QString &ipObjName, DbObject::Type) const;

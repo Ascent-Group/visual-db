@@ -78,7 +78,7 @@ Legend::refresh()
 
     clearFields();
     for (int i = 0; i < schemasNames.count(); ++i) {
-	addFieldItem(new QGraphicsTextItem(schemasNames.at(i)));
+    addFieldItem(new QGraphicsTextItem(schemasNames.at(i)));
     }
 
     adjustSize();
@@ -99,34 +99,34 @@ Legend::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidg
 
     // draw each field
     for (int i = 0; i < countFields(); ++i) {
-	ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL, 
-		(int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2,
-		Qt::AlignLeft, fieldText(i));
+    ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL, 
+        (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2,
+        Qt::AlignLeft, fieldText(i));
 
-	QColor color = QColor();
-	bool initializedColor = false;
-	bool hasAllSameColor = true;
-	foreach (QGraphicsItem *item, scene()->items()) {
-	    // if it's a table
-	    // important: i use dynamic_cast because qgraphicsitem_cast doesn't work correctly
-	    if (dynamic_cast<TableItem *>(item) != 0 && qgraphicsitem_cast<TableItem *>(item)->schemaName() == fieldText(i)) {
-		if (!initializedColor) {
-		    initializedColor = true;
-		    color = qgraphicsitem_cast<TableItem *>(item)->itemColor();
-		// and if this table color is another than all privious table colors in this scene - break
-		} else if (qgraphicsitem_cast<TableItem *>(item)->itemColor() != color) {
-		    hasAllSameColor = false;
-		    break;
-		}
-	    }
-	}
+    QColor color = QColor();
+    bool initializedColor = false;
+    bool hasAllSameColor = true;
+    foreach (QGraphicsItem *item, scene()->items()) {
+        // if it's a table
+        // important: i use dynamic_cast because qgraphicsitem_cast doesn't work correctly
+        if (dynamic_cast<TableItem *>(item) != 0 && qgraphicsitem_cast<TableItem *>(item)->schemaName() == fieldText(i)) {
+        if (!initializedColor) {
+            initializedColor = true;
+            color = qgraphicsitem_cast<TableItem *>(item)->itemColor();
+        // and if this table color is another than all privious table colors in this scene - break
+        } else if (qgraphicsitem_cast<TableItem *>(item)->itemColor() != color) {
+            hasAllSameColor = false;
+            break;
+        }
+        }
+    }
 
-	if (hasAllSameColor) {
-	    ipPainter->fillRect((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
-		    IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL - 1, color);
-	} else {
-	    ipPainter->drawText((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
-		    IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL - 1, Qt::AlignCenter, QString("N"));
-	}
+    if (hasAllSameColor) {
+        ipPainter->fillRect((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
+            IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL - 1, color);
+    } else {
+        ipPainter->drawText((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
+            IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL - 1, Qt::AlignCenter, QString("N"));
+    }
     }
 }

@@ -87,7 +87,7 @@ class DbIndex : public DbObject
         DbTable *mTable;
         DbSchema *mSchema;
         quint16 mColumnsCount;
-	// qint16 because columns can be addressed via negative ids
+    // qint16 because columns can be addressed via negative ids
         QVector<qint16> mColumnsNumbers;
         bool mIsUnique;
         bool mIsPrimary;

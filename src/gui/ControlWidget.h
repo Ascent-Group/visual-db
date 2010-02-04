@@ -46,38 +46,38 @@ class ControlWidget : public QWidget
     Q_PROPERTY(int zoom READ zoom WRITE setZoom)
 
     public:
-	ControlWidget(/*int, int, */QWidget *ipParent = 0);
-	~ControlWidget();
+    ControlWidget(/*int, int, */QWidget *ipParent = 0);
+    ~ControlWidget();
 
-	int minZoom() const;
-	void setMinZoom(int);
+    int minZoom() const;
+    void setMinZoom(int);
 
-	int maxZoom() const;
-	void setMaxZoom(int);
+    int maxZoom() const;
+    void setMaxZoom(int);
 
-	int zoom() const;
-	void setZoom(int);
+    int zoom() const;
+    void setZoom(int);
 
     signals:
-	void valueChanged(int ipFactor);
-	void movedUp();
-	void movedDown();
-	void movedRight();
-	void movedLeft();
-	void moveModeSet(bool);
+    void valueChanged(int ipFactor);
+    void movedUp();
+    void movedDown();
+    void movedRight();
+    void movedLeft();
+    void moveModeSet(bool);
 
     private:
-	Ui::ControlWidget ui;
+    Ui::ControlWidget ui;
 
     private slots:
-	void changeValue(int);
-	void increaseValue();
-	void decreaseValue();
-	void moveUp();
-	void moveDown();
-	void moveLeft();
-	void moveRight();
-	void setMoveMode();
+    void changeValue(int);
+    void increaseValue();
+    void decreaseValue();
+    void moveUp();
+    void moveDown();
+    void moveLeft();
+    void moveRight();
+    void setMoveMode();
 };
 
 #endif // CONTROLWIDGET_H

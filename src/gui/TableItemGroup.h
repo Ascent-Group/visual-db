@@ -44,21 +44,21 @@ class QMenu;
 class TableItemGroup : public QGraphicsItemGroup
 {
     public:
-	TableItemGroup(QGraphicsItem *parent = 0);
-	~TableItemGroup();
-	virtual int type() const;
+    TableItemGroup(QGraphicsItem *parent = 0);
+    ~TableItemGroup();
+    virtual int type() const;
 
-	void setContextMenu(QMenu *);
-	QDomElement toXml(QDomDocument &);
+    void setContextMenu(QMenu *);
+    QDomElement toXml(QDomDocument &);
 
     public:
-	enum { Type = UserType + 6 };
+    enum { Type = UserType + 6 };
 
     protected:
-	void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
 
     private:
-	QMenu *mContextMenu;
+    QMenu *mContextMenu;
 };
 
 bool isTableGroup(QGraphicsItem *);

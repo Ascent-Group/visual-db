@@ -4,7 +4,7 @@ TEMPLATE    = lib
 
 QT += sql network gui
 
-SRC	    = ../../../
+SRC     = ../../../
 
 UI_DIR = .uic
 UI_HEADERS_DIR = $$SRC/gui/ui
@@ -18,10 +18,10 @@ INCLUDEPATH += $$SRC/ $$SRC/dbobjects
 FORMS = $$SRC/gui/ui/SqlWidget.ui
 
 HEADERS = $$SRC/gui/SqlWidget.h \
-	  SqlWidgetPlugin.h
+      SqlWidgetPlugin.h
 
 SOURCES = $$SRC/gui/SqlWidget.cpp \
-	  SqlWidgetPlugin.cpp
+      SqlWidgetPlugin.cpp
 
 RESOURCES += $$SRC/visual_db.qrc
 

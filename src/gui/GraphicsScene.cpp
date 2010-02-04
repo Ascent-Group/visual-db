@@ -113,9 +113,9 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
             return tableList;
         }
 
-	TableItem *table = newTableItem(ipTreeItem->parent()->parent()->text(TreeWidget::NameCol),
-		ipTreeItem->text(TreeWidget::NameCol), mTableMenu);
-	tableList.append(table);
+    TableItem *table = newTableItem(ipTreeItem->parent()->parent()->text(TreeWidget::NameCol),
+        ipTreeItem->text(TreeWidget::NameCol), mTableMenu);
+    tableList.append(table);
 
     } else if (TreeWidget::TableNode == objId) {
         for (int i = 0; i < ipTreeItem->childCount(); ++i) {
@@ -135,7 +135,7 @@ GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ip
     TableItem *newItem = findTableItem(ipSchemaName, ipTableName);
     // check if such item is already on the scene
     if (newItem) {
-	return newItem;
+    return newItem;
     }
 
     // create new table
@@ -150,13 +150,13 @@ void
 GraphicsScene::addTableItems(const QList<QGraphicsItem *> &ipItems) 
 {
     foreach (QGraphicsItem *item, ipItems) {
-	if (qgraphicsitem_cast<TableItemGroup *>(item)) {
-	    TableItemGroup *group = qgraphicsitem_cast<TableItemGroup *>(item);
+    if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+        TableItemGroup *group = qgraphicsitem_cast<TableItemGroup *>(item);
             addTableItems(group->children());
-	    createItemGroup(group->children());
-	} else if (qgraphicsitem_cast<TableItem *>(item)) {
-	    addItem(item);
-	}
+        createItemGroup(group->children());
+    } else if (qgraphicsitem_cast<TableItem *>(item)) {
+        addItem(item);
+    }
     }
     drawRelations();
     clearSelection();
@@ -171,9 +171,9 @@ GraphicsScene::drawRelations()
 {
     // draw all relations between new table and already added ones
     foreach (QGraphicsItem *item, items()) {
-	if (qgraphicsitem_cast<TableItem *>(item)) {
-	    createRelations(qgraphicsitem_cast<TableItem *>(item));
-	}
+    if (qgraphicsitem_cast<TableItem *>(item)) {
+        createRelations(qgraphicsitem_cast<TableItem *>(item));
+    }
     }  
 }
 
@@ -186,19 +186,19 @@ GraphicsScene::createRelations(TableItem *ipSourceItem)
     DbTable *tableModel = ipSourceItem->tableModel();
     // find foreign keys and tables related to this keys
     for (int i = 0; i < tableModel->columnsCount(); ++i) {
-	if (tableModel->isColumnForeignKey(i)) {
-	    TableItem *destItem = 0;
+    if (tableModel->isColumnForeignKey(i)) {
+        TableItem *destItem = 0;
 
-	    // if founded, create arrow
-	    if ((destItem = findTableItem(tableModel->foreignSchemaName(i), tableModel->foreignTableName(i))) != 0) {
-		ArrowItem *arrow = new ArrowItem(ipSourceItem, destItem);
-		ipSourceItem->addArrowItem(arrow);
-		destItem->addArrowItem(arrow);
-		arrow->setZValue(-1000.0);
-		addItem(arrow);
-		arrow->updatePosition();
-	    }
-	}
+        // if founded, create arrow
+        if ((destItem = findTableItem(tableModel->foreignSchemaName(i), tableModel->foreignTableName(i))) != 0) {
+        ArrowItem *arrow = new ArrowItem(ipSourceItem, destItem);
+        ipSourceItem->addArrowItem(arrow);
+        destItem->addArrowItem(arrow);
+        arrow->setZValue(-1000.0);
+        addItem(arrow);
+        arrow->updatePosition();
+        }
+    }
     }
 }
 
@@ -209,12 +209,12 @@ TableItem *
 GraphicsScene::findTableItem(const QString &ipSchemaName, const QString &ipTableName)
 {
     foreach (QGraphicsItem *item, items()) {
-	if (qgraphicsitem_cast<TableItem *>(item)) {
-	    TableItem *tableItem = qgraphicsitem_cast<TableItem *>(item);
-	    if (tableItem->schemaName() == ipSchemaName && tableItem->tableName() == ipTableName) {
-		return tableItem;
-	    }
-	}
+    if (qgraphicsitem_cast<TableItem *>(item)) {
+        TableItem *tableItem = qgraphicsitem_cast<TableItem *>(item);
+        if (tableItem->schemaName() == ipSchemaName && tableItem->tableName() == ipTableName) {
+        return tableItem;
+        }
+    }
     }
 
     return 0;
@@ -227,8 +227,8 @@ void
 GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *ipEvent)
 {
     if (itemAt(ipEvent->scenePos())) {
-	QGraphicsScene::contextMenuEvent(ipEvent);
-	return;
+    QGraphicsScene::contextMenuEvent(ipEvent);
+    return;
     }
 
     mSchemeMenu->exec(ipEvent->screenPos());
@@ -241,21 +241,21 @@ void
 GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     if (mMoveMode) {
-	QGraphicsScene::mousePressEvent(ipEvent);
-	return;
+    QGraphicsScene::mousePressEvent(ipEvent);
+    return;
     } else {
-	// if we pressed under item - do default actions and return
-	QGraphicsItem *item = itemAt(ipEvent->scenePos());
-	if (item && qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) {
-	    mOldPos = item->scenePos();
-	    QGraphicsScene::mousePressEvent(ipEvent);
-	    return;
-	}
+    // if we pressed under item - do default actions and return
+    QGraphicsItem *item = itemAt(ipEvent->scenePos());
+    if (item && qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) {
+        mOldPos = item->scenePos();
+        QGraphicsScene::mousePressEvent(ipEvent);
+        return;
+    }
      
-	clearSelection();
-	mStartSelect = ipEvent->scenePos();
-	   
-	QGraphicsScene::mousePressEvent(ipEvent);
+    clearSelection();
+    mStartSelect = ipEvent->scenePos();
+       
+    QGraphicsScene::mousePressEvent(ipEvent);
     }
 }
 
@@ -268,20 +268,20 @@ GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
     QGraphicsItem *item = itemAt(ipEvent->scenePos());
     qDebug() << item << mOldPos.x() << ipEvent->scenePos().x();
     if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) && 
-	    ipEvent->scenePos() != mOldPos) {
-//	emit tableMoved(selectedItems(), mOldPos - item->scenePos());
+        ipEvent->scenePos() != mOldPos) {
+//  emit tableMoved(selectedItems(), mOldPos - item->scenePos());
     }
 
     if (mMoveMode) {
-	QGraphicsScene::mouseReleaseEvent(ipEvent);
-	return;
+    QGraphicsScene::mouseReleaseEvent(ipEvent);
+    return;
     } else {
-	if (mSelectionPath) {
-	    removeItem(mSelectionPath);
-	    mSelectionPath = 0;
-	}
+    if (mSelectionPath) {
+        removeItem(mSelectionPath);
+        mSelectionPath = 0;
+    }
 
-	QGraphicsScene::mouseReleaseEvent(ipEvent);
+    QGraphicsScene::mouseReleaseEvent(ipEvent);
     }
 }
 
@@ -292,46 +292,46 @@ void
 GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     if (mMoveMode) {
-	QGraphicsScene::mouseMoveEvent(ipEvent);
-	return;
+    QGraphicsScene::mouseMoveEvent(ipEvent);
+    return;
     } else {
-	// if we grabbered an item - do default actions and return
-	if (mouseGrabberItem()) {
-	    QGraphicsScene::mouseMoveEvent(ipEvent);
-	    return;
-	}
+    // if we grabbered an item - do default actions and return
+    if (mouseGrabberItem()) {
+        QGraphicsScene::mouseMoveEvent(ipEvent);
+        return;
+    }
 
-	// if left button was pressed - draw selection rectangle and set selection for all items under this rectangle
-	if (ipEvent->buttons() == Qt::LeftButton) {
-	    mEndSelect = ipEvent->scenePos();
-	   
-	    if (mSelectionPath) {
-		removeItem(mSelectionPath);
-		mSelectionPath = 0;
-	    }
+    // if left button was pressed - draw selection rectangle and set selection for all items under this rectangle
+    if (ipEvent->buttons() == Qt::LeftButton) {
+        mEndSelect = ipEvent->scenePos();
+       
+        if (mSelectionPath) {
+        removeItem(mSelectionPath);
+        mSelectionPath = 0;
+        }
 
-	    // calculate coordinates of left top and right bottom corners
-	    qreal startX = fmin(mStartSelect.x(), mEndSelect.x());
-	    qreal startY = fmin(mStartSelect.y(), mEndSelect.y());
-	    qreal endX = fmax(mStartSelect.x(), mEndSelect.x());
-	    qreal endY = fmax(mStartSelect.y(), mEndSelect.y());
+        // calculate coordinates of left top and right bottom corners
+        qreal startX = fmin(mStartSelect.x(), mEndSelect.x());
+        qreal startY = fmin(mStartSelect.y(), mEndSelect.y());
+        qreal endX = fmax(mStartSelect.x(), mEndSelect.x());
+        qreal endY = fmax(mStartSelect.y(), mEndSelect.y());
 
-	    qreal width = endX - startX;
-	    qreal height = endY - startY;
+        qreal width = endX - startX;
+        qreal height = endY - startY;
 
-	    // draw rectangle
-	    QPen pen(Qt::DashLine);
-	    pen.setColor(Qt::gray);
+        // draw rectangle
+        QPen pen(Qt::DashLine);
+        pen.setColor(Qt::gray);
 
-	    QPainterPath path = QPainterPath();
-	    path.addRect(QRectF(startX, startY, width, height));
-	    mSelectionPath = addPath(path, pen);
+        QPainterPath path = QPainterPath();
+        path.addRect(QRectF(startX, startY, width, height));
+        mSelectionPath = addPath(path, pen);
 
-	    // select all items under rectangle
-	    setSelectionArea(path);
-	}
-	   
-	QGraphicsScene::mouseMoveEvent(ipEvent);
+        // select all items under rectangle
+        setSelectionArea(path);
+    }
+       
+    QGraphicsScene::mouseMoveEvent(ipEvent);
     }
 }
 
@@ -349,7 +349,7 @@ GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
         QGraphicsItem *parent = items.at(n++);
         while ((parent = parent->parentItem())) {
             ancestors.append(parent);
-	}
+    }
     }
 
     // find the common ancestor for all items
@@ -369,7 +369,7 @@ GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
             if (commonIndex == -1) {
                 commonAncestor = 0;
                 break;
-	    }
+        }
 
             commonAncestor = ancestors.at(commonIndex);
         }
@@ -382,9 +382,9 @@ GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
     }
 
     foreach (QGraphicsItem *item, items) {
-	if (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) {
-	    group->addToGroup(item);
-	}
+    if (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) {
+        group->addToGroup(item);
+    }
     }
     return group;
 }
@@ -397,12 +397,12 @@ GraphicsScene::drawBackground(QPainter *ipPainter, const QRectF &)
 {
     bool needDrawGrid = mSettings.value("View/ShowGrid", true).value<bool>();
     if (needDrawGrid) {
-	drawGrid(ipPainter);
+    drawGrid(ipPainter);
     }
    
     bool needDivideIntoPages = mSettings.value("View/DivideIntoPages", true).value<bool>();
     if (needDivideIntoPages) {
-	divideIntoPages(ipPainter);
+    divideIntoPages(ipPainter);
     }
 }
 
@@ -419,36 +419,36 @@ GraphicsScene::drawGrid(QPainter *ipPainter)
     int x1 = 0;
     int x2 = x1;
     while (x1 < width()) {
-	if (x1 % 50 == 0) {
-	    pen.setColor(Qt::gray);
-	    pen.setStyle(Qt::DashDotDotLine);
-	} else {
-	    pen.setColor(QColor(210, 210, 210));
-	    pen.setStyle(Qt::DashDotDotLine);
-	}
-	ipPainter->setPen(pen);
+    if (x1 % 50 == 0) {
+        pen.setColor(Qt::gray);
+        pen.setStyle(Qt::DashDotDotLine);
+    } else {
+        pen.setColor(QColor(210, 210, 210));
+        pen.setStyle(Qt::DashDotDotLine);
+    }
+    ipPainter->setPen(pen);
        
-	// draw line between (x1, 0) and (x2, height) points
-	ipPainter->drawLine(x1, 0, x2, (int)height());
-	x1 = x2 = x1 + LOW_GRID_DX;
+    // draw line between (x1, 0) and (x2, height) points
+    ipPainter->drawLine(x1, 0, x2, (int)height());
+    x1 = x2 = x1 + LOW_GRID_DX;
     }
 
     // draw hogizontal lines
     int y1 = 0;
     int y2 = y1;
     while (y1 < height()) {
-	if (y1 % 50 == 0) {
-	    pen.setColor(Qt::gray);
-	    pen.setStyle(Qt::DashDotDotLine);
-	} else {
-	    pen.setColor(QColor(210, 210, 210));
-	    pen.setStyle(Qt::DashDotDotLine);
-	}
-	ipPainter->setPen(pen);
+    if (y1 % 50 == 0) {
+        pen.setColor(Qt::gray);
+        pen.setStyle(Qt::DashDotDotLine);
+    } else {
+        pen.setColor(QColor(210, 210, 210));
+        pen.setStyle(Qt::DashDotDotLine);
+    }
+    ipPainter->setPen(pen);
 
-	// draw line between (0, y1) and (width, y2) points
-	ipPainter->drawLine(0, y1, (int)width(), y2);
-	y1 = y2 = y1 + LOW_GRID_DY;
+    // draw line between (0, y1) and (width, y2) points
+    ipPainter->drawLine(0, y1, (int)width(), y2);
+    y1 = y2 = y1 + LOW_GRID_DY;
     }
 }
 
@@ -472,11 +472,11 @@ GraphicsScene::divideIntoPages(QPainter *ipPainter)
     ipPainter->setPen(pen);
 
     for (int i = 0; i < maxI; ++i) {
-	ipPainter->drawLine(i * a4width, 0, i * a4width, (int)height());
+    ipPainter->drawLine(i * a4width, 0, i * a4width, (int)height());
     }
 
     for (int j = 0; j < maxJ; ++j) {
-	ipPainter->drawLine(0, j * a4height, (int)width(), j * a4height);
+    ipPainter->drawLine(0, j * a4height, (int)width(), j * a4height);
     }
 }
 
@@ -497,11 +497,11 @@ void
 GraphicsScene::showLegend(bool ipFlag)
 {
     if (ipFlag) {
-	addItem(mLegend);
+    addItem(mLegend);
     } else {
-	if (mLegend->scene()) {
-	    removeItem(mLegend);
-	}
+    if (mLegend->scene()) {
+        removeItem(mLegend);
+    }
     }
 }
 
@@ -525,7 +525,7 @@ GraphicsScene::deleteTableItems(QList<QGraphicsItem *> ipItems)
             qgraphicsitem_cast<TableItem *>(item)->removeArrowItems();
         } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
             deleteTableItems(qgraphicsitem_cast<TableItemGroup *>(item)->children());
-	}
+    }
         removeItem(item);
     }
 
@@ -563,7 +563,7 @@ GraphicsScene::setFieldsTypesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag
             qgraphicsitem_cast<TableItem *>(item)->setFieldsTypesVisible(ipFlag);
         } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
             setFieldsTypesVisible(qgraphicsitem_cast<TableItemGroup *>(item)->children(), ipFlag);
-	}
+    }
     }
 }
 
@@ -587,7 +587,7 @@ GraphicsScene::setIndicesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag)
             qgraphicsitem_cast<TableItem *>(item)->setIndicesVisible(ipFlag);
         } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
             setIndicesVisible(qgraphicsitem_cast<TableItemGroup *>(item)->children(), ipFlag);
-	}
+    }
     }
 }
 
@@ -602,7 +602,7 @@ GraphicsScene::setTableColor()
 
     // if color is valid
     if (color.isValid()) {
-	setTableColor(selectedItems(), color);
+    setTableColor(selectedItems(), color);
     }
 
     updateLegend();
@@ -620,7 +620,7 @@ GraphicsScene::setTableColor(QList<QGraphicsItem *> ipItems, QColor ipColor)
             setTableColor(qgraphicsitem_cast<TableItem *>(item), ipColor);
         } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
             setTableColor(qgraphicsitem_cast<TableItemGroup *>(item)->children(), ipColor);
-	}
+    }
     }
 }
 
@@ -643,7 +643,7 @@ GraphicsScene::selectAllTables()
     foreach (QGraphicsItem *item, items()) {
         if (qgraphicsitem_cast<TableItem *>(item)) {
             qgraphicsitem_cast<TableItem *>(item)->setSelected(true);
-	}
+    }
     }
 }
 
@@ -667,7 +667,7 @@ GraphicsScene::adjustTables(QList<QGraphicsItem *> ipItems)
             qgraphicsitem_cast<TableItem *>((item))->adjustSize();
         } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
             adjustTables(qgraphicsitem_cast<TableItemGroup *>((item))->children());
-	}
+    }
     }
 }
 
@@ -679,7 +679,7 @@ GraphicsScene::groupItems(QList<QGraphicsItem *> ipItems)
 {
     // if we try to group only one item - return
     if (1 == ipItems.count()) {
-	return;
+    return;
     }
 
     TableItemGroup *group = createItemGroup(ipItems);
@@ -704,7 +704,7 @@ GraphicsScene::ungroupItems(QList<QGraphicsItem *> ipItems)
     foreach (QGraphicsItem *item, ipItems) {
         if (qgraphicsitem_cast<TableItemGroup *>(item)) {
             destroyItemGroup(qgraphicsitem_cast<TableItemGroup *>(item));
-	}
+    }
     }
 }
 
@@ -729,17 +729,17 @@ GraphicsScene::colorizeAccordingSchemas()
     dbInst->schemasList(&schemasNames);
 
     for (int i = 0; i < schemasNames.count(); ++i) {
-	// items can mutate in the loop
-	foreach (QGraphicsItem *item, items()) {
-	    TableItem *tableItem = qgraphicsitem_cast<TableItem *>(item);
-	    if (tableItem && tableItem->schemaName() == schemasNames.at(i)) {
-		// use only two colors from the palette
-		int red = (0 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
-		int green = (1 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
-		int blue = (2 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
-		setTableColor(tableItem, QColor(red, green, blue));
-	    }
-	}
+    // items can mutate in the loop
+    foreach (QGraphicsItem *item, items()) {
+        TableItem *tableItem = qgraphicsitem_cast<TableItem *>(item);
+        if (tableItem && tableItem->schemaName() == schemasNames.at(i)) {
+        // use only two colors from the palette
+        int red = (0 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
+        int green = (1 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
+        int blue = (2 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
+        setTableColor(tableItem, QColor(red, green, blue));
+        }
+    }
     }
 
     updateLegend();
@@ -783,15 +783,15 @@ void
 GraphicsScene::selectAllTablesInSchema()
 {
     foreach (QGraphicsItem *itemFromSelected, selectedItems()) {
-	// items can mutate in the loop
-	foreach (QGraphicsItem *itemFromAll, items()) {
-	    if (qgraphicsitem_cast<TableItem *>(itemFromAll) && 
-		    qgraphicsitem_cast<TableItem *>(itemFromSelected) &&
-		    qgraphicsitem_cast<TableItem *>(itemFromAll)->schemaName() ==
-		    qgraphicsitem_cast<TableItem *>(itemFromSelected)->schemaName()) {
-		(itemFromAll)->setSelected(true);
-	    }
-	}
+    // items can mutate in the loop
+    foreach (QGraphicsItem *itemFromAll, items()) {
+        if (qgraphicsitem_cast<TableItem *>(itemFromAll) && 
+            qgraphicsitem_cast<TableItem *>(itemFromSelected) &&
+            qgraphicsitem_cast<TableItem *>(itemFromAll)->schemaName() ==
+            qgraphicsitem_cast<TableItem *>(itemFromSelected)->schemaName()) {
+        (itemFromAll)->setSelected(true);
+        }
+    }
     }
 }
 

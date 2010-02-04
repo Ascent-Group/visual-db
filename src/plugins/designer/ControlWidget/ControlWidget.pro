@@ -2,7 +2,7 @@ CONFIG      += designer plugin
 TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
-SRC	    = ../../../
+SRC     = ../../../
 
 UI_DIR = .uic
 UI_HEADERS_DIR = $$SRC/gui/ui
@@ -16,10 +16,10 @@ INCLUDEPATH += $$SRC/
 FORMS = $$SRC/gui/ui/ControlWidget.ui
 
 HEADERS = $$SRC/gui/ControlWidget.h \
-	  ControlWidgetPlugin.h
+      ControlWidgetPlugin.h
 
 SOURCES = $$SRC/gui/ControlWidget.cpp \
-	  ControlWidgetPlugin.cpp
+      ControlWidgetPlugin.cpp
 
 RESOURCES += $$SRC/visual_db.qrc
 

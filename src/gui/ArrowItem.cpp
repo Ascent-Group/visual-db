@@ -48,9 +48,9 @@ const qreal Pi = 3.14;
  * Constructor
  */
 ArrowItem::ArrowItem(TableItem *ipStartItem, 
-		     TableItem *ipEndItem, 
-		     QGraphicsItem *ipParent, 
-		     QGraphicsScene *ipScene)
+             TableItem *ipEndItem, 
+             QGraphicsItem *ipParent, 
+             QGraphicsScene *ipScene)
     : QGraphicsLineItem(ipParent, ipScene), 
       mStartItem(ipStartItem), mEndItem(ipEndItem)
 {
@@ -78,7 +78,7 @@ ArrowItem::boundingRect() const
     qreal extra = (pen().width() + 20) / 2.0;
 
     return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(), 
-	line().p2().y() - line().p1().y()))
+    line().p2().y() - line().p1().y()))
         .normalized()
         .adjusted(-extra, -extra, extra, extra);
 }
@@ -147,13 +147,13 @@ findIntersection(const TableItem *ipItem, const QLineF &ipLine)
     QPointF point1 = polygon.first() + ipItem->scenePos();
     QPointF intersectPoint;
     for (int i = 1; i < polygon.count(); ++i) {
-	QPointF point2 = polygon.at(i) + ipItem->scenePos();
-	QLineF polyLine = QLineF(point1, point2);
-	QLineF::IntersectType intersectType = polyLine.intersect(ipLine, &intersectPoint);
-	if (intersectType == QLineF::BoundedIntersection) {
-	    break;
-	}
-	point1 = point2;
+    QPointF point2 = polygon.at(i) + ipItem->scenePos();
+    QLineF polyLine = QLineF(point1, point2);
+    QLineF::IntersectType intersectType = polyLine.intersect(ipLine, &intersectPoint);
+    if (intersectType == QLineF::BoundedIntersection) {
+        break;
+    }
+    point1 = point2;
     }
 
     return intersectPoint;
@@ -174,9 +174,9 @@ makeHead(const QLineF &ipLine)
     }
 
     QPointF arrowP1 = ipLine.p1() + QPointF(sin(angle + Pi / 3) * ArrowItem::ARROW_SIZE,
-				    cos(angle + Pi / 3) * ArrowItem::ARROW_SIZE);
+                    cos(angle + Pi / 3) * ArrowItem::ARROW_SIZE);
     QPointF arrowP2 = ipLine.p1() + QPointF(sin(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE,
-				    cos(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE);
+                    cos(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE);
 
     head << ipLine.p1() << arrowP1 << arrowP2;
 
@@ -190,7 +190,7 @@ QLineF
 ArrowItem::makeLine() const
 {
     QLineF centerLine(mapFromItem(mStartItem, mStartItem->centerPoint()), 
-	    mapFromItem(mEndItem, mEndItem->centerPoint()));
+        mapFromItem(mEndItem, mEndItem->centerPoint()));
 
     QPointF startPoint = findIntersection(mStartItem, centerLine);
     QPointF endPoint = findIntersection(mEndItem, centerLine);

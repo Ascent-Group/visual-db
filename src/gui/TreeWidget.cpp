@@ -157,24 +157,24 @@ TreeWidget::refresh()
 
         // create schema
 
-	DbSchema *schema = dbInst->findSchema(schemaName);
+    DbSchema *schema = dbInst->findSchema(schemaName);
 
         // create tablesNode
         QTreeWidgetItem *tablesNode = new QTreeWidgetItem(schemaItem);
         tablesNode->setText(TreeWidget::NameCol, tr("Tables"));
         tablesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TableNode));
-	setBold(tablesNode, true);
+    setBold(tablesNode, true);
         // create viewsNode
         QTreeWidgetItem *viewsNode = new QTreeWidgetItem(schemaItem);
         viewsNode->setText(TreeWidget::NameCol, tr("Views"));
         viewsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::ViewNode));
-	setBold(viewsNode, true);
+    setBold(viewsNode, true);
         // create procsNode
         QTreeWidgetItem *procsNode = new QTreeWidgetItem(schemaItem);
         procsNode->setText(TreeWidget::NameCol, tr("Procedures"));
         procsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::ProcedureNode));
         setBold(procsNode, true);
-	// create procsNode
+    // create procsNode
         QTreeWidgetItem *trigsNode = new QTreeWidgetItem(schemaItem);
         trigsNode->setText(TreeWidget::NameCol, tr("Triggers"));
         trigsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TriggerNode));
@@ -204,11 +204,11 @@ TreeWidget::refresh()
 
         insertItems(procsNode, &procsList, TreeWidget::ProcedureItem);
 
-	//// TRIGGERS
-	QStringList trigsList;
-	schema->triggersList(&trigsList);
+    //// TRIGGERS
+    QStringList trigsList;
+    schema->triggersList(&trigsList);
 
-	insertItems(trigsNode, &trigsList, TreeWidget::TriggerItem);
+    insertItems(trigsNode, &trigsList, TreeWidget::TriggerItem);
 
     }
 
@@ -244,7 +244,7 @@ qDBCaption(const QSqlDatabase &ipDb)
     driverName.append(QLatin1Char(':'));
 
     if (!ipDb.userName().isEmpty()) {
-	driverName.append(ipDb.userName()).append(QLatin1Char('@'));
+    driverName.append(ipDb.userName()).append(QLatin1Char('@'));
     }
 
     driverName.append(ipDb.databaseName());
@@ -276,9 +276,9 @@ TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, Tree
     for (iter = ipList->begin(); iter != ipList->end(); ++iter) {
         QString name = *iter;
 
-		// create an item
-		QTreeWidgetItem *item = new QTreeWidgetItem(ipParentItem);
-		item->setText(TreeWidget::NameCol, name);
-		item->setText(TreeWidget::IdCol, QString::number(ipType));
+        // create an item
+        QTreeWidgetItem *item = new QTreeWidgetItem(ipParentItem);
+        item->setText(TreeWidget::NameCol, name);
+        item->setText(TreeWidget::IdCol, QString::number(ipType));
     }
 }

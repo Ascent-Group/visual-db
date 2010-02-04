@@ -78,7 +78,7 @@ class DbRole : public DbObject
         bool mCanCreateDb;
         bool mCanUpdateSysCat;
         bool mCanLogin;
-	// I even doubt that any server can handle such number of connections
+    // I even doubt that any server can handle such number of connections
         quint32 mConnectionLimit;
         QDate mExpiryDate;
         quint64 mId;

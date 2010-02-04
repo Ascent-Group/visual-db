@@ -2,7 +2,7 @@ CONFIG      += designer plugin
 TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
-SRC	    = ../../../
+SRC     = ../../../
 
 UI_DIR = .uic
 UI_HEADERS_DIR = $$SRC/gui/ui
@@ -16,10 +16,10 @@ INCLUDEPATH += $$SRC/
 FORMS = $$SRC/gui/ui/PreferencesPage.ui
 
 HEADERS = $$SRC/gui/PreferencesPage.h \
-	  PreferencesPagePlugin.h
+      PreferencesPagePlugin.h
 
 SOURCES = $$SRC/gui/PreferencesPage.cpp \
-	  PreferencesPagePlugin.cpp
+      PreferencesPagePlugin.cpp
 
 RESOURCES += $$SRC/visual_db.qrc
 

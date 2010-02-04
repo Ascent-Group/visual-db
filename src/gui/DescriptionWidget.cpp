@@ -40,7 +40,7 @@
 #include <QtDebug>
 
 const QString DescriptionWidget::sCreateSchemaScript = "CREATE SCHEMA %1 \n"
-			"AUTHORIZATION %2;\n";
+            "AUTHORIZATION %2;\n";
 const QString DescriptionWidget::sAddSchemaDecriptionScript = "\nCOMMENT ON SCHEMA public IS '%1';";
 
 /*
@@ -80,37 +80,37 @@ DescriptionWidget::describe(const DbSchema *ipSchema)
     QString description = ipSchema->description();
 
     ui.mTable->setRowCount(1);
-	ui.mTable->setColumnCount(DescriptionWidget::DbSchemaColumnsCount);
+    ui.mTable->setColumnCount(DescriptionWidget::DbSchemaColumnsCount);
 
-	// set column labels
-	QStringList labels;
+    // set column labels
+    QStringList labels;
 
-	labels << tr("Name")
-			<< tr("Owner")
-			<< tr("Description");
+    labels << tr("Name")
+            << tr("Owner")
+            << tr("Description");
 
-	ui.mTable->setHorizontalHeaderLabels(labels);
+    ui.mTable->setHorizontalHeaderLabels(labels);
 
-	// fill table with Schema data
-	QTableWidgetItem *nameItem = new QTableWidgetItem();
-	nameItem->setText(name);
-	ui.mTable->setItem(0, DescriptionWidget::SchemaNameCol, nameItem);
+    // fill table with Schema data
+    QTableWidgetItem *nameItem = new QTableWidgetItem();
+    nameItem->setText(name);
+    ui.mTable->setItem(0, DescriptionWidget::SchemaNameCol, nameItem);
 
-	QTableWidgetItem *ownerNameItem = new QTableWidgetItem();
-	ownerNameItem->setText(ownerName);
-	ui.mTable->setItem(0, DescriptionWidget::SchemaOwnerNameCol, ownerNameItem);
+    QTableWidgetItem *ownerNameItem = new QTableWidgetItem();
+    ownerNameItem->setText(ownerName);
+    ui.mTable->setItem(0, DescriptionWidget::SchemaOwnerNameCol, ownerNameItem);
 
-	QTableWidgetItem *descrItem = new QTableWidgetItem();
-	descrItem->setText(description);
-	ui.mTable->setItem(0, DescriptionWidget::SchemaDescriptionCol, descrItem);
+    QTableWidgetItem *descrItem = new QTableWidgetItem();
+    descrItem->setText(description);
+    ui.mTable->setItem(0, DescriptionWidget::SchemaDescriptionCol, descrItem);
 
-	// auto resize cells
-	ui.mTable->resizeColumnsToContents();
+    // auto resize cells
+    ui.mTable->resizeColumnsToContents();
 
     QString body = sCreateSchemaScript.arg(name).arg(ownerName);
 
     if (description.length() > 0) {
-    	body += sAddSchemaDecriptionScript.arg(description);
+        body += sAddSchemaDecriptionScript.arg(description);
     }
 
     ui.mBodyEdit->setText(body);
@@ -235,10 +235,10 @@ DescriptionWidget::describe(const DbTable *ipTable)
                         .arg(foreignTableName)
                         .arg(foreignFieldsNames));
         }
-	
-	if (i != columnsCount - 1) {
-	    body.append(",");
-	}
+    
+    if (i != columnsCount - 1) {
+        body.append(",");
+    }
     }
 
     // auto resize cells
@@ -624,7 +624,7 @@ DescriptionWidget::describe(const DbTrigger *ipTrigger)
 
     labels << tr("Name")
             << tr("Table")
-			<< tr("Procedure")
+            << tr("Procedure")
             << tr("Enabled")
             << tr("Is constraint")
             << tr("Constraint name")

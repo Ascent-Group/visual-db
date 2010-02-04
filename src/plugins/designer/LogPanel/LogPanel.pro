@@ -2,7 +2,7 @@ CONFIG      += designer plugin
 TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
-SRC	    = ../../../
+SRC     = ../../../
 
 UI_DIR = .uic
 UI_HEADERS_DIR = $$SRC/gui/ui
@@ -17,10 +17,10 @@ FORMS = $$SRC/gui/ui/LogPanel.ui
 
 
 HEADERS = $$SRC/gui/LogPanel.h \
-	  LogPanelPlugin.h
+      LogPanelPlugin.h
 
 SOURCES = $$SRC/gui/LogPanel.cpp \
-	  LogPanelPlugin.cpp
+      LogPanelPlugin.cpp
 
 RESOURCES += $$SRC/visual_db.qrc
 

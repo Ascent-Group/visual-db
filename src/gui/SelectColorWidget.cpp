@@ -67,14 +67,14 @@ void
 SelectColorWidget::colorSelect(int ipIndex)
 {
     switch (ipIndex) {
-	case 1:
-	    getColorFromDialog();
-	    break;
-	
-	case 0:
-	default:
-	    mColor = mDefaultColor;
-	    break;
+    case 1:
+        getColorFromDialog();
+        break;
+    
+    case 0:
+    default:
+        mColor = mDefaultColor;
+        break;
     }
 
     ui.mColorButton->setPalette(QPalette(mColor));
@@ -97,8 +97,8 @@ SelectColorWidget::buttonClick()
 {
     // if 'another color' is selected - make button clickable
     if (ui.mCombo->currentIndex() == 1) {
-	getColorFromDialog();
-	ui.mColorButton->setPalette(QPalette(mColor));
+    getColorFromDialog();
+    ui.mColorButton->setPalette(QPalette(mColor));
     }
 }
 
@@ -110,7 +110,7 @@ SelectColorWidget::getColorFromDialog()
 {
     QColor color = QColorDialog::getColor(mColor, this);
     if (color.isValid()) {
-	mColor = color;
+    mColor = color;
     }
 }
 
@@ -144,7 +144,7 @@ SelectColorWidget::setDefaultColor(QColor ipColor)
     mDefaultColor = ipColor;
 
     if (mDefaultColor != mColor) {
-	ui.mCombo->setCurrentIndex(1);
+    ui.mCombo->setCurrentIndex(1);
     }
 
     ui.mColorButton->setPalette(QPalette(mColor));
@@ -158,7 +158,7 @@ SelectColorWidget::init()
 
     // select default color
     if (mDefaultColor != mColor) {
-	ui.mCombo->setCurrentIndex(1);
+    ui.mCombo->setCurrentIndex(1);
     }
 
     ui.mColorButton->setPalette(QPalette(mColor));

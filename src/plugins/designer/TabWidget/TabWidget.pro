@@ -2,7 +2,7 @@ CONFIG      += designer plugin
 TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
-SRC	    = ../../../
+SRC     = ../../../
 
 UI_DIR = .uic
 UI_HEADERS_DIR = $$SRC/gui/ui
@@ -15,10 +15,10 @@ INCLUDEPATH += $$SRC/
 
 
 HEADERS = $$SRC/gui/TabWidget.h \
-	  TabWidgetPlugin.h
+      TabWidgetPlugin.h
 
 SOURCES = $$SRC/gui/TabWidget.cpp \
-	  TabWidgetPlugin.cpp
+      TabWidgetPlugin.cpp
 
 RESOURCES += $$SRC/visual_db.qrc
 

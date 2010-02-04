@@ -43,7 +43,7 @@ class TabWidget : public QTabWidget
     Q_OBJECT
 
     public:
-	// will be used in future - see release plans
+    // will be used in future - see release plans
         enum TabIds {
             SchemeTab = 0,
             DescTab

@@ -36,7 +36,7 @@ class DbObject
 {
     public:
 
-	enum Type {
+    enum Type {
             UnkObject = 0,
             SchemaObject,
             TableObject,

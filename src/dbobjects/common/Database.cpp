@@ -70,7 +70,7 @@ Database::instance()
 {
     // if not yet created => create
     if (0 == mInstance) {
-	mInstance = new Database();
+        mInstance = new Database();
     }
 
     return mInstance;
@@ -83,40 +83,40 @@ void
 Database::addSchema(DbSchema *ipSchema)
 {
     if (!mSchemas.contains(ipSchema)) {
-	mSchemas.push_back(ipSchema);
+        mSchemas.push_back(ipSchema);
     }
 }
 
 /*
  * Add role to DB roles list
  */
-void
+    void
 Database::addRole(DbRole *ipRole)
 {
     if (!mRoles.contains(ipRole)) {
-	mRoles.push_back(ipRole);
+        mRoles.push_back(ipRole);
     }
 }
 
 /*
  * Adds index to indices list
  */
-void
+    void
 Database::addIndex(DbIndex *ipIndex)
 {
     if (!mIndices.contains(ipIndex)) {
-	mIndices.push_back(ipIndex);
+        mIndices.push_back(ipIndex);
     }
 }
 
 /*
  * Adds language to list
  */
-void
+    void
 Database::addLanguage(DbLanguage *ipLanguage)
 {
     if (!mLanguages.contains(ipLanguage)) {
-	mLanguages.push_back(ipLanguage);
+        mLanguages.push_back(ipLanguage);
     }
 }
 
@@ -302,7 +302,7 @@ Database::findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) co
     for (quint64 i = 0; i < count; ++i) {
         // if index is for our table -- add it
         if (tableName == mIndices.at(i)->tableName()
-            && schemaName == mIndices.at(i)->schemaName()) {            
+            && schemaName == mIndices.at(i)->schemaName()) {
             ipList.push_back(mIndices.at(i));
         }
     }
@@ -353,25 +353,25 @@ Database::readSchemas()
     // choose a query depending on sql driver
     switch (mSqlDriver) {
         case Database::Unknown:
-			qDebug() << "Database::readSchemas> SqlDriver was not set";
+            qDebug() << "Database::readSchemas> SqlDriver was not set";
         case Database::PostgreSQL:
-			qstr = QString("SELECT nspname as name, roles.rolname as ownername, description "
-				    "FROM pg_catalog.pg_namespace pgn "
-					"left join pg_roles roles on roles.oid = pgn.nspowner "
-					"left join pg_description descr on descr.objoid = pgn.oid "
-				    ";");
-				    //"WHERE nspname NOT LIKE 'pg_%';");
-			break;
+            qstr = QString("SELECT nspname as name, roles.rolname as ownername, description "
+                    "FROM pg_catalog.pg_namespace pgn "
+                    "left join pg_roles roles on roles.oid = pgn.nspowner "
+                    "left join pg_description descr on descr.objoid = pgn.oid "
+                    ";");
+                    //"WHERE nspname NOT LIKE 'pg_%';");
+            break;
         case Database::MySQL:
-			qstr = QString("SELECT schema_name "
-				    "FROM information_schema.schemata;");
-			break;
+            qstr = QString("SELECT schema_name "
+                    "FROM information_schema.schemata;");
+            break;
         case Database::Oracle:
         case Database::SQLite:
-	default:
-			/* temporarily no support for these DBMS */
-			return;
-			break;
+        default:
+            /* temporarily no support for these DBMS */
+            return;
+            break;
     }
 
 #ifdef DEBUG_QUERY
@@ -380,34 +380,34 @@ Database::readSchemas()
 
     // if query execution failed
     if (!query.exec(qstr)) {
-	qDebug() << "Database::readSchemas> Unable to retrieve schemas.";
+        qDebug() << "Database::readSchemas> Unable to retrieve schemas.";
         qDebug() << query.lastError().text();
 
-	return;
+        return;
     }
 
     // if query returned nothing
     if (!query.first()) {
-	qDebug() << "Database::readSchemas> No schemas were found.";
+        qDebug() << "Database::readSchemas> No schemas were found.";
 
-	return;
+        return;
     }
 
     // for every retrieved row
     do {
-    	// get data from query
-    	qint32 colId = query.record().indexOf("name");
-    	QString name = query.value(colId).toString();
+        // get data from query
+        qint32 colId = query.record().indexOf("name");
+        QString name = query.value(colId).toString();
 
-    	colId = query.record().indexOf("ownername");
-    	QString ownerName = query.value(colId).toString();
+        colId = query.record().indexOf("ownername");
+        QString ownerName = query.value(colId).toString();
 
-    	colId = query.record().indexOf("description");
-    	QString description = query.value(colId).toString();
+        colId = query.record().indexOf("description");
+        QString description = query.value(colId).toString();
 
-    	// find owner for scheme
-    	DbRole *dbRole = findRole(ownerName);
-    	Q_CHECK_PTR(dbRole);
+        // find owner for scheme
+        DbRole *dbRole = findRole(ownerName);
+        Q_CHECK_PTR(dbRole);
 
         // create new schema object
         DbSchema *schema = new DbSchema(name, dbRole);
@@ -419,10 +419,10 @@ Database::readSchemas()
         schema->readTables();
         // read views
         schema->readViews();
-		// read procs
-		schema->readProcedures();
-		// read trigs
-		schema->readTriggers();
+        // read procs
+        schema->readProcedures();
+        // read trigs
+        schema->readTriggers();
 
         // add schema - not needed anymore, done in schema's ctor
         //addSchema(schema);
@@ -1004,3 +1004,4 @@ DatabaseManager::flush()
 {
      delete Database::instance();
 }
+

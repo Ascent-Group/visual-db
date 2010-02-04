@@ -3,7 +3,7 @@ TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
 QT += sql
-SRC	    = ../../../
+SRC     = ../../../
 
 UI_DIR = .uic
 UI_HEADERS_DIR = $$SRC/gui/ui
@@ -16,10 +16,10 @@ INCLUDEPATH += $$SRC/ $$SRC/dbobjects
 
 
 HEADERS = $$SRC/gui/TreeWidget.h \
-	  TreeWidgetPlugin.h
+      TreeWidgetPlugin.h
 
 SOURCES = $$SRC/gui/TreeWidget.cpp \
-	  TreeWidgetPlugin.cpp
+      TreeWidgetPlugin.cpp
 
 RESOURCES += $$SRC/visual_db.qrc
 

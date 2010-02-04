@@ -42,20 +42,20 @@ class OptionsDialog : public QDialog
     Q_OBJECT
 
     public:
-	OptionsDialog(QWidget *ipParent = 0);
-	~OptionsDialog();    
+    OptionsDialog(QWidget *ipParent = 0);
+    ~OptionsDialog();    
     
     private:
-	Ui::OptionsDialog ui;
+    Ui::OptionsDialog ui;
 
-	QSettings mSettings;
+    QSettings mSettings;
 
     private:
         void writeSettings();
-	    
+        
     private slots:
-	void accept();
-	void changePage(QListWidgetItem *, QListWidgetItem *);
+    void accept();
+    void changePage(QListWidgetItem *, QListWidgetItem *);
 };
 
 #endif // OPTIONSDIALOG_H

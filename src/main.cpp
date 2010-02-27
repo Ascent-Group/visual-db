@@ -27,6 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+/*!
+ * \mainpage VisualDB v1.0
+ */
+
 #include <QApplication>
 #include <QLocale>
 #include <QSettings>

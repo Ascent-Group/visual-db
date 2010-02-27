@@ -46,7 +46,7 @@
 // null initialization of instance
 Database* Database::mInstance = 0;
 
-/*
+/*!
  * Constructor
  */
 Database::Database()
@@ -54,7 +54,7 @@ Database::Database()
 
 }
 
-/*
+/*!
  * Destructor
  */
 Database::~Database()
@@ -62,8 +62,10 @@ Database::~Database()
     cleanup();
 }
 
-/*
- * Get/create an instance of Database
+/*!
+ * \brief Get/create an instance of Database
+ *
+ * \return Instance of Database
  */
 Database*
 Database::instance()
@@ -76,8 +78,10 @@ Database::instance()
     return mInstance;
 }
 
-/*
- * Add schema to DB schema list
+/*!
+ * \brief Add schema to DB schema list
+ *
+ * \param[in] ipSchema Schema object to add to schemas vector
  */
 void
 Database::addSchema(DbSchema *ipSchema)
@@ -87,10 +91,12 @@ Database::addSchema(DbSchema *ipSchema)
     }
 }
 
-/*
- * Add role to DB roles list
+/*!
+ * \brief Add role to DB roles list
+ *
+ * \param[in] ipRole Role object to add to roles vector
  */
-    void
+void
 Database::addRole(DbRole *ipRole)
 {
     if (!mRoles.contains(ipRole)) {
@@ -98,10 +104,12 @@ Database::addRole(DbRole *ipRole)
     }
 }
 
-/*
- * Adds index to indices list
+/*!
+ * \brief Adds index to indices list
+ *
+ * \param[in] ipIndex Index object to add to indices vector
  */
-    void
+void
 Database::addIndex(DbIndex *ipIndex)
 {
     if (!mIndices.contains(ipIndex)) {
@@ -109,10 +117,12 @@ Database::addIndex(DbIndex *ipIndex)
     }
 }
 
-/*
- * Adds language to list
+/*!
+ * \brief Adds language to list
+ *
+ * \param[in] ipLanguage Language object to add to indices vector
  */
-    void
+void
 Database::addLanguage(DbLanguage *ipLanguage)
 {
     if (!mLanguages.contains(ipLanguage)) {
@@ -120,8 +130,10 @@ Database::addLanguage(DbLanguage *ipLanguage)
     }
 }
 
-/*
- * Returns a list of schemas' names
+/*!
+ * \brief Returns a list of schemas' names
+ *
+ * \param[out] ipList List with names of stored schemas
  */
 void
 Database::schemasList(QStringList *ipList) const
@@ -145,8 +157,10 @@ Database::schemasList(QStringList *ipList) const
     //ipList->sort();
 }
 
-/*
- * Returns a list of roles' names
+/*!
+ * \brief Returns a list of roles' names
+ *
+ * \param[out] ipList List with names of stored roles
  */
 void
 Database::rolesList(QStringList *ipList) const
@@ -166,8 +180,10 @@ Database::rolesList(QStringList *ipList) const
     //ipList->sort();
 }
 
-/*
- * Returns a list of indices' names
+/*!
+ * \brief Returns a list of indices' names
+ *
+ * \param[out] ipList List with names of stored indices
  */
 void
 Database::indicesList(QStringList *ipList) const
@@ -187,8 +203,8 @@ Database::indicesList(QStringList *ipList) const
     //ipList->sort();
 }
 
-/*
- * Returns a list of languages' names
+/*!
+ * \param[out] ipList List with names of stored languages
  */
 void
 Database::languagesList(QStringList *ipList) const
@@ -208,8 +224,8 @@ Database::languagesList(QStringList *ipList) const
     //ipList->sort();
 }
 
-/*
- * Calculate the number of schemas in a given database
+/*!
+ * \return Number of schemas currently store in Database
  */
 quint64
 Database::schemasCount() const
@@ -217,8 +233,8 @@ Database::schemasCount() const
     return mSchemas.count();
 }
 
-/*
- * Calculate the number of database roles
+/*!
+ * \return Number of roles currently store in Database
  */
 quint64
 Database::rolesCount() const
@@ -226,8 +242,8 @@ Database::rolesCount() const
     return mRoles.count();
 }
 
-/*
- * Calculates the number of database indices
+/*!
+ * \return Number of indice currently store in Database
  */
 quint64
 Database::indicesCount() const
@@ -235,8 +251,8 @@ Database::indicesCount() const
     return mIndices.count();
 }
 
-/*
- * Calculates the number of pl languages
+/*!
+ * \return Number of languages currently store in Database
  */
 quint8
 Database::languagesCount() const
@@ -244,8 +260,12 @@ Database::languagesCount() const
     return mLanguages.count();
 }
 
-/*
- * Find and return schema by its name
+/*!
+ * \brief Finds schema by its name
+ *
+ * \param[in] ipSchemaName - Name of a schema we are looking for
+ *
+ * \return Found schema object or NULL if not found
  */
 DbSchema*
 Database::findSchema(const QString &ipSchemaName) const
@@ -253,8 +273,12 @@ Database::findSchema(const QString &ipSchemaName) const
     return dynamic_cast<DbSchema*>(findObject(ipSchemaName, DbObject::SchemaObject));
 }
 
-/*
- * Returns a database role by its name
+/*!
+ * \brief Finds role by its name
+ *
+ * \param[in] ipRoleName - Name of a role we are looking for
+ *
+ * \return Found role object or NULL if not found
  */
 DbRole*
 Database::findRole(const QString &ipRoleName) const
@@ -262,8 +286,12 @@ Database::findRole(const QString &ipRoleName) const
     return dynamic_cast<DbRole*>(findObject(ipRoleName, DbObject::RoleObject));
 }
 
-/*
- * Returns a database index by its name
+/*!
+ * \brief Finds index by its name
+ *
+ * \param[in] ipIndexName - Name of an index we are looking for
+ *
+ * \return Found index object or NULL if not found
  */
 DbIndex*
 Database::findIndex(const QString &ipIndexName) const
@@ -271,8 +299,12 @@ Database::findIndex(const QString &ipIndexName) const
     return dynamic_cast<DbIndex*>(findObject(ipIndexName, DbObject::IndexObject));
 }
 
-/*
- * Returns a language by its name
+/*!
+ * \brief Finds language by its name
+ *
+ * \param[in] ipLangName - Name of a language we are looking for
+ *
+ * \return Found language object or NULL if not found
  */
 DbLanguage*
 Database::findLanguage(const QString &ipLangName) const
@@ -280,8 +312,14 @@ Database::findLanguage(const QString &ipLangName) const
     return dynamic_cast<DbLanguage*>(findObject(ipLangName, DbObject::LanguageObject));
 }
 
-/*
- * Returns the number of indices found and populates the input list
+/*!
+ * \brief Finds all indices for a table
+ *
+ * \param[in] ipTable - Table object whose indices we are looking for
+ * \param[out] ipList - Resulting list of indices objects that are assigned
+ *                      to the given table
+ *
+ * \return Number of found indices
  */
 quint64
 Database::findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) const
@@ -309,8 +347,10 @@ Database::findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) co
 
     return ipList.count();
 }
-/*
- * Obtain a type of DBMS
+/*!
+ * \brief Sets sql driver by its name
+ *
+ * \param[in] ipSqlDriverName - SQL driver name
  */
 void
 Database::setSqlDriver(const QString &ipSqlDriverName)
@@ -329,16 +369,18 @@ Database::setSqlDriver(const QString &ipSqlDriverName)
 
 }
 
-/*
- * Get the type of sql driver (see enum in header)
+/*!
+ * \brief Get SQL driver type
+ *
+ * \return SQL Driver type
  */
 Database::SqlDriverType
 Database::sqlDriver() const
 {
     return mSqlDriver;
 }
-/*
- * Retrieve available schemas
+/*!
+ * \brief Retrieve all available schemas from the DB
  */
 void
 Database::readSchemas()
@@ -429,8 +471,8 @@ Database::readSchemas()
     } while (query.next());
 }
 
-/*
- * Retrieve database roles
+/*!
+ * \brief Retrieve all available roles from the DB
  */
 void
 Database::readRoles()
@@ -579,8 +621,8 @@ Database::readRoles()
     } while (query.next());
 }
 
-/*
- *
+/*!
+ * \brief Retrieve all available indices from the DB
  */
 void
 Database::readIndices()
@@ -774,8 +816,8 @@ Database::readIndices()
 
 }
 
-/*
- * Reads pl languages
+/*!
+ * \brief Retrieve all available languages from the DB
  */
 void
 Database::readLanguages()
@@ -892,8 +934,8 @@ Database::readLanguages()
     } while (query.next());
 }
 
-/*
- * Cleanup data
+/*!
+ * \brief Cleanup data (all objects' vectors)
  */
 void
 Database::cleanup()
@@ -919,8 +961,16 @@ Database::cleanup()
     mIndices.clear();
 }
 
-/*
- * Searches for an object by its name
+/*!
+ * \brief Searches for an object by its name
+ *
+ * An auxilliary function used by findSchema, findRole, findIndex and
+ * findLanguage function
+ *
+ * \param[in] ipObjectName - Object name to look for
+ * \param[in] ipObjectType - Type of object we are looking for
+ *
+ * \return A pointer to a found object or NULL if search failed
  */
 DbObject*
 Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
@@ -996,8 +1046,8 @@ Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
     return object;
 }
 
-/*
- *
+/*!
+ * \brief Deletes an instance of the Database class
  */
 void
 DatabaseManager::flush()

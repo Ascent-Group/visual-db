@@ -38,6 +38,12 @@ class DbLanguage;
 class DbRole;
 class DbSchema;
 
+/*!
+ * \class Database
+ * \include <common/Database.h>
+ * \brief Class (singleton) that holds and knows how to operate with all
+ *        chached db objects
+ */
 class Database
 {
     public:
@@ -113,11 +119,13 @@ class Database
         DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
 };
 
-/*
- * Class: DatabaseManager
- * Descr: The main purpose for this class is to handle Database's instance
- *        deletion. That's why it is Database's friend, so that it has
- *        access to Database::mInstance;
+/*!
+ * \class DatabaseManager
+ * \brief Singleton manager that knows how to utilize the Database instance
+ *
+ * The main purpose for this class is to handle Database's instance
+ * deletion. That's why it is Database's friend, so that it has
+ * access to Database::mInstance;
  */
 class DatabaseManager
 {
@@ -127,3 +135,4 @@ class DatabaseManager
 };
 
 #endif // DATABASE_H
+

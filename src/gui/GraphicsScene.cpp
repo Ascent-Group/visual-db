@@ -246,7 +246,7 @@ GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
     } else {
     // if we pressed under item - do default actions and return
     QGraphicsItem *item = itemAt(ipEvent->scenePos());
-    if (item && qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) {
+    if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item))) {
         mOldPos = item->scenePos();
         QGraphicsScene::mousePressEvent(ipEvent);
         return;

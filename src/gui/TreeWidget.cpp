@@ -157,24 +157,24 @@ TreeWidget::refresh()
 
         // create schema
 
-    DbSchema *schema = dbInst->findSchema(schemaName);
+        DbSchema *schema = dbInst->findSchema(schemaName);
 
         // create tablesNode
         QTreeWidgetItem *tablesNode = new QTreeWidgetItem(schemaItem);
         tablesNode->setText(TreeWidget::NameCol, tr("Tables"));
         tablesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TableNode));
-    setBold(tablesNode, true);
+        setBold(tablesNode, true);
         // create viewsNode
         QTreeWidgetItem *viewsNode = new QTreeWidgetItem(schemaItem);
         viewsNode->setText(TreeWidget::NameCol, tr("Views"));
         viewsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::ViewNode));
-    setBold(viewsNode, true);
+        setBold(viewsNode, true);
         // create procsNode
         QTreeWidgetItem *procsNode = new QTreeWidgetItem(schemaItem);
         procsNode->setText(TreeWidget::NameCol, tr("Procedures"));
         procsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::ProcedureNode));
         setBold(procsNode, true);
-    // create procsNode
+        // create procsNode
         QTreeWidgetItem *trigsNode = new QTreeWidgetItem(schemaItem);
         trigsNode->setText(TreeWidget::NameCol, tr("Triggers"));
         trigsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TriggerNode));
@@ -204,11 +204,11 @@ TreeWidget::refresh()
 
         insertItems(procsNode, &procsList, TreeWidget::ProcedureItem);
 
-    //// TRIGGERS
-    QStringList trigsList;
-    schema->triggersList(&trigsList);
+        //// TRIGGERS
+        QStringList trigsList;
+        schema->triggersList(&trigsList);
 
-    insertItems(trigsNode, &trigsList, TreeWidget::TriggerItem);
+        insertItems(trigsNode, &trigsList, TreeWidget::TriggerItem);
 
     }
 
@@ -220,9 +220,6 @@ TreeWidget::refresh()
     dbInst->indicesList(&indicesList);
 
     insertItems(indicesNode, &indicesList, TreeWidget::IndexItem);
-
-
-
 }
 
 /*
@@ -282,3 +279,4 @@ TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, Tree
         item->setText(TreeWidget::IdCol, QString::number(ipType));
     }
 }
+

@@ -95,6 +95,7 @@ SqlWidget::runQuery()
     MainWindow *mainWindow = dynamic_cast<MainWindow*>(parentWidget()->parentWidget()->parentWidget()->parentWidget());
 
     mainWindow->statusBar()->showMessage(tr("Query succeeded"));
+    mainWindow->printMsg("Query successfully executed.");
 }
 
 /*
@@ -278,3 +279,4 @@ SqlWidget::readPortion(Portions ipDirection)
     ui.mTable->resizeRowsToContents();
 
 }
+

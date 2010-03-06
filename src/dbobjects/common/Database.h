@@ -87,7 +87,7 @@ class Database
         DbIndex* findIndex(const QString &ipIndexName) const;
         DbLanguage* findLanguage(const QString &ipLangName) const;
 
-        quint64 findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) const;        
+        quint64 findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) const;
 
         void setSqlDriver(const QString &ipSqlDriverName);
         SqlDriverType sqlDriver() const;

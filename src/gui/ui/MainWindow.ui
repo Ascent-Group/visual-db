@@ -41,7 +41,7 @@
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
-         <widget class="SceneWidget" name="mSceneWidget">
+         <widget class="SceneWidget" name="mSceneWidget" native="true">
           <property name="toolTip">
            <string>Scene widget</string>
           </property>
@@ -62,7 +62,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="mFileMenu">
@@ -184,7 +184,7 @@
       <number>3</number>
      </property>
      <item row="0" column="0">
-      <widget class="LogPanel" name="mLogPanel">
+      <widget class="LogPanel" name="mLogPanel" native="true">
        <property name="toolTip">
         <string>Log panel</string>
        </property>
@@ -230,7 +230,7 @@
        </property>
        <column>
         <property name="text">
-         <string notr="true">1</string>
+         <string notr="true"/>
         </property>
        </column>
       </widget>
@@ -662,6 +662,7 @@
    <class>TabWidget</class>
    <extends>QTabWidget</extends>
    <header location="global">gui/TabWidget.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>TreeWidget</class>

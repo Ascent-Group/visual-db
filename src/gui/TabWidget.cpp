@@ -84,3 +84,4 @@ TabWidget::closeTabButtonClicked()
         removeTab(activeTabId);
     }
 }
+

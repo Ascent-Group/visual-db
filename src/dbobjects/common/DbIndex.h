@@ -36,6 +36,13 @@
 class DbSchema;
 class DbTable;
 
+/*!
+ * \brief Class for DB index
+ *
+ * \include <common/DbIndex.h>
+ *
+ * DbIndex defines an index stored in DB
+ */
 class DbIndex : public DbObject
 {
     public:

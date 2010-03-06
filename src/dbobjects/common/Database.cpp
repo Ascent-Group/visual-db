@@ -204,6 +204,8 @@ Database::indicesList(QStringList *ipList) const
 }
 
 /*!
+ * \brief Returns a list of languages' names
+ *
  * \param[out] ipList List with names of stored languages
  */
 void

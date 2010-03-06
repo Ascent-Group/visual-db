@@ -33,7 +33,7 @@
 
 #include <QtDebug>
 
-/*
+/*!
  * Ctor
  */
 DbIndex::DbIndex(QString ipName)
@@ -42,7 +42,7 @@ DbIndex::DbIndex(QString ipName)
 
 }
 
-/*
+/*!
  * Dtor
  */
 DbIndex::~DbIndex()
@@ -50,8 +50,8 @@ DbIndex::~DbIndex()
 
 }
 
-/*
- * Returns the table name this index is for
+/*!
+ * \return Table name this index is fassigned to
  */
 QString
 DbIndex::tableName() const

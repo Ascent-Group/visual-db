@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
- * 
+ *
+ *
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -29,9 +29,10 @@
 
 #include <dbobjects/common/Database.h>
 #include <dbobjects/common/DatabaseTest.h>
-#include <dbobjects/common/DbLanguage.h>
-#include <dbobjects/common/DbRole.h>
 #include <dbobjects/common/DbSchema.h>
+#include <dbobjects/psql/PsqlLanguage.h>
+#include <dbobjects/psql/PsqlIndex.h>
+#include <dbobjects/psql/PsqlRole.h>
 
 #include <QSqlDatabase>
 
@@ -40,22 +41,42 @@ DatabaseTest::initTestCase()
 {
     QString driverName = QString("QPSQL");
 
-    Database *dbInst = Database::instance();
-    dbInst->setSqlDriver(driverName);
-
+    Database *mDbInst = Database::instance();
+    mDbInst->setSqlDriver(driverName);
 }
 
 void
 DatabaseTest::cleanupTestCase()
 {
-
+    DatabaseManager dbMgr;
+    dbMgr.flush();
 }
-
 
 void
 DatabaseTest::addIndexTest()
 {
-    QVERIFY(0);
+    QVERIFY(0 != mDbInst);
+
+    // read all indices
+    mDbInst->readIndices();
+
+    int count = mDbInst->indicesCount();
+
+    QVERIFY(0 < count);
+
+    // try to add dummy index
+    PsqlIndex *dummyIndex = new PsqlIndex("dummy");
+
+    QVERIFY(mDbInst->addIndex(dummyIndex));
+
+    QVERIFY((count + 1) == mDbInst->indicesCount());
+
+    // try to add a index that already has been there
+    DbIndex *index = mDbInst->findIndex("ind_artists");
+
+    QVERIFY(0 != index);
+
+    QVERIFY(false == mDbInst->addIndex(index));
 }
 
 void
@@ -77,41 +98,50 @@ DatabaseTest::addSchemaTest()
 }
 
 void
-DatabaseTest::addTriggerTest()
-{
-    QVERIFY(0);
-}
-
-void
 DatabaseTest::cleanupTest()
 {
-    QVERIFY(0);
+    mDbInst->readIndices();
+    mDbInst->readLanguages();
+    mDbInst->readRoles();
+    mDbInst->readSchemas();
+
+    QVERIFY(0 != mDbInst->indicesCount());
+    QVERIFY(0 != mDbInst->languagesCount());
+    QVERIFY(0 != mDbInst->rolesCount());
+    QVERIFY(0 != mDbInst->schemasCount());
+
+    mDbInst->cleanup();
+
+    QVERIFY(0 == mDbInst->indicesCount());
+    QVERIFY(0 == mDbInst->languagesCount());
+    QVERIFY(0 == mDbInst->rolesCount());
+    QVERIFY(0 == mDbInst->schemasCount());
+
 }
 
 void
 DatabaseTest::findIndexTest()
 {
-    Database *dbInst = Database::instance();
-    QVERIFY(0 != dbInst);
+    QVERIFY(0 != mDbInst);
 
-    dbInst->readIndices();
+    mDbInst->readIndices();
 
-    QVERIFY(0 != dbInst->findIndex("ind_artists"));
-    QVERIFY(0 != dbInst->findIndex("ind_albums"));
-    QVERIFY(0 != dbInst->findIndex("ind_tracks"));
-    QVERIFY(0 != dbInst->findIndex("ind_users"));
-    QVERIFY(0 != dbInst->findIndex("ind_locations"));
+    QVERIFY(0 != mDbInst->findIndex("ind_artists"));
+    QVERIFY(0 != mDbInst->findIndex("ind_albums"));
+    QVERIFY(0 != mDbInst->findIndex("ind_tracks"));
+    QVERIFY(0 != mDbInst->findIndex("ind_users"));
+    QVERIFY(0 != mDbInst->findIndex("ind_locations"));
 }
 
 void
 DatabaseTest::findLanguageTest()
 {
-    Database *dbInst = Database::instance();
-    QVERIFY(0 != dbInst);
+    QVERIFY(0 != mDbInst);
 
-    dbInst->readRoles();
+    mDbInst->readRoles();
+    //mDbInst->readLanguages();
 
-    QVERIFY(0 != dbInst->findLanguage("plpgsql"));
+    QVERIFY(0 != mDbInst->findLanguage("plpgsql"));
 }
 
 void
@@ -126,40 +156,27 @@ DatabaseTest::findObjectTest()
 void
 DatabaseTest::findRoleTest()
 {
-    Database *dbInst = Database::instance();
-    QVERIFY(0 != dbInst);
+    Database *mDbInst = Database::instance();
+    QVERIFY(0 != mDbInst);
 
-    QVERIFY(0 != dbInst->findRole("music_user"));
+    QVERIFY(0 != mDbInst->findRole("music_user"));
 }
 
 void
 DatabaseTest::findSchemaTest()
 {
-    Database *dbInst = Database::instance();
-    QVERIFY(0 != dbInst);
+    QVERIFY(0 != mDbInst);
 
-    dbInst->readSchemas();
+    mDbInst->readSchemas();
 
-    QVERIFY(0 != dbInst->findSchema("public"));
-    QVERIFY(0 != dbInst->findSchema("vtunes"));
+    QVERIFY(0 != mDbInst->findSchema("public"));
+    QVERIFY(0 != mDbInst->findSchema("vtunes"));
 }
 
 void
 DatabaseTest::findTableIndicesTest()
 {
     QVERIFY(0);
-}
-
-void
-DatabaseTest::findTriggerTest()
-{
-    Database *dbInst = Database::instance();
-    QVERIFY(0 != dbInst);
-
-    dbInst->readTriggers();
-
-    QVERIFY(0 != dbInst->findTrigger("check_location"));
-    QVERIFY(0 != dbInst->findTrigger("check_release_date"));
 }
 
 void
@@ -183,13 +200,11 @@ DatabaseTest::indicesListTest()
 void
 DatabaseTest::instanceTest()
 {
-    Database *dbInst = Database::instance();
-
     // the pointer should be non-zero
-    QVERIFY(0 != dbInst);
+    QVERIFY(0 != mDbInst);
 
     // additionaly it should be valid
-    QVERIFY(Database::PostgreSQL == dbInst->sqlDriver());
+    QVERIFY(Database::PostgreSQL == mDbInst->sqlDriver());
 }
 
 void
@@ -213,54 +228,45 @@ DatabaseTest::readIndicesTest()
 void
 DatabaseTest::readLanguagesTest()
 {
-    Database *dbInst = Database::instance();
-
     // read langs
-    dbInst->readLanguages();
+    mDbInst->readLanguages();
 
     // plpgsql MUST be there
     QString name = QString("plpgsql");
-    QVERIFY(name == dbInst->findLanguage(name)->name());
+    QVERIFY(name == mDbInst->findLanguage(name)->name());
 }
 
 void
 DatabaseTest::readRolesTest()
 {
-    Database *dbInst = Database::instance();
-    QVERIFY(0 != dbInst);
+    Database *mDbInst = Database::instance();
+    QVERIFY(0 != mDbInst);
 
     // read roles
-    dbInst->readRoles();
+    mDbInst->readRoles();
 
     // validate names
     QString name = QString("music_user");
-    QVERIFY(name == dbInst->findRole(name)->name());
+    QVERIFY(name == mDbInst->findRole(name)->name());
 }
 
 void
 DatabaseTest::readSchemasTest()
 {
-    Database *dbInst = Database::instance();
-    QVERIFY(0 != dbInst);
+    QVERIFY(0 != mDbInst);
 
     // read schemas
-    dbInst->readSchemas();
+    mDbInst->readSchemas();
 
     // validate their names
     QString name = QString("public");
-    QVERIFY(name == dbInst->findSchema(name)->name());
+    QVERIFY(name == mDbInst->findSchema(name)->name());
 
     name = QString("information_schema");
-    QVERIFY(name == dbInst->findSchema(name)->name());
+    QVERIFY(name == mDbInst->findSchema(name)->name());
 
     name = QString("vtunes");
-    QVERIFY(name == dbInst->findSchema(name)->name());
-}
-
-void
-DatabaseTest::readTriggersTest()
-{
-    QVERIFY(0);
+    QVERIFY(name == mDbInst->findSchema(name)->name());
 }
 
 void
@@ -278,11 +284,9 @@ DatabaseTest::rolesListTest()
 void
 DatabaseTest::schemasCountTest()
 {
-    Database *dbInst = Database::instance();
+    mDbInst->readSchemas();
 
-    dbInst->readSchemas();
-
-    QVERIFY(3 == dbInst->schemasCount());
+    QVERIFY(3 == mDbInst->schemasCount());
 }
 
 void
@@ -290,7 +294,7 @@ DatabaseTest::schemasListTest()
 {
     QStringList list;
 
-    Database::instance()->schemasList(&list);
+    mDbInst->schemasList(&list);
 
     QVERIFY(3 == list.count());
 

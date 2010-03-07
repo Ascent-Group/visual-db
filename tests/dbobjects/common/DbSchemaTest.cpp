@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
- * 
+ *
+ *
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -28,6 +28,8 @@
  */
 
 #include <dbobjects/common/DbSchemaTest.h>
+#include <dbobjects/common/Database.h>
+#include <dbobjects/common/DbSchema.h>
 
 void
 DbSchemaTest::initTestCase()
@@ -50,6 +52,12 @@ DbSchemaTest::addProcedureTest()
 
 void
 DbSchemaTest::addTableTest()
+{
+    QVERIFY(0);
+}
+
+void
+DbSchemaTest::addTriggerTest()
 {
     QVERIFY(0);
 }
@@ -85,13 +93,31 @@ DbSchemaTest::findTableTest()
 }
 
 void
+DbSchemaTest::findTriggerTest()
+{
+    Database *dbInst = Database::instance();
+    QVERIFY(0 != dbInst);
+
+    dbInst->readSchemas();
+
+    DbSchema *schema = dbInst->findSchema("vtunes");
+
+    QVERIFY(0 != schema);
+
+    schema->readTriggers();
+
+    QVERIFY(0 != schema->findTrigger("check_location"));
+    QVERIFY(0 != schema->findTrigger("check_release_date"));
+}
+
+void
 DbSchemaTest::findViewTest()
 {
     QVERIFY(0);
 }
 
 void
-DbSchemaTest::objectIdTest()
+DbSchemaTest::typeTest()
 {
     QVERIFY(0);
 }
@@ -116,6 +142,12 @@ DbSchemaTest::readProceduresTest()
 
 void
 DbSchemaTest::readTablesTest()
+{
+    QVERIFY(0);
+}
+
+void
+DbSchemaTest::readTriggersTest()
 {
     QVERIFY(0);
 }

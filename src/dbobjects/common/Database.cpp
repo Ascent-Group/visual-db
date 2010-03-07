@@ -1081,6 +1081,7 @@ Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
 void
 DatabaseManager::flush()
 {
-     delete Database::instance();
+    Database::instance()->cleanup();
+    delete Database::instance();
 }
 

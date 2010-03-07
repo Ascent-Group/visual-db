@@ -37,11 +37,10 @@ class DbSchema;
 class DbTable;
 
 /*!
- * \brief Class for DB index
+ * \class DbIndex
+ * \headerfile DbIndex.h <common/DbIndex.h>
  *
- * \include <common/DbIndex.h>
- *
- * DbIndex defines an index stored in DB
+ * \brief Defines an index stored in DB
  */
 class DbIndex : public DbObject
 {
@@ -86,7 +85,7 @@ class DbIndex : public DbObject
 
         virtual void loadData() = 0;
 
-        virtual DbObject::Type type();
+        virtual DbObject::Type type() const;
 
     protected:
         QString mTableName;
@@ -108,3 +107,4 @@ class DbIndex : public DbObject
 };
 
 #endif // DBINDEX_H
+

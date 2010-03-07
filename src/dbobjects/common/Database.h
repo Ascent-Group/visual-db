@@ -40,15 +40,18 @@ class DbSchema;
 
 /*!
  * \class Database
- * \include <common/Database.h>
+ * \headerfile Database.h <common/Database.h>
  * \brief Class (singleton) that holds and knows how to operate with all
- *        chached db objects
+ *        cached db objects
  */
 class Database
 {
     public:
         static Database* instance();
 
+        /*!
+         * \enum Database::SqlDriverType
+         */
         enum SqlDriverType
         {
             Unknown = 0,
@@ -59,10 +62,10 @@ class Database
         };
 
     public:
-        void addSchema(DbSchema *);
-        void addRole(DbRole *);
-        void addIndex(DbIndex *);
-        void addLanguage(DbLanguage *);
+        bool addSchema(DbSchema *);
+        bool addRole(DbRole *);
+        bool addIndex(DbIndex *);
+        bool addLanguage(DbLanguage *);
 
         void schemasList(QStringList *ipList) const;
         quint64 schemasCount() const;

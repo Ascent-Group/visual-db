@@ -257,7 +257,8 @@ DbTrigger::setNumArgs(const quint16 &ipNum)
  * Returns the database object type
  */
 DbObject::Type
-DbTrigger::type()
+DbTrigger::type() const
 {
     return DbObject::TriggerObject;
 }
+

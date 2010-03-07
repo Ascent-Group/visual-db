@@ -32,11 +32,19 @@
 
 #include <QString>
 
+/*!
+ * \class DbObject
+ * \headerfile DbObject.h <common/DbObject.h>
+ * \brief Defines a base class for all database objects
+ */
 class DbObject
 {
     public:
 
-    enum Type {
+        /*!
+         * \enum DbObject::Type
+         */
+        enum Type {
             UnkObject = 0,
             SchemaObject,
             TableObject,
@@ -51,7 +59,7 @@ class DbObject
         QString name() const;
         void setName(const QString &ipName);
 
-        virtual DbObject::Type type() = 0;
+        virtual DbObject::Type type() const = 0;
 
     protected:
         QString mName;
@@ -62,3 +70,4 @@ class DbObject
 };
 
 #endif // DBOBJECT_H
+

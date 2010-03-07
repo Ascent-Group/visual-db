@@ -30,7 +30,7 @@
 #include <common/Database.h>
 #include <common/DbRole.h>
 
-/*
+/*!
  * Ctor
  */
 DbRole::DbRole(QString ipName)
@@ -39,7 +39,7 @@ DbRole::DbRole(QString ipName)
 
 }
 
-/*
+/*!
  * Dtor
  */
 DbRole::~DbRole()
@@ -47,8 +47,9 @@ DbRole::~DbRole()
 
 }
 
-/*
- * Returns true if the role has superuser privileges
+/*!
+ * \return true - If the role has superuser privileges
+ * \return false - Otherwise
  */
 bool
 DbRole::isSuperUser() const
@@ -56,17 +57,20 @@ DbRole::isSuperUser() const
     return mIsSuperUser;
 }
 
-/*
- * Sets the rolsuper flag
+/*!
+ * \brief Sets the rolsuper flag
+ *
+ * \param[in] ipFlag
  */
 void
-DbRole::setSuperUser(const bool ipFlag)
+DbRole::setSuperUser(bool ipFlag)
 {
     mIsSuperUser = ipFlag;
 }
 
-/*
- * Returns true if role inherits its parent's privileges
+/*!
+ * \return true - If role inherits its parent's privileges
+ * \return false - Otherwise
  */
 bool
 DbRole::inheritsPrivileges() const
@@ -74,17 +78,20 @@ DbRole::inheritsPrivileges() const
     return mInheritsPrivileges;
 }
 
-/*
- * Sets the rolinherit flag
+/*!
+ * \brief Sets the rolinherit flag
+ *
+ * \param[in] ipFlag
  */
 void
-DbRole::setInheritsPriviligese(const bool ipFlag)
+DbRole::setInheritsPriviligese(bool ipFlag)
 {
     mInheritsPrivileges = ipFlag;
 }
 
-/*
- * Returns true if role is allowed to create roles
+/*!
+ * \return true - If role is allowed to create roles
+ * \return false - Otherwise
  */
 bool
 DbRole::canCreateRole() const
@@ -92,17 +99,20 @@ DbRole::canCreateRole() const
     return mCanCreateRole;
 }
 
-/*
- * Sets the rolcreaterole flag
+/*!
+ * \brief Sets the rolcreaterole flag
+ *
+ * \param[in] ipFlag
  */
 void
-DbRole::setCanCreateRole(const bool ipFlag)
+DbRole::setCanCreateRole(bool ipFlag)
 {
     mCanCreateRole = ipFlag;
 }
 
-/*
- * Returns true if role is allowed to create db
+/*!
+ * \return true - If role is allowed to create db
+ * \return false - Otherwise
  */
 bool
 DbRole::canCreateDb() const
@@ -110,17 +120,20 @@ DbRole::canCreateDb() const
     return mCanCreateDb;
 }
 
-/*
- * Sets the rolcreatedb flag
+/*!
+ * \brief Sets the rolcreatedb flag
+ *
+ * \param[in] ipFlag
  */
 void
-DbRole::setCanCreateDb(const bool ipFlag)
+DbRole::setCanCreateDb(bool ipFlag)
 {
     mCanCreateDb = ipFlag;
 }
 
-/*
- * Returns true if role is allowed to update system catalogs
+/*!
+ * \return true - If role is allowed to update system catalogs
+ * \return false - Otherwise
  */
 bool
 DbRole::canUpdateSysCat() const
@@ -128,17 +141,20 @@ DbRole::canUpdateSysCat() const
     return mCanUpdateSysCat;
 }
 
-/*
- * Sets the rolcatupdate flag
+/*!
+ * \brief Sets the rolcatupdate flag
+ *
+ * \param[in] ipFlag
  */
 void
-DbRole::setCanUpdateSysCat(const bool ipFlag)
+DbRole::setCanUpdateSysCat(bool ipFlag)
 {
     mCanUpdateSysCat = ipFlag;
 }
 
-/*
- * Returns true if role is allowed to login
+/*!
+ * \return true - If role is allowed to login
+ * \return false - Otherwise
  */
 bool
 DbRole::canLogin() const
@@ -146,17 +162,19 @@ DbRole::canLogin() const
     return mCanLogin;
 }
 
-/*
- * Sets the rolcanlogin flag
+/*!
+ * \brief Sets the rolcanlogin flag
+ *
+ * \param[in] ipFlag
  */
 void
-DbRole::setCanLogin(const bool ipFlag)
+DbRole::setCanLogin(bool ipFlag)
 {
     mCanLogin = ipFlag;
 }
 
-/*
- * Returns the connection limit for the given role
+/*!
+ * \return The connection limit for the given role
  */
 quint32
 DbRole::connectionLimit() const
@@ -164,17 +182,19 @@ DbRole::connectionLimit() const
     return mConnectionLimit;
 }
 
-/*
- * Sets the connection limit for the role
+/*!
+ * \brief Sets the connection limit for the role
+ *
+ * \param[in] ipLimit - Connection limit for the given role
  */
 void
-DbRole::setConnectionLimit(const quint32 ipLimit)
+DbRole::setConnectionLimit(quint32 ipLimit)
 {
     mConnectionLimit = ipLimit;
 }
 
-/*
- * Returns role's expiration date
+/*!
+ * \return Role's expiration date
  */
 QDate
 DbRole::expiryDate() const
@@ -182,17 +202,19 @@ DbRole::expiryDate() const
     return mExpiryDate;
 }
 
-/*
- * Sets the expiration date of the role
+/*!
+ * \brief Sets the expiration date of the role
+ *
+ * \param[in] ipDate - Expiration date
  */
 void
-DbRole::setExpiryDate(const QDate ipDate)
+DbRole::setExpiryDate(const QDate &ipDate)
 {
     mExpiryDate = ipDate;
 }
 
-/*
- * Returns the id of the role
+/*!
+ * \return The id of the role
  */
 quint64
 DbRole::id() const
@@ -200,20 +222,25 @@ DbRole::id() const
     return mId;
 }
 
-/*
- * Sets the id for the role
+/*!
+ * \brief Sets the id for the role
+ *
+ * \param[in] ipId - Role id
  */
 void
-DbRole::setId(const quint64 ipId)
+DbRole::setId(quint64 ipId)
 {
     mId = ipId;
 }
 
-/*
- * Returns the id of database object type
+/*!
+ * \return Database object type
+ *
+ * \see DbObject::Type
  */
 DbObject::Type
-DbRole::type()
+DbRole::type() const
 {
     return DbObject::RoleObject;
 }
+

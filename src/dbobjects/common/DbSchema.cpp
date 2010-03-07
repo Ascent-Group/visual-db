@@ -43,8 +43,11 @@
 
 #include <QtDebug>
 
-/*
+/*!
  * Constructor
+ *
+ * On creation automatically adds newly created schema object to
+ * a Database's vector of schemas
  */
 DbSchema::DbSchema(QString ipName, DbRole *ipOwner)
     :DbObject(ipName),
@@ -53,7 +56,7 @@ DbSchema::DbSchema(QString ipName, DbRole *ipOwner)
     Database::instance()->addSchema(this);
 }
 
-/*
+/*!
  * Destructor
  */
 DbSchema::~DbSchema()
@@ -61,48 +64,80 @@ DbSchema::~DbSchema()
     cleanup();
 }
 
-/*
- * Add table to a schema
+/*!
+ * \brief Add table to a schema
+ *
+ * \param[in] ipTable
+ *
+ * \return true - If the table object has been added
+ * \return false - If the table object has alread existed in the vector
  */
-void
+bool
 DbSchema::addTable(DbTable *ipTable)
 {
-    if (!mTables.contains(ipTable)) {
-    mTables.push_back(ipTable);
+    if (mTables.contains(ipTable)) {
+        return false;
     }
+
+    mTables.push_back(ipTable);
+    return true;
 }
 
-/*
- * Add view to a schema
+/*!
+ * \brief Add view to a schema
+ *
+ * \param[in] ipView
+ *
+ * \return true - If the view object has been added
+ * \return false - If the view object has already existed in the vector
  */
-void
+bool
 DbSchema::addView(DbView *ipView)
 {
-    if (!mViews.contains(ipView)) {
-    mViews.push_back(ipView);
+    if (mViews.contains(ipView)) {
+        return false;
     }
+
+    mViews.push_back(ipView);
+    return true;
 }
 
-/*
- * Add proc to a schema
+/*!
+ * \brief Add proc to a schema
+ *
+ * \param[in] ipSchema
+ *
+ * \return true - If the proc object has been added
+ * \return false - If the proc object has already existed in the vector
  */
-void
+bool
 DbSchema::addProcedure(DbProcedure *ipProc)
 {
-    if (!mProcedures.contains(ipProc)) {
-    mProcedures.push_back(ipProc);
+    if (mProcedures.contains(ipProc)) {
+        return false;
     }
+
+    mProcedures.push_back(ipProc);
+    return true;
 }
 
-/*
- * Add trig to a schema
+/*!
+ * \brief Add trig to a schema
+ *
+ * \param[in] ipTrig
+ *
+ * \return true - If the trigger object has been added
+ * \return false - If the trigger object has laready existed in the vector
  */
-void
+bool
 DbSchema::addTrigger(DbTrigger *ipTrig)
 {
-    if (!mTriggers.contains(ipTrig)) {
-    mTriggers.push_back(ipTrig);
+    if (mTriggers.contains(ipTrig)) {
+        return false;
     }
+
+    mTriggers.push_back(ipTrig);
+    return true;
 }
 /*
  * Return a list of tables' names
@@ -849,7 +884,7 @@ DbSchema::cleanup()
  * Returns the id of database object type
  */
 DbObject::Type
-DbSchema::type()
+DbSchema::type() const
 {
     return DbObject::SchemaObject;
 }
@@ -946,3 +981,4 @@ void DbSchema::setDescription(const QString & ipDescription)
 {
     mDescription = ipDescription;
 }
+

@@ -29,7 +29,7 @@
 
 #include <DbObject.h>
 
-/*
+/*!
  * Ctor
  */
 DbObject::DbObject(QString ipName)
@@ -38,7 +38,7 @@ DbObject::DbObject(QString ipName)
 
 }
 
-/*
+/*!
  * Dtor
  */
 DbObject::~DbObject()
@@ -46,8 +46,8 @@ DbObject::~DbObject()
 
 }
 
-/*
- * Returns the name of the object
+/*!
+ * \return Name of the object
  */
 QString
 DbObject::name() const
@@ -55,11 +55,14 @@ DbObject::name() const
     return mName;
 }
 
-/*
- * Sets the name of the object
+/*!
+ * \brief Sets the name of the object
+ *
+ * \param[in] ipName - Name of the object
  */
 void
 DbObject::setName(const QString &ipName)
 {
     mName = ipName;
 }
+

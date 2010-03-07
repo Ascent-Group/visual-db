@@ -42,3 +42,4 @@ class PsqlView : public DbView
 };
 
 #endif // PSQLVIEW_H
+

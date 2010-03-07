@@ -197,3 +197,4 @@ PsqlTrigger::loadData()
 
     }
 }
+

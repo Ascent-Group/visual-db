@@ -62,8 +62,10 @@ DbIndex::tableName() const
     return mTableName;
 }
 
-/*
- * Sets the table this index is for
+/*!
+ * \brief Sets the table this index is for
+ *
+ * \param[in] ipTableName
  */
 void
 DbIndex::setTableName(const QString &ipTableName)
@@ -75,8 +77,14 @@ DbIndex::setTableName(const QString &ipTableName)
     }
 }
 
-/*
- * Returns the name of schema
+/*!
+ * \return Parent schema name or name stored within DbIndex object
+ *         if the parent schema object is NULL.
+ *
+ * \note Schema name stored within the object can be set with the
+ *       help of setSchemaName().
+ *
+ * \see setSchemaName()
  */
 QString
 DbIndex::schemaName() const
@@ -88,8 +96,12 @@ DbIndex::schemaName() const
     return mSchemaName;
 }
 
-/*
- * Sets the name of schema
+/*!
+ * \brief Sets the name of schema
+ *
+ * \param[in] ipSchemaName
+ *
+ * \note Doesn't set the name for the parent schema object
  */
 void
 DbIndex::setSchemaName(const QString &ipSchemaName)
@@ -101,8 +113,8 @@ DbIndex::setSchemaName(const QString &ipSchemaName)
     }
 }
 
-/*
- * Returns the table
+/*!
+ * \return Table
  */
 DbTable*
 DbIndex::table() const
@@ -110,8 +122,10 @@ DbIndex::table() const
     return mTable;
 }
 
-/*
- * Sets the table
+/*!
+ * \brief Sets the table
+ *
+ * \param[in] ipTable
  */
 void
 DbIndex::setTable(DbTable *ipTable)
@@ -119,8 +133,8 @@ DbIndex::setTable(DbTable *ipTable)
     mTable = ipTable;
 }
 
-/*
- * Returns the schema
+/*!
+ * \return Parent schema
  */
 DbSchema*
 DbIndex::schema() const
@@ -128,8 +142,10 @@ DbIndex::schema() const
     return mSchema;
 }
 
-/*
- * Sets the schema
+/*!
+ * \brief Sets the schema
+ *
+ * \param[in] ipSchema - Parent schema of the given index
  */
 void
 DbIndex::setSchema(DbSchema *ipSchema)
@@ -137,8 +153,8 @@ DbIndex::setSchema(DbSchema *ipSchema)
     mSchema = ipSchema;
 }
 
-/*
- * Returns the number of columns in the ginev db index
+/*!
+ * \return The number of columns covered by the given db index
  */
 quint16
 DbIndex::columnsCount() const
@@ -146,8 +162,10 @@ DbIndex::columnsCount() const
     return mColumnsCount;
 }
 
-/*
- * Sets the number of columns in the given index
+/*!
+ * \brief Sets the number of columns in the given index
+ *
+ * \param[in] ipCount - Number of columns covered by the given index
  */
 void
 DbIndex::setColumnsCount(quint16 ipCount)
@@ -155,8 +173,8 @@ DbIndex::setColumnsCount(quint16 ipCount)
     mColumnsCount = ipCount;
 }
 
-/*
- * Returns the list of table's columns numbers
+/*!
+ * \return The list of table's columns numbers
  */
 QVector<qint16>
 DbIndex::columnsNumbers() const
@@ -164,8 +182,10 @@ DbIndex::columnsNumbers() const
     return mColumnsNumbers;
 }
 
-/*
- * Adds a table's coolumn number
+/*!
+ * \brief Adds a table's column number
+ *
+ * \param[in] ipNum - Column number the given index is assigned to
  */
 void
 DbIndex::addColumnNumber(qint16 ipNum)
@@ -173,8 +193,9 @@ DbIndex::addColumnNumber(qint16 ipNum)
     mColumnsNumbers.push_back(ipNum);
 }
 
-/*
- * Returns true if the index is unique
+/*!
+ * \return true - If the index is unique
+ * \return false - Otherwise
  */
 bool
 DbIndex::isUnique() const
@@ -182,8 +203,10 @@ DbIndex::isUnique() const
     return mIsUnique;
 }
 
-/*
- * Sets the unique flag
+/*!
+ * \brief Sets the unique flag
+ *
+ * param[in] ipFlag
  */
 void
 DbIndex::setUnique(bool ipFlag)
@@ -191,8 +214,9 @@ DbIndex::setUnique(bool ipFlag)
     mIsUnique = ipFlag;
 }
 
-/*
- * Returns true if the index represents the primary key in the table
+/*!
+ * \return true - If the index represents the primary key in the table
+ * \return false - Otherwise
  */
 bool
 DbIndex::isPrimary() const
@@ -200,8 +224,10 @@ DbIndex::isPrimary() const
     return mIsPrimary;
 }
 
-/*
- * Sets the primary flag
+/*!
+ * \brief Sets the primary flag
+ *
+ * \param[in] ipFlag
  */
 void
 DbIndex::setPrimary(bool ipFlag)
@@ -209,8 +235,9 @@ DbIndex::setPrimary(bool ipFlag)
     mIsPrimary = ipFlag;
 }
 
-/*
- * Returns true if the table was clustered on this index
+/*!
+ * \return true - If the table was clustered on this index
+ * \return false - Otherwise
  */
 bool
 DbIndex::isClustered() const
@@ -218,8 +245,10 @@ DbIndex::isClustered() const
     return mIsClustered;
 }
 
-/*
- * Sets the clustered flag
+/*!
+ * \brief Sets the clustered flag
+ *
+ * \param[in] ipFlag
  */
 void
 DbIndex::setClustered(bool ipFlag)
@@ -227,8 +256,9 @@ DbIndex::setClustered(bool ipFlag)
     mIsClustered = ipFlag;
 }
 
-/*
- * Returns true if the index is currently valid for queries
+/*!
+ * \return true - If the index is currently valid for queries
+ * \return falase - Otherwise
  */
 bool
 DbIndex::isValid() const
@@ -236,8 +266,10 @@ DbIndex::isValid() const
     return mIsValid;
 }
 
-/*
- * Sets the valid flag
+/*!
+ * \brief Sets the valid flag
+ *
+ * \param[in] ipFlag
  */
 void
 DbIndex::setValid(bool ipFlag)
@@ -245,8 +277,9 @@ DbIndex::setValid(bool ipFlag)
     mIsValid = ipFlag;
 }
 
-/*
- * Returns true if queries must not use this index if xmin < query.transaction_xmin
+/*!
+ * \return true - If queries must not use this index if xmin < query.transaction_xmin
+ * \return false - Otherwise
  */
 bool
 DbIndex::checksXMin() const
@@ -254,8 +287,10 @@ DbIndex::checksXMin() const
     return mChecksXMin;
 }
 
-/*
- * Sets the checksXmin flag
+/*!
+ * \brief Sets the checksXmin flag
+ *
+ * \param[in] ipFlag
  */
 void
 DbIndex::setChecksXMin(bool ipFlag)
@@ -263,8 +298,9 @@ DbIndex::setChecksXMin(bool ipFlag)
     mChecksXMin = ipFlag;
 }
 
-/*
- * Returns true if the index is ready for queries
+/*!
+ * \return true - If the index is ready for queries
+ * \return false - Otherwise
  */
 bool
 DbIndex::isReady() const
@@ -272,8 +308,10 @@ DbIndex::isReady() const
     return mIsReady;
 }
 
-/*
- * Sets the ready flag
+/*!
+ * \brief Sets the ready flag
+ *
+ * \param[in] ipFlag
  */
 void
 DbIndex::setReady(bool ipFlag)
@@ -281,11 +319,11 @@ DbIndex::setReady(bool ipFlag)
     mIsReady = ipFlag;
 }
 
-/*
- * Returns the id of database object type
+/*!
+ * \return Database object type
  */
 DbObject::Type
-DbIndex::type()
+DbIndex::type() const
 {
     return DbObject::IndexObject;
 }

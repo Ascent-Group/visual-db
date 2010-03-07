@@ -76,7 +76,7 @@ class DbTable : public DbObject
 
         quint64 getIndices(QVector<DbIndex*> &ipIndicesList);
 
-        virtual DbObject::Type type();
+        virtual DbObject::Type type() const;
 
     protected:
         struct ColumnDefinition
@@ -87,7 +87,7 @@ class DbTable : public DbObject
             bool isPrimaryKey;
             bool isForeignKey;
             QString foreignSchemaName;
-        QString foreignTableName;
+            QString foreignTableName;
             QStringList foreignFieldNames;
             bool isUnique;
         };
@@ -101,3 +101,4 @@ class DbTable : public DbObject
 };
 
 #endif // DBTABLE_H
+

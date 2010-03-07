@@ -29,8 +29,11 @@
 
 #include <DbProcedure.h>
 
-/*
+/*!
  * Ctor
+ *
+ * On creation finds the parent schema by its name ipSchemaName and sets it as
+ * parent schema object with setSchema() function.
  */
 DbProcedure::DbProcedure(QString ipSchemaName, QString ipName)
     : DbObject(ipName), mSchemaName(ipSchemaName)
@@ -38,7 +41,7 @@ DbProcedure::DbProcedure(QString ipSchemaName, QString ipName)
     setSchema(Database::instance()->findSchema(mSchemaName));
 }
 
-/*
+/*!
  * Dtor
  */
 DbProcedure::~DbProcedure()
@@ -46,17 +49,18 @@ DbProcedure::~DbProcedure()
 
 }
 
-/*
- * Returns the id of database object type
+/*!
+ * \return Database object type
  */
 DbObject::Type
-DbProcedure::type()
+DbProcedure::type() const
 {
     return DbObject::ProcedureObject;
 }
 
-/*
- * Returns full name
+/*!
+ * \return Procedure's full name that has a look of
+ *         "schemaName.procedureName"
  */
 QString
 DbProcedure::fullName() const
@@ -64,8 +68,8 @@ DbProcedure::fullName() const
     return QString("%1.%2").arg(mSchemaName).arg(mName);
 }
 
-/*
- * Returns schema
+/*!
+ * \return Parent schema object
  */
 DbSchema*
 DbProcedure::schema() const
@@ -73,8 +77,10 @@ DbProcedure::schema() const
     return mSchema;
 }
 
-/*
- * Sets schema
+/*!
+ * \brief Sets parent schema
+ *
+ * \param[in] ipSchema - Parent schema object
  */
 void
 DbProcedure::setSchema(DbSchema *ipSchema)
@@ -82,8 +88,8 @@ DbProcedure::setSchema(DbSchema *ipSchema)
     mSchema = ipSchema;
 }
 
-/*
- * Returns the owner
+/*!
+ * \return The owner of the given procedure
  */
 DbRole*
 DbProcedure::owner() const
@@ -91,8 +97,10 @@ DbProcedure::owner() const
     return mOwner;
 }
 
-/*
- * Sets the owner
+/*!
+ * \brief Sets the owner
+ *
+ * \param[in] ipRole - Owner of the procedure
  */
 void
 DbProcedure::setOwner(DbRole *ipRole)
@@ -100,8 +108,8 @@ DbProcedure::setOwner(DbRole *ipRole)
     mOwner = ipRole;
 }
 
-/*
- * Returns the language
+/*!
+ * \return The language
  */
 DbLanguage*
 DbProcedure::language() const
@@ -109,8 +117,10 @@ DbProcedure::language() const
     return mLanguage;
 }
 
-/*
- * Sets the language
+/*!
+ * \brief Sets the language
+ *
+ * \param[in] ipLang
  */
 void
 DbProcedure::setLanguage(DbLanguage *ipLang)
@@ -118,8 +128,8 @@ DbProcedure::setLanguage(DbLanguage *ipLang)
     mLanguage = ipLang;
 }
 
-/*
- * Returns the proc's source code
+/*!
+ * \return The proc's source code text
  */
 QString
 DbProcedure::sourceCode() const
@@ -127,11 +137,14 @@ DbProcedure::sourceCode() const
     return mSourceCode;
 }
 
-/*
- * Sets the proc's source code
+/*!
+ * \brief Sets the proc's source code
+ *
+ * \param[in] ipText - Source code text
  */
 void
 DbProcedure::setSourceCode(const QString &ipText)
 {
     mSourceCode = ipText;
 }
+

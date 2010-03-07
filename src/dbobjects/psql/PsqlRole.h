@@ -46,3 +46,4 @@ class PsqlRole : public DbRole
 };
 
 #endif // PSQLROLE_H
+

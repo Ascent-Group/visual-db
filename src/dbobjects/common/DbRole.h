@@ -33,43 +33,48 @@
 #include <QDate>
 #include <common/DbObject.h>
 
+/*!
+ * \class DbRole
+ * \brief Defines database role object
+ * \headerfile DbRole.h <common/Dbrole.h>
+ */
 class DbRole : public DbObject
 {
     public:
         virtual ~DbRole();
 
         bool isSuperUser() const;
-        void setSuperUser(const bool ipFlag);
+        void setSuperUser(bool ipFlag);
 
         bool inheritsPrivileges() const;
-        void setInheritsPriviligese(const bool ipFlag);
+        void setInheritsPriviligese(bool ipFlag);
 
         bool canCreateRole() const;
-        void setCanCreateRole(const bool ipFlag);
+        void setCanCreateRole(bool ipFlag);
 
         bool canCreateDb() const;
-        void setCanCreateDb(const bool ipFlag);
+        void setCanCreateDb(bool ipFlag);
 
         bool canUpdateSysCat() const;
-        void setCanUpdateSysCat(const bool ipFlag);
+        void setCanUpdateSysCat(bool ipFlag);
 
         bool canLogin() const;
-        void setCanLogin(const bool ipFlag);
+        void setCanLogin(bool ipFlag);
 
         quint32 connectionLimit() const;
-        void setConnectionLimit(const quint32 ipLimit);
+        void setConnectionLimit(quint32 ipLimit);
 
         QDate expiryDate() const;
-        void setExpiryDate(const QDate ipDate);
+        void setExpiryDate(const QDate &ipDate);
 
         quint64 id() const;
-        void setId(const quint64 ipId);
+        void setId(quint64 ipId);
 
         virtual void loadData() = 0;
         // lyuts: for future use
         // virtual void save() = 0;
 
-        virtual DbObject::Type type();
+        virtual DbObject::Type type() const;
 
     protected:
         bool mIsSuperUser;
@@ -88,3 +93,4 @@ class DbRole : public DbObject
 };
 
 #endif // DBROLE_H
+

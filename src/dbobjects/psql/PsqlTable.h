@@ -47,3 +47,4 @@ class PsqlTable : public DbTable
 };
 
 #endif // PSQLTABLE_H
+

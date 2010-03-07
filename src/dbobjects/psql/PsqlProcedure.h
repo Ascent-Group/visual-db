@@ -44,3 +44,4 @@ class PsqlProcedure : public DbProcedure
 };
 
 #endif // PSQLPROCEDURE_H
+

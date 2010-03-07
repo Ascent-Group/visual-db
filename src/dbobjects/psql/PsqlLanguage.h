@@ -43,3 +43,4 @@ class PsqlLanguage : public DbLanguage
 };
 
 #endif // PSQLLANGUAGE_H
+

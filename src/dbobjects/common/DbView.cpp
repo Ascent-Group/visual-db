@@ -115,7 +115,8 @@ DbView::setDefinition(QString ipDef)
  * Returns the id of database object type
  */
 DbObject::Type
-DbView::type()
+DbView::type() const
 {
     return DbObject::ViewObject;
 }
+

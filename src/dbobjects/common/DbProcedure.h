@@ -33,6 +33,11 @@
 #include <common/Database.h>
 #include <common/DbObject.h>
 
+/*!
+ * \class DbProcedure
+ * \brief Defines database procedure object
+ * \headerfile DbProcedure.h <common/DbProcedure.h>
+ */
 class DbProcedure : public DbObject
 {
     public:
@@ -52,7 +57,7 @@ class DbProcedure : public DbObject
         QString sourceCode() const;
         void setSourceCode(const QString &ipText);
 
-        virtual DbObject::Type type();
+        virtual DbObject::Type type() const;
 
     protected:
         QString mSchemaName; // !!! for internal use only
@@ -68,3 +73,4 @@ class DbProcedure : public DbObject
 };
 
 #endif // DBPROCEDURE_H
+

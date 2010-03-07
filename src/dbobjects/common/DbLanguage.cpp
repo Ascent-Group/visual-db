@@ -47,8 +47,9 @@ DbLanguage::~DbLanguage()
 
 }
 
-/*
- * Returns true if language is trusted
+/*!
+ * \return true - If the given language is trusted
+ * \return false - Otherwise
  */
 bool
 DbLanguage::isTrusted() const
@@ -56,20 +57,23 @@ DbLanguage::isTrusted() const
     return mIsTrusted;
 }
 
-/*
- * Sets the trusted flag
+/*!
+ * \brief Sets the trusted flag
+ *
+ * \param[in] ipFlag
  */
 void
-DbLanguage::setTrusted(const bool &ipFlag)
+DbLanguage::setTrusted(bool ipFlag)
 {
     mIsTrusted = ipFlag;
 }
 
-/*
- * Returns the id of database object type
+/*!
+ * \return Database object type
  */
 DbObject::Type
-DbLanguage::type()
+DbLanguage::type() const
 {
     return DbObject::LanguageObject;
 }
+

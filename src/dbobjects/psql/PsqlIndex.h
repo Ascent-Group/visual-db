@@ -43,3 +43,4 @@ class PsqlIndex : public DbIndex
 };
 
 #endif // PSQLINDEX_H
+

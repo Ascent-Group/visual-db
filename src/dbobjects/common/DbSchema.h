@@ -40,16 +40,21 @@ class DbTable;
 class DbTrigger;
 class DbView;
 
+/*!
+ * \class DbSchema
+ * \brief Defines database schema object
+ * \headerfile DbSchema.h <common/DbSchema.h>
+ */
 class DbSchema : public DbObject
 {
     public:
         DbSchema(QString ipName, DbRole *ipOwner);
         virtual ~DbSchema();
 
-        void addTable(DbTable *ipTable);
-        void addView(DbView *ipView);
-        void addProcedure(DbProcedure *ipProc);
-        void addTrigger(DbTrigger *);
+        bool addTable(DbTable *ipTable);
+        bool addView(DbView *ipView);
+        bool addProcedure(DbProcedure *ipProc);
+        bool addTrigger(DbTrigger *);
 
         void tablesList(QStringList *) const;
         quint64 tablesCount() const;
@@ -60,7 +65,7 @@ class DbSchema : public DbObject
         void proceduresList(QStringList *) const;
         quint64 proceduresCount() const;
 
-        void triggersList(QStringList *ipList) const;
+        void triggersList(QStringList *) const;
         quint16 triggersCount() const;
 
         DbTable* findTable(const QString &ipTableName) const;
@@ -75,7 +80,7 @@ class DbSchema : public DbObject
 
         void cleanup();
 
-        virtual DbObject::Type type();
+        virtual DbObject::Type type() const;
 
         QString ownerName() const;
 
@@ -95,3 +100,4 @@ class DbSchema : public DbObject
 };
 
 #endif // DBSCHEMA_H
+

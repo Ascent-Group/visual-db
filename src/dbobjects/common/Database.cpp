@@ -44,7 +44,7 @@
 #include <QtDebug>
 
 // null initialization of instance
-Database* Database::mInstance = 0;
+Database *Database::mInstance = 0;
 
 /*!
  * Constructor
@@ -82,52 +82,76 @@ Database::instance()
  * \brief Add schema to DB schema list
  *
  * \param[in] ipSchema Schema object to add to schemas vector
+ *
+ * \return true - If the schema object has been added
+ * \return false - If the schema object has already existed in the vector
  */
-void
+bool
 Database::addSchema(DbSchema *ipSchema)
 {
-    if (!mSchemas.contains(ipSchema)) {
-        mSchemas.push_back(ipSchema);
+    if (mSchemas.contains(ipSchema)) {
+        return false;
     }
+
+    mSchemas.push_back(ipSchema);
+    return true;
 }
 
 /*!
  * \brief Add role to DB roles list
  *
  * \param[in] ipRole Role object to add to roles vector
+ *
+ * \return true - If the role object has been added
+ * \return false - If the role object has already existed in the vector
  */
-void
+bool
 Database::addRole(DbRole *ipRole)
 {
-    if (!mRoles.contains(ipRole)) {
-        mRoles.push_back(ipRole);
+    if (mRoles.contains(ipRole)) {
+        return false;
     }
+
+    mRoles.push_back(ipRole);
+    return true;
 }
 
 /*!
  * \brief Adds index to indices list
  *
  * \param[in] ipIndex Index object to add to indices vector
+ *
+ * \return true - If the index object has been added
+ * \return false - If the index object has already existed in the vector
  */
-void
+bool
 Database::addIndex(DbIndex *ipIndex)
 {
-    if (!mIndices.contains(ipIndex)) {
-        mIndices.push_back(ipIndex);
+    if (mIndices.contains(ipIndex)) {
+        return false;
     }
+
+    mIndices.push_back(ipIndex);
+    return true;
 }
 
 /*!
  * \brief Adds language to list
  *
  * \param[in] ipLanguage Language object to add to indices vector
+ *
+ * \return true - If the language object has been added
+ * \return false - If the language object has already existed in the vector
  */
-void
+bool
 Database::addLanguage(DbLanguage *ipLanguage)
 {
-    if (!mLanguages.contains(ipLanguage)) {
-        mLanguages.push_back(ipLanguage);
+    if (mLanguages.contains(ipLanguage)) {
+        return false;
     }
+
+    mLanguages.push_back(ipLanguage);
+    return true;
 }
 
 /*!
@@ -967,12 +991,15 @@ Database::cleanup()
  * \brief Searches for an object by its name
  *
  * An auxilliary function used by findSchema, findRole, findIndex and
- * findLanguage function
+ * findLanguage functions
  *
  * \param[in] ipObjectName - Object name to look for
  * \param[in] ipObjectType - Type of object we are looking for
  *
  * \return A pointer to a found object or NULL if search failed
+ *
+ * \todo Try to make the search algorithm more "cute", that will not
+ *       have a look of huge switches and ifs
  */
 DbObject*
 Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
@@ -980,7 +1007,7 @@ Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
     quint64 count;
     QStringList list;
 
-    //
+    // detect object type and read all objects of that type
     switch (ipObjectType) {
         case DbObject::SchemaObject:
                 count = mSchemas.count();

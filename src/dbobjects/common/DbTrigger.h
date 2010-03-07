@@ -69,7 +69,7 @@ class DbTrigger : public DbObject
         quint16 numArgs() const;
         void setNumArgs(const quint16 &ipNum);
 
-        virtual DbObject::Type type();
+        virtual DbObject::Type type() const;
         virtual void loadData() = 0;
 
         QString schemaName() const;
@@ -99,3 +99,4 @@ class DbTrigger : public DbObject
 };
 
 #endif // DBTRIGGER_H
+

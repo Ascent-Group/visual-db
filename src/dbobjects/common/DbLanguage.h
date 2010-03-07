@@ -32,17 +32,22 @@
 
 #include <common/DbObject.h>
 
+/*!
+ * \class DbLanguage
+ * \brief Defines PL/SQL language
+ * \headerfile DbLanguage.h <common/DbLanguage.h>
+ */
 class DbLanguage : public DbObject
 {
     public:
         virtual ~DbLanguage();
 
         bool isTrusted() const;
-        void setTrusted(const bool &ipFlag);
+        void setTrusted(bool ipFlag);
 
         virtual void loadData() = 0;
 
-        virtual DbObject::Type type();
+        virtual DbObject::Type type() const;
 
     protected:
         bool mIsTrusted;
@@ -52,3 +57,4 @@ class DbLanguage : public DbObject
 };
 
 #endif // DBLANGUAGE_H
+

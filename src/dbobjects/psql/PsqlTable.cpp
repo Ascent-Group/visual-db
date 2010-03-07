@@ -307,3 +307,4 @@ PsqlTable::checkUnique(const QString &ipColumnName) const
     // unique constraint definition found
     return query.first();
 }
+

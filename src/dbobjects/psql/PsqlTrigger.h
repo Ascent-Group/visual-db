@@ -42,3 +42,4 @@ class PsqlTrigger : public DbTrigger
 };
 
 #endif // PSQLTRIGGER_H
+

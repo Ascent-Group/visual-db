@@ -371,6 +371,7 @@ SceneWidget::saveToImage()
 
     // print to image
     QPainter painter(image);
+    mScene->clearSelection();
     mScene->render(&painter);
 
     // save
@@ -506,10 +507,14 @@ SceneWidget::print(QPrinter *ipPrinter)
 {
     QPainter painter(ipPrinter);
     painter.setFont(QFont("Arial", 10));
+
     int pageWidth = ipPrinter->pageRect().width();
     int pageHeight = ipPrinter->pageRect().height();
     int maxI = (int)(mScene->width() / pageWidth + 1);
     int maxJ = (int)(mScene->height() / pageHeight + 1);
+
+    mScene->clearSelection();
+
     for (int i = 0; i < maxI; ++i) {
         for (int j = 0; j < maxJ; ++j) {
             mScene->render(&painter, QRectF(), QRectF(i * pageWidth, j * pageHeight, pageWidth, pageHeight));

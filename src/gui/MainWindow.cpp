@@ -70,8 +70,8 @@
 /*
  * Constructor
  */
-MainWindow::MainWindow()
-    : QMainWindow()
+    MainWindow::MainWindow()
+: QMainWindow()
 {
     ui.setupUi(this);
 
@@ -152,16 +152,16 @@ MainWindow::updateSessionMenu()
 
     int countSavedSessions = mSettings.value("Preferences/CountSavedSessions", 10).toInt();
     for (int i = 0; i < countSavedSessions; ++i) {
-    // update session menu
-    if (mSettings.contains("LastSession/SavedSession" + QString().setNum(i))) {
-        // last session
-        QAction *lastSessionAction = new QAction(mSettings.value("LastSession/SavedSession" + QString().setNum(i)).toString(), this);
-        connect(lastSessionAction, SIGNAL(triggered()), this, SLOT(loadLastSession()));
+        // update session menu
+        if (mSettings.contains("LastSession/SavedSession" + QString().setNum(i))) {
+            // last session
+            QAction *lastSessionAction = new QAction(mSettings.value("LastSession/SavedSession" + QString().setNum(i)).toString(), this);
+            connect(lastSessionAction, SIGNAL(triggered()), this, SLOT(loadLastSession()));
 
-        ui.mSessionMenu->addAction(lastSessionAction);
-    } else {
-        break;
-    }
+            ui.mSessionMenu->addAction(lastSessionAction);
+        } else {
+            break;
+        }
     }
     ui.mSessionMenu->addSeparator();
     ui.mSessionMenu->addAction(ui.mLoadSessionAction);
@@ -203,7 +203,7 @@ MainWindow::setEnableForActions(bool ipFlag)
 /*
  * Show connection dialog
  */
-int
+    int
 MainWindow::showConnectionDialog(bool ipLoadSession)
 {
     SqlConnectionDialog connDialog(mDbParameters, mProxyParameters, ipLoadSession);
@@ -211,15 +211,15 @@ MainWindow::showConnectionDialog(bool ipLoadSession)
     // nothing to do if canceled
     int code = connDialog.exec();
     if (code != QDialog::Accepted) {
-    return code;
+        return code;
     }
 
     if (QSqlDatabase::database("mainConnect").open()) {
-    ui.mSceneWidget->cleanTableSchemeScene();
-    ui.mTree->refresh();
-    ui.mSceneWidget->refreshLegend();
-    setEnableForActions(true);
-    return QDialog::Accepted;
+        ui.mSceneWidget->cleanTableSchemeScene();
+        ui.mTree->refresh();
+        ui.mSceneWidget->refreshLegend();
+        setEnableForActions(true);
+        return QDialog::Accepted;
     }
 
     return QDialog::Rejected;
@@ -236,7 +236,7 @@ MainWindow::showOptionsDialog()
     // no need to check for accept/reject
     // this will be done by optionsDialog's accept method
     if (optionsDialog.exec() == QDialog::Accepted) {
-    updateSessionMenu();
+        updateSessionMenu();
     }
 }
 
@@ -263,7 +263,7 @@ MainWindow::showPrintDialog()
     QPrinter printer(QPrinter::ScreenResolution);
     QPrintDialog printDialog(&printer);
     if (printDialog.exec() == QDialog::Accepted) {
-    ui.mSceneWidget->print(&printer);
+        ui.mSceneWidget->print(&printer);
     }
 #endif
 }
@@ -296,7 +296,7 @@ MainWindow::createStatusBar()
     mProgressBar = new QProgressBar();
 
     statusBar->addWidget(mProgressBar);
-    
+
     setStatusBar(statusBar);
 }
 
@@ -307,9 +307,9 @@ void
 MainWindow::setDockTableListVisible(bool ipFlag)
 {
     if (ipFlag) {
-    ui.mDockTableListWidget->show();
+        ui.mDockTableListWidget->show();
     } else {
-    ui.mDockTableListWidget->hide();
+        ui.mDockTableListWidget->hide();
     }
 }
 
@@ -320,9 +320,9 @@ void
 MainWindow::setDockLogPanelVisible(bool ipFlag)
 {
     if (ipFlag) {
-    ui.mDockLogPanelWidget->show();
+        ui.mDockLogPanelWidget->show();
     } else {
-    ui.mDockLogPanelWidget->hide();
+        ui.mDockLogPanelWidget->hide();
     }
 }
 /*
@@ -400,30 +400,30 @@ MainWindow::closeEvent(QCloseEvent *ipEvent)
             tr("Do you want to save current session?"),
             QMessageBox::Yes,
             QMessageBox::No,
-        QMessageBox::Cancel);
+            QMessageBox::Cancel);
 
-//    int result = QMessageBox::question(
-//            this,
-//            tr("Confirm exit"),
-//            tr("Do you really want to exit?"),
-//            QMessageBox::Yes,
-//            QMessageBox::No);
+    //    int result = QMessageBox::question(
+    //            this,
+    //            tr("Confirm exit"),
+    //            tr("Do you really want to exit?"),
+    //            QMessageBox::Yes,
+    //            QMessageBox::No);
 
     // if yes || no
     if (QMessageBox::Cancel != result) {
 
-    if (QMessageBox::Yes == result) {
-        // save parameters to xml file
-        saveSession();
-    }
+        if (QMessageBox::Yes == result) {
+            // save parameters to xml file
+            saveSession();
+        }
 
         // get singleton instance and cleanup
         Database *dbInst = Database::instance();
 
         dbInst->cleanup();
 
-    DatabaseManager dbMngr;
-    dbMngr.flush();
+        DatabaseManager dbMngr;
+        dbMngr.flush();
 
         ipEvent->accept();
     } else {
@@ -474,74 +474,74 @@ MainWindow::describeObject()
     // find the correct object and describe
     switch ( objId ) {
         case TreeWidget::SchemaItem:
-                    schema = dbInst->findSchema(objName);
+            schema = dbInst->findSchema(objName);
 
-                    // no check for null pointer, describe will handle it
-                    descWidget->describe(schema);
-                    tabTitle = tr("Schema: ");
-                    break;
+            // no check for null pointer, describe will handle it
+            descWidget->describe(schema);
+            tabTitle = tr("Schema: ");
+            break;
 
         case TreeWidget::TableItem:
-                    // find table's schema
-                    schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
+            // find table's schema
+            schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
 
-                    schema = dbInst->findSchema(schemaName);
+            schema = dbInst->findSchema(schemaName);
 
-                    if ( schema ) {
-                        table = schema->findTable(objName);
-                        // no check for null pointer, describe will handle it
-                        descWidget->describe(table);
-                        tabTitle = tr("Table: ");
-                    }
-                    break;
+            if ( schema ) {
+                table = schema->findTable(objName);
+                // no check for null pointer, describe will handle it
+                descWidget->describe(table);
+                tabTitle = tr("Table: ");
+            }
+            break;
 
         case TreeWidget::ViewItem:
-                    // find view's schema
-                    schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
+            // find view's schema
+            schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
 
-                    schema = dbInst->findSchema(schemaName);
+            schema = dbInst->findSchema(schemaName);
 
-                    if (schema) {
-                        view = schema->findView(objName);
-                        // no check for null pointer, describe will handle it
-                        descWidget->describe(view);
-                        tabTitle = tr("View: ");
-                    }
-                    break;
+            if (schema) {
+                view = schema->findView(objName);
+                // no check for null pointer, describe will handle it
+                descWidget->describe(view);
+                tabTitle = tr("View: ");
+            }
+            break;
 
         case TreeWidget::RoleItem:
-                    role = dbInst->findRole(objName);
+            role = dbInst->findRole(objName);
 
-                    // no check for null pointer, describe will handle it
-                    descWidget->describe(role);
-                    tabTitle = tr("Role: ");
-                    break;
+            // no check for null pointer, describe will handle it
+            descWidget->describe(role);
+            tabTitle = tr("Role: ");
+            break;
 
         case TreeWidget::IndexItem:
-                    index = dbInst->findIndex(objName);
+            index = dbInst->findIndex(objName);
 
-                    descWidget->describe(index);
-                    tabTitle = tr("Index: ");
-                    break;
+            descWidget->describe(index);
+            tabTitle = tr("Index: ");
+            break;
 
         case TreeWidget::TriggerItem:
             // find view's schema
-                    schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
+            schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
 
-                    schema = dbInst->findSchema(schemaName);
+            schema = dbInst->findSchema(schemaName);
 
             if (schema) {
-                        trig = schema->findTrigger(objName);
-                        // no check for null pointer, describe will handle it
+                trig = schema->findTrigger(objName);
+                // no check for null pointer, describe will handle it
 
-            descWidget->describe(trig);
-            tabTitle = tr("Trigger: ");
+                descWidget->describe(trig);
+                tabTitle = tr("Trigger: ");
             }
-                    break;
+            break;
         default:
-                    qDebug() << "MainWindow::describeObject> Unknown object!";
-                    return;
-                    break;
+            qDebug() << "MainWindow::describeObject> Unknown object!";
+            return;
+            break;
     }
 
     // construct the whole tab title
@@ -596,23 +596,23 @@ MainWindow::queryData()
     switch ( objId ) {
         case TreeWidget::TableItem:
         case TreeWidget::ViewItem:
-        // find schema
-        schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
+            // find schema
+            schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
 
-        schema = dbInst->findSchema(schemaName);
+            schema = dbInst->findSchema(schemaName);
 
-        if ( schema ) {
-        sqlWidget->setDefaultQuery(
-            QString("SELECT t.* FROM %1.%2 t;")
-            .arg(schemaName)
-            .arg(objName));
-        }
-        break;
+            if ( schema ) {
+                sqlWidget->setDefaultQuery(
+                        QString("SELECT t.* FROM %1.%2 t;")
+                        .arg(schemaName)
+                        .arg(objName));
+            }
+            break;
 
         default:
-        qDebug() << "MainWindow::queryData> Unknown object!";
-        return;
-        break;
+            qDebug() << "MainWindow::queryData> Unknown object!";
+            return;
+            break;
     }
 
     // construct the whole tab title
@@ -641,13 +641,13 @@ MainWindow::saveToXml(QString ipFileName)
     root.appendChild(mDbParameters->toXml(doc));
     root.appendChild(mProxyParameters->toXml(doc));
     root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(), 
-        ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
+                ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
 
     QFile file(ipFileName);
     if (!file.open(QIODevice::WriteOnly)) {
-    QMessageBox messageBox;
-    messageBox.setText("Can't open file");
-    messageBox.exec();
+        QMessageBox messageBox;
+        messageBox.setText("Can't open file");
+        messageBox.exec();
     }
 
     QTextStream stream(&file);
@@ -665,44 +665,44 @@ MainWindow::loadFromXml(QString ipFileName)
     QDomDocument doc("VisualDB");
     QFile file(ipFileName);
     if (!file.open(QIODevice::ReadOnly)) {
-    QMessageBox messageBox;
-    messageBox.setText("Can't open file");
-    messageBox.exec();
-    return;
+        QMessageBox messageBox;
+        messageBox.setText("Can't open file");
+        messageBox.exec();
+        return;
     }
     if (!doc.setContent(&file)) {
-    file.close();
-    return;
+        file.close();
+        return;
     }
     file.close();
 
     QDomElement docElem = doc.documentElement();
     QDomNode child = docElem.firstChild();
     while (!child.isNull()) {
-    QDomElement element = child.toElement(); // try to convert the node to an element.
-    if (!element.isNull()) {
-        if (element.tagName() == "database") {
-        mDbParameters->fromXml(element);
-        } else if (element.tagName() == "proxy") {
-        mProxyParameters->fromXml(element);
+        QDomElement element = child.toElement(); // try to convert the node to an element.
+        if (!element.isNull()) {
+            if (element.tagName() == "database") {
+                mDbParameters->fromXml(element);
+            } else if (element.tagName() == "proxy") {
+                mProxyParameters->fromXml(element);
+            }
         }
-    }
-    child = child.nextSibling();
+        child = child.nextSibling();
     }
 
     // show connection dialog and check if we haven't pressed 'Cancel' button
     if (showConnectionDialog(true) == QDialog::Accepted) {
-    // second loop to fill in schema from the xml (we need to connect to database first)
-    docElem = doc.documentElement();
-    child = docElem.firstChild();
-    while (!child.isNull()) {
-        QDomElement element = child.toElement();
-        if (element.tagName() == "scene") {
-        ui.mSceneWidget->fromXml(element);
-        break;
+        // second loop to fill in schema from the xml (we need to connect to database first)
+        docElem = doc.documentElement();
+        child = docElem.firstChild();
+        while (!child.isNull()) {
+            QDomElement element = child.toElement();
+            if (element.tagName() == "scene") {
+                ui.mSceneWidget->fromXml(element);
+                break;
+            }
+            child = child.nextSibling();
         }
-        child = child.nextSibling();
-    }
     }
 }
 
@@ -713,23 +713,23 @@ void
 MainWindow::saveSession()
 {
     QString defaultFileName = "session_" + 
-    mSettings.value("LastSession/DbName", "undefined").toString() + "_" +
-    mSettings.value("LastSession/DbUser", "undefined").toString() + "_" + 
-    QDate::currentDate().toString(Qt::DefaultLocaleShortDate) + "_" + QTime::currentTime().toString() + ".vdb";
+        mSettings.value("LastSession/DbName", "undefined").toString() + "_" +
+        mSettings.value("LastSession/DbUser", "undefined").toString() + "_" + 
+        QDate::currentDate().toString(Qt::DefaultLocaleShortDate) + "_" + QTime::currentTime().toString() + ".vdb";
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save session..."),
-        mSettings.value("Preferences/SessionFolder", "./").toString() + defaultFileName,
-        tr("Xml files (*.vdb)"));
+            mSettings.value("Preferences/SessionFolder", "./").toString() + defaultFileName,
+            tr("Xml files (*.vdb)"));
     // return if we don't select any file to save
     if (fileName == "") {
-    return;
+        return;
     }
 
     for (int i = 9; i > 0; --i) {
-    if (mSettings.contains("LastSession/SavedSession" + QString().setNum(i - 1))) {
-        mSettings.setValue("LastSession/SavedSession" + QString().setNum(i), mSettings.value("LastSession/SavedSession" + QString().setNum(i - 1)));
+        if (mSettings.contains("LastSession/SavedSession" + QString().setNum(i - 1))) {
+            mSettings.setValue("LastSession/SavedSession" + QString().setNum(i), mSettings.value("LastSession/SavedSession" + QString().setNum(i - 1)));
+        }
     }
-    }
-    
+
     mSettings.setValue("LastSession/SavedSession0", fileName);
     updateSessionMenu();
     saveToXml(fileName);
@@ -742,14 +742,14 @@ void
 MainWindow::loadSession()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open session..."),
-        mSettings.value("Preferences/SessionFolder", "./").toString(),
-        tr("Xml files (*.vdb)"));
+            mSettings.value("Preferences/SessionFolder", "./").toString(),
+            tr("Xml files (*.vdb)"));
     if (!QFile::exists(fileName)) {
-    QMessageBox messageBox;
-    messageBox.setText("File doesn't exists");
-    messageBox.exec();
-//  qDebug() << "File doesn't exists";
-    return;
+        QMessageBox messageBox;
+        messageBox.setText("File doesn't exists");
+        messageBox.exec();
+        //  qDebug() << "File doesn't exists";
+        return;
     }
 
     loadFromXml(fileName);
@@ -772,9 +772,9 @@ void
 MainWindow::setFullScreen(bool ipFlag)
 {
     if (ipFlag) {
-    setWindowState(Qt::WindowFullScreen);
+        setWindowState(Qt::WindowFullScreen);
     } else {
-    setWindowState(Qt::WindowMaximized);
+        setWindowState(Qt::WindowMaximized);
     }
 }
 

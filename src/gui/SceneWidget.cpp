@@ -50,7 +50,7 @@
  * Constructor
  */
 SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
-    : QWidget(ipParent, ipFlags)
+: QWidget(ipParent, ipFlags)
 {
     mScene = new GraphicsScene();
 
@@ -70,7 +70,10 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
     connect(mControlWidget, SIGNAL(moveModeSet(bool)), mView, SLOT(setMoveMode(bool)));
 
     connect(mScene, SIGNAL(tableMoved(QList <QGraphicsItem *>, const QPointF &)), 
-        this, SLOT(sendTableMoved(QList <QGraphicsItem *>, const QPointF &)));
+            this, SLOT(sendTableMoved(QList <QGraphicsItem *>, const QPointF &)));
+
+    connect(mView, SIGNAL(valueIncreased()), mControlWidget, SLOT(increaseValue()));
+    connect(mView, SIGNAL(valueDecreased()), mControlWidget, SLOT(decreaseValue()));
 
     mainLayout = new QGridLayout(this);
     mainLayout->setAlignment(Qt::AlignCenter);
@@ -137,7 +140,7 @@ void
 SceneWidget::deleteTableItem()
 {
     if (mScene->selectedItems().count() > 0) { 
-    emit tableActionDone(new DeleteTableCommand(mScene, mScene->selectedItems()));
+        emit tableActionDone(new DeleteTableCommand(mScene, mScene->selectedItems()));
     }
 }
 
@@ -148,8 +151,8 @@ void
 SceneWidget::cleanTableSchemeScene()
 {
     if (mScene->items().count() > 0) {
-    // first send the signal to remember deleted items
-    emit tableActionDone(new DeleteTableCommand(mScene, mScene->items()));;
+        // first send the signal to remember deleted items
+        emit tableActionDone(new DeleteTableCommand(mScene, mScene->items()));;
     }
     TableItem::setSeek(20);
 }
@@ -260,11 +263,11 @@ void
 SceneWidget::setAnchor(QList<QGraphicsItem *> ipItems, bool ipFlag)
 {
     foreach (QGraphicsItem *item, ipItems) {
-    if (qgraphicsitem_cast<TableItemGroup *>(item)) {
-        setAnchor(item->children(), ipFlag);
-    } else if (qgraphicsitem_cast<TableItem *>(item)) {
-        item->setFlag(QGraphicsItem::ItemIsMovable, ipFlag);
-    }
+        if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+            setAnchor(item->children(), ipFlag);
+        } else if (qgraphicsitem_cast<TableItem *>(item)) {
+            item->setFlag(QGraphicsItem::ItemIsMovable, ipFlag);
+        }
     }
 }
 
@@ -356,11 +359,11 @@ void
 SceneWidget::saveToImage()
 {
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save to image..."),
-        "untitled.png",
-        tr("Images (*.png *.jpg)"));
+            "untitled.png",
+            tr("Images (*.png *.jpg)"));
     // return if we don't select any file to save
     if (fileName == "") {
-    return;
+        return;
     }
 
     // create image
@@ -394,15 +397,15 @@ SceneWidget::toXml(QDomDocument &ipDoc, bool ipShowGrid, bool ipDivideIntoPages,
     element.setAttribute("divideIntoPages", ipDivideIntoPages);
     element.setAttribute("legend", ipShowLegend);
     element.setAttribute("controlWidget", ipShowControlWidget);
-    
+
     foreach (QGraphicsItem *item, items()) {
-    TableItem *tableItem;
-    TableItemGroup *groupItem;
-    if ((groupItem = qgraphicsitem_cast<TableItemGroup *>(item)) && 0 == groupItem->parentItem()) {
-        element.appendChild(groupItem->toXml(ipDoc));
-    } else if ((tableItem = qgraphicsitem_cast<TableItem *>(item)) && 0 == tableItem->parentItem()) {
-        element.appendChild(tableItem->toXml(ipDoc));
-    }
+        TableItem *tableItem;
+        TableItemGroup *groupItem;
+        if ((groupItem = qgraphicsitem_cast<TableItemGroup *>(item)) && 0 == groupItem->parentItem()) {
+            element.appendChild(groupItem->toXml(ipDoc));
+        } else if ((tableItem = qgraphicsitem_cast<TableItem *>(item)) && 0 == tableItem->parentItem()) {
+            element.appendChild(tableItem->toXml(ipDoc));
+        }
     }
 
     return element;
@@ -427,18 +430,18 @@ SceneWidget::fromXml(QDomElement &ipElement)
     QList<QGraphicsItem *> tableList;
     // show all elements
     while (!child.isNull()) {
-    QDomElement element = child.toElement();
-    if (!element.isNull()) {
-        // it's a table
-        if (element.tagName() == "table") {
-        tableList << tableFromXml(element);
-        // it's a table group
-        } else if (element.tagName() == "tableGroup") {
-        tableList << tableGroupFromXml(element);
+        QDomElement element = child.toElement();
+        if (!element.isNull()) {
+            // it's a table
+            if (element.tagName() == "table") {
+                tableList << tableFromXml(element);
+                // it's a table group
+            } else if (element.tagName() == "tableGroup") {
+                tableList << tableGroupFromXml(element);
+            }
         }
-    }
-    // go to the next element
-    child = child.nextSibling();
+        // go to the next element
+        child = child.nextSibling();
     }
 
     emit tableActionDone(new AddTableCommand(mScene, tableList));
@@ -452,10 +455,10 @@ SceneWidget::tableFromXml(QDomElement &ipElement)
 {
     // get table's coordinates
     TableItem *newTable = mScene->newTableItem(ipElement.attribute("schema"), 
-        ipElement.attribute("name"), mTableMenu);
+            ipElement.attribute("name"), mTableMenu);
     newTable->moveBy(ipElement.attribute("x").toInt() - newTable->x(),
-        ipElement.attribute("y").toInt() - newTable->y());
-    
+            ipElement.attribute("y").toInt() - newTable->y());
+
     // get table's size
     newTable->setWidth(ipElement.attribute("width").toInt());
     newTable->setHeight(ipElement.attribute("height").toInt());
@@ -463,7 +466,7 @@ SceneWidget::tableFromXml(QDomElement &ipElement)
 
     // get table's color
     newTable->setItemColor(QColor(ipElement.attribute("red").toInt(),
-        ipElement.attribute("green").toInt(), ipElement.attribute("blue").toInt()));
+                ipElement.attribute("green").toInt(), ipElement.attribute("blue").toInt()));
 
     return newTable;
 }
@@ -478,15 +481,15 @@ SceneWidget::tableGroupFromXml(QDomElement &ipElement)
     // loop for all childs of this group
     QDomNode child = ipElement.firstChild();
     while (!child.isNull()) {
-    QDomElement element = child.toElement();
-    if (!element.isNull()) {
-        if (element.tagName() == "table") {
-        tableList << tableFromXml(element);
-        } else if (element.tagName() == "tableGroup") {
-        tableList << tableGroupFromXml(element);
+        QDomElement element = child.toElement();
+        if (!element.isNull()) {
+            if (element.tagName() == "table") {
+                tableList << tableFromXml(element);
+            } else if (element.tagName() == "tableGroup") {
+                tableList << tableGroupFromXml(element);
+            }
         }
-    }
-    child = child.nextSibling();
+        child = child.nextSibling();
     }
 
     TableItemGroup *group = mScene->createItemGroup(tableList);
@@ -508,11 +511,11 @@ SceneWidget::print(QPrinter *ipPrinter)
     int maxI = (int)(mScene->width() / pageWidth + 1);
     int maxJ = (int)(mScene->height() / pageHeight + 1);
     for (int i = 0; i < maxI; ++i) {
-    for (int j = 0; j < maxJ; ++j) {
-        mScene->render(&painter, QRectF(), QRectF(i * pageWidth, j * pageHeight, pageWidth, pageHeight));
-        if (i != maxI - 1 || j != maxJ - 1) {
-        ipPrinter->newPage();
-        }
+        for (int j = 0; j < maxJ; ++j) {
+            mScene->render(&painter, QRectF(), QRectF(i * pageWidth, j * pageHeight, pageWidth, pageHeight));
+            if (i != maxI - 1 || j != maxJ - 1) {
+                ipPrinter->newPage();
+            }
         }
     }
 }

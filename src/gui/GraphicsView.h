@@ -43,38 +43,42 @@ class GraphicsView : public QGraphicsView
     Q_OBJECT
 
     public:
-    GraphicsView();
-    GraphicsView(QGraphicsScene *, QWidget *);
-    ~GraphicsView();
+        GraphicsView();
+        GraphicsView(QGraphicsScene *, QWidget *);
+        ~GraphicsView();
 
-    public slots:
-        void scaleView(int);
+        public slots:
+            void scaleView(int);
 
     public:
-    static const int MINIMUM_FACTOR = 0;
-    static const int MAXIMUM_FACTOR = 10;
+        static const int MINIMUM_FACTOR = 0;
+        static const int MAXIMUM_FACTOR = 10;
+
+    signals:
+        void valueDecreased();
+        void valueIncreased();
 
     protected:
-    virtual void keyPressEvent(QKeyEvent *ipEvent);
-    virtual void wheelEvent(QWheelEvent *ipEvent);
-    virtual void scrollContentsBy(int, int);
-    virtual void mousePressEvent(QMouseEvent *);
-    virtual void mouseMoveEvent(QMouseEvent *);
-    virtual void mouseReleaseEvent(QMouseEvent *);
+        virtual void keyPressEvent(QKeyEvent *ipEvent);
+        virtual void wheelEvent(QWheelEvent *ipEvent);
+        virtual void scrollContentsBy(int, int);
+        virtual void mousePressEvent(QMouseEvent *);
+        virtual void mouseMoveEvent(QMouseEvent *);
+        virtual void mouseReleaseEvent(QMouseEvent *);
 
     private:
-    bool mMovingNow;
-    QPointF mBeginPoint;
-    QAction *mDeleteTableAction;
-    int mPrevFactor;
-    static const int MOVE_STEP = 10;
+        bool mMovingNow;
+        QPointF mBeginPoint;
+        QAction *mDeleteTableAction;
+        int mPrevFactor;
+        static const int MOVE_STEP = 10;
 
-    private slots:
-    void moveUp();
-    void moveDown();
-    void moveLeft();
-    void moveRight();
-    void setMoveMode(bool);
+        private slots:
+            void moveUp();
+        void moveDown();
+        void moveLeft();
+        void moveRight();
+        void setMoveMode(bool);
 };
 
 #endif // GRAPHICSVIEW_H

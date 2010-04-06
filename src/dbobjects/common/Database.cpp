@@ -157,97 +157,97 @@ Database::addLanguage(DbLanguage *ipLanguage)
 /*!
  * \brief Returns a list of schemas' names
  *
- * \param[out] ipList List with names of stored schemas
+ * \param[out] opList List with names of stored schemas
  */
 void
-Database::schemasList(QStringList *ipList) const
+Database::schemasList(QStringList *opList) const
 {
-    if (0 == ipList) {
+    if (0 == opList) {
         return;
     }
 
-    ipList->clear();
+    opList->clear();
 
     QVector<DbSchema*>::const_iterator iter;
 
     for (iter = mSchemas.constBegin(); iter != mSchemas.constEnd(); ++iter) {
-        ipList->append((*iter)->name());
+        opList->append((*iter)->name());
     }
 
     /* lyuts - if uncommented, then something gets wrong with the list, the list
      * has "public" and "public" 0_0
      *
      */
-    //ipList->sort();
+    //opList->sort();
 }
 
 /*!
  * \brief Returns a list of roles' names
  *
- * \param[out] ipList List with names of stored roles
+ * \param[out] opList List with names of stored roles
  */
 void
-Database::rolesList(QStringList *ipList) const
+Database::rolesList(QStringList *opList) const
 {
-    if (0 == ipList) {
+    if (0 == opList) {
         return;
     }
 
-    ipList->clear();
+    opList->clear();
 
     QVector<DbRole*>::const_iterator iter;
 
     for (iter = mRoles.constBegin(); iter != mRoles.constEnd(); ++iter) {
-        ipList->append((*iter)->name());
+        opList->append((*iter)->name());
     }
 
-    //ipList->sort();
+    //opList->sort();
 }
 
 /*!
  * \brief Returns a list of indices' names
  *
- * \param[out] ipList List with names of stored indices
+ * \param[out] opList List with names of stored indices
  */
 void
-Database::indicesList(QStringList *ipList) const
+Database::indicesList(QStringList *opList) const
 {
-    if (0 == ipList) {
+    if (0 == opList) {
         return;
     }
 
-    ipList->clear();
+    opList->clear();
 
     QVector<DbIndex*>::const_iterator iter;
 
     for (iter = mIndices.constBegin(); iter != mIndices.constEnd(); ++iter) {
-        ipList->append((*iter)->name());
+        opList->append((*iter)->name());
     }
 
-    //ipList->sort();
+    //opList->sort();
 }
 
 /*!
  * \brief Returns a list of languages' names
  *
- * \param[out] ipList List with names of stored languages
+ * \param[out] opList List with names of stored languages
  */
 void
-Database::languagesList(QStringList *ipList) const
+Database::languagesList(QStringList *opList) const
 {
-    if (0 == ipList) {
+    if (0 == opList) {
         return;
     }
 
-    ipList->clear();
+    opList->clear();
 
     QVector<DbLanguage*>::const_iterator iter;
 
     for (iter = mLanguages.constBegin(); iter != mLanguages.constEnd(); ++iter) {
-        ipList->append((*iter)->name());
+        opList->append((*iter)->name());
     }
 
-    //ipList->sort();
+    //opList->sort();
 }
 
 /*!
@@ -342,15 +342,15 @@ Database::findLanguage(const QString &ipLangName) const
  * \brief Finds all indices for a table
  *
  * \param[in] ipTable - Table object whose indices we are looking for
- * \param[out] ipList - Resulting list of indices objects that are assigned
+ * \param[out] opList - Resulting list of indices objects that are assigned
  *                      to the given table
  *
  * \return Number of found indices
  */
 quint64
-Database::findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) const
+Database::findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &opList) const
 {
-    ipList.clear();
+    opList.clear();
 
     quint64 count = mIndices.count();
 
@@ -367,11 +367,11 @@ Database::findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) co
         // if index is for our table -- add it
         if (tableName == mIndices.at(i)->tableName()
             && schemaName == mIndices.at(i)->schemaName()) {
-            ipList.push_back(mIndices.at(i));
+            opList.push_back(mIndices.at(i));
         }
     }
 
-    return ipList.count();
+    return opList.count();
 }
 /*!
  * \brief Sets sql driver by its name

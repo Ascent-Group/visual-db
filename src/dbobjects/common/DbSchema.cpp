@@ -143,24 +143,24 @@ DbSchema::addTrigger(DbTrigger *ipTrig)
 /*!
  * Get a list of tables' names
  *
- * \param[out] ipList - List of tables' names
+ * \param[out] opList - List of tables' names
  */
 void
-DbSchema::tablesList(QStringList *ipList) const
+DbSchema::tablesList(QStringList *opList) const
 {
-    if (0 == ipList) {
+    if (0 == opList) {
         return;
     }
 
-    ipList->clear();
+    opList->clear();
 
     QVector<DbTable*>::const_iterator iter;
 
     for (iter = mTables.constBegin(); iter != mTables.constEnd(); ++iter) {
-        ipList->append((*iter)->name());
+        opList->append((*iter)->name());
     }
 
-    //ipList->sort();
+    //opList->sort();
 }
 
 /*!
@@ -177,24 +177,24 @@ DbSchema::tablesCount() const
 /*!
  * Get a list of views' names
  *
- * \param[out] ipList - List of views' names
+ * \param[out] opList - List of views' names
  */
 void
-DbSchema::viewsList(QStringList *ipList) const
+DbSchema::viewsList(QStringList *opList) const
 {
-    if (0 == ipList) {
+    if (0 == opList) {
         return;
     }
 
-    ipList->clear();
+    opList->clear();
 
     QVector<DbView*>::const_iterator iter;
 
     for (iter = mViews.constBegin(); iter != mViews.constEnd(); ++iter) {
-        ipList->append((*iter)->name());
+        opList->append((*iter)->name());
     }
 
-    //ipList->sort();
+    //opList->sort();
 }
 
 /*!
@@ -211,47 +211,47 @@ DbSchema::viewsCount() const
 /*!
  * Get a list of procs' names
  *
- * \param[out] ipList - List of procs' names
+ * \param[out] opList - List of procs' names
  */
 void
-DbSchema::proceduresList(QStringList *ipList) const
+DbSchema::proceduresList(QStringList *opList) const
 {
-    if (0 == ipList) {
+    if (0 == opList) {
         return;
     }
 
-    ipList->clear();
+    opList->clear();
 
     QVector<DbProcedure*>::const_iterator iter;
 
     for (iter = mProcedures.constBegin(); iter != mProcedures.constEnd(); ++iter) {
-        ipList->append((*iter)->name());
+        opList->append((*iter)->name());
     }
 
-    //ipList->sort();
+    //opList->sort();
 }
 
 /*!
  * Get a list of triggers' names
  *
- * \param[out] ipList - List of triggers' names
+ * \param[out] opList - List of triggers' names
  */
 void
-DbSchema::triggersList(QStringList *ipList) const
+DbSchema::triggersList(QStringList *opList) const
 {
-    if (0 == ipList) {
+    if (0 == opList) {
         return;
     }
 
-    ipList->clear();
+    opList->clear();
 
     QVector<DbTrigger*>::const_iterator iter;
 
     for (iter = mTriggers.constBegin(); iter != mTriggers.constEnd(); ++iter) {
-        ipList->append((*iter)->name());
+        opList->append((*iter)->name());
     }
 
-    //ipList->sort();
+    //opList->sort();
 }
 
 /*!

@@ -45,11 +45,19 @@ class DbLanguage : public DbObject
         bool isTrusted() const;
         void setTrusted(bool ipFlag);
 
+        /*!
+         * \see PsqlLanguage::loadData()
+         * \see MysqlLanguage::loadData()
+         */
         virtual void loadData() = 0;
 
         virtual DbObject::Type type() const;
 
     protected:
+        /*!
+         * means that it is believed not to grant access to anything outside
+         * the normal SQL execution environment
+         */
         bool mIsTrusted;
 
     protected:

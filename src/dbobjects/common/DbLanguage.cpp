@@ -30,8 +30,10 @@
 #include <Database.h>
 #include <DbLanguage.h>
 
-/*
+/*!
  * Ctor
+ *
+ * \param[in] ipName - Name of the language
  */
 DbLanguage::DbLanguage(QString ipName)
     : DbObject(ipName)
@@ -39,7 +41,7 @@ DbLanguage::DbLanguage(QString ipName)
 
 }
 
-/*
+/*!
  * Dtor
  */
 DbLanguage::~DbLanguage()

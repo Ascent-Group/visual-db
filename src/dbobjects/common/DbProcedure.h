@@ -60,14 +60,23 @@ class DbProcedure : public DbObject
         virtual DbObject::Type type() const;
 
     protected:
+        /*! Name of the schema that holds this procedure */
         QString mSchemaName; // !!! for internal use only
+        /*! Schema that holds this procedure */
         DbSchema *mSchema;
+        /*! Procedure's owner */
         DbRole *mOwner;
+        /*! pl/sql language this procedure has been written in */
         DbLanguage *mLanguage;
+        /*! Procedure's source code text */
         QString mSourceCode;
 
     protected:
         DbProcedure(QString ipSchemaName, QString ipName);
+        /*!
+         * \see PsqlProcedure::loadData()
+         * \see MysqlProcedure::loadData()
+         */
         virtual void loadData() = 0;
 
 };

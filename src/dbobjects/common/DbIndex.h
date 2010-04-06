@@ -83,23 +83,46 @@ class DbIndex : public DbObject
         bool isReady() const;
         void setReady(bool ipFlag);
 
+        /*!
+         * \see PsqlIndex::loadData()
+         * \see MysqlIndex::loadData()
+         */
         virtual void loadData() = 0;
 
         virtual DbObject::Type type() const;
 
     protected:
+        /*! Table name this index is assigned to */
         QString mTableName;
+        /*! Name of a schema containing this index */
         QString mSchemaName;
+        /*! Table this index is assigned to */
         DbTable *mTable;
+        /*! Schema containing this index */
         DbSchema *mSchema;
+        /*! Number of columns covered by this index */
         quint16 mColumnsCount;
-    // qint16 because columns can be addressed via negative ids
+        /*! Columns numbers */
+        // qint16 because columns can be addressed via negative ids
         QVector<qint16> mColumnsNumbers;
+        /*! If true, this is a unique index */
         bool mIsUnique;
+        /*! If true, this index represents the primary key of the table
+         * (indisunique should always be true when this is true)
+         */
         bool mIsPrimary;
+        /*! If true, the table was last clustered on this index */
         bool mIsClustered;
+        /*! If true, the index is currently valid for queries. */
         bool mIsValid;
+        /*!
+         * If true, queries must not use the index until the xmin of this
+         * pg_index  row is below their TransactionXmin event horizon, because
+         * the table may contain broken HOT chains with incompatible rows that
+         * they can see 
+         */
         bool mChecksXMin;
+        /*! is currently ready for inserts */
         bool mIsReady;
 
     protected:

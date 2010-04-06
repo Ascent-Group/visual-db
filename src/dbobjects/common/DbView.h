@@ -35,6 +35,11 @@
 class DbRole;
 class DbSchema;
 
+/*!
+ * \class DbView
+ * \headerfile <common/DbView.h>
+ * \brief Defines database view object
+ */
 class DbView : public DbObject
 {
     public:
@@ -51,14 +56,22 @@ class DbView : public DbObject
         QString definition() const;
         void setDefinition(QString ipDef);
 
+        /*!
+         * \see PsqlView::loadData()
+         * \see MysqlView::loadData()
+         */
         virtual void loadData() = 0;
 
         virtual DbObject::Type type() const;
 
     protected:
+        /*! Containing schema's name */
         QString mSchemaName; // for internal use only => no accessors for it
+        /*! Schema containing this view */
         DbSchema *mSchema;
+        /*! View's owner */
         DbRole *mOwner;
+        /*! View's definition */
         QString mDefinition;
 
     protected:

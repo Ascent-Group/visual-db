@@ -32,15 +32,17 @@
 
 #include <QtDebug>
 
-/*
+/*!
  * Ctor
+ * \param[in] ipSchemaName - Schema name
+ * \param[in] ipName - View name
  */
 DbView::DbView(QString ipSchemaName, QString ipName)
     : DbObject(ipName), mSchemaName(ipSchemaName)
 {
     setSchema(Database::instance()->findSchema(mSchemaName));
 }
-/*
+/*!
  * Dtor
  */
 DbView::~DbView()
@@ -48,8 +50,8 @@ DbView::~DbView()
 
 }
 
-/*
- * Returns view's full name
+/*!
+ * \return View's full name in a "Schema.View" format
  */
 QString
 DbView::fullName() const
@@ -57,8 +59,8 @@ DbView::fullName() const
     return QString("%1.%2").arg(mSchemaName).arg(mName);
 }
 
-/*
- * Returns the schema containing this view
+/*!
+ * \return Schema containing this view
  */
 DbSchema*
 DbView::schema() const
@@ -66,8 +68,8 @@ DbView::schema() const
     return mSchema;
 }
 
-/*
- * Sets the schema for the view
+/*!
+ * \param[in] ipSchema - Parent schema for the view
  */
 void
 DbView::setSchema(DbSchema *ipSchema)
@@ -75,8 +77,8 @@ DbView::setSchema(DbSchema *ipSchema)
     mSchema = ipSchema;
 }
 
-/*
- * Returns the owner of this view
+/*!
+ * \return Owner of this view
  */
 DbRole*
 DbView::owner() const
@@ -84,8 +86,8 @@ DbView::owner() const
     return mOwner;
 }
 
-/*
- * Sets the owner for this view
+/*!
+ * \param[in] ipOwner - Owner for this view
  */
 void
 DbView::setOwner(DbRole *ipOwner)
@@ -93,8 +95,8 @@ DbView::setOwner(DbRole *ipOwner)
     mOwner = ipOwner;
 }
 
-/*
- * Returns the definition (reconstructed select)
+/*!
+ * \return The definition (reconstructed select)
  */
 QString
 DbView::definition() const
@@ -102,8 +104,10 @@ DbView::definition() const
     return mDefinition;
 }
 
-/*
+/*!
  * Sets the definition for this view
+ *
+ * \param[in] ipDef - View's definition
  */
 void
 DbView::setDefinition(QString ipDef)
@@ -111,8 +115,8 @@ DbView::setDefinition(QString ipDef)
     mDefinition = ipDef;
 }
 
-/*
- * Returns the id of database object type
+/*!
+ * \return Database object type identifier
  */
 DbObject::Type
 DbView::type() const

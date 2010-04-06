@@ -30,8 +30,10 @@
 #include <common/DbSchema.h>
 #include <common/DbTrigger.h>
 
-/*
- * Ctor
+/*!
+ * Constructor
+ * \param[in] ipSchemaName - Parent schema name
+ * \param[in] ipName - Trigger name
  */
 DbTrigger::DbTrigger(QString ipSchemaName, QString ipName)
     : DbObject(ipName), mSchemaName(ipSchemaName)
@@ -39,16 +41,16 @@ DbTrigger::DbTrigger(QString ipSchemaName, QString ipName)
     setSchema(Database::instance()->findSchema(mSchemaName));
 }
 
-/*
- * Dtor
+/*!
+ * Destructor
  */
 DbTrigger::~DbTrigger()
 {
 
 }
 
-/*
- *
+/*!
+ * \return Handle to parent schema
  */
 DbSchema*
 DbTrigger::schema() const
@@ -56,8 +58,8 @@ DbTrigger::schema() const
     return mSchema;
 }
 
-/*
- *
+/*!
+ * \param[in] ipSchema - Parent schema handle
  */
 void
 DbTrigger::setSchema(DbSchema *ipSchema)
@@ -65,8 +67,8 @@ DbTrigger::setSchema(DbSchema *ipSchema)
     mSchema = ipSchema;
 }
 
-/*
- * Returns the table this trigger is on
+/*!
+ * \return Handle for the table this trigger is on
  */
 DbTable*
 DbTrigger::table() const
@@ -74,8 +76,9 @@ DbTrigger::table() const
     return mTable;
 }
 
-/*
+/*!
  * Sets the table
+ * \param[in] ipTable - Table handle
  */
 void
 DbTrigger::setTable(DbTable *ipTable)
@@ -83,8 +86,8 @@ DbTrigger::setTable(DbTable *ipTable)
     mTable = ipTable;
 }
 
-/*
- * Returns the procedure that runs when trigger fires
+/*!
+ * \return The procedure that runs when trigger fires
  */
 DbProcedure*
 DbTrigger::procedure() const
@@ -92,8 +95,10 @@ DbTrigger::procedure() const
     return mProcedure;
 }
 
-/*
+/*!
  * Sets the procedure
+ *
+ * \param[in] ipProcedure - Procedure handle
  */
 void
 DbTrigger::setProcedure(DbProcedure *ipProcedure)
@@ -101,8 +106,8 @@ DbTrigger::setProcedure(DbProcedure *ipProcedure)
     mProcedure = ipProcedure;
 }
 
-/*
- * Returns enabled flag
+/*!
+ * \return 'Enabled' flag
  */
 QChar
 DbTrigger::enabled() const
@@ -110,8 +115,8 @@ DbTrigger::enabled() const
     return mEnabled;
 }
 
-/*
- *
+/*!
+ * \return Parent schema name
  */
 QString
 DbTrigger::schemaName() const
@@ -123,8 +128,8 @@ DbTrigger::schemaName() const
     return mSchemaName;
 }
 
-/*
- *
+/*!
+ * \return Trigger's fullname in "Schema.Trigger" format
  */
 QString
 DbTrigger::fullName() const
@@ -132,17 +137,19 @@ DbTrigger::fullName() const
     return QString("%1.%2").arg(mSchemaName).arg(mName);
 }
 
-/*
+/*!
  * Sets the enabled flag
+ * \param[in] ipFlag - Indicates whether the trigger is enabled
  */
 void
-DbTrigger::setEnabled(const QChar ipFlag)
+DbTrigger::setEnabled(const QChar &ipFlag)
 {
     mEnabled = ipFlag;
 }
 
-/*
- * Returns true is trigger is a constraint
+/*!
+ * \return true - If trigger is a constraint
+ * \return false - Otherwise
  */
 bool
 DbTrigger::isConstraint() const
@@ -150,17 +157,18 @@ DbTrigger::isConstraint() const
     return mIsConstraint;
 }
 
-/*
+/*!
  * Sets the constraint flag
+ *
  */
 void
-DbTrigger::setConstraint(const bool ipFlag)
+DbTrigger::setConstraint(bool ipFlag)
 {
     mIsConstraint = ipFlag;
 }
 
-/*
- * Returns the constraint name if the trigger is a constraint
+/*!
+ * \return The constraint name if the trigger is a constraint
  */
 QString
 DbTrigger::constraintName() const
@@ -172,8 +180,10 @@ DbTrigger::constraintName() const
     return mConstraintName;
 }
 
-/*
+/*!
  * Sets the constraint name for a constraint trigger
+ *
+ * \param[in] ipName - Constraint name
  */
 void
 DbTrigger::setConstraintName(const QString &ipName)
@@ -181,8 +191,8 @@ DbTrigger::setConstraintName(const QString &ipName)
     mConstraintName = ipName;
 }
 
-/*
- * Returns the referenced table
+/*!
+ * \return The referenced table handle
  */
 DbTable*
 DbTrigger::referencedTable() const
@@ -190,8 +200,10 @@ DbTrigger::referencedTable() const
     return mReferencedTable;
 }
 
-/*
+/*!
  * Sets the table referenced by this trigger
+ *
+ * \param[in] ipTable
  */
 void
 DbTrigger::setReferencedTable(DbTable *ipTable)
@@ -199,8 +211,9 @@ DbTrigger::setReferencedTable(DbTable *ipTable)
     mReferencedTable = ipTable;
 }
 
-/*
- * Returns true if the trigger if deferrable
+/*!
+ * \return true - If the trigger if deferrable
+ * \return false - Otherwise
  */
 bool
 DbTrigger::isDeferrable() const
@@ -208,17 +221,20 @@ DbTrigger::isDeferrable() const
     return mIsDeferrable;
 }
 
-/*
+/*!
  * Sets the deferrrable flag
+ *
+ * \param[in] ipFlag - Inidicates whether the trigger is deferrable
  */
 void
-DbTrigger::setDeferrable(const bool ipFlag)
+DbTrigger::setDeferrable(bool ipFlag)
 {
     mIsDeferrable = ipFlag;
 }
 
-/*
- * Returns true if the trigger is initially deferred
+/*!
+ * \return true - If the trigger is initially deferred
+ * \return false - Otherwise
  */
 bool
 DbTrigger::isInitiallyDeferred() const
@@ -226,17 +242,19 @@ DbTrigger::isInitiallyDeferred() const
     return mIsInitiallyDeferred;
 }
 
-/*
+/*!
  * Sets the initially deferred flag
+ *
+ * \param[in] ipFlag - Indicates, whether the trigger is initially deferred
  */
 void
-DbTrigger::setInitiallyDeferred(const bool ipFlag)
+DbTrigger::setInitiallyDeferred(bool ipFlag)
 {
     mIsInitiallyDeferred = ipFlag;
 }
 
-/*
- * Returns the number of args passed to the trigger
+/*!
+ * \return The number of args passed to the trigger
  */
 quint16
 DbTrigger::numArgs() const
@@ -244,8 +262,10 @@ DbTrigger::numArgs() const
     return mNumArgs;
 }
 
-/*
+/*!
  * Sets the number of arguments passed to the trigger
+ *
+ * \param[in] ipNum - Number of args
  */
 void
 DbTrigger::setNumArgs(const quint16 &ipNum)
@@ -253,8 +273,8 @@ DbTrigger::setNumArgs(const quint16 &ipNum)
     mNumArgs = ipNum;
 }
 
-/*
- * Returns the database object type
+/*!
+ * \return The database object type identifier
  */
 DbObject::Type
 DbTrigger::type() const

@@ -70,6 +70,10 @@ class DbRole : public DbObject
         quint64 id() const;
         void setId(quint64 ipId);
 
+        /*!
+         * \see PsqlRole::loadData()
+         * \see MysqlRole::loadData()
+         */
         virtual void loadData() = 0;
         // lyuts: for future use
         // virtual void save() = 0;
@@ -77,15 +81,24 @@ class DbRole : public DbObject
         virtual DbObject::Type type() const;
 
     protected:
+        /*! Does role have superuser privileges? */
         bool mIsSuperUser;
+        /*! Role automatically inherits privileges of roles it is a member of */
         bool mInheritsPrivileges; // true if the role inherits its parent's privileges
+        /*! Can role create other roles */
         bool mCanCreateRole;
+        /*! Can role create databases */
         bool mCanCreateDb;
+        /*! Can role update system catalogs directly. (Even a superuser cannot do this unless this column is true.) */
         bool mCanUpdateSysCat;
+        /*! Role can log in. That is, this role can be given as the initial session auth id */
         bool mCanLogin;
-    // I even doubt that any server can handle such number of connections
+        // I even doubt that any server can handle such number of connections
+        /*! Connection limit for the given role */
         quint32 mConnectionLimit;
+        /*! Date when the role expires */
         QDate mExpiryDate;
+        /*! Db role id */
         quint64 mId;
 
     protected:

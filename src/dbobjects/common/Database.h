@@ -50,7 +50,8 @@ class Database
         static Database* instance();
 
         /*!
-         * \enum Database::SqlDriverType
+         * \enum SqlDriverType
+         * Sql driver indentifiers
          */
         enum SqlDriverType
         {

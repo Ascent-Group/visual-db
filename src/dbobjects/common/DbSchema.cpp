@@ -105,7 +105,7 @@ DbSchema::addView(DbView *ipView)
 /*!
  * \brief Add proc to a schema
  *
- * \param[in] ipSchema
+ * \param[in] ipProc
  *
  * \return true - If the proc object has been added
  * \return false - If the proc object has already existed in the vector
@@ -139,8 +139,11 @@ DbSchema::addTrigger(DbTrigger *ipTrig)
     mTriggers.push_back(ipTrig);
     return true;
 }
-/*
- * Return a list of tables' names
+
+/*!
+ * Get a list of tables' names
+ *
+ * \param[out] ipList - List of tables' names
  */
 void
 DbSchema::tablesList(QStringList *ipList) const
@@ -160,8 +163,10 @@ DbSchema::tablesList(QStringList *ipList) const
     //ipList->sort();
 }
 
-/*
+/*!
  * Calculate the number of tables in the given schema
+ *
+ * \return Number of tables currently stored in the schema
  */
 quint64
 DbSchema::tablesCount() const
@@ -169,8 +174,10 @@ DbSchema::tablesCount() const
     return mTables.count();
 }
 
-/*
- * Returns a list of views' names
+/*!
+ * Get a list of views' names
+ *
+ * \param[out] ipList - List of views' names
  */
 void
 DbSchema::viewsList(QStringList *ipList) const
@@ -190,8 +197,10 @@ DbSchema::viewsList(QStringList *ipList) const
     //ipList->sort();
 }
 
-/*
- * Returns the number of views in the given schema
+/*!
+ * Calculate the number of views in the given schema
+ *
+ * \return Number of views currently stored in the schema
  */
 quint64
 DbSchema::viewsCount() const
@@ -199,8 +208,10 @@ DbSchema::viewsCount() const
     return mViews.count();
 }
 
-/*
- * Returns a list of procs' names
+/*!
+ * Get a list of procs' names
+ *
+ * \param[out] ipList - List of procs' names
  */
 void
 DbSchema::proceduresList(QStringList *ipList) const
@@ -220,8 +231,10 @@ DbSchema::proceduresList(QStringList *ipList) const
     //ipList->sort();
 }
 
-/*
- * Returns a list of triggers' names
+/*!
+ * Get a list of triggers' names
+ *
+ * \param[out] ipList - List of triggers' names
  */
 void
 DbSchema::triggersList(QStringList *ipList) const
@@ -241,8 +254,10 @@ DbSchema::triggersList(QStringList *ipList) const
     //ipList->sort();
 }
 
-/*
- * Returns the number of procs in the given schema
+/*!
+ * Calculate the number of procs in the given schema
+ *
+ * \return Number of procs currently stored in the schema
  */
 quint64
 DbSchema::proceduresCount() const
@@ -250,8 +265,10 @@ DbSchema::proceduresCount() const
     return mProcedures.count();
 }
 
-/*
- * Calculates the number of triggers
+/*!
+ * Calculate the number of triggers in the given schema
+ *
+ * \return Number of triggers currently stored in the schema
  */
 quint16
 DbSchema::triggersCount() const
@@ -259,8 +276,12 @@ DbSchema::triggersCount() const
     return mTriggers.count();
 }
 
-/*
+/*!
  * Find table by its name
+ *
+ * \param[in] ipTableName - Name of the table we are looking for
+ *
+ * \return Handle to the found table or NULL is not found.
  */
 DbTable*
 DbSchema::findTable(const QString &ipTableName) const
@@ -268,8 +289,12 @@ DbSchema::findTable(const QString &ipTableName) const
     return dynamic_cast<DbTable*>(findObject(ipTableName, DbObject::TableObject));
 }
 
-/*
+/*!
  * Find view by its name
+ *
+ * \param[in] ipViewName - Name of the view we are looking for
+ *
+ * \return Handle to the found view or NULL is not found.
  */
 DbView*
 DbSchema::findView(const QString &ipViewName) const
@@ -277,8 +302,12 @@ DbSchema::findView(const QString &ipViewName) const
     return dynamic_cast<DbView*>(findObject(ipViewName, DbObject::ViewObject));
 }
 
-/*
- * Find proc by its name
+/*!
+ * Find procedure by its name
+ *
+ * \param[in] ipProcName - Name of the procedure we are looking for
+ *
+ * \return Handle to the found procedure or NULL is not found.
  */
 DbProcedure*
 DbSchema::findProcedure(const QString &ipProcName) const
@@ -286,8 +315,12 @@ DbSchema::findProcedure(const QString &ipProcName) const
     return dynamic_cast<DbProcedure*>(findObject(ipProcName, DbObject::ProcedureObject));
 }
 
-/*
- * Returns a trigger by its name
+/*!
+ * Find trigger by its name
+ *
+ * \param[in] ipTrigName - Name of the trigger we are looking for
+ *
+ * \return Handle to the found trigger or NULL is not found.
  */
 DbTrigger*
 DbSchema::findTrigger(const QString &ipTrigName) const
@@ -295,7 +328,7 @@ DbSchema::findTrigger(const QString &ipTrigName) const
     return dynamic_cast<DbTrigger*>(findObject(ipTrigName, DbObject::TriggerObject));
 }
 
-/*
+/*!
  * Read tables' names list from DB and populate
  * tables vector with *Table objects
  */
@@ -377,7 +410,7 @@ DbSchema::readTables()
     } while (query.next());
 }
 
-/*
+/*!
  * Reads views within the schema
  */
 void
@@ -500,7 +533,7 @@ DbSchema::readViews()
     } while (query.next());
 }
 
-/*
+/*!
  * Read procs within the given schema
  */
 void
@@ -627,7 +660,7 @@ DbSchema::readProcedures()
     } while (query.next());
 }
 
-/*
+/*!
  * Reads triggers
  */
 void
@@ -856,7 +889,7 @@ DbSchema::readTriggers()
     } while (query.next());
 }
 
-/*
+/*!
  * Cleanup
  */
 void
@@ -880,8 +913,8 @@ DbSchema::cleanup()
     mTriggers.clear();
 }
 
-/*
- * Returns the id of database object type
+/*!
+ * \return DbObject::SchemaObject
  */
 DbObject::Type
 DbSchema::type() const
@@ -889,8 +922,13 @@ DbSchema::type() const
     return DbObject::SchemaObject;
 }
 
-/*
+/*!
  * Searches for an object by its name
+ *
+ * \param[in] ipObjectName - Object's name
+ * \param[in] ipObjectType - Object's type \see DbObject::Type
+ *
+ * \return Handle to the found object or NULL if not found.
  */
 DbObject*
 DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
@@ -967,17 +1005,31 @@ DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
     return object;
 }
 
-QString DbSchema::ownerName() const
+/*!
+ * \return Name of the given schema's owner
+ */
+QString
+DbSchema::ownerName() const
 {
     return mOwner->name();
 }
 
-QString DbSchema::description() const
+/*!
+ * \return Db schema description
+ */
+QString
+DbSchema::description() const
 {
     return mDescription;
 }
 
-void DbSchema::setDescription(const QString & ipDescription)
+/*!
+ * Set description for the schema
+ *
+ * \param[in] ipDescription - Description text
+ */
+void
+DbSchema::setDescription(const QString & ipDescription)
 {
     mDescription = ipDescription;
 }

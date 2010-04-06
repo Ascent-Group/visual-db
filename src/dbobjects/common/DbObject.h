@@ -42,26 +42,29 @@ class DbObject
     public:
 
         /*!
-         * \enum DbObject::Type
+         * \enum Type
+         * Database object indentifiers
          */
         enum Type {
-            UnkObject = 0,
-            SchemaObject,
-            TableObject,
-            ViewObject,
-            RoleObject,
-            TriggerObject,
-            LanguageObject,
-            IndexObject,
-            ProcedureObject,
+            UnkObject = 0,      /*!< Unknown object */
+            SchemaObject,       /*!< Schema */
+            TableObject,        /*!< Table */
+            ViewObject,         /*!< View */
+            RoleObject,         /*!< Role */
+            TriggerObject,      /*!< Trigger */
+            LanguageObject,     /*!< Language */
+            IndexObject,        /*!< Index */
+            ProcedureObject,    /*!< Procedure */
         };
 
         QString name() const;
         void setName(const QString &ipName);
 
+        /*! \see Descendants' implementation */
         virtual DbObject::Type type() const = 0;
 
     protected:
+        /*! Name of db object */
         QString mName;
 
     protected:

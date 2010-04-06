@@ -34,6 +34,11 @@
 #include <common/DbProcedure.h>
 #include <common/DbTable.h>
 
+/*!
+ * \class DbTrigger
+ * \headerfile <common/DbTrigger.h>
+ * \brief Represents database trigger object
+ */
 class DbTrigger : public DbObject
 {
     public:
@@ -49,10 +54,10 @@ class DbTrigger : public DbObject
         void setProcedure(DbProcedure *ipProcedure);
 
         QChar enabled() const;
-        void setEnabled(const QChar ipFlag);
+        void setEnabled(const QChar &ipFlag);
 
         bool isConstraint() const;
-        void setConstraint(const bool ipFlag);
+        void setConstraint(bool ipFlag);
 
         QString constraintName() const;
         void setConstraintName(const QString &ipName);
@@ -61,15 +66,19 @@ class DbTrigger : public DbObject
         void setReferencedTable(DbTable *ipTable);
 
         bool isDeferrable() const;
-        void setDeferrable(const bool ipFlag);
+        void setDeferrable(bool ipFlag);
 
         bool isInitiallyDeferred() const;
-        void setInitiallyDeferred(const bool ipFlag);
+        void setInitiallyDeferred(bool ipFlag);
 
         quint16 numArgs() const;
         void setNumArgs(const quint16 &ipNum);
 
         virtual DbObject::Type type() const;
+        /*!
+         * \see PsqlTrigger::loadData()
+         * \see MysqlTrigger::loadData()
+         */
         virtual void loadData() = 0;
 
         QString schemaName() const;
@@ -78,22 +87,32 @@ class DbTrigger : public DbObject
     protected:
         DbTrigger(QString ipSchemaName, QString ipName);
 
+        /*! Parent schema name */
         QString mSchemaName; // for internal use only
+        /*! Table */
         DbTable *mTable;
+        /*! Parent schema */
         DbSchema *mSchema;
+        /*! ??? */
         DbProcedure *mProcedure;
-        // controls in which session_replication_role modes the trigger fires
-        // O - origin and local modes
-        // D - disabled
-        // R - replica mode
-        // A - always
+        /*! Controls in which session_replication_role modes the trigger fires
+         * O - origin and local modes
+         * D - disabled
+         * R - replica mode
+         * A - always
+         */
         QChar mEnabled;
+        /*! True if trigger is a "constraint trigger" */
         bool mIsConstraint;
-        QString mConstraintName; // name of constr if mIsConstraint is true
+        /*! Constraint name, if a constraint trigger */
+        QString mConstraintName;
+        /*! The table referenced by a referential integrity constraint */
         DbTable *mReferencedTable;
-        //DbConstraint
+        /*! True if constraint trigger is deferrable */
         bool mIsDeferrable;
+        /*! True if constraint trigger is initially deferred */
         bool mIsInitiallyDeferred;
+        /*! Number of argument strings passed to trigger function */
         quint16 mNumArgs;
 
 };

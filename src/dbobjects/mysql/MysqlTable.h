@@ -47,3 +47,4 @@ class MysqlTable : public DbTable
 };
 
 #endif // MYSQLTABLE_H
+

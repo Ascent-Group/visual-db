@@ -44,14 +44,15 @@ class AppearancePage : public QWidget
     Q_OBJECT
     
     public:
-    AppearancePage(QWidget *ipParent = 0);
-    ~AppearancePage();
+        AppearancePage(QWidget *ipParent = 0);
+        ~AppearancePage();
 
-    int language() const;
+        int language() const;
 
     private:
-    Ui::AppearancePage ui;
-    QSettings mSettings;
+        Ui::AppearancePage ui;
+        QSettings mSettings;
 };
 
 #endif // APPEARANCEPAGE_H
+

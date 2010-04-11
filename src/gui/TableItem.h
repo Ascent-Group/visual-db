@@ -55,78 +55,79 @@ class TableItem : public GraphicsItem
 {
     public:
         TableItem(const QString &, const QString &, QMenu *);
-    ~TableItem();
-    virtual int type() const;
+        ~TableItem();
+        virtual int type() const;
 
-    void addIndexItem(QGraphicsTextItem *);
-    void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *widget = 0);
-    void addArrowItem(ArrowItem *);
-    void removeArrowItem(ArrowItem *);
-    void removeArrowItems();
-    void setFieldsTypesVisible(bool);
+        void addIndexItem(QGraphicsTextItem *);
+        void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *widget = 0);
+        void addArrowItem(ArrowItem *);
+        void removeArrowItem(ArrowItem *);
+        void removeArrowItems();
+        void setFieldsTypesVisible(bool);
         void setIndicesVisible(bool);
-    void adjustSize();
+        void adjustSize();
 
-    QList<ArrowItem *> arrows() const;
-    QString tableName() const; 
-    QString schemaName() const; 
-    DbTable *tableModel() const;
-    QDomElement toXml(QDomDocument &);
+        QList<ArrowItem *> arrows() const;
+        QString tableName() const; 
+        QString schemaName() const; 
+        DbTable *tableModel() const;
+        QDomElement toXml(QDomDocument &);
 
-    static void setSeek(int);
+        static void setSeek(int);
 
     public:
-    enum { Type = UserType + 5 };
+        enum { Type = UserType + 5 };
 
     protected:
-    void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
-    QVariant itemChange(GraphicsItemChange, const QVariant &);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *);
-    void mousePressEvent(QGraphicsSceneMouseEvent *);
-    void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
-    void hoverMoveEvent(QGraphicsSceneHoverEvent *);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
+        QVariant itemChange(GraphicsItemChange, const QVariant &);
+        void mouseMoveEvent(QGraphicsSceneMouseEvent *);
+        void mousePressEvent(QGraphicsSceneMouseEvent *);
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
+        void hoverMoveEvent(QGraphicsSceneHoverEvent *);
+        void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
 
     private:
-    // mode for table (you can resize table from different positions or move it)
-    enum Mode { 
-        RIGHT_BOTTOM_CORNER_RESIZE,
-        LEFT_BOTTOM_CORNER_RESIZE,
-        LEFT_TOP_CORNER_RESIZE,
-        RIGHT_TOP_CORNER_RESIZE,
-        
-        LEFT_VERTICAL_RESIZE, 
-        RIGHT_VERTICAL_RESIZE, 
-        TOP_HORIZONTAL_RESIZE, 
-        BOTTOM_HORIZONTAL_RESIZE, 
-        
-        MOVE 
-    };
-    
-    static int mSeek;
+        // mode for table (you can resize table from different positions or move it)
+        enum Mode { 
+            RIGHT_BOTTOM_CORNER_RESIZE,
+            LEFT_BOTTOM_CORNER_RESIZE,
+            LEFT_TOP_CORNER_RESIZE,
+            RIGHT_TOP_CORNER_RESIZE,
 
-    QSettings mSettings;
-    DbTable *mTableModel;
+            LEFT_VERTICAL_RESIZE, 
+            RIGHT_VERTICAL_RESIZE, 
+            TOP_HORIZONTAL_RESIZE, 
+            BOTTOM_HORIZONTAL_RESIZE, 
+
+            MOVE 
+        };
+
+        static int mSeek;
+
+        QSettings mSettings;
+        DbTable *mTableModel;
         QVector<DbIndex *> mIndices;
-    
-    QMenu *mContextMenu;
-    
-    QList<ArrowItem *> mArrowItems;
 
-    QList<QGraphicsTextItem *> mIndexItems;
+        QMenu *mContextMenu;
 
-    Mode mMode;
-    bool mFieldsTypesVisible;
+        QList<ArrowItem *> mArrowItems;
+
+        QList<QGraphicsTextItem *> mIndexItems;
+
+        Mode mMode;
+        bool mFieldsTypesVisible;
         bool mIndicesVisible;
-    QFont mFont;
+        QFont mFont;
 
-    QImage *mTableImage;
-    QImage *mKeyImage;
-    QImage *mForeignKeyImage;
-    QImage *mFieldImage;
-    QImage *mAnchorImage;
+        QImage *mTableImage;
+        QImage *mKeyImage;
+        QImage *mForeignKeyImage;
+        QImage *mFieldImage;
+        QImage *mAnchorImage;
 };
 
 bool isTable(QGraphicsItem *);
 
 #endif // TABLEITEM_H
+

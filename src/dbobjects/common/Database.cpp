@@ -269,7 +269,7 @@ Database::rolesCount() const
 }
 
 /*!
- * \return Number of indice currently store in Database
+ * \return Number of indices currently store in Database
  */
 quint64
 Database::indicesCount() const

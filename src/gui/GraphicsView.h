@@ -47,8 +47,8 @@ class GraphicsView : public QGraphicsView
         GraphicsView(QGraphicsScene *, QWidget *);
         ~GraphicsView();
 
-        public slots:
-            void scaleView(int);
+    public slots:
+        void scaleView(int);
 
     public:
         static const int MINIMUM_FACTOR = 0;
@@ -73,8 +73,8 @@ class GraphicsView : public QGraphicsView
         int mPrevFactor;
         static const int MOVE_STEP = 10;
 
-        private slots:
-            void moveUp();
+    private slots:
+        void moveUp();
         void moveDown();
         void moveLeft();
         void moveRight();
@@ -82,3 +82,4 @@ class GraphicsView : public QGraphicsView
 };
 
 #endif // GRAPHICSVIEW_H
+

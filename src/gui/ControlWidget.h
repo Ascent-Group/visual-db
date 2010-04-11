@@ -83,3 +83,4 @@ class ControlWidget : public QWidget
 };
 
 #endif // CONTROLWIDGET_H
+

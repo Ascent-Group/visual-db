@@ -44,13 +44,13 @@ class SqlConnectionDialog : public QDialog
     Q_OBJECT
 
     public:
-    SqlConnectionDialog(DbParameters *, ProxyParameters *, bool, QWidget *ipParent = 0);
+        SqlConnectionDialog(DbParameters *, ProxyParameters *, bool, QWidget *ipParent = 0);
 
     private:
-    Ui::SqlConnectionDialog ui;
+        Ui::SqlConnectionDialog ui;
 
-    DbParameters *mDbParameters;
-    ProxyParameters *mProxyParameters;
+        DbParameters *mDbParameters;
+        ProxyParameters *mProxyParameters;
 
     private:
         void createDialog(bool);
@@ -61,3 +61,4 @@ class SqlConnectionDialog : public QDialog
 };
 
 #endif // SQLCONNECTIONDIALOG_H
+

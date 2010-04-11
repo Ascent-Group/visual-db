@@ -34,8 +34,11 @@
 
 #include <QtDebug>
 
-/*
+/*!
  * Constructor
+ *
+ * \param[in] ipSchemaName - Parent schema name
+ * \param[in] ipTableName - Table name
  */
 DbTable::DbTable(QString ipSchemaName, QString ipTableName)
     : DbObject(ipTableName), mSchemaName(ipSchemaName)
@@ -43,7 +46,7 @@ DbTable::DbTable(QString ipSchemaName, QString ipTableName)
     setSchema(Database::instance()->findSchema(mSchemaName));
 }
 
-/*
+/*!
  * Destructor
  */
 DbTable::~DbTable()
@@ -51,8 +54,8 @@ DbTable::~DbTable()
 
 }
 
-/*
- * Returns the number of columns
+/*!
+ * \return Number of columns
  */
 quint16
 DbTable::columnsCount() const
@@ -60,8 +63,8 @@ DbTable::columnsCount() const
     return mColumnDefs.size();
 }
 
-/*
- * Returns table's schema
+/*!
+ * \return tParent schema handle
  */
 DbSchema*
 DbTable::schema() const
@@ -69,8 +72,8 @@ DbTable::schema() const
     return mSchema;
 }
 
-/*
- * Sets the schema
+/*!
+ * \param[in] ipSchema - Parent schema
  */
 void
 DbTable::setSchema(DbSchema *ipSchema)
@@ -78,8 +81,8 @@ DbTable::setSchema(DbSchema *ipSchema)
     mSchema = ipSchema;
 }
 
-/*
- * Returns a name of table's schema
+/*!
+ * \return Parent schema's name
  */
 QString
 DbTable::schemaName() const
@@ -91,8 +94,8 @@ DbTable::schemaName() const
     return mSchemaName;
 }
 
-/*
- * Returns the full name of the given table in a 'schema.name' representation
+/*!
+ * \return Fhe full name of the given table in a 'schema.name' format
  */
 QString
 DbTable::fullName() const
@@ -100,8 +103,10 @@ DbTable::fullName() const
     return QString("%1.%2").arg(mSchemaName).arg(mName);
 }
 
-/*
- * Returns a column name by its index
+/*!
+ * \param[in] ipColId - Column id.
+ *
+ * \return Column name
  */
 QString
 DbTable::columnName(qint16 ipColId) const
@@ -123,8 +128,10 @@ DbTable::columnName(qint16 ipColId) const
     return mColumnDefs.at(ipColId).name;
 }
 
-/*
- * Returns the column type by its index
+/*!
+ * \param[in] ipColId - Column id.
+ *
+ * \return The type of the column with ipColId id.
  */
 QString
 DbTable::columnType(qint16 ipColId) const
@@ -147,8 +154,11 @@ DbTable::columnType(qint16 ipColId) const
     return mColumnDefs.at(ipColId).type;
 }
 
-/*
- * Returns true if column is nullable
+/*!
+ * \param[in] ipColId - Column id.
+ *
+ * \return true - If a column specified by ipColId is nullable
+ * \return false - Otherwise
  */
 bool
 DbTable::isColumnNullable(qint16 ipColId) const
@@ -170,8 +180,11 @@ DbTable::isColumnNullable(qint16 ipColId) const
     return mColumnDefs.at(ipColId).isNullable;
 }
 
-/*
- * Returns true if column is a primary key
+/*!
+ * \param[in] ipColId - Column id.
+ *
+ * \return true - If a column specified by ipColId is a primary key
+ * \return false - Otherwise
  */
 bool
 DbTable::isColumnPrimaryKey(qint16 ipColId) const
@@ -194,8 +207,11 @@ DbTable::isColumnPrimaryKey(qint16 ipColId) const
     return mColumnDefs.at(ipColId).isPrimaryKey;
 }
 
-/*
- * Returns true if column is a foreign key
+/*!
+ * \param[in] ipColId - Column id.
+ *
+ * \return true - If a column specified by ipColId is a foreign key
+ * \return false - Otherwise
  */
 bool
 DbTable::isColumnForeignKey(qint16 ipColId) const
@@ -218,8 +234,10 @@ DbTable::isColumnForeignKey(qint16 ipColId) const
     return mColumnDefs.at(ipColId).isForeignKey;
 }
 
-/*
- * Returns foreign table's schema name pointed by a foreign key
+/*!
+ * \param[in] ipColId - Column id
+ *
+ * \return Foreign table's schema name
  */
 QString
 DbTable::foreignSchemaName(qint16 ipColId) const
@@ -242,8 +260,10 @@ DbTable::foreignSchemaName(qint16 ipColId) const
     return mColumnDefs.at(ipColId).foreignSchemaName;
 }
 
-/*
- * Returns a table name pointed to by a foregin key
+/*!
+ * \param[in] ipColId - Column id
+ *
+ * \return A table name pointed to by a foregin key
  */
 QString
 DbTable::foreignTableName(qint16 ipColId) const
@@ -266,25 +286,32 @@ DbTable::foreignTableName(qint16 ipColId) const
     return mColumnDefs.at(ipColId).foreignTableName;
 }
 
-/*
- * Returns the list of referenced fields by a foreign key
+/*!
+ * \param[in] ipColId - Column id
+ *
+ * \return The list of referenced fields by a foreign key column that has
+ * ipColId id.
  */
 QStringList
-DbTable::foreignFields(qint16 colId) const
+DbTable::foreignFields(qint16 ipColId) const
 {
-    quint16 count = mColumnDefs.at(colId).foreignFieldNames.count();
+    //quint16 count = mColumnDefs.at(ipColId).foreignFieldNames.count();
 
-    QStringList list;
+    //QStringList list;
 
-    for (quint16 i = 0; i < count; ++i) {
-        list << mColumnDefs.at(colId).foreignFieldNames.at(i);
-    }
+    //for (quint16 i = 0; i < count; ++i) {
+    //    list << mColumnDefs.at(ipColId).foreignFieldNames.at(i);
+    //}
 
-    return list;
+    //return list;
+    return mColumnDefs.at(ipColId).foreignFieldNames;
 }
 
-/*
- * Returns true if column has unique constraint
+/*!
+ * \param[in] ipColId - Column id
+ *
+ * \return true - If column with id = ipColId has unique constraint
+ * \return false - Otherwise
  */
 bool
 DbTable::isColumnUnique(qint16 ipColId) const
@@ -307,18 +334,20 @@ DbTable::isColumnUnique(qint16 ipColId) const
     return mColumnDefs.at(ipColId).isUnique;
 }
 
-/*
- * Returns the number of indices for the given table
- * and populates the input list with pointers to indices
+/*!
+ * \param[out] opIndicesList - A list of indices assigned to the given table
+ *
+ * \returns The number of indices for the given table and populates the
+ * input list with pointers to indices
  */
 quint64
-DbTable::getIndices(QVector<DbIndex*> &ipIndicesList)
+DbTable::getIndices(QVector<DbIndex*> &opIndicesList)
 {
-    return Database::instance()->findTableIndices(this, ipIndicesList);
+    return Database::instance()->findTableIndices(this, opIndicesList);
 }
 
-/*
- * Returns the id of database object type
+/*!
+ * \return Database object type identifier
  */
 DbObject::Type
 DbTable::type() const

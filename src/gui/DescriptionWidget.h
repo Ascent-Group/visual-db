@@ -127,10 +127,11 @@ class DescriptionWidget : public QWidget
         void describe(const DbTrigger *ipTrigger);
 
     private:
-    Ui::DescriptionWidget ui;
+        Ui::DescriptionWidget ui;
 
         static const QString sCreateSchemaScript;
         static const QString sAddSchemaDecriptionScript;
 };
 
 #endif // DESCRIPTIONWIDGET_H
+

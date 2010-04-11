@@ -37,6 +37,11 @@
 class DbIndex;
 class DbSchema;
 
+/*!
+ * \class DbTable
+ * \headerfile <common/DbTable.h>
+ * \brief Defines databse table object
+ */
 class DbTable : public DbObject
 {
     public:
@@ -50,12 +55,12 @@ class DbTable : public DbObject
         QString schemaName() const;
         QString fullName() const;
 
-    // params: [in] int ipColId
-    // specifies the index of a column
-    //  e.g.
-    // (+)id 0 1 2 3 4  5   6  7
-    // col   A B C D E  F   G  H
-    // (-)id 0 . . . . -3  -2 -1
+        // params: [in] int ipColId
+        // specifies the index of a column
+        //  e.g.
+        // (+)id 0 1 2 3 4  5   6  7
+        // col   A B C D E  F   G  H
+        // (-)id 0 . . . . -3  -2 -1
         QString columnName(qint16 ipColId) const;
         QString columnType(qint16 ipColId) const;
         bool isColumnNullable(qint16 ipColId) const;
@@ -66,12 +71,16 @@ class DbTable : public DbObject
         QStringList foreignFields(qint16 ipColId) const;
         bool isColumnUnique(qint16 ipColId) const;
 
+        /*! \see PsqlTable::loadData() */
         virtual void loadData() = 0;
         // lyuts: for further functionality
         // lyuts: will save the changes made to the table
         // lyuts: virtual void save() = 0;
+        /*! \return true - if the column is PK */
         virtual bool checkPrimaryKey(const QString &) const = 0;
+        /*! \return true - if the column is FK */
         virtual bool checkForeignKey(const QString &, QString *, QString *, QStringList *) const = 0;
+        /*! \return true - if the column is unique */
         virtual bool checkUnique(const QString &) const = 0;
 
         quint64 getIndices(QVector<DbIndex*> &ipIndicesList);
@@ -79,21 +88,37 @@ class DbTable : public DbObject
         virtual DbObject::Type type() const;
 
     protected:
+        /*!
+         * \struct ColumnDefinition
+         * \brief Db table column's properties
+         */
         struct ColumnDefinition
         {
+            /*! Column name */
             QString name;
+            /*! Column type (just like it is stored in system catalog) */
             QString type;
+            /*! Indicates whether the field can be nullable */
             bool isNullable;
+            /*! Indicates whether the field is a primary key */
             bool isPrimaryKey;
+            /*! Indicates whether the field is a foreign key */
             bool isForeignKey;
+            /*! Name of the foreign schema name */
             QString foreignSchemaName;
+            /*! Name of the table tied with a FK constraint */
             QString foreignTableName;
+            /*! Name of the column which references this column, when it is a FK */
             QStringList foreignFieldNames;
+            /*! Indicates whether the field has to be unique */
             bool isUnique;
         };
 
+        /*! Parent schema name */
         QString mSchemaName; // for internal use only
+        /*! Parent schema handle */
         DbSchema *mSchema;
+        /*! Column definitions */
         QVector<ColumnDefinition> mColumnDefs;
 
     protected:

@@ -47,7 +47,7 @@ class SqlWidget : public QWidget
         void setDefaultQuery(QString ipQueryText);
 
     private:
-    Ui::SqlWidget ui;
+        Ui::SqlWidget ui;
         enum Portions {
             PreviousPortion = 0,
             NextPortion
@@ -76,3 +76,4 @@ class SqlWidget : public QWidget
 bool isQuerySafe(const QString &ipQueryText);
 
 #endif // SQLWIDGET_H
+

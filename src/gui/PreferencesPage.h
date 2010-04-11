@@ -48,20 +48,21 @@ class PreferencesPage : public QWidget
 
     public:
         PreferencesPage(QWidget *ipParent = 0);
-    ~PreferencesPage();
+        ~PreferencesPage();
 
-    bool showIndices() const;
-    QString sessionFolder() const;
+        bool showIndices() const;
+        QString sessionFolder() const;
         bool newTabAutoSwitch() const;
-    bool loadLastSession() const;
-    int countSavedSession() const;
+        bool loadLastSession() const;
+        int countSavedSession() const;
 
     private:
-    Ui::PreferencesPage ui;
-    QSettings mSettings;
+        Ui::PreferencesPage ui;
+        QSettings mSettings;
 
     private slots:
-        void folder();
+    void folder();
 };
 
 #endif // PREFERENCESPAGE_H
+

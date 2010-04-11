@@ -44,24 +44,24 @@ class TreeWidget : public QTreeWidget
     Q_OBJECT
 
     public:
-    TreeWidget(/*QMenu *, */QWidget *ipParent = 0);
-    ~TreeWidget();
+        TreeWidget(/*QMenu *, */QWidget *ipParent = 0);
+        ~TreeWidget();
 
-    // it is highly recommended that we keep the same order as
-    // in DbObject::Type enum (though we don't have to)
-    enum Item {
-        UnkItem = DbObject::UnkObject,
-        SchemaItem = DbObject::SchemaObject,
-        TableItem = DbObject::TableObject,
-        ViewItem = DbObject::ViewObject,
-        RoleItem = DbObject::RoleObject,
-        TriggerItem = DbObject::TriggerObject,
-        LanguageItem = DbObject::LanguageObject,
-        IndexItem = DbObject::IndexObject,
-        ProcedureItem = DbObject::ProcedureObject,
-    };
+        // it is highly recommended that we keep the same order as
+        // in DbObject::Type enum (though we don't have to)
+        enum Item {
+            UnkItem = DbObject::UnkObject,
+            SchemaItem = DbObject::SchemaObject,
+            TableItem = DbObject::TableObject,
+            ViewItem = DbObject::ViewObject,
+            RoleItem = DbObject::RoleObject,
+            TriggerItem = DbObject::TriggerObject,
+            LanguageItem = DbObject::LanguageObject,
+            IndexItem = DbObject::IndexObject,
+            ProcedureItem = DbObject::ProcedureObject,
+        };
 
-    // Node's values MUST NOT intersect with Item's values
+        // Node's values MUST NOT intersect with Item's values
         enum Node {
             UnkNode = 100 + UnkItem,
             SchemaNode,
@@ -74,9 +74,9 @@ class TreeWidget : public QTreeWidget
             ProcedureNode
         };
 
-    void refresh();
+        void refresh();
 
-    void setContextMenu(QMenu *);
+        void setContextMenu(QMenu *);
 
         enum Columns {
             NameCol = 0,
@@ -84,7 +84,7 @@ class TreeWidget : public QTreeWidget
         };
 
     protected:
-    void contextMenuEvent(QContextMenuEvent *);
+        void contextMenuEvent(QContextMenuEvent *);
 
     private:
         QMenu *mContextMenu;
@@ -94,3 +94,4 @@ class TreeWidget : public QTreeWidget
 };
 
 #endif // TREEWIDGET_H
+

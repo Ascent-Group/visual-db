@@ -501,12 +501,18 @@
    <property name="text">
     <string>Show indices</string>
    </property>
+   <property name="toolTip">
+    <string>Show indices</string>
+   </property>
    <property name="statusTip">
     <string>Show indices</string>
    </property>
   </action>
   <action name="mHideIndicesAction">
    <property name="text">
+    <string>Hide indices</string>
+   </property>
+   <property name="toolTip">
     <string>Hide indices</string>
    </property>
    <property name="statusTip">

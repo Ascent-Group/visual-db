@@ -41,16 +41,17 @@ class LogPanel : public QWidget
     Q_OBJECT
 
     public:
-    LogPanel(QWidget *ipParent = 0);
-    ~LogPanel();
+        LogPanel(QWidget *ipParent = 0);
+        ~LogPanel();
 
-    void print(QString ipText);
+        void print(QString ipText);
 
     private:
-    Ui::LogPanel ui;
+        Ui::LogPanel ui;
 
     private slots:
-    void saveToFile();
+        void saveToFile();
 };
 
 #endif // LOGPANEL_H
+

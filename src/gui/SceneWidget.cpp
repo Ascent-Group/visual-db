@@ -153,7 +153,7 @@ SceneWidget::cleanTableSchemeScene()
 {
     if (mScene->items().count() > 0) {
         // first send the signal to remember deleted items
-        DeleteTableCommand *command = new DeleteTableCommand(*mScene, mScene->selectedItems());
+        DeleteTableCommand *command = new DeleteTableCommand(*mScene, mScene->items());
         emit tableActionDone(command);
     }
     TableItem::setSeek(20);

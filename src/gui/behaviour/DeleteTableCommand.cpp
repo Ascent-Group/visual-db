@@ -37,11 +37,11 @@
 /*
  * Ctor
  */
-DeleteTableCommand::DeleteTableCommand(GraphicsScene *ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *ipParent)
-    : QUndoCommand(ipParent)
+DeleteTableCommand::DeleteTableCommand(GraphicsScene &ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *ipParent)
+: QUndoCommand(ipParent)
+, mScene(ipScene)
+, mTableList(ipTableList)
 {
-    mScene = ipScene;
-    mTableList = ipTableList;
     setText(QObject::tr("Delete table"));
 }
 
@@ -58,7 +58,7 @@ DeleteTableCommand::~DeleteTableCommand()
 void 
 DeleteTableCommand::undo()
 {
-    mScene->addTableItems(mTableList);
+    mScene.addTableItems(mTableList);
 }
 
 /*
@@ -67,5 +67,5 @@ DeleteTableCommand::undo()
 void 
 DeleteTableCommand::redo()
 {
-    mScene->deleteTableItems(mTableList);
+    mScene.deleteTableItems(mTableList);
 }

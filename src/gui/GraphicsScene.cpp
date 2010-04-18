@@ -518,13 +518,14 @@ GraphicsScene::updateLegend()
  * Delete given items (recursivelly for groups)
  */
 void
-GraphicsScene::deleteTableItems(QList<QGraphicsItem *> ipItems)
+GraphicsScene::deleteTableItems(QList<QGraphicsItem *> &ipItems)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (qgraphicsitem_cast<TableItem *>(item)) {
+        if (item && qgraphicsitem_cast<TableItem *>(item)) {
             qgraphicsitem_cast<TableItem *>(item)->removeArrowItems();
         } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
-            deleteTableItems(qgraphicsitem_cast<TableItemGroup *>(item)->children());
+            QList<QGraphicsItem *> children = qgraphicsitem_cast<TableItemGroup *>(item)->children();
+            deleteTableItems(children);
     }
         removeItem(item);
     }

@@ -42,15 +42,15 @@ class QGraphicsItem;
 class DeleteTableCommand : public QUndoCommand
 {
     public:
-        DeleteTableCommand(GraphicsScene *, QList<QGraphicsItem *>, QUndoCommand *parent = 0);
+        DeleteTableCommand(GraphicsScene &ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *parent = 0);
         ~DeleteTableCommand();
 
         void undo();
         void redo();
 
     private:
+        GraphicsScene &mScene;
         QList<QGraphicsItem *> mTableList;
-        GraphicsScene *mScene;
 };
 
 #endif // DELETETABLECOMMAND_H

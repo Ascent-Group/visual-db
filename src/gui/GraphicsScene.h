@@ -66,7 +66,7 @@ class GraphicsScene : public QGraphicsScene {
         void setSchemeMenu(QMenu *);
         void setTableMenu(QMenu *);
         TableItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
-        void deleteTableItems(QList<QGraphicsItem *>);
+        void deleteTableItems(QList<QGraphicsItem *> &ipTabliList);
         void setAcceptsHoverEvents(bool);
         void refreshLegend();
         void updateLegend();

@@ -71,14 +71,14 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
         if (table) {
             mTableModel = table;
         } else {
-        qDebug() << "Cann't find this table: " << ipTableName;
-        return;
-    }
+            qDebug() << "Cann't find this table: " << ipTableName;
+            return;
+        }
         // lyuts: maybe else we should do this
         // mTableModel = new PsqlTable(ipSchemaName, ipTableName);
     } else {
-    qDebug() << "Cann't find this schema: " << ipSchemaName;
-    return;
+        qDebug() << "Cann't find this schema: " << ipSchemaName;
+        return;
     }
 
     // create title item
@@ -86,12 +86,12 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
 
     // create field items
     for (int i = 0; i < mTableModel->columnsCount(); ++i) {
-    addFieldItem(new QGraphicsTextItem(mTableModel->columnName(i) + ": " + mTableModel->columnType(i)));
+        addFieldItem(new QGraphicsTextItem(mTableModel->columnName(i) + ": " + mTableModel->columnType(i)));
     }
 
     dbInst->findTableIndices(mTableModel, mIndices);
     foreach (DbIndex *index, mIndices) {
-    addIndexItem(new QGraphicsTextItem(index->name()));
+        addIndexItem(new QGraphicsTextItem(index->name()));
     }
 
     // set left top point coordinates
@@ -105,7 +105,7 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     if (mIndicesVisible) {
         setHeight((mTableModel->columnsCount() + mIndices.count() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
     } else {
-    setHeight((mTableModel->columnsCount() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
+        setHeight((mTableModel->columnsCount() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
     }
 
     TableItem::mSeek += 20;
@@ -167,12 +167,12 @@ TableItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QW
 
     // fill title with a little darker color then another table
     ipPainter->fillRect((int)x() + 1, (int)y() + 1,
-        (int)width() - 1, (int)y() + FIELD_HEIGHT + INTERVAL * 2 - (int)y() - 1, 
-        QColor(abs(itemColor().red() - 80), abs(itemColor().green() - 80), abs(itemColor().blue() - 80)));
+            (int)width() - 1, (int)y() + FIELD_HEIGHT + INTERVAL * 2 - (int)y() - 1, 
+            QColor(abs(itemColor().red() - 80), abs(itemColor().green() - 80), abs(itemColor().blue() - 80)));
 
     // draw line under the title
     ipPainter->drawLine((int)x(), (int)y() + FIELD_HEIGHT + INTERVAL * 2,
-        (int)(x() + width()), (int)y() + FIELD_HEIGHT + INTERVAL * 2);
+            (int)(x() + width()), (int)y() + FIELD_HEIGHT + INTERVAL * 2);
 
     // set the color of painting
     ipPainter->setPen(fontColor());
@@ -180,65 +180,65 @@ TableItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QW
 
     // draw image for table
     QRectF target((int)x() + INTERVAL, (int)y() + INTERVAL,
-        IMG_HEIGHT + INTERVAL, IMG_HEIGHT + INTERVAL);
+            IMG_HEIGHT + INTERVAL, IMG_HEIGHT + INTERVAL);
     QRectF source(0.0, 0.0, mTableImage->width(), mTableImage->height());
     ipPainter->drawImage(target, *mTableImage, source);
 
     // draw the title aligned on the center in upper case
     ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + INTERVAL, 
-        (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL, 
-        Qt::AlignCenter,
-        titleText());
+            (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL, 
+            Qt::AlignCenter,
+            titleText());
 
     // row in the graphic table (some items may be missed)
     // draw each field
     for (int i = 0; i < countFields(); ++i) {
-    // break drawing if we have reached the board
-    if (height() < (FIELD_HEIGHT + INTERVAL) * (i + 2) + INTERVAL) {
-        break;
-    }
-    
-    QImage *image = 0;
-    // draw image for primary key field with margins = INTERVAL for top, bottom, left and right sizes
-    if (mTableModel->isColumnPrimaryKey(i)) {
-        image = mKeyImage;
-    } else if (mTableModel->isColumnForeignKey(i)) {
-        image = mForeignKeyImage;
-    }
-    if (image) {
-        QRectF target((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
-            IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL);
-        QRectF source(0.0, 0.0, image->width(), image->height());
-        ipPainter->drawImage(target, *image, source);
-    }
+        // break drawing if we have reached the board
+        if (height() < (FIELD_HEIGHT + INTERVAL) * (i + 2) + INTERVAL) {
+            break;
+        }
 
-    // draw field name with margins = INTERVAL for top, bottom, left and right sizes
-    ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL, 
-        (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2, 
-        Qt::AlignLeft,
-        fieldText(i));
+        QImage *image = 0;
+        // draw image for primary key field with margins = INTERVAL for top, bottom, left and right sizes
+        if (mTableModel->isColumnPrimaryKey(i)) {
+            image = mKeyImage;
+        } else if (mTableModel->isColumnForeignKey(i)) {
+            image = mForeignKeyImage;
+        }
+        if (image) {
+            QRectF target((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
+                    IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL);
+            QRectF source(0.0, 0.0, image->width(), image->height());
+            ipPainter->drawImage(target, *image, source);
+        }
+
+        // draw field name with margins = INTERVAL for top, bottom, left and right sizes
+        ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL, 
+                (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2, 
+                Qt::AlignLeft,
+                fieldText(i));
     }
 
     // if we need to show indeces
     if (mIndicesVisible) {
-    for (int i = 0; i < mIndexItems.size(); ++i) {
-        // break drawing if we have reached the board
-        if (height() < (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 2) + INTERVAL) {
-        break;
+        for (int i = 0; i < mIndexItems.size(); ++i) {
+            // break drawing if we have reached the board
+            if (height() < (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 2) + INTERVAL) {
+                break;
+            }
+            ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, 
+                    (int)y() + (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 1) + INTERVAL, 
+                    (int)width() - IMG_WIDTH - INTERVAL * 3, 
+                    FIELD_HEIGHT + INTERVAL * 2, Qt::AlignLeft,
+                    mIndexItems.at(i)->toPlainText());
         }
-        ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, 
-            (int)y() + (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 1) + INTERVAL, 
-            (int)width() - IMG_WIDTH - INTERVAL * 3, 
-            FIELD_HEIGHT + INTERVAL * 2, Qt::AlignLeft,
-            mIndexItems.at(i)->toPlainText());
-    }
     }
 
     // if anchor was setted for this table - draw the anchor
     if (!(flags() & QGraphicsItem::ItemIsMovable)) {
-    QRectF target(x() + width() - IMG_WIDTH - INTERVAL, y() + height() - IMG_HEIGHT - INTERVAL, IMG_WIDTH, IMG_HEIGHT);
-    QRectF source(0.0, 0.0, mAnchorImage->width(), mAnchorImage->height());
-    ipPainter->drawImage(target, *mAnchorImage, source);
+        QRectF target(x() + width() - IMG_WIDTH - INTERVAL, y() + height() - IMG_HEIGHT - INTERVAL, IMG_WIDTH, IMG_HEIGHT);
+        QRectF source(0.0, 0.0, mAnchorImage->width(), mAnchorImage->height());
+        ipPainter->drawImage(target, *mAnchorImage, source);
     }
 }
 
@@ -270,7 +270,7 @@ TableItem::removeArrowItem(ArrowItem *ipArrowItem)
 {
     int index = mArrowItems.indexOf(ipArrowItem);
     if (index != -1) {
-    mArrowItems.removeAt(index);
+        mArrowItems.removeAt(index);
     }
 }
 
@@ -280,14 +280,14 @@ TableItem::removeArrowItem(ArrowItem *ipArrowItem)
 void
 TableItem::removeArrowItems()
 {
-    foreach (ArrowItem *arrow, mArrowItems) {
-    // this way to handle self-referenced tables
-    if (arrow->scene() && arrow) {
-        arrow->startItem()->removeArrowItem(arrow);
-        arrow->endItem()->removeArrowItem(arrow);
-        scene()->removeItem(arrow);
-        delete arrow;
-    }
+    for (QList<ArrowItem *>::const_iterator iter = mArrowItems.constBegin(); iter != mArrowItems.constEnd(); ++iter) {
+        (*iter)->startItem()->removeArrowItem(*iter);
+        (*iter)->endItem()->removeArrowItem(*iter);
+        if (scene()) {
+            scene()->removeItem(*iter);
+        }
+        // FIXME we must delete this item but program chashed in this case...
+//        delete (*iter);
     }
 }
 
@@ -299,9 +299,9 @@ TableItem::itemChange(GraphicsItemChange ipChange, const QVariant &ipValue)
 {
     // if we change the position of the table - redraw all related arrows
     if (ipChange == QGraphicsItem::ItemPositionChange) {
-    foreach (ArrowItem *arrow, mArrowItems) {
-        arrow->updatePosition();
-    }
+        foreach (ArrowItem *arrow, mArrowItems) {
+            arrow->updatePosition();
+        }
     }
 
     return ipValue;
@@ -333,7 +333,7 @@ TableItem::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
         mMode = TableItem::MOVE;
     }
 
-//    setZValue(1);
+    //    setZValue(1);
 
     QGraphicsItem::mousePressEvent(ipEvent);
 }
@@ -344,11 +344,11 @@ TableItem::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
 void
 TableItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
-//    setZValue(0);
+    //    setZValue(0);
 
     QGraphicsItem::mouseReleaseEvent(ipEvent);
     if (mSettings.value("View/AlignToGrid", false).toBool()) {
-    moveBy(-(int)pos().x() % GraphicsScene::LOW_GRID_DX, -(int)pos().y() % GraphicsScene::LOW_GRID_DY);
+        moveBy(-(int)pos().x() % GraphicsScene::LOW_GRID_DX, -(int)pos().y() % GraphicsScene::LOW_GRID_DY);
     }
 }
 
@@ -359,23 +359,23 @@ void
 TableItem::hoverMoveEvent(QGraphicsSceneHoverEvent *ipEvent)
 {
     if (isRightBottomCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
-    setCursor(Qt::SizeFDiagCursor);
+        setCursor(Qt::SizeFDiagCursor);
     } else if (isLeftBottomCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
-    setCursor(Qt::SizeBDiagCursor);
+        setCursor(Qt::SizeBDiagCursor);
     } else if (isLeftTopCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
-    setCursor(Qt::SizeFDiagCursor);
+        setCursor(Qt::SizeFDiagCursor);
     } else if (isRightTopCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
-    setCursor(Qt::SizeBDiagCursor);
+        setCursor(Qt::SizeBDiagCursor);
     } else if (isLeftVerticalBorder(ipEvent->pos().x())) {
-    setCursor(Qt::SizeHorCursor);
+        setCursor(Qt::SizeHorCursor);
     } else if (isRightVerticalBorder(ipEvent->pos().x())) {
-    setCursor(Qt::SizeHorCursor);
+        setCursor(Qt::SizeHorCursor);
     } else if (isBottomHorizontalBorder(ipEvent->pos().y())) {
-    setCursor(Qt::SizeVerCursor);
+        setCursor(Qt::SizeVerCursor);
     } else if (isTopHorizontalBorder(ipEvent->pos().y())) {
-    setCursor(Qt::SizeVerCursor);
+        setCursor(Qt::SizeVerCursor);
     } else {
-    setCursor(Qt::SizeAllCursor);
+        setCursor(Qt::SizeAllCursor);
     }
 
     QGraphicsItem::hoverMoveEvent(ipEvent);
@@ -397,43 +397,43 @@ void
 TableItem::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     if (mMode == TableItem::RIGHT_BOTTOM_CORNER_RESIZE) {
-    if (ipEvent->pos().x() - x() < MIN_WIDTH || ipEvent->pos().y() - y() < MIN_HEIGHT) return;
-    setWidth((int)ipEvent->pos().x() - x());
-    setHeight((int)ipEvent->pos().y() - y());
-    updatePolygon();
+        if (ipEvent->pos().x() - x() < MIN_WIDTH || ipEvent->pos().y() - y() < MIN_HEIGHT) return;
+        setWidth((int)ipEvent->pos().x() - x());
+        setHeight((int)ipEvent->pos().y() - y());
+        updatePolygon();
     } else if (mMode == TableItem::LEFT_BOTTOM_CORNER_RESIZE) {
-    if (ipEvent->pos().x() - x() < MIN_WIDTH || height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
-    setWidth((int)ipEvent->pos().x() - x());
-    setY((int)ipEvent->pos().y());
-    updatePolygon();
+        if (ipEvent->pos().x() - x() < MIN_WIDTH || height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
+        setWidth((int)ipEvent->pos().x() - x());
+        setY((int)ipEvent->pos().y());
+        updatePolygon();
     } else if (mMode == TableItem::LEFT_TOP_CORNER_RESIZE) {
-    if (width() + x() - ipEvent->pos().x() < MIN_WIDTH || height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
-    setX((int)ipEvent->pos().x());
-    setY((int)ipEvent->pos().y());
-    updatePolygon();
+        if (width() + x() - ipEvent->pos().x() < MIN_WIDTH || height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
+        setX((int)ipEvent->pos().x());
+        setY((int)ipEvent->pos().y());
+        updatePolygon();
     } else if (mMode == TableItem::RIGHT_TOP_CORNER_RESIZE) {
-    if (width() + x() - ipEvent->pos().x() < MIN_WIDTH || ipEvent->pos().y() - y() < MIN_HEIGHT) return;
-    setX((int)ipEvent->pos().x());
-    setHeight((int)ipEvent->pos().y() - y());
-    updatePolygon();
+        if (width() + x() - ipEvent->pos().x() < MIN_WIDTH || ipEvent->pos().y() - y() < MIN_HEIGHT) return;
+        setX((int)ipEvent->pos().x());
+        setHeight((int)ipEvent->pos().y() - y());
+        updatePolygon();
     } else if (mMode == TableItem::LEFT_VERTICAL_RESIZE) {
-    if (width() + x() - ipEvent->pos().x() < MIN_WIDTH) return;
-    setX((int)ipEvent->pos().x());
-    updatePolygon();
+        if (width() + x() - ipEvent->pos().x() < MIN_WIDTH) return;
+        setX((int)ipEvent->pos().x());
+        updatePolygon();
     } else if (mMode == TableItem::RIGHT_VERTICAL_RESIZE) {
-    if (ipEvent->pos().x() - x() < MIN_WIDTH) return;
-    setWidth((int)ipEvent->pos().x() - x());
-    updatePolygon();
+        if (ipEvent->pos().x() - x() < MIN_WIDTH) return;
+        setWidth((int)ipEvent->pos().x() - x());
+        updatePolygon();
     } else if (mMode == TableItem::BOTTOM_HORIZONTAL_RESIZE) {
-    if (ipEvent->pos().y() - y() < MIN_HEIGHT) return;
-    setHeight((int)ipEvent->pos().y() - y());
-    updatePolygon();
+        if (ipEvent->pos().y() - y() < MIN_HEIGHT) return;
+        setHeight((int)ipEvent->pos().y() - y());
+        updatePolygon();
     } else if (mMode == TableItem::TOP_HORIZONTAL_RESIZE) {
-    if (height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
-    setY((int)ipEvent->pos().y());
-    updatePolygon();
+        if (height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
+        setY((int)ipEvent->pos().y());
+        updatePolygon();
     } else {
-    QGraphicsItem::mouseMoveEvent(ipEvent);
+        QGraphicsItem::mouseMoveEvent(ipEvent);
     }
 }
 
@@ -444,27 +444,27 @@ void
 TableItem::setFieldsTypesVisible(bool ipFlag)
 {
     for (int i = 0; i < countFields(); ++i) {
-    if (ipFlag) {
-        setFieldText(i, mTableModel->columnName(i) + ": " + mTableModel->columnType(i));
-    } else {
-        setFieldText(i, mTableModel->columnName(i));
-    }
+        if (ipFlag) {
+            setFieldText(i, mTableModel->columnName(i) + ": " + mTableModel->columnType(i));
+        } else {
+            setFieldText(i, mTableModel->columnName(i));
+        }
     }
     mFieldsTypesVisible = ipFlag;
     update(x(), y(), width(), height());
-/*
-    if (ipFlag) {
-    for (int i = 0; i < countFields(); ++i) {
-        setFieldText(i, mTableModel->columnName(i) + ": " + mTableModel->columnType(i));
-    }
-    mFieldsTypesVisible = true;
-    } else {
-        for (int i = 0; i < countFields(); ++i) {
-        setFieldText(i, mTableModel->columnName(i));
-    }
-    mFieldsTypesVisible = false;
-    }
-*/
+    /*
+       if (ipFlag) {
+       for (int i = 0; i < countFields(); ++i) {
+       setFieldText(i, mTableModel->columnName(i) + ": " + mTableModel->columnType(i));
+       }
+       mFieldsTypesVisible = true;
+       } else {
+       for (int i = 0; i < countFields(); ++i) {
+       setFieldText(i, mTableModel->columnName(i));
+       }
+       mFieldsTypesVisible = false;
+       }
+       */
 }
 
 /*
@@ -546,12 +546,12 @@ TableItem::adjustSize()
     // find the maximum width among the item's fields
     qreal optimalWidth = MIN_WIDTH;
     if (optimalWidth < titleItem()->document()->idealWidth()) {
-    optimalWidth = titleItem()->document()->idealWidth();
+        optimalWidth = titleItem()->document()->idealWidth();
     }
     foreach (QGraphicsTextItem *fieldItem, fieldItems()) {
-    if (optimalWidth < fieldItem->document()->idealWidth()) {
-        optimalWidth = fieldItem->document()->idealWidth();
-    }
+        if (optimalWidth < fieldItem->document()->idealWidth()) {
+            optimalWidth = fieldItem->document()->idealWidth();
+        }
     }
 
     // calculate optimal width
@@ -559,7 +559,7 @@ TableItem::adjustSize()
     // calculate optimal height
     int totalFields = fieldItems().size();
     if (mIndicesVisible) {
-    totalFields += mIndexItems.size();
+        totalFields += mIndexItems.size();
     }
     qreal optimalHeight = (totalFields + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 2;
 
@@ -572,7 +572,7 @@ TableItem::adjustSize()
 /*
  * Create the xml represantation for the table
  */
-QDomElement
+    QDomElement
 TableItem::toXml(QDomDocument &ipDoc)
 {
     QDomElement element = ipDoc.createElement("table");
@@ -592,7 +592,7 @@ TableItem::toXml(QDomDocument &ipDoc)
 /*
  * Check if input graphics item is table item
  */
-bool
+    bool
 isTable(QGraphicsItem *ipItem)
 {
     return qgraphicsitem_cast<TableItem *>(ipItem) != 0;

@@ -40,7 +40,7 @@ void
 TabWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-    return;
+        return;
     }
 
     initialized = true;
@@ -127,3 +127,4 @@ TabWidgetPlugin::includeFile() const
 
 
 Q_EXPORT_PLUGIN2(tabwidgetplugin, TabWidgetPlugin)
+

@@ -40,7 +40,7 @@ void
 ControlWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-    return;
+        return;
     }
 
     initialized = true;
@@ -136,3 +136,4 @@ ControlWidgetPlugin::includeFile() const
 
 
 Q_EXPORT_PLUGIN2(controlwidgetplugin, ControlWidgetPlugin)
+

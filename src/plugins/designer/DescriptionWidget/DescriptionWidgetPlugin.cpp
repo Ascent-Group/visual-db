@@ -40,7 +40,7 @@ void
 DescriptionWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-    return;
+        return;
     }
 
     initialized = true;
@@ -127,3 +127,4 @@ DescriptionWidgetPlugin::includeFile() const
 
 
 Q_EXPORT_PLUGIN2(descriptionwidgetplugin, DescriptionWidgetPlugin)
+

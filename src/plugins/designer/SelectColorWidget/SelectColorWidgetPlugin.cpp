@@ -40,7 +40,7 @@ void
 SelectColorWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-    return;
+        return;
     }
 
     initialized = true;
@@ -133,3 +133,4 @@ SelectColorWidgetPlugin::includeFile() const
 
 
 Q_EXPORT_PLUGIN2(selectcolorwidgetplugin, SelectColorWidgetPlugin)
+

@@ -40,7 +40,7 @@ void
 LogPanelPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-    return;
+        return;
     }
 
     initialized = true;
@@ -127,3 +127,4 @@ LogPanelPlugin::includeFile() const
 
 
 Q_EXPORT_PLUGIN2(logpanelplugin, LogPanelPlugin)
+

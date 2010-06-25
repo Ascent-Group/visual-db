@@ -64,11 +64,11 @@ int main(int argc, char **argv)
 
     // load qm translation
     switch (settings.value("Appearance/Language").toInt()) {
-    case QLocale::Russian:
+        case QLocale::Russian:
             translator.load(":visual_db_ru");
-        break;
-    case QLocale::English:
-    default:
+            break;
+        case QLocale::English:
+        default:
             translator.load(":visual_db_en");
     }
     
@@ -82,3 +82,4 @@ int main(int argc, char **argv)
 
     return app.exec();
 }
+

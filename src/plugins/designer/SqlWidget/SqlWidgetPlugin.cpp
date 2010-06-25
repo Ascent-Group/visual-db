@@ -40,7 +40,7 @@ void
 SqlWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-    return;
+        return;
     }
 
     initialized = true;
@@ -127,3 +127,4 @@ SqlWidgetPlugin::includeFile() const
 
 
 Q_EXPORT_PLUGIN2(sqlwidgetplugin, SqlWidgetPlugin)
+

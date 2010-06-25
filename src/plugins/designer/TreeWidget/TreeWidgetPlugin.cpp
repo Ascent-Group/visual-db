@@ -40,7 +40,7 @@ void
 TreeWidgetPlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-    return;
+        return;
     }
 
     initialized = true;
@@ -127,3 +127,4 @@ TreeWidgetPlugin::includeFile() const
 
 
 Q_EXPORT_PLUGIN2(treewidgetplugin, TreeWidgetPlugin)
+

@@ -127,3 +127,4 @@ AppearancePagePlugin::includeFile() const
 
 
 Q_EXPORT_PLUGIN2(appearancepageplugin, AppearancePagePlugin)
+

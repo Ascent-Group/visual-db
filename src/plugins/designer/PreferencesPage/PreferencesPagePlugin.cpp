@@ -40,7 +40,7 @@ void
 PreferencesPagePlugin::initialize(QDesignerFormEditorInterface * /* core */)
 {
     if (initialized) {
-    return;
+        return;
     }
 
     initialized = true;
@@ -127,3 +127,4 @@ PreferencesPagePlugin::includeFile() const
 
 
 Q_EXPORT_PLUGIN2(preferencespageplugin, PreferencesPagePlugin)
+

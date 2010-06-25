@@ -55,8 +55,8 @@ class ProxyParameters
         void setProxyHost(QString);
         QString proxyHost() const;
 
-        void setProxyPort(int);
-        int proxyPort() const;
+        void setProxyPort(quint16);
+        quint16 proxyPort() const;
 
         void setProxyUser(QString);
         QString proxyUser() const;
@@ -70,7 +70,7 @@ class ProxyParameters
         bool mUseProxy;
         QNetworkProxy::ProxyType mProxyType;
         QString mProxyHost;
-        int mProxyPort;
+        quint16 mProxyPort;
         QString mProxyUser;
 };
 

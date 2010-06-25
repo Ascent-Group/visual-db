@@ -51,8 +51,8 @@ class DbParameters
         void setDbHost(QString);
         QString dbHost() const;
 
-        void setDbPort(int);
-        int dbPort() const;
+        void setDbPort(quint16);
+        quint16 dbPort() const;
 
         void setDbName(QString);
         QString dbName() const;
@@ -71,7 +71,7 @@ class DbParameters
 
         QString mDbDriver;
         QString mDbHost;
-        int mDbPort;
+        quint16 mDbPort;
         QString mDbName;
         QString mDbUser;
         QString mDbPassword;

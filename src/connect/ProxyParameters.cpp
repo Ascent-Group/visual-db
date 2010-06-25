@@ -72,7 +72,7 @@ ProxyParameters::proxyHost() const
     return mProxyHost;
 }
 
-int
+quint16
 ProxyParameters::proxyPort() const
 {
     return mProxyPort;
@@ -106,7 +106,7 @@ ProxyParameters::setProxyHost(QString ipProxyHost)
 }
 
 void
-ProxyParameters::setProxyPort(int ipProxyPort)
+ProxyParameters::setProxyPort(quint16 ipProxyPort)
 {
     mProxyPort = ipProxyPort;
     mSettings.setValue("LastSession/proxyPort", mProxyPort);

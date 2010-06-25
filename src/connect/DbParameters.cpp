@@ -67,7 +67,7 @@ DbParameters::dbHost() const
     return mDbHost;
 }
 
-int
+quint16
 DbParameters::dbPort() const
 {
     return mDbPort;
@@ -106,7 +106,7 @@ DbParameters::setDbHost(QString ipDbHost)
 }
 
 void
-DbParameters::setDbPort(int ipDbPort)
+DbParameters::setDbPort(quint16 ipDbPort)
 {
     mDbPort = ipDbPort;
     mSettings.setValue("LastSession/dbPort", mDbPort);

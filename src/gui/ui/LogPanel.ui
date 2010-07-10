@@ -42,6 +42,9 @@
    </item>
    <item row="2" column="0">
     <widget class="QPushButton" name="mSaveButton">
+     <property name="toolTip">
+      <string>Save to file...</string>
+     </property>
      <property name="text">
       <string/>
      </property>
@@ -67,6 +70,9 @@
        <width>30</width>
        <height>30</height>
       </size>
+     </property>
+     <property name="toolTip">
+      <string>Clear</string>
      </property>
      <property name="text">
       <string/>

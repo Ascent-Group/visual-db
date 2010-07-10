@@ -62,7 +62,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>27</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="mFileMenu">
@@ -607,7 +607,7 @@
      <normaloff>:/img/reload.png</normaloff>:/img/reload.png</iconset>
    </property>
    <property name="text">
-    <string>mReloadDataAction</string>
+    <string>Refresh</string>
    </property>
    <property name="statusTip">
     <string>Reload</string>

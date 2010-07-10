@@ -47,19 +47,19 @@
  * Constructor
  */
 SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters, 
-                     ProxyParameters *ipProxyParameters, 
-                     bool ipLoadSession,
-                     QWidget *ipParent)
-    : QDialog(ipParent), mDbParameters(ipDbParameters), mProxyParameters(ipProxyParameters)
+        ProxyParameters *ipProxyParameters, 
+        bool ipLoadSession,
+        QWidget *ipParent)
+: QDialog(ipParent), mDbParameters(ipDbParameters), mProxyParameters(ipProxyParameters)
 {
     ui.setupUi(this);
 
     createDialog(ipLoadSession);
     if (!ipDbParameters) {
-    mDbParameters = new DbParameters();
+        mDbParameters = new DbParameters();
     }
     if (!ipProxyParameters) {
-    mProxyParameters = new ProxyParameters();
+        mProxyParameters = new ProxyParameters();
     }
     initConnectionFields();
 }
@@ -67,7 +67,7 @@ SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
 /*
  * Create dialog
  */
-void
+    void
 SqlConnectionDialog::createDialog(bool ipLoadSession)
 {
 
@@ -95,7 +95,7 @@ SqlConnectionDialog::createDialog(bool ipLoadSession)
     ui.mProxyTypeBox->addItem(QString("Socks5"), QNetworkProxy::Socks5Proxy);
     ui.mProxyTypeBox->addItem(QString("Http"), QVariant(QNetworkProxy::HttpProxy));
     ui.mProxyTypeBox->addItem(QString("HttpCaching"), QVariant(QNetworkProxy::HttpCachingProxy));
-//    mProxyTypeBox->addItem(QString("FtpCaching"), QVariant(QNetworkProxy::FtpCachingProxy));
+    //    mProxyTypeBox->addItem(QString("FtpCaching"), QVariant(QNetworkProxy::FtpCachingProxy));
 
     // proxy port
     ui.mProxyPortEdit->setValidator(new QIntValidator(1, 65535, this));
@@ -119,11 +119,11 @@ SqlConnectionDialog::createDialog(bool ipLoadSession)
 /*
  * Set fields in the dialog from the given connection parameters
  */
-void
+    void
 SqlConnectionDialog::initConnectionFields()
 {
     if (!mDbParameters || !mProxyParameters) {
-    return;
+        return;
     }
 
     ui.mDbDriverCombo->setCurrentIndex(ui.mDbDriverCombo->findText(mDbParameters->dbDriver()));
@@ -131,7 +131,7 @@ SqlConnectionDialog::initConnectionFields()
     ui.mDbPortEdit->setText(QString::number(mDbParameters->dbPort()));
     ui.mDbNameEdit->setText(mDbParameters->dbName());
     ui.mDbUserEdit->setText(mDbParameters->dbUser());
-    
+
     ui.mUseProxyBox->setChecked(mProxyParameters->useProxy());
     ui.mProxyTypeBox->setCurrentIndex(ui.mProxyTypeBox->findData(mProxyParameters->proxyType()));
     ui.mProxyHostNameEdit->setText(mProxyParameters->proxyHost());
@@ -142,21 +142,21 @@ SqlConnectionDialog::initConnectionFields()
 /*
  * Establish connection
  */
-void
+    void
 SqlConnectionDialog::addConnection() 
 {
     // proxy section
     if (ui.mUseProxyBox->isChecked()) {
         // remember connection paramters
-    mProxyParameters->setUseProxy(true);
-    mProxyParameters->setProxyType((QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toInt());
-    mProxyParameters->setProxyHost(ui.mProxyHostNameEdit->text());
-    mProxyParameters->setProxyPort(ui.mProxyPortEdit->text().toInt());
-    mProxyParameters->setProxyUser(ui.mProxyUserEdit->text());
+        mProxyParameters->setUseProxy(true);
+        mProxyParameters->setProxyType((QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toInt());
+        mProxyParameters->setProxyHost(ui.mProxyHostNameEdit->text());
+        mProxyParameters->setProxyPort(ui.mProxyPortEdit->text().toInt());
+        mProxyParameters->setProxyUser(ui.mProxyUserEdit->text());
 
-    setProxy((*mProxyParameters));
+        setProxy((*mProxyParameters));
     } else {
-    mProxyParameters->setUseProxy(false);
+        mProxyParameters->setUseProxy(false);
     }
     // proxy section end
 
@@ -170,13 +170,13 @@ SqlConnectionDialog::addConnection()
 
     // create connection to database
     if (createConnection((*mDbParameters))) {
-    accept();
+        accept();
     } else {
-    QMessageBox::warning(
-        this,
-        tr("Error"),
-        tr("Connection refused: ") + QSqlDatabase::database("mainConnect").lastError().text());
-    reject();
+        QMessageBox::warning(
+                this,
+                tr("Error"),
+                tr("Connection refused: ") + QSqlDatabase::database("mainConnect").lastError().text());
+        reject();
     }
 }
 

@@ -55,7 +55,11 @@ PsqlViewTest::loadDataTest()
     dbInst->readSchemas();
     dbInst->readRoles();
 
-    DbView *view = dbInst->findSchema(schemaName)->findView(viewName);
+    DbSchema *schema = dbInst->findSchema(schemaName);
+
+    QVERIFY(0 != schema);
+
+    DbView *view = schema->findView(viewName);
 
     QVERIFY(0 != view);
 

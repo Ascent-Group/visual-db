@@ -14,7 +14,7 @@ INCLUDEPATH += . common mysql psql
 MOC_DIR = .moc
 OBJECTS_DIR = .obj
 
-QMAKE_CXXFLAGS += -g2 -Wextra
+QMAKE_CXXFLAGS += -O2 -g2 -Wextra
 
 #DEFINES += DEBUG_QUERY
 #DEFINES += DEBUG_TRACE

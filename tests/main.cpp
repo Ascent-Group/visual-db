@@ -52,15 +52,16 @@
 #include <dbobjects/psql/PsqlTriggerTest.h>
 #include <dbobjects/psql/PsqlViewTest.h>
 
-#define DBHOST "localhost"
-#define DBNAME "music_db"
-#define DBUSER "music_user"
+const QString DBHOST = "localhost";
+const QString DBNAME = "music_db";
+const QString DBUSER = "music_user";
 
-/*
+/*!
  *
  */
-int main(int argc, char **argv)
+int main(int argc, char *argv[])
 {
+    QApplication app(argc, argv);
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", "mainConnect");
     db.setHostName(DBHOST);
@@ -68,154 +69,155 @@ int main(int argc, char **argv)
     db.setUserName(DBUSER);
 
     if (!db.open()) {
-	qDebug() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
-	    .arg(DBNAME)
-	    .arg(DBHOST)
-	    .arg(DBUSER);
+        qDebug() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
+            .arg(DBNAME)
+            .arg(DBHOST)
+            .arg(DBUSER);
 
-	return QSqlError::ConnectionError;
+        return QSqlError::ConnectionError;
     }
 
 #if TEST_BEHAVIOUR
     /* gui/behaviour */
     AddTableCommandTest addTableCommandTest;
-    QTest::qExec(&addTableCommandTest);
+    QTest::qExec(&addTableCommandTest, argc, argv);
 
     MoveTableCommandTest moveTableCommandTest;
-    QTest::qExec(&moveTableCommandTest);
+    QTest::qExec(&moveTableCommandTest, argc, argv);
 #endif // TEST_BEHAVIOUR
 
 #if TEST_CONNECT
     /* connect */
     DbParametersTest dbParametersTest ;
-    QTest::qExec(&dbParametersTest);
+    QTest::qExec(&dbParametersTest, argc, argv);
     
     ProxyParametersTest proxyParametersTest;
-    QTest::qExec(&proxyParametersTest);
+    QTest::qExec(&proxyParametersTest, argc, argv);
 #endif // TEST_CONNECT
 
 #if TEST_GUI
     /* gui */
     AppearancePageTest appearancePageTest;
-    QTest::qExec(&appearancePageTest);
+    QTest::qExec(&appearancePageTest, argc, argv);
 
     ArrowItemTest arrowItemTest;
-    QTest::qExec(&arrowItemTest);
+    QTest::qExec(&arrowItemTest, argc, argv);
 
     ColorsPageTest colorsPageTest;
-    QTest::qExec(&colorsPageTest);
+    QTest::qExec(&colorsPageTest, argc, argv);
 
     ControlWidgetTest controlWidgetTest;
-    QTest::qExec(&controlWidgetTest);
+    QTest::qExec(&controlWidgetTest, argc, argv);
     
     DescriptionWidgetTest descriptionWidgetTest;
-    QTest::qExec(&descriptionWidgetTest);
+    QTest::qExec(&descriptionWidgetTest, argc, argv);
     
     GraphicsItemTest graphicsItemTest;
-    QTest::qExec(&graphicsItemTest);
+    QTest::qExec(&graphicsItemTest, argc, argv);
     
     GraphicsSceneTest graphicsSceneTest;
-    QTest::qExec(&graphicsSceneTest);
+    QTest::qExec(&graphicsSceneTest, argc, argv);
     
     GraphicsViewTest graphicsViewTest;
-    QTest::qExec(&graphicsViewTest);
+    QTest::qExec(&graphicsViewTest, argc, argv);
     
     LegendTest legendTest;
-    QTest::qExec(&legendTest);
+    QTest::qExec(&legendTest, argc, argv);
 
     LogPanelTest logPanelTest;
-    QTest::qExec(&logPanelTest);
+    QTest::qExec(&logPanelTest, argc, argv);
 
     MainWindowTest mainWindowTest;
-    QTest::qExec(&mainWindowTest);
+    QTest::qExec(&mainWindowTest, argc, argv);
     
     OptionsDialogTest optionsDialogTest;
-    QTest::qExec(&optionsDialogTest);
+    QTest::qExec(&optionsDialogTest, argc, argv);
     
     PreferencesPageTest preferencesPageTest;
-    QTest::qExec(&preferencesPageTest);
+    QTest::qExec(&preferencesPageTest, argc, argv);
     
     SceneWidgetTest sceneWidgetTest;
-    QTest::qExec(&sceneWidgetTest);
+    QTest::qExec(&sceneWidgetTest, argc, argv);
     
     SelectColorWidgetTest selectColorWidgetTest;
-    QTest::qExec(&selectColorWidgetTest);
+    QTest::qExec(&selectColorWidgetTest, argc, argv);
     
     SqlConnectionDialogTest sqlConnectionDialogTest;
-    QTest::qExec(&sqlConnectionDialogTest);
+    QTest::qExec(&sqlConnectionDialogTest, argc, argv);
     
     SqlWidgetTest sqlWidgetTest;
-    QTest::qExec(&sqlWidgetTest);
+    QTest::qExec(&sqlWidgetTest, argc, argv);
     
     TableItemGroupTest tableItemGroupTest;
-    QTest::qExec(&tableItemGroupTest);
+    QTest::qExec(&tableItemGroupTest, argc, argv);
     
     TableItemTest tableItemTest;
-    QTest::qExec(&tableItemTest);
+    QTest::qExec(&tableItemTest, argc, argv);
     
     TabWidgetTest tabWidgetTest;
-    QTest::qExec(&tabWidgetTest);
+    QTest::qExec(&tabWidgetTest, argc, argv);
     
     TreeWidgetTest treeWidgetTest;
-    QTest::qExec(&treeWidgetTest);
+    QTest::qExec(&treeWidgetTest, argc, argv);
 #endif // TEST_GUI
 
 #if TEST_DBOBJECTS
     /* dbobjects */
     DatabaseTest databaseTest;
-    QTest::qExec(&databaseTest);
+    QTest::qExec(&databaseTest, argc, argv);
 
     DbIndexTest dbIndexTest;
-    QTest::qExec(&dbIndexTest);
+    QTest::qExec(&dbIndexTest, argc, argv);
     
     DbLanguageTest dbLanguageTest;
-    QTest::qExec(&dbLanguageTest);
+    QTest::qExec(&dbLanguageTest, argc, argv);
     
     DbObjectTest dbObjectTest;
-    QTest::qExec(&dbObjectTest);
+    QTest::qExec(&dbObjectTest, argc, argv);
     
     DbProcedureTest dbProcedureTest;
-    QTest::qExec(&dbProcedureTest);
+    QTest::qExec(&dbProcedureTest, argc, argv);
     
     DbRoleTest dbRoleTest;
-    QTest::qExec(&dbRoleTest);
+    QTest::qExec(&dbRoleTest, argc, argv);
     
     DbSchemaTest dbSchemaTest;
-    QTest::qExec(&dbSchemaTest);
+    QTest::qExec(&dbSchemaTest, argc, argv);
     
     DbTableTest dbTableTest;
-    QTest::qExec(&dbTableTest);
+    QTest::qExec(&dbTableTest, argc, argv);
     
     DbTriggerTest dbTriggerTest;
-    QTest::qExec(&dbTriggerTest);
+    QTest::qExec(&dbTriggerTest, argc, argv);
     
     DbViewTest dbViewTest;
-    QTest::qExec(&dbViewTest);
+    QTest::qExec(&dbViewTest, argc, argv);
     
     MysqlTableTest mysqlTableTest;
-    QTest::qExec(&mysqlTableTest);
+    QTest::qExec(&mysqlTableTest, argc, argv);
     
     PsqlIndexTest psqlIndexTest;
-    QTest::qExec(&psqlIndexTest);
+    QTest::qExec(&psqlIndexTest, argc, argv);
     
     PsqlLanguageTest psqlLanguageTest;
-    QTest::qExec(&psqlLanguageTest);
+    QTest::qExec(&psqlLanguageTest, argc, argv);
     
     PsqlProcedureTest psqlProcedureTest;
-    QTest::qExec(&psqlProcedureTest);
+    QTest::qExec(&psqlProcedureTest, argc, argv);
     
     PsqlRoleTest psqlRoleTest;
-    QTest::qExec(&psqlRoleTest);
+    QTest::qExec(&psqlRoleTest, argc, argv);
     
     PsqlTableTest psqlTableTest;
-    QTest::qExec(&psqlTableTest);
+    QTest::qExec(&psqlTableTest, argc, argv);
     
     PsqlTriggerTest psqlTriggerTest;
-    QTest::qExec(&psqlTriggerTest);
+    QTest::qExec(&psqlTriggerTest, argc, argv);
     
     PsqlViewTest psqlViewTest;
-    QTest::qExec(&psqlViewTest);
+    QTest::qExec(&psqlViewTest, argc, argv);
 #endif // TEST_DBOBJECTS
 
     return 0;
 }
+

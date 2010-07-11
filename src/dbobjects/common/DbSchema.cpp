@@ -991,7 +991,7 @@ DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
             case DbObject::ProcedureObject:
                     object = mProcedures.at(i);
                     break;
-        case DbObject::TriggerObject:
+            case DbObject::TriggerObject:
                     object = mTriggers.at(i);
                     break;
 

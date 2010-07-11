@@ -78,7 +78,7 @@ SqlConnectionDialog::createDialog(bool ipLoadSession)
     QStringList redundantDrivers;
     redundantDrivers << "QMYSQL" << "QMYSQL" << "QSQLITE" << "QOCI" << "QODBC" << "QODBC" << "QTDS" << "QDB2" << "QIBASE";
 
-    foreach(QString drv, redundantDrivers) {
+    foreach(const QString &drv, redundantDrivers) {
         int index = ui.mDbDriverCombo->findText(drv, Qt::MatchContains);
         if (-1 != index) {
             ui.mDbDriverCombo->removeItem(index);
@@ -149,9 +149,9 @@ SqlConnectionDialog::addConnection()
     if (ui.mUseProxyBox->isChecked()) {
         // remember connection paramters
         mProxyParameters->setUseProxy(true);
-        mProxyParameters->setProxyType((QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toInt());
+        mProxyParameters->setProxyType((QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toUInt());
         mProxyParameters->setProxyHost(ui.mProxyHostNameEdit->text());
-        mProxyParameters->setProxyPort(ui.mProxyPortEdit->text().toInt());
+        mProxyParameters->setProxyPort(ui.mProxyPortEdit->text().toUInt());
         mProxyParameters->setProxyUser(ui.mProxyUserEdit->text());
 
         setProxy((*mProxyParameters));
@@ -163,7 +163,7 @@ SqlConnectionDialog::addConnection()
     // remember database settings
     mDbParameters->setDbDriver(ui.mDbDriverCombo->currentText());
     mDbParameters->setDbHost(ui.mDbHostEdit->text());
-    mDbParameters->setDbPort(ui.mDbPortEdit->text().toInt());
+    mDbParameters->setDbPort(ui.mDbPortEdit->text().toUInt());
     mDbParameters->setDbName(ui.mDbNameEdit->text());
     mDbParameters->setDbUser(ui.mDbUserEdit->text());
     mDbParameters->setDbPassword(ui.mDbPasswordEdit->text());

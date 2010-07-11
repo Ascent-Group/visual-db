@@ -60,6 +60,7 @@ Database::Database()
 Database::~Database()
 {
     cleanup();
+    mInstance = 0;
 }
 
 /*!
@@ -72,7 +73,7 @@ Database::instance()
 {
     // if not yet created => create
     if (0 == mInstance) {
-        mInstance = new Database();
+        mInstance = new(std::nothrow) Database();
     }
 
     return mInstance;
@@ -391,6 +392,10 @@ Database::setSqlDriver(const QString &ipSqlDriverName)
         db->mSqlDriver = Oracle;
     } else if (ipSqlDriverName.contains("SQLITE")) {
         db->mSqlDriver = Database::SQLite;
+    } else {
+        db->mSqlDriver = Database::Unknown;
+
+        qDebug() << __PRETTY_FUNCTION__ << "> Unknown SQL driver '" << ipSqlDriverName << "'";
     }
 
 }
@@ -421,7 +426,7 @@ Database::readSchemas()
     // choose a query depending on sql driver
     switch (mSqlDriver) {
         case Database::Unknown:
-            qDebug() << "Database::readSchemas> SqlDriver was not set";
+            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
         case Database::PostgreSQL:
             qstr = QString("SELECT nspname as name, roles.rolname as ownername, description "
                     "FROM pg_catalog.pg_namespace pgn "
@@ -443,20 +448,20 @@ Database::readSchemas()
     }
 
 #ifdef DEBUG_QUERY
-    qDebug() << qstr;
+    qDebug() << __PRETTY_FUNCTION__ << qstr;
 #endif
 
     // if query execution failed
     if (!query.exec(qstr)) {
-        qDebug() << "Database::readSchemas> Unable to retrieve schemas.";
-        qDebug() << query.lastError().text();
+        qDebug() << __PRETTY_FUNCTION__ << "> Unable to retrieve schemas.";
+        qDebug() << __PRETTY_FUNCTION__ << query.lastError().text();
 
         return;
     }
 
     // if query returned nothing
     if (!query.first()) {
-        qDebug() << "Database::readSchemas> No schemas were found.";
+        qDebug() << __PRETTY_FUNCTION__ << "> No schemas were found.";
 
         return;
     }
@@ -513,7 +518,7 @@ Database::readRoles()
     // choose a query depending on sql driver
     switch (mSqlDriver) {
         case Database::Unknown:
-                        qDebug() << "Database::readRoles> SqlDriver was not set";
+                        qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                         return;
         case Database::PostgreSQL:
                         qstr = QString("SELECT "
@@ -542,17 +547,19 @@ Database::readRoles()
     }
 
 #ifdef DEBUG_QUERY
-    qDebug() << qstr;
+    qDebug() << __PRETTY_FUNCTION__ << qstr;
 #endif
 
     // if query failed
     if (!query.exec(qstr)) {
-        qDebug() << query.lastError().text();
+        qDebug() << __PRETTY_FUNCTION__ << query.lastError().text();
+
+        return;
     }
 
     // if query returned nothing
     if (!query.first()) {
-        qDebug() << "Database::readRoles> No roles were found.";
+        qDebug() << __PRETTY_FUNCTION__ << "> No roles were found.";
 
         return;
     }
@@ -567,7 +574,7 @@ Database::readRoles()
             // lyuts: looks like this case is useless. if driver is not set then
             // previous switch will handle this and return from function.
             /*case Database::Unknown:
-                            qDebug() << "Database::readRoles> SqlDriver was not set";
+                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                             return;
                             */
             case Database::PostgreSQL:
@@ -579,7 +586,7 @@ Database::readRoles()
             case Database::Oracle:
             case Database::SQLite:
             default:
-                            qDebug() << "Database::readRoles> SqlDriver is not supported currently!";
+                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver is not supported currently!";
                             /* temporarily no support for these DBMS */
                             return;
                             break;
@@ -629,16 +636,16 @@ Database::readRoles()
 
         /* temporary debug output */
 #if DEBUG_TRACE
-        qDebug() << "role->mName: " << role->name();
-        qDebug() << "role->mIsSuperUser: " << role->isSuperUser();
-        qDebug() << "role->mInheritsPrivileges: " << role->inheritsPrivileges();
-        qDebug() << "role->mCanCreateRole: " << role->canCreateRole();
-        qDebug() << "role->mCanCreateDb: " << role->canCreateDb();
-        qDebug() << "role->mCanUpdateSysCat: " << role->canUpdateSysCat();
-        qDebug() << "role->mCanLogin: " << role->canLogin();
-        qDebug() << "role->mConnectionLimit: " << role->connectionLimit();
-        qDebug() << "role->mExpiryDate: " << role->expiryDate();
-        qDebug() << "role->mId: " << role->id();
+        qDebug() << __PRETTY_FUNCTION__ << "role->mName: " << role->name();
+        qDebug() << __PRETTY_FUNCTION__ << "role->mIsSuperUser: " << role->isSuperUser();
+        qDebug() << __PRETTY_FUNCTION__ << "role->mInheritsPrivileges: " << role->inheritsPrivileges();
+        qDebug() << __PRETTY_FUNCTION__ << "role->mCanCreateRole: " << role->canCreateRole();
+        qDebug() << __PRETTY_FUNCTION__ << "role->mCanCreateDb: " << role->canCreateDb();
+        qDebug() << __PRETTY_FUNCTION__ << "role->mCanUpdateSysCat: " << role->canUpdateSysCat();
+        qDebug() << __PRETTY_FUNCTION__ << "role->mCanLogin: " << role->canLogin();
+        qDebug() << __PRETTY_FUNCTION__ << "role->mConnectionLimit: " << role->connectionLimit();
+        qDebug() << __PRETTY_FUNCTION__ << "role->mExpiryDate: " << role->expiryDate();
+        qDebug() << __PRETTY_FUNCTION__ << "role->mId: " << role->id();
 #endif
 
         // add role
@@ -663,7 +670,7 @@ Database::readIndices()
     // choose a query depending on sql driver
     switch (mSqlDriver) {
         case Database::Unknown:
-                        qDebug() << "Database::readIndices> SqlDriver was not set";
+                        qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                         return;
         case Database::PostgreSQL:
                         qstr = QString("SELECT "
@@ -701,19 +708,19 @@ Database::readIndices()
     }
 
 #ifdef DEBUG_QUERY
-    qDebug() << qstr;
+    qDebug() << __PRETTY_FUNCTION__ << qstr;
 #endif
 
     // if query failed
     if (!query.exec(qstr)) {
-        qDebug() << query.lastError().text();
+        qDebug() << __PRETTY_FUNCTION__ << query.lastError().text();
 
         return;
     }
 
     // if query returned nothing
     if (!query.first()) {
-        qDebug() << "Database::readIndices> No indices were found.";
+        qDebug() << __PRETTY_FUNCTION__ << "> No indices were found.";
 
         return;
     }
@@ -721,7 +728,7 @@ Database::readIndices()
     // for every retrieved row
     do {
         // declare new index object
-        DbIndex *index;
+        DbIndex *index; // \todo = Factory::createIndex();
 
         qint32 colId;
 
@@ -730,7 +737,7 @@ Database::readIndices()
             // lyuts: looks like this case is useless. if driver is not set then
             // previous switch will handle this and return from function.
             /*case Database::Unknown:
-                            qDebug() << "Database::readIndices> SqlDriver was not set";
+                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                             return;
                             */
             case Database::PostgreSQL:
@@ -744,7 +751,7 @@ Database::readIndices()
             case Database::Oracle:
             case Database::SQLite:
             default:
-                            qDebug() << "Database::readIndices> SqlDriver is not supported currently!";
+                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver is not supported currently!";
                             /* temporarily no support for these DBMS */
                             return;
                             break;
@@ -815,24 +822,24 @@ Database::readIndices()
         QString str = query.value(colId).toString();
 
         // populate the vector
-        foreach (QString section, str.split(" ")) {
+        foreach (const QString &section, str.split(" ")) {
             index->addColumnNumber(section.toInt());
         }
 
 
         /* temporary debug output */
 #if DEBUG_TRACE
-        qDebug() << "index->name(): " << index->name();
-        qDebug() << "index->isUnique: " << index->isUnique();
-        qDebug() << "index->isPrimary: " << index->isPrimary();
-        qDebug() << "index->isClustered: " << index->isClustered();
-        qDebug() << "index->isValid: " << index->isValid();
-        qDebug() << "index->checksXMin: " << index->checksXMin();
-        qDebug() << "index->isReady: " << index->isReady();
-        qDebug() << "index->tableName: " << index->tableName();
-        qDebug() << "index->schemaName: " << index->schemaName();
-        qDebug() << "index->columnsCount: " << index->columnsCount();
-        qDebug() << "index->columnsNumbers: " << index->columnsNumbers();
+        qDebug() << __PRETTY_FUNCTION__ << "index->name(): " << index->name();
+        qDebug() << __PRETTY_FUNCTION__ << "index->isUnique: " << index->isUnique();
+        qDebug() << __PRETTY_FUNCTION__ << "index->isPrimary: " << index->isPrimary();
+        qDebug() << __PRETTY_FUNCTION__ << "index->isClustered: " << index->isClustered();
+        qDebug() << __PRETTY_FUNCTION__ << "index->isValid: " << index->isValid();
+        qDebug() << __PRETTY_FUNCTION__ << "index->checksXMin: " << index->checksXMin();
+        qDebug() << __PRETTY_FUNCTION__ << "index->isReady: " << index->isReady();
+        qDebug() << __PRETTY_FUNCTION__ << "index->tableName: " << index->tableName();
+        qDebug() << __PRETTY_FUNCTION__ << "index->schemaName: " << index->schemaName();
+        qDebug() << __PRETTY_FUNCTION__ << "index->columnsCount: " << index->columnsCount();
+        qDebug() << __PRETTY_FUNCTION__ << "index->columnsNumbers: " << index->columnsNumbers();
 #endif
 
         // add index
@@ -858,7 +865,7 @@ Database::readLanguages()
     // choose a query depending on sql driver
     switch (mSqlDriver) {
         case Database::Unknown:
-                        qDebug() << "Database::readLanguages> SqlDriver was not set";
+                        qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                         return;
         case Database::PostgreSQL:
                         qstr = QString("SELECT "
@@ -884,19 +891,19 @@ Database::readLanguages()
     }
 
 #ifdef DEBUG_QUERY
-    qDebug() << qstr;
+    qDebug() << __PRETTY_FUNCTION__ << qstr;
 #endif
 
     // if query failed
     if (!query.exec(qstr)) {
-        qDebug() << query.lastError().text();
+        qDebug() << __PRETTY_FUNCTION__ << query.lastError().text();
 
         return;
     }
 
     // if query returned nothing
     if (!query.first()) {
-        qDebug() << "Database::readLanguages> No languages were found.";
+        qDebug() << __PRETTY_FUNCTION__ << "> No languages were found.";
 
         return;
     }
@@ -913,7 +920,7 @@ Database::readLanguages()
             // lyuts: looks like this case is useless. if driver is not set then
             // previous switch will handle this and return from function.
             /*case Database::Unknown:
-                            qDebug() << "Database::readLanguages> SqlDriver was not set";
+                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                             return;
                             */
             case Database::PostgreSQL:
@@ -928,7 +935,7 @@ Database::readLanguages()
             case Database::Oracle:
             case Database::SQLite:
             default:
-                            qDebug() << "Database::readLanguages> SqlDriver is not supported currently!";
+                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver is not supported currently!";
                             /* temporarily no support for these DBMS */
                             return;
                             break;
@@ -950,8 +957,8 @@ Database::readLanguages()
 
         /* temporary debug output */
 #if DEBUG_TRACE
-        qDebug() << "lang->name() = " << lang->name();
-        qDebug() << "lang->isTrusted() =  " << lang->isTrusted();
+        qDebug() << __PRETTY_FUNCTION__ << "lang->name() = " << lang->name();
+        qDebug() << __PRETTY_FUNCTION__ << "lang->isTrusted() =  " << lang->isTrusted();
 #endif
 
         // add language
@@ -967,7 +974,7 @@ void
 Database::cleanup()
 {
 #ifdef DEBUG_TRACE
-    qDebug() << "Database::cleanup> cleaning...";
+    qDebug() << __PRETTY_FUNCTION__ << "> cleaning...";
 #endif
 
     quint64 schemasCount = mSchemas.count();
@@ -985,6 +992,9 @@ Database::cleanup()
 
     qDeleteAll(mIndices);
     mIndices.clear();
+
+    qDeleteAll(mLanguages);
+    mLanguages.clear();
 }
 
 /*!
@@ -1031,7 +1041,7 @@ Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
 
         case DbObject::UnkObject:
         default:
-                qDebug() << "Database::findObject> Unknown object type";
+                qDebug() << __PRETTY_FUNCTION__ << "> Unknown object type";
                 return 0;
     }
 

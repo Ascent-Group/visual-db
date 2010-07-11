@@ -69,11 +69,14 @@ class DatabaseTest : public QObject
         void schemasListTest();
         void setSqlDriverTest();
         void sqlDriverTest();
-        void triggersCountTest();
-        void triggersListTest();
 
     private:
         Database *mDbInst;
+        static const quint8 LANGUAGES_COUNT;
+        static const quint64 SCHEMAS_COUNT;
+        static const quint64 ROLES_COUNT;
+        static const quint64 INDICES_COUNT;
+
 };
 
 #endif // DATABASETEST_H

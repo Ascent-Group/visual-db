@@ -169,53 +169,53 @@ int main(int argc, char *argv[])
     DbIndexTest dbIndexTest;
     QTest::qExec(&dbIndexTest, argc, argv);
     
-    DbLanguageTest dbLanguageTest;
-    QTest::qExec(&dbLanguageTest, argc, argv);
-    
-    DbObjectTest dbObjectTest;
-    QTest::qExec(&dbObjectTest, argc, argv);
-    
-    DbProcedureTest dbProcedureTest;
-    QTest::qExec(&dbProcedureTest, argc, argv);
-    
-    DbRoleTest dbRoleTest;
-    QTest::qExec(&dbRoleTest, argc, argv);
-    
-    DbSchemaTest dbSchemaTest;
-    QTest::qExec(&dbSchemaTest, argc, argv);
-    
-    DbTableTest dbTableTest;
-    QTest::qExec(&dbTableTest, argc, argv);
-    
-    DbTriggerTest dbTriggerTest;
-    QTest::qExec(&dbTriggerTest, argc, argv);
-    
-    DbViewTest dbViewTest;
-    QTest::qExec(&dbViewTest, argc, argv);
-    
-    MysqlTableTest mysqlTableTest;
-    QTest::qExec(&mysqlTableTest, argc, argv);
-    
-    PsqlIndexTest psqlIndexTest;
-    QTest::qExec(&psqlIndexTest, argc, argv);
-    
-    PsqlLanguageTest psqlLanguageTest;
-    QTest::qExec(&psqlLanguageTest, argc, argv);
-    
-    PsqlProcedureTest psqlProcedureTest;
-    QTest::qExec(&psqlProcedureTest, argc, argv);
-    
-    PsqlRoleTest psqlRoleTest;
-    QTest::qExec(&psqlRoleTest, argc, argv);
-    
-    PsqlTableTest psqlTableTest;
-    QTest::qExec(&psqlTableTest, argc, argv);
-    
-    PsqlTriggerTest psqlTriggerTest;
-    QTest::qExec(&psqlTriggerTest, argc, argv);
-    
-    PsqlViewTest psqlViewTest;
-    QTest::qExec(&psqlViewTest, argc, argv);
+//    DbLanguageTest dbLanguageTest;
+//    QTest::qExec(&dbLanguageTest, argc, argv);
+//    
+//    DbObjectTest dbObjectTest;
+//    QTest::qExec(&dbObjectTest, argc, argv);
+//    
+//    DbProcedureTest dbProcedureTest;
+//    QTest::qExec(&dbProcedureTest, argc, argv);
+//    
+//    DbRoleTest dbRoleTest;
+//    QTest::qExec(&dbRoleTest, argc, argv);
+//    
+//    DbSchemaTest dbSchemaTest;
+//    QTest::qExec(&dbSchemaTest, argc, argv);
+//    
+//    DbTableTest dbTableTest;
+//    QTest::qExec(&dbTableTest, argc, argv);
+//    
+//    DbTriggerTest dbTriggerTest;
+//    QTest::qExec(&dbTriggerTest, argc, argv);
+//    
+//    DbViewTest dbViewTest;
+//    QTest::qExec(&dbViewTest, argc, argv);
+//    
+//    MysqlTableTest mysqlTableTest;
+//    QTest::qExec(&mysqlTableTest, argc, argv);
+//    
+//    PsqlIndexTest psqlIndexTest;
+//    QTest::qExec(&psqlIndexTest, argc, argv);
+//    
+//    PsqlLanguageTest psqlLanguageTest;
+//    QTest::qExec(&psqlLanguageTest, argc, argv);
+//    
+//    PsqlProcedureTest psqlProcedureTest;
+//    QTest::qExec(&psqlProcedureTest, argc, argv);
+//    
+//    PsqlRoleTest psqlRoleTest;
+//    QTest::qExec(&psqlRoleTest, argc, argv);
+//    
+//    PsqlTableTest psqlTableTest;
+//    QTest::qExec(&psqlTableTest, argc, argv);
+//    
+//    PsqlTriggerTest psqlTriggerTest;
+//    QTest::qExec(&psqlTriggerTest, argc, argv);
+//    
+//    PsqlViewTest psqlViewTest;
+//    QTest::qExec(&psqlViewTest, argc, argv);
 #endif // TEST_DBOBJECTS
 
     return 0;

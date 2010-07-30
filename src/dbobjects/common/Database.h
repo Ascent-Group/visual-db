@@ -117,9 +117,13 @@ class Database
         QVector<DbLanguage*> mLanguages;
         SqlDriverType mSqlDriver;
 
-    friend class DatabaseManager;
+        friend class DatabaseManager;
 
     private:
+        Database(const Database &iInst);
+
+        const Database& operator=(const Database &iRhs);
+
         DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
 };
 

@@ -39,8 +39,13 @@ class DatabaseTest : public QObject
     Q_OBJECT
 
     private slots:
+        /* QTestLib slots - BEGIN */
         void initTestCase();
         void cleanupTestCase();
+
+        void init();
+        void cleanup();
+        /* QTestLib slots - END */
 
         void addIndexTest();
         void addLanguageTest();

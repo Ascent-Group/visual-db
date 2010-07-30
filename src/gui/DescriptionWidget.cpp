@@ -494,7 +494,7 @@ DescriptionWidget::describe(const DbIndex *ipIndex)
 
     // find table object
     DbSchema *schema = Database::instance()->findSchema(schemaName);
-    DbTable *table;
+    DbTable *table = 0;
 
     if (schema) {
         table = schema->findTable(tableName);

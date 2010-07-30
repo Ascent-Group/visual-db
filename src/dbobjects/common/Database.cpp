@@ -55,12 +55,44 @@ Database::Database()
 }
 
 /*!
+ * Constructor. FORBIDDEN
+ */
+Database::Database(const Database &iInst)
+    : //mInstance(iInst.mInstance),
+      mSchemas(iInst.mSchemas),
+      mRoles(iInst.mRoles),
+      mIndices(iInst.mIndices),
+      mLanguages(iInst.mLanguages),
+      mSqlDriver(iInst.mSqlDriver)
+{
+
+}
+
+/*!
  * Destructor
  */
 Database::~Database()
 {
     cleanup();
-    mInstance = 0;
+    Database::mInstance = 0;
+}
+
+/*!
+ * Assignment operator. FORBIDDEN
+ */
+const Database&
+Database::operator=(const Database &iRhs)
+{
+    if (this != &iRhs)
+    {
+        mSchemas = iRhs.mSchemas;
+        mRoles = iRhs.mRoles;
+        mIndices = iRhs.mIndices;
+        mLanguages = iRhs.mLanguages;
+        mSqlDriver = iRhs.mSqlDriver;
+    }
+
+    return *this;
 }
 
 /*!
@@ -483,10 +515,18 @@ Database::readSchemas()
         Q_CHECK_PTR(dbRole);
 
         // create new schema object
-        DbSchema *schema = new DbSchema(name, dbRole);
+        DbSchema *schema = new(std::nothrow) DbSchema(name, dbRole);
+
+        Q_CHECK_PTR(schema);
 
         // set scheme description
         schema->setDescription(description);
+
+        /*!
+         * We need to add schema to database's vector BEFORE we start
+         * caling schema->read*() methods !!!
+         */
+        addSchema(schema);
 
         // read tables
         schema->readTables();
@@ -497,8 +537,6 @@ Database::readSchemas()
         // read trigs
         schema->readTriggers();
 
-        // add schema - not needed anymore, done in schema's ctor
-        //addSchema(schema);
     } while (query.next());
 }
 
@@ -567,7 +605,7 @@ Database::readRoles()
     // for every retrieved row
     do {
         // declare new role object
-        DbRole *role;
+        DbRole *role = 0;
 
         // choose a query depending on sql driver
         switch (mSqlDriver) {
@@ -578,7 +616,7 @@ Database::readRoles()
                             return;
                             */
             case Database::PostgreSQL:
-                            role = new PsqlRole();
+                            role = new(std::nothrow) PsqlRole();
 
 
                             break;
@@ -592,6 +630,8 @@ Database::readRoles()
                             break;
 
         }
+
+        Q_ASSERT(role != 0);
 
         // set role's attributes
         qint32 colId = query.record().indexOf("name");
@@ -1056,12 +1096,12 @@ Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
 
     quint64 i = 0;
     // look through objects' names
-    while ( i < count && ipObjectName != list.at(i) ) {
+    while (i < count && ipObjectName != list.at(i)) {
         i++;
     }
 
     // if object was found
-    if ( !(i == count - 1 && ipObjectName != list.at(i)) ) {
+    if (!(i == count - 1 && ipObjectName != list.at(i))) {
         switch (ipObjectType) {
             case DbObject::SchemaObject:
                     object = mSchemas.at(i);
@@ -1091,7 +1131,6 @@ Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
 void
 DatabaseManager::flush()
 {
-    Database::instance()->cleanup();
-    delete Database::instance();
+    delete Database::mInstance;
 }
 

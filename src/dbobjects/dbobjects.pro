@@ -16,6 +16,7 @@ OBJECTS_DIR = .obj
 
 QMAKE_CXXFLAGS += -O2 -g2 -Wextra
 
+DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 #DEFINES += DEBUG_QUERY
 #DEFINES += DEBUG_TRACE
 
@@ -38,6 +39,7 @@ HEADERS += common/Database.h \
            psql/PsqlTable.h \
            psql/PsqlTrigger.h \
            psql/PsqlView.h
+
 SOURCES += common/Database.cpp \
            common/DbIndex.cpp \
            common/DbLanguage.cpp \

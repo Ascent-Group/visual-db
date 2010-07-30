@@ -51,9 +51,8 @@
  */
 DbSchema::DbSchema(QString ipName, DbRole *ipOwner)
     :DbObject(ipName),
-    mOwner(ipOwner)
+     mOwner(ipOwner)
 {
-    Database::instance()->addSchema(this);
 }
 
 /*!
@@ -386,7 +385,7 @@ DbSchema::readTables()
     do {
         QString tableName = query.value(0).toString();
 
-    DbTable *table = 0;
+        DbTable *table = 0;
         // create a *table object by its name
         switch (sqlDriverType) {
             case Database::Unknown:
@@ -398,13 +397,13 @@ DbSchema::readTables()
             case Database::MySQL:
             case Database::Oracle:
             case Database::SQLite:
-        default:
+            default:
                 /* no temporary support */
                 return;
                 break;
     }
 
-    // add table
+        // add table
         addTable(table);
 
     } while (query.next());

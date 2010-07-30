@@ -36,21 +36,52 @@
 
 #include <QSqlDatabase>
 
+// These are the counts fr non-system db objects
 const quint8  DatabaseTest::LANGUAGES_COUNT = 4;
-const quint64 DatabaseTest::SCHEMAS_COUNT = 7;
+const quint64 DatabaseTest::SCHEMAS_COUNT = 6;
 const quint64 DatabaseTest::ROLES_COUNT = 2;
 const quint64 DatabaseTest::INDICES_COUNT = 5;
+
+#define QDEBUG_PRINT_ALL(type) \
+    { \
+        QStringList type; \
+        mDbInst->type##List(&type); \
+         \
+        foreach(const QString &name, type) { \
+            qDebug() << name; \
+        } \
+    }
+
 
 void
 DatabaseTest::initTestCase()
 {
-    mDbInst = Database::instance();
-    mDbInst->setSqlDriver("QPSQL");
+    mDbInst = 0;
 }
 
 void
 DatabaseTest::cleanupTestCase()
 {
+}
+
+/*!
+ * Called before each test function
+ */
+void
+DatabaseTest::init()
+{
+    mDbInst = Database::instance();
+    mDbInst->setSqlDriver("QPSQL");
+}
+
+/*!
+ * Called after each test function
+ */
+void
+DatabaseTest::cleanup()
+{
+    mDbInst->cleanup();
+
     DatabaseManager dbMgr;
     dbMgr.flush();
 }
@@ -159,6 +190,7 @@ DatabaseTest::addSchemaTest()
     // check db instance
     QVERIFY(0 != mDbInst);
 
+    mDbInst->readRoles();
     // read schemas
     mDbInst->readSchemas();
 
@@ -171,6 +203,8 @@ DatabaseTest::addSchemaTest()
     DbSchema *dummySchema = new(std::nothrow) DbSchema("dummy", mDbInst->findRole("music_user"));
 
     QVERIFY(0 != dummySchema);
+
+//    QDEBUG_PRINT_ALL(schemas);
 
     QVERIFY(mDbInst->addSchema(dummySchema));
 
@@ -261,10 +295,12 @@ DatabaseTest::findSchemaTest()
 {
     QVERIFY(0 != mDbInst);
 
+    mDbInst->readRoles();
     mDbInst->readSchemas();
 
     QVERIFY(0 != mDbInst->findSchema("public"));
     QVERIFY(0 != mDbInst->findSchema("vtunes"));
+    QVERIFY(0 != mDbInst->findSchema("pg_catalog"));
 }
 
 void
@@ -272,15 +308,23 @@ DatabaseTest::findTableIndicesTest()
 {
     QVERIFY(0 != mDbInst);
 
+    mDbInst->readIndices();
+    mDbInst->readRoles();
+    mDbInst->readSchemas();
+
     QVector<DbIndex*> indicesList;
 
-    DbTable *table = mDbInst->findSchema("vtunes")->findTable("artists");
+    DbSchema *schema = mDbInst->findSchema("vtunes");
+
+    QVERIFY(0 != schema);
+
+    DbTable *table = schema->findTable("artists");
 
     QVERIFY(0 != table);
 
     mDbInst->findTableIndices(table, indicesList);
 
-    QVERIFY(0);
+    QVERIFY(0 < indicesList.size());
 }
 
 void
@@ -301,7 +345,8 @@ DatabaseTest::flushTest()
     DatabaseManager dbMgr;
     dbMgr.flush();
 
-    QVERIFY(mDbInst != Database::instance());
+    // this check might not be valid if the object will be reconstructed in the same location
+//    QVERIFY(mDbInst != Database::instance());
 
     mDbInst = Database::instance();
 
@@ -323,7 +368,7 @@ DatabaseTest::indicesCountTest()
     
     mDbInst->readIndices();
 
-    QCOMPARE(mDbInst->indicesCount(), INDICES_COUNT);
+    QVERIFY(mDbInst->indicesCount() >= INDICES_COUNT);
 
     mDbInst->cleanup();
 
@@ -349,7 +394,7 @@ DatabaseTest::indicesListTest()
 
     mDbInst->indicesList(&indicesList);
 
-    QCOMPARE((quint64)indicesList.size(), INDICES_COUNT);
+    QVERIFY((quint64)indicesList.size() >= INDICES_COUNT);
 
     foreach(const QString &indexName, namesList) {
         QVERIFY(indicesList.contains(indexName));
@@ -381,7 +426,7 @@ DatabaseTest::languagesCountTest()
 
     mDbInst->readLanguages();
 
-    QCOMPARE(mDbInst->languagesCount(), LANGUAGES_COUNT);
+    QVERIFY(mDbInst->languagesCount() >= LANGUAGES_COUNT);
 
     mDbInst->cleanup();
 
@@ -393,6 +438,8 @@ DatabaseTest::languagesListTest()
 {
     QVERIFY(0 != mDbInst);
 
+    mDbInst->readLanguages();
+
     QStringList langNames;
     langNames << "plpgsql";
 
@@ -400,7 +447,7 @@ DatabaseTest::languagesListTest()
 
     mDbInst->languagesList(&langList);
 
-    QCOMPARE((quint8)langList.size(), LANGUAGES_COUNT);
+    QVERIFY((quint8)langList.size() >= LANGUAGES_COUNT);
 
     foreach(const QString &name, langNames) {
         QVERIFY(langList.contains(name));
@@ -421,8 +468,7 @@ DatabaseTest::readIndicesTest()
 
     QVERIFY(0 < count);
 
-    // can't check this way, because there are too many system indices
-//    QCOMPARE(mDbInst->indicesCount(), INDICES_COUNT);
+    QVERIFY(mDbInst->indicesCount() >= INDICES_COUNT);
 
     mDbInst->readIndices();
     QCOMPARE(mDbInst->indicesCount(), count);
@@ -467,6 +513,7 @@ DatabaseTest::readSchemasTest()
 {
     QVERIFY(0 != mDbInst);
 
+    mDbInst->readRoles();
     // read schemas
     mDbInst->readSchemas();
 
@@ -497,7 +544,7 @@ DatabaseTest::rolesCountTest()
 
     mDbInst->readRoles();
 
-    QCOMPARE(mDbInst->rolesCount(), ROLES_COUNT);
+    QVERIFY(mDbInst->rolesCount() >= ROLES_COUNT);
 
     mDbInst->cleanup();
 
@@ -520,7 +567,7 @@ DatabaseTest::rolesListTest()
 
     mDbInst->rolesList(&rolesList);
 
-    QCOMPARE((quint64)rolesList.size(), ROLES_COUNT);
+    QVERIFY((quint64)rolesList.size() >= ROLES_COUNT);
 
     foreach(const QString &name, rolesNames) {
         QVERIFY(rolesList.contains(name));
@@ -533,10 +580,13 @@ DatabaseTest::schemasCountTest()
     QVERIFY(0 != mDbInst);
 
     QCOMPARE(mDbInst->schemasCount(), (quint64)0);
-    
+
+    mDbInst->readRoles();
     mDbInst->readSchemas();
 
-    QCOMPARE(mDbInst->schemasCount(), SCHEMAS_COUNT);
+//    QDEBUG_PRINT_ALL(schemas);
+
+    QVERIFY(mDbInst->schemasCount() >= SCHEMAS_COUNT);
 
     mDbInst->cleanup();
 
@@ -553,14 +603,15 @@ DatabaseTest::schemasListTest()
     names << "public"
           << "information_schema"
           << "vtunes";
-    
+
+    mDbInst->readRoles();
     mDbInst->readSchemas();
 
     QStringList schemasList;
 
     mDbInst->schemasList(&schemasList);
 
-    QCOMPARE((quint64)schemasList.size(), SCHEMAS_COUNT);
+    QVERIFY((quint64)schemasList.size() >= SCHEMAS_COUNT);
 
     foreach(const QString &name, names) {
         QVERIFY(schemasList.contains(name));

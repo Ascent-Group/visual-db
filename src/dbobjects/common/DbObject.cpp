@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <DbObject.h>
+#include <common/DbObject.h>
 
 /*!
  * Ctor

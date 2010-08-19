@@ -3,25 +3,24 @@ TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
 QT += sql
-SRC     = ../../../
 
 UI_DIR = .uic
-UI_HEADERS_DIR = $$SRC/gui/ui
+UI_HEADERS_DIR = $$TOP_SRC_DIR/gui/ui
 MOC_DIR = .moc
 OBJECTS_DIR = .obj
 
 CONFIG += release
 
-INCLUDEPATH += $$SRC/ $$SRC/dbobjects
+INCLUDEPATH += $$TOP_SRC_DIR/ $$TOP_SRC_DIR/dbobjects
 
 
-HEADERS = $$SRC/gui/TreeWidget.h \
+HEADERS = $$TOP_SRC_DIR/gui/TreeWidget.h \
       TreeWidgetPlugin.h
 
-SOURCES = $$SRC/gui/TreeWidget.cpp \
+SOURCES = $$TOP_SRC_DIR/gui/TreeWidget.cpp \
       TreeWidgetPlugin.cpp
 
-RESOURCES += $$SRC/visual_db.qrc
+RESOURCES += $$TOP_SRC_DIR/visual_db.qrc
 
 target.path = $$[QT_INSTALL_PLUGINS]/designer
 sources.files = $$SOURCES $$HEADERS *.pro

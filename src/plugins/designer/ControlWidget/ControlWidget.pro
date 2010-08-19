@@ -2,26 +2,24 @@ CONFIG      += designer plugin
 TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
-SRC     = ../../../
-
 UI_DIR = .uic
-UI_HEADERS_DIR = $$SRC/gui/ui
+UI_HEADERS_DIR = $$TOP_SRC_DIR/gui/ui
 MOC_DIR = .moc
 OBJECTS_DIR = .obj
 
 CONFIG += release
 
-INCLUDEPATH += $$SRC/
+INCLUDEPATH += $$TOP_SRC_DIR/
 
-FORMS = $$SRC/gui/ui/ControlWidget.ui
+FORMS = $$TOP_SRC_DIR/gui/ui/ControlWidget.ui
 
-HEADERS = $$SRC/gui/ControlWidget.h \
+HEADERS = $$TOP_SRC_DIR/gui/ControlWidget.h \
       ControlWidgetPlugin.h
 
-SOURCES = $$SRC/gui/ControlWidget.cpp \
+SOURCES = $$TOP_SRC_DIR/gui/ControlWidget.cpp \
       ControlWidgetPlugin.cpp
 
-RESOURCES += $$SRC/visual_db.qrc
+RESOURCES += $$TOP_SRC_DIR/visual_db.qrc
 
 target.path = $$[QT_INSTALL_PLUGINS]/designer
 sources.files = $$SOURCES $$HEADERS *.pro

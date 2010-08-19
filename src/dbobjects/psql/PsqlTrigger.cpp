@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <DbSchema.h>
-#include <PsqlTrigger.h>
+#include <common/DbSchema.h>
+#include <psql/PsqlTrigger.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>

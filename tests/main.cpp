@@ -1,5 +1,5 @@
-#include <QSqlDatabase>
-#include <QSqlError>
+//#include <QSqlDatabase>
+//#include <QSqlError>
 
 /* connect */
 #include <connect/DbParametersTest.h>
@@ -52,6 +52,9 @@
 #include <dbobjects/psql/PsqlTriggerTest.h>
 #include <dbobjects/psql/PsqlViewTest.h>
 
+#include <connect/DbParameters.h>
+#include <common/DatabaseCreator.h>
+
 const QString DBHOST = "localhost";
 const QString DBNAME = "music_db";
 const QString DBUSER = "music_user";
@@ -61,21 +64,69 @@ const QString DBUSER = "music_user";
  */
 int main(int argc, char *argv[])
 {
+    /*!
+     * We cannot pass the db driver to use for testing via argv because QTestLib needs/uses
+     * argv (e.g. a name of a test to run) and they will be parsed by QApplication. Adding
+     * our custom input argument may influence/harm workflow. So, looks like we will have
+     * find another way of specifying db driver. As a solution, we can use environment
+     * variable for that.
+     */
+    const char *drv = getenv("VDB_DB_DRV");
+
+    if (!drv) {
+        qCritical("[ERROR] db driver not set!");
+        return -1;
+    }
+
+    DbParameters dbParams;
+
+    dbParams.setDbHost(DBHOST);
+    dbParams.setDbName(DBNAME);
+    dbParams.setDbUser(DBUSER);
+//    dbParams.setDbPassword();
+
+    if (0 == strncmp(drv, "psql", strlen(drv))) {
+        dbParams.setDbDriver("QPSQL");
+        DatabaseCreator::setDriver(Database::PostgreSQL);
+    } else if (0 == strncmp(drv, "mysql", strlen(drv))) {
+        dbParams.setDbDriver("QMYSQL");
+        DatabaseCreator::setDriver(Database::MySQL);
+    } else if (0 == strncmp(drv, "oracle", strlen(drv))) {
+        dbParams.setDbDriver("QODBC");
+        DatabaseCreator::setDriver(Database::Oracle);
+    } else if (0 == strncmp(drv, "sqlite", strlen(drv))) {
+        dbParams.setDbDriver("QSQLITE");
+        DatabaseCreator::setDriver(Database::SQLite);
+    } else {
+        qCritical("[ERROR] Unknown db driver!");
+
+        return -1;
+    }
+
+    if (!createConnection(dbParams)) {
+        qCritical() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
+                .arg(DBNAME)
+                .arg(DBHOST)
+                .arg(DBUSER);
+
+        return -1;
+    }
+
     QApplication app(argc, argv);
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", "mainConnect");
-    db.setHostName(DBHOST);
-    db.setDatabaseName(DBNAME);
-    db.setUserName(DBUSER);
-
-    if (!db.open()) {
-        qDebug() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
-            .arg(DBNAME)
-            .arg(DBHOST)
-            .arg(DBUSER);
-
-        return QSqlError::ConnectionError;
-    }
+//    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", "mainConnect");
+//    db.setHostName(DBHOST);
+//    db.setDatabaseName(DBNAME);
+//    db.setUserName(DBUSER);
+//
+//    if (!db.open()) {
+//        qDebug() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
+//            .arg(DBNAME)
+//            .arg(DBHOST)
+//            .arg(DBUSER);
+//
+//        return QSqlError::ConnectionError;
+//    }
 
 #if TEST_BEHAVIOUR
     /* gui/behaviour */

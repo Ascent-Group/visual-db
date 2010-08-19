@@ -27,9 +27,9 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <Database.h>
-#include <DbSchema.h>
-#include <PsqlIndex.h>
+#include <common/Database.h>
+#include <common/DbSchema.h>
+#include <psql/PsqlIndex.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>

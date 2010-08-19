@@ -9,7 +9,7 @@ QT += sql
 CONFIG += staticlib
 
 DEPENDPATH += .
-INCLUDEPATH += . common mysql psql
+INCLUDEPATH += .
 
 MOC_DIR = .moc
 OBJECTS_DIR = .obj
@@ -21,40 +21,10 @@ DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 #DEFINES += DEBUG_TRACE
 
 # Input
-HEADERS += common/Database.h \
-           common/DbIndex.h \
-           common/DbLanguage.h \
-           common/DbObject.h \
-           common/DbProcedure.h \
-           common/DbRole.h \
-           common/DbSchema.h \
-           common/DbTable.h \
-           common/DbTrigger.h \
-           common/DbView.h \
-           mysql/MysqlTable.h \
-           psql/PsqlIndex.h \
-           psql/PsqlLanguage.h \
-           psql/PsqlProcedure.h \
-           psql/PsqlRole.h \
-           psql/PsqlTable.h \
-           psql/PsqlTrigger.h \
-           psql/PsqlView.h
+HEADERS += common/*.h \
+           mysql/*.h \
+           psql/*.h
 
-SOURCES += common/Database.cpp \
-           common/DbIndex.cpp \
-           common/DbLanguage.cpp \
-           common/DbObject.cpp \
-           common/DbProcedure.cpp \
-           common/DbRole.cpp \
-           common/DbSchema.cpp \
-           common/DbTable.cpp \
-           common/DbTrigger.cpp \
-           common/DbView.cpp \
-           mysql/MysqlTable.cpp \
-           psql/PsqlIndex.cpp \
-           psql/PsqlLanguage.cpp \
-           psql/PsqlProcedure.cpp \
-           psql/PsqlRole.cpp \
-           psql/PsqlTable.cpp \
-           psql/PsqlTrigger.cpp \
-           psql/PsqlView.cpp
+SOURCES += common/*.cpp \
+           mysql/*.cpp \
+           psql/*.cpp

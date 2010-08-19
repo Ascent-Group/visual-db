@@ -27,14 +27,14 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <Database.h>
-#include <DbIndex.h>
-#include <DbLanguage.h>
-#include <DbSchema.h>
-#include <PsqlIndex.h>
-#include <PsqlLanguage.h>
-#include <PsqlRole.h>
-#include <PsqlTrigger.h>
+#include <common/Database.h>
+#include <common/DbIndex.h>
+#include <common/DbLanguage.h>
+#include <common/DbSchema.h>
+#include <psql/PsqlIndex.h>
+#include <psql/PsqlLanguage.h>
+#include <psql/PsqlRole.h>
+#include <psql/PsqlTrigger.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>

@@ -4,50 +4,48 @@ TEMPLATE    = lib
 
 QT += xml gui
 
-SRC     = ../../../
-
 UI_DIR = .uic
-UI_HEADERS_DIR = $$SRC/gui/ui
+UI_HEADERS_DIR = $$TOP_SRC_DIR/gui/ui
 MOC_DIR = .moc
 OBJECTS_DIR = .obj
 
 CONFIG += release
 
-INCLUDEPATH += $$SRC/ $$SRC/dbobjects
+INCLUDEPATH += $$TOP_SRC_DIR/ $$TOP_SRC_DIR/dbobjects
 
-LIBS += -L$$SRC/dbobjects -ldbobjects
+LIBS += -L$$TOP_SRC_DIR/dbobjects -ldbobjects
 
-FORMS += $$SRC/gui/ui/ControlWidget.ui
+FORMS += $$TOP_SRC_DIR/gui/ui/ControlWidget.ui
 
-HEADERS = $$SRC/gui/SceneWidget.h \
-      $$SRC/gui/ArrowItem.h \
-      $$SRC/gui/ControlWidget.h \
-      $$SRC/gui/GraphicsItem.h \
-      $$SRC/gui/GraphicsScene.h \
-      $$SRC/gui/GraphicsView.h \
-      $$SRC/gui/Legend.h \
-      $$SRC/gui/TableItem.h \
-      $$SRC/gui/TableItemGroup.h \
-      $$SRC/gui/behaviour/AddTableCommand.h \
-      $$SRC/gui/behaviour/DeleteTableCommand.h \
-      $$SRC/gui/behaviour/MoveTableCommand.h \
+HEADERS = $$TOP_SRC_DIR/gui/SceneWidget.h \
+      $$TOP_SRC_DIR/gui/ArrowItem.h \
+      $$TOP_SRC_DIR/gui/ControlWidget.h \
+      $$TOP_SRC_DIR/gui/GraphicsItem.h \
+      $$TOP_SRC_DIR/gui/GraphicsScene.h \
+      $$TOP_SRC_DIR/gui/GraphicsView.h \
+      $$TOP_SRC_DIR/gui/Legend.h \
+      $$TOP_SRC_DIR/gui/TableItem.h \
+      $$TOP_SRC_DIR/gui/TableItemGroup.h \
+      $$TOP_SRC_DIR/gui/behaviour/AddTableCommand.h \
+      $$TOP_SRC_DIR/gui/behaviour/DeleteTableCommand.h \
+      $$TOP_SRC_DIR/gui/behaviour/MoveTableCommand.h \
       SceneWidgetPlugin.h
 
-SOURCES = $$SRC/gui/SceneWidget.cpp \
-      $$SRC/gui/ArrowItem.cpp \
-      $$SRC/gui/ControlWidget.cpp \
-      $$SRC/gui/GraphicsItem.cpp \
-      $$SRC/gui/GraphicsScene.cpp \
-      $$SRC/gui/GraphicsView.cpp \
-      $$SRC/gui/Legend.cpp \
-      $$SRC/gui/TableItem.cpp \
-      $$SRC/gui/TableItemGroup.cpp \
-      $$SRC/gui/behaviour/AddTableCommand.cpp \
-      $$SRC/gui/behaviour/DeleteTableCommand.cpp \
-      $$SRC/gui/behaviour/MoveTableCommand.cpp \
+SOURCES = $$TOP_SRC_DIR/gui/SceneWidget.cpp \
+      $$TOP_SRC_DIR/gui/ArrowItem.cpp \
+      $$TOP_SRC_DIR/gui/ControlWidget.cpp \
+      $$TOP_SRC_DIR/gui/GraphicsItem.cpp \
+      $$TOP_SRC_DIR/gui/GraphicsScene.cpp \
+      $$TOP_SRC_DIR/gui/GraphicsView.cpp \
+      $$TOP_SRC_DIR/gui/Legend.cpp \
+      $$TOP_SRC_DIR/gui/TableItem.cpp \
+      $$TOP_SRC_DIR/gui/TableItemGroup.cpp \
+      $$TOP_SRC_DIR/gui/behaviour/AddTableCommand.cpp \
+      $$TOP_SRC_DIR/gui/behaviour/DeleteTableCommand.cpp \
+      $$TOP_SRC_DIR/gui/behaviour/MoveTableCommand.cpp \
       SceneWidgetPlugin.cpp
 
-RESOURCES += $$SRC/visual_db.qrc
+RESOURCES += $$TOP_SRC_DIR/visual_db.qrc
 
 target.path = $$[QT_INSTALL_PLUGINS]/designer
 sources.files = $$SOURCES $$HEADERS *.pro

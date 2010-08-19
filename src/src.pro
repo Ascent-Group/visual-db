@@ -28,73 +28,17 @@ UI_HEADERS_DIR = gui/ui
 
 QMAKE_CXXFLAGS += -O2 -g2 -Wextra
 
-FORMS = gui/ui/AppearancePage.ui \
-        gui/ui/ColorsPage.ui \
-        gui/ui/ControlWidget.ui \
-        gui/ui/DescriptionWidget.ui \
-        gui/ui/LogPanel.ui \
-        gui/ui/MainWindow.ui \
-        gui/ui/OptionsDialog.ui \
-        gui/ui/PreferencesPage.ui \
-        gui/ui/SelectColorWidget.ui \
-        gui/ui/SqlConnectionDialog.ui \
-        gui/ui/SqlWidget.ui
+FORMS = gui/ui/*.ui
 
 # Input
-HEADERS += connect/DbParameters.h \
-           connect/ProxyParameters.h \
-           gui/behaviour/AddTableCommand.h \
-           gui/behaviour/DeleteTableCommand.h \
-           gui/behaviour/MoveTableCommand.h \
-           gui/AppearancePage.h \
-           gui/ArrowItem.h \
-           gui/ColorsPage.h \
-           gui/ControlWidget.h \
-           gui/DescriptionWidget.h \
-           gui/GraphicsItem.h \
-           gui/GraphicsScene.h \
-           gui/GraphicsView.h \
-           gui/Legend.h \
-           gui/LogPanel.h \
-           gui/MainWindow.h \
-           gui/OptionsDialog.h \
-           gui/PreferencesPage.h \
-           gui/SceneWidget.h \
-           gui/SelectColorWidget.h \
-           gui/SqlConnectionDialog.h \
-           gui/SqlWidget.h \
-           gui/TableItem.h \
-           gui/TableItemGroup.h \
-           gui/TabWidget.h \
-           gui/TreeWidget.h
+HEADERS += connect/*.h \
+           gui/behaviour/*.h \
+           gui/*.h
 
 SOURCES += main.cpp \
-           connect/DbParameters.cpp \
-           connect/ProxyParameters.cpp \
-           gui/behaviour/AddTableCommand.cpp \
-           gui/behaviour/DeleteTableCommand.cpp \
-           gui/behaviour/MoveTableCommand.cpp \
-           gui/AppearancePage.cpp \
-           gui/ArrowItem.cpp \
-           gui/ColorsPage.cpp \
-           gui/ControlWidget.cpp \
-           gui/DescriptionWidget.cpp \
-           gui/GraphicsItem.cpp \
-           gui/GraphicsScene.cpp \
-           gui/GraphicsView.cpp \
-           gui/Legend.cpp \
-           gui/LogPanel.cpp \
-           gui/MainWindow.cpp \
-           gui/OptionsDialog.cpp \
-           gui/PreferencesPage.cpp \
-           gui/SceneWidget.cpp \
-           gui/SelectColorWidget.cpp \
-           gui/SqlConnectionDialog.cpp \
-           gui/SqlWidget.cpp \
-           gui/TableItem.cpp \
-           gui/TableItemGroup.cpp \
-           gui/TabWidget.cpp \
-           gui/TreeWidget.cpp
+           connect/*.cpp \
+           gui/behaviour/*.cpp \
+           gui/*.cpp
 
 RESOURCES += visual_db.qrc
 

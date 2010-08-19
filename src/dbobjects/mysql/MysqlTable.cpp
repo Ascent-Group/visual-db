@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <MysqlTable.h>
+#include <mysql/MysqlTable.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>

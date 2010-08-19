@@ -27,9 +27,9 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <DbSchema.h>
-#include <PsqlRole.h>
-#include <PsqlView.h>
+#include <common/DbSchema.h>
+#include <psql/PsqlRole.h>
+#include <psql/PsqlView.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>

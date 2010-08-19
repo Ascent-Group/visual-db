@@ -4,26 +4,24 @@ TEMPLATE    = lib
 
 QT += sql network gui
 
-SRC     = ../../../
-
 UI_DIR = .uic
-UI_HEADERS_DIR = $$SRC/gui/ui
+UI_HEADERS_DIR = $$TOP_SRC_DIR/gui/ui
 MOC_DIR = .moc
 OBJECTS_DIR = .obj
 
 CONFIG += release
 
-INCLUDEPATH += $$SRC/ $$SRC/dbobjects
+INCLUDEPATH += $$TOP_SRC_DIR/ $$TOP_SRC_DIR/dbobjects
 
-FORMS = $$SRC/gui/ui/SqlWidget.ui
+FORMS = $$TOP_SRC_DIR/gui/ui/SqlWidget.ui
 
-HEADERS = $$SRC/gui/SqlWidget.h \
+HEADERS = $$TOP_SRC_DIR/gui/SqlWidget.h \
       SqlWidgetPlugin.h
 
-SOURCES = $$SRC/gui/SqlWidget.cpp \
+SOURCES = $$TOP_SRC_DIR/gui/SqlWidget.cpp \
       SqlWidgetPlugin.cpp
 
-RESOURCES += $$SRC/visual_db.qrc
+RESOURCES += $$TOP_SRC_DIR/visual_db.qrc
 
 target.path = $$[QT_INSTALL_PLUGINS]/designer
 sources.files = $$SOURCES $$HEADERS *.pro

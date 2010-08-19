@@ -27,9 +27,9 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <Database.h>
-#include <DbSchema.h>
-#include <DbTable.h>
+#include <common/Database.h>
+#include <common/DbSchema.h>
+#include <common/DbTable.h>
 #include <QStringList>
 
 #include <QtDebug>

@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <Database.h>
-#include <PsqlTable.h>
+#include <common/Database.h>
+#include <psql/PsqlTable.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>

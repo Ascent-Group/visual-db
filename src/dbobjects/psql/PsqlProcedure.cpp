@@ -27,10 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <DbSchema.h>
-#include <PsqlLanguage.h>
-#include <PsqlProcedure.h>
-#include <PsqlRole.h>
+#include <common/DbSchema.h>
+#include <psql/PsqlLanguage.h>
+#include <psql/PsqlProcedure.h>
+#include <psql/PsqlRole.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>

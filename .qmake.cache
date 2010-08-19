@@ -1,0 +1,5 @@
+###
+### This is the place to set variable that need to be shared among all .pro files
+###
+TOP_DIR=$$PWD
+TOP_SRC_DIR=$$PWD/src

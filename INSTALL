@@ -1,7 +1,10 @@
 1. Installation
 
     a) make sure you have Qt4 installed and PostgreSQL driver has been built. (Qt >= 4.4.0)
+    a.1) If you have Qt 4.4.x then the tabs are movable which is not good. Qt 4.5 and newer
+         make it possible to forbid tab moving.
     b) tar xfvz visual-db.tar.gz
     c) cd visual-db
     d) qmake
     e) make
+

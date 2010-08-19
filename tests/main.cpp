@@ -85,18 +85,16 @@ int main(int argc, char *argv[])
     dbParams.setDbUser(DBUSER);
 //    dbParams.setDbPassword();
 
+    DatabaseCreator::setDriver(drv);
+
     if (0 == strncmp(drv, "psql", strlen(drv))) {
         dbParams.setDbDriver("QPSQL");
-        DatabaseCreator::setDriver(Database::PostgreSQL);
     } else if (0 == strncmp(drv, "mysql", strlen(drv))) {
         dbParams.setDbDriver("QMYSQL");
-        DatabaseCreator::setDriver(Database::MySQL);
     } else if (0 == strncmp(drv, "oracle", strlen(drv))) {
         dbParams.setDbDriver("QODBC");
-        DatabaseCreator::setDriver(Database::Oracle);
     } else if (0 == strncmp(drv, "sqlite", strlen(drv))) {
         dbParams.setDbDriver("QSQLITE");
-        DatabaseCreator::setDriver(Database::SQLite);
     } else {
         qCritical("[ERROR] Unknown db driver!");
 

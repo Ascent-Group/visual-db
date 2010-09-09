@@ -29,7 +29,7 @@
 
 #include <common/Database.h>
 #include <common/DbSchema.h>
-#include <psql/PsqlIndex.h>
+#include <psql/Index.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -39,10 +39,16 @@
 
 #include <QtDebug>
 
+namespace DbObjects
+{
+
+namespace Psql
+{
+
 /*
  * Ctor
  */
-PsqlIndex::PsqlIndex(QString ipName)
+Index::Index(QString ipName)
     : DbIndex(ipName)
 {
 
@@ -51,7 +57,7 @@ PsqlIndex::PsqlIndex(QString ipName)
 /*
  * Dtor
  */
-PsqlIndex::~PsqlIndex()
+Index::~Index()
 {
 
 }
@@ -59,7 +65,8 @@ PsqlIndex::~PsqlIndex()
 /*
  * Loads the index's definition
  */
-void PsqlIndex::loadData()
+bool
+Index::loadData()
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -92,96 +99,114 @@ void PsqlIndex::loadData()
             .arg(mName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "PsqlIndex::loadData> " << qstr;
+    qDebug() << "Index::loadData> " << qstr;
 #endif
 
     // if query execuition failed
     if (!query.exec(qstr)) {
         qDebug() << query.lastError().text();
+        return false;
     }
 
-    // if query retrieved a row
-    if (query.first()) {
+    // if query didn't retrieve a row
+    if (!query.first()) {
+        return false;
+    }
 
-        qint32 colId;
-        /*
-        colId= query.record().indexOf("name");
-        Q_ASSERT(colId > 0);
-        mName = query.value(colId).toString();
-        */
+    qint32 colId;
+    /*
+       colId= query.record().indexOf("name");
+       Q_ASSERT(colId > 0);
+       mName = query.value(colId).toString();
+       */
 
-        colId = query.record().indexOf("unique");
-        Q_ASSERT(colId > 0);
-        mIsUnique = query.value(colId).toBool();
+    colId = query.record().indexOf("unique");
+    Q_ASSERT(colId > 0);
+    mIsUnique = query.value(colId).toBool();
 
-        colId = query.record().indexOf("primary");
-        Q_ASSERT(colId > 0);
-        mIsPrimary = query.value(colId).toBool();
+    colId = query.record().indexOf("primary");
+    Q_ASSERT(colId > 0);
+    mIsPrimary = query.value(colId).toBool();
 
-        colId = query.record().indexOf("clustered");
-        Q_ASSERT(colId > 0);
-        mIsClustered = query.value(colId).toBool();
+    colId = query.record().indexOf("clustered");
+    Q_ASSERT(colId > 0);
+    mIsClustered = query.value(colId).toBool();
 
-        colId = query.record().indexOf("valid");
-        Q_ASSERT(colId > 0);
-        mIsValid = query.value(colId).toBool();
+    colId = query.record().indexOf("valid");
+    Q_ASSERT(colId > 0);
+    mIsValid = query.value(colId).toBool();
 
-        colId = query.record().indexOf("xmin");
-        Q_ASSERT(colId > 0);
-        mChecksXMin = query.value(colId).toBool();
+    colId = query.record().indexOf("xmin");
+    Q_ASSERT(colId > 0);
+    mChecksXMin = query.value(colId).toBool();
 
-        colId = query.record().indexOf("ready");
-        Q_ASSERT(colId > 0);
-        mIsReady = query.value(colId).toBool();
+    colId = query.record().indexOf("ready");
+    Q_ASSERT(colId > 0);
+    mIsReady = query.value(colId).toBool();
 
-        colId = query.record().indexOf("table");
-        Q_ASSERT(colId > 0);
-        mTableName = query.value(colId).toString();
+    colId = query.record().indexOf("table");
+    Q_ASSERT(colId > 0);
+    mTableName = query.value(colId).toString();
 
-        colId = query.record().indexOf("schema");
-        Q_ASSERT(colId > 0);
-        mSchemaName = query.value(colId).toString();
+    colId = query.record().indexOf("schema");
+    Q_ASSERT(colId > 0);
+    mSchemaName = query.value(colId).toString();
 
-        DbSchema *schema = Database::instance()->findSchema(mSchemaName);
-        DbTable *table = 0;
+    Common::DbSchema *schema = Common::Database::instance()->findSchema(mSchemaName);
+    Common::DbTable *table = 0;
 
-        if (schema) {
-            table = schema->findTable(mTableName);
-        }
+    if (schema) {
+        table = schema->findTable(mTableName);
+    }
 
-        setSchema(schema);
-        setTable(table);
+    setSchema(schema);
+    setTable(table);
 
-        colId = query.record().indexOf("colcount");
-        Q_ASSERT(colId > 0);
-        mColumnsCount = query.value(colId).toInt();
+    colId = query.record().indexOf("colcount");
+    Q_ASSERT(colId > 0);
+    mColumnsCount = query.value(colId).toInt();
 
-        // get the list of column numbers
-        colId = query.record().indexOf("fields");
-        Q_ASSERT(colId > 0);
-        QString str = query.value(colId).toString();
+    // get the list of column numbers
+    colId = query.record().indexOf("fields");
+    Q_ASSERT(colId > 0);
+    QString str = query.value(colId).toString();
 
-        // populate the number
-        foreach (QString section, str.split(" ")) {
-            addColumnNumber(section.toInt());
-        }
+    // populate the number
+    foreach (QString section, str.split(" ")) {
+        addColumnNumber(section.toInt());
+    }
 
 
-        /* temporary debug output */
+    /* temporary debug output */
 #if DEBUG_TRACE
-        qDebug() << "mName: " << mName;
-        qDebug() << "mIsUnique: " << mIsUnique;
-        qDebug() << "mIsPrimary: " << mIsPrimary;
-        qDebug() << "mIsClustered: " << mIsClustered;
-        qDebug() << "mIsValid: " << mIsValid;
-        qDebug() << "mChecksXMin: " << mChecksXMin;
-        qDebug() << "mIsReady: " << mIsReady;
-        qDebug() << "mTableName: " << mTable->name();
-        qDebug() << "mSchemaName: " << mSchema->name();
-        qDebug() << "mColumnsCount: " << mColumnsCount;
-        qDebug() << "mColumnsNumbers: " << mColumnsNumbers;
+    qDebug() << "mName: " << mName;
+    qDebug() << "mIsUnique: " << mIsUnique;
+    qDebug() << "mIsPrimary: " << mIsPrimary;
+    qDebug() << "mIsClustered: " << mIsClustered;
+    qDebug() << "mIsValid: " << mIsValid;
+    qDebug() << "mChecksXMin: " << mChecksXMin;
+    qDebug() << "mIsReady: " << mIsReady;
+    qDebug() << "mTableName: " << mTable->name();
+    qDebug() << "mSchemaName: " << mSchema->name();
+    qDebug() << "mColumnsCount: " << mColumnsCount;
+    qDebug() << "mColumnsNumbers: " << mColumnsNumbers;
 #endif
 
-    }
+    return true;
 }
+
+/*!
+ * Reset psql index's data
+ */
+void
+Index::resetData()
+{
+    mColumnsNumbers.clear();
+    // \todo Implement
+//    Database::reload(this);
+}
+
+} // namespace Psql
+
+} // namespace DbObjects
 

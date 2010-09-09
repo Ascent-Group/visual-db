@@ -27,20 +27,32 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLLANGUAGE_H
-#define PSQLLANGUAGE_H
+#ifndef PSQLPROCEDURE_H
+#define PSQLPROCEDURE_H
 
-#include <common/DbLanguage.h>
+#include <common/DbProcedure.h>
 
-class PsqlLanguage : public DbLanguage
+namespace DbObjects
+{
+
+namespace Psql
+{
+
+class Procedure : public Common::DbProcedure
 {
     public:
-        PsqlLanguage(QString ipName);
-        ~PsqlLanguage();
+        Procedure(QString ipSchemaName, QString ipName);
+        ~Procedure();
 
     private:
-        void loadData();
+        bool loadData();
+        void resetData();
+
 };
 
-#endif // PSQLLANGUAGE_H
+} // namespace Psql
+
+} // namespace DbObjects
+
+#endif // PSQLPROCEDURE_H
 

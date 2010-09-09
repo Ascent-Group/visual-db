@@ -30,6 +30,12 @@
 #include <common/DbSchema.h>
 #include <common/DbTrigger.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * Constructor
  * \param[in] ipSchemaName - Parent schema name
@@ -281,4 +287,8 @@ DbTrigger::type() const
 {
     return DbObject::TriggerObject;
 }
+
+} // namespace Common
+
+} // namespace DbObjects
 

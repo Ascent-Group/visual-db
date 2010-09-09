@@ -36,6 +36,8 @@
 class QContextMenuEvent;
 class QMenu;
 
+using namespace DbObjects::Common;
+
 /*
  * Tree widget. Show all database objects on this tree.
  */

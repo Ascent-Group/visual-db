@@ -28,7 +28,8 @@
  */
 
 #include <common/Database.h>
-#include <psql/PsqlTable.h>
+#include <psql/Table.h>
+#include <psql/Tools.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -37,10 +38,16 @@
 
 #include <QtDebug>
 
+namespace DbObjects
+{
+
+namespace Psql
+{
+
 /*
  * Constructor
  */
-PsqlTable::PsqlTable(QString ipSchemaName, QString ipTableName)
+Table::Table(QString ipSchemaName, QString ipTableName)
     :DbTable(ipSchemaName, ipTableName)
 {
     // load column definitions
@@ -50,7 +57,7 @@ PsqlTable::PsqlTable(QString ipSchemaName, QString ipTableName)
 /*
  * Destructor
  */
-PsqlTable::~PsqlTable()
+Table::~Table()
 {
 
 }
@@ -58,12 +65,20 @@ PsqlTable::~PsqlTable()
 /*
  * Load column definitions data
  */
-void
-PsqlTable::loadData()
+bool
+Table::loadData()
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;
+
+    // \todo Before creating a query we need to find out postgres version;
+    //       Bersion check can help support different Postgres versions,
+    //       especcialy when the system catalogs change in newer versions
+    Tools::Version version = Tools::version();
+
+    // \todo version check
+    // \todo do version specific actions
 
     // create query
     qstr = QString("SELECT "
@@ -84,58 +99,62 @@ PsqlTable::loadData()
         .arg(mSchemaName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "PsqlTable::loadData> " << qstr;
+    qDebug() << "Psql::Table::loadData> " << qstr;
 #endif
 
     // if query exectuion failed
     if (!query.exec(qstr)) {
         qDebug() << query.lastError().text();
-        return;
+        return false;
     }
 
-    // if query result is not empty
-    if (query.first()) {
-        // for each retrieved row
-        do {
-            /* temporary debug output */
-#if DEBUG_TRACE
-            qDebug() << query.value(0).toString();
-            qDebug() << query.value(1).toString();
-            qDebug() << query.value(2).toString();
-#endif
-
-            // create column definition
-            struct ColumnDefinition cDef;
-
-            // populate column definition
-            cDef.name = query.value(0).toString();
-            cDef.type = query.value(1).toString();
-            cDef.isNullable = !query.value(2).toBool();
-            cDef.isPrimaryKey = checkPrimaryKey(cDef.name);
-            cDef.isForeignKey = checkForeignKey(cDef.name, &cDef.foreignSchemaName, &cDef.foreignTableName, &cDef.foreignFieldNames);
-            cDef.isUnique = checkUnique(cDef.name);
-
-            /* temporary debug output */
-#if DEBUG_TRACE
-            qDebug() << "NAME: " << cDef.name;
-            qDebug() << "isPrimaryKey: " << cDef.isPrimaryKey;
-            qDebug() << "isForeignKey: " << cDef.isForeignKey;
-            qDebug() << "isUnique: " << cDef.isUnique;
-            qDebug() << "FKEY_SCHEMA: " << cDef.foreignSchemaName;
-            qDebug() << "FKEY_TABLE: " << cDef.foreignTableName;
-#endif
-
-            // add column definition
-            mColumnDefs.push_back(cDef);
-        } while (query.next());
+    // if query result is empty
+    if (!query.first()) {
+        return false;
     }
+
+    // for each retrieved row
+    do {
+        /* temporary debug output */
+#if DEBUG_TRACE
+        qDebug() << query.value(0).toString();
+        qDebug() << query.value(1).toString();
+        qDebug() << query.value(2).toString();
+#endif
+
+        // create column definition
+        struct ColumnDefinition cDef;
+
+        // populate column definition
+        cDef.name = query.value(0).toString();
+        cDef.type = query.value(1).toString();
+        cDef.isNullable = !query.value(2).toBool();
+        cDef.isPrimaryKey = checkPrimaryKey(cDef.name);
+        cDef.isForeignKey = checkForeignKey(cDef.name, &cDef.foreignSchemaName, &cDef.foreignTableName, &cDef.foreignFieldNames);
+        cDef.isUnique = checkUnique(cDef.name);
+
+        /* temporary debug output */
+#if DEBUG_TRACE
+        qDebug() << "NAME: " << cDef.name;
+        qDebug() << "isPrimaryKey: " << cDef.isPrimaryKey;
+        qDebug() << "isForeignKey: " << cDef.isForeignKey;
+        qDebug() << "isUnique: " << cDef.isUnique;
+        qDebug() << "FKEY_SCHEMA: " << cDef.foreignSchemaName;
+        qDebug() << "FKEY_TABLE: " << cDef.foreignTableName;
+#endif
+
+        // add column definition
+        mColumnDefs.push_back(cDef);
+    } while (query.next());
+
+    return true;
 }
 
 /*
  * Checks if column is a primary key for the given table
  */
 bool
-PsqlTable::checkPrimaryKey(const QString &ipColumnName) const
+Table::checkPrimaryKey(const QString &ipColumnName) const
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -163,7 +182,7 @@ PsqlTable::checkPrimaryKey(const QString &ipColumnName) const
                 .arg(ipColumnName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "PsqlTable::checkPrimaryKey> " << qstr;
+    qDebug() << "Psql::Table::checkPrimaryKey> " << qstr;
 #endif
 
     // if query execution failed
@@ -181,7 +200,7 @@ PsqlTable::checkPrimaryKey(const QString &ipColumnName) const
  * Checks if ipColumnName is a foreign key for ipTableName
  */
 bool
-PsqlTable::checkForeignKey(const QString &ipColumnName,
+Table::checkForeignKey(const QString &ipColumnName,
                QString *opForeignSchemaName,
                QString *opForeignTableName,
                QStringList *opForeignFieldsNames) const
@@ -223,7 +242,7 @@ PsqlTable::checkForeignKey(const QString &ipColumnName,
         .arg(ipColumnName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "PsqlTable::checkForeignKey> " << qstr;
+    qDebug() << "Psql::Table::checkForeignKey> " << qstr;
 #endif
 
     // if query execution failed
@@ -265,7 +284,7 @@ PsqlTable::checkForeignKey(const QString &ipColumnName,
  * Checks if ipColumnName is unique for ipTableName
  */
 bool
-PsqlTable::checkUnique(const QString &ipColumnName) const
+Table::checkUnique(const QString &ipColumnName) const
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -294,7 +313,7 @@ PsqlTable::checkUnique(const QString &ipColumnName) const
         .arg(ipColumnName);
 
 #if DEBUG_QUERY
-    qDebug() << "PsqlTable::checkUnique> " << qstr;
+    qDebug() << "Psql::Table::checkUnique> " << qstr;
 #endif
 
     // if query execution failed
@@ -307,4 +326,17 @@ PsqlTable::checkUnique(const QString &ipColumnName) const
     // unique constraint definition found
     return query.first();
 }
+
+/*!
+ * \todo Implement
+ */
+void
+Table::resetData()
+{
+
+}
+
+} // namespace Psql
+
+} // namespace DbObjects
 

@@ -183,7 +183,7 @@ GraphicsScene::drawRelations()
 void
 GraphicsScene::createRelations(TableItem *ipSourceItem)
 {
-    DbTable *tableModel = ipSourceItem->tableModel();
+    DbObjects::Common::DbTable *tableModel = ipSourceItem->tableModel();
     // find foreign keys and tables related to this keys
     for (int i = 0; i < tableModel->columnsCount(); ++i) {
         if (tableModel->isColumnForeignKey(i)) {

@@ -27,62 +27,48 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECT_H
-#define DBOBJECT_H
+#ifndef FACTORY_INDEX_H
+#define FACTORY_INDEX_H
 
-#include <QString>
+#include <QtCore/qglobal.h>
 
 namespace DbObjects
 {
 
 namespace Common
 {
+class DbIndex;
+}
+
+namespace Psql
+{
+class Index;
+}
+
+namespace Factory
+{
 
 /*!
- * \class DbObject
- * \headerfile DbObject.h <common/DbObject.h>
- * \brief Defines a base class for all database objects
+ * \class Index
+ * \headerfile <factory/Index.h>
+ * \brief Defines database index factory
  */
-class DbObject
+class Index
 {
     public:
-
-        /*!
-         * \enum Type
-         * Database object indentifiers
-         */
-        enum Type {
-            UnkObject = 0,      /*!< Unknown object */
-            SchemaObject,       /*!< Schema */
-            TableObject,        /*!< Table */
-            ViewObject,         /*!< View */
-            RoleObject,         /*!< Role */
-            TriggerObject,      /*!< Trigger */
-            LanguageObject,     /*!< Language */
-            IndexObject,        /*!< Index */
-            ProcedureObject,    /*!< Procedure */
-        };
-
-        QString name() const;
-        void setName(const QString &ipName);
-
-        /*! \see Descendants' implementation */
-        virtual DbObject::Type type() const = 0;
-        virtual bool loadData() = 0;
-        virtual void resetData() = 0;
+        static Common::DbIndex* createIndex(const QString &ipName);
 
     protected:
-        /*! Name of db object */
-        QString mName;
+        static Psql::Index* createPsqlIndex(const QString &iName);
+//        static MysqlIndex* createMysqlIndex(const QString &iName);
 
-    protected:
-        DbObject(QString ipName = 0);
-        virtual ~DbObject();
+    private:
+        Q_DISABLE_COPY(Index);
 };
 
-} // namespace Common
+} // namespace Factory
 
 } // namespace DbObjects
 
-#endif // DBOBJECT_H
+#endif // FACTORY_INDEX_H
 

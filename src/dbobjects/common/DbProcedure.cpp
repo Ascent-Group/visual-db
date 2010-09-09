@@ -29,6 +29,12 @@
 
 #include <common/DbProcedure.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * Ctor
  *
@@ -147,4 +153,8 @@ DbProcedure::setSourceCode(const QString &ipText)
 {
     mSourceCode = ipText;
 }
+
+} // namespace Common
+
+} // namespace DbObjects
 

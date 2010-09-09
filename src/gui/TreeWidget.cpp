@@ -112,7 +112,7 @@ TreeWidget::refresh()
 
     // populate object tree
     // (better place rather than inside ctor)
-    Database *dbInst = Database::instance();
+    DbObjects::Common::Database *dbInst = DbObjects::Common::Database::instance();
 
     //// ROLES
     // read roles

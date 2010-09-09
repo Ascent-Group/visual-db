@@ -30,6 +30,12 @@
 #include <common/Database.h>
 #include <common/DbLanguage.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * Ctor
  *
@@ -78,4 +84,8 @@ DbLanguage::type() const
 {
     return DbObject::LanguageObject;
 }
+
+} // namespace Common
+
+} // namespace DbObjects
 

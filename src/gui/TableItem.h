@@ -45,8 +45,19 @@ class QImage;
 class QMenu;
 
 class ArrowItem;
+
+namespace DbObjects
+{
+
+namespace Common
+{
+
 class DbIndex;
 class DbTable;
+
+} // namespace Common
+
+} // namespace DbObjects
 
 /*
  * Graphics item, implements the database table. Support moving, resizing, changing of the color etc.
@@ -70,7 +81,7 @@ class TableItem : public GraphicsItem
         QList<ArrowItem *> arrows() const;
         QString tableName() const; 
         QString schemaName() const; 
-        DbTable *tableModel() const;
+        DbObjects::Common::DbTable *tableModel() const;
         QDomElement toXml(QDomDocument &);
 
         static void setSeek(int);
@@ -106,8 +117,8 @@ class TableItem : public GraphicsItem
         static int mSeek;
 
         QSettings mSettings;
-        DbTable *mTableModel;
-        QVector<DbIndex *> mIndices;
+        DbObjects::Common::DbTable *mTableModel;
+        QVector<DbObjects::Common::DbIndex *> mIndices;
 
         QMenu *mContextMenu;
 

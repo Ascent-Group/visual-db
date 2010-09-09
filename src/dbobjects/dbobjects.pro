@@ -12,7 +12,15 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 MOC_DIR = .moc
-OBJECTS_DIR = .obj
+
+# We have to have two next lines as they are right now, because we have
+# several files with identical names and placing .o files into a single
+# OBJECTS_DIR will cause object file conflict, i.e. factroy/Index.cpp and
+# mysql/Index.cpp will not be compiled because psql/Index.cpp will be
+# compiled first and as a result .obj/Index.o will exist by the time of
+# compilation of the other two
+#OBJECTS_DIR = .obj
+CONFIG += object_with_source
 
 QMAKE_CXXFLAGS += -O2 -g2 -Wextra
 
@@ -23,8 +31,11 @@ DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 # Input
 HEADERS += common/*.h \
            mysql/*.h \
-           psql/*.h
+           psql/*.h \
+           factory/*.h
 
 SOURCES += common/*.cpp \
            mysql/*.cpp \
-           psql/*.cpp
+           psql/*.cpp \
+           factory/*.cpp
+

@@ -46,8 +46,8 @@
 #include <gui/GraphicsScene.h>
 #include <gui/TableItem.h>
 #include <math.h>
-#include <mysql/MysqlTable.h>
-#include <psql/PsqlTable.h>
+#include <mysql/Table.h>
+#include <psql/Table.h>
 
 int TableItem::mSeek = 80;
 
@@ -57,6 +57,7 @@ int TableItem::mSeek = 80;
 TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QMenu *ipMenu)
     : GraphicsItem(), mContextMenu(ipMenu), mMode(TableItem::MOVE), mFieldsTypesVisible(true), mIndicesVisible(true), mFont("Arial", 10)
 {
+    using namespace DbObjects::Common;
     Database *dbInst = Database::instance();
 
     // find schema
@@ -513,7 +514,7 @@ TableItem::tableName() const
 /*
  * Get the table model of this item
  */
-DbTable *
+DbObjects::Common::DbTable *
 TableItem::tableModel() const
 {
     return mTableModel;

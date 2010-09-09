@@ -27,21 +27,30 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLPROCEDURE_H
-#define PSQLPROCEDURE_H
+#ifndef PSQLTRIGGER_H
+#define PSQLTRIGGER_H
 
-#include <common/DbProcedure.h>
+#include <common/DbTrigger.h>
 
-class PsqlProcedure : public DbProcedure
+namespace DbObjects
+{
+
+namespace Psql
+{
+
+class Trigger : public Common::DbTrigger
 {
     public:
-        PsqlProcedure(QString ipSchemaName, QString ipName);
-        ~PsqlProcedure();
+        Trigger(QString ipSchemaName, QString ipName);
+        ~Trigger();
 
-    private:
-        void loadData();
-
+        bool loadData();
+        void resetData();
 };
 
-#endif // PSQLPROCEDURE_H
+} // namespace Psql
+
+} // namespace DbObjects
+
+#endif // PSQLTRIGGER_H
 

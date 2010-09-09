@@ -27,7 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <mysql/MysqlTable.h>
+#include <mysql/Table.h>
+#include <mysql/Tools.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -35,10 +36,16 @@
 
 #include <QtDebug>
 
+namespace DbObjects
+{
+
+namespace Mysql
+{
+
 /*
  * Constructor
  */
-MysqlTable::MysqlTable(QString ipSchemaName, QString ipTableName)
+Table::Table(QString ipSchemaName, QString ipTableName)
     :DbTable(ipSchemaName, ipTableName)
 {
     // load column definitions
@@ -49,7 +56,7 @@ MysqlTable::MysqlTable(QString ipSchemaName, QString ipTableName)
 /*
  * Destructor
  */
-MysqlTable::~MysqlTable()
+Table::~Table()
 {
 
 }
@@ -57,12 +64,18 @@ MysqlTable::~MysqlTable()
 /*
  * Load column definitions data
  */
-void
-MysqlTable::loadData()
+bool
+Table::loadData()
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery    query(db);
     QString  qstr;
+
+    // \todo get version
+    Tools::Version version = Tools::version();
+
+    // \todo do version check
+    // \todo do version specific actions
 
     /*if (mTableName.contains(QString('.'))) {
         mSchemaName = mTableName.section('.', 0);
@@ -98,6 +111,7 @@ MysqlTable::loadData()
     // if query execution failed
     if (!query.exec(qstr)) {
         qDebug() << query.lastError().text();
+        return false;
     }
 
     // if query result is not empty
@@ -136,15 +150,18 @@ MysqlTable::loadData()
             // add coumn definition
             mColumnDefs.push_back(cDef);
         } while (query.next());
+
+        return true;
     }
 
+    return false;
 }
 
 /*
  * Checks if Óolumn is a primary key for the given table
  */
 bool
-MysqlTable::checkPrimaryKey(const QString &ipColumnName) const
+Table::checkPrimaryKey(const QString &ipColumnName) const
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -162,7 +179,7 @@ MysqlTable::checkPrimaryKey(const QString &ipColumnName) const
                 .arg(ipColumnName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "MysqlTable::checkPrimaryKey> " << qstr;
+    qDebug() << "Table::checkPrimaryKey> " << qstr;
 #endif
 
     // if query execution failed
@@ -180,7 +197,7 @@ MysqlTable::checkPrimaryKey(const QString &ipColumnName) const
  * Checks if ipColumnName is a foreign key for ipTableName
  */
 bool
-MysqlTable::checkForeignKey(const QString &ipColumnName, QString *opForeignSchemaName, QString *opForeignTableName) const
+Table::checkForeignKey(const QString &ipColumnName, QString *opForeignSchemaName, QString *opForeignTableName) const
 {
     Q_UNUSED(opForeignSchemaName);
     Q_UNUSED(opForeignTableName);
@@ -201,7 +218,7 @@ MysqlTable::checkForeignKey(const QString &ipColumnName, QString *opForeignSchem
                 .arg(ipColumnName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "MysqlTable::checkForeignKey> " << qstr;
+    qDebug() << "Table::checkForeignKey> " << qstr;
 #endif
 
     // if query execution failed
@@ -219,7 +236,7 @@ MysqlTable::checkForeignKey(const QString &ipColumnName, QString *opForeignSchem
  * Checks if ipColumnName is unique for ipTableName
  */
 bool
-MysqlTable::checkUnique(const QString &ipColumnName) const
+Table::checkUnique(const QString &ipColumnName) const
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -237,7 +254,7 @@ MysqlTable::checkUnique(const QString &ipColumnName) const
                 .arg(ipColumnName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "MysqlTable::checkUnique> " << qstr;
+    qDebug() << "Table::checkUnique> " << qstr;
 #endif
 
     // if query execution failed
@@ -250,3 +267,17 @@ MysqlTable::checkUnique(const QString &ipColumnName) const
     // unique constraint definiton found
     return query.first();
 }
+
+/*!
+ * \todo Implement
+ */
+void
+Table::resetData()
+{
+
+}
+
+} // namespace Mysql
+
+} // namespace DbObjects
+

@@ -32,6 +32,12 @@
 
 #include <common/DbObject.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 class DbRole;
 class DbSchema;
 
@@ -60,7 +66,8 @@ class DbView : public DbObject
          * \see PsqlView::loadData()
          * \see MysqlView::loadData()
          */
-        virtual void loadData() = 0;
+        // \todo remove next line
+//        virtual void loadData() = 0;
 
         virtual DbObject::Type type() const;
 
@@ -77,6 +84,10 @@ class DbView : public DbObject
     protected:
         DbView(QString ipSchema, QString ipName);
 };
+
+} // namespace Common
+
+} // namespace DbObjects
 
 #endif // DBVIEW_H
 

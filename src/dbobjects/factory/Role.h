@@ -27,62 +27,43 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECT_H
-#define DBOBJECT_H
+#ifndef FACTORY_ROLE_H
+#define FACTORY_ROLE_H
 
-#include <QString>
+#include <QtCore/qglobal.h>
 
 namespace DbObjects
 {
 
 namespace Common
 {
+class DbRole;
+}
 
-/*!
- * \class DbObject
- * \headerfile DbObject.h <common/DbObject.h>
- * \brief Defines a base class for all database objects
- */
-class DbObject
+namespace Psql
+{
+class Role;
+}
+
+namespace Factory
+{
+
+class Role
 {
     public:
-
-        /*!
-         * \enum Type
-         * Database object indentifiers
-         */
-        enum Type {
-            UnkObject = 0,      /*!< Unknown object */
-            SchemaObject,       /*!< Schema */
-            TableObject,        /*!< Table */
-            ViewObject,         /*!< View */
-            RoleObject,         /*!< Role */
-            TriggerObject,      /*!< Trigger */
-            LanguageObject,     /*!< Language */
-            IndexObject,        /*!< Index */
-            ProcedureObject,    /*!< Procedure */
-        };
-
-        QString name() const;
-        void setName(const QString &ipName);
-
-        /*! \see Descendants' implementation */
-        virtual DbObject::Type type() const = 0;
-        virtual bool loadData() = 0;
-        virtual void resetData() = 0;
+        static DbObjects::Common::DbRole* createRole(const QString &ipName);
 
     protected:
-        /*! Name of db object */
-        QString mName;
+        static DbObjects::Psql::Role* createPsqlRole(const QString &ipName);
 
-    protected:
-        DbObject(QString ipName = 0);
-        virtual ~DbObject();
+    private:
+        Q_DISABLE_COPY(Role);
+
 };
 
-} // namespace Common
+} // namespace Factory
 
 } // namespace DbObjects
 
-#endif // DBOBJECT_H
+#endif // FACTORY_ROLE_H
 

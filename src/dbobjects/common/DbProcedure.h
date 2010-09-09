@@ -33,6 +33,12 @@
 #include <common/Database.h>
 #include <common/DbObject.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * \class DbProcedure
  * \brief Defines database procedure object
@@ -77,9 +83,14 @@ class DbProcedure : public DbObject
          * \see PsqlProcedure::loadData()
          * \see MysqlProcedure::loadData()
          */
-        virtual void loadData() = 0;
+        // \todo remove next line
+//        virtual void loadData() = 0;
 
 };
+
+} // namespace Common
+
+} // namespace DbObjects
 
 #endif // DBPROCEDURE_H
 

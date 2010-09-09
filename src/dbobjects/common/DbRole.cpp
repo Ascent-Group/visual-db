@@ -30,6 +30,12 @@
 #include <common/Database.h>
 #include <common/DbRole.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * Ctor
  */
@@ -243,4 +249,8 @@ DbRole::type() const
 {
     return DbObject::RoleObject;
 }
+
+} // namespace Common
+
+} // namespace DbObjects
 

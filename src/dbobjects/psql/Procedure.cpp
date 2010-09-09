@@ -28,8 +28,9 @@
  */
 
 #include <common/DbSchema.h>
-#include <psql/PsqlRole.h>
-#include <psql/PsqlView.h>
+#include <psql/Language.h>
+#include <psql/Procedure.h>
+#include <psql/Role.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -38,11 +39,17 @@
 
 #include <QtDebug>
 
+namespace DbObjects
+{
+
+namespace Psql
+{
+
 /*
  * Ctor
  */
-PsqlView::PsqlView(QString ipSchema, QString ipName)
-    : DbView(ipSchema, ipName)
+Procedure::Procedure(QString ipSchemaName, QString ipName)
+    : DbProcedure(ipSchemaName, ipName)
 {
 
 }
@@ -50,16 +57,16 @@ PsqlView::PsqlView(QString ipSchema, QString ipName)
 /*
  * Dtor
  */
-PsqlView::~PsqlView()
+Procedure::~Procedure()
 {
 
 }
 
 /*
- * Load view's data
+ * Loads database proc's definition
  */
-void
-PsqlView::loadData()
+bool
+Procedure::loadData()
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -67,57 +74,76 @@ PsqlView::loadData()
 
     // prepare a query
     qstr = QString("SELECT "
-                        "v.schemaname as schema, "
-                        "v.viewname as name, "
-                        "v.viewowner as owner, "
-                        "v.definition as def "
+                        "p.proname AS name, "
+                        "n.nspname AS schema, "
+                        "o.rolname AS owner, "
+                        "l.lanname AS lang, "
+                        "p.prosrc AS src "
                     "FROM "
-                        "pg_catalog.pg_views v "
+                        "pg_catalog.pg_proc p, "
+                        "pg_catalog.pg_namespace n, "
+                        "pg_catalog.pg_roles o, "
+                        "pg_catalog.pg_language l "
                     "WHERE "
-                        "schemaname = '%1' "
-                        "AND viewname = '%2';")
-            .arg(mSchemaName)
-            .arg(mName);
+                        "p.pronamespace = n.oid "
+                        "AND p.proowner = o.oid "
+                        "AND p.prolang = l.oid "
+                        "AND p.proname = '%1' "
+                        "AND n.nspname = '%2';")
+            .arg(mName)
+            .arg(mSchemaName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "PsqlView::loadData> " << qstr;
+    qDebug() << "Procedure::loadData> " << qstr;
 #endif
 
     // if query execution failed
     if (!query.exec(qstr)) {
         qDebug() << query.lastError().text();
-        return;
+
+        return false;;
     }
 
-    // if data was found
-    if (query.first()) {
-        qint32 colId = query.record().indexOf("schema");
-        Q_ASSERT(colId > 0);
-        mSchemaName = query.value(colId).toString();
-        mSchema->setName(mSchemaName);
+    // if record was not found
+    if (!query.first()) {
+        return false;
+    }
 
-        /*
-        colId = query.record().indexOf("name");
-        Q_ASSERT(colId > 0);
-        mName = query.value(colId).toString();
-        */
+    qint32 colId = query.record().indexOf("owner");
+    Q_ASSERT(colId > 0);
+    QString ownerName = query.value(colId).toString();
+    mOwner = Common::Database::instance()->findRole(ownerName);
 
-        colId = query.record().indexOf("owner");
-        Q_ASSERT(colId > 0);
-        mOwner->setName(query.value(colId).toString());
+    colId = query.record().indexOf("lang");
+    Q_ASSERT(colId > 0);
+    QString languageName = query.value(colId).toString();
+    mLanguage = Common::Database::instance()->findLanguage(languageName);
 
-        colId = query.record().indexOf("def");
-        Q_ASSERT(colId > 0);
-        mDefinition = query.value(colId).toString();
+    colId = query.record().indexOf("src");
+    Q_ASSERT(colId > 0);
+    mSourceCode = query.value(colId).toString();
 
 #if DEBUG_TRACE
-        qDebug() << "PsqlView::loadData> name = " << mName;
-        qDebug() << "PsqlView::loadData> schema = " << mSchemaName;
-        qDebug() << "PsqlView::loadData> owner = " << mOwner->name();
-        qDebug() << "PsqlView::loadData> def = " << mDefinition;
+    qDebug() << "Psql::Procedure::loadData> name = " << mName;
+    qDebug() << "Psql::Procedure::loadData> schema = " << mSchema->name();
+    qDebug() << "Psql::Procedure::loadData> owner = " << mOwner->name();
+    qDebug() << "Psql::Procedure::loadData> lang = " << mLanguage->name();
+    qDebug() << "Psql::Procedure::loadData> src = " << mSourceCode;
 #endif
-    }
 
+    return true;
+}
+
+/*!
+ * \todo Implement
+ */
+void
+Procedure::resetData()
+{
 
 }
+
+} // namespace Psql
+
+} // namespace DbObjects
 

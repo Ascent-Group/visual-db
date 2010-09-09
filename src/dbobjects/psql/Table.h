@@ -32,19 +32,30 @@
 
 #include <common/DbTable.h>
 
-class PsqlTable : public DbTable
+namespace DbObjects
+{
+
+namespace Psql
+{
+
+class Table : public Common::DbTable
 {
     public:
-        PsqlTable(QString ipSchemaName, QString ipTableName);
-        ~PsqlTable();
+        Table(QString ipSchemaName, QString ipTableName);
+        ~Table();
 
         bool checkPrimaryKey(const QString &) const;
         bool checkForeignKey(const QString &, QString *, QString *, QStringList *) const;
         bool checkUnique(const QString &) const;
 
     private:
-        void loadData();
+        bool loadData();
+        void resetData();
 };
+
+} // namespace Psql
+
+} // namespace DbObjects
 
 #endif // PSQLTABLE_H
 

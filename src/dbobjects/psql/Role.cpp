@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <psql/PsqlRole.h>
+#include <psql/Role.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -36,10 +36,16 @@
 
 #include <QtDebug>
 
+namespace DbObjects
+{
+
+namespace Psql
+{
+
 /*
  * Ctor
  */
-PsqlRole::PsqlRole(QString ipName)
+Role::Role(QString ipName)
     : DbRole(ipName)
 {
 
@@ -48,7 +54,7 @@ PsqlRole::PsqlRole(QString ipName)
 /*
  * Dtor
  */
-PsqlRole::~PsqlRole()
+Role::~Role()
 {
 
 }
@@ -56,8 +62,8 @@ PsqlRole::~PsqlRole()
 /*
  * Loads role definition data
  */
-void
-PsqlRole::loadData()
+bool
+Role::loadData()
 {
     // lyuts: maybe it should be done in Database in one sweep
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
@@ -83,74 +89,90 @@ PsqlRole::loadData()
            .arg(mName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "PsqlRole::loadData> " << qstr;
+    qDebug() << "Psql::Role::loadData> " << qstr;
 #endif
 
     // if query failed
     if (!query.exec(qstr)) {
         qDebug() << query.lastError().text();
+        return false;
     }
 
-    // if query retrieved a row
-    if (query.first()) {
+    // if query didn't retrieve a row
+    if (!query.first()) {
+        return false;
+    }
 
-        qint32 colId;
-        /*
-        colId= query.record().indexOf("name");
-        Q_ASSERT(colId > 0);
-        mName = query.value(colId).toString();
-        */
+    qint32 colId;
 
-        colId = query.record().indexOf("super");
-        Q_ASSERT(colId > 0);
-        mIsSuperUser = query.value(colId).toBool();
+    // name is set at object construction
+    /*colId= query.record().indexOf("name");
+    Q_ASSERT(colId > 0);
+    mName = query.value(colId).toString();*/
 
-        colId = query.record().indexOf("inherit");
-        Q_ASSERT(colId > 0);
-        mInheritsPrivileges = query.value(colId).toBool();
+    colId = query.record().indexOf("super");
+    Q_ASSERT(colId > 0);
+    mIsSuperUser = query.value(colId).toBool();
 
-        colId = query.record().indexOf("createrole");
-        Q_ASSERT(colId > 0);
-        mCanCreateRole = query.value(colId).toBool();
+    colId = query.record().indexOf("inherit");
+    Q_ASSERT(colId > 0);
+    mInheritsPrivileges = query.value(colId).toBool();
 
-        colId = query.record().indexOf("createdb");
-        Q_ASSERT(colId > 0);
-        mCanCreateDb = query.value(colId).toBool();
+    colId = query.record().indexOf("createrole");
+    Q_ASSERT(colId > 0);
+    mCanCreateRole = query.value(colId).toBool();
 
-        colId = query.record().indexOf("catupdate");
-        Q_ASSERT(colId > 0);
-        mCanUpdateSysCat = query.value(colId).toBool();
+    colId = query.record().indexOf("createdb");
+    Q_ASSERT(colId > 0);
+    mCanCreateDb = query.value(colId).toBool();
 
-        colId = query.record().indexOf("canlogin");
-        Q_ASSERT(colId > 0);
-        mCanLogin = query.value(colId).toBool();
+    colId = query.record().indexOf("catupdate");
+    Q_ASSERT(colId > 0);
+    mCanUpdateSysCat = query.value(colId).toBool();
 
-        colId = query.record().indexOf("connlimit");
-        Q_ASSERT(colId > 0);
-        mConnectionLimit = query.value(colId).toInt();
+    colId = query.record().indexOf("canlogin");
+    Q_ASSERT(colId > 0);
+    mCanLogin = query.value(colId).toBool();
 
-        colId = query.record().indexOf("validuntil");
-        Q_ASSERT(colId > 0);
-        mExpiryDate = query.value(colId).toDate();
+    colId = query.record().indexOf("connlimit");
+    Q_ASSERT(colId > 0);
+    mConnectionLimit = query.value(colId).toInt();
 
-        colId = query.record().indexOf("id");
-        Q_ASSERT(colId > 0);
-        mId = query.value(colId).toInt();
+    colId = query.record().indexOf("validuntil");
+    Q_ASSERT(colId > 0);
+    mExpiryDate = query.value(colId).toDate();
 
-        /* temporary debug output */
+    colId = query.record().indexOf("id");
+    Q_ASSERT(colId > 0);
+    mId = query.value(colId).toInt();
+
+    /* temporary debug output */
 #if DEBUG_TRACE
-        qDebug() << "mName: " << mName;
-        qDebug() << "mIsSuperUser: " << mIsSuperUser;
-        qDebug() << "mInheritsPrivileges: " << mInheritsPrivileges;
-        qDebug() << "mCanCreateRole: " << mCanCreateRole;
-        qDebug() << "mCanCreateDb: " << mCanCreateDb;
-        qDebug() << "mCanUpdateSysCat: " << mCanUpdateSysCat;
-        qDebug() << "mCanLogin: " << mCanLogin;
-        qDebug() << "mConnectionLimit: " << mConnectionLimit;
-        qDebug() << "mExpiryDate: " << mExpiryDate;
-        qDebug() << "mId: " << mId;
+    qDebug() << "Psql::Role::mName: " << mName;
+    qDebug() << "Psql::Role::mIsSuperUser: " << mIsSuperUser;
+    qDebug() << "Psql::Role::mInheritsPrivileges: " << mInheritsPrivileges;
+    qDebug() << "Psql::Role::mCanCreateRole: " << mCanCreateRole;
+    qDebug() << "Psql::Role::mCanCreateDb: " << mCanCreateDb;
+    qDebug() << "Psql::Role::mCanUpdateSysCat: " << mCanUpdateSysCat;
+    qDebug() << "Psql::Role::mCanLogin: " << mCanLogin;
+    qDebug() << "Psql::Role::mConnectionLimit: " << mConnectionLimit;
+    qDebug() << "Psql::Role::mExpiryDate: " << mExpiryDate;
+    qDebug() << "Psql::Role::mId: " << mId;
 #endif
 
-    }
+    return true;
 }
+
+/*!
+ * \todo Implement
+ */
+void
+Role::resetData()
+{
+
+}
+
+} // namespace Psql
+
+} // namespace DbObjects
 

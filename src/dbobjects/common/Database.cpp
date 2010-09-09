@@ -31,10 +31,12 @@
 #include <common/DbIndex.h>
 #include <common/DbLanguage.h>
 #include <common/DbSchema.h>
-#include <psql/PsqlIndex.h>
-#include <psql/PsqlLanguage.h>
-#include <psql/PsqlRole.h>
-#include <psql/PsqlTrigger.h>
+#include <factory/Index.h>
+#include <factory/Language.h>
+#include <factory/Role.h>
+#include <psql/Role.h>
+// \ todo remove next include
+#include <psql/Trigger.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -42,6 +44,15 @@
 #include <QVariant>
 
 #include <QtDebug>
+
+// \todo Database should not have any SQL queries in it. Instead, it should
+//       delegate SQL routines to DbTable's subclasses
+
+namespace DbObjects
+{
+
+namespace Common
+{
 
 // null initialization of instance
 Database *Database::mInstance = 0;
@@ -73,7 +84,7 @@ Database::Database(const Database &iInst)
  */
 Database::~Database()
 {
-    cleanup();
+    resetData();
     Database::mInstance = 0;
 }
 
@@ -553,6 +564,11 @@ Database::readRoles()
     // clear roles list
     mRoles.clear();
 
+    // \todo QStringList rolesList;
+    //       Tools::rolesList(&rolesList);
+    //       // and remove SELECTs
+    //       // there should be no sql here
+
     // choose a query depending on sql driver
     switch (mSqlDriver) {
         case Database::Unknown:
@@ -602,91 +618,15 @@ Database::readRoles()
         return;
     }
 
+    qint32 colId;
     // for every retrieved row
     do {
+        colId = query.record().indexOf("name");
+        Q_ASSERT(colId > 0);
         // declare new role object
-        DbRole *role = 0;
-
-        // choose a query depending on sql driver
-        switch (mSqlDriver) {
-            // lyuts: looks like this case is useless. if driver is not set then
-            // previous switch will handle this and return from function.
-            /*case Database::Unknown:
-                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
-                            return;
-                            */
-            case Database::PostgreSQL:
-                            role = new(std::nothrow) PsqlRole();
-
-
-                            break;
-            case Database::MySQL:
-            case Database::Oracle:
-            case Database::SQLite:
-            default:
-                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver is not supported currently!";
-                            /* temporarily no support for these DBMS */
-                            return;
-                            break;
-
-        }
+        DbRole *role = Factory::Role::createRole(query.value(colId).toString());
 
         Q_ASSERT(role != 0);
-
-        // set role's attributes
-        qint32 colId = query.record().indexOf("name");
-        Q_ASSERT(colId > 0);
-        role->setName(query.value(colId).toString());
-
-        colId = query.record().indexOf("super");
-        Q_ASSERT(colId > 0);
-        role->setSuperUser(query.value(colId).toBool());
-
-        colId = query.record().indexOf("inherit");
-        Q_ASSERT(colId > 0);
-        role->setInheritsPriviligese(query.value(colId).toBool());
-
-        colId = query.record().indexOf("createrole");
-        Q_ASSERT(colId > 0);
-        role->setCanCreateRole(query.value(colId).toBool());
-
-        colId = query.record().indexOf("createdb");
-        Q_ASSERT(colId > 0);
-        role->setCanCreateDb(query.value(colId).toBool());
-
-        colId = query.record().indexOf("catupdate");
-        Q_ASSERT(colId > 0);
-        role->setCanUpdateSysCat(query.value(colId).toBool());
-
-        colId = query.record().indexOf("canlogin");
-        Q_ASSERT(colId > 0);
-        role->setCanLogin(query.value(colId).toBool());
-
-        colId = query.record().indexOf("connlimit");
-        Q_ASSERT(colId > 0);
-        role->setConnectionLimit(query.value(colId).toInt());
-
-        colId = query.record().indexOf("validuntil");
-        Q_ASSERT(colId > 0);
-        role->setExpiryDate(query.value(colId).toDate());
-
-        colId = query.record().indexOf("id");
-        Q_ASSERT(colId > 0);
-        role->setId(query.value(colId).toInt());
-
-        /* temporary debug output */
-#if DEBUG_TRACE
-        qDebug() << __PRETTY_FUNCTION__ << "role->mName: " << role->name();
-        qDebug() << __PRETTY_FUNCTION__ << "role->mIsSuperUser: " << role->isSuperUser();
-        qDebug() << __PRETTY_FUNCTION__ << "role->mInheritsPrivileges: " << role->inheritsPrivileges();
-        qDebug() << __PRETTY_FUNCTION__ << "role->mCanCreateRole: " << role->canCreateRole();
-        qDebug() << __PRETTY_FUNCTION__ << "role->mCanCreateDb: " << role->canCreateDb();
-        qDebug() << __PRETTY_FUNCTION__ << "role->mCanUpdateSysCat: " << role->canUpdateSysCat();
-        qDebug() << __PRETTY_FUNCTION__ << "role->mCanLogin: " << role->canLogin();
-        qDebug() << __PRETTY_FUNCTION__ << "role->mConnectionLimit: " << role->connectionLimit();
-        qDebug() << __PRETTY_FUNCTION__ << "role->mExpiryDate: " << role->expiryDate();
-        qDebug() << __PRETTY_FUNCTION__ << "role->mId: " << role->id();
-#endif
 
         // add role
         addRole(role);
@@ -767,45 +707,17 @@ Database::readIndices()
 
     // for every retrieved row
     do {
+        QString name = query.value(query.record().indexOf("name")).toString();
         // declare new index object
-        DbIndex *index; // \todo = Factory::createIndex();
+        DbIndex *index = Factory::Index::createIndex(name);
 
         qint32 colId;
 
-        // choose a query depending on sql driver
-        switch (mSqlDriver) {
-            // lyuts: looks like this case is useless. if driver is not set then
-            // previous switch will handle this and return from function.
-            /*case Database::Unknown:
-                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
-                            return;
-                            */
-            case Database::PostgreSQL:
-                            colId = query.record().indexOf("name");
-                            Q_ASSERT(colId > 0);
-
-                            index = new PsqlIndex(query.value(colId).toString());
-
-                            break;
-            case Database::MySQL:
-            case Database::Oracle:
-            case Database::SQLite:
-            default:
-                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver is not supported currently!";
-                            /* temporarily no support for these DBMS */
-                            return;
-                            break;
-
-        }
-
         // set index's attributes
-
-        //int colId;
 
         /*colId= query.record().indexOf("name");
         Q_ASSERT(colId > 0);
         index->setName(query.value(colId).toString());*/
-
 
         colId = query.record().indexOf("unique");
         Q_ASSERT(colId > 0);
@@ -950,41 +862,13 @@ Database::readLanguages()
 
     // for every retrieved row
     do {
+        QString name = query.value(query.record().indexOf("name")).toString();
         // declare new language object
-        DbLanguage *lang;
+        DbLanguage *lang = Factory::Language::createLanguage(name);
 
         qint32 colId;
 
-        // choose a query depending on sql driver
-        switch (mSqlDriver) {
-            // lyuts: looks like this case is useless. if driver is not set then
-            // previous switch will handle this and return from function.
-            /*case Database::Unknown:
-                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
-                            return;
-                            */
-            case Database::PostgreSQL:
-                            colId= query.record().indexOf("name");
-                            Q_ASSERT(colId > 0);
-
-                            lang = new PsqlLanguage(query.value(colId).toString());
-
-
-                            break;
-            case Database::MySQL:
-            case Database::Oracle:
-            case Database::SQLite:
-            default:
-                            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver is not supported currently!";
-                            /* temporarily no support for these DBMS */
-                            return;
-                            break;
-
-        }
-
         // set lang's attributes
-
-        //int colId;
 
         /*colId= query.record().indexOf("name");
         Q_ASSERT(colId > 0);
@@ -1008,10 +892,26 @@ Database::readLanguages()
 }
 
 /*!
+ * Read everything from database
+ *
+ * \return true - Even if nothing has been read
+ */
+bool
+Database::loadData()
+{
+    readRoles();
+    readLanguages();
+    readSchemas();
+    readIndices();
+
+    return true;
+}
+
+/*!
  * \brief Cleanup data (all objects' vectors)
  */
 void
-Database::cleanup()
+Database::resetData()
 {
 #ifdef DEBUG_TRACE
     qDebug() << __PRETTY_FUNCTION__ << "> cleaning...";
@@ -1020,7 +920,7 @@ Database::cleanup()
     quint64 schemasCount = mSchemas.count();
 
     for (quint64 i = 0; i < schemasCount; ++i) {
-        mSchemas.at(i)->cleanup();
+        mSchemas.at(i)->resetData();
     }
 
     // clear vectors
@@ -1133,4 +1033,8 @@ DatabaseManager::flush()
 {
     delete Database::mInstance;
 }
+
+} // namespace Common
+
+} // namespace DbObjects
 

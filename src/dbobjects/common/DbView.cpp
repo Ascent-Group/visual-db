@@ -32,6 +32,12 @@
 
 #include <QtDebug>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * Ctor
  * \param[in] ipSchemaName - Schema name
@@ -123,4 +129,8 @@ DbView::type() const
 {
     return DbObject::ViewObject;
 }
+
+} // namespace Common
+
+} // namespace DbObjects
 

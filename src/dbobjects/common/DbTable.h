@@ -34,6 +34,12 @@
 #include <QVector>
 #include <common/DbObject.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 class DbIndex;
 class DbSchema;
 
@@ -42,13 +48,13 @@ class DbSchema;
  * \headerfile <common/DbTable.h>
  * \brief Defines databse table object
  */
-class DbTable : public DbObject
+class DbTable : public Common::DbObject
 {
     public:
         virtual ~DbTable();
 
         quint16 columnsCount() const;
-        
+
         DbSchema* schema() const;
         void setSchema(DbSchema *ipSchema);
 
@@ -72,7 +78,8 @@ class DbTable : public DbObject
         bool isColumnUnique(qint16 ipColId) const;
 
         /*! \see PsqlTable::loadData() */
-        virtual void loadData() = 0;
+        // \todo remove next line
+//        virtual void loadData() = 0;
         // lyuts: for further functionality
         // lyuts: will save the changes made to the table
         // lyuts: virtual void save() = 0;
@@ -124,6 +131,10 @@ class DbTable : public DbObject
     protected:
         DbTable(QString ipSchemaName, QString ipTableName);
 };
+
+} // namespace Common
+
+} // namespace DbObjects
 
 #endif // DBTABLE_H
 

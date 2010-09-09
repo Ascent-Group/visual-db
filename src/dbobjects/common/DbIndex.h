@@ -33,6 +33,12 @@
 #include <QVector>
 #include <common/DbObject.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 class DbSchema;
 class DbTable;
 
@@ -87,7 +93,8 @@ class DbIndex : public DbObject
          * \see PsqlIndex::loadData()
          * \see MysqlIndex::loadData()
          */
-        virtual void loadData() = 0;
+        // \todo remove next line
+//        virtual void loadData() = 0;
 
         virtual DbObject::Type type() const;
 
@@ -128,6 +135,10 @@ class DbIndex : public DbObject
     protected:
         DbIndex(QString ipName);
 };
+
+} // namespace Common
+
+} // namespace DbObjects
 
 #endif // DBINDEX_H
 

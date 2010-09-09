@@ -27,62 +27,32 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECT_H
-#define DBOBJECT_H
+#ifndef MYSQL_TOOLS_H
+#define MYSQL_TOOLS_H
 
-#include <QString>
+#include <QtCore/qglobal.h>
 
 namespace DbObjects
 {
 
-namespace Common
+namespace Mysql
 {
 
-/*!
- * \class DbObject
- * \headerfile DbObject.h <common/DbObject.h>
- * \brief Defines a base class for all database objects
- */
-class DbObject
+namespace Tools
 {
-    public:
 
-        /*!
-         * \enum Type
-         * Database object indentifiers
-         */
-        enum Type {
-            UnkObject = 0,      /*!< Unknown object */
-            SchemaObject,       /*!< Schema */
-            TableObject,        /*!< Table */
-            ViewObject,         /*!< View */
-            RoleObject,         /*!< Role */
-            TriggerObject,      /*!< Trigger */
-            LanguageObject,     /*!< Language */
-            IndexObject,        /*!< Index */
-            ProcedureObject,    /*!< Procedure */
-        };
+    enum Version {
+        MySQL_Unknown = 0,
+        MySQL_5
+    };
 
-        QString name() const;
-        void setName(const QString &ipName);
+    Tools::Version version();
 
-        /*! \see Descendants' implementation */
-        virtual DbObject::Type type() const = 0;
-        virtual bool loadData() = 0;
-        virtual void resetData() = 0;
+} // namespace Tools
 
-    protected:
-        /*! Name of db object */
-        QString mName;
-
-    protected:
-        DbObject(QString ipName = 0);
-        virtual ~DbObject();
-};
-
-} // namespace Common
+} // namespace Mysql
 
 } // namespace DbObjects
 
-#endif // DBOBJECT_H
+#endif // MYSQL_TOOLS_H
 

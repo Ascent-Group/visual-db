@@ -27,62 +27,34 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECT_H
-#define DBOBJECT_H
+#ifndef PSQLROLE_H
+#define PSQLROLE_H
 
-#include <QString>
+#include <common/DbRole.h>
+#include <QDate>
 
 namespace DbObjects
 {
 
-namespace Common
+namespace Psql
 {
 
-/*!
- * \class DbObject
- * \headerfile DbObject.h <common/DbObject.h>
- * \brief Defines a base class for all database objects
- */
-class DbObject
+class Role : public Common::DbRole
 {
     public:
+        Role(QString ipName = 0);
+        ~Role();
 
-        /*!
-         * \enum Type
-         * Database object indentifiers
-         */
-        enum Type {
-            UnkObject = 0,      /*!< Unknown object */
-            SchemaObject,       /*!< Schema */
-            TableObject,        /*!< Table */
-            ViewObject,         /*!< View */
-            RoleObject,         /*!< Role */
-            TriggerObject,      /*!< Trigger */
-            LanguageObject,     /*!< Language */
-            IndexObject,        /*!< Index */
-            ProcedureObject,    /*!< Procedure */
-        };
+    private:
+        bool loadData();
+        void resetData();
 
-        QString name() const;
-        void setName(const QString &ipName);
 
-        /*! \see Descendants' implementation */
-        virtual DbObject::Type type() const = 0;
-        virtual bool loadData() = 0;
-        virtual void resetData() = 0;
-
-    protected:
-        /*! Name of db object */
-        QString mName;
-
-    protected:
-        DbObject(QString ipName = 0);
-        virtual ~DbObject();
 };
 
-} // namespace Common
+} // namespace Psql
 
 } // namespace DbObjects
 
-#endif // DBOBJECT_H
+#endif // PSQLROLE_H
 

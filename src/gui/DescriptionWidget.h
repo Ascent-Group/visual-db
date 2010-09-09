@@ -33,12 +33,22 @@
 #include <gui/ui/ui_DescriptionWidget.h>
 #include <QWidget>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 class DbIndex;
 class DbRole;
 class DbSchema;
 class DbTable;
 class DbTrigger;
 class DbView;
+
+} // namespace Common
+
+} //namespace DbObjects
 
 /*
  * Description widget. Here the object's description is displayed.
@@ -109,22 +119,22 @@ class DescriptionWidget : public QWidget
         };
 
         enum DbSchemaCols {
-        SchemaNameCol = 0,
-        SchemaOwnerNameCol,
-        SchemaDescriptionCol,
-        DbSchemaColumnsCount
-    };
+            SchemaNameCol = 0,
+            SchemaOwnerNameCol,
+            SchemaDescriptionCol,
+            DbSchemaColumnsCount
+        };
 
     public:
         DescriptionWidget(QWidget *ipParent = 0);
         ~DescriptionWidget();
 
-        void describe(const DbSchema *ipSchema);
-        void describe(const DbTable *ipTable);
-        void describe(const DbRole *ipRole);
-        void describe(const DbView *ipView);
-        void describe(const DbIndex *ipIndex);
-        void describe(const DbTrigger *ipTrigger);
+        void describe(const DbObjects::Common::DbSchema *ipSchema);
+        void describe(const DbObjects::Common::DbTable *ipTable);
+        void describe(const DbObjects::Common::DbRole *ipRole);
+        void describe(const DbObjects::Common::DbView *ipView);
+        void describe(const DbObjects::Common::DbIndex *ipIndex);
+        void describe(const DbObjects::Common::DbTrigger *ipTrigger);
 
     private:
         Ui::DescriptionWidget ui;

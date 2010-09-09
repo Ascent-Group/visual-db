@@ -27,62 +27,64 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECT_H
-#define DBOBJECT_H
+#include <common/Database.h>
+#include <factory/Role.h>
+#include <psql/Role.h>
 
-#include <QString>
+#include <QtDebug>
 
 namespace DbObjects
 {
 
-namespace Common
+namespace Factory
 {
 
 /*!
- * \class DbObject
- * \headerfile DbObject.h <common/DbObject.h>
- * \brief Defines a base class for all database objects
+ * \todo Implement
  */
-class DbObject
+DbObjects::Common::DbRole*
+Role::createRole(const QString &ipName)
 {
-    public:
+    using namespace DbObjects::Common;
+    Database::SqlDriverType drv = Database::instance()->sqlDriver();
 
-        /*!
-         * \enum Type
-         * Database object indentifiers
-         */
-        enum Type {
-            UnkObject = 0,      /*!< Unknown object */
-            SchemaObject,       /*!< Schema */
-            TableObject,        /*!< Table */
-            ViewObject,         /*!< View */
-            RoleObject,         /*!< Role */
-            TriggerObject,      /*!< Trigger */
-            LanguageObject,     /*!< Language */
-            IndexObject,        /*!< Index */
-            ProcedureObject,    /*!< Procedure */
-        };
+    DbRole *role = 0;
 
-        QString name() const;
-        void setName(const QString &ipName);
+    switch (drv) {
+        case Database::Unknown:
+                        qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
+                        break;
+        case Database::PostgreSQL:
+                        role =  createPsqlRole(ipName);
+                        break;
+        case Database::MySQL:
+//                        role = createMysqlRole();
+                        break;
+        case Database::Oracle:
+        case Database::SQLite:
+        default:
+                        /* temporarily no support for these DBMS */
+                        break;
+    }
 
-        /*! \see Descendants' implementation */
-        virtual DbObject::Type type() const = 0;
-        virtual bool loadData() = 0;
-        virtual void resetData() = 0;
+    if (!role || !role->loadData()) {
+        delete role;
+        role = 0;
+    }
 
-    protected:
-        /*! Name of db object */
-        QString mName;
+    return role;
+}
 
-    protected:
-        DbObject(QString ipName = 0);
-        virtual ~DbObject();
-};
+/*!
+ * \todo Implement
+ */
+DbObjects::Psql::Role*
+Role::createPsqlRole(const QString &ipName)
+{
+    return new(std::nothrow) Psql::Role(ipName);
+}
 
-} // namespace Common
+} // namespace Factory
 
 } // namespace DbObjects
-
-#endif // DBOBJECT_H
 

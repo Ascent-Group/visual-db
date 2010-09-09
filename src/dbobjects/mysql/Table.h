@@ -27,62 +27,35 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECT_H
-#define DBOBJECT_H
+#ifndef MYSQLTABLE_H
+#define MYSQLTABLE_H
 
-#include <QString>
+#include <common/DbTable.h>
 
 namespace DbObjects
 {
 
-namespace Common
+namespace Mysql
 {
 
-/*!
- * \class DbObject
- * \headerfile DbObject.h <common/DbObject.h>
- * \brief Defines a base class for all database objects
- */
-class DbObject
+class Table : public Common::DbTable
 {
     public:
+        Table(QString ipSchemaName, QString ipTableName);
+        ~Table();
 
-        /*!
-         * \enum Type
-         * Database object indentifiers
-         */
-        enum Type {
-            UnkObject = 0,      /*!< Unknown object */
-            SchemaObject,       /*!< Schema */
-            TableObject,        /*!< Table */
-            ViewObject,         /*!< View */
-            RoleObject,         /*!< Role */
-            TriggerObject,      /*!< Trigger */
-            LanguageObject,     /*!< Language */
-            IndexObject,        /*!< Index */
-            ProcedureObject,    /*!< Procedure */
-        };
+        bool checkPrimaryKey(const QString &) const;
+        bool checkForeignKey(const QString &, QString *, QString *) const;
+        bool checkUnique(const QString &) const;
 
-        QString name() const;
-        void setName(const QString &ipName);
-
-        /*! \see Descendants' implementation */
-        virtual DbObject::Type type() const = 0;
-        virtual bool loadData() = 0;
-        virtual void resetData() = 0;
-
-    protected:
-        /*! Name of db object */
-        QString mName;
-
-    protected:
-        DbObject(QString ipName = 0);
-        virtual ~DbObject();
+    private:
+        bool loadData();
+        void resetData();
 };
 
-} // namespace Common
+} // namespace Mysql
 
 } // namespace DbObjects
 
-#endif // DBOBJECT_H
+#endif // MYSQLTABLE_H
 

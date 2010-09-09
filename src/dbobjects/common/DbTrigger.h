@@ -34,6 +34,12 @@
 #include <common/DbProcedure.h>
 #include <common/DbTable.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * \class DbTrigger
  * \headerfile <common/DbTrigger.h>
@@ -79,7 +85,8 @@ class DbTrigger : public DbObject
          * \see PsqlTrigger::loadData()
          * \see MysqlTrigger::loadData()
          */
-        virtual void loadData() = 0;
+        // \todo remove next line
+//        virtual void loadData() = 0;
 
         QString schemaName() const;
         QString fullName() const;
@@ -116,6 +123,10 @@ class DbTrigger : public DbObject
         quint16 mNumArgs;
 
 };
+
+} // namespace Common
+
+} // namespace DbObjects
 
 #endif // DBTRIGGER_H
 

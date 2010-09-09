@@ -27,23 +27,65 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLROLE_H
-#define PSQLROLE_H
+#include <common/Database.h>
+#include <factory/Index.h>
+#include <psql/Index.h>
 
-#include <common/DbRole.h>
-#include <QDate>
-
-class PsqlRole : public DbRole
+namespace DbObjects
 {
-    public:
-        PsqlRole(QString ipName = 0);
-        ~PsqlRole();
 
-    private:
-        void loadData();
+namespace Factory
+{
 
+/*!
+ * \todo Implement
+ */
+DbObjects::Common::DbIndex*
+Index::createIndex(const QString &ipName)
+{
+    using namespace DbObjects::Common;
 
-};
+    DbIndex *index = 0;
 
-#endif // PSQLROLE_H
+    switch (Database::instance()->sqlDriver()) {
+        case Database::PostgreSQL:
+                index = createPsqlIndex(ipName);
+                break;
+        case Database::MySQL:
+        case Database::Oracle:
+        case Database::SQLite:
+        case Database::Unknown:
+        default:
+                break;
+    }
+
+    if (!index || !index->loadData()) {
+        delete index;
+        index = 0;
+    }
+
+    return index;
+}
+
+/*!
+ *
+ */
+Psql::Index*
+Index::createPsqlIndex(const QString &iName)
+{
+    return new Psql::Index(iName);
+}
+
+/*!
+ *
+ */
+//MysqlIndex*
+//Index::createMysqlIndex(const QString &iName)
+//{
+//    return new MysqlIndex(iName);
+//}
+
+} // namespace Factory
+
+} // namespace DbObjects
 

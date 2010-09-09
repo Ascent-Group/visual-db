@@ -27,24 +27,54 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MYSQLTABLE_H
-#define MYSQLTABLE_H
+#include <psql/Tools.h>
 
-#include <common/DbTable.h>
+#include <QString>
 
-class MysqlTable : public DbTable
+namespace DbObjects
 {
-    public:
-        MysqlTable(QString ipSchemaName, QString ipTableName);
-        ~MysqlTable();
 
-        bool checkPrimaryKey(const QString &) const;
-        bool checkForeignKey(const QString &, QString *, QString *) const;
-        bool checkUnique(const QString &) const;
+namespace Psql
+{
 
-    private:
-        void loadData();
-};
+namespace Tools
+{
 
-#endif // MYSQLTABLE_H
+/*!
+ * \todo Implement
+ */
+Tools::Version
+version()
+{
+    QString qstr("SELECT version();");
+    return PostgreSQL_Unknown;
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+rolesList(QStringList &ipList)
+{
+//    QString qstr = QString("SELECT "
+//            "r.rolname as name, "
+//            "r.rolsuper as super, "
+//            "r.rolinherit as inherit, "
+//            "r.rolcreaterole as createrole, "
+//            "r.rolcreatedb as createdb, "
+//            "r.rolcatupdate as catupdate, "
+//            "r.rolcanlogin as canlogin, "
+//            "r.rolconnlimit as connlimit, "
+//            "r.rolvaliduntil as validuntil, "
+//            "r.oid as id "
+//            "FROM "
+//            "pg_catalog.pg_roles r;");
+    return -1;
+}
+
+} // namespace Tools
+
+} // namespace Psql
+
+} // namespace DbObjects
 

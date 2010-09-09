@@ -28,7 +28,7 @@
  */
 
 #include <common/DbSchema.h>
-#include <psql/PsqlTrigger.h>
+#include <psql/Trigger.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -37,10 +37,16 @@
 
 #include <QtDebug>
 
+namespace DbObjects
+{
+
+namespace Psql
+{
+
 /*
  * Ctor
  */
-PsqlTrigger::PsqlTrigger(QString ipSchemaName, QString ipName)
+Trigger::Trigger(QString ipSchemaName, QString ipName)
     : DbTrigger(ipSchemaName, ipName)
 {
 
@@ -49,7 +55,7 @@ PsqlTrigger::PsqlTrigger(QString ipSchemaName, QString ipName)
 /*
  * Dtor
  */
-PsqlTrigger::~PsqlTrigger()
+Trigger::~Trigger()
 {
 
 }
@@ -57,8 +63,8 @@ PsqlTrigger::~PsqlTrigger()
 /*
  * Loads trigger definition
  */
-void
-PsqlTrigger::loadData()
+bool
+Trigger::loadData()
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -102,99 +108,115 @@ PsqlTrigger::loadData()
             .arg(mName).arg(schemaName());
 
 #ifdef DEBUG_QUERY
-    qDebug() << "PsqlTrigger::loadData> " << qstr;
+    qDebug() << "Trigger::loadData> " << qstr;
 #endif
 
     // if query execution failed
     if (!query.exec(qstr)) {
         qDebug() << query.lastError().text();
-        return;
+        return false;
     }
 
-    // if data was found
-    if (query.first()) {
-        // table
-        qint32 colId = query.record().indexOf("schema");
-        Q_ASSERT(colId > 0);
-        QString schemaName = query.value(colId).toString();
+    // if data was not found
+    if (!query.first()) {
+        return false;
+    }
 
-        colId = query.record().indexOf("table");
-        Q_ASSERT(colId > 0);
-        QString tableName = query.value(colId).toString();
+    // table
+    qint32 colId = query.record().indexOf("schema");
+    Q_ASSERT(colId > 0);
+    QString schemaName = query.value(colId).toString();
 
-        DbTable *table = Database::instance()->findSchema(schemaName)->findTable(tableName);
+    colId = query.record().indexOf("table");
+    Q_ASSERT(colId > 0);
+    QString tableName = query.value(colId).toString();
 
-        setTable(table);
+    Common::DbTable *table = Common::Database::instance()->findSchema(schemaName)->findTable(tableName);
 
-        // proc
-        colId = query.record().indexOf("proc_schema");
-        Q_ASSERT(colId > 0);
-        QString procSchemaName = query.value(colId).toString();
+    setTable(table);
 
-        colId = query.record().indexOf("proc");
-        Q_ASSERT(colId > 0);
-        QString procName = query.value(colId).toString();
+    // proc
+    colId = query.record().indexOf("proc_schema");
+    Q_ASSERT(colId > 0);
+    QString procSchemaName = query.value(colId).toString();
 
-        DbProcedure *proc = Database::instance()->findSchema(procSchemaName)->findProcedure(procName);
+    colId = query.record().indexOf("proc");
+    Q_ASSERT(colId > 0);
+    QString procName = query.value(colId).toString();
 
-        setProcedure(proc);
+    Common::DbProcedure *proc = Common::Database::instance()->findSchema(procSchemaName)->findProcedure(procName);
 
-        // enabled
-        colId = query.record().indexOf("enabled");
-        Q_ASSERT(colId > 0);
-        mEnabled = query.value(colId).toChar();
+    setProcedure(proc);
 
-        // isconstraint
-        colId = query.record().indexOf("isconstraint");
-        Q_ASSERT(colId > 0);
-        mIsConstraint = query.value(colId).toBool();
+    // enabled
+    colId = query.record().indexOf("enabled");
+    Q_ASSERT(colId > 0);
+    mEnabled = query.value(colId).toChar();
 
-        // constrname
-        colId = query.record().indexOf("constrname");
-        Q_ASSERT(colId > 0);
-        mConstraintName = query.value(colId).toString();
+    // isconstraint
+    colId = query.record().indexOf("isconstraint");
+    Q_ASSERT(colId > 0);
+    mIsConstraint = query.value(colId).toBool();
 
-        // ref table
-        colId = query.record().indexOf("ref_schema");
-        Q_ASSERT(colId > 0);
-        QString refSchemaName = query.value(colId).toString();
+    // constrname
+    colId = query.record().indexOf("constrname");
+    Q_ASSERT(colId > 0);
+    mConstraintName = query.value(colId).toString();
 
-        colId = query.record().indexOf("ref_table");
-        Q_ASSERT(colId > 0);
-        QString refTableName = query.value(colId).toString();
+    // ref table
+    colId = query.record().indexOf("ref_schema");
+    Q_ASSERT(colId > 0);
+    QString refSchemaName = query.value(colId).toString();
 
-        DbTable *refTable = Database::instance()->findSchema(refSchemaName)->findTable(refTableName);
+    colId = query.record().indexOf("ref_table");
+    Q_ASSERT(colId > 0);
+    QString refTableName = query.value(colId).toString();
 
-        setReferencedTable(refTable);
+    Common::DbTable *refTable = Common::Database::instance()->findSchema(refSchemaName)->findTable(refTableName);
 
-        // deferrable
-        colId = query.record().indexOf("deferrable");
-        Q_ASSERT(colId > 0);
-        mIsDeferrable = query.value(colId).toBool();
+    setReferencedTable(refTable);
 
-        // initdeferred
-        colId = query.record().indexOf("initdeferred");
-        Q_ASSERT(colId > 0);
-        mIsInitiallyDeferred = query.value(colId).toBool();
+    // deferrable
+    colId = query.record().indexOf("deferrable");
+    Q_ASSERT(colId > 0);
+    mIsDeferrable = query.value(colId).toBool();
 
-        // nargs
-        colId = query.record().indexOf("nargs");
-        Q_ASSERT(colId > 0);
-        mNumArgs = query.value(colId).toInt();
+    // initdeferred
+    colId = query.record().indexOf("initdeferred");
+    Q_ASSERT(colId > 0);
+    mIsInitiallyDeferred = query.value(colId).toBool();
+
+    // nargs
+    colId = query.record().indexOf("nargs");
+    Q_ASSERT(colId > 0);
+    mNumArgs = query.value(colId).toInt();
 
 #if DEBUG_TRACE
-       qDebug() << "PsqlTrigger::loadData> name = " << mName;
-       qDebug() << "PsqlTrigger::loadData> table = " << mTable->name();
-       qDebug() << "PsqlTrigger::loadData> proc = " << mProcedure->name();
-       qDebug() << "PsqlTrigger::loadData> enabled = " << mEnabled;
-       qDebug() << "PsqlTrigger::loadData> isConstraint = " << mIsConstraint;
-       qDebug() << "PsqlTrigger::loadData> constraintName = " << mConstraintName;
-       qDebug() << "PsqlTrigger::loadData> ref_table = " << mReferencedTable->name();
-       qDebug() << "PsqlTrigger::loadData> isDeferrable = " << mIsDeferrable;
-       qDebug() << "PsqlTrigger::loadData> isInitiallyDeferred = " << mIsInitiallyDeferred;
-       qDebug() << "PsqlTrigger::loadData> nargs = " << mNumArgs;
+    qDebug() << "Psql::Trigger::loadData> name = " << mName;
+    qDebug() << "Psql::Trigger::loadData> table = " << mTable->name();
+    qDebug() << "Psql::Trigger::loadData> proc = " << mProcedure->name();
+    qDebug() << "Psql::Trigger::loadData> enabled = " << mEnabled;
+    qDebug() << "Psql::Trigger::loadData> isConstraint = " << mIsConstraint;
+    qDebug() << "Psql::Trigger::loadData> constraintName = " << mConstraintName;
+    qDebug() << "Psql::Trigger::loadData> ref_table = " << mReferencedTable->name();
+    qDebug() << "Psql::Trigger::loadData> isDeferrable = " << mIsDeferrable;
+    qDebug() << "Psql::Trigger::loadData> isInitiallyDeferred = " << mIsInitiallyDeferred;
+    qDebug() << "Psql::Trigger::loadData> nargs = " << mNumArgs;
 #endif
 
-    }
+    return true;
 }
+
+/*!
+ * \todo Implement
+ */
+void
+Trigger::resetData()
+{
+
+}
+
+} // namespace Psql
+
+} // namespace DbObjects
 

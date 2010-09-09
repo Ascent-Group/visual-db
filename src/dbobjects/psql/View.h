@@ -27,62 +27,30 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECT_H
-#define DBOBJECT_H
+#ifndef PSQLVIEW_H
+#define PSQLVIEW_H
 
-#include <QString>
+#include <common/DbView.h>
 
 namespace DbObjects
 {
 
-namespace Common
+namespace Psql
 {
 
-/*!
- * \class DbObject
- * \headerfile DbObject.h <common/DbObject.h>
- * \brief Defines a base class for all database objects
- */
-class DbObject
+class View : public Common::DbView
 {
     public:
+        View(QString ipSchema, QString ipName);
+        ~View();
 
-        /*!
-         * \enum Type
-         * Database object indentifiers
-         */
-        enum Type {
-            UnkObject = 0,      /*!< Unknown object */
-            SchemaObject,       /*!< Schema */
-            TableObject,        /*!< Table */
-            ViewObject,         /*!< View */
-            RoleObject,         /*!< Role */
-            TriggerObject,      /*!< Trigger */
-            LanguageObject,     /*!< Language */
-            IndexObject,        /*!< Index */
-            ProcedureObject,    /*!< Procedure */
-        };
-
-        QString name() const;
-        void setName(const QString &ipName);
-
-        /*! \see Descendants' implementation */
-        virtual DbObject::Type type() const = 0;
-        virtual bool loadData() = 0;
-        virtual void resetData() = 0;
-
-    protected:
-        /*! Name of db object */
-        QString mName;
-
-    protected:
-        DbObject(QString ipName = 0);
-        virtual ~DbObject();
+        bool loadData();
+        void resetData();
 };
 
-} // namespace Common
+} // namespace Psql
 
 } // namespace DbObjects
 
-#endif // DBOBJECT_H
+#endif // PSQLVIEW_H
 

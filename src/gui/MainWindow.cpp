@@ -423,7 +423,7 @@ MainWindow::closeEvent(QCloseEvent *ipEvent)
         // get singleton instance and cleanup
         Database *dbInst = Database::instance();
 
-        dbInst->cleanup();
+        dbInst->resetData();
 
         DatabaseManager dbMngr;
         dbMngr.flush();
@@ -788,7 +788,7 @@ void
 MainWindow::reloadData()
 {
     ui.mSceneWidget->cleanTableSchemeScene();
-    Database::instance()->cleanup();
+    Database::instance()->resetData();
     ui.mTree->refresh();
 }
 

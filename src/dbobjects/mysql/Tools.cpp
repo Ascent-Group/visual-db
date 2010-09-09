@@ -27,62 +27,32 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECT_H
-#define DBOBJECT_H
+#include <mysql/Tools.h>
 
 #include <QString>
 
 namespace DbObjects
 {
 
-namespace Common
+namespace Mysql
+{
+
+namespace Tools
 {
 
 /*!
- * \class DbObject
- * \headerfile DbObject.h <common/DbObject.h>
- * \brief Defines a base class for all database objects
+ * \todo Implement
  */
-class DbObject
+Tools::Version
+version()
 {
-    public:
+    QString qstr("SELECT version();");
+    return Tools::MySQL_Unknown;
+}
 
-        /*!
-         * \enum Type
-         * Database object indentifiers
-         */
-        enum Type {
-            UnkObject = 0,      /*!< Unknown object */
-            SchemaObject,       /*!< Schema */
-            TableObject,        /*!< Table */
-            ViewObject,         /*!< View */
-            RoleObject,         /*!< Role */
-            TriggerObject,      /*!< Trigger */
-            LanguageObject,     /*!< Language */
-            IndexObject,        /*!< Index */
-            ProcedureObject,    /*!< Procedure */
-        };
+} // namespace Tools
 
-        QString name() const;
-        void setName(const QString &ipName);
-
-        /*! \see Descendants' implementation */
-        virtual DbObject::Type type() const = 0;
-        virtual bool loadData() = 0;
-        virtual void resetData() = 0;
-
-    protected:
-        /*! Name of db object */
-        QString mName;
-
-    protected:
-        DbObject(QString ipName = 0);
-        virtual ~DbObject();
-};
-
-} // namespace Common
+} // namespace Mysql
 
 } // namespace DbObjects
-
-#endif // DBOBJECT_H
 

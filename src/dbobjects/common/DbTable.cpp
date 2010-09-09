@@ -34,6 +34,12 @@
 
 #include <QtDebug>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * Constructor
  *
@@ -354,4 +360,8 @@ DbTable::type() const
 {
     return DbObject::TableObject;
 }
+
+} // namespace Common
+
+} // namespace DbObjects
 

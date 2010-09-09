@@ -27,19 +27,31 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLVIEW_H
-#define PSQLVIEW_H
+#ifndef PSQLINDEX_H
+#define PSQLINDEX_H
 
-#include <common/DbView.h>
+#include <common/DbIndex.h>
 
-class PsqlView : public DbView
+namespace DbObjects
+{
+
+namespace Psql
+{
+
+class Index : public Common::DbIndex
 {
     public:
-        PsqlView(QString ipSchema, QString ipName);
-        ~PsqlView();
+        Index(QString ipName);
+        ~Index();
 
-        void loadData();
+    private:
+        bool loadData();
+        void resetData();
 };
 
-#endif // PSQLVIEW_H
+} // namespace Psql
+
+} // namespace DbObjects
+
+#endif // PSQLINDEX_H
 

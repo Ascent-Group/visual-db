@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <psql/PsqlLanguage.h>
+#include <psql/Language.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -36,10 +36,16 @@
 
 #include <QtDebug>
 
+namespace DbObjects
+{
+
+namespace Psql
+{
+
 /*
  * Ctor
  */
-PsqlLanguage::PsqlLanguage(QString ipName)
+Language::Language(QString ipName)
     :DbLanguage(ipName)
 {
 
@@ -48,7 +54,7 @@ PsqlLanguage::PsqlLanguage(QString ipName)
 /*
  * Dtor
  */
-PsqlLanguage::~PsqlLanguage()
+Language::~Language()
 {
 
 }
@@ -56,8 +62,8 @@ PsqlLanguage::~PsqlLanguage()
 /*
  * Loads language definition
  */
-void
-PsqlLanguage::loadData()
+bool
+Language::loadData()
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -78,21 +84,21 @@ PsqlLanguage::loadData()
             .arg(mName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "PsqlLanguage::loadData> " << qstr;
+    qDebug() << "Language::loadData> " << qstr;
 #endif
 
     // if query execution failed
     if (!query.exec(qstr)) {
         qDebug() << query.lastError().text();
 
-        return;
+        return false;
     }
 
     // if query returned nothing
     if (!query.first()) {
-        qDebug() << "PsqlLanguage::loadData> Language not found.";
+        qDebug() << "Language::loadData> Language not found.";
 
-        return;
+        return false;
     }
 
     qint32 colId;
@@ -108,9 +114,23 @@ PsqlLanguage::loadData()
     mIsTrusted = query.value(colId).toBool();
 
 #if DEBUG_TRACE
-    qDebug() << "PsqlLanguage::loadData> name = " << mName;
-    qDebug() << "PsqlLanguage::loadData> trusted = " << mIsTrusted;
+    qDebug() << "Language::loadData> name = " << mName;
+    qDebug() << "Language::loadData> trusted = " << mIsTrusted;
 #endif
 
+    return true;
 }
+
+/*!
+ * \todo Implement
+ */
+void
+Language::resetData()
+{
+
+}
+
+} // namespace Psql
+
+} // namespace DbObjects
 

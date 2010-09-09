@@ -35,6 +35,12 @@
 #include <common/Database.h>
 #include <common/DbObject.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 class DbProcedure;
 class DbTable;
 class DbTrigger;
@@ -87,6 +93,9 @@ class DbSchema : public DbObject
         QString description() const;
         void setDescription(const QString & ipDescription);
 
+        virtual bool loadData();
+        virtual void resetData();
+
     private:
         DbRole *mOwner;
         QString mDescription;
@@ -98,6 +107,10 @@ class DbSchema : public DbObject
     private:
         DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
 };
+
+} // namespace Common
+
+} // namespace DbObjects
 
 #endif // DBSCHEMA_H
 

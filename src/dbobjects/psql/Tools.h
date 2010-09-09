@@ -27,20 +27,34 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLINDEX_H
-#define PSQLINDEX_H
+#ifndef PSQL_TOOLS_H
+#define PSQL_TOOLS_H
 
-#include <common/DbIndex.h>
+#include <QStringList>
+#include <QtCore/qglobal.h>
 
-class PsqlIndex : public DbIndex
+namespace DbObjects
 {
-    public:
-        PsqlIndex(QString ipName);
-        ~PsqlIndex();
 
-    private:
-        void loadData();
-};
+namespace Psql
+{
 
-#endif // PSQLINDEX_H
+namespace Tools
+{
+
+    enum Version {
+        PostgreSQL_Unknown = 0,
+        PostgreSQL_8
+    };
+
+    Tools::Version version();
+    quint32 rolesList(QStringList &ipList);
+
+} // namespace Tools
+
+} // namespace Psql
+
+} // namespace DbObjects
+
+#endif // PSQL_TOOLS_H
 

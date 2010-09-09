@@ -33,15 +33,21 @@
 #include <QSqlRecord>
 #include <QVariant>
 #include <common/DbSchema.h>
-#include <mysql/MysqlTable.h>
-#include <psql/PsqlLanguage.h>
-#include <psql/PsqlProcedure.h>
-#include <psql/PsqlRole.h>
-#include <psql/PsqlTable.h>
-#include <psql/PsqlTrigger.h>
-#include <psql/PsqlView.h>
+#include <mysql/Table.h>
+#include <psql/Language.h>
+#include <psql/Procedure.h>
+#include <psql/Role.h>
+#include <psql/Table.h>
+#include <psql/Trigger.h>
+#include <psql/View.h>
 
 #include <QtDebug>
+
+namespace DbObjects
+{
+
+namespace Common
+{
 
 /*!
  * Constructor
@@ -60,7 +66,7 @@ DbSchema::DbSchema(QString ipName, DbRole *ipOwner)
  */
 DbSchema::~DbSchema()
 {
-    cleanup();
+    resetData();
 }
 
 /*!
@@ -391,7 +397,7 @@ DbSchema::readTables()
             case Database::Unknown:
                 break;
             case Database::PostgreSQL:
-                table = new PsqlTable(mName, tableName);
+                table = new Psql::Table(mName, tableName);
 
                 break;
             case Database::MySQL:
@@ -486,7 +492,7 @@ DbSchema::readViews()
                             colId = query.record().indexOf("name");
 
 
-                            view = new PsqlView(mName, query.value(colId).toString());
+                            view = new Psql::View(mName, query.value(colId).toString());
 
 
                             break;
@@ -615,7 +621,7 @@ DbSchema::readProcedures()
             case Database::PostgreSQL:
                             colId = query.record().indexOf("name");
 
-                            proc = new PsqlProcedure(mName, query.value(colId).toString());
+                            proc = new Psql::Procedure(mName, query.value(colId).toString());
 
                             break;
             case Database::MySQL:
@@ -764,7 +770,7 @@ DbSchema::readTriggers()
                             colId = query.record().indexOf(/*"name"*/"constrname");
                             Q_ASSERT(colId > 0);
 
-                            trig = new PsqlTrigger(mName, query.value(colId).toString());
+                            trig = new Psql::Trigger(mName, query.value(colId).toString());
 
 
                             break;
@@ -889,13 +895,29 @@ DbSchema::readTriggers()
 }
 
 /*!
+ * \todo Implement
+ *
+ * \return true - Even if nothing has been read
+ */
+bool
+DbSchema::loadData()
+{
+    readTables();
+    readViews();
+    readProcedures();
+    readTriggers();
+
+    return true;
+}
+
+/*!
  * Cleanup
  */
 void
-DbSchema::cleanup()
+DbSchema::resetData()
 {
 #ifdef DEBUG_QUERY
-    qDebug() << "DbSchema::cleanup> cleaning for " << mName;
+    qDebug() << "DbSchema::resetData> cleaning for " << mName;
 #endif
 
     // clear lists
@@ -1032,4 +1054,8 @@ DbSchema::setDescription(const QString & ipDescription)
 {
     mDescription = ipDescription;
 }
+
+} // namespace Common
+
+} // namespace DbObjects
 

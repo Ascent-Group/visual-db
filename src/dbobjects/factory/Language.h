@@ -27,62 +27,44 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECT_H
-#define DBOBJECT_H
+#ifndef FACTORY_LANGUAGE_H
+#define FACTORY_LANGUAGE_H
 
 #include <QString>
+#include <QtCore/qglobal.h>
 
 namespace DbObjects
 {
 
 namespace Common
 {
+class DbLanguage;
+}
 
-/*!
- * \class DbObject
- * \headerfile DbObject.h <common/DbObject.h>
- * \brief Defines a base class for all database objects
- */
-class DbObject
+namespace Psql
+{
+class Language;
+}
+
+namespace Factory
+{
+
+class Language
 {
     public:
-
-        /*!
-         * \enum Type
-         * Database object indentifiers
-         */
-        enum Type {
-            UnkObject = 0,      /*!< Unknown object */
-            SchemaObject,       /*!< Schema */
-            TableObject,        /*!< Table */
-            ViewObject,         /*!< View */
-            RoleObject,         /*!< Role */
-            TriggerObject,      /*!< Trigger */
-            LanguageObject,     /*!< Language */
-            IndexObject,        /*!< Index */
-            ProcedureObject,    /*!< Procedure */
-        };
-
-        QString name() const;
-        void setName(const QString &ipName);
-
-        /*! \see Descendants' implementation */
-        virtual DbObject::Type type() const = 0;
-        virtual bool loadData() = 0;
-        virtual void resetData() = 0;
+        static Common::DbLanguage* createLanguage(const QString &ipName);
 
     protected:
-        /*! Name of db object */
-        QString mName;
+        static Psql::Language* createPsqlLanguage(const QString &ipName);
 
-    protected:
-        DbObject(QString ipName = 0);
-        virtual ~DbObject();
+    private:
+        Q_DISABLE_COPY(Language);
+
 };
 
-} // namespace Common
+} // namespace Factory
 
 } // namespace DbObjects
 
-#endif // DBOBJECT_H
+#endif // FACTORY_LANGUAGE_H
 

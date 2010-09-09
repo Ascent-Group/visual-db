@@ -29,6 +29,12 @@
 
 #include <common/DbObject.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * Ctor
  */
@@ -65,4 +71,8 @@ DbObject::setName(const QString &ipName)
 {
     mName = ipName;
 }
+
+} // namespace Common
+
+} // namespace DbObjects
 

@@ -63,7 +63,7 @@ DescriptionWidget::~DescriptionWidget()
  * Generates and represents schema's description
  */
 void
-DescriptionWidget::describe(const DbSchema *ipSchema)
+DescriptionWidget::describe(const DbObjects::Common::DbSchema *ipSchema)
 {
     if (0 == ipSchema) {
         QMessageBox::critical(
@@ -120,7 +120,7 @@ DescriptionWidget::describe(const DbSchema *ipSchema)
  * Generates and represents table's description
  */
 void
-DescriptionWidget::describe(const DbTable *ipTable)
+DescriptionWidget::describe(const DbObjects::Common::DbTable *ipTable)
 {
     if ( 0 == ipTable ) {
         QMessageBox::critical(
@@ -255,7 +255,7 @@ DescriptionWidget::describe(const DbTable *ipTable)
  * Generates and represents role's description
  */
 void
-DescriptionWidget::describe(const DbRole *ipRole)
+DescriptionWidget::describe(const DbObjects::Common::DbRole *ipRole)
 {
     if ( 0 == ipRole ) {
         QMessageBox::critical(
@@ -387,7 +387,7 @@ DescriptionWidget::describe(const DbRole *ipRole)
  * Generates and represents view's description
  */
 void
-DescriptionWidget::describe(const DbView *ipView)
+DescriptionWidget::describe(const DbObjects::Common::DbView *ipView)
 {
     if ( 0 == ipView ) {
         QMessageBox::critical(
@@ -449,7 +449,7 @@ DescriptionWidget::describe(const DbView *ipView)
  * Generates and represents index's description
  */
 void
-DescriptionWidget::describe(const DbIndex *ipIndex)
+DescriptionWidget::describe(const DbObjects::Common::DbIndex *ipIndex)
 {
     if ( 0 == ipIndex ) {
         QMessageBox::critical(
@@ -493,6 +493,7 @@ DescriptionWidget::describe(const DbIndex *ipIndex)
     bool ready = ipIndex->isReady();
 
     // find table object
+    using namespace DbObjects::Common;
     DbSchema *schema = Database::instance()->findSchema(schemaName);
     DbTable *table = 0;
 
@@ -605,7 +606,7 @@ DescriptionWidget::describe(const DbIndex *ipIndex)
  * Generates and represents trig's description
  */
 void
-DescriptionWidget::describe(const DbTrigger *ipTrigger)
+DescriptionWidget::describe(const DbObjects::Common::DbTrigger *ipTrigger)
 {
     if ( 0 == ipTrigger ) {
         QMessageBox::critical(

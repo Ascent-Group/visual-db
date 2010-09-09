@@ -27,19 +27,56 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLTRIGGER_H
-#define PSQLTRIGGER_H
+#include <common/Database.h>
+#include <factory/Language.h>
+#include <psql/Language.h>
 
-#include <common/DbTrigger.h>
-
-class PsqlTrigger : public DbTrigger
+namespace DbObjects
 {
-    public:
-        PsqlTrigger(QString ipSchemaName, QString ipName);
-        ~PsqlTrigger();
 
-        void loadData();
-};
+namespace Factory
+{
 
-#endif // PSQLTRIGGER_H
+/*!
+ * \todo Implement
+ */
+DbObjects::Common::DbLanguage*
+Language::createLanguage(const QString &ipName)
+{
+    using namespace DbObjects::Common;
+
+    DbLanguage *lang = 0;
+
+    switch (Database::instance()->sqlDriver()) {
+        case Database::PostgreSQL:
+                lang = createPsqlLanguage(ipName);
+                break;
+        case Database::MySQL:
+        case Database::Oracle:
+        case Database::SQLite:
+        case Database::Unknown:
+        default:
+                break;
+    }
+
+    if (!lang || !lang->loadData()) {
+        delete lang;
+        lang = 0;
+    }
+
+    return lang;
+}
+
+/*!
+ * \todo Implement
+ */
+Psql::Language*
+Language::createPsqlLanguage(const QString &ipName)
+{
+    return new(std::nothrow) Psql::Language(ipName);
+}
+
+} // namespace Factory
+
+} // namespace DbObjects
 

@@ -161,6 +161,7 @@ createConnection(DbParameters &ipConnection)
     }
 
     // initialize Database for further use and get schemas
+    using namespace DbObjects::Common;
     Database *dbInst = Database::instance();
     dbInst->setSqlDriver(ipConnection.dbDriver());
 

@@ -33,6 +33,12 @@
 
 #include <QtDebug>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * Ctor
  */
@@ -327,4 +333,8 @@ DbIndex::type() const
 {
     return DbObject::IndexObject;
 }
+
+} // namespace Common
+
+} // namespace DbObjects
 

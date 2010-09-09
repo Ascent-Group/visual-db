@@ -32,6 +32,12 @@
 
 #include <common/DbObject.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * \class DbLanguage
  * \brief Defines PL/SQL language
@@ -49,7 +55,8 @@ class DbLanguage : public DbObject
          * \see PsqlLanguage::loadData()
          * \see MysqlLanguage::loadData()
          */
-        virtual void loadData() = 0;
+        // \todo remove next line
+//        virtual void loadData() = 0;
 
         virtual DbObject::Type type() const;
 
@@ -63,6 +70,10 @@ class DbLanguage : public DbObject
     protected:
         DbLanguage(QString ipName);
 };
+
+} // namespace Common
+
+} // namespace DbObjects
 
 #endif // DBLANGUAGE_H
 

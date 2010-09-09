@@ -33,6 +33,12 @@
 #include <QVector>
 #include <common/DbTable.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 class DbIndex;
 class DbLanguage;
 class DbRole;
@@ -101,9 +107,8 @@ class Database
         void readIndices();
         void readLanguages();
 
-        void cleanup();
-
-
+        virtual bool loadData();
+        virtual void resetData();
 
     protected:
         Database();
@@ -141,6 +146,10 @@ class DatabaseManager
         void flush();
 
 };
+
+} // namespace Common
+
+} // namespace DbObjects
 
 #endif // DATABASE_H
 

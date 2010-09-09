@@ -33,6 +33,12 @@
 #include <QDate>
 #include <common/DbObject.h>
 
+namespace DbObjects
+{
+
+namespace Common
+{
+
 /*!
  * \class DbRole
  * \brief Defines database role object
@@ -74,7 +80,8 @@ class DbRole : public DbObject
          * \see PsqlRole::loadData()
          * \see MysqlRole::loadData()
          */
-        virtual void loadData() = 0;
+        // \todo remove next line
+//        virtual void loadData() = 0;
         // lyuts: for future use
         // virtual void save() = 0;
 
@@ -104,6 +111,10 @@ class DbRole : public DbObject
     protected:
         DbRole(QString ipName = 0);
 };
+
+} // namespace Common
+
+} // namespace DbObjects
 
 #endif // DBROLE_H
 

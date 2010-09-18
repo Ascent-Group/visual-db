@@ -61,21 +61,83 @@ version()
 }
 
 /*!
+ * \brief Read indices that are in available in the database
+ *
+ * \param[out] ipList - The list that will contain indices' names
+ *
+ * \return The number of indices read by the query
+ */
+quint32
+indicesList(QStringList &ipList)
+{
+    QString qstr = QString("SELECT "
+                "index.relname as name "
+            "FROM "
+                "pg_catalog.pg_index pgi, "
+                "pg_catalog.pg_class index, "
+                "pg_catalog.pg_namespace pgn, "
+                "pg_catalog.pg_class rel "
+            "WHERE "
+                "pgi.indrelid = rel.oid "
+                "AND pgn.oid = rel.relnamespace "
+                //"AND index.relname NOT LIKE 'pg_%' "
+                "AND pgi.indexrelid = index.oid;");
+
+    return objectNamesList(qstr, ipList);
+}
+
+/*!
  * \todo Implement
+ */
+quint32
+languagesList(QStringList &ipList)
+{
+    QString qstr("SELECT "
+                    "l.lanname AS name "
+                "FROM "
+                    "pg_catalog.pg_language l;");
+
+    return objectNamesList(qstr, ipList);
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+proceduresList(QStringList &ipList)
+{
+
+}
+
+/*!
+ * \brief Read roles that are in available in the database
+ *
+ * \param[out] ipList - The list that will contain roles' names
+ *
+ * \return The number of roles read by the query
  */
 quint32
 rolesList(QStringList &ipList)
 {
+    QString qstr = QString("SELECT "
+                "r.rolname as name "
+            "FROM "
+                "pg_catalog.pg_roles r;");
+
+    return objectNamesList(qstr, ipList);
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+objectNamesList(const QString &ipQstr, QStringList &ipList)
+{
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
 
-    QString qstr = QString("SELECT "
-            "r.rolname as name "
-            "FROM "
-            "pg_catalog.pg_roles r;");
-
     // if query failed
-    if (!query.exec(qstr)) {
+    if (!query.exec(ipQstr)) {
         qDebug() << query.lastError().text();
         return 0;
     }
@@ -94,6 +156,33 @@ rolesList(QStringList &ipList)
     } while (query.next());
 
     return count;
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+tablesList(QStringList &ipList)
+{
+
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+triggersList(QStringList &ipList)
+{
+
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+viewsList(QStringList &ipList)
+{
+
 }
 
 } // namespace Tools

@@ -29,7 +29,14 @@
 
 #include <mysql/Tools.h>
 
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
 #include <QString>
+#include <QVariant>
+
+#include <QtDebug>
 
 namespace DbObjects
 {
@@ -48,6 +55,116 @@ version()
 {
     QString qstr("SELECT version();");
     return Tools::MySQL_Unknown;
+}
+
+/*!
+ * \todo Implement
+ * \brief Read indices that are in available in the database
+ *
+ * \param[out] ipList - The list that will contain indices' names
+ *
+ * \return The number of indices read by the query
+ */
+quint32
+indicesList(QStringList &ipList)
+{
+    QString qstr = QString("");
+
+    return objectNamesList(qstr, ipList);
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+languagesList(QStringList &ipList)
+{
+    QString qstr("");
+
+    return objectNamesList(qstr, ipList);
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+proceduresList(QStringList &ipList)
+{
+
+}
+
+/*!
+ * \todo Implement
+ * \brief Read roles that are in available in the database
+ *
+ * \param[out] ipList - The list that will contain roles' names
+ *
+ * \return The number of roles read by the query
+ */
+quint32
+rolesList(QStringList &ipList)
+{
+    QString qstr = QString("");
+
+    return objectNamesList(qstr, ipList);
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+objectNamesList(const QString &ipQstr, QStringList &ipList)
+{
+    QSqlDatabase db = QSqlDatabase::database("mainConnect");
+    QSqlQuery query(db);
+
+    // if query failed
+    if (!query.exec(ipQstr)) {
+        qDebug() << query.lastError().text();
+        return 0;
+    }
+
+    // if query didn't retrieve a row
+    if (!query.first()) {
+        return 0;
+    }
+
+    quint32 count = 0;
+    qint32 colId = query.record().indexOf("name");
+
+    do {
+        ipList.append(query.value(colId).toString());
+        ++count;
+    } while (query.next());
+
+    return count;
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+tablesList(QStringList &ipList)
+{
+
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+triggersList(QStringList &ipList)
+{
+
+}
+
+/*!
+ * \todo Implement
+ */
+quint32
+viewsList(QStringList &ipList)
+{
+
 }
 
 } // namespace Tools

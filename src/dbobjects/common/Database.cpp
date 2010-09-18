@@ -34,6 +34,7 @@
 #include <factory/Index.h>
 #include <factory/Language.h>
 #include <factory/Role.h>
+#include <mysql/Tools.h>
 #include <psql/Role.h>
 #include <psql/Tools.h>
 // \ todo remove next include
@@ -467,15 +468,19 @@ Database::readSchemas()
     // clear schemas list
     mSchemas.clear();
 
-    // choose a query depending on sql driver
+    // read schemas names depending on sql driver
     switch (mSqlDriver) {
         case Database::Unknown:
             qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
         case Database::PostgreSQL:
-            qstr = QString("SELECT nspname as name, roles.rolname as ownername, description "
-                    "FROM pg_catalog.pg_namespace pgn "
-                    "left join pg_roles roles on roles.oid = pgn.nspowner "
-                    "left join pg_description descr on descr.objoid = pgn.oid "
+            qstr = QString("SELECT "
+                                "nspname as name, "
+                                "roles.rolname as ownername, "
+                                "description "
+                           "FROM "
+                                "pg_catalog.pg_namespace pgn "
+                                "left join pg_roles roles on roles.oid = pgn.nspowner "
+                                "left join pg_description descr on descr.objoid = pgn.oid "
                     ";");
                     //"WHERE nspname NOT LIKE 'pg_%';");
             break;
@@ -562,7 +567,24 @@ Database::readRoles()
     mRoles.clear();
 
     QStringList rolesList;
-    Psql::Tools::rolesList(rolesList);
+    // read names depending on sql driver
+    switch (mSqlDriver) {
+        case Database::Unknown:
+                        qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
+                        return;
+        case Database::PostgreSQL:
+                        Psql::Tools::rolesList(rolesList);
+                        break;
+        case Database::MySQL:
+                        Mysql::Tools::rolesList(rolesList);
+                        break;
+        case Database::Oracle:
+        case Database::SQLite:
+        default:
+                        /* temporarily no support for these DBMS */
+                        return;
+                        break;
+    }
 
     // for every retrieved row
     foreach (const QString &name, rolesList) {
@@ -583,44 +605,20 @@ Database::readRoles()
 void
 Database::readIndices()
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
-    QString qstr;
-
     // clear indices list
     mIndices.clear();
 
-    // choose a query depending on sql driver
+    QStringList indicesList;
+    // read names depending on sql driver
     switch (mSqlDriver) {
         case Database::Unknown:
                         qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                         return;
         case Database::PostgreSQL:
-                        qstr = QString("SELECT "
-                                            "index.relname as name, "
-                                            "pgi.indisunique as unique, "
-                                            "pgi.indisprimary as primary, "
-                                            "pgi.indisclustered as clustered, "
-                                            "pgi.indisvalid as valid, "
-                                            "pgi.indcheckxmin as xmin, "
-                                            "pgi.indisready as ready, "
-                                            "pgi.indnatts as colcount, "
-                                            "pgi.indkey as fields, "
-                                            "pgn.nspname as schema, "
-                                            "rel.relname as table "
-                                        "FROM "
-                                            "pg_catalog.pg_index pgi, "
-                                            "pg_catalog.pg_class index, "
-                                            "pg_catalog.pg_namespace pgn, "
-                                            "pg_catalog.pg_class rel "
-                                        "WHERE "
-                                            "pgi.indrelid = rel.oid "
-                                            "AND pgn.oid = rel.relnamespace "
-                                            //"AND index.relname NOT LIKE 'pg_%' "
-                                            "AND pgi.indexrelid = index.oid;");
+                        Psql::Tools::indicesList(indicesList);
                         break;
         case Database::MySQL:
-                        qstr = QString(";");
+                        Mysql::Tools::indicesList(indicesList);
                         break;
         case Database::Oracle:
         case Database::SQLite:
@@ -630,117 +628,15 @@ Database::readIndices()
                         break;
     }
 
-#ifdef DEBUG_QUERY
-    qDebug() << __PRETTY_FUNCTION__ << qstr;
-#endif
-
-    // if query failed
-    if (!query.exec(qstr)) {
-        qDebug() << __PRETTY_FUNCTION__ << query.lastError().text();
-
-        return;
-    }
-
-    // if query returned nothing
-    if (!query.first()) {
-        qDebug() << __PRETTY_FUNCTION__ << "> No indices were found.";
-
-        return;
-    }
-
     // for every retrieved row
-    do {
-        QString name = query.value(query.record().indexOf("name")).toString();
+    foreach (const QString &name, indicesList) {
         // declare new index object
         DbIndex *index = Factory::Index::createIndex(name);
-
-        qint32 colId;
-
-        // set index's attributes
-
-        /*colId= query.record().indexOf("name");
-        Q_ASSERT(colId > 0);
-        index->setName(query.value(colId).toString());*/
-
-        colId = query.record().indexOf("unique");
-        Q_ASSERT(colId > 0);
-        index->setUnique(query.value(colId).toBool());
-
-        colId = query.record().indexOf("primary");
-        Q_ASSERT(colId > 0);
-        index->setPrimary(query.value(colId).toBool());
-
-        colId = query.record().indexOf("clustered");
-        Q_ASSERT(colId > 0);
-        index->setClustered(query.value(colId).toBool());
-
-        colId = query.record().indexOf("valid");
-        Q_ASSERT(colId > 0);
-        index->setValid(query.value(colId).toBool());
-
-        colId = query.record().indexOf("xmin");
-        Q_ASSERT(colId > 0);
-        index->setChecksXMin(query.value(colId).toBool());
-
-        colId = query.record().indexOf("ready");
-        Q_ASSERT(colId > 0);
-        index->setReady(query.value(colId).toBool());
-
-        colId = query.record().indexOf("table");
-        Q_ASSERT(colId > 0);
-        QString tableName = query.value(colId).toString();
-
-        colId = query.record().indexOf("schema");
-        Q_ASSERT(colId > 0);
-        QString schemaName = query.value(colId).toString();
-
-        DbSchema *schema = Database::instance()->findSchema(schemaName);
-        DbTable *table = 0;
-
-        if (schema) {
-            table = schema->findTable(tableName);
-        }
-
-        index->setSchema(schema);
-        index->setTable(table);
-
-        index->setTableName(tableName);
-        index->setSchemaName(schemaName);
-
-        colId = query.record().indexOf("colcount");
-        Q_ASSERT(colId > 0);
-        index->setColumnsCount(query.value(colId).toInt());
-
-        // get the list of column numbers
-        colId = query.record().indexOf("fields");
-        Q_ASSERT(colId > 0);
-        QString str = query.value(colId).toString();
-
-        // populate the vector
-        foreach (const QString &section, str.split(" ")) {
-            index->addColumnNumber(section.toInt());
-        }
-
-
-        /* temporary debug output */
-#if DEBUG_TRACE
-        qDebug() << __PRETTY_FUNCTION__ << "index->name(): " << index->name();
-        qDebug() << __PRETTY_FUNCTION__ << "index->isUnique: " << index->isUnique();
-        qDebug() << __PRETTY_FUNCTION__ << "index->isPrimary: " << index->isPrimary();
-        qDebug() << __PRETTY_FUNCTION__ << "index->isClustered: " << index->isClustered();
-        qDebug() << __PRETTY_FUNCTION__ << "index->isValid: " << index->isValid();
-        qDebug() << __PRETTY_FUNCTION__ << "index->checksXMin: " << index->checksXMin();
-        qDebug() << __PRETTY_FUNCTION__ << "index->isReady: " << index->isReady();
-        qDebug() << __PRETTY_FUNCTION__ << "index->tableName: " << index->tableName();
-        qDebug() << __PRETTY_FUNCTION__ << "index->schemaName: " << index->schemaName();
-        qDebug() << __PRETTY_FUNCTION__ << "index->columnsCount: " << index->columnsCount();
-        qDebug() << __PRETTY_FUNCTION__ << "index->columnsNumbers: " << index->columnsNumbers();
-#endif
 
         // add index
         addIndex(index);
 
-    } while (query.next());
+    }
 
 }
 
@@ -750,32 +646,20 @@ Database::readIndices()
 void
 Database::readLanguages()
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
-    QString qstr;
-
     // clear languages list
     mLanguages.clear();
 
-    // choose a query depending on sql driver
+    QStringList languagesList;
+    // read names depending on sql driver
     switch (mSqlDriver) {
         case Database::Unknown:
                         qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                         return;
         case Database::PostgreSQL:
-                        qstr = QString("SELECT "
-                                            "l.lanname AS name, "
-                                            "l.lanowner AS owner, "
-                                            "l.lanispl AS ispl, "
-                                            "l.lanpltrusted AS trusted, "
-                                            "l.lanplcallfoid AS executor, "
-                                            "l.lanvalidator AS validator, "
-                                            "l.lanacl AS acl "
-                                        "FROM "
-                                            "pg_catalog.pg_language l;");
+                        Psql::Tools::languagesList(languagesList);
                         break;
         case Database::MySQL:
-                        qstr = QString(";");
+                        Mysql::Tools::languagesList(languagesList);
                         break;
         case Database::Oracle:
         case Database::SQLite:
@@ -785,53 +669,14 @@ Database::readLanguages()
                         break;
     }
 
-#ifdef DEBUG_QUERY
-    qDebug() << __PRETTY_FUNCTION__ << qstr;
-#endif
-
-    // if query failed
-    if (!query.exec(qstr)) {
-        qDebug() << __PRETTY_FUNCTION__ << query.lastError().text();
-
-        return;
-    }
-
-    // if query returned nothing
-    if (!query.first()) {
-        qDebug() << __PRETTY_FUNCTION__ << "> No languages were found.";
-
-        return;
-    }
-
     // for every retrieved row
-    do {
-        QString name = query.value(query.record().indexOf("name")).toString();
+    foreach (const QString &name, languagesList) {
         // declare new language object
         DbLanguage *lang = Factory::Language::createLanguage(name);
 
-        qint32 colId;
-
-        // set lang's attributes
-
-        /*colId= query.record().indexOf("name");
-        Q_ASSERT(colId > 0);
-        index->setName(query.value(colId).toString());*/
-
-
-        colId = query.record().indexOf("trusted");
-        Q_ASSERT(colId > 0);
-        lang->setTrusted(query.value(colId).toBool());
-
-        /* temporary debug output */
-#if DEBUG_TRACE
-        qDebug() << __PRETTY_FUNCTION__ << "lang->name() = " << lang->name();
-        qDebug() << __PRETTY_FUNCTION__ << "lang->isTrusted() =  " << lang->isTrusted();
-#endif
-
         // add language
         addLanguage(lang);
-
-    } while (query.next());
+    }
 }
 
 /*!

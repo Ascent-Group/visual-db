@@ -30,6 +30,7 @@
 #ifndef MYSQL_TOOLS_H
 #define MYSQL_TOOLS_H
 
+#include <QStringList>
 #include <QtCore/qglobal.h>
 
 namespace DbObjects
@@ -47,6 +48,16 @@ namespace Tools
     };
 
     Tools::Version version();
+
+    quint32 indicesList(QStringList &ipList);
+    quint32 languagesList(QStringList &ipList);
+    quint32 proceduresList(QStringList &ipList);
+    quint32 rolesList(QStringList &ipList);
+    quint32 tablesList(QStringList &ipList);
+    quint32 triggersList(QStringList &ipList);
+    quint32 viewsList(QStringList &ipList);
+
+    quint32 objectNamesList(const QString &ipQstr, QStringList &ipList);
 
 } // namespace Tools
 

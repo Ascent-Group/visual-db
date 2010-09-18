@@ -29,7 +29,13 @@
 
 #include <psql/Tools.h>
 
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
 #include <QString>
+#include <QVariant>
+
+#include <QtDebug>
 
 namespace DbObjects
 {
@@ -46,7 +52,11 @@ namespace Tools
 Tools::Version
 version()
 {
+    QSqlQuery query;
     QString qstr("SELECT version();");
+
+    /* \todo execute the query and detect the version */
+
     return PostgreSQL_Unknown;
 }
 
@@ -56,20 +66,34 @@ version()
 quint32
 rolesList(QStringList &ipList)
 {
-//    QString qstr = QString("SELECT "
-//            "r.rolname as name, "
-//            "r.rolsuper as super, "
-//            "r.rolinherit as inherit, "
-//            "r.rolcreaterole as createrole, "
-//            "r.rolcreatedb as createdb, "
-//            "r.rolcatupdate as catupdate, "
-//            "r.rolcanlogin as canlogin, "
-//            "r.rolconnlimit as connlimit, "
-//            "r.rolvaliduntil as validuntil, "
-//            "r.oid as id "
-//            "FROM "
-//            "pg_catalog.pg_roles r;");
-    return -1;
+    QSqlDatabase db = QSqlDatabase::database("mainConnect");
+    QSqlQuery query(db);
+
+    QString qstr = QString("SELECT "
+            "r.rolname as name "
+            "FROM "
+            "pg_catalog.pg_roles r;");
+
+    // if query failed
+    if (!query.exec(qstr)) {
+        qDebug() << query.lastError().text();
+        return 0;
+    }
+
+    // if query didn't retrieve a row
+    if (!query.first()) {
+        return 0;
+    }
+
+    quint32 count = 0;
+    qint32 colId = query.record().indexOf("name");
+
+    do {
+        ipList.append(query.value(colId).toString());
+        ++count;
+    } while (query.next());
+
+    return count;
 }
 
 } // namespace Tools

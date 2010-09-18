@@ -35,6 +35,7 @@
 #include <factory/Language.h>
 #include <factory/Role.h>
 #include <psql/Role.h>
+#include <psql/Tools.h>
 // \ todo remove next include
 #include <psql/Trigger.h>
 #include <QSqlDatabase>
@@ -557,81 +558,23 @@ Database::readSchemas()
 void
 Database::readRoles()
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
-    QString qstr;
-
     // clear roles list
     mRoles.clear();
 
-    // \todo QStringList rolesList;
-    //       Tools::rolesList(&rolesList);
-    //       // and remove SELECTs
-    //       // there should be no sql here
+    QStringList rolesList;
+    Psql::Tools::rolesList(rolesList);
 
-    // choose a query depending on sql driver
-    switch (mSqlDriver) {
-        case Database::Unknown:
-                        qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
-                        return;
-        case Database::PostgreSQL:
-                        qstr = QString("SELECT "
-                                            "r.rolname as name, "
-                                            "r.rolsuper as super, "
-                                            "r.rolinherit as inherit, "
-                                            "r.rolcreaterole as createrole, "
-                                            "r.rolcreatedb as createdb, "
-                                            "r.rolcatupdate as catupdate, "
-                                            "r.rolcanlogin as canlogin, "
-                                            "r.rolconnlimit as connlimit, "
-                                            "r.rolvaliduntil as validuntil, "
-                                            "r.oid as id "
-                                        "FROM "
-                                            "pg_catalog.pg_roles r;");
-                        break;
-        case Database::MySQL:
-                        qstr = QString(";");
-                        break;
-        case Database::Oracle:
-        case Database::SQLite:
-        default:
-                        /* temporarily no support for these DBMS */
-                        return;
-                        break;
-    }
-
-#ifdef DEBUG_QUERY
-    qDebug() << __PRETTY_FUNCTION__ << qstr;
-#endif
-
-    // if query failed
-    if (!query.exec(qstr)) {
-        qDebug() << __PRETTY_FUNCTION__ << query.lastError().text();
-
-        return;
-    }
-
-    // if query returned nothing
-    if (!query.first()) {
-        qDebug() << __PRETTY_FUNCTION__ << "> No roles were found.";
-
-        return;
-    }
-
-    qint32 colId;
     // for every retrieved row
-    do {
-        colId = query.record().indexOf("name");
-        Q_ASSERT(colId > 0);
+    foreach (const QString &name, rolesList) {
+
         // declare new role object
-        DbRole *role = Factory::Role::createRole(query.value(colId).toString());
+        DbRole *role = Factory::Role::createRole(name);
 
         Q_ASSERT(role != 0);
 
         // add role
         addRole(role);
-
-    } while (query.next());
+    }
 }
 
 /*!

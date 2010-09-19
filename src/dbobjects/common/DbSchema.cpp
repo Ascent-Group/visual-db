@@ -33,11 +33,13 @@
 #include <QSqlRecord>
 #include <QVariant>
 #include <common/DbSchema.h>
+#include <factory/Procedure.h>
 #include <mysql/Table.h>
 #include <psql/Language.h>
 #include <psql/Procedure.h>
 #include <psql/Role.h>
 #include <psql/Table.h>
+#include <psql/Tools.h>
 #include <psql/Trigger.h>
 #include <psql/View.h>
 
@@ -544,12 +546,10 @@ DbSchema::readViews()
 void
 DbSchema::readProcedures()
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
-    QString qstr;
-
     // clear procs list
     mProcedures.clear();
+
+    QStringList proceduresList;
 
     // get sql driver
     Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
@@ -559,23 +559,7 @@ DbSchema::readProcedures()
         case Database::Unknown:
                         qDebug() << "Database::readProcedures> SqlDriver was not set";
         case Database::PostgreSQL:
-                        qstr = QString("SELECT "
-                                            "p.proname AS name, "
-                                            "n.nspname AS schema, "
-                                            "o.rolname AS owner, "
-                                            "l.lanname AS lang, "
-                                            "p.prosrc AS src "
-                                        "FROM "
-                                            "pg_catalog.pg_proc p, "
-                                            "pg_catalog.pg_namespace n, "
-                                            "pg_catalog.pg_roles o, "
-                                            "pg_catalog.pg_language l "
-                                        "WHERE "
-                                            "p.pronamespace = n.oid "
-                                            "AND p.proowner = o.oid "
-                                            "AND p.prolang = l.oid "
-                                            "AND n.nspname = '%1';")
-                                .arg(mName);
+                        Psql::Tools::proceduresList(mName, proceduresList);
                         break;
         case Database::MySQL:
         case Database::Oracle:
@@ -586,83 +570,20 @@ DbSchema::readProcedures()
                         break;
     }
 
-#ifdef DEBUG_QUERY
-    qDebug() << "DbSchema::readProcedures> " << qstr;
-#endif
-
-    // if query failed
-    if (!query.exec(qstr)) {
-        qDebug() << query.lastError().text();
-    }
-
-    // if query returned nothing
-    if (!query.first()) {
-        qDebug() << "DbSchema::readProcedures> No procs were found.";
-
-        return;
-    }
-
     // for every retrieved row
-    do {
+    foreach (const QString &name, proceduresList) {
 
         qint32 colId;
 
         // declare new proc object
-        DbProcedure *proc;
+        DbProcedure *proc = 0;
+        proc = Factory::Procedure::createProcedure(mName, name);
 
-        // choose a query depending on sql driver
-        switch (sqlDriverType) {
-            // lyuts: looks like this case is useless. if driver is not set then
-            // previous switch will handle this and return from function.
-            /*case Database::Unknown:
-                            qDebug() << "DbSchema::readProcedures> SqlDriver was not set";
-                            return;
-                            */
-            case Database::PostgreSQL:
-                            colId = query.record().indexOf("name");
-
-                            proc = new Psql::Procedure(mName, query.value(colId).toString());
-
-                            break;
-            case Database::MySQL:
-            case Database::Oracle:
-            case Database::SQLite:
-            default:
-                            qDebug() << "DbSchema::readProcedures> SqlDriver is not supported currently!";
-                            /* temporarily no support for these DBMS */
-                            return;
-                            break;
-
-        }
-
-        // set proc's attributes
-        colId = query.record().indexOf("owner");
-        Q_ASSERT(colId > 0);
-        QString ownerName = query.value(colId).toString();
-        proc->setOwner(Database::instance()->findRole(ownerName));
-
-        colId = query.record().indexOf("lang");
-        Q_ASSERT(colId > 0);
-        QString langName = query.value(colId).toString();
-        proc->setLanguage(Database::instance()->findLanguage(langName));
-
-        colId = query.record().indexOf("src");
-        Q_ASSERT(colId > 0);
-        proc->setSourceCode(query.value(colId).toString());
-
-        /* temporary debug output */
-#if DEBUG_TRACE
-        qDebug() << "proc->mName: " << proc->name();
-        qDebug() << "proc->mSchema: " << proc->schema()->name();
-        qDebug() << "proc->mOwner: " << proc->owner()->name();
-        qDebug() << "proc->mLanguage: " << proc->language()->name();
-        qDebug() << "proc->mSourceCode: " << proc->sourceCode();
-#endif
+        Q_ASSERT(proc != 0);
 
         // add proc
         addProcedure(proc);
-
-    } while (query.next());
+    }
 }
 
 /*!

@@ -59,8 +59,8 @@ class Index
         static Common::DbIndex* createIndex(const QString &ipName);
 
     protected:
-        static Psql::Index* createPsqlIndex(const QString &iName);
-//        static MysqlIndex* createMysqlIndex(const QString &iName);
+        static Psql::Index* createPsqlIndex(const QString &ipName);
+//        static Mysql::Index* createMysqlIndex(const QString &ipName);
 
     private:
         Q_DISABLE_COPY(Index);

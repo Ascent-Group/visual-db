@@ -80,7 +80,7 @@ class DbRole : public DbObject
          * \see PsqlRole::loadData()
          * \see MysqlRole::loadData()
          */
-        // \todo remove next line
+        /*! \todo remove next line */
 //        virtual void loadData() = 0;
         // lyuts: for future use
         // virtual void save() = 0;

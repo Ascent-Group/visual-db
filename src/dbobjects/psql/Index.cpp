@@ -202,7 +202,7 @@ void
 Index::resetData()
 {
     mColumnsNumbers.clear();
-    // \todo Implement
+    /*! \todo Implement */
 //    Database::reload(this);
 }
 

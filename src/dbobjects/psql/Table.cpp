@@ -72,13 +72,14 @@ Table::loadData()
     QSqlQuery query(db);
     QString qstr;
 
-    // \todo Before creating a query we need to find out postgres version;
-    //       Bersion check can help support different Postgres versions,
-    //       especcialy when the system catalogs change in newer versions
+    /*! \todo Before creating a query we need to find out postgres version;
+     *        Bersion check can help support different Postgres versions,
+     *        especcialy when the system catalogs change in newer versions
+     */
     Tools::Version version = Tools::version();
 
-    // \todo version check
-    // \todo do version specific actions
+    /*! \todo version check */
+    /*! \todo do version specific actions */
 
     // create query
     qstr = QString("SELECT "

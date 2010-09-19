@@ -83,7 +83,7 @@ class DbProcedure : public DbObject
          * \see PsqlProcedure::loadData()
          * \see MysqlProcedure::loadData()
          */
-        // \todo remove next line
+        /*! \todo remove next line */
 //        virtual void loadData() = 0;
 
 };

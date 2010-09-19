@@ -29,6 +29,7 @@
 
 #include <common/Database.h>
 #include <factory/Index.h>
+//#include <mysql/Index.h>
 #include <psql/Index.h>
 
 namespace DbObjects
@@ -38,7 +39,9 @@ namespace Factory
 {
 
 /*!
- * \todo Implement
+ * \param[in] ipName - Name of the index to construct
+ *
+ * \return Database index objects
  */
 DbObjects::Common::DbIndex*
 Index::createIndex(const QString &ipName)
@@ -52,6 +55,8 @@ Index::createIndex(const QString &ipName)
                 index = createPsqlIndex(ipName);
                 break;
         case Database::MySQL:
+//                index = createMysqlIndex(ipName);
+                break;
         case Database::Oracle:
         case Database::SQLite:
         case Database::Unknown:
@@ -59,6 +64,7 @@ Index::createIndex(const QString &ipName)
                 break;
     }
 
+    //if the index creation failed or index inforamtion could not be read from database.
     if (!index || !index->loadData()) {
         delete index;
         index = 0;
@@ -68,21 +74,24 @@ Index::createIndex(const QString &ipName)
 }
 
 /*!
- *
+ * \param[in] ipName - Name of index to construct
+ * \return Pointer to PostgreSQL index object
  */
 Psql::Index*
-Index::createPsqlIndex(const QString &iName)
+Index::createPsqlIndex(const QString &ipName)
 {
-    return new Psql::Index(iName);
+    return new Psql::Index(ipName);
 }
 
 /*!
  *
+ * \param[in] ipName - Name of index to construct
+ * \return Pointer to MySQL index object
  */
-//MysqlIndex*
+//Mysql::Index*
 //Index::createMysqlIndex(const QString &iName)
 //{
-//    return new MysqlIndex(iName);
+//    return new Mysql::Index(iName);
 //}
 
 } // namespace Factory

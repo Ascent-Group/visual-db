@@ -78,7 +78,7 @@ class DbTable : public Common::DbObject
         bool isColumnUnique(qint16 ipColId) const;
 
         /*! \see PsqlTable::loadData() */
-        // \todo remove next line
+        /*! \todo remove next line */
 //        virtual void loadData() = 0;
         // lyuts: for further functionality
         // lyuts: will save the changes made to the table

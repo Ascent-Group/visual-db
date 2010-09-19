@@ -63,12 +63,12 @@ version()
 /*!
  * \brief Read indices that are in available in the database
  *
- * \param[out] ipList - The list that will contain indices' names
+ * \param[out] opList - The list that will contain indices' names
  *
  * \return The number of indices read by the query
  */
 quint32
-indicesList(QStringList &ipList)
+indicesList(QStringList &opList)
 {
     QString qstr = QString("SELECT "
                 "index.relname as name "
@@ -83,55 +83,69 @@ indicesList(QStringList &ipList)
                 //"AND index.relname NOT LIKE 'pg_%' "
                 "AND pgi.indexrelid = index.oid;");
 
-    return objectNamesList(qstr, ipList);
+    return objectNamesList(qstr, opList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-languagesList(QStringList &ipList)
+languagesList(QStringList &opList)
 {
     QString qstr("SELECT "
                     "l.lanname AS name "
                 "FROM "
                     "pg_catalog.pg_language l;");
 
-    return objectNamesList(qstr, ipList);
+    return objectNamesList(qstr, opList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-proceduresList(QStringList &ipList)
+proceduresList(const QString &ipSchemaName, QStringList &opList)
 {
+    QString qstr = QString("SELECT "
+                                "p.proname AS name "
+                           "FROM "
+                                "pg_catalog.pg_proc p, "
+                                "pg_catalog.pg_namespace n, "
+                                "pg_catalog.pg_roles o, "
+                                "pg_catalog.pg_language l "
+                           "WHERE "
+                                "p.pronamespace = n.oid "
+                                "AND p.proowner = o.oid "
+                                "AND p.prolang = l.oid "
+                                "AND n.nspname = '%1';")
+        .arg(ipSchemaName);
 
+    return objectNamesList(qstr, opList);
 }
 
 /*!
  * \brief Read roles that are in available in the database
  *
- * \param[out] ipList - The list that will contain roles' names
+ * \param[out] opList - The list that will contain roles' names
  *
  * \return The number of roles read by the query
  */
 quint32
-rolesList(QStringList &ipList)
+rolesList(QStringList &opList)
 {
     QString qstr = QString("SELECT "
                 "r.rolname as name "
             "FROM "
                 "pg_catalog.pg_roles r;");
 
-    return objectNamesList(qstr, ipList);
+    return objectNamesList(qstr, opList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-objectNamesList(const QString &ipQstr, QStringList &ipList)
+objectNamesList(const QString &ipQstr, QStringList &opList)
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -151,7 +165,7 @@ objectNamesList(const QString &ipQstr, QStringList &ipList)
     qint32 colId = query.record().indexOf("name");
 
     do {
-        ipList.append(query.value(colId).toString());
+        opList.append(query.value(colId).toString());
         ++count;
     } while (query.next());
 
@@ -162,7 +176,7 @@ objectNamesList(const QString &ipQstr, QStringList &ipList)
  * \todo Implement
  */
 quint32
-tablesList(QStringList &ipList)
+tablesList(QStringList &opList)
 {
 
 }
@@ -171,7 +185,7 @@ tablesList(QStringList &ipList)
  * \todo Implement
  */
 quint32
-triggersList(QStringList &ipList)
+triggersList(QStringList &opList)
 {
 
 }
@@ -180,7 +194,7 @@ triggersList(QStringList &ipList)
  * \todo Implement
  */
 quint32
-viewsList(QStringList &ipList)
+viewsList(QStringList &opList)
 {
 
 }

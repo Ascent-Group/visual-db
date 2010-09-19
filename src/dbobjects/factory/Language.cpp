@@ -38,7 +38,9 @@ namespace Factory
 {
 
 /*!
- * \todo Implement
+ * \param[in] ipName - Name of a language that is going to be constructed
+ *
+ * \return Pointer to database language object
  */
 DbObjects::Common::DbLanguage*
 Language::createLanguage(const QString &ipName)
@@ -59,6 +61,7 @@ Language::createLanguage(const QString &ipName)
                 break;
     }
 
+    // if language creation failed or the information cannot be read from database
     if (!lang || !lang->loadData()) {
         delete lang;
         lang = 0;
@@ -68,7 +71,9 @@ Language::createLanguage(const QString &ipName)
 }
 
 /*!
- * \todo Implement
+ * \param[in] ipName - Name of a language that is going to be constructed
+ *
+ * \return Pointer to PostgreSQL language object
  */
 Psql::Language*
 Language::createPsqlLanguage(const QString &ipName)

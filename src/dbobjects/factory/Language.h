@@ -49,6 +49,11 @@ class Language;
 namespace Factory
 {
 
+/*!
+ * \class Language
+ * \headerfile <factory/Language.h>
+ * \brief Defines database language factory
+ */
 class Language
 {
     public:

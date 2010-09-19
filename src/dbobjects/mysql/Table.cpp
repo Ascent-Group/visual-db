@@ -71,11 +71,11 @@ Table::loadData()
     QSqlQuery    query(db);
     QString  qstr;
 
-    // \todo get version
+    /*! \todo get version */
     Tools::Version version = Tools::version();
 
-    // \todo do version check
-    // \todo do version specific actions
+    /*! \todo do version check */
+    /*! \todo do version specific actions */
 
     /*if (mTableName.contains(QString('.'))) {
         mSchemaName = mTableName.section('.', 0);

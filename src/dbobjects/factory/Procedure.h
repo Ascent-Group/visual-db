@@ -27,4 +27,48 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// \todo Implement
+#ifndef FACTORY_PROCEDURE_H
+#define FACTORY_PROCEDURE_H
+
+#include <QtCore/qglobal.h>
+
+namespace DbObjects
+{
+
+namespace Common
+{
+class DbProcedure;
+}
+
+namespace Psql
+{
+class Procedure;
+}
+
+namespace Factory
+{
+
+/*!
+ * \class Procedure
+ * \headerfile <factory/Procedure.h>
+ * \brief Defines database index factory
+ */
+class Procedure
+{
+    public:
+        static Common::DbProcedure* createProcedure(const QString &ipSchemaName, const QString &ipName);
+
+    protected:
+        static Psql::Procedure* createPsqlProcedure(const QString &ipSchemaName, const QString &ipName);
+//        static Mysql::Procedure* createMysqlProcedure(const QString &ipName);
+
+    private:
+        Q_DISABLE_COPY(Procedure);
+};
+
+} // namespace Factory
+
+} // namespace DbObjects
+
+#endif // FACTORY_PROCEDURE_H
+

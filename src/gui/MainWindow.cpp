@@ -394,8 +394,13 @@ MainWindow::drawFullDbScheme()
 void
 MainWindow::closeEvent(QCloseEvent *ipEvent)
 {
-    // \todo Check if the connection is alive
-    // if Yes, do the rest, else - return
+    /*! \todo If the connoection is not alive, then do not ask the confirmation
+     *        For saving the session
+     */
+
+    /*! \todo Check if the connection is alive
+     *        if Yes, do the rest, else - return
+     */
 
     int result = QMessageBox::question(
             this,

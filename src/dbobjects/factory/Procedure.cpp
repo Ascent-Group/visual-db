@@ -27,4 +27,73 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-// \todo Implement
+#include <common/Database.h>
+#include <factory/Procedure.h>
+#include <psql/Procedure.h>
+
+namespace DbObjects
+{
+
+namespace Factory
+{
+
+/*!
+ * \param[in] ipName - Name of the procedure to construct
+ *
+ * \return Database procedure objects
+ */
+DbObjects::Common::DbProcedure*
+Procedure::createProcedure(const QString &ipSchemaName, const QString &ipName)
+{
+    using namespace DbObjects::Common;
+
+    DbProcedure *procedure = 0;
+
+    switch (Database::instance()->sqlDriver()) {
+        case Database::PostgreSQL:
+                procedure = createPsqlProcedure(ipSchemaName, ipName);
+                break;
+        case Database::MySQL:
+//                procedure = createMysqlProcedure(ipName);
+                break;
+        case Database::Oracle:
+        case Database::SQLite:
+        case Database::Unknown:
+        default:
+                break;
+    }
+
+    //if the procedure creation failed or procedure inforamtion could not be read from database.
+    if (!procedure || !procedure->loadData()) {
+        delete procedure;
+        procedure = 0;
+    }
+
+    return procedure;
+}
+
+/*!
+ * \param[in] ipName - Name of procedure to construct
+ * \return Pointer to PostgreSQL procedure object
+ */
+Psql::Procedure*
+Procedure::createPsqlProcedure(const QString &ipSchemaName, const QString &ipName)
+{
+    return new Psql::Procedure(ipSchemaName, ipName);
+}
+
+/*!
+ *
+ * \param[in] ipName - Name of procedure to construct
+ * \return Pointer to MySQL procedure object
+ */
+//Mysql::Procedure*
+//Procedure::createMysqlProcedure(const QString &ipSchemaName, const QString &iName)
+//{
+//    return new Mysql::Procedure(ipSchemaName, iName);
+//}
+
+} // namespace Factory
+
+} // namespace DbObjects
+

@@ -40,7 +40,8 @@ namespace Factory
 {
 
 /*!
- * \todo Implement
+ * \param[in] ipName - Name of the role to be constructed
+ * \return Pointer to abstract database role object
  */
 DbObjects::Common::DbRole*
 Role::createRole(const QString &ipName)
@@ -67,6 +68,7 @@ Role::createRole(const QString &ipName)
                         break;
     }
 
+    // if role creation failed or role information cannont be read from database
     if (!role || !role->loadData()) {
         delete role;
         role = 0;
@@ -76,7 +78,8 @@ Role::createRole(const QString &ipName)
 }
 
 /*!
- * \todo Implement
+ * \param[in] ipName - Name of the rle to construct
+ * \return Pointer to PostgreSQL role object whose name is ipName
  */
 DbObjects::Psql::Role*
 Role::createPsqlRole(const QString &ipName)

@@ -85,7 +85,7 @@ class DbTrigger : public DbObject
          * \see PsqlTrigger::loadData()
          * \see MysqlTrigger::loadData()
          */
-        // \todo remove next line
+        /*! \todo remove next line */
 //        virtual void loadData() = 0;
 
         QString schemaName() const;

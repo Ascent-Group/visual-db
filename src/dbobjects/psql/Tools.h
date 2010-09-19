@@ -49,15 +49,15 @@ namespace Tools
 
     Tools::Version version();
 
-    quint32 indicesList(QStringList &ipList);
-    quint32 languagesList(QStringList &ipList);
-    quint32 proceduresList(QStringList &ipList);
-    quint32 rolesList(QStringList &ipList);
-    quint32 tablesList(QStringList &ipList);
-    quint32 triggersList(QStringList &ipList);
-    quint32 viewsList(QStringList &ipList);
+    quint32 indicesList(QStringList &opList);
+    quint32 languagesList(QStringList &opList);
+    quint32 proceduresList(const QString &ipSchemaName, QStringList &opList);
+    quint32 rolesList(QStringList &opList);
+    quint32 tablesList(const QString &ipSchemaName, QStringList &opList);
+    quint32 triggersList(const QString &ipSchemaName, QStringList &opList);
+    quint32 viewsList(const QString &ipSchemaName, QStringList &opList);
 
-    quint32 objectNamesList(const QString &ipQstr, QStringList &ipList);
+    quint32 objectNamesList(const QString &ipQstr, QStringList &opList);
 
 } // namespace Tools
 

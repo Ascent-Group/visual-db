@@ -93,7 +93,7 @@ class DbIndex : public DbObject
          * \see PsqlIndex::loadData()
          * \see MysqlIndex::loadData()
          */
-        // \todo remove next line
+        /*! \todo remove next line */
 //        virtual void loadData() = 0;
 
         virtual DbObject::Type type() const;

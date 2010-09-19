@@ -31,6 +31,39 @@
  * \mainpage VisualDB v1.0
  */
 
+/* namespace descriptions go here */
+/*!
+ * \namespace DbObjects
+ * \brief Top level namespace for all database objects
+ */
+namespace DbObjects
+{
+    /*!
+     * \namespace Common
+     * \brief Namespace for abstract database objects
+     */
+    namespace Common { }
+
+    /*!
+     * \namespace Factory
+     * \brief Namespace with factories of database objects
+     */
+    namespace Factory { }
+
+    /*!
+     * \namespace Psql
+     * \brief Namespace for PostgreSQL specific implementations
+     */
+    namespace Psql { }
+
+    /*!
+     * \namespace Mysql
+     * \brief Namespace for MySQL specific implementations
+     */
+    namespace Mysql { }
+
+} // namespace DbObjects
+
 #include <QApplication>
 #include <QLocale>
 #include <QSettings>

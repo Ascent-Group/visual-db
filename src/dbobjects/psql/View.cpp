@@ -107,15 +107,14 @@ View::loadData()
     mSchemaName = query.value(colId).toString();
     mSchema->setName(mSchemaName);
 
-    /*
-       colId = query.record().indexOf("name");
-       Q_ASSERT(colId > 0);
-       mName = query.value(colId).toString();
-       */
+//    colId = query.record().indexOf("name");
+//    Q_ASSERT(colId > 0);
+//    mName = query.value(colId).toString();
 
     colId = query.record().indexOf("owner");
     Q_ASSERT(colId > 0);
-    mOwner->setName(query.value(colId).toString());
+    QString ownerName = query.value(colId).toString();
+    mOwner = Common::Database::instance()->findRole(ownerName);
 
     colId = query.record().indexOf("def");
     Q_ASSERT(colId > 0);

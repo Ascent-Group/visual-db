@@ -27,4 +27,48 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*! \todo Implement */
+#ifndef FACTORY_VIEW_H
+#define FACTORY_VIEW_H
+
+#include <QtCore/qglobal.h>
+
+namespace DbObjects
+{
+
+namespace Common
+{
+class DbView;
+}
+
+namespace Psql
+{
+class View;
+}
+
+namespace Factory
+{
+
+/*!
+ * \class View
+ * \headerfile <factory/View.h>
+ * \brief Defines database index factory
+ */
+class View
+{
+    public:
+        static Common::DbView* createView(const QString &ipSchemaName, const QString &ipName);
+
+    protected:
+        static Psql::View* createPsqlView(const QString &ipSchemaName, const QString &ipName);
+//        static Mysql::View* createMysqlView(const QString &ipName);
+
+    private:
+        Q_DISABLE_COPY(View);
+};
+
+} // namespace Factory
+
+} // namespace DbObjects
+
+#endif // FACTORY_VIEW_H
+

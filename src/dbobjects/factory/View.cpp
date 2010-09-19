@@ -27,4 +27,73 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*! \todo Implement */
+#include <common/Database.h>
+#include <factory/View.h>
+#include <psql/View.h>
+
+namespace DbObjects
+{
+
+namespace Factory
+{
+
+/*!
+ * \param[in] ipName - Name of the view to construct
+ *
+ * \return Database view objects
+ */
+DbObjects::Common::DbView*
+View::createView(const QString &ipSchemaName, const QString &ipName)
+{
+    using namespace DbObjects::Common;
+
+    DbView *view = 0;
+
+    switch (Database::instance()->sqlDriver()) {
+        case Database::PostgreSQL:
+                view = createPsqlView(ipSchemaName, ipName);
+                break;
+        case Database::MySQL:
+//                view = createMysqlView(ipName);
+                break;
+        case Database::Oracle:
+        case Database::SQLite:
+        case Database::Unknown:
+        default:
+                break;
+    }
+
+    //if the view creation failed or view inforamtion could not be read from database.
+    if (!view || !view->loadData()) {
+        delete view;
+        view = 0;
+    }
+
+    return view;
+}
+
+/*!
+ * \param[in] ipName - Name of view to construct
+ * \return Pointer to PostgreSQL view object
+ */
+Psql::View*
+View::createPsqlView(const QString &ipSchemaName, const QString &ipName)
+{
+    return new Psql::View(ipSchemaName, ipName);
+}
+
+/*!
+ *
+ * \param[in] ipName - Name of view to construct
+ * \return Pointer to MySQL view object
+ */
+//Mysql::View*
+//View::createMysqlView(const QString &ipSchemaName, const QString &iName)
+//{
+//    return new Mysql::View(ipSchemaName, iName);
+//}
+
+} // namespace Factory
+
+} // namespace DbObjects
+

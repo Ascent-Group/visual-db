@@ -593,7 +593,7 @@ Database::readRoles()
         // declare new role object
         DbRole *role = Factory::Role::createRole(name);
 
-        Q_ASSERT(role != 0);
+        Q_ASSERT(0 != role);
 
         // add role
         addRole(role);
@@ -674,6 +674,8 @@ Database::readLanguages()
     foreach (const QString &name, languagesList) {
         // declare new language object
         DbLanguage *lang = Factory::Language::createLanguage(name);
+
+        Q_ASSERT(0 != lang);
 
         // add language
         addLanguage(lang);

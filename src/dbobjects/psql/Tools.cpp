@@ -48,6 +48,7 @@ namespace Tools
 
 /*!
  * \todo Implement
+ * \todo Comments
  */
 Tools::Version
 version()
@@ -88,6 +89,7 @@ indicesList(QStringList &opList)
 
 /*!
  * \todo Implement
+ * \todo Comments
  */
 quint32
 languagesList(QStringList &opList)
@@ -102,6 +104,7 @@ languagesList(QStringList &opList)
 
 /*!
  * \todo Implement
+ * \todo Comments
  */
 quint32
 proceduresList(const QString &ipSchemaName, QStringList &opList)
@@ -143,6 +146,7 @@ rolesList(QStringList &opList)
 
 /*!
  * \todo Implement
+ * \todo Comments
  */
 quint32
 objectNamesList(const QString &ipQstr, QStringList &opList)
@@ -174,6 +178,7 @@ objectNamesList(const QString &ipQstr, QStringList &opList)
 
 /*!
  * \todo Implement
+ * \todo Comments
  */
 quint32
 tablesList(QStringList &opList)
@@ -183,6 +188,7 @@ tablesList(QStringList &opList)
 
 /*!
  * \todo Implement
+ * \todo Comments
  */
 quint32
 triggersList(QStringList &opList)
@@ -192,11 +198,20 @@ triggersList(QStringList &opList)
 
 /*!
  * \todo Implement
+ * \todo Comments
  */
 quint32
-viewsList(QStringList &opList)
+viewsList(const QString &ipSchemaName, QStringList &opList)
 {
+    QString qstr = QString("SELECT "
+                                "v.viewname as name "
+                           "FROM "
+                                "pg_catalog.pg_views v "
+                           "WHERE "
+                                "schemaname = '%1';")
+        .arg(ipSchemaName);
 
+    return objectNamesList(qstr, opList);
 }
 
 } // namespace Tools

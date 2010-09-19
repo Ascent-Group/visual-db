@@ -34,6 +34,7 @@
 #include <QVariant>
 #include <common/DbSchema.h>
 #include <factory/Procedure.h>
+#include <factory/View.h>
 #include <mysql/Table.h>
 #include <psql/Language.h>
 #include <psql/Procedure.h>
@@ -430,6 +431,8 @@ DbSchema::readViews()
     // clear views list
     mViews.clear();
 
+    QStringList viewsList;
+
     // get sql driver
     Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
 
@@ -438,16 +441,7 @@ DbSchema::readViews()
         case Database::Unknown:
                         qDebug() << "Database::readViews> SqlDriver was not set";
         case Database::PostgreSQL:
-                        qstr = QString("SELECT "
-                                            "v.schemaname as schema, "
-                                            "v.viewname as name, "
-                                            "v.viewowner as owner, "
-                                            "v.definition as def "
-                                        "FROM "
-                                            "pg_catalog.pg_views v "
-                                        "WHERE "
-                                            "schemaname = '%1';")
-                                .arg(mName);
+                        Psql::Tools::viewsList(mName, viewsList);
                         break;
         case Database::MySQL:
         case Database::Oracle:
@@ -458,86 +452,17 @@ DbSchema::readViews()
                         break;
     }
 
-#ifdef DEBUG_QUERY
-    qDebug() << "DbSchema::readViews> " << qstr;
-#endif
-
-    // if query failed
-    if (!query.exec(qstr)) {
-        qDebug() << query.lastError().text();
-    }
-
-    // if query returned nothing
-    if (!query.first()) {
-        qDebug() << "DbSchema::readViews> No views were found for " << mName;
-
-        return;
-    }
-
     // for every retrieved row
-    do {
-
-    qint32 colId;
+    foreach (const QString &name, viewsList) {
 
         // declare new view object
-        DbView *view;
+        DbView *view = Factory::View::createView(mName, name);
 
-        // choose a query depending on sql driver
-        switch (sqlDriverType) {
-            // lyuts: looks like this case is useless. if driver is not set then
-            // previous switch will handle this and return from function.
-            /*case Database::Unknown:
-                            qDebug() << "DbSchema::readViews> SqlDriver was not set";
-                            return;
-                            */
-            case Database::PostgreSQL:
-                            colId = query.record().indexOf("name");
-
-
-                            view = new Psql::View(mName, query.value(colId).toString());
-
-
-                            break;
-            case Database::MySQL:
-            case Database::Oracle:
-            case Database::SQLite:
-            default:
-                            qDebug() << "DbSchema::readViews> SqlDriver is not supported currently!";
-                            /* temporarily no support for these DBMS */
-                            return;
-                            break;
-
-        }
-
-        // set views's attributes
-        colId = query.record().indexOf("schema");
-        Q_ASSERT(colId > 0);
-
-        colId = query.record().indexOf("name");
-        Q_ASSERT(colId > 0);
-        view->setName(query.value(colId).toString());
-
-        colId = query.record().indexOf("owner");
-        Q_ASSERT(colId > 0);
-        QString ownerName = query.value(colId).toString();
-        view->setOwner(Database::instance()->findRole(ownerName));
-
-        colId = query.record().indexOf("def");
-        Q_ASSERT(colId > 0);
-        view->setDefinition(query.value(colId).toString());
-
-        /* temporary debug output */
-#if DEBUG_TRACE
-        qDebug() << "view->mName: " << view->name();
-        qDebug() << "view->mSchema: " << view->schema()->name();
-        qDebug() << "view->mOwner: " << view->owner()->name();
-        qDebug() << "view->mDefinition: " << view->definition();
-#endif
+        Q_ASSERT(0 != view);
 
         // add view
         addView(view);
-
-    } while (query.next());
+    }
 }
 
 /*!
@@ -573,13 +498,11 @@ DbSchema::readProcedures()
     // for every retrieved row
     foreach (const QString &name, proceduresList) {
 
-        qint32 colId;
-
         // declare new proc object
         DbProcedure *proc = 0;
         proc = Factory::Procedure::createProcedure(mName, name);
 
-        Q_ASSERT(proc != 0);
+        Q_ASSERT(0 != proc);
 
         // add proc
         addProcedure(proc);

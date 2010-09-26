@@ -27,4 +27,73 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*! \todo Implement */
+#include <common/Database.h>
+#include <factory/Trigger.h>
+#include <psql/Trigger.h>
+
+namespace DbObjects
+{
+
+namespace Factory
+{
+
+/*!
+ * \param[in] ipName - Name of the trigger to construct
+ *
+ * \return Database trigger objects
+ */
+DbObjects::Common::DbTrigger*
+Trigger::createTrigger(const QString &ipSchemaName, const QString &ipName)
+{
+    using namespace DbObjects::Common;
+
+    DbTrigger *trigger = 0;
+
+    switch (Database::instance()->sqlDriver()) {
+        case Database::PostgreSQL:
+                trigger = createPsqlTrigger(ipSchemaName, ipName);
+                break;
+        case Database::MySQL:
+//                trigger = createMysqlTrigger(ipName);
+                break;
+        case Database::Oracle:
+        case Database::SQLite:
+        case Database::Unknown:
+        default:
+                break;
+    }
+
+    //if the trigger creation failed or trigger inforamtion could not be read from database.
+    if (!trigger || !trigger->loadData()) {
+        delete trigger;
+        trigger = 0;
+    }
+
+    return trigger;
+}
+
+/*!
+ * \param[in] ipName - Name of trigger to construct
+ * \return Pointer to PostgreSQL trigger object
+ */
+Psql::Trigger*
+Trigger::createPsqlTrigger(const QString &ipSchemaName, const QString &ipName)
+{
+    return new Psql::Trigger(ipSchemaName, ipName);
+}
+
+/*!
+ *
+ * \param[in] ipName - Name of trigger to construct
+ * \return Pointer to MySQL trigger object
+ */
+//Mysql::Trigger*
+//Trigger::createMysqlTrigger(const QString &ipSchemaName, const QString &iName)
+//{
+//    return new Mysql::Trigger(ipSchemaName, iName);
+//}
+
+} // namespace Factory
+
+} // namespace DbObjects
+

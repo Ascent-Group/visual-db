@@ -191,9 +191,43 @@ tablesList(QStringList &opList)
  * \todo Comments
  */
 quint32
-triggersList(QStringList &opList)
+triggersList(const QString &ipSchemaName, QStringList &opList)
 {
+    QString qstr = QString("SELECT "
+                    "tbl_nsp.nspname AS schema, "
+                    "tbl.relname AS table, "
+                    "t.tgname AS name, "
+                    "proc_nsp.nspname AS proc_schema, "
+                    "proc.proname AS proc, "
+                    "t.tgenabled AS enabled, "
+                    "t.tgisconstraint AS isconstraint, "
+                    "t.tgconstrname AS constrname, "
+                    "ref_tbl_nsp.nspname AS ref_schema, "
+                    "ref_tbl.relname AS ref_table, "
+                    "t.tgdeferrable AS deferrable, "
+                    "t.tginitdeferred AS initdeferred, "
+                    "t.tgnargs AS nargs "
+                "FROM "
+                    "pg_catalog.pg_trigger t, "
+                    "pg_catalog.pg_class tbl, "
+                    "pg_catalog.pg_class ref_tbl, "
+                    "pg_catalog.pg_namespace tbl_nsp, "
+                    "pg_catalog.pg_namespace ref_tbl_nsp, "
+                    "pg_catalog.pg_proc proc, "
+                    "pg_catalog.pg_namespace proc_nsp "
+                "WHERE "
+                    "tbl.oid = t.tgrelid "
+                    "AND tbl.relnamespace = tbl_nsp.oid "
+                    "AND t.tgfoid = proc.oid "
+                    "AND proc.pronamespace = proc_nsp.oid "
+                    "AND ref_tbl.oid = t.tgconstrrelid "
+                    "AND tbl_nsp.nspname = '%1' "
+                    //"AND ref_tbl_nsp.nspname NOT LIKE 'pg_%' "
+                    //"AND proc_nsp.nspname NOT LIKE 'pg_%' "
+                    "AND ref_tbl.relnamespace = ref_tbl_nsp.oid;")
+                .arg(ipSchemaName);
 
+    return objectNamesList(qstr, opList);
 }
 
 /*!

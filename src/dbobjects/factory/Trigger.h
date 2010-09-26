@@ -27,4 +27,48 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*! \todo Implement */
+#ifndef FACTORY_TRIGGER_H
+#define FACTORY_TRIGGER_H
+
+#include <QtCore/qglobal.h>
+
+namespace DbObjects
+{
+
+namespace Common
+{
+class DbTrigger;
+}
+
+namespace Psql
+{
+class Trigger;
+}
+
+namespace Factory
+{
+
+/*!
+ * \class Trigger
+ * \headerfile <factory/Trigger.h>
+ * \brief Defines database index factory
+ */
+class Trigger
+{
+    public:
+        static Common::DbTrigger* createTrigger(const QString &ipSchemaName, const QString &ipName);
+
+    protected:
+        static Psql::Trigger* createPsqlTrigger(const QString &ipSchemaName, const QString &ipName);
+//        static Mysql::Trigger* createMysqlTrigger(const QString &ipName);
+
+    private:
+        Q_DISABLE_COPY(Trigger);
+};
+
+} // namespace Factory
+
+} // namespace DbObjects
+
+#endif // FACTORY_TRIGGER_H
+

@@ -145,7 +145,7 @@ rolesList(QStringList &opList)
 }
 
 /*!
- * \todo Implement
+ * \note The functions looks for a field by name 'name' !!!
  * \todo Comments
  */
 quint32
@@ -181,9 +181,14 @@ objectNamesList(const QString &ipQstr, QStringList &opList)
  * \todo Comments
  */
 quint32
-tablesList(QStringList &opList)
+tablesList(const QString &ipSchemaName, QStringList &opList)
 {
+    QString qstr = QString("SELECT tablename AS name "
+                           "FROM pg_catalog.pg_tables pgt "
+                           "WHERE schemaname='%1';")
+        .arg(ipSchemaName);
 
+    return objectNamesList(qstr, opList);
 }
 
 /*!

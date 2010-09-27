@@ -32,18 +32,16 @@
 #include <QSqlQuery>
 #include <QSqlRecord>
 #include <QVariant>
+#include <common/DbProcedure.h>
+#include <common/DbRole.h>
 #include <common/DbSchema.h>
+#include <common/DbTrigger.h>
+#include <common/DbView.h>
 #include <factory/Procedure.h>
+#include <factory/Table.h>
 #include <factory/Trigger.h>
 #include <factory/View.h>
-#include <mysql/Table.h>
-#include <psql/Language.h>
-#include <psql/Procedure.h>
-#include <psql/Role.h>
-#include <psql/Table.h>
 #include <psql/Tools.h>
-#include <psql/Trigger.h>
-#include <psql/View.h>
 
 #include <QtDebug>
 
@@ -344,12 +342,10 @@ DbSchema::findTrigger(const QString &ipTrigName) const
 void
 DbSchema::readTables()
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
-    QString qstr;
-
     // clear tables list
     mTables.clear();
+
+    QStringList tablesNamesList;
 
     // get sql driver
     Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
@@ -357,14 +353,11 @@ DbSchema::readTables()
     // choose a query depending on sql driver
     switch (sqlDriverType) {
         case Database::Unknown:
-                        qDebug() << "DbSchema::readTables> Sql driver was not set";
-                        return;
+            qDebug() << "DbSchema::readTables> Sql driver was not set";
             break;
+
         case Database::PostgreSQL:
-                        qstr = QString("SELECT tablename "
-                    "FROM pg_catalog.pg_tables pgt "
-                    "WHERE schemaname='%1';")
-                .arg(mName);
+            DbObjects::Psql::Tools::tablesList(mName, tablesNamesList);
             break;
 
         case Database::MySQL:
@@ -376,47 +369,17 @@ DbSchema::readTables()
 
     }
 
-    // if query execution failed
-    if (!query.exec(qstr)) {
-    qDebug() << "DbSchema::readTables> Unable to read tables.";
-        qDebug() << query.lastError().text();
-
-    return;
-    }
-
-    // if query returned nothing
-    if (!query.first()) {
-    qDebug() << "DbSchema::readTables> No tables were found.";
-
-    return;
-    }
-
     // for every retrieved row
-    do {
-        QString tableName = query.value(0).toString();
+    foreach (const QString &name, tablesNamesList) {
 
         DbTable *table = 0;
-        // create a *table object by its name
-        switch (sqlDriverType) {
-            case Database::Unknown:
-                break;
-            case Database::PostgreSQL:
-                table = new Psql::Table(mName, tableName);
+        table = Factory::Table::createTable(mName, name);
 
-                break;
-            case Database::MySQL:
-            case Database::Oracle:
-            case Database::SQLite:
-            default:
-                /* no temporary support */
-                return;
-                break;
-    }
+        Q_ASSERT(0 != table);
 
         // add table
         addTable(table);
-
-    } while (query.next());
+    }
 }
 
 /*!
@@ -432,7 +395,7 @@ DbSchema::readViews()
     // clear views list
     mViews.clear();
 
-    QStringList viewsList;
+    QStringList viewsNamesList;
 
     // get sql driver
     Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
@@ -442,7 +405,7 @@ DbSchema::readViews()
         case Database::Unknown:
                         qDebug() << "Database::readViews> SqlDriver was not set";
         case Database::PostgreSQL:
-                        Psql::Tools::viewsList(mName, viewsList);
+                        Psql::Tools::viewsList(mName, viewsNamesList);
                         break;
         case Database::MySQL:
         case Database::Oracle:
@@ -454,7 +417,7 @@ DbSchema::readViews()
     }
 
     // for every retrieved row
-    foreach (const QString &name, viewsList) {
+    foreach (const QString &name, viewsNamesList) {
 
         // declare new view object
         DbView *view = Factory::View::createView(mName, name);
@@ -475,7 +438,7 @@ DbSchema::readProcedures()
     // clear procs list
     mProcedures.clear();
 
-    QStringList proceduresList;
+    QStringList proceduresNamesList;
 
     // get sql driver
     Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
@@ -485,7 +448,7 @@ DbSchema::readProcedures()
         case Database::Unknown:
                         qDebug() << "Database::readProcedures> SqlDriver was not set";
         case Database::PostgreSQL:
-                        Psql::Tools::proceduresList(mName, proceduresList);
+                        Psql::Tools::proceduresList(mName, proceduresNamesList);
                         break;
         case Database::MySQL:
         case Database::Oracle:
@@ -497,7 +460,7 @@ DbSchema::readProcedures()
     }
 
     // for every retrieved row
-    foreach (const QString &name, proceduresList) {
+    foreach (const QString &name, proceduresNamesList) {
 
         // declare new proc object
         DbProcedure *proc = 0;
@@ -519,7 +482,7 @@ DbSchema::readTriggers()
     // clear triggers list
     mTriggers.clear();
 
-    QStringList triggersList;
+    QStringList triggersNamesList;
 
     // get sql driver
     Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
@@ -530,10 +493,10 @@ DbSchema::readTriggers()
                         qDebug() << "DbSchema::readTriggers> SqlDriver was not set";
                         return;
         case Database::PostgreSQL:
-                        Psql::Tools::triggersList(mName, triggersList);
+                        Psql::Tools::triggersList(mName, triggersNamesList);
                         break;
         case Database::MySQL:
-//                        Mysql::Tools::triggersList(mName, triggersList);
+//                        Mysql::Tools::triggersList(mName, triggersNamesList);
                         break;
         case Database::Oracle:
         case Database::SQLite:
@@ -544,7 +507,7 @@ DbSchema::readTriggers()
     }
 
     // for every retrieved row
-    foreach (const QString &name, triggersList) {
+    foreach (const QString &name, triggersNamesList) {
         // declare new trigger object
         DbTrigger *trigger;
 

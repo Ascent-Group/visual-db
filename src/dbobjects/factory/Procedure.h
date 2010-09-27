@@ -51,7 +51,7 @@ namespace Factory
 /*!
  * \class Procedure
  * \headerfile <factory/Procedure.h>
- * \brief Defines database index factory
+ * \brief Defines database procedure factory
  */
 class Procedure
 {

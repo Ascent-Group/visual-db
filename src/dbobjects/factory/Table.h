@@ -27,4 +27,48 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-/*! \todo Implement */
+#ifndef FACTORY_TABLE_H
+#define FACTORY_TABLE_H
+
+#include <QtCore/qglobal.h>
+
+namespace DbObjects
+{
+
+namespace Common
+{
+class DbTable;
+}
+
+namespace Psql
+{
+class Table;
+}
+
+namespace Factory
+{
+
+/*!
+ * \class Table
+ * \headerfile <factory/Table.h>
+ * \brief Defines database table factory
+ */
+class Table
+{
+    public:
+        static Common::DbTable* createTable(const QString &ipSchemaName, const QString &ipName);
+
+    protected:
+        static Psql::Table* createPsqlTable(const QString &ipSchemaName, const QString &ipName);
+//        static Mysql::Table* createMysqlTable(const QString &ipName);
+
+    private:
+        Q_DISABLE_COPY(Table);
+};
+
+} // namespace Factory
+
+} // namespace DbObjects
+
+#endif // FACTORY_TABLE_H
+

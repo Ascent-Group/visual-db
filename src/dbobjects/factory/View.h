@@ -51,7 +51,7 @@ namespace Factory
 /*!
  * \class View
  * \headerfile <factory/View.h>
- * \brief Defines database index factory
+ * \brief Defines database view factory
  */
 class View
 {

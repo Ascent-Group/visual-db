@@ -62,6 +62,7 @@ class DbSchema : public DbObject
         bool addProcedure(DbProcedure *ipProc);
         bool addTrigger(DbTrigger *);
 
+        /*! \todo pass list by reference */
         void tablesList(QStringList *) const;
         quint64 tablesCount() const;
 

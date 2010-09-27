@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
- * 
+ *
+ *
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -40,9 +40,9 @@ AppearancePage::AppearancePage(QWidget *ipParent)
     ui.setupUi(this);
 
     // create combo box to select the appropriate language
-    ui.mLanguageCombo->addItem(tr("English"), QLocale::English);
-    ui.mLanguageCombo->addItem(tr("Russian"), QLocale::Russian);
-    
+    ui.mLanguageCombo->addItem(QLocale::languageToString(QLocale::English), QLocale::English);
+    ui.mLanguageCombo->addItem(QLocale::languageToString(QLocale::Russian), QLocale::Russian);
+
     // set language to the one from settings
     int currentIndex = ui.mLanguageCombo->findData(mSettings.value("Appearance/Language", QLocale::English));
     ui.mLanguageCombo->setCurrentIndex(currentIndex);

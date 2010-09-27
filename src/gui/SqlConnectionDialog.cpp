@@ -68,7 +68,7 @@ SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
  * Create dialog
  */
     void
-SqlConnectionDialog::createDialog(bool ipLoadSession)
+SqlConnectionDialog::createDialog(bool/* ipLoadSession*/)
 {
 
     QStringList drivers = QSqlDatabase::drivers();
@@ -104,16 +104,16 @@ SqlConnectionDialog::createDialog(bool ipLoadSession)
     // proxy password
     ui.mProxyPasswordEdit->setEchoMode(QLineEdit::Password);
 
-    ui.mDbDriverCombo->setEnabled(!ipLoadSession);
-    ui.mDbHostEdit->setEnabled(!ipLoadSession);
-    ui.mDbPortEdit->setEnabled(!ipLoadSession);
-    ui.mDbNameEdit->setEnabled(!ipLoadSession);
-    ui.mDbUserEdit->setEnabled(!ipLoadSession);
-    ui.mProxyTypeBox->setEnabled(!ipLoadSession);
-    ui.mProxyHostNameEdit->setEnabled(!ipLoadSession);
-    ui.mProxyPortEdit->setEnabled(!ipLoadSession);
-    ui.mProxyUserEdit->setEnabled(!ipLoadSession);
-
+    ui.mDbDriverCombo->setEnabled(true);
+    ui.mDbHostEdit->setEnabled(true);
+    ui.mDbPortEdit->setEnabled(true);
+    ui.mDbNameEdit->setEnabled(true);
+    ui.mDbUserEdit->setEnabled(true);
+    ui.mProxyTypeBox->setEnabled(false);
+    ui.mProxyHostNameEdit->setEnabled(false);
+    ui.mProxyPortEdit->setEnabled(false);
+    ui.mProxyUserEdit->setEnabled(false);
+    ui.mProxyPasswordEdit->setEnabled(false);
 }
 
 /*
@@ -180,3 +180,15 @@ SqlConnectionDialog::addConnection()
     }
 }
 
+/*
+ * Switch on/off proxy connection parameters
+ */
+void 
+SqlConnectionDialog::switchProxy(bool toggle)
+{
+    ui.mProxyTypeBox->setEnabled(toggle);
+    ui.mProxyHostNameEdit->setEnabled(toggle);
+    ui.mProxyPortEdit->setEnabled(toggle);
+    ui.mProxyUserEdit->setEnabled(toggle);
+    ui.mProxyPasswordEdit->setEnabled(toggle);
+}

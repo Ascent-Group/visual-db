@@ -34,7 +34,11 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="mDbHostEdit"/>
+      <widget class="QLineEdit" name="mDbHostEdit">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="mDbPortLabel">
@@ -212,6 +216,12 @@
      <y>-12</y>
     </hint>
    </hints>
+  </connection>
+  <connection>
+   <sender>mUseProxyBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>SqlConnectionDialog</receiver>
+   <slot>switchProxy(bool)</slot>
   </connection>
  </connections>
  <slots>

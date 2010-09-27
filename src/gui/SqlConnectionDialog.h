@@ -58,6 +58,7 @@ class SqlConnectionDialog : public QDialog
 
     private slots:
         void addConnection();
+        void switchProxy(bool);
 };
 
 #endif // SQLCONNECTIONDIALOG_H

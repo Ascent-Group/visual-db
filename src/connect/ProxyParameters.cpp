@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
- * 
+ *
+ *
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -28,6 +28,7 @@
  */
 
 #include <connect/ProxyParameters.h>
+#include <consts.h>
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFile>
@@ -39,11 +40,12 @@
  */
 ProxyParameters::ProxyParameters()
 {
-    mUseProxy = mSettings.value("LastSession/useProxy", "false").toBool();
-    mProxyType = (QNetworkProxy::ProxyType)mSettings.value("LastSession/proxyType", QNetworkProxy::HttpProxy).toInt();
-    mProxyHost = mSettings.value("LastSession/proxyAddress", QString("")).toString();
-    mProxyPort = mSettings.value("LastSession/proxyPort", 8080).toInt();
-    mProxyUser = mSettings.value("LastSession/proxyUser", QString("")).toString();
+    using namespace Consts;
+    mUseProxy = mSettings.value(LAST_SESSION_GRP + "/" + USE_PROXY_SETTING, "false").toBool();
+    mProxyType = (QNetworkProxy::ProxyType)mSettings.value(LAST_SESSION_GRP + "/" + PROXY_TYPE_SETTING, QNetworkProxy::HttpProxy).toInt();
+    mProxyHost = mSettings.value(LAST_SESSION_GRP + "/" + PROXY_HOST_SETTING, QString("")).toString();
+    mProxyPort = mSettings.value(LAST_SESSION_GRP + "/" + PROXY_PORT_SETTING, 8080).toInt();
+    mProxyUser = mSettings.value(LAST_SESSION_GRP + "/" + PROXY_USER_SETTING, QString("")).toString();
 }
 
 /*
@@ -88,35 +90,35 @@ void
 ProxyParameters::setUseProxy(bool ipUseProxy)
 {
     mUseProxy = ipUseProxy;
-    mSettings.setValue("LastSession/useProxy", mUseProxy);
+    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::USE_PROXY_SETTING, mUseProxy);
 }
 
 void
 ProxyParameters::setProxyType(QNetworkProxy::ProxyType ipProxyType)
 {
     mProxyType = ipProxyType;
-    mSettings.setValue("LastSession/proxyType", mProxyType);
+    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::PROXY_TYPE_SETTING, mProxyType);
 }
 
 void
 ProxyParameters::setProxyHost(QString ipProxyHost)
 {
     mProxyHost = ipProxyHost;
-    mSettings.setValue("LastSession/proxyHost", mProxyHost);
+    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::PROXY_HOST_SETTING, mProxyHost);
 }
 
 void
 ProxyParameters::setProxyPort(quint16 ipProxyPort)
 {
     mProxyPort = ipProxyPort;
-    mSettings.setValue("LastSession/proxyPort", mProxyPort);
+    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::PROXY_PORT_SETTING, mProxyPort);
 }
 
 void
 ProxyParameters::setProxyUser(QString ipProxyUser)
 {
     mProxyUser = ipProxyUser;
-    mSettings.setValue("LastSession/proxyUser", mProxyUser);
+    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::PROXY_USER_SETTING, mProxyUser);
 }
 
 /*
@@ -154,7 +156,7 @@ QDomElement
 ProxyParameters::toXml(QDomDocument &ipDoc) const
 {
     QDomElement proxyElement = ipDoc.createElement("proxy");
-//    proxyElement.setAttribute("type", mSettings.value("LastSession/proxyType", QString("Http")).toString());
+//    proxyElement.setAttribute("type", mSettings.value(Consts::LAST_SESSION_GRP + "/" + Consts::PROXY_TYPE_SETTING, QString("Http")).toString());
     proxyElement.setAttribute("use", useProxy());
     proxyElement.setAttribute("type", proxyType());
     proxyElement.setAttribute("host", proxyHost());

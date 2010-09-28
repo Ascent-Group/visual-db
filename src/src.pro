@@ -36,6 +36,7 @@ HEADERS += connect/*.h \
            gui/*.h
 
 SOURCES += main.cpp \
+           consts.cpp \
            connect/*.cpp \
            gui/behaviour/*.cpp \
            gui/*.cpp

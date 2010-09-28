@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
- * 
+ *
+ *
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -27,6 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <consts.h>
 #include <gui/ArrowItem.h>
 #include <QDebug>
 #include <QGraphicsLineItem>
@@ -47,18 +48,18 @@ const qreal Pi = 3.14;
 /*
  * Constructor
  */
-ArrowItem::ArrowItem(TableItem *ipStartItem, 
-             TableItem *ipEndItem, 
-             QGraphicsItem *ipParent, 
+ArrowItem::ArrowItem(TableItem *ipStartItem,
+             TableItem *ipEndItem,
+             QGraphicsItem *ipParent,
              QGraphicsScene *ipScene)
-    : QGraphicsLineItem(ipParent, ipScene), 
+    : QGraphicsLineItem(ipParent, ipScene),
       mStartItem(ipStartItem), mEndItem(ipEndItem)
 {
 
     // make arrow selectable
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     // set the style of the arrow
-    mColor = mSettings.value("Color/Arrow", Qt::black).value<QColor>();
+    mColor = mSettings.value(Consts::COLOR_GRP + "/" + Consts::ARROW_SETTING, Qt::black).value<QColor>();
     setPen(QPen(mColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 }
 
@@ -72,21 +73,21 @@ ArrowItem::~ArrowItem()
 /*
  * Define the bounding that arrow covers
  */
-QRectF 
+QRectF
 ArrowItem::boundingRect() const
 {
     qreal extra = (pen().width() + 20) / 2.0;
 
-    return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(), 
+    return QRectF(line().p1(), QSizeF(line().p2().x() - line().p1().x(),
     line().p2().y() - line().p1().y()))
         .normalized()
         .adjusted(-extra, -extra, extra, extra);
 }
 
 /*
- * Get the arrow head path 
+ * Get the arrow head path
  */
-QPainterPath 
+QPainterPath
 ArrowItem::shape() const
 {
     QPainterPath path = QGraphicsLineItem::shape();
@@ -97,7 +98,7 @@ ArrowItem::shape() const
 /*
  * Update the arrow's position
  */
-void 
+void
 ArrowItem::updatePosition()
 {
     setLine(makeLine());
@@ -106,7 +107,7 @@ ArrowItem::updatePosition()
 /*
  * Draw the arrow
  */
-void 
+void
 ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     // return if start and end tables collides
@@ -120,7 +121,7 @@ ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget 
 
     setLine(makeLine());
     mArrowItemHead = makeHead(line());
- 
+
     // draw the arrow with the head
     ipPainter->drawLine(line());
     ipPainter->drawPolygon(mArrowItemHead);
@@ -189,7 +190,7 @@ makeHead(const QLineF &ipLine)
 QLineF
 ArrowItem::makeLine() const
 {
-    QLineF centerLine(mapFromItem(mStartItem, mStartItem->centerPoint()), 
+    QLineF centerLine(mapFromItem(mStartItem, mStartItem->centerPoint()),
         mapFromItem(mEndItem, mEndItem->centerPoint()));
 
     QPointF startPoint = findIntersection(mStartItem, centerLine);
@@ -202,18 +203,18 @@ ArrowItem::makeLine() const
  * Get the start item of the arrow
  */
 TableItem *
-ArrowItem::startItem() const 
-{ 
-    return mStartItem; 
+ArrowItem::startItem() const
+{
+    return mStartItem;
 }
 
 /*
  * Get the end item of the arrow
  */
 TableItem *
-ArrowItem::endItem() const 
-{ 
-    return mEndItem; 
+ArrowItem::endItem() const
+{
+    return mEndItem;
 }
 
 /*
@@ -224,3 +225,4 @@ ArrowItem::type() const
 {
     return Type;
 }
+

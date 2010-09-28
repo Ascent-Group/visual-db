@@ -30,6 +30,7 @@
 #include <QBrush>
 #include <QGraphicsTextItem>
 #include <QTextDocument>
+#include <consts.h>
 #include <gui/GraphicsItem.h>
 
 /*
@@ -40,8 +41,8 @@ GraphicsItem::GraphicsItem()
 {
     mFieldItems = QList<QGraphicsTextItem *>();
     // get selected color
-    mItemColor = mSettings.value("Color/Table", Qt::white).value<QColor>();
-    mBorderColor = mSettings.value("Color/Border", Qt::black).value<QColor>();
+    mItemColor = mSettings.value(Consts::COLOR_GRP + "/" + Consts::TABLE_SETTING, Qt::white).value<QColor>();
+    mBorderColor = mSettings.value(Consts::COLOR_GRP + "/" + Consts::BORDER_SETTING, Qt::black).value<QColor>();
 }
 
 /*

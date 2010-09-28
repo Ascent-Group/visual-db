@@ -70,6 +70,7 @@ namespace DbObjects
 #include <QTranslator>
 #include <QIcon>
 
+#include <consts.h>
 #include <gui/MainWindow.h>
 
 int main(int argc, char **argv)
@@ -96,7 +97,7 @@ int main(int argc, char **argv)
     QTranslator translator;
 
     // load qm translation
-    switch (settings.value("Appearance/Language").toInt()) {
+    switch (settings.value(Consts::APPEARANCE_GRP + "/" + Consts::LANG_SETTING).toInt()) {
         case QLocale::Russian:
             translator.load(":visual_db_ru");
             break;
@@ -104,13 +105,13 @@ int main(int argc, char **argv)
         default:
             translator.load(":visual_db_en");
     }
-    
+
     //
     app.installTranslator(&translator);
 
     MainWindow *mainWindow = new MainWindow();
     mainWindow->show();
-    
+
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
     return app.exec();

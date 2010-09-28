@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
- * 
+ *
+ *
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -27,6 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <consts.h>
 #include <gui/SelectColorWidget.h>
 #include <QColor>
 #include <QColorDialog>
@@ -70,7 +71,7 @@ SelectColorWidget::colorSelect(int ipIndex)
     case 1:
         getColorFromDialog();
         break;
-    
+
     case 0:
     default:
         mColor = mDefaultColor;
@@ -154,7 +155,7 @@ void
 SelectColorWidget::init()
 {
     // get the default colors from the settings
-    mColor = mSettings.value("Color/" + ui.mLabel->text(), Qt::white).value<QColor>();
+    mColor = mSettings.value(Consts::COLOR_GRP + "/" + ui.mLabel->text(), Qt::white).value<QColor>();
 
     // select default color
     if (mDefaultColor != mColor) {
@@ -164,3 +165,4 @@ SelectColorWidget::init()
     ui.mColorButton->setPalette(QPalette(mColor));
 
 }
+

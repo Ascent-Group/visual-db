@@ -50,6 +50,7 @@
 #include <common/DbSchema.h>
 #include <connect/DbParameters.h>
 #include <connect/ProxyParameters.h>
+#include <consts.h>
 #include <gui/ArrowItem.h>
 #include <gui/DescriptionWidget.h>
 #include <gui/GraphicsScene.h>
@@ -117,7 +118,7 @@ void MainWindow::createActions()
     ui.mEditMenu->addAction(redoAction);
 
     // align tables to the grid
-    ui.mAlignToGridAction->setChecked(mSettings.value("View/AlignToGrid", false).toBool());
+    ui.mAlignToGridAction->setChecked(mSettings.value(Consts::VIEW_GRP + "/" + Consts::ALIGN_TO_GRID_SETTING, false).toBool());
 }
 
 /*
@@ -150,12 +151,13 @@ MainWindow::updateSessionMenu()
 {
     ui.mSessionMenu->clear();
 
-    int countSavedSessions = mSettings.value("Preferences/CountSavedSessions", 10).toInt();
+    using namespace Consts;
+    int countSavedSessions = mSettings.value(PREFS_GRP + "/" + COUNT_SAVED_SESSIONS_SETTING, 10).toInt();
     for (int i = 0; i < countSavedSessions; ++i) {
         // update session menu
-        if (mSettings.contains("LastSession/SavedSession" + QString().setNum(i))) {
+        if (mSettings.contains(LAST_SESSION_GRP + "/" + SAVED_SESSION_SETTING + QString().setNum(i))) {
             // last session
-            QAction *lastSessionAction = new QAction(mSettings.value("LastSession/SavedSession" + QString().setNum(i)).toString(), this);
+            QAction *lastSessionAction = new QAction(mSettings.value(LAST_SESSION_GRP + "/" + SAVED_SESSION_SETTING + QString().setNum(i)).toString(), this);
             connect(lastSessionAction, SIGNAL(triggered()), this, SLOT(loadLastSession()));
 
             ui.mSessionMenu->addAction(lastSessionAction);
@@ -557,7 +559,7 @@ MainWindow::describeObject()
     // add description widget to tab widget
     ui.mTabWidget->addTab(descWidget, tabTitle);
 
-    bool switchToNewTab = mSettings.value("Preferences/NewTabAutoSwitch").toBool();
+    bool switchToNewTab = mSettings.value(Consts::PREFS_GRP + "/" + Consts::NEW_TAB_AUTO_SWITCH_SETTING).toBool();
 
     // if auto switch enabled
     if (switchToNewTab) {
@@ -628,7 +630,7 @@ MainWindow::queryData()
     // add description widget to tab widget
     ui.mTabWidget->addTab(sqlWidget, tabTitle);
 
-    bool switchToNewTab = mSettings.value("Preferences/NewTabAutoSwitch", true).toBool();
+    bool switchToNewTab = mSettings.value(Consts::PREFS_GRP + "/" + Consts::NEW_TAB_AUTO_SWITCH_SETTING, true).toBool();
 
     // if auto switch enabled
     if ( switchToNewTab ) {
@@ -720,12 +722,14 @@ MainWindow::loadFromXml(QString ipFileName)
 void
 MainWindow::saveSession()
 {
-    QString defaultFileName = "session_" + 
-        mSettings.value("LastSession/DbName", "undefined").toString() + "_" +
-        mSettings.value("LastSession/DbUser", "undefined").toString() + "_" + 
+    using namespace Consts;
+    QString defaultFileName = "session_" +
+        /*! \todo Fix these hard coded strings approach */
+        mSettings.value(LAST_SESSION_GRP + "/" + DB_NAME_SETTING, "undefined").toString() + "_" +
+        mSettings.value(LAST_SESSION_GRP + "/" + DB_USER_SETTING, "undefined").toString() + "_" + 
         QDate::currentDate().toString(Qt::DefaultLocaleShortDate) + "_" + QTime::currentTime().toString() + ".vdb";
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save session..."),
-            mSettings.value("Preferences/SessionFolder", "./").toString() + defaultFileName,
+            mSettings.value(PREFS_GRP + "/" + SESSION_DIR_SETTING, "./").toString() + defaultFileName,
             tr("Xml files (*.vdb)"));
     // return if we don't select any file to save
     if (fileName == "") {
@@ -733,12 +737,12 @@ MainWindow::saveSession()
     }
 
     for (int i = 9; i > 0; --i) {
-        if (mSettings.contains("LastSession/SavedSession" + QString().setNum(i - 1))) {
-            mSettings.setValue("LastSession/SavedSession" + QString().setNum(i), mSettings.value("LastSession/SavedSession" + QString().setNum(i - 1)));
+        if (mSettings.contains(LAST_SESSION_GRP + "/" + SAVED_SESSION_SETTING + QString().setNum(i - 1))) {
+            mSettings.setValue(LAST_SESSION_GRP + "/" + SAVED_SESSION_SETTING + QString().setNum(i), mSettings.value(LAST_SESSION_GRP + "/" + SAVED_SESSION_SETTING + QString().setNum(i - 1)));
         }
     }
 
-    mSettings.setValue("LastSession/SavedSession0", fileName);
+    mSettings.setValue(LAST_SESSION_GRP + "/" + SAVED_SESSION_SETTING + "0", fileName);
     updateSessionMenu();
     saveToXml(fileName);
 }
@@ -750,7 +754,7 @@ void
 MainWindow::loadSession()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open session..."),
-            mSettings.value("Preferences/SessionFolder", "./").toString(),
+            mSettings.value(Consts::PREFS_GRP + "/" + Consts::SESSION_DIR_SETTING, "./").toString(),
             tr("Xml files (*.vdb)"));
     if (!QFile::exists(fileName)) {
         QMessageBox messageBox;
@@ -767,7 +771,7 @@ MainWindow::loadSession()
  * Load last session
  */
 void
-MainWindow::loadLastSession() 
+MainWindow::loadLastSession()
 {
     QAction *action = dynamic_cast<QAction *>(QObject::sender());
     loadFromXml(action->text());
@@ -803,10 +807,11 @@ MainWindow::reloadData()
 void
 MainWindow::initSession()
 {
+    QString firstSavedSession = Consts::LAST_SESSION_GRP + "/" + Consts::SAVED_SESSION_SETTING + "0";
     // if checked flag in appearance page - load last session
-    if (mSettings.value("Preferences/LoadLastSession", false).toBool()) {
-        if (mSettings.contains("LastSession/SavedSession0")) {
-            loadFromXml(mSettings.value("LastSession/SavedSession0").toString());
+    if (mSettings.value(Consts::PREFS_GRP + "/" + Consts::LOAD_LAST_SESSION_SETTING, false).toBool()) {
+        if (mSettings.contains(firstSavedSession)) {
+            loadFromXml(mSettings.value(firstSavedSession).toString());
         } else {
             qDebug() << "Last session not found";
         }
@@ -832,3 +837,4 @@ MainWindow::printMsg(QString ipText) const
     qDebug() << ui.mLogPanel;
     ui.mLogPanel->print(ipText);
 }
+

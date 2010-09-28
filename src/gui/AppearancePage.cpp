@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -27,6 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <consts.h>
 #include <gui/AppearancePage.h>
 #include <QLocale>
 
@@ -44,7 +45,8 @@ AppearancePage::AppearancePage(QWidget *ipParent)
     ui.mLanguageCombo->addItem(QLocale::languageToString(QLocale::Russian), QLocale::Russian);
 
     // set language to the one from settings
-    int currentIndex = ui.mLanguageCombo->findData(mSettings.value("Appearance/Language", QLocale::English));
+    using namespace Consts;
+    int currentIndex = ui.mLanguageCombo->findData(mSettings.value(APPEARANCE_GRP + "/" + LANG_SETTING, QLocale::English));
     ui.mLanguageCombo->setCurrentIndex(currentIndex);
 
 }

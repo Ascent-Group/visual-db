@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
- * 
+ *
+ *
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -32,8 +32,9 @@
 #include <gui/OptionsDialog.h>
 #include <gui/PreferencesPage.h>
 
-#include <QtDebug>
+#include <consts.h>
 
+#include <QtDebug>
 
 /*
  * Constructor
@@ -57,17 +58,18 @@ OptionsDialog::~OptionsDialog()
 void
 OptionsDialog::writeSettings()
 {
-    mSettings.setValue("Appearance/Language", ui.mAppearancePage->language());
-    mSettings.setValue("Preferences/SessionFolder", ui.mPreferencesPage->sessionFolder());
-    mSettings.setValue("Preferences/NewTabAutoSwitch", ui.mPreferencesPage->newTabAutoSwitch());
-    mSettings.setValue("Preferences/LoadLastSession", ui.mPreferencesPage->loadLastSession());
-    mSettings.setValue("Preferences/CountSavedSessions", ui.mPreferencesPage->countSavedSession());
-    mSettings.setValue("Preferences/ShowIndices", ui.mPreferencesPage->showIndices());
-    mSettings.setValue("Color/Background", ui.mColorsPage->backgroundColor());
-    mSettings.setValue("Color/Table", ui.mColorsPage->tableColor());
-//    mSettings.setValue("Color/Font", ui.mColorsPage->fontColor());
-    mSettings.setValue("Color/Arrow", ui.mColorsPage->arrowColor());
-    mSettings.setValue("Color/Border", ui.mColorsPage->borderColor());
+    using namespace Consts;
+    mSettings.setValue(APPEARANCE_GRP + "/" + LANG_SETTING, ui.mAppearancePage->language());
+    mSettings.setValue(PREFS_GRP + "/" + SESSION_DIR_SETTING, ui.mPreferencesPage->sessionFolder());
+    mSettings.setValue(PREFS_GRP + "/" + NEW_TAB_AUTO_SWITCH_SETTING, ui.mPreferencesPage->newTabAutoSwitch());
+    mSettings.setValue(PREFS_GRP + "/" + LOAD_LAST_SESSION_SETTING, ui.mPreferencesPage->loadLastSession());
+    mSettings.setValue(PREFS_GRP + "/" + COUNT_SAVED_SESSIONS_SETTING, ui.mPreferencesPage->countSavedSession());
+    mSettings.setValue(PREFS_GRP + "/" + SHOW_INDICES_SETTING, ui.mPreferencesPage->showIndices());
+    mSettings.setValue(COLOR_GRP + "/" + BACKGROUND_SETTING, ui.mColorsPage->backgroundColor());
+    mSettings.setValue(COLOR_GRP + "/" + TABLE_SETTING, ui.mColorsPage->tableColor());
+//    mSettings.setValue(COLOR_GRP + "/" + FONT_SETTING, ui.mColorsPage->fontColor());
+    mSettings.setValue(COLOR_GRP + "/" + ARROW_SETTING, ui.mColorsPage->arrowColor());
+    mSettings.setValue(COLOR_GRP + "/" + BORDER_SETTING, ui.mColorsPage->borderColor());
 }
 
 /*
@@ -89,7 +91,8 @@ OptionsDialog::changePage(QListWidgetItem *ipCurrent, QListWidgetItem *ipPreviou
     if (!ipCurrent) {
         ipCurrent = ipPrevious;
     }
-    
+
     // show appropriate page
     ui.mOptionsPages->setCurrentIndex(ui.mOptionsList->row(ipCurrent));
 }
+

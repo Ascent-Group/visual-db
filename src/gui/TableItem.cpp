@@ -42,6 +42,7 @@
 #include <common/DbIndex.h>
 #include <common/DbSchema.h>
 #include <common/DbTable.h>
+#include <consts.h>
 #include <gui/ArrowItem.h>
 #include <gui/GraphicsScene.h>
 #include <gui/TableItem.h>
@@ -102,7 +103,7 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     // set width and height
     setWidth(DEFAULT_WIDTH);
 
-    mIndicesVisible = mSettings.value("Preferences/ShowIndices", false).toBool();
+    mIndicesVisible = mSettings.value(Consts::PREFS_GRP + "/" + Consts::SHOW_INDICES_SETTING, false).toBool();
     if (mIndicesVisible) {
         setHeight((mTableModel->columnsCount() + mIndices.count() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
     } else {
@@ -348,7 +349,7 @@ TableItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
     //    setZValue(0);
 
     QGraphicsItem::mouseReleaseEvent(ipEvent);
-    if (mSettings.value("View/AlignToGrid", false).toBool()) {
+    if (mSettings.value(Consts::VIEW_GRP + "/" + Consts::ALIGN_TO_GRID_SETTING, false).toBool()) {
         moveBy(-(int)pos().x() % GraphicsScene::LOW_GRID_DX, -(int)pos().y() % GraphicsScene::LOW_GRID_DY);
     }
 }

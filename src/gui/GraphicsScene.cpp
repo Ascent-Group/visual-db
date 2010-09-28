@@ -37,6 +37,7 @@
 #include <QTreeWidgetItem>
 #include <common/Database.h>
 #include <common/DbTable.h>
+#include <consts.h>
 #include <gui/ArrowItem.h>
 #include <gui/ControlWidget.h>
 #include <gui/GraphicsScene.h>
@@ -54,7 +55,7 @@
     GraphicsScene::GraphicsScene()
 : QGraphicsScene(), mSelectionPath(), mMoveMode(false), mOldPos()
 {
-    setBackgroundBrush(QBrush(mSettings.value("Color/Background", Qt::white).value<QColor>()));
+    setBackgroundBrush(QBrush(mSettings.value(Consts::COLOR_GRP + "/" + Consts::BACKGROUND_SETTING, Qt::white).value<QColor>()));
     setSceneRect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     mLegend = new Legend();
     mLegend->setZValue(1000);
@@ -87,7 +88,7 @@ GraphicsScene::setTableMenu(QMenu *ipTableMenu)
  */
     QList<QGraphicsItem *>
 GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
-{ 
+{
     QList<QGraphicsItem *> tableList;
 
     if (0 == ipTreeItem) {
@@ -147,7 +148,7 @@ GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ip
  * Add existent table items to the scene
  */
 void
-GraphicsScene::addTableItems(const QList<QGraphicsItem *> &ipItems) 
+GraphicsScene::addTableItems(const QList<QGraphicsItem *> &ipItems)
 {
     foreach (QGraphicsItem *item, ipItems) {
         if (qgraphicsitem_cast<TableItemGroup *>(item)) {
@@ -174,7 +175,7 @@ GraphicsScene::drawRelations()
         if (qgraphicsitem_cast<TableItem *>(item)) {
             createRelations(qgraphicsitem_cast<TableItem *>(item));
         }
-    }  
+    }
 }
 
 /*
@@ -395,12 +396,13 @@ GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
 void
 GraphicsScene::drawBackground(QPainter *ipPainter, const QRectF &)
 {
-    bool needDrawGrid = mSettings.value("View/ShowGrid", true).value<bool>();
+    using namespace Consts;
+    bool needDrawGrid = mSettings.value(VIEW_GRP + "/" + SHOW_GRID_SETTING, true).value<bool>();
     if (needDrawGrid) {
         drawGrid(ipPainter);
     }
 
-    bool needDivideIntoPages = mSettings.value("View/DivideIntoPages", true).value<bool>();
+    bool needDivideIntoPages = mSettings.value(VIEW_GRP + "/" + DIVIDE_INTO_PAGES_SETTING, true).value<bool>();
     if (needDivideIntoPages) {
         divideIntoPages(ipPainter);
     }
@@ -756,7 +758,7 @@ void
 GraphicsScene::showGrid(bool ipFlag)
 {
     // only remember given flag; all analyze will be done in scene class
-    mSettings.setValue("View/ShowGrid", ipFlag);
+    mSettings.setValue(Consts::VIEW_GRP + "/" + Consts::SHOW_GRID_SETTING, ipFlag);
     update(QRectF(0.0, 0.0, width(), height()));
 }
 
@@ -766,7 +768,7 @@ GraphicsScene::showGrid(bool ipFlag)
 void
 GraphicsScene::alignToGrid(bool ipFlag)
 {
-    mSettings.setValue("View/AlignToGrid", ipFlag);
+    mSettings.setValue(Consts::VIEW_GRP + "/" + Consts::ALIGN_TO_GRID_SETTING, ipFlag);
 }
 
 /*
@@ -776,7 +778,7 @@ void
 GraphicsScene::divideIntoPages(bool ipFlag)
 {
     // only remember given flag; all analyze will be done in scene class
-    mSettings.setValue("View/DivideIntoPages", ipFlag);
+    mSettings.setValue(Consts::VIEW_GRP + "/" + Consts::DIVIDE_INTO_PAGES_SETTING, ipFlag);
     update(QRectF(0.0, 0.0, width(), height()));
 }
 

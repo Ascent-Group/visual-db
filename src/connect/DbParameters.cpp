@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
- * 
+ *
+ *
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -34,17 +34,19 @@
 #include <QVariant>
 #include <common/Database.h>
 #include <connect/DbParameters.h>
+#include <consts.h>
 
 /*
  * Constructor
  */
 DbParameters::DbParameters()
 {
-    mDbDriver = mSettings.value("LastSession/dbDriver", QString("QSQLITE")).toString();
-    mDbHost = mSettings.value("LastSession/dbHost", QString("localhost")).toString();
-    mDbPort = mSettings.value("LastSession/dbPort", 5432).toInt();
-    mDbName = mSettings.value("LastSession/dbName", QString("")).toString();
-    mDbUser = mSettings.value("LastSession/dbUser", QString("postgres")).toString();
+    using namespace Consts;
+    mDbDriver = mSettings.value(LAST_SESSION_GRP + "/" + DB_DRV_SETTING, QString("QSQLITE")).toString();
+    mDbHost = mSettings.value(LAST_SESSION_GRP + "/" + DB_HOST_SETTING, QString("localhost")).toString();
+    mDbPort = mSettings.value(LAST_SESSION_GRP + "/" + DB_PORT_SETTING, 5432).toInt();
+    mDbName = mSettings.value(LAST_SESSION_GRP + "/" + DB_NAME_SETTING, QString("")).toString();
+    mDbUser = mSettings.value(LAST_SESSION_GRP + "/" + DB_USER_SETTING, QString("postgres")).toString();
 }
 
 /*
@@ -95,42 +97,42 @@ void
 DbParameters::setDbDriver(QString ipDbDriver)
 {
     mDbDriver = ipDbDriver;
-    mSettings.setValue("LastSession/dbDriver", mDbDriver);
+    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::DB_DRV_SETTING, mDbDriver);
 }
 
 void
 DbParameters::setDbHost(QString ipDbHost)
 {
     mDbHost = ipDbHost;
-    mSettings.setValue("LastSession/dbHost", mDbHost);
+    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::DB_HOST_SETTING, mDbHost);
 }
 
 void
 DbParameters::setDbPort(quint16 ipDbPort)
 {
     mDbPort = ipDbPort;
-    mSettings.setValue("LastSession/dbPort", mDbPort);
+    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::DB_PORT_SETTING, mDbPort);
 }
 
 void
 DbParameters::setDbName(QString ipDbName)
 {
     mDbName = ipDbName;
-    mSettings.setValue("LastSession/dbName", mDbName);
+    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::DB_NAME_SETTING, mDbName);
 }
 
 void
 DbParameters::setDbPassword(QString ipDbPassword)
 {
     mDbPassword = ipDbPassword;
-    mSettings.setValue("LastSession/dbPassword", mDbPassword);
+    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::DB_PASS_SETTING, mDbPassword);
 }
 
 void
 DbParameters::setDbUser(QString ipDbUser)
 {
     mDbUser = ipDbUser;
-    mSettings.setValue("LastSession/dbUser", mDbUser);
+    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::DB_USER_SETTING, mDbUser);
 }
 
 /*

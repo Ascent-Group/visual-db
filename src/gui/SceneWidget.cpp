@@ -69,7 +69,7 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
     connect(mControlWidget, SIGNAL(movedRight()), mView, SLOT(moveRight()));
     connect(mControlWidget, SIGNAL(moveModeSet(bool)), mView, SLOT(setMoveMode(bool)));
 
-    connect(mScene, SIGNAL(tableMoved(QList <QGraphicsItem *>, const QPointF &)), 
+    connect(mScene, SIGNAL(tableMoved(QList <QGraphicsItem *>, const QPointF &)),
             this, SLOT(sendTableMoved(QList <QGraphicsItem *>, const QPointF &)));
 
     connect(mView, SIGNAL(valueIncreased()), mControlWidget, SLOT(increaseValue()));
@@ -139,7 +139,7 @@ SceneWidget::showLegend(bool ipFlag)
 void
 SceneWidget::deleteTableItem()
 {
-    if (mScene->selectedItems().count() > 0) { 
+    if (mScene->selectedItems().count() > 0) {
         DeleteTableCommand *command = new DeleteTableCommand(*mScene, mScene->selectedItems());
         emit tableActionDone(command);
     }
@@ -457,7 +457,7 @@ TableItem *
 SceneWidget::tableFromXml(QDomElement &ipElement)
 {
     // get table's coordinates
-    TableItem *newTable = mScene->newTableItem(ipElement.attribute("schema"), 
+    TableItem *newTable = mScene->newTableItem(ipElement.attribute("schema"),
             ipElement.attribute("name"), mTableMenu);
     newTable->moveBy(ipElement.attribute("x").toInt() - newTable->x(),
             ipElement.attribute("y").toInt() - newTable->y());

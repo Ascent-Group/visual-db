@@ -126,7 +126,7 @@ class DbIndex : public DbObject
          * If true, queries must not use the index until the xmin of this
          * pg_index  row is below their TransactionXmin event horizon, because
          * the table may contain broken HOT chains with incompatible rows that
-         * they can see 
+         * they can see
          */
         bool mChecksXMin;
         /*! is currently ready for inserts */

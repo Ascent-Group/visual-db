@@ -43,7 +43,7 @@ Legend::Legend()
     : GraphicsItem()
 {
     setTitleItem(new QGraphicsTextItem("Legend"));
- 
+
     setX(DEFAULT_X);
     setY(DEFAULT_Y);
     setBrush(Qt::white);
@@ -88,7 +88,7 @@ Legend::refresh()
  * Paint the legend
  */
 void
-Legend::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidget *ipWidget) 
+Legend::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidget *ipWidget)
 {
     // draw the board of the table
     QGraphicsPolygonItem::paint(ipPainter, ipItem, ipWidget);
@@ -99,7 +99,7 @@ Legend::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidg
 
     // draw each field
     for (int i = 0; i < countFields(); ++i) {
-    ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL, 
+    ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
         (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2,
         Qt::AlignLeft, fieldText(i));
 

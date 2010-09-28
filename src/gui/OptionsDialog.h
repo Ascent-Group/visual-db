@@ -43,7 +43,7 @@ class OptionsDialog : public QDialog
 
     public:
         OptionsDialog(QWidget *ipParent = 0);
-        ~OptionsDialog();    
+        ~OptionsDialog();
 
     private:
         Ui::OptionsDialog ui;

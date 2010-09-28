@@ -46,8 +46,8 @@
 /*
  * Constructor
  */
-SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters, 
-        ProxyParameters *ipProxyParameters, 
+SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
+        ProxyParameters *ipProxyParameters,
         bool ipLoadSession,
         QWidget *ipParent)
 : QDialog(ipParent), mDbParameters(ipDbParameters), mProxyParameters(ipProxyParameters)
@@ -143,7 +143,7 @@ SqlConnectionDialog::initConnectionFields()
  * Establish connection
  */
     void
-SqlConnectionDialog::addConnection() 
+SqlConnectionDialog::addConnection()
 {
     // proxy section
     if (ui.mUseProxyBox->isChecked()) {
@@ -183,7 +183,7 @@ SqlConnectionDialog::addConnection()
 /*
  * Switch on/off proxy connection parameters
  */
-void 
+void
 SqlConnectionDialog::switchProxy(bool toggle)
 {
     ui.mProxyTypeBox->setEnabled(toggle);

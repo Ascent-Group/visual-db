@@ -79,8 +79,8 @@ class TableItem : public GraphicsItem
         void adjustSize();
 
         QList<ArrowItem *> arrows() const;
-        QString tableName() const; 
-        QString schemaName() const; 
+        QString tableName() const;
+        QString schemaName() const;
         DbObjects::Common::DbTable *tableModel() const;
         QDomElement toXml(QDomDocument &);
 
@@ -100,18 +100,18 @@ class TableItem : public GraphicsItem
 
     private:
         // mode for table (you can resize table from different positions or move it)
-        enum Mode { 
+        enum Mode {
             RIGHT_BOTTOM_CORNER_RESIZE,
             LEFT_BOTTOM_CORNER_RESIZE,
             LEFT_TOP_CORNER_RESIZE,
             RIGHT_TOP_CORNER_RESIZE,
 
-            LEFT_VERTICAL_RESIZE, 
-            RIGHT_VERTICAL_RESIZE, 
-            TOP_HORIZONTAL_RESIZE, 
-            BOTTOM_HORIZONTAL_RESIZE, 
+            LEFT_VERTICAL_RESIZE,
+            RIGHT_VERTICAL_RESIZE,
+            TOP_HORIZONTAL_RESIZE,
+            BOTTOM_HORIZONTAL_RESIZE,
 
-            MOVE 
+            MOVE
         };
 
         static int mSeek;

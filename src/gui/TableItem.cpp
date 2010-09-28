@@ -150,7 +150,7 @@ TableItem::type() const
 }
 
 /*
- * 
+ *
  */
 void
 TableItem::addIndexItem(QGraphicsTextItem *ipIndexItem)
@@ -162,14 +162,14 @@ TableItem::addIndexItem(QGraphicsTextItem *ipIndexItem)
  * Paint the table. Height is adjusting, but width is setted to default.
  */
 void
-TableItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidget *ipWidget) 
+TableItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidget *ipWidget)
 {
     // draw the board of the table
     QGraphicsPolygonItem::paint(ipPainter, ipItem, ipWidget);
 
     // fill title with a little darker color then another table
     ipPainter->fillRect((int)x() + 1, (int)y() + 1,
-            (int)width() - 1, (int)y() + FIELD_HEIGHT + INTERVAL * 2 - (int)y() - 1, 
+            (int)width() - 1, (int)y() + FIELD_HEIGHT + INTERVAL * 2 - (int)y() - 1,
             QColor(abs(itemColor().red() - 80), abs(itemColor().green() - 80), abs(itemColor().blue() - 80)));
 
     // draw line under the title
@@ -187,8 +187,8 @@ TableItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QW
     ipPainter->drawImage(target, *mTableImage, source);
 
     // draw the title aligned on the center in upper case
-    ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + INTERVAL, 
-            (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL, 
+    ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + INTERVAL,
+            (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL,
             Qt::AlignCenter,
             titleText());
 
@@ -215,8 +215,8 @@ TableItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QW
         }
 
         // draw field name with margins = INTERVAL for top, bottom, left and right sizes
-        ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL, 
-                (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2, 
+        ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
+                (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2,
                 Qt::AlignLeft,
                 fieldText(i));
     }
@@ -228,9 +228,9 @@ TableItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QW
             if (height() < (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 2) + INTERVAL) {
                 break;
             }
-            ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, 
-                    (int)y() + (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 1) + INTERVAL, 
-                    (int)width() - IMG_WIDTH - INTERVAL * 3, 
+            ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL,
+                    (int)y() + (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 1) + INTERVAL,
+                    (int)width() - IMG_WIDTH - INTERVAL * 3,
                     FIELD_HEIGHT + INTERVAL * 2, Qt::AlignLeft,
                     mIndexItems.at(i)->toPlainText());
         }

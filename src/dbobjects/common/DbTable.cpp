@@ -149,7 +149,7 @@ DbTable::columnType(qint16 ipColId) const
     }
 
     // if id is out of bounds
-    if (0 > ipColId || ipColId >= mColumnDefs.count()) {    
+    if (0 > ipColId || ipColId >= mColumnDefs.count()) {
     qDebug() << QString("DbTable::columnType> For %1 id %2 is out of bounds!!!")
         .arg(mName)
         .arg(ipColId);

@@ -268,7 +268,7 @@ GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     QGraphicsItem *item = itemAt(ipEvent->scenePos());
     qDebug() << item << mOldPos.x() << ipEvent->scenePos().x();
-    if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) && 
+    if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) &&
             ipEvent->scenePos() != mOldPos) {
         //  emit tableMoved(selectedItems(), mOldPos - item->scenePos());
     }
@@ -791,7 +791,7 @@ GraphicsScene::selectAllTablesInSchema()
     foreach (QGraphicsItem *itemFromSelected, selectedItems()) {
         // items can mutate in the loop
         foreach (QGraphicsItem *itemFromAll, items()) {
-            if (qgraphicsitem_cast<TableItem *>(itemFromAll) && 
+            if (qgraphicsitem_cast<TableItem *>(itemFromAll) &&
                     qgraphicsitem_cast<TableItem *>(itemFromSelected) &&
                     qgraphicsitem_cast<TableItem *>(itemFromAll)->schemaName() ==
                     qgraphicsitem_cast<TableItem *>(itemFromSelected)->schemaName()) {

@@ -235,7 +235,7 @@ DescriptionWidget::describe(const DbObjects::Common::DbTable *ipTable)
                         .arg(foreignTableName)
                         .arg(foreignFieldsNames));
         }
-    
+
     if (i != columnsCount - 1) {
         body.append(",");
     }

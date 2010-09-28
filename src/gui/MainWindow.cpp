@@ -650,7 +650,7 @@ MainWindow::saveToXml(QString ipFileName)
     doc.appendChild(root);
     root.appendChild(mDbParameters->toXml(doc));
     root.appendChild(mProxyParameters->toXml(doc));
-    root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(), 
+    root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(),
                 ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
 
     QFile file(ipFileName);
@@ -726,7 +726,7 @@ MainWindow::saveSession()
     QString defaultFileName = "session_" +
         /*! \todo Fix these hard coded strings approach */
         mSettings.value(LAST_SESSION_GRP + "/" + DB_NAME_SETTING, "undefined").toString() + "_" +
-        mSettings.value(LAST_SESSION_GRP + "/" + DB_USER_SETTING, "undefined").toString() + "_" + 
+        mSettings.value(LAST_SESSION_GRP + "/" + DB_USER_SETTING, "undefined").toString() + "_" +
         QDate::currentDate().toString(Qt::DefaultLocaleShortDate) + "_" + QTime::currentTime().toString() + ".vdb";
     QString fileName = QFileDialog::getSaveFileName(this, tr("Save session..."),
             mSettings.value(PREFS_GRP + "/" + SESSION_DIR_SETTING, "./").toString() + defaultFileName,

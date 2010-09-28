@@ -14,6 +14,6 @@ build_tests.commands = @echo "Building tests" \
                        && make
 
 run_tests.commands = @echo "Running tests" \
-                     && ./tests/tests
+                     && env VDB_DB_DRV=QPSQL ./tests/tests
 run_tests.depends = build_tests
 

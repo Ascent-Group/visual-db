@@ -1,10 +1,10 @@
 /*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
- * 
+ *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
- * 
+ *
  *     * Redistributions of source code must retain the above copyright notice,
  *       this list of conditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above copyright notice,
@@ -13,8 +13,8 @@
  *     * Neither the name of the Ascent Group nor the names of its contributors
  *       may be used to endorse or promote products derived from this software
  *       without specific prior written permission.
- * 
- * 
+ *
+ *
  *     THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
@@ -76,7 +76,7 @@ GraphicsView::~GraphicsView()
  * - - minimize the table scheme view
  * arrow keys - move items to the appropriate sides
  */
-void 
+void
 GraphicsView::keyPressEvent(QKeyEvent *ipEvent)
 {
     switch (ipEvent->key()) {
@@ -128,7 +128,7 @@ GraphicsView::keyPressEvent(QKeyEvent *ipEvent)
 /*
  * Handler for scrolling event
  */
-void 
+void
 GraphicsView::wheelEvent(QWheelEvent *ipEvent)
 {
     // if we scroll with control button pressed
@@ -148,7 +148,7 @@ GraphicsView::wheelEvent(QWheelEvent *ipEvent)
 /*
  * Scaling the table scheme
  */
-void 
+void
 GraphicsView::scaleView(int ipScaleFactor)
 {
     static int prevFactor = (MAXIMUM_FACTOR - MINIMUM_FACTOR) / 2;
@@ -197,7 +197,7 @@ GraphicsView::moveUp()
 /*
  * Move the widget down
  */
-void 
+void
 GraphicsView::moveDown()
 {
     verticalScrollBar()->setValue(verticalScrollBar()->value() + MOVE_STEP);

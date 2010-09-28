@@ -37,7 +37,7 @@
 #include <mysql/Tools.h>
 #include <psql/Role.h>
 #include <psql/Tools.h>
-// \ todo remove next include
+// \todo remove next include
 #include <psql/Trigger.h>
 #include <QSqlDatabase>
 #include <QSqlError>

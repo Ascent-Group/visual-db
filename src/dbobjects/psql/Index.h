@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLINDEX_H
-#define PSQLINDEX_H
+#ifndef DBOBJECTS_PSQL_INDEX_H
+#define DBOBJECTS_PSQL_INDEX_H
 
 #include <common/DbIndex.h>
 
@@ -53,5 +53,5 @@ class Index : public Common::DbIndex
 
 } // namespace DbObjects
 
-#endif // PSQLINDEX_H
+#endif // DBOBJECTS_PSQL_INDEX_H
 

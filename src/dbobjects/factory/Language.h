@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FACTORY_LANGUAGE_H
-#define FACTORY_LANGUAGE_H
+#ifndef DBOBJECTS_FACTORY_LANGUAGE_H
+#define DBOBJECTS_FACTORY_LANGUAGE_H
 
 #include <QString>
 #include <QtCore/qglobal.h>
@@ -71,5 +71,5 @@ class Language
 
 } // namespace DbObjects
 
-#endif // FACTORY_LANGUAGE_H
+#endif // DBOBJECTS_FACTORY_LANGUAGE_H
 

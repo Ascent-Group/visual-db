@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLTRIGGER_H
-#define PSQLTRIGGER_H
+#ifndef DBOBJECTS_PSQL_TRIGGER_H
+#define DBOBJECTS_PSQL_TRIGGER_H
 
 #include <common/DbTrigger.h>
 
@@ -52,5 +52,5 @@ class Trigger : public Common::DbTrigger
 
 } // namespace DbObjects
 
-#endif // PSQLTRIGGER_H
+#endif // DBOBJECTS_PSQL_TRIGGER_H
 

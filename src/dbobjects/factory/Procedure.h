@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FACTORY_PROCEDURE_H
-#define FACTORY_PROCEDURE_H
+#ifndef DBOBJECTS_FACTORY_PROCEDURE_H
+#define DBOBJECTS_FACTORY_PROCEDURE_H
 
 #include <QtCore/qglobal.h>
 
@@ -70,5 +70,5 @@ class Procedure
 
 } // namespace DbObjects
 
-#endif // FACTORY_PROCEDURE_H
+#endif // DBOBJECTS_FACTORY_PROCEDURE_H
 

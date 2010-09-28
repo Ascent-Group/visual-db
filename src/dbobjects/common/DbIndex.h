@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBINDEX_H
-#define DBINDEX_H
+#ifndef DBOBJECTS_COMMON_DBINDEX_H
+#define DBOBJECTS_COMMON_DBINDEX_H
 
 #include <QVector>
 #include <common/DbObject.h>
@@ -140,5 +140,5 @@ class DbIndex : public DbObject
 
 } // namespace DbObjects
 
-#endif // DBINDEX_H
+#endif // DBOBJECTS_COMMON_DBINDEX_H
 

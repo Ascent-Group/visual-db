@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLTABLE_H
-#define PSQLTABLE_H
+#ifndef DBOBJECTS_PSQL_TABLE_H
+#define DBOBJECTS_PSQL_TABLE_H
 
 #include <common/DbTable.h>
 
@@ -57,5 +57,5 @@ class Table : public Common::DbTable
 
 } // namespace DbObjects
 
-#endif // PSQLTABLE_H
+#endif // DBOBJECTS_PSQL_TABLE_H
 

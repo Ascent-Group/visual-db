@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FACTORY_ROLE_H
-#define FACTORY_ROLE_H
+#ifndef DBOBJECTS_FACTORY_ROLE_H
+#define DBOBJECTS_FACTORY_ROLE_H
 
 #include <QtCore/qglobal.h>
 
@@ -70,5 +70,5 @@ class Role
 
 } // namespace DbObjects
 
-#endif // FACTORY_ROLE_H
+#endif // DBOBJECTS_FACTORY_ROLE_H
 

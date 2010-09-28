@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DATABASE_H
-#define DATABASE_H
+#ifndef DBOBJECTS_COMMON_DATABASE_H
+#define DBOBJECTS_COMMON_DATABASE_H
 
 #include <QVector>
 #include <common/DbTable.h>
@@ -151,5 +151,5 @@ class DatabaseManager
 
 } // namespace DbObjects
 
-#endif // DATABASE_H
+#endif // DBOBJECTS_COMMON_DATABASE_H
 

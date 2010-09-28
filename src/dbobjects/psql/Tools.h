@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQL_TOOLS_H
-#define PSQL_TOOLS_H
+#ifndef DBOBJECTS_PSQL_TOOLS_H
+#define DBOBJECTS_PSQL_TOOLS_H
 
 #include <QStringList>
 #include <QtCore/qglobal.h>
@@ -65,5 +65,5 @@ namespace Tools
 
 } // namespace DbObjects
 
-#endif // PSQL_TOOLS_H
+#endif // DBOBJECTS_PSQL_TOOLS_H
 

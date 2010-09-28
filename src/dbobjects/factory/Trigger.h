@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FACTORY_TRIGGER_H
-#define FACTORY_TRIGGER_H
+#ifndef DBOBJECTS_FACTORY_TRIGGER_H
+#define DBOBJECTS_FACTORY_TRIGGER_H
 
 #include <QtCore/qglobal.h>
 
@@ -70,5 +70,5 @@ class Trigger
 
 } // namespace DbObjects
 
-#endif // FACTORY_TRIGGER_H
+#endif // DBOBJECTS_FACTORY_TRIGGER_H
 

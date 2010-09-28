@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBTABLE_H
-#define DBTABLE_H
+#ifndef DBOBJECTS_COMMON_DBTABLE_H
+#define DBOBJECTS_COMMON_DBTABLE_H
 
 #include <QStringList>
 #include <QVector>
@@ -136,5 +136,5 @@ class DbTable : public Common::DbObject
 
 } // namespace DbObjects
 
-#endif // DBTABLE_H
+#endif // DBOBJECTS_COMMON_DBTABLE_H
 

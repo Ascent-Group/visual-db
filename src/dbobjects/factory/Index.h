@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FACTORY_INDEX_H
-#define FACTORY_INDEX_H
+#ifndef DBOBJECTS_FACTORY_INDEX_H
+#define DBOBJECTS_FACTORY_INDEX_H
 
 #include <QtCore/qglobal.h>
 
@@ -70,5 +70,5 @@ class Index
 
 } // namespace DbObjects
 
-#endif // FACTORY_INDEX_H
+#endif // DBOBJECTS_FACTORY_INDEX_H
 

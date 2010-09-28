@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECT_H
-#define DBOBJECT_H
+#ifndef DBOBJECTS_COMMON_DBOBJECT_H
+#define DBOBJECTS_COMMON_DBOBJECT_H
 
 #include <QString>
 
@@ -84,5 +84,5 @@ class DbObject
 
 } // namespace DbObjects
 
-#endif // DBOBJECT_H
+#endif // DBOBJECTS_COMMON_DBOBJECT_H
 

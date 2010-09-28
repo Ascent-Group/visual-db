@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLLANGUAGE_H
-#define PSQLLANGUAGE_H
+#ifndef DBOBJECTS_PSQL_LANGUAGE_H
+#define DBOBJECTS_PSQL_LANGUAGE_H
 
 #include <common/DbLanguage.h>
 
@@ -53,5 +53,5 @@ class Language : public Common::DbLanguage
 
 } // namespace DbObjects
 
-#endif // PSQLLANGUAGE_H
+#endif // DBOBJECTS_PSQL_LANGUAGE_H
 

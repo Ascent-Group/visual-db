@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MYSQLTABLE_H
-#define MYSQLTABLE_H
+#ifndef DBOBJECTS_MYSQL_TABLE_H
+#define DBOBJECTS_MYSQL_TABLE_H
 
 #include <common/DbTable.h>
 
@@ -57,5 +57,5 @@ class Table : public Common::DbTable
 
 } // namespace DbObjects
 
-#endif // MYSQLTABLE_H
+#endif // DBOBJECTS_MYSQL_TABLE_H
 

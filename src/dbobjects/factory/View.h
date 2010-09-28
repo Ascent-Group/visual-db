@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FACTORY_VIEW_H
-#define FACTORY_VIEW_H
+#ifndef DBOBJECTS_FACTORY_VIEW_H
+#define DBOBJECTS_FACTORY_VIEW_H
 
 #include <QtCore/qglobal.h>
 
@@ -70,5 +70,5 @@ class View
 
 } // namespace DbObjects
 
-#endif // FACTORY_VIEW_H
+#endif // DBOBJECTS_FACTORY_VIEW_H
 

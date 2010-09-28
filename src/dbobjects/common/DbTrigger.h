@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBTRIGGER_H
-#define DBTRIGGER_H
+#ifndef DBOBJECTS_COMMON_DBTRIGGER_H
+#define DBOBJECTS_COMMON_DBTRIGGER_H
 
 #include <common/DbObject.h>
 #include <common/DbProcedure.h>
@@ -128,5 +128,5 @@ class DbTrigger : public DbObject
 
 } // namespace DbObjects
 
-#endif // DBTRIGGER_H
+#endif // DBOBJECTS_COMMON_DBTRIGGER_H
 

@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLVIEW_H
-#define PSQLVIEW_H
+#ifndef DBOBJECTS_PSQL_VIEW_H
+#define DBOBJECTS_PSQL_VIEW_H
 
 #include <common/DbView.h>
 
@@ -52,5 +52,5 @@ class View : public Common::DbView
 
 } // namespace DbObjects
 
-#endif // PSQLVIEW_H
+#endif // DBOBJECTS_PSQL_VIEW_H
 

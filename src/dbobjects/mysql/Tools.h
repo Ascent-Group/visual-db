@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MYSQL_TOOLS_H
-#define MYSQL_TOOLS_H
+#ifndef DBOBJECTS_MYSQL_TOOLS_H
+#define DBOBJECTS_MYSQL_TOOLS_H
 
 #include <QStringList>
 #include <QtCore/qglobal.h>
@@ -65,5 +65,5 @@ namespace Tools
 
 } // namespace DbObjects
 
-#endif // MYSQL_TOOLS_H
+#endif // DBOBJECTS_MYSQL_TOOLS_H
 

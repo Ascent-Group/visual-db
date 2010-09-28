@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLPROCEDURE_H
-#define PSQLPROCEDURE_H
+#ifndef DBOBJECTS_PSQL_PROCEDURE_H
+#define DBOBJECTS_PSQL_PROCEDURE_H
 
 #include <common/DbProcedure.h>
 
@@ -54,5 +54,5 @@ class Procedure : public Common::DbProcedure
 
 } // namespace DbObjects
 
-#endif // PSQLPROCEDURE_H
+#endif // DBOBJECTS_PSQL_PROCEDURE_H
 

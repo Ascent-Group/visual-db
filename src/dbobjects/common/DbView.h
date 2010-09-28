@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBVIEW_H
-#define DBVIEW_H
+#ifndef DBOBJECTS_COMMON_DBVIEW_H
+#define DBOBJECTS_COMMON_DBVIEW_H
 
 #include <common/DbObject.h>
 
@@ -89,5 +89,5 @@ class DbView : public DbObject
 
 } // namespace DbObjects
 
-#endif // DBVIEW_H
+#endif // DBOBJECTS_COMMON_DBVIEW_H
 

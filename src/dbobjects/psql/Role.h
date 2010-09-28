@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PSQLROLE_H
-#define PSQLROLE_H
+#ifndef DBOBJECTS_PSQL_ROLE_H
+#define DBOBJECTS_PSQL_ROLE_H
 
 #include <common/DbRole.h>
 #include <QDate>
@@ -56,5 +56,5 @@ class Role : public Common::DbRole
 
 } // namespace DbObjects
 
-#endif // PSQLROLE_H
+#endif // DBOBJECTS_PSQL_ROLE_H
 

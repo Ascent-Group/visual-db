@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FACTORY_TABLE_H
-#define FACTORY_TABLE_H
+#ifndef DBOBJECTS_FACTORY_TABLE_H
+#define DBOBJECTS_FACTORY_TABLE_H
 
 #include <QtCore/qglobal.h>
 
@@ -70,5 +70,5 @@ class Table
 
 } // namespace DbObjects
 
-#endif // FACTORY_TABLE_H
+#endif // DBOBJECTS_FACTORY_TABLE_H
 

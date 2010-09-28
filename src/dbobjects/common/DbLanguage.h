@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBLANGUAGE_H
-#define DBLANGUAGE_H
+#ifndef DBOBJECTS_COMMON_DBLANGUAGE_H
+#define DBOBJECTS_COMMON_DBLANGUAGE_H
 
 #include <common/DbObject.h>
 
@@ -75,5 +75,5 @@ class DbLanguage : public DbObject
 
 } // namespace DbObjects
 
-#endif // DBLANGUAGE_H
+#endif // DBOBJECTS_COMMON_DBLANGUAGE_H
 

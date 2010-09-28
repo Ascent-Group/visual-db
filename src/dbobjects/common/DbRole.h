@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBROLE_H
-#define DBROLE_H
+#ifndef DBOBJECTS_COMMON_DBROLE_H
+#define DBOBJECTS_COMMON_DBROLE_H
 
 #include <QDate>
 #include <common/DbObject.h>
@@ -116,5 +116,5 @@ class DbRole : public DbObject
 
 } // namespace DbObjects
 
-#endif // DBROLE_H
+#endif // DBOBJECTS_COMMON_DBROLE_H
 

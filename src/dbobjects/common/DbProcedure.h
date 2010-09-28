@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBPROCEDURE_H
-#define DBPROCEDURE_H
+#ifndef DBOBJECTS_COMMON_DBPROCEDURE_H
+#define DBOBJECTS_COMMON_DBPROCEDURE_H
 
 #include <common/Database.h>
 #include <common/DbObject.h>
@@ -92,5 +92,5 @@ class DbProcedure : public DbObject
 
 } // namespace DbObjects
 
-#endif // DBPROCEDURE_H
+#endif // DBOBJECTS_COMMON_DBPROCEDURE_H
 

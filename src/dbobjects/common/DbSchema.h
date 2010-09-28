@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBSCHEMA_H
-#define DBSCHEMA_H
+#ifndef DBOBJECTS_COMMON_DBSCHEMA_H
+#define DBOBJECTS_COMMON_DBSCHEMA_H
 
 #include <QStringList>
 #include <QVector>
@@ -113,5 +113,5 @@ class DbSchema : public DbObject
 
 } // namespace DbObjects
 
-#endif // DBSCHEMA_H
+#endif // DBOBJECTS_COMMON_DBSCHEMA_H
 

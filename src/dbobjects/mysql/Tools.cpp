@@ -49,11 +49,22 @@ namespace Tools
 
 /*!
  * \todo Implement
+ * \return The version of MySQL that is currently used
  */
 Tools::Version
 version()
 {
+    QSqlDatabase db = QSqlDatabase::database("mainConnect");
+    QSqlQuery query(db);
     QString qstr("SELECT version();");
+
+    if (!query.exec(qstr) || !query.first()) {
+        return Tools::MySQL_Unknown;
+    }
+
+    QString versionString = query.value(0).toString();
+    /* \todo detect the version */
+
     return Tools::MySQL_Unknown;
 }
 
@@ -61,34 +72,34 @@ version()
  * \todo Implement
  * \brief Read indices that are in available in the database
  *
- * \param[out] ipList - The list that will contain indices' names
+ * \param[out] opList - The list that will contain indices' names
  *
  * \return The number of indices read by the query
  */
 quint32
-indicesList(QStringList &ipList)
+indicesList(QStringList &opList)
 {
     QString qstr = QString("");
 
-    return objectNamesList(qstr, ipList);
+    return objectNamesList(qstr, opList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-languagesList(QStringList &ipList)
+languagesList(QStringList &opList)
 {
     QString qstr("");
 
-    return objectNamesList(qstr, ipList);
+    return objectNamesList(qstr, opList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-proceduresList(QStringList &ipList)
+proceduresList(QStringList &opList)
 {
 
 }
@@ -97,23 +108,23 @@ proceduresList(QStringList &ipList)
  * \todo Implement
  * \brief Read roles that are in available in the database
  *
- * \param[out] ipList - The list that will contain roles' names
+ * \param[out] opList - The list that will contain roles' names
  *
  * \return The number of roles read by the query
  */
 quint32
-rolesList(QStringList &ipList)
+rolesList(QStringList &opList)
 {
     QString qstr = QString("");
 
-    return objectNamesList(qstr, ipList);
+    return objectNamesList(qstr, opList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-objectNamesList(const QString &ipQstr, QStringList &ipList)
+objectNamesList(const QString &ipQstr, QStringList &opList)
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -133,7 +144,7 @@ objectNamesList(const QString &ipQstr, QStringList &ipList)
     qint32 colId = query.record().indexOf("name");
 
     do {
-        ipList.append(query.value(colId).toString());
+        opList.append(query.value(colId).toString());
         ++count;
     } while (query.next());
 
@@ -144,7 +155,7 @@ objectNamesList(const QString &ipQstr, QStringList &ipList)
  * \todo Implement
  */
 quint32
-tablesList(QStringList &ipList)
+tablesList(QStringList &opList)
 {
 
 }
@@ -153,7 +164,7 @@ tablesList(QStringList &ipList)
  * \todo Implement
  */
 quint32
-triggersList(QStringList &ipList)
+triggersList(QStringList &opList)
 {
 
 }
@@ -162,7 +173,7 @@ triggersList(QStringList &ipList)
  * \todo Implement
  */
 quint32
-viewsList(QStringList &ipList)
+viewsList(QStringList &opList)
 {
 
 }

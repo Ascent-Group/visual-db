@@ -89,9 +89,9 @@ Index::createPsqlIndex(const QString &ipName)
  * \return Pointer to MySQL index object
  */
 //Mysql::Index*
-//Index::createMysqlIndex(const QString &iName)
+//Index::createMysqlIndex(const QString &ipName)
 //{
-//    return new Mysql::Index(iName);
+//    return new Mysql::Index(ipName);
 //}
 
 } // namespace Factory

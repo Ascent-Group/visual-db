@@ -38,6 +38,11 @@ namespace DbObjects
 namespace Psql
 {
 
+/*!
+ * \class View
+ * \headerfile <psql/View.h>
+ * \brief Defines PostgreSQL database view object
+ */
 class View : public Common::DbView
 {
     public:

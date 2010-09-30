@@ -42,9 +42,17 @@ namespace Psql
 namespace Tools
 {
 
+    /*!
+     * \enum Psql::Tools::Version
+     * \brief Defines PostgreSQL version
+     */
     enum Version {
+        /*! Denotes that PostgreSQL version couldn't be recognized */
         PostgreSQL_Unknown = 0,
-        PostgreSQL_8
+        /*! PostgreSQL version is >= 8 */
+        PostgreSQL_8,
+        /*! PostgreSQL version is >= 9 */
+        PostgreSQL_9
     };
 
     Tools::Version version();

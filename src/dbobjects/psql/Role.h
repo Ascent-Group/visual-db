@@ -39,6 +39,11 @@ namespace DbObjects
 namespace Psql
 {
 
+/*!
+ * \class Role
+ * \headerfile <psql/Role.h>
+ * \brief Defines PostgreSQL database role object
+ */
 class Role : public Common::DbRole
 {
     public:

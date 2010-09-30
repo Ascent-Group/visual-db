@@ -38,6 +38,11 @@ namespace DbObjects
 namespace Psql
 {
 
+/*!
+ * \class Language
+ * \headerfile <psql/Language.h>
+ * \brief Defines PostgreSQL db language object
+ */
 class Language : public Common::DbLanguage
 {
     public:

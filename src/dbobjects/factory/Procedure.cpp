@@ -38,9 +38,10 @@ namespace Factory
 {
 
 /*!
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  * \param[in] ipName - Name of the procedure to construct
  *
- * \return Database procedure objects
+ * \return Database procedure object
  */
 DbObjects::Common::DbProcedure*
 Procedure::createProcedure(const QString &ipSchemaName, const QString &ipName)
@@ -73,7 +74,9 @@ Procedure::createProcedure(const QString &ipSchemaName, const QString &ipName)
 }
 
 /*!
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  * \param[in] ipName - Name of procedure to construct
+ *
  * \return Pointer to PostgreSQL procedure object
  */
 Psql::Procedure*
@@ -83,14 +86,15 @@ Procedure::createPsqlProcedure(const QString &ipSchemaName, const QString &ipNam
 }
 
 /*!
- *
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  * \param[in] ipName - Name of procedure to construct
+ *
  * \return Pointer to MySQL procedure object
  */
 //Mysql::Procedure*
-//Procedure::createMysqlProcedure(const QString &ipSchemaName, const QString &iName)
+//Procedure::createMysqlProcedure(const QString &ipSchemaName, const QString &ipName)
 //{
-//    return new Mysql::Procedure(ipSchemaName, iName);
+//    return new Mysql::Procedure(ipSchemaName, ipName);
 //}
 
 } // namespace Factory

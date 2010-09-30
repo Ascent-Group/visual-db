@@ -38,9 +38,10 @@ namespace Factory
 {
 
 /*!
+ * \param[in] ipSchemaName - Name of schema containing the trigger
  * \param[in] ipName - Name of the trigger to construct
  *
- * \return Database trigger objects
+ * \return Database trigger object
  */
 DbObjects::Common::DbTrigger*
 Trigger::createTrigger(const QString &ipSchemaName, const QString &ipName)
@@ -73,7 +74,9 @@ Trigger::createTrigger(const QString &ipSchemaName, const QString &ipName)
 }
 
 /*!
+ * \param[in] ipSchemaName - Name of schema containing the trigger
  * \param[in] ipName - Name of trigger to construct
+ *
  * \return Pointer to PostgreSQL trigger object
  */
 Psql::Trigger*
@@ -83,14 +86,15 @@ Trigger::createPsqlTrigger(const QString &ipSchemaName, const QString &ipName)
 }
 
 /*!
- *
+ * \param[in] ipSchemaName - Name of schema containing the trigger
  * \param[in] ipName - Name of trigger to construct
+ *
  * \return Pointer to MySQL trigger object
  */
 //Mysql::Trigger*
-//Trigger::createMysqlTrigger(const QString &ipSchemaName, const QString &iName)
+//Trigger::createMysqlTrigger(const QString &ipSchemaName, const QString &ipName)
 //{
-//    return new Mysql::Trigger(ipSchemaName, iName);
+//    return new Mysql::Trigger(ipSchemaName, ipName);
 //}
 
 } // namespace Factory

@@ -135,7 +135,8 @@ Procedure::loadData()
 }
 
 /*!
- * \todo Implement
+ * \fixme Implement
+ * \bug test str
  */
 void
 Procedure::resetData()

@@ -42,8 +42,10 @@ namespace DbObjects
 namespace Psql
 {
 
-/*
- * Ctor
+/*!
+ * Constructor
+ *
+ * \param[in] ipName - Name of the language
  */
 Language::Language(QString ipName)
     :DbLanguage(ipName)
@@ -51,8 +53,8 @@ Language::Language(QString ipName)
 
 }
 
-/*
- * Dtor
+/*!
+ * Destructor
  */
 Language::~Language()
 {

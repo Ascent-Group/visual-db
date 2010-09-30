@@ -34,59 +34,95 @@
 
 /*!
  * \namespace Consts
- * \brief
- * \todo comment this
+ * \brief Namespace for holding various constants
  */
 namespace Consts
 {
     // begin Appearance group
+    /*! Name of a group of settings concerning UI appearance */
     extern const QString APPEARANCE_GRP;
 
+    /*! Name of a language setting */
     extern const QString LANG_SETTING;
     // end Appearance group
 
     // begin Preferences group
+    /*! Name of a group of settings concerning preferences and app behaviour */
     extern const QString PREFS_GRP;
 
+    /*! Name of a setting that holds the path where all sessions are saved */
     extern const QString SESSION_DIR_SETTING;
+    /*! Name of a setting that indicaties whether a new tab should be switched to or not */
     extern const QString NEW_TAB_AUTO_SWITCH_SETTING;
+    /*!
+     * Name of a setting that indicates whether last saved session should be restored on
+     * startup or not
+     */
     extern const QString LOAD_LAST_SESSION_SETTING;
+    /*! Name of a setting that defines the maximum number of sessions to save */
     extern const QString COUNT_SAVED_SESSIONS_SETTING;
+    /*! Name of a setting that indicates whether indices should be shown or not */
     extern const QString SHOW_INDICES_SETTING;
     // end Preferences group
 
     // begin Color group
+    /*! Name of a group of settings concerning colors */
     extern const QString COLOR_GRP;
 
+    /*! Name of a setting that defines the background color */
     extern const QString BACKGROUND_SETTING;
+    /*! Name of a setting that defines the table color */
     extern const QString TABLE_SETTING;
+    /*! Name of a setting that defines the font color */
     extern const QString FONT_SETTING;
+    /*! Name of a setting that defines the arrow color */
     extern const QString ARROW_SETTING;
+    /*! Name of a setting that defines the border color */
     extern const QString BORDER_SETTING;
     // end Preferences group
 
     // begin group View
+    /*! Name of a group of settings concerning graphics scene view */
     extern const QString VIEW_GRP;
 
+    /*!
+     * Name of a setting that indicates whether db objects should be aligned to grid on
+     * the graphics scene ot not
+     */
     extern const QString ALIGN_TO_GRID_SETTING;
+    /*! Name of a setting that indicates whether the grid should be shown on scene or not */
     extern const QString SHOW_GRID_SETTING;
+    /*! Name of a setting that indicates whether the scene should be divided into pages or not */
     extern const QString DIVIDE_INTO_PAGES_SETTING;
     // end group View
 
     // begin group LastSession
+    /*! Name of a group of settings concerning last session */
     extern const QString LAST_SESSION_GRP;
 
+    /*! Name of a setting that holds the path to a saved session description file*/
     extern const QString SAVED_SESSION_SETTING;
+    /*! Name of a setting that holds a name of db driver that has been used during last session */
     extern const QString DB_DRV_SETTING;
+    /*! Name of a setting that holds a name of db explored during last session */
     extern const QString DB_NAME_SETTING;
+    /*! Name of a setting that holds a username used to connect to db during last session */
     extern const QString DB_USER_SETTING;
+    /*! Name of a setting that holds user's password used to connect to db during last session */
     extern const QString DB_PASS_SETTING;
+    /*! Name of a setting that holds host address used to connect to db during last session*/
     extern const QString DB_HOST_SETTING;
+    /*! Name of a setting that holds port number used to connect to db during last session */
     extern const QString DB_PORT_SETTING;
+    /*! Name of a setting that indicates whether a proxy has been used or not */
     extern const QString USE_PROXY_SETTING;
+    /*! Name of a setting that holds proxy's type */
     extern const QString PROXY_TYPE_SETTING;
+    /*! Name of a setting that holds proxy's host address*/
     extern const QString PROXY_HOST_SETTING;
+    /*! Name of a setting that holds proxy's port number */
     extern const QString PROXY_PORT_SETTING;
+    /*! Name of a setting that holds proxy's username */
     extern const QString PROXY_USER_SETTING;
     // end group LastSession
 

@@ -49,16 +49,23 @@ namespace Tools
 /*!
  * \todo Implement
  * \todo Comments
+ * \return The version of PostgreSQL that is currently used
  */
 Tools::Version
 version()
 {
-    QSqlQuery query;
+    QSqlDatabase db = QSqlDatabase::database("mainConnect");
+    QSqlQuery query(db);
     QString qstr("SELECT version();");
 
-    /* \todo execute the query and detect the version */
+    if (!query.exec(qstr) || !query.first()) {
+        return Tools::PostgreSQL_Unknown;
+    }
 
-    return PostgreSQL_Unknown;
+    QString versionString = query.value(0).toString();
+    /* \todo detect the version */
+
+    return Tools::PostgreSQL_Unknown;
 }
 
 /*!
@@ -88,7 +95,6 @@ indicesList(QStringList &opList)
 }
 
 /*!
- * \todo Implement
  * \todo Comments
  */
 quint32
@@ -103,7 +109,6 @@ languagesList(QStringList &opList)
 }
 
 /*!
- * \todo Implement
  * \todo Comments
  */
 quint32
@@ -177,7 +182,6 @@ objectNamesList(const QString &ipQstr, QStringList &opList)
 }
 
 /*!
- * \todo Implement
  * \todo Comments
  */
 quint32
@@ -192,7 +196,6 @@ tablesList(const QString &ipSchemaName, QStringList &opList)
 }
 
 /*!
- * \todo Implement
  * \todo Comments
  */
 quint32
@@ -236,7 +239,6 @@ triggersList(const QString &ipSchemaName, QStringList &opList)
 }
 
 /*!
- * \todo Implement
  * \todo Comments
  */
 quint32

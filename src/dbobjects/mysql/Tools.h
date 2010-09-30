@@ -42,6 +42,10 @@ namespace Mysql
 namespace Tools
 {
 
+    /*!
+     * \enum Mysql::Tools::Version
+     * \brief Defines MySQL version
+     */
     enum Version {
         MySQL_Unknown = 0,
         MySQL_5

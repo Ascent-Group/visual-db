@@ -45,8 +45,8 @@ namespace DbObjects
 namespace Psql
 {
 
-/*
- * Ctor
+/*!
+ * Constructor
  */
 Index::Index(QString ipName)
     : DbIndex(ipName)
@@ -54,8 +54,8 @@ Index::Index(QString ipName)
 
 }
 
-/*
- * Dtor
+/*!
+ * Destructor
  */
 Index::~Index()
 {

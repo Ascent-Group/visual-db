@@ -38,6 +38,11 @@ namespace DbObjects
 namespace Psql
 {
 
+/*!
+ * \class Procedure
+ * \headerfile <psql/Procedure.h>
+ * \brief Defines PostgreSQL database procedure object
+ */
 class Procedure : public Common::DbProcedure
 {
     public:

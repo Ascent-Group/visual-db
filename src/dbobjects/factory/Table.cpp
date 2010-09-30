@@ -39,9 +39,10 @@ namespace Factory
 {
 
 /*!
+ * \param[in] ipSchemaName - Name of schema containing the table
  * \param[in] ipName - Name of the table to construct
  *
- * \return Database table objects
+ * \return Database table object
  */
 DbObjects::Common::DbTable*
 Table::createTable(const QString &ipSchemaName, const QString &ipName)
@@ -74,7 +75,9 @@ Table::createTable(const QString &ipSchemaName, const QString &ipName)
 }
 
 /*!
+ * \param[in] ipSchemaName - Name of schema containing the table
  * \param[in] ipName - Name of table to construct
+ *
  * \return Pointer to PostgreSQL table object
  */
 Psql::Table*
@@ -84,8 +87,9 @@ Table::createPsqlTable(const QString &ipSchemaName, const QString &ipName)
 }
 
 /*!
- *
+ * \param[in] ipSchemaName - Name of schema containing the table
  * \param[in] ipName - Name of table to construct
+ *
  * \return Pointer to MySQL table object
  */
 //Mysql::Table*

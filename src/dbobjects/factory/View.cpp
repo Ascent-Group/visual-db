@@ -38,9 +38,10 @@ namespace Factory
 {
 
 /*!
+ * \param[in] ipSchemaName - Name of the view to construct
  * \param[in] ipName - Name of the view to construct
  *
- * \return Database view objects
+ * \return Database view object
  */
 DbObjects::Common::DbView*
 View::createView(const QString &ipSchemaName, const QString &ipName)
@@ -73,7 +74,9 @@ View::createView(const QString &ipSchemaName, const QString &ipName)
 }
 
 /*!
+ * \param[in] ipSchemaName - Name of schema containing the view
  * \param[in] ipName - Name of view to construct
+ *
  * \return Pointer to PostgreSQL view object
  */
 Psql::View*
@@ -83,14 +86,15 @@ View::createPsqlView(const QString &ipSchemaName, const QString &ipName)
 }
 
 /*!
- *
+ * \param[in] ipSchemaName - Name of schema containing the view
  * \param[in] ipName - Name of view to construct
+ *
  * \return Pointer to MySQL view object
  */
 //Mysql::View*
-//View::createMysqlView(const QString &ipSchemaName, const QString &iName)
+//View::createMysqlView(const QString &ipSchemaName, const QString &ipName)
 //{
-//    return new Mysql::View(ipSchemaName, iName);
+//    return new Mysql::View(ipSchemaName, ipName);
 //}
 
 } // namespace Factory

@@ -69,8 +69,8 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
     connect(mControlWidget, SIGNAL(movedRight()), mView, SLOT(moveRight()));
     connect(mControlWidget, SIGNAL(moveModeSet(bool)), mView, SLOT(setMoveMode(bool)));
 
-    connect(mScene, SIGNAL(tableMoved(QList <QGraphicsItem *>, const QPointF &)),
-            this, SLOT(sendTableMoved(QList <QGraphicsItem *>, const QPointF &)));
+    connect(mScene, SIGNAL(tableMoved(QList <QGraphicsItem *>, QPointF, QPointF)),
+            this, SLOT(sendTableMoved(QList <QGraphicsItem *>, QPointF, QPointF)));
 
     connect(mView, SIGNAL(valueIncreased()), mControlWidget, SLOT(increaseValue()));
     connect(mView, SIGNAL(valueDecreased()), mControlWidget, SLOT(decreaseValue()));
@@ -531,8 +531,8 @@ SceneWidget::print(QPrinter *ipPrinter)
  * Send 'table moved' signal
  */
 void
-SceneWidget::sendTableMoved(QList <QGraphicsItem *> ipTableList, const QPointF &ipPos)
+SceneWidget::sendTableMoved(QList <QGraphicsItem *> ipTableList, QPointF ipNewPos, QPointF ipOldPos)
 {
-    emit tableActionDone(new MoveTableCommand(ipTableList, ipPos));
+    emit tableActionDone(new MoveTableCommand(ipTableList, ipNewPos, ipOldPos));
 }
 

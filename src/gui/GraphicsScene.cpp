@@ -241,23 +241,17 @@ GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *ipEvent)
 void
 GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
-    if (mMoveMode) {
-        QGraphicsScene::mousePressEvent(ipEvent);
-        return;
-    } else {
+    if (!mMoveMode) {
         // if we pressed under item - do default actions and return
         QGraphicsItem *item = itemAt(ipEvent->scenePos());
         if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item))) {
             mOldPos = item->scenePos();
-            QGraphicsScene::mousePressEvent(ipEvent);
-            return;
+        } else {
+            clearSelection();
+            mStartSelect = ipEvent->scenePos();
         }
-
-        clearSelection();
-        mStartSelect = ipEvent->scenePos();
-
-        QGraphicsScene::mousePressEvent(ipEvent);
     }
+    QGraphicsScene::mousePressEvent(ipEvent);
 }
 
 /*
@@ -267,23 +261,19 @@ void
 GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     QGraphicsItem *item = itemAt(ipEvent->scenePos());
-    qDebug() << item << mOldPos.x() << ipEvent->scenePos().x();
+    qDebug() << item << mOldPos.x() << ":" << ipEvent->scenePos().x();
     if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) &&
             ipEvent->scenePos() != mOldPos) {
-        //  emit tableMoved(selectedItems(), mOldPos - item->scenePos());
+        emit tableMoved(selectedItems(), item->scenePos(), mOldPos);
     }
 
-    if (mMoveMode) {
-        QGraphicsScene::mouseReleaseEvent(ipEvent);
-        return;
-    } else {
+    if (!mMoveMode) {
         if (mSelectionPath) {
             removeItem(mSelectionPath);
             mSelectionPath = 0;
         }
-
-        QGraphicsScene::mouseReleaseEvent(ipEvent);
     }
+    QGraphicsScene::mouseReleaseEvent(ipEvent);
 }
 
 /*

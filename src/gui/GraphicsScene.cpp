@@ -30,6 +30,7 @@
 #include <QColorDialog>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
+#include <QKeyEvent>
 #include <QMenu>
 #include <QPainter>
 #include <QPen>
@@ -53,12 +54,14 @@
  * Constructor
  */
     GraphicsScene::GraphicsScene()
-: QGraphicsScene(), mSelectionPath(), mMoveMode(false), mOldPos()
+: QGraphicsScene(), mSelectionPath(), mMoveMode(false), mOldPos(), mDiffX(0), mDiffY(0), mStartMovingTimer()
 {
     setBackgroundBrush(QBrush(mSettings.value(Consts::COLOR_GRP + "/" + Consts::BACKGROUND_SETTING, Qt::white).value<QColor>()));
     setSceneRect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     mLegend = new Legend();
     mLegend->setZValue(1000);
+
+    connect(&mStartMovingTimer, SIGNAL(timeout()), this, SLOT(movingTimerExpired()));
 }
 
 /*
@@ -261,10 +264,9 @@ void
 GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     QGraphicsItem *item = itemAt(ipEvent->scenePos());
-    qDebug() << item << mOldPos.x() << ":" << ipEvent->scenePos().x();
     if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) &&
             ipEvent->scenePos() != mOldPos) {
-        emit tableMoved(selectedItems(), item->scenePos(), mOldPos);
+        emit tableMoved(selectedItems(), (int)(item->scenePos().x() - mOldPos.x()), (int)(item->scenePos().y() - mOldPos.y()));
     }
 
     if (!mMoveMode) {
@@ -324,6 +326,81 @@ GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
 
         QGraphicsScene::mouseMoveEvent(ipEvent);
     }
+}
+
+/*
+ * Handler for key press ipEvent
+ * + - maximize the table scheme view
+ * - - minimize the table scheme view
+ * arrow keys - move items to the appropriate sides
+ */
+void
+GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
+{
+    switch (ipEvent->key()) {
+        case Qt::Key_Plus:
+            //      scaleView(mPrevFactor + 1);
+            break;
+        case Qt::Key_Minus:
+            //      scaleView(mPrevFactor - 1);
+            break;
+        case Qt::Key_Left:
+            foreach (QGraphicsItem *item, selectedItems()) {
+                if ((item->type() == TableItem::Type
+                            || item->type() == TableItemGroup::Type)
+                        && item->flags() & QGraphicsItem::ItemIsMovable) {
+                    item->moveBy(-MOVE_STEP, 0);
+                    mDiffX -= MOVE_STEP;
+                    mStartMovingTimer.start(MOVE_INTERVAL);
+                }
+            }
+            break;
+        case Qt::Key_Right:
+            foreach (QGraphicsItem *item, selectedItems()) {
+                if ((item->type() == TableItem::Type
+                            || item->type() == TableItemGroup::Type)
+                        && item->flags() & QGraphicsItem::ItemIsMovable) {
+                    item->moveBy(MOVE_STEP, 0);
+                    mDiffX += MOVE_STEP;
+                    mStartMovingTimer.start(MOVE_INTERVAL);
+                }
+            }
+            break;
+        case Qt::Key_Up:
+            foreach (QGraphicsItem *item, selectedItems()) {
+                if ((item->type() == TableItem::Type
+                            || item->type() == TableItemGroup::Type)
+                        && item->flags() & QGraphicsItem::ItemIsMovable) {
+                    item->moveBy(0, -MOVE_STEP);
+                    mDiffY -= MOVE_STEP;
+                    mStartMovingTimer.start(MOVE_INTERVAL);
+                }
+            }
+            break;
+        case Qt::Key_Down:
+            foreach (QGraphicsItem *item, selectedItems()) {
+                if ((item->type() == TableItem::Type
+                            || item->type() == TableItemGroup::Type)
+                        && item->flags() & QGraphicsItem::ItemIsMovable) {
+                    item->moveBy(0, MOVE_STEP);
+                    mDiffY += MOVE_STEP;
+                    mStartMovingTimer.start(MOVE_INTERVAL);
+                }
+            }
+            break;
+    }
+}
+
+void
+GraphicsScene::movingTimerExpired()
+{
+    qDebug() << "DIFF: " << mDiffX << ":" << mDiffY;
+
+    mStartMovingTimer.stop();
+
+    emit tableMoved(selectedItems(), mDiffX, mDiffY);
+    mDiffX = 0;
+    mDiffY = 0;
 }
 
 /*

@@ -41,7 +41,7 @@ class QGraphicsItem;
 class MoveTableCommand : public QUndoCommand
 {
     public:
-        MoveTableCommand(QList <QGraphicsItem *>, const QPointF, const QPointF, QUndoCommand *parent = 0);
+        MoveTableCommand(QList <QGraphicsItem *>, int, int, QUndoCommand *parent = 0);
         ~MoveTableCommand();
 
         enum { Id = 1234 };
@@ -52,8 +52,8 @@ class MoveTableCommand : public QUndoCommand
 
     private:
         QList <QGraphicsItem *> mTableList;
-        QPointF mNewPos;
-        QPointF mOldPos;
+        int mDiffX;
+        int mDiffY;
         bool mNeedMove;
 };
 

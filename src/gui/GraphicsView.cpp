@@ -32,7 +32,6 @@
 #include <QGraphicsItem>
 #include <QGraphicsScene>
 #include <QGraphicsView>
-#include <QKeyEvent>
 #include <QPointF>
 #include <QScrollBar>
 #include <QWheelEvent>
@@ -48,8 +47,8 @@
 /*
  * Constructor
  */
-    GraphicsView::GraphicsView()
-: QGraphicsView()
+GraphicsView::GraphicsView()
+    : QGraphicsView()
 {
     mPrevFactor = (MAXIMUM_FACTOR - MINIMUM_FACTOR) / 2;
 }
@@ -58,7 +57,7 @@
  * Constructor
  */
     GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent = 0)
-: QGraphicsView(scene, parent), mMovingNow(false)
+: QGraphicsView(scene, parent)
 {
     centerOn(GraphicsScene::DEFAULT_WIDTH / 2, GraphicsScene::DEFAULT_HEIGHT / 2);
 }
@@ -68,61 +67,6 @@
  */
 GraphicsView::~GraphicsView()
 {
-}
-
-/*
- * Handler for key press ipEvent
- * + - maximize the table scheme view
- * - - minimize the table scheme view
- * arrow keys - move items to the appropriate sides
- */
-void
-GraphicsView::keyPressEvent(QKeyEvent *ipEvent)
-{
-    switch (ipEvent->key()) {
-        case Qt::Key_Plus:
-            //      scaleView(mPrevFactor + 1);
-            break;
-        case Qt::Key_Minus:
-            //      scaleView(mPrevFactor - 1);
-            break;
-        case Qt::Key_Left:
-            foreach (QGraphicsItem *item, scene()->selectedItems()) {
-                if ((item->type() == TableItem::Type
-                            || item->type() == TableItemGroup::Type)
-                        && item->flags() & QGraphicsItem::ItemIsMovable) {
-                    item->moveBy(-MOVE_STEP, 0);
-                }
-            }
-            break;
-        case Qt::Key_Right:
-            foreach (QGraphicsItem *item, scene()->selectedItems()) {
-                if ((item->type() == TableItem::Type
-                            || item->type() == TableItemGroup::Type)
-                        && item->flags() & QGraphicsItem::ItemIsMovable) {
-                    item->moveBy(MOVE_STEP, 0);
-                }
-            }
-            break;
-        case Qt::Key_Up:
-            foreach (QGraphicsItem *item, scene()->selectedItems()) {
-                if ((item->type() == TableItem::Type
-                            || item->type() == TableItemGroup::Type)
-                        && item->flags() & QGraphicsItem::ItemIsMovable) {
-                    item->moveBy(0, -MOVE_STEP);
-                }
-            }
-            break;
-        case Qt::Key_Down:
-            foreach (QGraphicsItem *item, scene()->selectedItems()) {
-                if ((item->type() == TableItem::Type
-                            || item->type() == TableItemGroup::Type)
-                        && item->flags() & QGraphicsItem::ItemIsMovable) {
-                    item->moveBy(0, MOVE_STEP);
-                }
-            }
-            break;
-    }
 }
 
 /*
@@ -221,41 +165,41 @@ GraphicsView::moveRight()
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() + MOVE_STEP);
 }
 
-void
-GraphicsView::mousePressEvent(QMouseEvent *ipEvent)
-{
-    if (dynamic_cast<GraphicsScene *>(scene())->moveMode()) {
-        if (!mMovingNow) {
-            mMovingNow = true;
-            mBeginPoint = ipEvent->pos();
-        }
-        QWidget::setCursor(Qt::ClosedHandCursor);
-    }
-    QGraphicsView::mousePressEvent(ipEvent);
-}
-
-void
-GraphicsView::mouseMoveEvent(QMouseEvent *ipEvent)
-{
-    if (dynamic_cast<GraphicsScene *>(scene())->moveMode()) {
-        if (mMovingNow) {
-            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (int)(ipEvent->pos().x() - mBeginPoint.x()));
-            verticalScrollBar()->setValue(verticalScrollBar()->value() - (int)(ipEvent->pos().y() - mBeginPoint.y()));
-            mBeginPoint = ipEvent->pos();
-        }
-    }
-    QGraphicsView::mouseMoveEvent(ipEvent);
-}
-
-void
-GraphicsView::mouseReleaseEvent(QMouseEvent *ipEvent)
-{
-    if (dynamic_cast<GraphicsScene *>(scene())->moveMode()) {
-        mMovingNow = false;
-        QWidget::setCursor(Qt::OpenHandCursor);
-    }
-    QGraphicsView::mouseReleaseEvent(ipEvent);
-}
+//void
+//GraphicsView::mousePressEvent(QMouseEvent *ipEvent)
+//{
+//    if (dynamic_cast<GraphicsScene *>(scene())->moveMode()) {
+//        if (!mMovingNow) {
+//            mMovingNow = true;
+//            mBeginPoint = ipEvent->pos();
+//        }
+//        QWidget::setCursor(Qt::ClosedHandCursor);
+//    }
+//    QGraphicsView::mousePressEvent(ipEvent);
+//}
+//
+//void
+//GraphicsView::mouseMoveEvent(QMouseEvent *ipEvent)
+//{
+//    if (dynamic_cast<GraphicsScene *>(scene())->moveMode()) {
+//        if (mMovingNow) {
+//            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (int)(ipEvent->pos().x() - mBeginPoint.x()));
+//            verticalScrollBar()->setValue(verticalScrollBar()->value() - (int)(ipEvent->pos().y() - mBeginPoint.y()));
+//            mBeginPoint = ipEvent->pos();
+//        }
+//    }
+//    QGraphicsView::mouseMoveEvent(ipEvent);
+//}
+//
+//void
+//GraphicsView::mouseReleaseEvent(QMouseEvent *ipEvent)
+//{
+//    if (dynamic_cast<GraphicsScene *>(scene())->moveMode()) {
+//        mMovingNow = false;
+//        QWidget::setCursor(Qt::OpenHandCursor);
+//    }
+//    QGraphicsView::mouseReleaseEvent(ipEvent);
+//}
 
 void
 GraphicsView::setMoveMode(bool ipFlag)

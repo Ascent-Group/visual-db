@@ -32,11 +32,13 @@
 
 #include <QGraphicsScene>
 #include <QSettings>
+#include <QTimer>
 
 class QGraphicsItem;
 class QGraphicsPathItem;
 class QGraphicsSceneMouseEvent;
 class QMenu;
+class QKeyEvent;
 class QSlider;
 class QTreeWidgetItem;
 
@@ -77,7 +79,7 @@ class GraphicsScene : public QGraphicsScene {
         bool moveMode() const;
 
     signals:
-        void tableMoved(QList <QGraphicsItem *>, const QPointF &, const QPointF &);
+        void tableMoved(QList <QGraphicsItem *>, int, int);
 
     public slots:
         QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int);
@@ -99,11 +101,12 @@ class GraphicsScene : public QGraphicsScene {
         void setMoveMode(bool);
 
     protected:
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
-        void mousePressEvent(QGraphicsSceneMouseEvent *);
-        void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
-        void mouseMoveEvent(QGraphicsSceneMouseEvent *);
-        void drawBackground(QPainter *, const QRectF &);
+        virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
+        virtual void mousePressEvent(QGraphicsSceneMouseEvent *);
+        virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
+        virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *);
+        virtual void keyPressEvent(QKeyEvent *ipEvent);
+        virtual void drawBackground(QPainter *, const QRectF &);
 
     private:
         QSettings mSettings;
@@ -121,6 +124,13 @@ class GraphicsScene : public QGraphicsScene {
 
         QPointF mOldPos;
 
+        int mDiffX;
+        int mDiffY;
+        QTimer mStartMovingTimer;
+
+        static const int MOVE_STEP = 10;
+        static const int MOVE_INTERVAL = 600;
+
     private:
         TableItem *findTableItem(const QString &, const QString &);
         void setFieldsTypesVisible(QList<QGraphicsItem *>, bool);
@@ -134,6 +144,7 @@ class GraphicsScene : public QGraphicsScene {
 
     private slots:
         void resize(int);
+        void movingTimerExpired();
 };
 
 #endif // GRAPHICSSCENE_H

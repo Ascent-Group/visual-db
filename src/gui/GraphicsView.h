@@ -57,20 +57,19 @@ class GraphicsView : public QGraphicsView
     signals:
         void valueDecreased();
         void valueIncreased();
+        void tableMoved(QList <QGraphicsItem *>, int, int);
 
     protected:
-        virtual void keyPressEvent(QKeyEvent *ipEvent);
         virtual void wheelEvent(QWheelEvent *ipEvent);
         virtual void scrollContentsBy(int, int);
-        virtual void mousePressEvent(QMouseEvent *);
-        virtual void mouseMoveEvent(QMouseEvent *);
-        virtual void mouseReleaseEvent(QMouseEvent *);
+//        virtual void mousePressEvent(QMouseEvent *);
+//        virtual void mouseMoveEvent(QMouseEvent *);
+//        virtual void mouseReleaseEvent(QMouseEvent *);
 
     private:
-        bool mMovingNow;
-        QPointF mBeginPoint;
         QAction *mDeleteTableAction;
         int mPrevFactor;
+
         static const int MOVE_STEP = 10;
 
     private slots:

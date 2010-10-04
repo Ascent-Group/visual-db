@@ -10,7 +10,7 @@ QMAKE_EXTRA_TARGETS += build_tests run_tests
 #build_tests.CONFIG = <nothing_here_yet>
 build_tests.commands = @echo "Building tests" \
                        && cd tests \
-                       && $(QMAKE) tests.pro \
+                       && $(QMAKE) $$PWD/tests.pro \
                        && make
 
 run_tests.commands = @echo "Running tests" \

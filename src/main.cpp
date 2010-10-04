@@ -99,11 +99,11 @@ int main(int argc, char **argv)
     // load qm translation
     switch (settings.value(Consts::APPEARANCE_GRP + "/" + Consts::LANG_SETTING).toInt()) {
         case QLocale::Russian:
-            translator.load(":visual_db_ru");
+            translator.load(":/visual_db_ru");
             break;
         case QLocale::English:
         default:
-            translator.load(":visual_db_en");
+            translator.load(":/visual_db_en");
     }
 
     //

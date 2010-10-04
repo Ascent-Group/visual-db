@@ -8,8 +8,8 @@ QT += sql
 
 CONFIG += staticlib
 
-DEPENDPATH += .
-INCLUDEPATH += .
+DEPENDPATH += $$PWD
+INCLUDEPATH += $$PWD
 
 MOC_DIR = .moc
 
@@ -29,13 +29,60 @@ DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 #DEFINES += DEBUG_TRACE
 
 # Input
-HEADERS += common/*.h \
-           mysql/*.h \
-           psql/*.h \
-           factory/*.h
+HEADERS += $$PWD/common/Database.h \
+           $$PWD/common/DbIndex.h \
+           $$PWD/common/DbLanguage.h \
+           $$PWD/common/DbObject.h \
+           $$PWD/common/DbProcedure.h \
+           $$PWD/common/DbRole.h \
+           $$PWD/common/DbTable.h \
+           $$PWD/common/DbTrigger.h \
+           $$PWD/common/DbView.h \
+           $$PWD/common/DbSchema.h \
+           $$PWD/mysql/Table.h \
+           $$PWD/mysql/Tools.h \
+           $$PWD/psql/Index.h \
+           $$PWD/psql/Language.h \
+           $$PWD/psql/Procedure.h \
+           $$PWD/psql/Role.h \
+           $$PWD/psql/Table.h \
+           $$PWD/psql/Tools.h \
+           $$PWD/psql/Trigger.h \
+           $$PWD/psql/View.h \
+           $$PWD/factory/Index.h \
+           $$PWD/factory/Language.h \
+           $$PWD/factory/Procedure.h \
+           $$PWD/factory/Role.h \
+           $$PWD/factory/Table.h \
+           $$PWD/factory/Trigger.h \
+           $$PWD/factory/View.h
 
-SOURCES += common/*.cpp \
-           mysql/*.cpp \
-           psql/*.cpp \
-           factory/*.cpp
+SOURCES += $$PWD/common/Database.cpp \
+           $$PWD/common/DbIndex.cpp \
+           $$PWD/common/DbLanguage.cpp \
+           $$PWD/common/DbObject.cpp \
+           $$PWD/common/DbProcedure.cpp \
+           $$PWD/common/DbRole.cpp \
+           $$PWD/common/DbTable.cpp \
+           $$PWD/common/DbTrigger.cpp \
+           $$PWD/common/DbView.cpp \
+           $$PWD/common/DbSchema.cpp \
+           $$PWD/mysql/Table.cpp \
+           $$PWD/mysql/Tools.cpp \
+           $$PWD/psql/Index.cpp \
+           $$PWD/psql/Language.cpp \
+           $$PWD/psql/Procedure.cpp \
+           $$PWD/psql/Role.cpp \
+           $$PWD/psql/Table.cpp \
+           $$PWD/psql/Tools.cpp \
+           $$PWD/psql/Trigger.cpp \
+           $$PWD/psql/View.cpp \
+           $$PWD/factory/Index.cpp \
+           $$PWD/factory/Language.cpp \
+           $$PWD/factory/Procedure.cpp \
+           $$PWD/factory/Role.cpp \
+           $$PWD/factory/Table.cpp \
+           $$PWD/factory/Trigger.cpp \
+           $$PWD/factory/View.cpp
+
 

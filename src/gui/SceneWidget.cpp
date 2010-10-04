@@ -74,6 +74,7 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
 
     connect(mView, SIGNAL(valueIncreased()), mControlWidget, SLOT(increaseValue()));
     connect(mView, SIGNAL(valueDecreased()), mControlWidget, SLOT(decreaseValue()));
+    connect(mView, SIGNAL(tableActionDone(QUndoCommand *)), this, SLOT(sendTableActionDone(QUndoCommand *)));
 
     mainLayout = new QGridLayout(this);
     mainLayout->setAlignment(Qt::AlignCenter);
@@ -536,3 +537,8 @@ SceneWidget::sendTableMoved(QList <QGraphicsItem *> ipTableList, int ipDiffX, in
     emit tableActionDone(new MoveTableCommand(ipTableList, ipDiffX, ipDiffY));
 }
 
+void
+SceneWidget::sendTableActionDone(QUndoCommand *ipCommand)
+{
+    emit tableActionDone(ipCommand);
+}

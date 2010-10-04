@@ -34,6 +34,7 @@
 
 class QAction;
 class QPointF;
+class QUndoCommand;
 
 /*
  * View of the scene.
@@ -58,9 +59,13 @@ class GraphicsView : public QGraphicsView
         void valueDecreased();
         void valueIncreased();
         void tableMoved(QList <QGraphicsItem *>, int, int);
+        void tableActionDone(QUndoCommand *);
 
     protected:
-        virtual void wheelEvent(QWheelEvent *ipEvent);
+        virtual void wheelEvent(QWheelEvent *);
+        virtual void dragEnterEvent(QDragEnterEvent *);
+        virtual void dragMoveEvent(QDragMoveEvent *);
+        virtual void dropEvent(QDropEvent *);
         virtual void scrollContentsBy(int, int);
 //        virtual void mousePressEvent(QMouseEvent *);
 //        virtual void mouseMoveEvent(QMouseEvent *);

@@ -42,6 +42,9 @@
        <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
          <widget class="SceneWidget" name="mSceneWidget" native="true">
+          <property name="acceptDrops">
+           <bool>true</bool>
+          </property>
           <property name="toolTip">
            <string>Scene widget</string>
           </property>
@@ -62,7 +65,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="mFileMenu">
@@ -224,6 +227,15 @@
        </property>
        <property name="whatsThis">
         <string>The tree widget is used for displaying db objects.</string>
+       </property>
+       <property name="dragEnabled">
+        <bool>true</bool>
+       </property>
+       <property name="dragDropMode">
+        <enum>QAbstractItemView::DragOnly</enum>
+       </property>
+       <property name="selectionMode">
+        <enum>QAbstractItemView::ExtendedSelection</enum>
        </property>
        <property name="expandsOnDoubleClick">
         <bool>false</bool>

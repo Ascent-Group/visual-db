@@ -100,6 +100,7 @@ class SceneWidget : public QWidget
         void disableAnchorTables();
         void cleanTableSchemeScene();
         void setTableColor();
+        void sendTableActionDone(QUndoCommand *);
 
     private:
         void setAnchor(QList<QGraphicsItem *>, bool);

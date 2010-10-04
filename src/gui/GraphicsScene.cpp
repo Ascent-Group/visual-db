@@ -265,7 +265,7 @@ GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     QGraphicsItem *item = itemAt(ipEvent->scenePos());
     if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) &&
-            ipEvent->scenePos() != mOldPos) {
+            item->scenePos() != mOldPos) {
         emit tableMoved(selectedItems(), (int)(item->scenePos().x() - mOldPos.x()), (int)(item->scenePos().y() - mOldPos.y()));
     }
 

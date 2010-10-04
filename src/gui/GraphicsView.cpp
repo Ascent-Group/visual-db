@@ -37,10 +37,12 @@
 #include <QWheelEvent>
 #include <math.h>
 
-#include "GraphicsScene.h"
-#include "GraphicsView.h"
-#include "TableItem.h"
-#include "TableItemGroup.h"
+#include <gui/GraphicsScene.h>
+#include <gui/GraphicsView.h>
+#include <gui/TableItem.h>
+#include <gui/TableItemGroup.h>
+#include <gui/TreeWidget.h>
+#include <gui/behaviour/AddTableCommand.h>
 
 #include <QDebug>
 
@@ -51,6 +53,7 @@ GraphicsView::GraphicsView()
     : QGraphicsView()
 {
     mPrevFactor = (MAXIMUM_FACTOR - MINIMUM_FACTOR) / 2;
+    setAcceptDrops(true);
 }
 
 /*
@@ -116,6 +119,56 @@ GraphicsView::scaleView(int ipScaleFactor)
     scale(scaleFactor, scaleFactor);
     if (factor < 1) {
         scene()->setSceneRect(0, 0, GraphicsScene::DEFAULT_WIDTH / factor, GraphicsScene::DEFAULT_HEIGHT / factor);
+    }
+}
+
+/*
+ * Drag enter event
+ */
+void 
+GraphicsView::dragEnterEvent(QDragEnterEvent *ipEvent)
+{
+    if (ipEvent->mimeData()->hasFormat("table/x-table")) {
+        ipEvent->accept();
+    }
+}
+
+/*
+ * Drag enter event
+ */
+void 
+GraphicsView::dragMoveEvent(QDragMoveEvent *ipEvent)
+{
+    if (ipEvent->mimeData()->hasFormat("table/x-table")) {
+        ipEvent->setDropAction(Qt::CopyAction);
+        ipEvent->accept();
+    }
+}
+
+/*
+ * Drop event
+ */
+void
+GraphicsView::dropEvent(QDropEvent *ipEvent)
+{
+    if (ipEvent->mimeData()->hasFormat("table/x-table")) {
+//        QByteArray pieceData = ipEvent->mimeData()->data("table/x-table");
+//        QDataStream dataStream(&pieceData, QIODevice::ReadOnly);
+//        QString tableName;
+//        dataStream >> tableName;
+        GraphicsScene *graphicsScene = dynamic_cast<GraphicsScene *>(scene());
+        QTreeWidget *tableTree = dynamic_cast<QTreeWidget *>(ipEvent->source());
+        qDebug() << "dropEvent" << graphicsScene << " -- " << tableTree;
+        if (graphicsScene && tableTree) {
+            foreach (QTreeWidgetItem *treeItem, tableTree->selectedItems()) {
+                qDebug() << "showOnScene";
+                QList<QGraphicsItem *> tableList = graphicsScene->showOnScene(treeItem, TreeWidget::NameCol);
+                emit tableActionDone(new AddTableCommand(graphicsScene, tableList));
+            }
+        }
+
+        ipEvent->setDropAction(Qt::CopyAction);
+        ipEvent->accept();    
     }
 }
 

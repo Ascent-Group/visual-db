@@ -46,6 +46,7 @@ TreeWidget::TreeWidget(/*QMenu *ipMenu, */QWidget *ipParent)
     : QTreeWidget(ipParent)//, mContextMenu(ipMenu)
 {
     setHeaderLabel(QString(""));
+    setAnimated(true);
 }
 
 /*
@@ -117,26 +118,20 @@ TreeWidget::refresh()
     //// ROLES
     // read roles
     dbInst->readRoles();
-
     QStringList rolesList;
     dbInst->rolesList(&rolesList);
-
     insertItems(rolesNode, &rolesList, TreeWidget::RoleItem);
 
-
     //// LANGS
-    dbInst->readLanguages();
-
     // get and sort langs list
+    dbInst->readLanguages();
     QStringList langsList;
     dbInst->languagesList(&langsList);
-
     insertItems(langsNode, &langsList, TreeWidget::LanguageItem);
 
     //// SCHEMAS
-    dbInst->readSchemas();
-
     // get and sort schemas list
+    dbInst->readSchemas();
     QStringList schemasList;
     dbInst->schemasList(&schemasList);
 
@@ -156,60 +151,48 @@ TreeWidget::refresh()
         //addTopLevelItem(schemaItem);
 
         // create schema
-
         DbSchema *schema = dbInst->findSchema(schemaName);
 
-        // create tablesNode
+        // create tables node
         QTreeWidgetItem *tablesNode = new QTreeWidgetItem(schemaItem);
         tablesNode->setText(TreeWidget::NameCol, tr("Tables"));
         tablesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TableNode));
         setBold(tablesNode, true);
-        // create viewsNode
+        // create views node
         QTreeWidgetItem *viewsNode = new QTreeWidgetItem(schemaItem);
         viewsNode->setText(TreeWidget::NameCol, tr("Views"));
         viewsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::ViewNode));
         setBold(viewsNode, true);
-        // create procsNode
+        // create procedures node
         QTreeWidgetItem *procsNode = new QTreeWidgetItem(schemaItem);
         procsNode->setText(TreeWidget::NameCol, tr("Procedures"));
         procsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::ProcedureNode));
         setBold(procsNode, true);
-        // create procsNode
+        // create triggers node
         QTreeWidgetItem *trigsNode = new QTreeWidgetItem(schemaItem);
         trigsNode->setText(TreeWidget::NameCol, tr("Triggers"));
         trigsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TriggerNode));
         setBold(trigsNode, true);
 
-
-        //// TABLES
-        // get tables list for the given schema and sort
+        // get tables list for the given schema
         QStringList tablesList;
         schema->tablesList(&tablesList);
+        insertItems(tablesNode, &tablesList, TreeWidget::TableItem, true);
 
-        insertItems(tablesNode, &tablesList, TreeWidget::TableItem);
-
-
-        //// VIEWS
-        // get views list for the given schema and sort
+        // get views list for the given schema
         QStringList viewsList;
         schema->viewsList(&viewsList);
-
         insertItems(viewsNode, &viewsList, TreeWidget::ViewItem);
 
-
-        //// PROCS
-        // get procs list for the given schema and sort
+        // get procs list for the given schema
         QStringList procsList;
         schema->proceduresList(&procsList);
-
         insertItems(procsNode, &procsList, TreeWidget::ProcedureItem);
 
-        //// TRIGGERS
+        // get triggers list for the given schema
         QStringList trigsList;
         schema->triggersList(&trigsList);
-
         insertItems(trigsNode, &trigsList, TreeWidget::TriggerItem);
-
     }
 
     //// INDICES
@@ -226,10 +209,39 @@ TreeWidget::refresh()
  * Handler for context menu event
  */
 void
-TreeWidget::contextMenuEvent(QContextMenuEvent *event)
+TreeWidget::contextMenuEvent(QContextMenuEvent *ipEvent)
 {
-    mContextMenu->exec(event->globalPos());
+    mContextMenu->exec(ipEvent->globalPos());
 }
+
+/*
+ * Start drag
+ */
+void
+TreeWidget::startDrag(Qt::DropActions)
+{
+    QTreeWidgetItem *item = currentItem();
+
+    QByteArray itemData;
+    QDataStream dataStream(&itemData, QIODevice::WriteOnly);
+//    QPixmap pixmap = qVariantValue<QPixmap>(item->data(Qt::UserRole));
+//    QPoint location = item->data(Qt::UserRole+1).toPoint();
+
+//    dataStream << pixmap << location;
+    dataStream << item->data(TreeWidget::NameCol, Qt::DisplayRole).toString();
+    qDebug() << "startDrag: " << item->data(TreeWidget::NameCol, Qt::DisplayRole).toString();
+
+    QMimeData *mimeData = new QMimeData;
+    mimeData->setData("table/x-table", itemData);
+
+    QDrag *drag = new QDrag(this);
+    drag->setMimeData(mimeData);
+//    drag->setHotSpot(QPoint(pixmap.width() / 2, pixmap.height() / 2));
+//    drag->setPixmap(pixmap);
+
+    drag->exec(Qt::MoveAction);
+}
+
 
 /*
  * Create the database caption
@@ -241,7 +253,7 @@ qDBCaption(const QSqlDatabase &ipDb)
     driverName.append(QLatin1Char(':'));
 
     if (!ipDb.userName().isEmpty()) {
-    driverName.append(ipDb.userName()).append(QLatin1Char('@'));
+        driverName.append(ipDb.userName()).append(QLatin1Char('@'));
     }
 
     driverName.append(ipDb.databaseName());
@@ -252,18 +264,18 @@ qDBCaption(const QSqlDatabase &ipDb)
 /*
  * Set font to bold
  */
-static void setBold(QTreeWidgetItem *item, bool bold)
+static void setBold(QTreeWidgetItem *ipItem, bool ipBold)
 {
-    QFont font = item->font(0);
-    font.setBold(bold);
-    item->setFont(0, font);
+    QFont font = ipItem->font(0);
+    font.setBold(ipBold);
+    ipItem->setFont(0, font);
 }
 
 /*
  * Populate tree under parent-item with triggers
  */
 void
-TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, TreeWidget::Item ipType)
+TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, TreeWidget::Item ipType, bool ipDragEnabled)
 {
     ipList->sort();
 
@@ -275,8 +287,13 @@ TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, Tree
 
         // create an item
         QTreeWidgetItem *item = new QTreeWidgetItem(ipParentItem);
+//        if (ipDragEnabled) {
+//            item->setFlags(item->flags() | Qt::ItemIsDragEnabled);
+//        }
+        item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled);
         item->setText(TreeWidget::NameCol, name);
         item->setText(TreeWidget::IdCol, QString::number(ipType));
+        item->setData(TreeWidget::NameCol, Qt::DisplayRole, name);
     }
 }
 

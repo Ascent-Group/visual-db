@@ -353,8 +353,9 @@ MainWindow::addTableItem(QTreeWidgetItem *ipItem, int ipCol)
 {
     //printMsg("Adding table '" + ipItem->text(ipCol) + "' to scene");
 
-    ui.mSceneWidget->showOnScene(ipItem, ipCol);
-    ui.mSceneWidget->updateLegend();
+//    ui.mSceneWidget->showOnScene(ipItem, ipCol);
+//    ui.mSceneWidget->updateLegend();
+    addTableItem();
 }
 
 /*

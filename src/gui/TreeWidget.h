@@ -87,12 +87,13 @@ class TreeWidget : public QTreeWidget
 
     protected:
         void contextMenuEvent(QContextMenuEvent *);
+        void startDrag(Qt::DropActions);
 
     private:
         QMenu *mContextMenu;
 
     private:
-        void insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, TreeWidget::Item ipType);
+        void insertItems(QTreeWidgetItem *, QStringList *, TreeWidget::Item, bool ipDragEnabled = false);
 };
 
 #endif // TREEWIDGET_H

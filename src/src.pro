@@ -1,20 +1,42 @@
 TEMPLATE = app
 TARGET = visual-db
 
-DESTDIR = $$OUT_PWD/../bin
+QT += sql network xml
+CONFIG += debug
 
-DEPENDPATH += . dbobjects
+DESTDIR = ../bin
+
+DEPENDPATH += . \
+              dbobjects \
+              dbobject/common \
+              dbobject/factory \
+              dbobject/psql \
+              dbobject/mysql
+
 INCLUDEPATH += $$PWD $$PWD/dbobjects
 
+### Windows specific paths
 win32 {
-    LIBS += -L$$OUT_PWD/dbobjects/debug -L$$OUT_PWD/dbobjects/release
+    Debug:LIBS += -L$$OUT_PWD/dbobjects/common/debug \
+                  -L$$OUT_PWD/dbobjects/factory/debug \
+                  -L$$OUT_PWD/dbobjects/psql/debug \
+                  -L$$OUT_PWD/dbobjects/mysql/debug
+
+    Release:LIBS += -L$$OUT_PWD/dbobjects/common/release \
+                    -L$$OUT_PWD/dbobjects/factory/release \
+                    -L$$OUT_PWD/dbobjects/psql/release \
+                    -L$$OUT_PWD/dbobjects/mysql/release
 }
 
-LIBS += -L$$OUT_PWD/dbobjects -ldbobjects
+### Unix specific paths
+unix {
+    LIBS += -L$$OUT_PWD/dbobjects/common \
+            -L$$OUT_PWD/dbobjects/factory \
+            -L$$OUT_PWD/dbobjects/psql \
+            -L$$OUT_PWD/dbobjects/mysql
+}
 
-QT += sql network xml
-
-CONFIG += debug
+LIBS += -lcommon -lpsql -lmysql -lfactory -lpsql
 
 ## check dependencies
 #CONFIG += link_pkgconfig
@@ -40,11 +62,12 @@ FORMS = $$PWD/gui/ui/AppearancePage.ui \
         $$PWD/gui/ui/SqlConnectionDialog.ui \
         $$PWD/gui/ui/SqlWidget.ui
 
-HEADERS += $$PWD/gui/behaviour/AddTableCommand.h \
-           $$PWD/gui/behaviour/DeleteTableCommand.h \
-           $$PWD/gui/behaviour/MoveTableCommand.h \
+HEADERS += $$PWD/consts.h \
            $$PWD/connect/DbParameters.h \
            $$PWD/connect/ProxyParameters.h \
+           $$PWD/gui/behaviour/AddTableCommand.h \
+           $$PWD/gui/behaviour/DeleteTableCommand.h \
+           $$PWD/gui/behaviour/MoveTableCommand.h \
            $$PWD/gui/AppearancePage.h \
            $$PWD/gui/ArrowItem.h \
            $$PWD/gui/ColorsPage.h \
@@ -69,11 +92,11 @@ HEADERS += $$PWD/gui/behaviour/AddTableCommand.h \
 
 SOURCES += $$PWD/main.cpp \
            $$PWD/consts.cpp \
+           $$PWD/connect/DbParameters.cpp \
+           $$PWD/connect/ProxyParameters.cpp \
            $$PWD/gui/behaviour/AddTableCommand.cpp \
            $$PWD/gui/behaviour/DeleteTableCommand.cpp \
            $$PWD/gui/behaviour/MoveTableCommand.cpp \
-           $$PWD/connect/DbParameters.cpp \
-           $$PWD/connect/ProxyParameters.cpp \
            $$PWD/gui/AppearancePage.cpp \
            $$PWD/gui/ArrowItem.cpp \
            $$PWD/gui/ColorsPage.cpp \
@@ -100,4 +123,7 @@ RESOURCES += $$PWD/visual_db.qrc
 
 TRANSLATIONS += $$PWD/visual_db_en.ts \
                 $$PWD/visual_db_ru.ts
+
+### Expanding clean target
+QMAKE_CLEAN += $$OUT_PWD/$$DESTDIR/$$TARGET
 

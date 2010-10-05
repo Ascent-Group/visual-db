@@ -28,13 +28,16 @@
  */
 
 #include <dbobjects/common/Database.h>
+#include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DatabaseTest.h>
 #include <dbobjects/common/DbSchema.h>
-#include <dbobjects/psql/PsqlIndex.h>
-#include <dbobjects/psql/PsqlLanguage.h>
-#include <dbobjects/psql/PsqlRole.h>
+#include <dbobjects/psql/Index.h>
+#include <dbobjects/psql/Language.h>
+#include <dbobjects/psql/Role.h>
 
 #include <QSqlDatabase>
+
+using namespace DbObjects;
 
 // These are the counts fr non-system db objects
 const quint8  DatabaseTest::LANGUAGES_COUNT = 4;
@@ -70,8 +73,8 @@ DatabaseTest::cleanupTestCase()
 void
 DatabaseTest::init()
 {
-    mDbInst = Database::instance();
-    mDbInst->setSqlDriver("QPSQL");
+    mDbInst = DatabaseCreator::createDatabase();
+//    mDbInst->setSqlDriver("QPSQL");
 }
 
 /*!
@@ -80,9 +83,9 @@ DatabaseTest::init()
 void
 DatabaseTest::cleanup()
 {
-    mDbInst->cleanup();
+    mDbInst->resetData();
 
-    DatabaseManager dbMgr;
+    Common::DatabaseManager dbMgr;
     dbMgr.flush();
 }
 
@@ -99,7 +102,7 @@ DatabaseTest::addIndexTest()
     QVERIFY(0 < count);
 
     // try to add dummy index
-    PsqlIndex *dummyIndex = new(std::nothrow) PsqlIndex("dummy");
+    Psql::Index *dummyIndex = new(std::nothrow) Psql::Index("dummy");
 
     QVERIFY(0 != dummyIndex);
 
@@ -109,7 +112,7 @@ DatabaseTest::addIndexTest()
 
     // try to add a index that already has been there
     QString indexName("ind_artists");
-    DbIndex *index = mDbInst->findIndex(indexName);
+    Common::DbIndex *index = mDbInst->findIndex(indexName);
 
     QVERIFY(0 != index);
 
@@ -131,7 +134,7 @@ DatabaseTest::addLanguageTest()
     QVERIFY(0 < count);
 
     // add dummy language
-    PsqlLanguage *dummyLang = new(std::nothrow) PsqlLanguage("dummy");
+    Psql::Language *dummyLang = new(std::nothrow) Psql::Language("dummy");
 
     QVERIFY(0 != dummyLang);
 
@@ -142,7 +145,7 @@ DatabaseTest::addLanguageTest()
 
     // add existant language again
     QString langName("plpgsql");
-    DbLanguage *lang = mDbInst->findLanguage(langName);
+    Common::DbLanguage *lang = mDbInst->findLanguage(langName);
 
     QVERIFY(0 != lang);
 
@@ -165,7 +168,7 @@ DatabaseTest::addRoleTest()
     QVERIFY(0 < count);
 
     // add dummy role
-    PsqlRole *dummyRole = new(std::nothrow) PsqlRole("dummy");
+    Psql::Role *dummyRole = new(std::nothrow) Psql::Role("dummy");
 
     QVERIFY(0 != dummyRole);
 
@@ -176,7 +179,7 @@ DatabaseTest::addRoleTest()
 
     // add existant role again
     QString roleName("music_user");
-    DbRole *role = mDbInst->findRole(roleName);
+    Common::DbRole *role = mDbInst->findRole(roleName);
 
     QVERIFY(0 != role);
 
@@ -200,7 +203,7 @@ DatabaseTest::addSchemaTest()
     QVERIFY(0 < count);
 
     // add dummy schema
-    DbSchema *dummySchema = new(std::nothrow) DbSchema("dummy", mDbInst->findRole("music_user"));
+    Common::DbSchema *dummySchema = new(std::nothrow) Common::DbSchema("dummy", mDbInst->findRole("music_user"));
 
     QVERIFY(0 != dummySchema);
 
@@ -213,7 +216,7 @@ DatabaseTest::addSchemaTest()
 
     // add existant schema again
     QString schemaName("vtunes");
-    DbSchema *schema = mDbInst->findSchema(schemaName);
+    Common::DbSchema *schema = mDbInst->findSchema(schemaName);
 
     QVERIFY(0 != schema);
 
@@ -223,7 +226,7 @@ DatabaseTest::addSchemaTest()
 }
 
 void
-DatabaseTest::cleanupTest()
+DatabaseTest::resetDataTest()
 {
     QVERIFY(0 != mDbInst);
 
@@ -237,7 +240,7 @@ DatabaseTest::cleanupTest()
     QVERIFY(0 != mDbInst->rolesCount());
     QVERIFY(0 != mDbInst->schemasCount());
 
-    mDbInst->cleanup();
+    mDbInst->resetData();
 
     QCOMPARE(mDbInst->indicesCount(), (quint64)0);
     QCOMPARE(mDbInst->languagesCount(), (quint8)0);
@@ -312,13 +315,13 @@ DatabaseTest::findTableIndicesTest()
     mDbInst->readRoles();
     mDbInst->readSchemas();
 
-    QVector<DbIndex*> indicesList;
+    QVector<Common::DbIndex*> indicesList;
 
-    DbSchema *schema = mDbInst->findSchema("vtunes");
+    Common::DbSchema *schema = mDbInst->findSchema("vtunes");
 
     QVERIFY(0 != schema);
 
-    DbTable *table = schema->findTable("artists");
+    Common::DbTable *table = schema->findTable("artists");
 
     QVERIFY(0 != table);
 
@@ -342,13 +345,13 @@ DatabaseTest::flushTest()
     QVERIFY(0 != mDbInst->rolesCount());
     QVERIFY(0 != mDbInst->schemasCount());
 
-    DatabaseManager dbMgr;
+    Common::DatabaseManager dbMgr;
     dbMgr.flush();
 
     // this check might not be valid if the object will be reconstructed in the same location
 //    QVERIFY(mDbInst != Database::instance());
 
-    mDbInst = Database::instance();
+    mDbInst = Common::Database::instance();
 
     QVERIFY(0 != mDbInst);
 
@@ -365,12 +368,12 @@ DatabaseTest::indicesCountTest()
     QVERIFY(0 != mDbInst);
 
     QCOMPARE(mDbInst->indicesCount(), (quint64)0);
-    
+
     mDbInst->readIndices();
 
     QVERIFY(mDbInst->indicesCount() >= INDICES_COUNT);
 
-    mDbInst->cleanup();
+    mDbInst->resetData();
 
     QCOMPARE(mDbInst->indicesCount(), (quint64)0);
 }
@@ -408,12 +411,12 @@ DatabaseTest::instanceTest()
     QVERIFY(0 != mDbInst);
 
     // additionaly it should be valid
-    QCOMPARE(mDbInst->sqlDriver(), Database::PostgreSQL);
-    Database *inst = Database::instance();
+    QCOMPARE(mDbInst->sqlDriver(), Common::Database::PostgreSQL);
+    Common::Database *inst = Common::Database::instance();
 
     for (int i = 0; i < 50; ++i)
     {
-        QCOMPARE(Database::instance(), inst);
+        QCOMPARE(Common::Database::instance(), inst);
     }
 }
 
@@ -428,7 +431,7 @@ DatabaseTest::languagesCountTest()
 
     QVERIFY(mDbInst->languagesCount() >= LANGUAGES_COUNT);
 
-    mDbInst->cleanup();
+    mDbInst->resetData();
 
     QCOMPARE(mDbInst->languagesCount(), (quint8)0);
 }
@@ -484,7 +487,7 @@ DatabaseTest::readLanguagesTest()
     // plpgsql MUST be there
     QString name("plpgsql");
 
-    DbLanguage *lang = mDbInst->findLanguage(name);
+    Common::DbLanguage *lang = mDbInst->findLanguage(name);
 
     QVERIFY(0 != lang);
 
@@ -502,7 +505,7 @@ DatabaseTest::readRolesTest()
     // validate names
     QString name("music_user");
 
-    DbRole *role = mDbInst->findRole(name);
+    Common::DbRole *role = mDbInst->findRole(name);
     QVERIFY(0 != role);
 
     QCOMPARE(role->name(), name);
@@ -517,7 +520,7 @@ DatabaseTest::readSchemasTest()
     // read schemas
     mDbInst->readSchemas();
 
-    DbSchema *schema;
+    Common::DbSchema *schema;
     // validate their names
     QString name = QString("public");
     schema = mDbInst->findSchema(name);
@@ -546,7 +549,7 @@ DatabaseTest::rolesCountTest()
 
     QVERIFY(mDbInst->rolesCount() >= ROLES_COUNT);
 
-    mDbInst->cleanup();
+    mDbInst->resetData();
 
     QCOMPARE(mDbInst->rolesCount(), (quint64)0);
 }
@@ -588,7 +591,7 @@ DatabaseTest::schemasCountTest()
 
     QVERIFY(mDbInst->schemasCount() >= SCHEMAS_COUNT);
 
-    mDbInst->cleanup();
+    mDbInst->resetData();
 
     QCOMPARE(mDbInst->schemasCount(), (quint64)0);
 }
@@ -621,8 +624,9 @@ DatabaseTest::schemasListTest()
 void
 DatabaseTest::setSqlDriverTest()
 {
+    using namespace DbObjects::Common;
     QVERIFY(0 != mDbInst);
-    
+
     mDbInst->setSqlDriver("QPSQL");
     QCOMPARE(mDbInst->sqlDriver(), Database::PostgreSQL);
 

@@ -44,11 +44,13 @@
 #include <dbobjects/common/DbTriggerTest.h>
 #include <dbobjects/common/DbViewTest.h>
 #include <dbobjects/mysql/MysqlTableTest.h>
+#include <dbobjects/mysql/MysqlToolsTest.h>
 #include <dbobjects/psql/PsqlIndexTest.h>
 #include <dbobjects/psql/PsqlLanguageTest.h>
 #include <dbobjects/psql/PsqlProcedureTest.h>
 #include <dbobjects/psql/PsqlRoleTest.h>
 #include <dbobjects/psql/PsqlTableTest.h>
+#include <dbobjects/psql/PsqlToolsTest.h>
 #include <dbobjects/psql/PsqlTriggerTest.h>
 #include <dbobjects/psql/PsqlViewTest.h>
 
@@ -78,28 +80,15 @@ int main(int argc, char *argv[])
         return -1;
     }
 
+    DatabaseCreator::setDriver(drv);
+
     DbParameters dbParams;
+    dbParams.setDbDriver(drv);
 
     dbParams.setDbHost(DBHOST);
     dbParams.setDbName(DBNAME);
     dbParams.setDbUser(DBUSER);
 //    dbParams.setDbPassword();
-
-    DatabaseCreator::setDriver(drv);
-
-    if (0 == strncmp(drv, "psql", strlen(drv))) {
-        dbParams.setDbDriver("QPSQL");
-    } else if (0 == strncmp(drv, "mysql", strlen(drv))) {
-        dbParams.setDbDriver("QMYSQL");
-    } else if (0 == strncmp(drv, "oracle", strlen(drv))) {
-        dbParams.setDbDriver("QODBC");
-    } else if (0 == strncmp(drv, "sqlite", strlen(drv))) {
-        dbParams.setDbDriver("QSQLITE");
-    } else {
-        qCritical("[ERROR] Unknown db driver!");
-
-        return -1;
-    }
 
     if (!createConnection(dbParams)) {
         qCritical() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
@@ -137,9 +126,9 @@ int main(int argc, char *argv[])
 
 #if TEST_CONNECT
     /* connect */
-    DbParametersTest dbParametersTest ;
+    DbParametersTest dbParametersTest;
     QTest::qExec(&dbParametersTest, argc, argv);
-    
+
     ProxyParametersTest proxyParametersTest;
     QTest::qExec(&proxyParametersTest, argc, argv);
 #endif // TEST_CONNECT
@@ -157,19 +146,19 @@ int main(int argc, char *argv[])
 
     ControlWidgetTest controlWidgetTest;
     QTest::qExec(&controlWidgetTest, argc, argv);
-    
+
     DescriptionWidgetTest descriptionWidgetTest;
     QTest::qExec(&descriptionWidgetTest, argc, argv);
-    
+
     GraphicsItemTest graphicsItemTest;
     QTest::qExec(&graphicsItemTest, argc, argv);
-    
+
     GraphicsSceneTest graphicsSceneTest;
     QTest::qExec(&graphicsSceneTest, argc, argv);
-    
+
     GraphicsViewTest graphicsViewTest;
     QTest::qExec(&graphicsViewTest, argc, argv);
-    
+
     LegendTest legendTest;
     QTest::qExec(&legendTest, argc, argv);
 
@@ -178,34 +167,34 @@ int main(int argc, char *argv[])
 
     MainWindowTest mainWindowTest;
     QTest::qExec(&mainWindowTest, argc, argv);
-    
+
     OptionsDialogTest optionsDialogTest;
     QTest::qExec(&optionsDialogTest, argc, argv);
-    
+
     PreferencesPageTest preferencesPageTest;
     QTest::qExec(&preferencesPageTest, argc, argv);
-    
+
     SceneWidgetTest sceneWidgetTest;
     QTest::qExec(&sceneWidgetTest, argc, argv);
-    
+
     SelectColorWidgetTest selectColorWidgetTest;
     QTest::qExec(&selectColorWidgetTest, argc, argv);
-    
+
     SqlConnectionDialogTest sqlConnectionDialogTest;
     QTest::qExec(&sqlConnectionDialogTest, argc, argv);
-    
+
     SqlWidgetTest sqlWidgetTest;
     QTest::qExec(&sqlWidgetTest, argc, argv);
-    
+
     TableItemGroupTest tableItemGroupTest;
     QTest::qExec(&tableItemGroupTest, argc, argv);
-    
+
     TableItemTest tableItemTest;
     QTest::qExec(&tableItemTest, argc, argv);
-    
+
     TabWidgetTest tabWidgetTest;
     QTest::qExec(&tabWidgetTest, argc, argv);
-    
+
     TreeWidgetTest treeWidgetTest;
     QTest::qExec(&treeWidgetTest, argc, argv);
 #endif // TEST_GUI
@@ -217,52 +206,52 @@ int main(int argc, char *argv[])
 
     DbIndexTest dbIndexTest;
     QTest::qExec(&dbIndexTest, argc, argv);
-    
+
 //    DbLanguageTest dbLanguageTest;
 //    QTest::qExec(&dbLanguageTest, argc, argv);
-//    
+//
 //    DbObjectTest dbObjectTest;
 //    QTest::qExec(&dbObjectTest, argc, argv);
-//    
+//
 //    DbProcedureTest dbProcedureTest;
 //    QTest::qExec(&dbProcedureTest, argc, argv);
-//    
+//
 //    DbRoleTest dbRoleTest;
 //    QTest::qExec(&dbRoleTest, argc, argv);
-//    
+//
 //    DbSchemaTest dbSchemaTest;
 //    QTest::qExec(&dbSchemaTest, argc, argv);
-//    
+//
 //    DbTableTest dbTableTest;
 //    QTest::qExec(&dbTableTest, argc, argv);
-//    
+//
 //    DbTriggerTest dbTriggerTest;
 //    QTest::qExec(&dbTriggerTest, argc, argv);
-//    
+//
 //    DbViewTest dbViewTest;
 //    QTest::qExec(&dbViewTest, argc, argv);
-//    
+//
 //    MysqlTableTest mysqlTableTest;
 //    QTest::qExec(&mysqlTableTest, argc, argv);
-//    
+//
 //    PsqlIndexTest psqlIndexTest;
 //    QTest::qExec(&psqlIndexTest, argc, argv);
-//    
+//
 //    PsqlLanguageTest psqlLanguageTest;
 //    QTest::qExec(&psqlLanguageTest, argc, argv);
-//    
+//
 //    PsqlProcedureTest psqlProcedureTest;
 //    QTest::qExec(&psqlProcedureTest, argc, argv);
-//    
+//
 //    PsqlRoleTest psqlRoleTest;
 //    QTest::qExec(&psqlRoleTest, argc, argv);
-//    
+//
 //    PsqlTableTest psqlTableTest;
 //    QTest::qExec(&psqlTableTest, argc, argv);
-//    
+//
 //    PsqlTriggerTest psqlTriggerTest;
 //    QTest::qExec(&psqlTriggerTest, argc, argv);
-//    
+//
 //    PsqlViewTest psqlViewTest;
 //    QTest::qExec(&psqlViewTest, argc, argv);
 #endif // TEST_DBOBJECTS

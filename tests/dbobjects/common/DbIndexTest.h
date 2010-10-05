@@ -32,6 +32,14 @@
 
 #include <QtTest/QtTest>
 
+namespace DbObjects
+{
+namespace Common
+{
+class Database;
+}
+}
+
 class DbIndexTest : public QObject
 {
     Q_OBJECT
@@ -66,6 +74,9 @@ class DbIndexTest : public QObject
         void setValidTest();
         void tableNameTest();
         void tableTest();
+
+    private:
+        DbObjects::Common::Database *mDbInst;
 };
 
 #endif // DBINDEXTEST_H

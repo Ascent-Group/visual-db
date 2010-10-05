@@ -6,25 +6,13 @@
 class DatabaseCreator
 {
     public:
-        static Database* createDatabase()
-        {
-            Database *dbInst = Database::instance();
+        static DbObjects::Common::Database* createDatabase();
 
-            dbInst->setSqlDriver(mDriver);            
-
-            return dbInst;
-        }
-        
-        static void setDriver(const QString &ipDriver)
-        {
-            mDriver = ipDriver;
-        }
+        static void setDriver(const QString &ipDriverName);
 
     private:
-        static QString mDriver;
+        static QString mDriverName;
 };
-
-QString DatabaseCreator::mDriver = QString("");
 
 #endif // DATABASE_CREATOR
 

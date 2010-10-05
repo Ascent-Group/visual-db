@@ -1,14 +1,8 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0">
 <context>
     <name>AppearancePage</name>
-    <message>
-        <source>English</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Russian</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Language:</source>
         <translation type="unfinished"></translation>
@@ -65,6 +59,38 @@
     </message>
     <message>
         <source>-</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -282,6 +308,14 @@ arguments</source>
     </message>
     <message>
         <source>Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save to file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -636,10 +670,6 @@ arguments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>mReloadDataAction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ctrl+R</source>
         <translation type="unfinished"></translation>
     </message>
@@ -657,6 +687,10 @@ arguments</source>
     </message>
     <message>
         <source>Xml files (*.vdb)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

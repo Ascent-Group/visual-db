@@ -29,15 +29,17 @@
 
 #include <dbobjects/common/DbIndexTest.h>
 
-#include <dbobjects/common/Database.h>
+#include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbIndex.h>
 
 #include <limits>
 
+using namespace DbObjects;
+
 void
 DbIndexTest::initTestCase()
 {
-
+    mDbInst = DatabaseCreator::createDatabase();
 }
 
 void
@@ -46,23 +48,29 @@ DbIndexTest::cleanupTestCase()
 
 }
 
-
 void
 DbIndexTest::addColumnNumberTest()
 {
-    DbIndex *index = Database::instance()->findIndex("ind_artists");
+    mDbInst->readIndices();
+
+    Common::DbIndex *index = mDbInst->findIndex("ind_artists");
 
     QVERIFY(0 != index);
 
-    for (short i = std::numeric_limits<short>::min(); i <= std::numeric_limits<short>::max(); ++i) {
-        index->addColumnNumber(i);
+    short min = std::numeric_limits<short>::min();
+    short max = std::numeric_limits<short>::max();
 
-        for (short j = std::numeric_limits<short>::min(); j <= i; ++j) {
+    for (short i = min; i <= max; ++i) {
+
+        for (short j = min; j <= i; ++j) {
             // check vector
             index->columnsNumbers().contains(j);
         }
 
-        QCOMPARE(index->columnsNumbers().size(), (qint32)i);
+        // expected size should be centered
+        QCOMPARE(index->columnsNumbers().size(), (qint32)(i - min + 1));
+
+        index->resetData();
     }
     QVERIFY(0);
 }

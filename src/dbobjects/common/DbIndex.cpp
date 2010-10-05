@@ -212,7 +212,7 @@ DbIndex::isUnique() const
 /*!
  * \brief Sets the unique flag
  *
- * param[in] ipFlag
+ * \param[in] ipFlag
  */
 void
 DbIndex::setUnique(bool ipFlag)

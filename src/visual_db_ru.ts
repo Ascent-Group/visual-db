@@ -1,13 +1,15 @@
-<!DOCTYPE TS><TS>
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="ru_RU">
 <context>
     <name>AppearancePage</name>
     <message>
         <source>English</source>
-        <translation>Английский</translation>
+        <translation type="obsolete">Английский</translation>
     </message>
     <message>
         <source>Russian</source>
-        <translation>Русский</translation>
+        <translation type="obsolete">Русский</translation>
     </message>
     <message>
         <source>Automatically switch to a new tab</source>
@@ -38,7 +40,7 @@
     </message>
     <message>
         <source>The current time</source>
-        <translation type="unfinished"></translation>
+        <translation>Текущее время</translation>
     </message>
     <message>
         <source>The widget is used for picking a color.</source>
@@ -46,19 +48,19 @@
     </message>
     <message>
         <source>Background</source>
-        <translation type="unfinished"></translation>
+        <translation>Фон</translation>
     </message>
     <message>
         <source>Table</source>
-        <translation type="unfinished">Талица</translation>
+        <translation>Талица</translation>
     </message>
     <message>
         <source>Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Стрелка</translation>
     </message>
     <message>
         <source>Border</source>
-        <translation type="unfinished"></translation>
+        <translation>Граница</translation>
     </message>
 </context>
 <context>
@@ -74,6 +76,38 @@
     <message>
         <source>-</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Up</source>
+        <translation>Вверх</translation>
+    </message>
+    <message>
+        <source>Left</source>
+        <translation>Влево</translation>
+    </message>
+    <message>
+        <source>Browse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right</source>
+        <translation>Вправо</translation>
+    </message>
+    <message>
+        <source>Down</source>
+        <translation>Вниз</translation>
+    </message>
+    <message>
+        <source>Zoom in</source>
+        <translation>Приблизить</translation>
+    </message>
+    <message>
+        <source>Zoom out</source>
+        <translation>Отдалить</translation>
+    </message>
+    <message>
+        <source>Zoom</source>
+        <translation>Приближение</translation>
     </message>
 </context>
 <context>
@@ -333,7 +367,7 @@ arguments</source>
     </message>
     <message>
         <source>Error</source>
-        <translation type="unfinished">Ошибка</translation>
+        <translation>Ошибка</translation>
     </message>
     <message>
         <source>Unable to open file!</source>
@@ -341,7 +375,15 @@ arguments</source>
     </message>
     <message>
         <source>Ok</source>
-        <translation type="unfinished">Ок</translation>
+        <translation>Ок</translation>
+    </message>
+    <message>
+        <source>Save to file...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -356,7 +398,7 @@ arguments</source>
     </message>
     <message>
         <source>Ctrl+Q</source>
-        <translation type="unfinished">Ctrl+Q</translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <source>New connection...</source>
@@ -364,7 +406,7 @@ arguments</source>
     </message>
     <message>
         <source>Ctrl+N</source>
-        <translation type="unfinished">Ctrl+N</translation>
+        <translation>Ctrl+N</translation>
     </message>
     <message>
         <source>Creation of new connection</source>
@@ -464,7 +506,7 @@ arguments</source>
     </message>
     <message>
         <source>Show control widget</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать виджет навигации</translation>
     </message>
     <message>
         <source>Show legend</source>
@@ -660,7 +702,7 @@ arguments</source>
     </message>
     <message>
         <source>Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Правка</translation>
     </message>
     <message>
         <source>toolBar</source>
@@ -676,7 +718,7 @@ arguments</source>
     </message>
     <message>
         <source>Objects list</source>
-        <translation type="unfinished"></translation>
+        <translation>Список объектов</translation>
     </message>
     <message>
         <source>Tree widget</source>
@@ -688,7 +730,7 @@ arguments</source>
     </message>
     <message>
         <source>New connection</source>
-        <translation type="unfinished"></translation>
+        <translation>Новое подключение</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
@@ -700,7 +742,7 @@ arguments</source>
     </message>
     <message>
         <source>Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>Выход</translation>
     </message>
     <message>
         <source>F11</source>
@@ -716,7 +758,7 @@ arguments</source>
     </message>
     <message>
         <source>Align to grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Выравнивать по сетке</translation>
     </message>
     <message>
         <source>Align tables to the grid</source>
@@ -724,7 +766,7 @@ arguments</source>
     </message>
     <message>
         <source>Divide into pages</source>
-        <translation type="unfinished"></translation>
+        <translation>Разбивать на страницы</translation>
     </message>
     <message>
         <source>Del</source>
@@ -748,7 +790,7 @@ arguments</source>
     </message>
     <message>
         <source>Anchor</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Прикрепить</translation>
     </message>
     <message>
         <source>Set anchor for selected tables</source>
@@ -760,10 +802,6 @@ arguments</source>
     </message>
     <message>
         <source>Disable anchor for selected tables</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>mReloadDataAction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -785,6 +823,10 @@ arguments</source>
     <message>
         <source>Xml files (*.vdb)</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>Обновить</translation>
     </message>
 </context>
 <context>
@@ -1088,7 +1130,7 @@ arguments</source>
     </message>
     <message>
         <source>Indices</source>
-        <translation type="unfinished">Индексы</translation>
+        <translation>Индексы</translation>
     </message>
     <message>
         <source>Languages</source>

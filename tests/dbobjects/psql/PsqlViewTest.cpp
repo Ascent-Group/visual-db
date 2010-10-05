@@ -28,7 +28,7 @@
  */
 
 #include <dbobjects/common/DbSchema.h>
-#include <dbobjects/psql/PsqlView.h>
+#include <dbobjects/psql/View.h>
 #include <dbobjects/psql/PsqlViewTest.h>
 
 void
@@ -49,6 +49,7 @@ PsqlViewTest::loadDataTest()
     QString schemaName = QString("vtunes");
     QString viewName = QString("users_playlists");
 
+    using namespace DbObjects::Common;
     Database *dbInst = Database::instance();
 
     // we need this for schema parent

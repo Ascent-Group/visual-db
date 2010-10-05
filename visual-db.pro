@@ -1,7 +1,7 @@
 TEMPLATE = subdirs
 
-SUBDIRS +=  src/dbobjects \
-            src
+SUBDIRS +=  $$PWD/src/dbobjects \
+            $$PWD/src
 
 CONFIG += ordered warn_on
 
@@ -9,8 +9,7 @@ QMAKE_EXTRA_TARGETS += build_tests run_tests
 
 #build_tests.CONFIG = <nothing_here_yet>
 build_tests.commands = @echo "Building tests" \
-                       && cd tests \
-                       && $(QMAKE) $$PWD/tests.pro \
+                       && $(QMAKE) $$PWD/tests/tests.pro \
                        && make
 
 run_tests.commands = @echo "Running tests" \

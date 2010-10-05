@@ -32,7 +32,16 @@
 
 #include <QtTest/QtTest>
 
+namespace DbObjects
+{
+namespace Common
+{
 class Database;
+}
+
+}
+
+// \todo Add test for resetData and loadData
 
 class DatabaseTest : public QObject
 {
@@ -51,7 +60,7 @@ class DatabaseTest : public QObject
         void addLanguageTest();
         void addRoleTest();
         void addSchemaTest();
-        void cleanupTest();
+        void resetDataTest();
         void findIndexTest();
         void findLanguageTest();
         void findObjectTest();
@@ -76,7 +85,7 @@ class DatabaseTest : public QObject
         void sqlDriverTest();
 
     private:
-        Database *mDbInst;
+        DbObjects::Common::Database *mDbInst;
         static const quint8 LANGUAGES_COUNT;
         static const quint64 SCHEMAS_COUNT;
         static const quint64 ROLES_COUNT;

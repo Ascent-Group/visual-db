@@ -31,6 +31,8 @@
 #include <dbobjects/common/Database.h>
 #include <dbobjects/common/DbSchema.h>
 
+using namespace DbObjects;
+
 void
 DbSchemaTest::initTestCase()
 {
@@ -95,12 +97,12 @@ DbSchemaTest::findTableTest()
 void
 DbSchemaTest::findTriggerTest()
 {
-    Database *dbInst = Database::instance();
+    Common::Database *dbInst = Common::Database::instance();
     QVERIFY(0 != dbInst);
 
     dbInst->readSchemas();
 
-    DbSchema *schema = dbInst->findSchema("vtunes");
+    Common::DbSchema *schema = dbInst->findSchema("vtunes");
 
     QVERIFY(0 != schema);
 

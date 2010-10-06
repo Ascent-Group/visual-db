@@ -15,12 +15,19 @@ psqlSetup()
 {
     DBUSER=music_user
     DBNAME=music_db
+    DBPASS=qwe
     LANG=plpgsql
+    PSQL_DIR=/opt/lampstack-1.2-2/postgresql
+    PSQL_SUPERUSER=postgres
+
+    # drop db and user if they exist
+    $PSQL_DIR/bin/dropdb -U $PSQL_SUPERUSER $DBNAME
+    $PSQL_DIR/bin/dropuser -U $PSQL_SUPERUSER $DBUSER
 
     # create user if it doesn't exist already
-    psql template1 postgres -c "\du" | grep $DBUSER > /dev/null
+    $PSQL_DIR/bin/psql template1 -U $PSQL_SUPERUSER -c "\du" | grep $DBUSER > /dev/null
     if [ $? != 0 ]; then
-        createuser -U postgres --createdb --no-superuser --no-createrole $DBUSER
+        $PSQL_DIR/bin/createuser -P -W -U $PSQL_SUPERUSER --createdb --no-superuser --no-createrole $DBUSER
 
         if [ $? != 0 ]; then
             echo "Unable to create db user!";
@@ -29,9 +36,9 @@ psqlSetup()
     fi
 
     # create db if it doesn't exist already
-    psql template1 postgres -c "\l" | grep $DBNAME > /dev/null
+    $PSQL_DIR/bin/psql template1 $PSQL_SUPERUSER -c "\l" | grep $DBNAME > /dev/null
     if [ $? != 0 ]; then
-        createdb --host=localhost --username=$DBUSER --template=template1 $DBNAME
+        $PSQL_DIR/bin/createdb --host=localhost --owner=$DBUSER --username=$PSQL_SUPERUSER --template=template1 $DBNAME
 
         if [ $? != 0 ]; then
             echo "Unable to create db!";
@@ -40,9 +47,9 @@ psqlSetup()
     fi
 
     # create lang if it doesn't exist already
-    createlang --host=localhost --username=$DBUSER --dbname=$DBNAME -l | grep $LANG > /dev/null
+    $PSQL_DIR/bin/createlang --host=localhost --username=$PSQL_SUPERUSER --dbname=$DBNAME -l | grep $LANG > /dev/null
     if [ $? != 0 ]; then
-        createlang --host=localhost --username=$DBUSER --dbname=$DBNAME $LANG
+        $PSQL_DIR/bin/createlang --host=localhost --username=$PSQL_SUPERUSER --dbname=$DBNAME $LANG
 
         if [ $? != 0 ]; then
             echo "Unable to create lang!";
@@ -60,8 +67,8 @@ psqlSetup()
           sql/psql/data.sql"
 
     for i in $SQLS; do
-        echo "Applying $i";
-        psql -f $i $DBNAME $DBUSER > /dev/null
+        echo "Applying $i on behalf of $DBUSER";
+        $PSQL_DIR/bin/psql -f $i --username=$DBUSER $DBNAME > /dev/null
 
         # no way check the last cmd for failure, somehow psql returns 0 on error
 
@@ -73,7 +80,7 @@ psqlSetup()
 #######################
 mysqlSetup()
 {
-
+    exit -1;
 }
 
 ########################
@@ -81,7 +88,7 @@ mysqlSetup()
 ########################
 sqliteSetp()
 {
-
+    exit -1;
 }
 
 ########################
@@ -89,7 +96,7 @@ sqliteSetp()
 ########################
 oracleSetup()
 {
-
+    exit -1;
 }
 
 ########

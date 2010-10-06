@@ -151,7 +151,7 @@ createConnection(DbParameters &ipConnection)
         if ((success = QFile::exists(ipConnection.dbName()))) {
             db.open();
         }
-        // of other DBMS
+    // of other DBMS
     } else {
         // check credentials and host
         db.setHostName(ipConnection.dbHost());
@@ -159,13 +159,13 @@ createConnection(DbParameters &ipConnection)
         db.setPassword(ipConnection.dbPassword());
         db.setPort(ipConnection.dbPort());
 
-        success = db.open();
+        if ((success = db.open())) {
+            // initialize Database for further use and get schemas
+            using namespace DbObjects::Common;
+            Database *dbInst = Database::instance();
+            dbInst->setSqlDriver(ipConnection.dbDriver());
+        }
     }
-
-    // initialize Database for further use and get schemas
-    using namespace DbObjects::Common;
-    Database *dbInst = Database::instance();
-    dbInst->setSqlDriver(ipConnection.dbDriver());
 
     return success;
 }

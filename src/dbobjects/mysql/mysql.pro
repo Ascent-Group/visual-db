@@ -16,11 +16,9 @@ DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 #DEFINES += DEBUG_TRACE
 
 # Input
-HEADERS += $$PWD/Table.h \
-           $$PWD/Tools.h
+HEADERS += $$files($$PWD/*.h)
 
-SOURCES += $$PWD/Table.cpp \
-           $$PWD/Tools.cpp
+SOURCES += $$files($$PWD/*.cpp)
 
 QMAKE_CLEAN += $$OUT_PWD/libmysql.a
 

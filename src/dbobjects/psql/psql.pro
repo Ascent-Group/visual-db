@@ -17,23 +17,9 @@ DEFINES += QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 #DEFINES += DEBUG_TRACE
 
 # Input
-HEADERS += $$PWD/Index.h \
-           $$PWD/Language.h \
-           $$PWD/Procedure.h \
-           $$PWD/Role.h \
-           $$PWD/Table.h \
-           $$PWD/Tools.h \
-           $$PWD/Trigger.h \
-           $$PWD/View.h
+HEADERS += $$files($$PWD/*.h)
 
-SOURCES += $$PWD/Index.cpp \
-           $$PWD/Language.cpp \
-           $$PWD/Procedure.cpp \
-           $$PWD/Role.cpp \
-           $$PWD/Table.cpp \
-           $$PWD/Tools.cpp \
-           $$PWD/Trigger.cpp \
-           $$PWD/View.cpp
+SOURCES += $$files($$PWD/*.cpp)
 
 QMAKE_CLEAN += $$OUT_PWD/libpsql.a
 

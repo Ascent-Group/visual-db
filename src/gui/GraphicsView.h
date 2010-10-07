@@ -76,6 +76,7 @@ class GraphicsView : public QGraphicsView
         int mPrevFactor;
 
         static const int MOVE_STEP = 10;
+        static const int SEEK_STEP = 20;
 
     private slots:
         void moveUp();

@@ -65,7 +65,7 @@ class DbTable;
 class TableItem : public GraphicsItem
 {
     public:
-        TableItem(const QString &, const QString &, QMenu *);
+        TableItem(const QString &, const QString &, QMenu *, const QPoint &);
         ~TableItem();
         virtual int type() const;
 
@@ -136,6 +136,8 @@ class TableItem : public GraphicsItem
         QImage *mForeignKeyImage;
         QImage *mFieldImage;
         QImage *mAnchorImage;
+
+        static const int SEEK_STEP = 20;
 };
 
 bool isTable(QGraphicsItem *);

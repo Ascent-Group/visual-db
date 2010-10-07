@@ -55,7 +55,7 @@ int TableItem::mSeek = 80;
 /*
  * Constructor
  */
-TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QMenu *ipMenu)
+TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QMenu *ipMenu, const QPoint &ipPos)
     : GraphicsItem(), mContextMenu(ipMenu), mMode(TableItem::MOVE), mFieldsTypesVisible(true), mIndicesVisible(true), mFont("Arial", 10)
 {
     using namespace DbObjects::Common;
@@ -97,8 +97,15 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     }
 
     // set left top point coordinates
-    setX(mSeek);
-    setY(mSeek);
+    if (ipPos.x() == 0 && ipPos.y() == 0) {
+        setX(ipPos.x() + mSeek);
+        setY(ipPos.y() + mSeek);
+
+        TableItem::mSeek += SEEK_STEP;
+    } else {
+        setX(ipPos.x());
+        setY(ipPos.y());
+    }
 
     // set width and height
     setWidth(DEFAULT_WIDTH);
@@ -109,8 +116,6 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     } else {
         setHeight((mTableModel->columnsCount() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
     }
-
-    TableItem::mSeek += 20;
 
     updatePolygon();
 

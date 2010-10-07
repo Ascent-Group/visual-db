@@ -139,6 +139,11 @@ GraphicsView::dragEnterEvent(QDragEnterEvent *ipEvent)
 void 
 GraphicsView::dragMoveEvent(QDragMoveEvent *ipEvent)
 {
+    if (!ipEvent) {
+        qDebug() << "[E][" << __func__ << "][" << __LINE__ << 
+            "]Can't handle drag move event because input event is NULL";   
+    }
+
     if (ipEvent->mimeData()->hasFormat("table/x-table")) {
         ipEvent->setDropAction(Qt::CopyAction);
         ipEvent->accept();
@@ -151,6 +156,11 @@ GraphicsView::dragMoveEvent(QDragMoveEvent *ipEvent)
 void
 GraphicsView::dropEvent(QDropEvent *ipEvent)
 {
+    if (!ipEvent) {
+        qDebug() << "[E][" << __func__ << "][" << __LINE__ << 
+            "]Can't handle drop event because input event is NULL";   
+    }
+
     if (ipEvent->mimeData()->hasFormat("table/x-table")) {
 //        QByteArray pieceData = ipEvent->mimeData()->data("table/x-table");
 //        QDataStream dataStream(&pieceData, QIODevice::ReadOnly);
@@ -158,17 +168,22 @@ GraphicsView::dropEvent(QDropEvent *ipEvent)
 //        dataStream >> tableName;
         GraphicsScene *graphicsScene = dynamic_cast<GraphicsScene *>(scene());
         QTreeWidget *tableTree = dynamic_cast<QTreeWidget *>(ipEvent->source());
-        qDebug() << "dropEvent" << graphicsScene << " -- " << tableTree;
         if (graphicsScene && tableTree) {
+            int i = 0;
             foreach (QTreeWidgetItem *treeItem, tableTree->selectedItems()) {
-                qDebug() << "showOnScene";
-                QList<QGraphicsItem *> tableList = graphicsScene->showOnScene(treeItem, TreeWidget::NameCol);
+                QList<QGraphicsItem *> tableList = graphicsScene->showOnScene(treeItem, TreeWidget::NameCol, ipEvent->pos() + QPoint(i * SEEK_STEP, i * SEEK_STEP));
                 emit tableActionDone(new AddTableCommand(graphicsScene, tableList));
+                ++i;
             }
+        } else {
+            qDebug() << "[E][" << __func__ << "][" << __LINE__ << 
+                "]Can't handle drop event because graphics scene or table tree doesn't have appropriate type";   
         }
-
         ipEvent->setDropAction(Qt::CopyAction);
         ipEvent->accept();    
+    } else {
+        qDebug() << "[W][" << __func__ << "][" << __LINE__ << 
+            "]Can't handle drop event because event mime type doesn't have appropriate type";   
     }
 }
 
@@ -178,8 +193,14 @@ GraphicsView::dropEvent(QDropEvent *ipEvent)
 void
 GraphicsView::scrollContentsBy(int ipDx, int ipDy)
 {
-    dynamic_cast<GraphicsScene *>(scene())->moveLegend(-ipDx, -ipDy);
-    QGraphicsView::scrollContentsBy(ipDx, ipDy);
+    GraphicsScene *graphicsScene = dynamic_cast<GraphicsScene *>(scene());
+    if (graphicsScene) {
+        graphicsScene->moveLegend(-ipDx, -ipDy);
+        QGraphicsView::scrollContentsBy(ipDx, ipDy);
+    } else {
+        qDebug() << "[E][" << __func__ << "][" << __LINE__ << 
+            "]Can't handle scroll event because graphics scene doesn't have appropriate type";   
+    }
 }
 
 /*

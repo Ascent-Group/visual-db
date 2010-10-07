@@ -121,7 +121,7 @@ SceneWidget::setTableMenu(QMenu *ipMenu)
 void
 SceneWidget::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
 {
-    QList<QGraphicsItem *> tableList = mScene->showOnScene(ipTreeItem, ipCol);
+    QList<QGraphicsItem *> tableList = mScene->showOnScene(ipTreeItem, ipCol, QPoint(0, 0));
     emit tableActionDone(new AddTableCommand(mScene, tableList));
 }
 
@@ -141,8 +141,7 @@ void
 SceneWidget::deleteTableItem()
 {
     if (mScene->selectedItems().count() > 0) {
-        DeleteTableCommand *command = new DeleteTableCommand(*mScene, mScene->selectedItems());
-        emit tableActionDone(command);
+        emit tableActionDone(new DeleteTableCommand(*mScene, mScene->selectedItems()));
     }
 }
 
@@ -154,8 +153,7 @@ SceneWidget::cleanTableSchemeScene()
 {
     if (mScene->items().count() > 0) {
         // first send the signal to remember deleted items
-        DeleteTableCommand *command = new DeleteTableCommand(*mScene, mScene->items());
-        emit tableActionDone(command);
+        emit tableActionDone(new DeleteTableCommand(*mScene, mScene->items()));
     }
     TableItem::setSeek(20);
 }
@@ -459,9 +457,10 @@ SceneWidget::tableFromXml(QDomElement &ipElement)
 {
     // get table's coordinates
     TableItem *newTable = mScene->newTableItem(ipElement.attribute("schema"),
-            ipElement.attribute("name"), mTableMenu);
-    newTable->moveBy(ipElement.attribute("x").toInt() - newTable->x(),
-            ipElement.attribute("y").toInt() - newTable->y());
+            ipElement.attribute("name"), mTableMenu, QPoint(ipElement.attribute("x").toInt() - newTable->x(),
+            ipElement.attribute("y").toInt() - newTable->y()));
+//    newTable->moveBy(ipElement.attribute("x").toInt() - newTable->x(),
+//            ipElement.attribute("y").toInt() - newTable->y());
 
     // get table's size
     newTable->setWidth(ipElement.attribute("width").toInt());

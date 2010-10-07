@@ -53,7 +53,7 @@
 /*
  * Constructor
  */
-    GraphicsScene::GraphicsScene()
+GraphicsScene::GraphicsScene()
 : QGraphicsScene(), mSelectionPath(), mMoveMode(false), mOldPos(), mDiffX(0), mDiffY(0), mStartMovingTimer()
 {
     setBackgroundBrush(QBrush(mSettings.value(Consts::COLOR_GRP + "/" + Consts::BACKGROUND_SETTING, Qt::white).value<QColor>()));
@@ -89,12 +89,14 @@ GraphicsScene::setTableMenu(QMenu *ipTableMenu)
 /*
  * Add table from tree event to the scene
  */
-    QList<QGraphicsItem *>
-GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
+QList<QGraphicsItem *>
+GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint &ipPos)
 {
     QList<QGraphicsItem *> tableList;
 
-    if (0 == ipTreeItem) {
+    if (!ipTreeItem) {
+        qDebug() << "[E][" << __func__ << "][" << __LINE__ << 
+            "]Can't show selected items on the scene because input tree item is empty";   
         return tableList;
     }
 
@@ -109,7 +111,7 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
             for (int i = 0; i < ipTreeItem->childCount(); ++i) {
                 if (TreeWidget::TableNode == ipTreeItem->child(i)->text(TreeWidget::IdCol).toInt()) {
                     for (int j = 0; j < ipTreeItem->child(i)->childCount(); ++j) {
-                        tableList << showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol);
+                        tableList << showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol, ipPos);
                     }
                 }
             }
@@ -118,12 +120,12 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
         }
 
         TableItem *table = newTableItem(ipTreeItem->parent()->parent()->text(TreeWidget::NameCol),
-                ipTreeItem->text(TreeWidget::NameCol), mTableMenu);
+                ipTreeItem->text(TreeWidget::NameCol), mTableMenu, ipPos);
         tableList.append(table);
 
     } else if (TreeWidget::TableNode == objId) {
         for (int i = 0; i < ipTreeItem->childCount(); ++i) {
-            showOnScene(ipTreeItem->child(i), ipCol);
+            showOnScene(ipTreeItem->child(i), ipCol, ipPos);
         }
     }
 
@@ -133,8 +135,8 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
 /*
  * Create new table item
  */
-    TableItem *
-GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ipMenu)
+TableItem *
+GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ipMenu, const QPoint &ipPos)
 {
     TableItem *newItem = findTableItem(ipSchemaName, ipTableName);
     // check if such item is already on the scene
@@ -143,7 +145,7 @@ GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ip
     }
 
     // create new table
-    newItem = new TableItem(ipSchemaName, ipTableName, ipMenu);
+    newItem = new TableItem(ipSchemaName, ipTableName, ipMenu, ipPos);
     return newItem;
 }
 

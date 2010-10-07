@@ -39,6 +39,7 @@ class QGraphicsPathItem;
 class QGraphicsSceneMouseEvent;
 class QMenu;
 class QKeyEvent;
+class QPoint;
 class QSlider;
 class QTreeWidgetItem;
 
@@ -74,7 +75,7 @@ class GraphicsScene : public QGraphicsScene {
         void updateLegend();
         void drawRelations();
         void createRelations(TableItem *);
-        TableItem *newTableItem(QString, QString, QMenu *);
+        TableItem *newTableItem(QString, QString, QMenu *, const QPoint &);
         void setTableColor(TableItem *, QColor);
         bool moveMode() const;
 
@@ -82,7 +83,7 @@ class GraphicsScene : public QGraphicsScene {
         void tableMoved(QList <QGraphicsItem *>, int, int);
 
     public slots:
-        QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int);
+        QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int, const QPoint &);
         void setFieldsTypesVisible();
         void setFieldsTypesInvisible();
         void setIndicesVisible(bool);

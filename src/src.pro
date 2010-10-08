@@ -57,7 +57,9 @@ HEADERS += $$files($$PWD/*.h) \
            $$files($$PWD/gui/behaviour/*.h) \
            $$files($$PWD/gui/*.h)
 
-SOURCES += $$files($$PWD/*.cpp) \
+### do not use wildcards for main.cpp and consts.cpp !!! it picks the genereated sources
+SOURCES += $$PWD/main.cpp \
+           $$PWD/consts.cpp \
            $$files($$PWD/connect/*.cpp) \
            $$files($$PWD/gui/behaviour/*.cpp) \
            $$files($$PWD/gui/*.cpp)

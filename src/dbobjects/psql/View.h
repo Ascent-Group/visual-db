@@ -40,7 +40,7 @@ namespace Psql
 
 /*!
  * \class View
- * \headerfile <psql/View.h>
+ * \headerfile psql/View.h
  * \brief Defines PostgreSQL database view object
  */
 class View : public Common::DbView

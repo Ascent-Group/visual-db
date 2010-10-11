@@ -40,7 +40,7 @@ namespace Mysql
 
 /*!
  * \class Table
- * \headerfile <mysql/Table.h>
+ * \headerfile mysql/Table.h
  * \brief Defines MySQL database table object
  */
 class Table : public Common::DbTable

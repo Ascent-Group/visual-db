@@ -45,7 +45,7 @@ class DbSchema;
 
 /*!
  * \class DbTable
- * \headerfile <common/DbTable.h>
+ * \headerfile common/DbTable.h
  * \brief Defines databse table object
  */
 class DbTable : public Common::DbObject

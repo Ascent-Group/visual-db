@@ -50,7 +50,7 @@ namespace Factory
 
 /*!
  * \class Procedure
- * \headerfile <factory/Procedure.h>
+ * \headerfile factory/Procedure.h
  * \brief Defines database procedure factory
  */
 class Procedure

@@ -39,6 +39,11 @@ namespace DbObjects
 namespace Mysql
 {
 
+/*!
+ * \namespace Tools
+ * \headerfile mysql/Tools.h
+ * \brief Contains helper functions for MySQL
+ */
 namespace Tools
 {
 

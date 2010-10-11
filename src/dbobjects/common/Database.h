@@ -46,7 +46,7 @@ class DbSchema;
 
 /*!
  * \class Database
- * \headerfile Database.h <common/Database.h>
+ * \headerfile common/Database.h
  * \brief Class (singleton) that holds and knows how to operate with all
  *        cached db objects
  */
@@ -134,7 +134,7 @@ class Database
 
 /*!
  * \class DatabaseManager
- * \headerfile <common/Database.h>
+ * \headerfile common/Database.h
  * \brief Singleton manager that knows how to utilize the Database instance
  *
  * The main purpose for this class is to handle Database's instance

@@ -50,7 +50,7 @@ namespace Factory
 
 /*!
  * \class Trigger
- * \headerfile <factory/Trigger.h>
+ * \headerfile factory/Trigger.h
  * \brief Defines database trigger factory
  */
 class Trigger

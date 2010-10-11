@@ -39,6 +39,11 @@ namespace DbObjects
 namespace Psql
 {
 
+/*!
+ * \namespace Tools
+ * \headerfile psql/Tools.h
+ * \brief Contains helper functions for PostgreSQL
+ */
 namespace Tools
 {
 

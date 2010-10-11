@@ -50,7 +50,7 @@ namespace Factory
 
 /*!
  * \class Index
- * \headerfile <factory/Index.h>
+ * \headerfile factory/Index.h
  * \brief Defines database index factory
  */
 class Index

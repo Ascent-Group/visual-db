@@ -88,7 +88,7 @@ int main(int argc, char **argv)
     app.setOrganizationName("Ascent Group");
     app.setOrganizationDomain("sourceforge.net");
     app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":img/logo.png"));
+    app.setWindowIcon(QIcon(":/img/logo.png"));
 
     // set additional plugins path
     app.addLibraryPath("./lib/");

@@ -44,7 +44,7 @@ class DbTable;
 
 /*!
  * \class DbIndex
- * \headerfile DbIndex.h <common/DbIndex.h>
+ * \headerfile common/DbIndex.h
  *
  * \brief Defines an index stored in DB
  */

@@ -42,7 +42,7 @@ namespace Common
 /*!
  * \class DbProcedure
  * \brief Defines database procedure object
- * \headerfile DbProcedure.h <common/DbProcedure.h>
+ * \headerfile common/DbProcedure.h
  */
 class DbProcedure : public DbObject
 {

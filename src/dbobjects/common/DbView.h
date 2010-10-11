@@ -43,7 +43,7 @@ class DbSchema;
 
 /*!
  * \class DbView
- * \headerfile <common/DbView.h>
+ * \headerfile common/DbView.h
  * \brief Defines database view object
  */
 class DbView : public DbObject

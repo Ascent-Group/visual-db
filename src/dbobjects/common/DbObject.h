@@ -40,7 +40,7 @@ namespace Common
 
 /*!
  * \class DbObject
- * \headerfile DbObject.h <common/DbObject.h>
+ * \headerfile common/DbObject.h
  * \brief Defines a base class for all database objects
  */
 class DbObject

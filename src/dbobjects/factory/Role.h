@@ -50,7 +50,7 @@ namespace Factory
 
 /*!
  * \class Role
- * \headerfile <factory/Role.h>
+ * \headerfile factory/Role.h
  * \brief Defines database role factory
  */
 class Role

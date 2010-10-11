@@ -40,7 +40,7 @@ namespace Psql
 
 /*!
  * \class Table
- * \headerfile <psql/Table.h>
+ * \headerfile psql/Table.h
  * \brief Defines PostgreSQL database table object
  */
 class Table : public Common::DbTable

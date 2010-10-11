@@ -50,7 +50,7 @@ namespace Factory
 
 /*!
  * \class Table
- * \headerfile <factory/Table.h>
+ * \headerfile factory/Table.h
  * \brief Defines database table factory
  */
 class Table

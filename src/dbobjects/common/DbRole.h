@@ -42,7 +42,7 @@ namespace Common
 /*!
  * \class DbRole
  * \brief Defines database role object
- * \headerfile DbRole.h <common/Dbrole.h>
+ * \headerfile common/DbRole.h
  */
 class DbRole : public DbObject
 {

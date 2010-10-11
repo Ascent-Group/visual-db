@@ -50,7 +50,7 @@ namespace Factory
 
 /*!
  * \class View
- * \headerfile <factory/View.h>
+ * \headerfile factory/View.h
  * \brief Defines database view factory
  */
 class View

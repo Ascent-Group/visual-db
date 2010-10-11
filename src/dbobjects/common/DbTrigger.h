@@ -42,7 +42,7 @@ namespace Common
 
 /*!
  * \class DbTrigger
- * \headerfile <common/DbTrigger.h>
+ * \headerfile common/DbTrigger.h
  * \brief Represents database trigger object
  */
 class DbTrigger : public DbObject

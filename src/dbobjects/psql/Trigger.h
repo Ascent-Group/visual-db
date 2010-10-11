@@ -40,7 +40,7 @@ namespace Psql
 
 /*!
  * \class Trigger
- * \headerfile <psql/Trigger.h>
+ * \headerfile psql/Trigger.h
  * \brief Defines PostgreSQL database trigger object
  */
 class Trigger : public Common::DbTrigger

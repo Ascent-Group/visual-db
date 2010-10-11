@@ -41,7 +41,7 @@ namespace Common
 /*!
  * \class DbLanguage
  * \brief Defines PL/SQL language
- * \headerfile DbLanguage.h <common/DbLanguage.h>
+ * \headerfile common/DbLanguage.h
  */
 class DbLanguage : public DbObject
 {

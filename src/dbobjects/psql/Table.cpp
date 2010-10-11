@@ -44,8 +44,11 @@ namespace DbObjects
 namespace Psql
 {
 
-/*
+/*!
  * Constructor
+ *
+ * \param[in] ipSchemaName - Name of the schema that contains this table
+ * \param[in] ipTableName - Table name
  */
 Table::Table(QString ipSchemaName, QString ipTableName)
     :DbTable(ipSchemaName, ipTableName)
@@ -54,7 +57,7 @@ Table::Table(QString ipSchemaName, QString ipTableName)
     loadData();
 }
 
-/*
+/*!
  * Destructor
  */
 Table::~Table()
@@ -62,8 +65,11 @@ Table::~Table()
 
 }
 
-/*
+/*!
  * Load column definitions data
+ *
+ * \return true If data has been successfully loaded
+ * \return false Otherwise
  */
 bool
 Table::loadData()
@@ -151,8 +157,13 @@ Table::loadData()
     return true;
 }
 
-/*
+/*!
  * Checks if column is a primary key for the given table
+ *
+ * \param[in] ipColumnName - Name of the column
+ *
+ * \return true If the column is primary key
+ * \return false Otherwise
  */
 bool
 Table::checkPrimaryKey(const QString &ipColumnName) const
@@ -197,8 +208,16 @@ Table::checkPrimaryKey(const QString &ipColumnName) const
     return query.first();
 }
 
-/*
+/*!
  * Checks if ipColumnName is a foreign key for ipTableName
+ *
+ * \param[in] ipColumnName - Name of the column
+ * \param[out] opForeignSchemaName - Name of the schema that contains the reference table
+ * \param[out] opForeignTableName - Name of the table references by this column
+ * \param[out] opForeignFieldsNames - Names of fields references by this column
+ *
+ * \return true If the column is a foreign key
+ * \return false Otherwise
  */
 bool
 Table::checkForeignKey(const QString &ipColumnName,
@@ -281,8 +300,13 @@ Table::checkForeignKey(const QString &ipColumnName,
     return flag;
 }
 
-/*
+/*!
  * Checks if ipColumnName is unique for ipTableName
+ *
+ * \param[in] ipColumnName - Name of the column
+ *
+ * \return true If the column has unique constraint
+ * \return false Otherwise
  */
 bool
 Table::checkUnique(const QString &ipColumnName) const

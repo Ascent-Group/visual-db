@@ -49,7 +49,7 @@ class DbView;
 /*!
  * \class DbSchema
  * \brief Defines database schema object
- * \headerfile DbSchema.h <common/DbSchema.h>
+ * \headerfile common/DbSchema.h
  */
 class DbSchema : public DbObject
 {

@@ -40,7 +40,7 @@ namespace Psql
 
 /*!
  * \class Index
- * \headerfile <psql/Index.h>
+ * \headerfile psql/Index.h
  * \brief Defines PostgreSQL index
  */
 class Index : public Common::DbIndex

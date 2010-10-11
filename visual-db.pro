@@ -29,4 +29,3 @@ docs.commands = env SRC_DIR=$$PWD QTDIR=$$QTDIR QHP_NAMESPACE=$$QHP_NAMESPACE QH
                 && $$ASSISTANT -unregister $$OUT_PWD/html/*.qch \
                 && $$ASSISTANT -register $$OUT_PWD/html/*.qch
 
-QMAKE_CLEAN

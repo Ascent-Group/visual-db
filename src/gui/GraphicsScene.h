@@ -110,6 +110,21 @@ class GraphicsScene : public QGraphicsScene {
         virtual void drawBackground(QPainter *, const QRectF &);
 
     private:
+        TableItem *findTableItem(const QString &, const QString &);
+        void setFieldsTypesVisible(QList<QGraphicsItem *>, bool);
+        void setIndicesVisible(QList<QGraphicsItem *>, bool);
+        void setTableColor(QList<QGraphicsItem *>, QColor);
+        void adjustTables(QList<QGraphicsItem *>);
+        void groupItems(QList<QGraphicsItem *>);
+        void ungroupItems(QList<QGraphicsItem *>);
+        void drawGrid(QPainter *);
+        void divideIntoPages(QPainter *);
+
+    private slots:
+        void resize(int);
+        void movingTimerExpired();
+
+    private:
         QSettings mSettings;
 
         QPointF mStartSelect;
@@ -131,21 +146,7 @@ class GraphicsScene : public QGraphicsScene {
 
         static const int MOVE_STEP = 10;
         static const int MOVE_INTERVAL = 600;
-
-    private:
-        TableItem *findTableItem(const QString &, const QString &);
-        void setFieldsTypesVisible(QList<QGraphicsItem *>, bool);
-        void setIndicesVisible(QList<QGraphicsItem *>, bool);
-        void setTableColor(QList<QGraphicsItem *>, QColor);
-        void adjustTables(QList<QGraphicsItem *>);
-        void groupItems(QList<QGraphicsItem *>);
-        void ungroupItems(QList<QGraphicsItem *>);
-        void drawGrid(QPainter *);
-        void divideIntoPages(QPainter *);
-
-    private slots:
-        void resize(int);
-        void movingTimerExpired();
+        static const int SEEK_STEP = 20;
 };
 
 #endif // GRAPHICSSCENE_H

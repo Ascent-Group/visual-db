@@ -111,7 +111,8 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
             for (int i = 0; i < ipTreeItem->childCount(); ++i) {
                 if (TreeWidget::TableNode == ipTreeItem->child(i)->text(TreeWidget::IdCol).toInt()) {
                     for (int j = 0; j < ipTreeItem->child(i)->childCount(); ++j) {
-                        tableList << showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol, ipPos);
+                        QPoint pos(ipPos.x() + j * SEEK_STEP, ipPos.y() + j * SEEK_STEP);
+                        tableList << showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol, pos);
                     }
                 }
             }

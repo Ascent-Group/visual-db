@@ -47,6 +47,7 @@ class ControlWidget;
 class Legend;
 class TableItem;
 class TableItemGroup;
+class ViewItem;
 
 /*
  * Scene for tables. Allow browsing the tables, relations between them and move tables on it.
@@ -76,6 +77,7 @@ class GraphicsScene : public QGraphicsScene {
         void drawRelations();
         void createRelations(TableItem *);
         TableItem *newTableItem(QString, QString, QMenu *, const QPoint &);
+        ViewItem *newViewItem(QString, QString, QMenu *, const QPoint &);
         void setTableColor(TableItem *, QColor);
         bool moveMode() const;
 

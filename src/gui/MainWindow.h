@@ -114,9 +114,11 @@ class MainWindow : public QMainWindow
         void describeObject();
         void drawFullDbScheme();
         void addTableItem();
-        void addTableItem(QTreeWidgetItem*, int);
-        void setDockTableListVisible(bool);
-        void setDockLogPanelVisible(bool);
+//        void addTableItem(QTreeWidgetItem*, int);
+        void showDatabaseTree(bool);
+        void closeDatabaseTree();
+        void showLogPanel(bool);
+        void closeLogPanel();
         void printPreview(QPrinter*);
         void showOptionsDialog();
         void showPrintPreviewDialog();

@@ -67,10 +67,9 @@ SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
 /*
  * Create dialog
  */
-    void
+void
 SqlConnectionDialog::createDialog(bool/* ipLoadSession*/)
 {
-
     QStringList drivers = QSqlDatabase::drivers();
     ui.mDbDriverCombo->addItems(drivers);
 
@@ -119,7 +118,7 @@ SqlConnectionDialog::createDialog(bool/* ipLoadSession*/)
 /*
  * Set fields in the dialog from the given connection parameters
  */
-    void
+void
 SqlConnectionDialog::initConnectionFields()
 {
     if (!mDbParameters || !mProxyParameters) {
@@ -142,7 +141,7 @@ SqlConnectionDialog::initConnectionFields()
 /*
  * Establish connection
  */
-    void
+void
 SqlConnectionDialog::addConnection()
 {
     // proxy section
@@ -154,7 +153,7 @@ SqlConnectionDialog::addConnection()
         mProxyParameters->setProxyPort(ui.mProxyPortEdit->text().toUInt());
         mProxyParameters->setProxyUser(ui.mProxyUserEdit->text());
 
-        setProxy((*mProxyParameters));
+        setProxy(*mProxyParameters);
     } else {
         mProxyParameters->setUseProxy(false);
     }

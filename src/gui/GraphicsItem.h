@@ -53,58 +53,58 @@ class GraphicsItem : public QGraphicsPolygonItem
         GraphicsItem();
         virtual ~GraphicsItem();
 
-        void setX(qreal);
-        qreal x() const;
+        virtual void setX(qreal);
+        virtual qreal x() const;
 
-        void setY(qreal);
-        qreal y() const;
+        virtual void setY(qreal);
+        virtual qreal y() const;
 
-        void setWidth(qreal);
-        qreal width() const;
+        virtual void setWidth(qreal);
+        virtual qreal width() const;
 
-        void setHeight(qreal);
-        qreal height() const;
+        virtual void setHeight(qreal);
+        virtual qreal height() const;
 
-        void setItemColor(QColor);
-        QColor itemColor() const;
+        virtual void setItemColor(QColor);
+        virtual QColor itemColor() const;
 
-        void setBorderColor(QColor);
-        QColor borderColor() const;
+        virtual void setBorderColor(QColor);
+        virtual QColor borderColor() const;
 
-        void setFontColor(QColor);
-        QColor fontColor() const;
+        virtual void setFontColor(QColor);
+        virtual QColor fontColor() const;
 
-        void setTitleText(QString);
-        QString titleText() const;
+        virtual void setTitleText(QString);
+        virtual QString titleText() const;
 
-        void setFieldText(int, QString);
-        QString fieldText(int) const;
+        virtual void setFieldText(int, QString);
+        virtual QString fieldText(int) const;
 
-        void setTitleItem(QGraphicsTextItem *);
-        QGraphicsTextItem *titleItem() const;
+        virtual void setTitleItem(QGraphicsTextItem *);
+        virtual QGraphicsTextItem *titleItem() const;
 
-        bool isRightBottomCorner(qreal ipX, qreal ipY) const;
-        bool isLeftBottomCorner(qreal ipX, qreal ipY) const;
-        bool isLeftTopCorner(qreal ipX, qreal ipY) const;
-        bool isRightTopCorner(qreal ipX, qreal ipY) const;
+        virtual bool isRightBottomCorner(qreal ipX, qreal ipY) const;
+        virtual bool isLeftBottomCorner(qreal ipX, qreal ipY) const;
+        virtual bool isLeftTopCorner(qreal ipX, qreal ipY) const;
+        virtual bool isRightTopCorner(qreal ipX, qreal ipY) const;
 
-        bool isLeftVerticalBorder(qreal) const;
-        bool isRightVerticalBorder(qreal) const;
-        bool isTopHorizontalBorder(qreal) const;
-        bool isBottomHorizontalBorder(qreal) const;
+        virtual bool isLeftVerticalBorder(qreal) const;
+        virtual bool isRightVerticalBorder(qreal) const;
+        virtual bool isTopHorizontalBorder(qreal) const;
+        virtual bool isBottomHorizontalBorder(qreal) const;
 
-        QPointF centerPoint() const;
+        virtual QPointF centerPoint() const;
 
-        QRectF rect() const;
+        virtual QRectF rect() const;
 
-        int countFields() const;
+        virtual int countFields() const;
 
-        QList<QGraphicsTextItem *> fieldItems() const;
+        virtual QList<QGraphicsTextItem *> fieldItems() const;
 
-        void addFieldItem(QGraphicsTextItem *);
-        void clearFields();
-        void updatePolygon();
-        void adjustSize();
+        virtual void addFieldItem(QGraphicsTextItem *);
+        virtual void clearFields();
+        virtual void updatePolygon();
+        virtual void adjustSize();
 
     private:
         QSettings mSettings;

@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TABLEITEM_H
-#define TABLEITEM_H
+#ifndef VIEWEITEM_H
+#define VIEWEITEM_H
 
 #include <gui/GraphicsItem.h>
 #include <QFont>
@@ -48,28 +48,21 @@ class ArrowItem;
 
 namespace DbObjects
 {
-
-namespace Common
-{
-
-class DbIndex;
-class DbTable;
-
-} // namespace Common
-
+    namespace Common
+    {
+        class DbIndex;
+        class DbView;
+    } // namespace Common
 } // namespace DbObjects
 
 /*
- * Graphics item, implements the database table. Support moving, resizing, changing of the color etc.
+ * Graphics item, implements the database view. Support moving, resizing, changing of the color etc.
  */
-class TableItem : public GraphicsItem
+class ViewItem : public GraphicsItem
 {
     public:
-        enum { Type = UserType + 5 };
-
-    public:
-        TableItem(const QString &, const QString &, QMenu *, const QPoint &);
-        ~TableItem();
+        ViewItem(const QString &, const QString &, QMenu *, const QPoint &);
+        ~ViewItem();
         virtual int type() const;
 
         void addIndexItem(QGraphicsTextItem *);
@@ -81,12 +74,15 @@ class TableItem : public GraphicsItem
         void setIndicesVisible(bool);
 
         QList<ArrowItem *> arrows() const;
-        QString tableName() const;
+        QString viewName() const;
         QString schemaName() const;
-        DbObjects::Common::DbTable *tableModel() const;
+        DbObjects::Common::DbView *viewModel() const;
         QDomElement toXml(QDomDocument &);
 
         static void setSeek(int);
+
+    public:
+        enum { Type = UserType + 8 };
 
     protected:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
@@ -98,7 +94,7 @@ class TableItem : public GraphicsItem
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
 
     private:
-        // mode for table (you can resize table from different positions or move it)
+        // mode for view (you can resize view from different positions or move it)
         enum Mode {
             RIGHT_BOTTOM_CORNER_RESIZE,
             LEFT_BOTTOM_CORNER_RESIZE,
@@ -116,7 +112,7 @@ class TableItem : public GraphicsItem
         static int mSeek;
 
         QSettings mSettings;
-        DbObjects::Common::DbTable *mTableModel;
+        DbObjects::Common::DbView *mViewModel;
         QVector<DbObjects::Common::DbIndex *> mIndices;
 
         QMenu *mContextMenu;
@@ -130,7 +126,7 @@ class TableItem : public GraphicsItem
         bool mIndicesVisible;
         QFont mFont;
 
-        QImage *mTableImage;
+        QImage *mViewImage;
         QImage *mKeyImage;
         QImage *mForeignKeyImage;
         QImage *mFieldImage;
@@ -139,7 +135,7 @@ class TableItem : public GraphicsItem
         static const int SEEK_STEP = 20;
 };
 
-bool isTable(QGraphicsItem *);
+bool isView(QGraphicsItem *);
 
-#endif // TABLEITEM_H
+#endif // VIEWEITEM_H
 

@@ -459,8 +459,6 @@ SceneWidget::tableFromXml(QDomElement &ipElement)
     TableItem *newTable = mScene->newTableItem(ipElement.attribute("schema"),
             ipElement.attribute("name"), mTableMenu, QPoint(ipElement.attribute("x").toInt() - newTable->x(),
             ipElement.attribute("y").toInt() - newTable->y()));
-//    newTable->moveBy(ipElement.attribute("x").toInt() - newTable->x(),
-//            ipElement.attribute("y").toInt() - newTable->y());
 
     // get table's size
     newTable->setWidth(ipElement.attribute("width").toInt());

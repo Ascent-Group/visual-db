@@ -27,62 +27,27 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/LogPanel.h>
-#include <QFileDialog>
-#include <QMessageBox>
+#ifndef DOCKWIDGET_H
+#define DOCKWIDGET_H
 
-#include <QtDebug>
-
-/*
- * Ctor
- */
-LogPanel::LogPanel(QWidget *ipParent)
-    : QWidget(ipParent)
-{
-    ui.setupUi(this);
-}
+#include <QDockWidget>
 
 /*
- * Dtor
+ * Tab widget
  */
-LogPanel::~LogPanel()
+class DockWidget : public QDockWidget
 {
-}
+    Q_OBJECT
 
-/*
- * Saves current log to a file
- */
-void
-LogPanel::saveToFile()
-{
-    QString text = ui.mOutputEdit->toPlainText();
+    public:
+        DockWidget(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+        ~DockWidget();
 
-    if (0 < text.trimmed().length()) {
-        QString fileName = QFileDialog::getSaveFileName(this);
+    signals:
+        void closed();
 
-        if (fileName.isEmpty()) {
-            return;
-        }
+    protected:
+        virtual void closeEvent(QCloseEvent *);
+};
 
-        QFile file(fileName);
-
-        if (!file.open(QIODevice::Text)) {
-            QMessageBox::critical(this, tr("Error"), tr("Unable to open file!"), tr("Ok"));
-            return;
-        }
-
-        file.write(text.toLocal8Bit());
-
-        file.close();
-    }
-}
-
-/*
- *
- */
-void
-LogPanel::print(QString ipText)
-{
-    ui.mOutputEdit->append(ipText);
-}
-
+#endif // DOCKWIDGET_H

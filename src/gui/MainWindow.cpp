@@ -33,15 +33,18 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFileDialog>
+#include <QFutureWatcher>
 #include <QMessageBox>
 #include <QPainter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
 #include <QProgressBar>
+#include <QProgressDialog>
 #include <QSettings>
 #include <QSqlDatabase>
 #include <QStatusBar>
+#include <QtConcurrentRun>
 #include <QTime>
 #include <QTreeWidgetItem>
 #include <QUndoCommand>
@@ -68,10 +71,12 @@
 
 #include <QtDebug>
 
+using namespace QtConcurrent;
+
 /*
  * Constructor
  */
-    MainWindow::MainWindow()
+MainWindow::MainWindow()
 : QMainWindow()
 {
     ui.setupUi(this);
@@ -94,6 +99,8 @@
     initSession();
 
     connect(ui.mNewConnectionAction, SIGNAL(triggered()), this, SLOT(showConnectionDialog()));
+    connect(ui.mLogPanelWidget, SIGNAL(closed()), this, SLOT(closeLogPanel()));
+    connect(ui.mDatabaseTreeWidget, SIGNAL(closed()), this, SLOT(closeDatabaseTree()));
 }
 
 /*
@@ -203,9 +210,25 @@ MainWindow::setEnableForActions(bool ipFlag)
 }
 
 /*
+ * Import database
+ */
+int
+importDatabase(const Ui::MainWindow &ui)
+{
+    if (QSqlDatabase::database("mainConnect").open()) {
+        ui.mSceneWidget->cleanTableSchemeScene();
+        ui.mTree->refresh();
+        ui.mSceneWidget->refreshLegend();
+        return QDialog::Accepted;
+    }
+
+    return QDialog::Rejected;
+}
+
+/*
  * Show connection dialog
  */
-    int
+int
 MainWindow::showConnectionDialog(bool ipLoadSession)
 {
     SqlConnectionDialog connDialog(mDbParameters, mProxyParameters, ipLoadSession);
@@ -216,15 +239,31 @@ MainWindow::showConnectionDialog(bool ipLoadSession)
         return code;
     }
 
-    if (QSqlDatabase::database("mainConnect").open()) {
-        ui.mSceneWidget->cleanTableSchemeScene();
-        ui.mTree->refresh();
-        ui.mSceneWidget->refreshLegend();
-        setEnableForActions(true);
-        return QDialog::Accepted;
+    QProgressDialog progress("Importing database...", 0, 0, 0, this, Qt::CustomizeWindowHint | Qt::WindowTitleHint);
+    progress.setRange(0, 0);
+    progress.setWindowModality(Qt::WindowModal);
+
+    QFutureWatcher<int> futureWatcher;
+    connect(&futureWatcher, SIGNAL(finished()), &progress, SLOT(reset()));
+    connect(&progress, SIGNAL(canceled()), &futureWatcher, SLOT(cancel()));
+
+    futureWatcher.setFuture(QtConcurrent::run(importDatabase, ui));
+
+    progress.exec();
+
+    futureWatcher.waitForFinished();
+    
+    if (futureWatcher.isCanceled()) {
+        ui.mTree->clear();
+        ui.mTree->setHeaderLabel(QString(""));
+        return QDialog::Rejected;
     }
 
-    return QDialog::Rejected;
+    if (futureWatcher.result() == QDialog::Accepted) {
+        setEnableForActions(true);
+    }
+
+    return futureWatcher.result();
 }
 
 /*
@@ -306,27 +345,46 @@ MainWindow::createStatusBar()
  * Make docked table list (in)visible
  */
 void
-MainWindow::setDockTableListVisible(bool ipFlag)
+MainWindow::showDatabaseTree(bool ipFlag)
 {
     if (ipFlag) {
-        ui.mDockTableListWidget->show();
+        ui.mDatabaseTreeWidget->show();
     } else {
-        ui.mDockTableListWidget->hide();
+        ui.mDatabaseTreeWidget->hide();
     }
+}
+
+/*
+ * Close database tree window
+ */
+void
+MainWindow::closeDatabaseTree()
+{
+    ui.mShowTableListAction->setChecked(false);
 }
 
 /*
  * Make docked log panel (in)visible
  */
 void
-MainWindow::setDockLogPanelVisible(bool ipFlag)
+MainWindow::showLogPanel(bool ipFlag)
 {
     if (ipFlag) {
-        ui.mDockLogPanelWidget->show();
+        ui.mLogPanelWidget->show();
     } else {
-        ui.mDockLogPanelWidget->hide();
+        ui.mLogPanelWidget->hide();
     }
 }
+
+/*
+ * Close log panel
+ */
+void 
+MainWindow::closeLogPanel()
+{
+    ui.mShowLogPanelAction->setChecked(false);
+}
+
 /*
  * Add table to scene
  */
@@ -348,15 +406,15 @@ MainWindow::addTableItem()
 /*
  * Add table to scene
  */
-void
-MainWindow::addTableItem(QTreeWidgetItem *ipItem, int ipCol)
-{
-    //printMsg("Adding table '" + ipItem->text(ipCol) + "' to scene");
-
-//    ui.mSceneWidget->showOnScene(ipItem, ipCol);
-//    ui.mSceneWidget->updateLegend();
-    addTableItem();
-}
+//void
+//MainWindow::addTableItem(QTreeWidgetItem *ipItem, int ipCol)
+//{
+//    //printMsg("Adding table '" + ipItem->text(ipCol) + "' to scene");
+//
+////    ui.mSceneWidget->showOnScene(ipItem, ipCol);
+////    ui.mSceneWidget->updateLegend();
+//    addTableItem();
+//}
 
 /*
  * Draw full db scheme
@@ -634,7 +692,7 @@ MainWindow::queryData()
     bool switchToNewTab = mSettings.value(Consts::PREFS_GRP + "/" + Consts::NEW_TAB_AUTO_SWITCH_SETTING, true).toBool();
 
     // if auto switch enabled
-    if ( switchToNewTab ) {
+    if (switchToNewTab) {
         // activate last tab
         ui.mTabWidget->setCurrentIndex(ui.mTabWidget->count() - 1);
     }

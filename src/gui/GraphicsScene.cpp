@@ -46,6 +46,7 @@
 #include <gui/TableItem.h>
 #include <gui/TableItemGroup.h>
 #include <gui/TreeWidget.h>
+#include <gui/ViewItem.h>
 #include <math.h>
 
 #include <QDebug>
@@ -103,13 +104,14 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
     // get database object id
     int objId = ipTreeItem->text(TreeWidget::IdCol).toInt();
 
-    // if schema or table were double clicked
-    if (TreeWidget::SchemaItem == objId || TreeWidget::TableItem == objId) {
+    // if schema or table or view were double clicked
+    if (TreeWidget::SchemaItem == objId || TreeWidget::TableItem == objId || TreeWidget::ViewItem == objId) {
         // check whether item is a schema item
-        if (TreeWidget::SchemaItem == ipTreeItem->text(TreeWidget::IdCol).toInt()) {
+        if (TreeWidget::SchemaItem == objId) {
             // add all its table children to the scene
             for (int i = 0; i < ipTreeItem->childCount(); ++i) {
-                if (TreeWidget::TableNode == ipTreeItem->child(i)->text(TreeWidget::IdCol).toInt()) {
+                if (TreeWidget::TableNode == ipTreeItem->child(i)->text(TreeWidget::IdCol).toInt() ||
+                        TreeWidget::ViewNode == ipTreeItem->child(i)->text(TreeWidget::IdCol).toInt()) {
                     for (int j = 0; j < ipTreeItem->child(i)->childCount(); ++j) {
                         QPoint pos(ipPos.x() + j * SEEK_STEP, ipPos.y() + j * SEEK_STEP);
                         tableList << showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol, pos);
@@ -120,9 +122,17 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
             return tableList;
         }
 
-        TableItem *table = newTableItem(ipTreeItem->parent()->parent()->text(TreeWidget::NameCol),
-                ipTreeItem->text(TreeWidget::NameCol), mTableMenu, ipPos);
-        tableList.append(table);
+        if (TreeWidget::TableItem == objId) {
+            TableItem *table = newTableItem(ipTreeItem->parent()->parent()->text(TreeWidget::NameCol),
+                    ipTreeItem->text(TreeWidget::NameCol), mTableMenu, ipPos);
+            tableList.append(table);
+        }
+
+        if (TreeWidget::ViewItem == objId) {
+            ViewItem *view = newViewItem(ipTreeItem->parent()->parent()->text(TreeWidget::NameCol),
+                    ipTreeItem->text(TreeWidget::NameCol), mTableMenu, ipPos);
+            tableList.append(view);
+        }
 
     } else if (TreeWidget::TableNode == objId) {
         for (int i = 0; i < ipTreeItem->childCount(); ++i) {
@@ -151,6 +161,23 @@ GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ip
 }
 
 /*
+ * Create new view item
+ */
+ViewItem *
+GraphicsScene::newViewItem(QString ipSchemaName, QString ipViewName, QMenu *ipMenu, const QPoint &ipPos)
+{
+//    ViewItem *newItem = findViewItem(ipSchemaName, ipViewName);
+//    // check if such item is already on the scene
+//    if (newItem) {
+//        return newItem;
+//    }
+
+    // create new view
+    ViewItem *newItem = new ViewItem(ipSchemaName, ipViewName, ipMenu, ipPos);
+    return newItem;
+}
+
+/*
  * Add existent table items to the scene
  */
 void
@@ -161,7 +188,7 @@ GraphicsScene::addTableItems(const QList<QGraphicsItem *> &ipItems)
             TableItemGroup *group = qgraphicsitem_cast<TableItemGroup *>(item);
             addTableItems(group->children());
             createItemGroup(group->children());
-        } else if (qgraphicsitem_cast<TableItem *>(item)) {
+        } else if (isTable(item) || isView(item)) {
             addItem(item);
         }
     }
@@ -178,7 +205,7 @@ GraphicsScene::drawRelations()
 {
     // draw all relations between new table and already added ones
     foreach (QGraphicsItem *item, items()) {
-        if (qgraphicsitem_cast<TableItem *>(item)) {
+        if (isTable(item)) {
             createRelations(qgraphicsitem_cast<TableItem *>(item));
         }
     }
@@ -212,7 +239,7 @@ GraphicsScene::createRelations(TableItem *ipSourceItem)
 /*
  * Find table by his name on the scene
  */
-    TableItem *
+TableItem *
 GraphicsScene::findTableItem(const QString &ipSchemaName, const QString &ipTableName)
 {
     foreach (QGraphicsItem *item, items()) {

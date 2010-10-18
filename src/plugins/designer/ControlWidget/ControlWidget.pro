@@ -2,6 +2,8 @@ CONFIG      += designer plugin
 TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
+TOP_SRC_DIR = $$PWD/../../..
+
 UI_DIR = .uic
 UI_HEADERS_DIR = $$TOP_SRC_DIR/gui/ui
 MOC_DIR = .moc

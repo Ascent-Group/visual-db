@@ -2,6 +2,8 @@ CONFIG      += designer plugin
 TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
+TOP_SRC_DIR = $$PWD/../../..
+
 QT += xml gui
 
 UI_DIR = .uic
@@ -13,7 +15,7 @@ CONFIG += release
 
 INCLUDEPATH += $$TOP_SRC_DIR/ $$TOP_SRC_DIR/dbobjects
 
-LIBS += -L$$TOP_SRC_DIR/dbobjects -ldbobjects
+LIBS += -L$$TOP_SRC_DIR/dbobjects/common -lcommon
 
 FORMS += $$TOP_SRC_DIR/gui/ui/ControlWidget.ui
 

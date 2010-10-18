@@ -4,6 +4,7 @@ SUBDIRS = AppearancePage \
       ColorsPage \
       ControlWidget \
       DescriptionWidget \
+      DockWidget \
       LogPanel \
       PreferencesPage \
       SceneWidget \

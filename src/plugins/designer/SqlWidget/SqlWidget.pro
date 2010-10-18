@@ -2,6 +2,8 @@ CONFIG      += designer plugin
 TARGET      = $$qtLibraryTarget($$TARGET)
 TEMPLATE    = lib
 
+TOP_SRC_DIR = $$PWD/../../..
+
 QT += sql network gui
 
 UI_DIR = .uic

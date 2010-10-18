@@ -68,6 +68,10 @@ class Database
             SQLite
         };
 
+        bool registerNew(const DbObject *ipObject);
+        bool registerModified(const DbObject *ipObject);
+        bool registerDeleted(const DbObject *ipObject);
+
     public:
         bool addSchema(DbSchema *);
         bool addRole(DbRole *);
@@ -88,11 +92,10 @@ class Database
 
         DbSchema* findSchema(const QString &ipSchemaName) const;
 
-        // lyuts: maybe we will need this
+        // \todo lyuts: maybe we will need this
         //Schema* findSchema(DbTable *ipTable) const;
         //DbTable* findTable(QString ipTableName) const;
 
-        // lyuts:
         DbRole* findRole(const QString &ipRoleName) const;
         DbIndex* findIndex(const QString &ipIndexName) const;
         DbLanguage* findLanguage(const QString &ipLangName) const;
@@ -121,6 +124,10 @@ class Database
         QVector<DbIndex*> mIndices;
         QVector<DbLanguage*> mLanguages;
         SqlDriverType mSqlDriver;
+
+        QVector<const DbObject*> mNewObjects;
+        QVector<const DbObject*> mModifiedObjects;
+        QVector<const DbObject*> mDeletedObjects;
 
         friend class DatabaseManager;
 

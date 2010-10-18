@@ -126,6 +126,63 @@ Database::instance()
 }
 
 /*!
+ * \brief Register an object that has been created
+ *
+ * \param[in] ipObject - Pointer to the object that we want to register
+ *
+ * \return true If the object has been successfully registered
+ * \return false If the object has been registered earlier
+ */
+bool
+Database::registerNew(const DbObject *ipObject)
+{
+    if (mNewObjects.contains(ipObject)) {
+        return false;
+    }
+
+    mNewObjects.push_back(ipObject);
+    return true;
+}
+
+/*!
+ * \brief Register an object that has been modified
+ *
+ * \param[in] ipObject - Pointer to the object that we want to register
+ *
+ * \return true If the object has been successfully registered
+ * \return false If the object has been registered earlier
+ */
+bool
+Database::registerModified(const DbObject *ipObject)
+{
+    if (mModifiedObjects.contains(ipObject)) {
+        return false;
+    }
+
+    mModifiedObjects.push_back(ipObject);
+    return true;
+}
+
+/*!
+ * \brief Register an object that has been deleted
+ *
+ * \param[in] ipObject - Pointer to the object that we want to register
+ *
+ * \return true If the object has been successfully registered
+ * \return false If the object has been registered earlier
+ */
+bool
+Database::registerDeleted(const DbObject *ipObject)
+{
+    if (mDeletedObjects.contains(ipObject)) {
+        return false;
+    }
+
+    mDeletedObjects.push_back(ipObject);
+    return true;
+}
+
+/*!
  * \brief Add schema to DB schema list
  *
  * \param[in] ipSchema Schema object to add to schemas vector
@@ -726,6 +783,14 @@ Database::resetData()
 
     qDeleteAll(mLanguages);
     mLanguages.clear();
+
+    /*! We don't need to call qDeleteAll for UnitOfWork pattern's vectors, we just need to
+     * flush them.
+     * Reason: We don't need to destroy the objects, they should stay alive
+     */
+    mNewObjects.clear();
+    mModifiedObjects.clear();
+    mDeletedObjects.clear();
 }
 
 /*!

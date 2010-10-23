@@ -101,6 +101,8 @@ MainWindow::MainWindow()
     connect(ui.mNewConnectionAction, SIGNAL(triggered()), this, SLOT(showConnectionDialog()));
     connect(ui.mLogPanelWidget, SIGNAL(closed()), this, SLOT(closeLogPanel()));
     connect(ui.mDatabaseTreeWidget, SIGNAL(closed()), this, SLOT(closeDatabaseTree()));
+    connect(ui.mLogPanelWidget, SIGNAL(shown()), this, SLOT(showLogPanel()));
+    connect(ui.mDatabaseTreeWidget, SIGNAL(shown()), this, SLOT(showDatabaseTree()));
 }
 
 /*
@@ -364,6 +366,15 @@ MainWindow::closeDatabaseTree()
 }
 
 /*
+ * Show database tree view
+ */
+void 
+MainWindow::showDatabaseTree()
+{
+    ui.mShowTableListAction->setChecked(true);
+}
+
+/*
  * Make docked log panel (in)visible
  */
 void
@@ -383,6 +394,15 @@ void
 MainWindow::closeLogPanel()
 {
     ui.mShowLogPanelAction->setChecked(false);
+}
+
+/*
+ * Show log panel
+ */
+void
+MainWindow::showLogPanel()
+{
+    ui.mShowLogPanelAction->setChecked(true);
 }
 
 /*

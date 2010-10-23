@@ -34,12 +34,13 @@
 
 class QToolButton;
 
-/*
- * Tab widget
+/*!
+ * \class TabWidget
+ * \headerfile TabWidget.h
+ * \brief Tab widget
  */
 class TabWidget : public QTabWidget
 {
-
     Q_OBJECT
 
     public:
@@ -53,7 +54,7 @@ class TabWidget : public QTabWidget
         TabWidget(QWidget *ipParent = 0);
         ~TabWidget();
 
-        void setActiveTab(const int ipTabId);
+        void setActiveTab(int ipTabId);
 
     private:
         QToolButton *mCloseTabButton;

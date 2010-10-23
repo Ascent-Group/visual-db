@@ -117,8 +117,10 @@ class MainWindow : public QMainWindow
 //        void addTableItem(QTreeWidgetItem*, int);
         void showDatabaseTree(bool);
         void closeDatabaseTree();
+        void showDatabaseTree();
         void showLogPanel(bool);
         void closeLogPanel();
+        void showLogPanel();
         void printPreview(QPrinter*);
         void showOptionsDialog();
         void showPrintPreviewDialog();

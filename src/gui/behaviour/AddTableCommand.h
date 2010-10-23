@@ -36,8 +36,10 @@
 class GraphicsScene;
 class QGraphicsItem;
 
-/*
- * Implement add table command
+/*!
+ * \class AddTableCommand
+ * \headerfile gui/behaviour/AddTableCommand.h
+ * \brief Implement add table command
  */
 class AddTableCommand : public QUndoCommand
 {

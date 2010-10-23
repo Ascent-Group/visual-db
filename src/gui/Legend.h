@@ -32,8 +32,10 @@
 
 #include "GraphicsItem.h"
 
-/*
- * Class for legend. Legend describes each schama and it's color.
+/*!
+ * \class Legend
+ * \headerfile Legend.h
+ * \brief Class for legend. Legend describes each schama and it's color.
  */
 class Legend : public GraphicsItem
 {

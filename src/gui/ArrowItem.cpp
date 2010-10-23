@@ -45,7 +45,7 @@ static QPolygonF makeHead(const QLineF &);
 
 const qreal Pi = 3.14;
 
-/*
+/*!
  * Constructor
  */
 ArrowItem::ArrowItem(TableItem *ipStartItem,
@@ -63,15 +63,17 @@ ArrowItem::ArrowItem(TableItem *ipStartItem,
     setPen(QPen(mColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 }
 
-/*
+/*!
  * Destructor
  */
 ArrowItem::~ArrowItem()
 {
 }
 
-/*
- * Define the bounding that arrow covers
+/*!
+ * \brief Define the bounding that arrow covers
+ *
+ * \return Bounding that arrow covers
  */
 QRectF
 ArrowItem::boundingRect() const
@@ -84,8 +86,10 @@ ArrowItem::boundingRect() const
         .adjusted(-extra, -extra, extra, extra);
 }
 
-/*
- * Get the arrow head path
+/*!
+ * \breif Get the arrow head path
+ *
+ * \return Arrow head path
  */
 QPainterPath
 ArrowItem::shape() const
@@ -95,8 +99,8 @@ ArrowItem::shape() const
     return path;
 }
 
-/*
- * Update the arrow's position
+/*!
+ * \breif Update the arrow's position
  */
 void
 ArrowItem::updatePosition()
@@ -104,8 +108,8 @@ ArrowItem::updatePosition()
     setLine(makeLine());
 }
 
-/*
- * Draw the arrow
+/*!
+ * \override
  */
 void
 ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget *)
@@ -137,8 +141,13 @@ ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget 
     }
 }
 
-/*
- * Get the intersection point between given item and line
+/*!
+ * \brief Get the intersection point between given item and line
+ *
+ * \param[in] ipItem - Pointer to the table item
+ * \param[in] ipLine - Line
+ *
+ * \return Intersection point if there is an intersection
  */
 static QPointF
 findIntersection(const TableItem *ipItem, const QLineF &ipLine)
@@ -148,20 +157,24 @@ findIntersection(const TableItem *ipItem, const QLineF &ipLine)
     QPointF point1 = polygon.first() + ipItem->scenePos();
     QPointF intersectPoint;
     for (int i = 1; i < polygon.count(); ++i) {
-    QPointF point2 = polygon.at(i) + ipItem->scenePos();
-    QLineF polyLine = QLineF(point1, point2);
-    QLineF::IntersectType intersectType = polyLine.intersect(ipLine, &intersectPoint);
-    if (intersectType == QLineF::BoundedIntersection) {
-        break;
-    }
-    point1 = point2;
+        QPointF point2 = polygon.at(i) + ipItem->scenePos();
+        QLineF polyLine = QLineF(point1, point2);
+        QLineF::IntersectType intersectType = polyLine.intersect(ipLine, &intersectPoint);
+        if (intersectType == QLineF::BoundedIntersection) {
+            break;
+        }
+        point1 = point2;
     }
 
     return intersectPoint;
 }
 
-/*
- * Make head for given arrow
+/*!
+ * \brief Make head for given arrow
+ *
+ * \param[in] ipLine - The line we are making the arrow head for
+ *
+ * \return Polygon that describes the arrow head
  */
 static QPolygonF
 makeHead(const QLineF &ipLine)
@@ -184,8 +197,10 @@ makeHead(const QLineF &ipLine)
     return head;
 }
 
-/*
- * Line from the start's item to the end's item (from border to border)
+/*!
+ * \brief Creates line from the start item to the end item (from border to border)
+ *
+ * \return Created line from the start item to the end item
  */
 QLineF
 ArrowItem::makeLine() const
@@ -199,8 +214,10 @@ ArrowItem::makeLine() const
     return QLineF(endPoint, startPoint);
 }
 
-/*
- * Get the start item of the arrow
+/*!
+ * \brief Get the start item of the arrow
+ *
+ * \return Start item for the arrow
  */
 TableItem *
 ArrowItem::startItem() const
@@ -208,8 +225,10 @@ ArrowItem::startItem() const
     return mStartItem;
 }
 
-/*
- * Get the end item of the arrow
+/*!
+ * \brief Get the end item of the arrow
+ *
+ * \return End item for the arrow
  */
 TableItem *
 ArrowItem::endItem() const
@@ -217,8 +236,10 @@ ArrowItem::endItem() const
     return mEndItem;
 }
 
-/*
- * Get the type of the arrow
+/*!
+ * \brief Get the type of the arrow
+ *
+ * \return Arrow type
  */
 int
 ArrowItem::type() const

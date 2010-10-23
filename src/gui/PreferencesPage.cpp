@@ -31,7 +31,7 @@
 #include <gui/PreferencesPage.h>
 #include <QFileDialog>
 
-/*
+/*!
  * Constructor
  */
 PreferencesPage::PreferencesPage(QWidget *ipParent)
@@ -58,15 +58,17 @@ PreferencesPage::PreferencesPage(QWidget *ipParent)
 
 }
 
-/*
+/*!
  * Destructor
  */
 PreferencesPage::~PreferencesPage()
 {
 }
 
-/*
- * Get flag - show or not indices
+/*!
+ * \brief Get flag - show or not indices
+ * 
+ * \return True if we need to show indeces, false otherwise
  */
 bool
 PreferencesPage::showIndices() const
@@ -74,8 +76,10 @@ PreferencesPage::showIndices() const
     return ui.mShowIndicesBox->isChecked();
 }
 
-/*
- * Get session folder
+/*!
+ * \brief Get session folder
+ *
+ * \return The folder where files with session information will be stored
  */
 QString
 PreferencesPage::sessionFolder() const
@@ -83,8 +87,10 @@ PreferencesPage::sessionFolder() const
     return ui.mSessionDirectoryEdit->text();
 }
 
-/*
+/*!
+ * \brief Get the autoswitch flag for tabs
  *
+ * \return True if we will switch to new tab immediatly after open it, false otherwise
  */
 bool
 PreferencesPage::newTabAutoSwitch() const
@@ -92,8 +98,8 @@ PreferencesPage::newTabAutoSwitch() const
     return ui.mNewTabAutoSwitchBox->isChecked();
 }
 
-/*
- * Get the folder where the sessions are saved
+/*!
+ * \brief Get the folder where the sessions are saved
  */
 void
 PreferencesPage::folder()
@@ -102,13 +108,15 @@ PreferencesPage::folder()
     dialog.setFileMode(QFileDialog::DirectoryOnly);
     QStringList fileNames;
     if (dialog.exec()) {
-    fileNames = dialog.selectedFiles();
-    ui.mSessionDirectoryEdit->setText(fileNames.first() + "/");
+        fileNames = dialog.selectedFiles();
+        ui.mSessionDirectoryEdit->setText(fileNames.first() + "/");
     }
 }
 
-/*
- * Get count of saved sessions
+/*!
+ * \brief Get count of saved sessions
+ *
+ * \return Count of saved sessions
  */
 int
 PreferencesPage::countSavedSession() const
@@ -116,8 +124,10 @@ PreferencesPage::countSavedSession() const
     return ui.mCountSessionsSpin->value();
 }
 
-/*
- * Get the flag - load or not last session when application is opened
+/*!
+ * \brief Get the flag - load or not last session while application start
+ *
+ * \return True if we will load last session while application start, false otherwise
  */
 bool
 PreferencesPage::loadLastSession() const

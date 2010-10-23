@@ -30,7 +30,7 @@
 #include <QToolButton>
 #include <gui/TabWidget.h>
 
-/*
+/*!
  * Ctor
  */
 TabWidget::TabWidget(QWidget *ipParent)
@@ -52,7 +52,7 @@ TabWidget::TabWidget(QWidget *ipParent)
     connect(mCloseTabButton, SIGNAL(clicked()), this, SLOT(closeTabButtonClicked()));
 }
 
-/*
+/*!
  * Dtor
  */
 TabWidget::~TabWidget()
@@ -60,17 +60,19 @@ TabWidget::~TabWidget()
 
 }
 
-/*
- * Makes the tab with the given id active
+/*!
+ * \brief Makes the tab with the given id active
+ *
+ * \param[in] ipTabId - tab id
  */
 void
-TabWidget::setActiveTab(const int ipTabId)
+TabWidget::setActiveTab(int ipTabId)
 {
     setCurrentIndex(ipTabId);
 }
 
-/*
- * Closes the active tab
+/*!
+ * \brief Close the active tab
  */
 void
 TabWidget::closeTabButtonClicked()
@@ -81,7 +83,7 @@ TabWidget::closeTabButtonClicked()
     // lyuts: remember last tab index so we can switch to it back!!
 
     // if id is greater than 0 = we are closing any tab except grachics scheme
-    if ( 0 < activeTabId ) {
+    if (0 < activeTabId) {
         removeTab(activeTabId);
     }
 }

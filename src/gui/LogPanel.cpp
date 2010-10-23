@@ -33,7 +33,7 @@
 
 #include <QtDebug>
 
-/*
+/*!
  * Ctor
  */
 LogPanel::LogPanel(QWidget *ipParent)
@@ -42,15 +42,15 @@ LogPanel::LogPanel(QWidget *ipParent)
     ui.setupUi(this);
 }
 
-/*
+/*!
  * Dtor
  */
 LogPanel::~LogPanel()
 {
 }
 
-/*
- * Saves current log to a file
+/*!
+ * \brief Saves current log to a file
  */
 void
 LogPanel::saveToFile()
@@ -77,11 +77,13 @@ LogPanel::saveToFile()
     }
 }
 
-/*
+/*!
+ * \brief Print given string in the log
  *
+ * \param[in] ipText - Log message
  */
 void
-LogPanel::print(QString ipText)
+LogPanel::print(const QString &ipText)
 {
     ui.mOutputEdit->append(ipText);
 }

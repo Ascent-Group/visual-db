@@ -33,8 +33,10 @@
 #include <gui/ui/ui_LogPanel.h>
 #include <QWidget>
 
-/*
- * The panel for application's output, will be docked to the bottom
+/*!
+ * \class LogPanel
+ * \headerfile LogPanel.h
+ * \brief The panel for application's output, will be docked to the bottom
  */
 class LogPanel : public QWidget
 {
@@ -44,7 +46,7 @@ class LogPanel : public QWidget
         LogPanel(QWidget *ipParent = 0);
         ~LogPanel();
 
-        void print(QString ipText);
+        void print(const QString &ipText);
 
     private:
         Ui::LogPanel ui;

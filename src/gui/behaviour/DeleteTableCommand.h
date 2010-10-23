@@ -36,8 +36,10 @@
 class GraphicsScene;
 class QGraphicsItem;
 
-/*
- * Implement add table command
+/*!
+ * \class DeleteTableCommand
+ * \headerfile gui/behaviour/DeleteTableCommand.h
+ * \brief Implement add table command
  */
 class DeleteTableCommand : public QUndoCommand
 {

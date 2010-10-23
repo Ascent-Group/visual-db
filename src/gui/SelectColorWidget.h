@@ -37,8 +37,10 @@
 
 class QColor;
 
-/*
- * Widget to provide the color selection.
+/*!
+ * \class SelectColorWidget
+ * \headerfile SelectColorWidget.h
+ * \brief Widget to provide the color selection.
  */
 class SelectColorWidget : public QWidget
 {
@@ -53,10 +55,10 @@ class SelectColorWidget : public QWidget
         QColor color() const;
 
         QString labelText() const;
-        void setLabelText(QString ipText);
+        void setLabelText(const QString &ipText);
 
         QColor defaultColor() const;
-        void setDefaultColor(QColor ipColor);
+        void setDefaultColor(const QColor &ipColor);
 
     private:
         Ui::SelectColorWidget ui;

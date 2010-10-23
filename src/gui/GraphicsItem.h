@@ -35,8 +35,10 @@
 
 class QGraphicsTextItem;
 
-/*
- * Parent class for graphics items on the scene
+/*!
+ * \class GraphicsItem
+ * \headerfile gui/GraphicsItem.h
+ * \brief Parent class for graphics items on the scene
  */
 class GraphicsItem : public QGraphicsPolygonItem
 {
@@ -83,15 +85,15 @@ class GraphicsItem : public QGraphicsPolygonItem
         virtual void setTitleItem(QGraphicsTextItem *);
         virtual QGraphicsTextItem *titleItem() const;
 
-        virtual bool isRightBottomCorner(qreal ipX, qreal ipY) const;
-        virtual bool isLeftBottomCorner(qreal ipX, qreal ipY) const;
-        virtual bool isLeftTopCorner(qreal ipX, qreal ipY) const;
-        virtual bool isRightTopCorner(qreal ipX, qreal ipY) const;
+        virtual bool isRightBottomCorner(const QPointF &ipPos) const;
+        virtual bool isLeftBottomCorner(const QPointF &ipPos) const;
+        virtual bool isLeftTopCorner(const QPointF &ipPos) const;
+        virtual bool isRightTopCorner(const QPointF &ipPos) const;
 
-        virtual bool isLeftVerticalBorder(qreal) const;
-        virtual bool isRightVerticalBorder(qreal) const;
-        virtual bool isTopHorizontalBorder(qreal) const;
-        virtual bool isBottomHorizontalBorder(qreal) const;
+        virtual bool isLeftVerticalBorder(const QPointF &ipPos) const;
+        virtual bool isRightVerticalBorder(const QPointF &ipPos) const;
+        virtual bool isTopHorizontalBorder(const QPointF &ipPos) const;
+        virtual bool isBottomHorizontalBorder(const QPointF &ipPos) const;
 
         virtual QPointF centerPoint() const;
 

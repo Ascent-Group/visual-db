@@ -36,8 +36,10 @@
 
 class QColor;
 
-/*
- * Color page in the settings dialog
+/*!
+ * \class ColorsPage
+ * \headerfile gui/ColorsPage.h
+ * \brief Color page in the settings dialog
  */
 class ColorsPage : public QWidget
 {

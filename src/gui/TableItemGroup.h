@@ -38,8 +38,10 @@ class QDomElement;
 class QGraphicsSceneContextMenuEvent;
 class QMenu;
 
-/*
- * Graphics item, iplements group of tables.
+/*!
+ * \class TableItemGroup
+ * \headerfile TableItemGroup.h
+ * \brief Graphics item, iplements group of tables.
  */
 class TableItemGroup : public QGraphicsItemGroup
 {

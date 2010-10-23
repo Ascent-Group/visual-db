@@ -39,8 +39,10 @@ class QLineEdit;
 class QPushButton;
 class QSpinBox;
 
-/*
- * Preferences page on the options dialog
+/*!
+ * \class PreferencesPage
+ * \headerfile PreferencesPage.h
+ * \brief Preferences page on the options dialog
  */
 class PreferencesPage : public QWidget
 {

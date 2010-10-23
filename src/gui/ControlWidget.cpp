@@ -31,10 +31,10 @@
 
 #include <QtDebug>
 
-/*
+/*!
  * Constructor
  */
-ControlWidget::ControlWidget(/*int ipMinValue, int ipMaxValue, */QWidget *ipParent)
+ControlWidget::ControlWidget(QWidget *ipParent)
     : QWidget(ipParent)
 {
     ui.setupUi(this);
@@ -44,15 +44,17 @@ ControlWidget::ControlWidget(/*int ipMinValue, int ipMaxValue, */QWidget *ipPare
     setZoom(5);
 }
 
-/*
+/*!
  * Destructor
  */
 ControlWidget::~ControlWidget()
 {
 }
 
-/*
- * Process value changed signal
+/*!
+ * \brief Process value changed signal (just emit the signal)
+ * 
+ * \param[in] ipFactor - 
  */
 void
 ControlWidget::changeValue(int ipFactor)
@@ -60,8 +62,8 @@ ControlWidget::changeValue(int ipFactor)
     emit valueChanged(ipFactor);
 }
 
-/*
- * Increase value
+/*!
+ * \brief Increment value
  */
 void
 ControlWidget::increaseValue()
@@ -69,8 +71,8 @@ ControlWidget::increaseValue()
     ui.mScaleSlider->setValue(ui.mScaleSlider->value() + 1);
 }
 
-/*
- * Decrease value
+/*!
+ * Decrement value
  */
 void
 ControlWidget::decreaseValue()
@@ -78,8 +80,8 @@ ControlWidget::decreaseValue()
     ui.mScaleSlider->setValue(ui.mScaleSlider->value() - 1);
 }
 
-/*
- * Move the scene up
+/*!
+ * \brief Move the scene up
  */
 void
 ControlWidget::moveUp()
@@ -87,8 +89,8 @@ ControlWidget::moveUp()
     emit movedUp();
 }
 
-/*
- * Move the scene down
+/*!
+ * \brief Move the scene down
  */
 void
 ControlWidget::moveDown()
@@ -96,8 +98,8 @@ ControlWidget::moveDown()
     emit movedDown();
 }
 
-/*
- * Move the scene left
+/*!
+ * \brief Move the scene left
  */
 void
 ControlWidget::moveLeft()
@@ -105,8 +107,8 @@ ControlWidget::moveLeft()
     emit movedLeft();
 }
 
-/*
- * Move the scene right
+/*!
+ * \breif Move the scene right
  */
 void
 ControlWidget::moveRight()
@@ -114,8 +116,8 @@ ControlWidget::moveRight()
     emit movedRight();
 }
 
-/*
- * Set move mode
+/*!
+ * \brief Set move mode/drag&drop mode
  */
 void
 ControlWidget::setMoveMode()
@@ -123,8 +125,10 @@ ControlWidget::setMoveMode()
     emit moveModeSet(ui.mMoveButton->isChecked());
 }
 
-/*
+/*!
+ * \brief Get the minimum scaling factor
  *
+ * \return Minimum scaling factor
  */
 int
 ControlWidget::minZoom() const
@@ -132,8 +136,10 @@ ControlWidget::minZoom() const
     return ui.mScaleSlider->minimum();
 }
 
-/*
+/*!
+ * \brief Set the minimum scaling factor
  *
+ * \param[in] ipVal - Minimum scaling factor
  */
 void
 ControlWidget::setMinZoom(int ipVal)
@@ -141,8 +147,10 @@ ControlWidget::setMinZoom(int ipVal)
     ui.mScaleSlider->setMinimum(ipVal);
 }
 
-/*
+/*!
+ * \brief Get the maximum scaling factor
  *
+ * \return Maximum scaling factor
  */
 int
 ControlWidget::maxZoom() const
@@ -150,8 +158,10 @@ ControlWidget::maxZoom() const
     return ui.mScaleSlider->maximum();
 }
 
-/*
+/*!
+ * \brief Set the maximum scaling factor
  *
+ * \param[in] ipVal - Maximum scaling factor
  */
 void
 ControlWidget::setMaxZoom(int ipVal)
@@ -159,8 +169,10 @@ ControlWidget::setMaxZoom(int ipVal)
     ui.mScaleSlider->setMaximum(ipVal);
 }
 
-/*
+/*!
+ * \brief Get current scaling factor
  *
+ * \return Current scaling factor
  */
 int
 ControlWidget::zoom() const
@@ -168,8 +180,10 @@ ControlWidget::zoom() const
     return ui.mScaleSlider->value();
 }
 
-/*
+/*!
+ * \brief Set current scaling factor
  *
+ * \param[in] ipVal - Current scaling factor
  */
 void
 ControlWidget::setZoom(int ipVal)

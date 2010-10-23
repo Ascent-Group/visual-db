@@ -275,7 +275,7 @@ static void setBold(QTreeWidgetItem *ipItem, bool ipBold)
  * Populate tree under parent-item with triggers
  */
 void
-TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, TreeWidget::Item ipType, bool ipDragEnabled)
+TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, TreeWidget::Item ipType, bool /*ipDragEnabled*/)
 {
     ipList->sort();
 

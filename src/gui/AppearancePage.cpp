@@ -32,7 +32,7 @@
 #include <QLocale>
 
 
-/*
+/*!
  * Constructor
  */
 AppearancePage::AppearancePage(QWidget *ipParent)
@@ -51,15 +51,17 @@ AppearancePage::AppearancePage(QWidget *ipParent)
 
 }
 
-/*
+/*!
  * Destructor
  */
 AppearancePage::~AppearancePage()
 {
 }
 
-/*
- * Get the desired language
+/*!
+ * \brief Get the desired language
+ *
+ * \return Language id
  */
 int
 AppearancePage::language() const

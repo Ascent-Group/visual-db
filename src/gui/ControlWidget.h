@@ -34,9 +34,11 @@
 #include <QWidget>
 
 
-/*
- * Widget for contorlling the scene - move it,
- * resize and change the drag-and-drop meaning
+/*!
+ * \class ControlWidget
+ * \headerfile gui/ControlWidget.h
+ * \brief Widget for contorlling the scene - move it,
+ *        resize and change the drag-and-drop meaning
  */
 class ControlWidget : public QWidget
 {
@@ -46,7 +48,7 @@ class ControlWidget : public QWidget
         Q_PROPERTY(int zoom READ zoom WRITE setZoom)
 
     public:
-        ControlWidget(/*int, int, */QWidget *ipParent = 0);
+        ControlWidget(QWidget *ipParent = 0);
         ~ControlWidget();
 
         int minZoom() const;

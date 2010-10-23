@@ -36,8 +36,10 @@
 class DbParameters;
 class ProxyParameters;
 
-/*
- * Dialog for connection to the database
+/*!
+ * \class SqlConnectionDialog
+ * \headerfile SqlConnectionDialog.h
+ * \brief Dialog for connection to the database
  */
 class SqlConnectionDialog : public QDialog
 {
@@ -45,6 +47,7 @@ class SqlConnectionDialog : public QDialog
 
     public:
         SqlConnectionDialog(DbParameters *, ProxyParameters *, bool, QWidget *ipParent = 0);
+        ~SqlConnectionDialog();
 
     private:
         Ui::SqlConnectionDialog ui;

@@ -33,7 +33,7 @@
 #include <consts.h>
 #include <gui/GraphicsItem.h>
 
-/*
+/*!
  * Constructor
  */
 GraphicsItem::GraphicsItem()
@@ -45,88 +45,119 @@ GraphicsItem::GraphicsItem()
     mBorderColor = mSettings.value(Consts::COLOR_GRP + "/" + Consts::BORDER_SETTING, Qt::black).value<QColor>();
 }
 
-/*
+/*!
  * Destructor
  */
 GraphicsItem::~GraphicsItem()
 {
 }
 
-
-/*
- * Check if the poition is under left vertical border
+/*!
+ * \brief Check if the poition is under left vertical border
+ *
+ * \param[in] ipPos - Position we are checking
+ *
+ * \return True if the poition is under left vertical border, false otherwise
  */
 bool
-GraphicsItem::isLeftVerticalBorder(qreal ipX) const
+GraphicsItem::isLeftVerticalBorder(const QPointF &ipPos) const
 {
-    return ipX > mLeftTopPoint.x() && ipX < mLeftTopPoint.x() + BORDER_WIDTH;
+    return ipPos.x() > mLeftTopPoint.x() && ipPos.x() < mLeftTopPoint.x() + BORDER_WIDTH;
 }
 
-/*
- * Check if the position is under right vertical border
+/*!
+ * \brief Check if the position is under right vertical border
+ *
+ * \param[in] ipPos - Position we are checking
+ *
+ * \return True if the position is under right vertical border, false otherwise
  */
 bool
-GraphicsItem::isRightVerticalBorder(qreal ipX) const
+GraphicsItem::isRightVerticalBorder(const QPointF &ipPos) const
 {
-    return ipX < mRightBottomPoint.x() && ipX > mRightBottomPoint.x() - BORDER_WIDTH;
+    return ipPos.x() < mRightBottomPoint.x() && ipPos.x() > mRightBottomPoint.x() - BORDER_WIDTH;
 }
 
-/*
- * Check if the positon is under top horizontal border
+/*!
+ * \brief Check if the positon is under top horizontal border
+ *
+ * \param[in] ipPos - Position we are checking
+ *
+ * \return True if the positon is under top horizontal border, false otherwise
  */
 bool
-GraphicsItem::isTopHorizontalBorder(qreal ipY) const
+GraphicsItem::isTopHorizontalBorder(const QPointF &ipPos) const
 {
-    return ipY > mLeftTopPoint.y() && ipY < mLeftTopPoint.y() + BORDER_WIDTH;
+    return ipPos.y() > mLeftTopPoint.y() && ipPos.y() < mLeftTopPoint.y() + BORDER_WIDTH;
 }
 
-/*
- * Check if the position is under bottom horizontal border
+/*!
+ * \brief Check if the position is under bottom horizontal border
+ *
+ * \param[in] ipPos - Position we are checking
+ *
+ * \return True if the position is under bottom horizontal border, false otherwise
  */
 bool
-GraphicsItem::isBottomHorizontalBorder(qreal ipY) const
+GraphicsItem::isBottomHorizontalBorder(const QPointF &ipPos) const
 {
-    return ipY < mRightBottomPoint.y() && ipY > mRightBottomPoint.y() - BORDER_WIDTH;
+    return ipPos.y() < mRightBottomPoint.y() && ipPos.y() > mRightBottomPoint.y() - BORDER_WIDTH;
 }
 
-/*
- * Check if the position is under the right bottom corner
+/*!
+ * \brief Check if the position is under the right bottom corner
+ *
+ * \param[in] ipPos - Position we are checking
+ *
+ * \return True if the position is under the right bottom corner, false otherwise
  */
 bool
-GraphicsItem::isRightBottomCorner(qreal ipX, qreal ipY) const
+GraphicsItem::isRightBottomCorner(const QPointF &ipPos) const
 {
-    return isBottomHorizontalBorder(ipY) && isRightVerticalBorder(ipX);
+    return isBottomHorizontalBorder(ipPos) && isRightVerticalBorder(ipPos);
 }
 
-/*
- * Check if the position is under the left bottom corner
+/*!
+ * \brief Check if the position is under the left bottom corner
+ *
+ * \param[in] ipPos - Position we are checking
+ *
+ * \return True if the position is under the left bottom corner, false otherwise
  */
 bool
-GraphicsItem::isLeftBottomCorner(qreal ipX, qreal ipY) const
+GraphicsItem::isLeftBottomCorner(const QPointF &ipPos) const
 {
-    return isTopHorizontalBorder(ipY) && isRightVerticalBorder(ipX);
+    return isTopHorizontalBorder(ipPos) && isRightVerticalBorder(ipPos);
 }
 
-/*
- * Check if the position is under the left top corner
+/*!
+ * \brief Check if the position is under the left top corner
+ *
+ * \param[in] ipPos - Position we are checking
+ *
+ * \return True if the position is under the left top corner, false otherwise
  */
 bool
-GraphicsItem::isLeftTopCorner(qreal ipX, qreal ipY) const
+GraphicsItem::isLeftTopCorner(const QPointF &ipPos) const
 {
-    return isTopHorizontalBorder(ipY) && isLeftVerticalBorder(ipX);
+    return isTopHorizontalBorder(ipPos) && isLeftVerticalBorder(ipPos);
 }
 
-/*
- * Check if the position is under the right top corner
+/*!
+ * \brief Check if the position is under the right top corner
+ *
+ * \param[in] ipPos - Position we are checking
+ *
+ * \return True if position is under the right top corner, false otherwise
  */
 bool
-GraphicsItem::isRightTopCorner(qreal ipX, qreal ipY) const
+GraphicsItem::isRightTopCorner(const QPointF &ipPos) const
 {
-    return isBottomHorizontalBorder(ipY) && isLeftVerticalBorder(ipX);
+    return isBottomHorizontalBorder(ipPos) && isLeftVerticalBorder(ipPos);
 }
 
-/*
- * Update the border polygon
+/*!
+ * \brief Update the border polygon
  */
 void
 GraphicsItem::updatePolygon()
@@ -141,8 +172,10 @@ GraphicsItem::updatePolygon()
     setPolygon(mPolygon);
 }
 
-/*
- * Get item color
+/*!
+ * \brief Get item color
+ *
+ * \return Item color
  */
 QColor
 GraphicsItem::itemColor() const
@@ -150,8 +183,10 @@ GraphicsItem::itemColor() const
     return mItemColor;
 }
 
-/*
- * Return rectangle
+/*!
+ * \brief Return rectangle
+ *
+ * \return Item rectangle
  */
 QRectF
 GraphicsItem::rect() const
@@ -159,8 +194,10 @@ GraphicsItem::rect() const
     return QRectF(x(), y(), width(), height());
 }
 
-/*
- * Get x coordinate of left top corner
+/*!
+ * \brief Get x coordinate of left top corner
+ *
+ * \return X coordinate of left top corner
  */
 qreal
 GraphicsItem::x() const
@@ -168,8 +205,10 @@ GraphicsItem::x() const
     return mLeftTopPoint.x();
 }
 
-/*
- * Get y coordinate of left top corner
+/*!
+ * \brief Get y coordinate of left top corner
+ *
+ * \return Y coordinate of left top corner
  */
 qreal
 GraphicsItem::y() const
@@ -177,8 +216,10 @@ GraphicsItem::y() const
     return mLeftTopPoint.y();
 }
 
-/*
- * Return width of the item
+/*!
+ * \brief Return width of the item
+ *
+ * \return Item width
  */
 qreal
 GraphicsItem::width() const
@@ -186,8 +227,10 @@ GraphicsItem::width() const
     return mRightBottomPoint.x() - mLeftTopPoint.x();
 }
 
-/*
- * Return height of the item
+/*!
+ * \brief Return height of the item
+ *
+ * \return Item height
  */
 qreal
 GraphicsItem::height() const
@@ -195,8 +238,10 @@ GraphicsItem::height() const
     return mRightBottomPoint.y() - mLeftTopPoint.y();
 }
 
-/*
- * Set x coordinate of left top corner
+/*!
+ * \brief Set x coordinate of left top corner
+ *
+ * \param[in] ipX - X coordinate of left top corner
  */
 void
 GraphicsItem::setX(qreal ipX)
@@ -204,8 +249,10 @@ GraphicsItem::setX(qreal ipX)
     mLeftTopPoint.setX(ipX);
 }
 
-/*
- * Set y coordinate of left top corner
+/*!
+ * \brief Set y coordinate of left top corner
+ *
+ * \param[in] ipY - Y coordinate of left top corner
  */
 void
 GraphicsItem::setY(qreal ipY)
@@ -213,8 +260,10 @@ GraphicsItem::setY(qreal ipY)
     mLeftTopPoint.setY(ipY);
 }
 
-/*
- * Set width of the item
+/*!
+ * \brief Set width of the item
+ *
+ * \param[in] ipWidth - Item width
  */
 void
 GraphicsItem::setWidth(qreal ipWidth)
@@ -222,14 +271,21 @@ GraphicsItem::setWidth(qreal ipWidth)
     mRightBottomPoint.setX(x() + ipWidth);
 }
 
+/*!
+ * \brief Set height of the item
+ *
+ * \param[in] ipHeight - Item height
+ */
 void
 GraphicsItem::setHeight(qreal ipHeight)
 {
     mRightBottomPoint.setY(y() + ipHeight);
 }
 
-/*
- * Get the center point of the item in item's system coordinate
+/*!
+ * \brief Get the center point of the item in item's system coordinate
+ *
+ * \return Center point of the item
  */
 QPointF
 GraphicsItem::centerPoint() const
@@ -237,8 +293,10 @@ GraphicsItem::centerPoint() const
     return QPointF((mRightBottomPoint.x() + mLeftTopPoint.x()) / 2, (mRightBottomPoint.y() + mLeftTopPoint.y()) / 2);
 }
 
-/*
- * Set table color
+/*!
+ * \brief Set table color
+ *
+ * \param[in] ipColor - Table color
  */
 void
 GraphicsItem::setItemColor(QColor ipColor)
@@ -254,8 +312,10 @@ GraphicsItem::setItemColor(QColor ipColor)
     update();
 }
 
-/*
- * Get border color
+/*!
+ * \brief Get border color
+ *
+ * \return Border color
  */
 QColor
 GraphicsItem::borderColor() const
@@ -263,8 +323,10 @@ GraphicsItem::borderColor() const
     return mBorderColor;
 }
 
-/*
- * Set border color
+/*!
+ * \brief Set border color
+ *
+ * \param[in] ipColor - Border color
  */
 void
 GraphicsItem::setBorderColor(QColor ipColor)
@@ -272,8 +334,10 @@ GraphicsItem::setBorderColor(QColor ipColor)
     mBorderColor = ipColor;
 }
 
-/*
- * Get font color
+/*!
+ * \brief Get font color
+ *
+ * \return Font color
  */
 QColor
 GraphicsItem::fontColor() const
@@ -281,8 +345,10 @@ GraphicsItem::fontColor() const
     return mFontColor;
 }
 
-/*
- * Set font color
+/*!
+ * \brief Set font color
+ *
+ * \param[in] ipColor - Font color
  */
 void
 GraphicsItem::setFontColor(QColor ipColor)
@@ -290,8 +356,10 @@ GraphicsItem::setFontColor(QColor ipColor)
     mFontColor = ipColor;
 }
 
-/*
- * Add field item to the list of field
+/*!
+ * \brief Add field item to the list of field
+ *
+ * \param[in] ipItem - Pointer to the field item
  */
 void
 GraphicsItem::addFieldItem(QGraphicsTextItem *ipItem)
@@ -299,8 +367,10 @@ GraphicsItem::addFieldItem(QGraphicsTextItem *ipItem)
     mFieldItems << ipItem;
 }
 
-/*
- * Set title item
+/*!
+ * \brief Set title item
+ *
+ * \param[in] ipItem - Pointer to the title item
  */
 void
 GraphicsItem::setTitleItem(QGraphicsTextItem *ipItem)
@@ -308,8 +378,10 @@ GraphicsItem::setTitleItem(QGraphicsTextItem *ipItem)
     mTitleItem = ipItem;
 }
 
-/*
- * Get title text
+/*!
+ * \brief Get title text
+ *
+ * \return Title text
  */
 QString
 GraphicsItem::titleText() const
@@ -317,8 +389,10 @@ GraphicsItem::titleText() const
     return mTitleItem->toPlainText();
 }
 
-/*
- * Set title text
+/*!
+ * \brief Set title text
+ *
+ * \param[in] ipTexx - Title text
  */
 void
 GraphicsItem::setTitleText(QString ipText)
@@ -326,8 +400,12 @@ GraphicsItem::setTitleText(QString ipText)
     mTitleItem->setPlainText(ipText);
 }
 
-/*
- * Get field text
+/*!
+ * \brief Get field text
+ *
+ * \param[in] ipI - Field index
+ *
+ * \return Field text
  */
 QString
 GraphicsItem::fieldText(int ipI) const
@@ -335,8 +413,10 @@ GraphicsItem::fieldText(int ipI) const
     return mFieldItems.at(ipI)->toPlainText();
 }
 
-/*
- * Get count field
+/*!
+ * \brief Get count fields
+ *
+ * \return Count fields
  */
 int
 GraphicsItem::countFields() const
@@ -344,8 +424,10 @@ GraphicsItem::countFields() const
     return mFieldItems.size();
 }
 
-/*
- * Get all field
+/*!
+ * \brief Get all field
+ *
+ * \return Field list
  */
 QList<QGraphicsTextItem *>
 GraphicsItem::fieldItems() const
@@ -353,16 +435,22 @@ GraphicsItem::fieldItems() const
     return mFieldItems;
 }
 
-/*
- * Get the title item
+/*!
+ * \brief Get the title item
+ *
+ * \return Title item
  */
 QGraphicsTextItem *
 GraphicsItem::titleItem() const
 {
     return mTitleItem;
 }
-/*
- * Set field text
+
+/*!
+ * \brief Set field text
+ *
+ * \param[in] ipI - Field index
+ * \param[in] ipText - Field text
  */
 void
 GraphicsItem::setFieldText(int ipI, QString ipText)
@@ -370,8 +458,8 @@ GraphicsItem::setFieldText(int ipI, QString ipText)
     mFieldItems.at(ipI)->setPlainText(ipText);
 }
 
-/*
- * Clear field
+/*!
+ * \brief Clear field
  */
 void
 GraphicsItem::clearFields()
@@ -379,8 +467,8 @@ GraphicsItem::clearFields()
     mFieldItems.clear();
 }
 
-/*
- * Adjust the size of the item
+/*!
+ * \brief Adjust the size of the item
  */
 void
 GraphicsItem::adjustSize()

@@ -29,7 +29,7 @@
 
 #include "DockWidget.h"
 
-/*
+/*!
  * Ctor
  */
 DockWidget::DockWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
@@ -37,19 +37,29 @@ DockWidget::DockWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
 {
 }
 
-/*
+/*!
  * Dtor
  */
 DockWidget::~DockWidget()
 {
 }
 
-/*
- * Close event
+/*!
+ * \brief Close event
  */
 void 
 DockWidget::closeEvent(QCloseEvent *ipEvent)
 {
     emit closed();
     QDockWidget::closeEvent(ipEvent);
+}
+
+/*!
+ * \brief Show event
+ */
+void
+DockWidget::showEvent(QShowEvent *event)
+{
+    emit shown();
+    QDockWidget::showEvent(event);
 }

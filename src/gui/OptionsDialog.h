@@ -33,9 +33,10 @@
 #include <gui/ui/ui_OptionsDialog.h>
 #include <QSettings>
 
-
-/*
- * Dialog to define different options (such as color schema etc.)
+/*!
+ * \class OptionsDialog
+ * \headerfile OptionsDialog.h
+ * \brief Dialog to define different options (such as color schema etc.)
  */
 class OptionsDialog : public QDialog
 {

@@ -35,8 +35,10 @@
 
 class QGraphicsItem;
 
-/*
- * Incapsulate move table command
+/*!
+ * \class MoveTableCommand
+ * \headerfile gui/behaviour/MoveTableCommand.h
+ * \brief Incapsulate move table command
  */
 class MoveTableCommand : public QUndoCommand
 {

@@ -320,21 +320,21 @@ TableItem::itemChange(GraphicsItemChange ipChange, const QVariant &ipValue)
 void
 TableItem::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
-    if (isRightBottomCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
+    if (isRightBottomCorner(ipEvent->pos())) {
         mMode = TableItem::RIGHT_BOTTOM_CORNER_RESIZE;
-    } else if (isLeftBottomCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
+    } else if (isLeftBottomCorner(ipEvent->pos())) {
         mMode = TableItem::LEFT_BOTTOM_CORNER_RESIZE;
-    } else if (isLeftTopCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
+    } else if (isLeftTopCorner(ipEvent->pos())) {
         mMode = TableItem::LEFT_TOP_CORNER_RESIZE;
-    } else if (isRightTopCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
+    } else if (isRightTopCorner(ipEvent->pos())) {
         mMode = TableItem::RIGHT_TOP_CORNER_RESIZE;
-    } else if (isLeftVerticalBorder(ipEvent->pos().x())) {
+    } else if (isLeftVerticalBorder(ipEvent->pos())) {
         mMode = TableItem::LEFT_VERTICAL_RESIZE;
-    } else if (isRightVerticalBorder(ipEvent->pos().x())) {
+    } else if (isRightVerticalBorder(ipEvent->pos())) {
         mMode = TableItem::RIGHT_VERTICAL_RESIZE;
-    } else if (isBottomHorizontalBorder(ipEvent->pos().y())) {
+    } else if (isBottomHorizontalBorder(ipEvent->pos())) {
         mMode = TableItem::BOTTOM_HORIZONTAL_RESIZE;
-    } else if (isTopHorizontalBorder(ipEvent->pos().y())) {
+    } else if (isTopHorizontalBorder(ipEvent->pos())) {
         mMode = TableItem::TOP_HORIZONTAL_RESIZE;
     } else {
         mMode = TableItem::MOVE;
@@ -365,21 +365,21 @@ TableItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 void
 TableItem::hoverMoveEvent(QGraphicsSceneHoverEvent *ipEvent)
 {
-    if (isRightBottomCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
+    if (isRightBottomCorner(ipEvent->pos())) {
         setCursor(Qt::SizeFDiagCursor);
-    } else if (isLeftBottomCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
+    } else if (isLeftBottomCorner(ipEvent->pos())) {
         setCursor(Qt::SizeBDiagCursor);
-    } else if (isLeftTopCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
+    } else if (isLeftTopCorner(ipEvent->pos())) {
         setCursor(Qt::SizeFDiagCursor);
-    } else if (isRightTopCorner(ipEvent->pos().x(), ipEvent->pos().y())) {
+    } else if (isRightTopCorner(ipEvent->pos())) {
         setCursor(Qt::SizeBDiagCursor);
-    } else if (isLeftVerticalBorder(ipEvent->pos().x())) {
+    } else if (isLeftVerticalBorder(ipEvent->pos())) {
         setCursor(Qt::SizeHorCursor);
-    } else if (isRightVerticalBorder(ipEvent->pos().x())) {
+    } else if (isRightVerticalBorder(ipEvent->pos())) {
         setCursor(Qt::SizeHorCursor);
-    } else if (isBottomHorizontalBorder(ipEvent->pos().y())) {
+    } else if (isBottomHorizontalBorder(ipEvent->pos())) {
         setCursor(Qt::SizeVerCursor);
-    } else if (isTopHorizontalBorder(ipEvent->pos().y())) {
+    } else if (isTopHorizontalBorder(ipEvent->pos())) {
         setCursor(Qt::SizeVerCursor);
     } else {
         setCursor(Qt::SizeAllCursor);

@@ -50,8 +50,10 @@ class DbView;
 
 } //namespace DbObjects
 
-/*
- * Description widget. Here the object's description is displayed.
+/*!
+ * \class DescriptionWidget
+ * \headerfile gui/DescriptionWidget.h
+ * \brief Description widget. Here the object's description is displayed.
  */
 class DescriptionWidget : public QWidget
 {

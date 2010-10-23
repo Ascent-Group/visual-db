@@ -43,7 +43,7 @@
 
 #include <QtDebug>
 
-/*
+/*!
  * Constructor
  */
 SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
@@ -64,8 +64,15 @@ SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
     initConnectionFields();
 }
 
-/*
- * Create dialog
+/*!
+ * Destructor
+ */
+SqlConnectionDialog::~SqlConnectionDialog()
+{
+}
+
+/*!
+ * \brief Create dialog
  */
 void
 SqlConnectionDialog::createDialog(bool/* ipLoadSession*/)
@@ -115,8 +122,8 @@ SqlConnectionDialog::createDialog(bool/* ipLoadSession*/)
     ui.mProxyPasswordEdit->setEnabled(false);
 }
 
-/*
- * Set fields in the dialog from the given connection parameters
+/*!
+ * \brief Set fields in the dialog from the given connection parameters
  */
 void
 SqlConnectionDialog::initConnectionFields()
@@ -138,8 +145,8 @@ SqlConnectionDialog::initConnectionFields()
     ui.mProxyUserEdit->setText(mProxyParameters->proxyUser());
 }
 
-/*
- * Establish connection
+/*!
+ * \brief Establish connection
  */
 void
 SqlConnectionDialog::addConnection()
@@ -179,15 +186,17 @@ SqlConnectionDialog::addConnection()
     }
 }
 
-/*
- * Switch on/off proxy connection parameters
+/*!
+ * \brief Switch on/off proxy connection parameters
+ *
+ * \param[in] ipToggle - True if proxy is enabled, false if proxy is disabled 
  */
 void
-SqlConnectionDialog::switchProxy(bool toggle)
+SqlConnectionDialog::switchProxy(bool ipToggle)
 {
-    ui.mProxyTypeBox->setEnabled(toggle);
-    ui.mProxyHostNameEdit->setEnabled(toggle);
-    ui.mProxyPortEdit->setEnabled(toggle);
-    ui.mProxyUserEdit->setEnabled(toggle);
-    ui.mProxyPasswordEdit->setEnabled(toggle);
+    ui.mProxyTypeBox->setEnabled(ipToggle);
+    ui.mProxyHostNameEdit->setEnabled(ipToggle);
+    ui.mProxyPortEdit->setEnabled(ipToggle);
+    ui.mProxyUserEdit->setEnabled(ipToggle);
+    ui.mProxyPasswordEdit->setEnabled(ipToggle);
 }

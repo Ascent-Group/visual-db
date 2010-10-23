@@ -32,7 +32,7 @@
 #include <gui/GraphicsScene.h>
 #include <gui/behaviour/MoveTableCommand.h>
 
-/*
+/*!
  * Ctor
  */
 MoveTableCommand::MoveTableCommand(QList<QGraphicsItem *> ipTableList,
@@ -45,17 +45,17 @@ MoveTableCommand::MoveTableCommand(QList<QGraphicsItem *> ipTableList,
     setText(QObject::tr("Move table"));
 }
 
-/*
+/*!
  * Dtor
  */
 MoveTableCommand::~MoveTableCommand()
 {
 }
 
-/*
- * Undo move command
+/*!
+ * \brief Undo move command
  */
-    void
+void
 MoveTableCommand::undo()
 {
     foreach (QGraphicsItem *item, mTableList) {
@@ -63,10 +63,10 @@ MoveTableCommand::undo()
     }
 }
 
-/*
- * Redo move command
+/*!
+ * \brief Redo move command
  */
-    void
+void
 MoveTableCommand::redo()
 {
     if (mNeedMove) {

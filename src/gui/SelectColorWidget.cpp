@@ -34,7 +34,7 @@
 #include <QDebug>
 #include <QPalette>
 
-/*
+/*!
  * Ctor
  */
 SelectColorWidget::SelectColorWidget(QWidget *ipParent)
@@ -54,35 +54,39 @@ SelectColorWidget::SelectColorWidget(QWidget *ipParent)
 
 }
 
-/*
+/*!
  * Dtor
  */
 SelectColorWidget::~SelectColorWidget()
 {
 }
 
-/*
- * Process color selection
+/*!
+ * \brief Process color selection - open the dialog
+ *
+ * \param[in] ipIndex - input color for default value of color picker in the dialog
  */
 void
 SelectColorWidget::colorSelect(int ipIndex)
 {
     switch (ipIndex) {
-    case 1:
-        getColorFromDialog();
-        break;
+        case 1:
+            getColorFromDialog();
+            break;
 
-    case 0:
-    default:
-        mColor = mDefaultColor;
-        break;
+        case 0:
+        default:
+            mColor = mDefaultColor;
+            break;
     }
 
     ui.mColorButton->setPalette(QPalette(mColor));
 }
 
-/*
- * Return the selected color
+/*!
+ * \brief Get the selected color
+ *
+ * \return Selected color
  */
 QColor
 SelectColorWidget::color() const
@@ -90,8 +94,8 @@ SelectColorWidget::color() const
     return mColor;
 }
 
-/*
- * Handle the button press event
+/*!
+ * \brief Handle the button press event
  */
 void
 SelectColorWidget::buttonClick()
@@ -103,8 +107,8 @@ SelectColorWidget::buttonClick()
     }
 }
 
-/*
- * Show the 'color dialog' and get choosed color
+/*!
+ * \brief Show the 'color dialog' and get choosed color
  */
 void
 SelectColorWidget::getColorFromDialog()
@@ -115,42 +119,61 @@ SelectColorWidget::getColorFromDialog()
     }
 }
 
-
+/*!
+ * \brief Get the label text
+ *
+ * \return Label text
+ */
 QString
 SelectColorWidget::labelText() const
 {
     return ui.mLabel->text();
 }
 
-/*
+/*!
+ * \brief Set the label text
  *
+ * \param[in] ipText - Label text
  */
 void
-SelectColorWidget::setLabelText(QString ipText)
+SelectColorWidget::setLabelText(const QString &ipText)
 {
     ui.mLabel->setText(ipText);
 
     init();
 }
 
+/*!
+ * \brief Get default color
+ *
+ * \return Default color
+ */
 QColor
 SelectColorWidget::defaultColor() const
 {
     return mDefaultColor;
 }
 
+/*!
+ * \brief Set default color
+ *
+ * \param[in] ipColor - Default color
+ */
 void
-SelectColorWidget::setDefaultColor(QColor ipColor)
+SelectColorWidget::setDefaultColor(const QColor &ipColor)
 {
     mDefaultColor = ipColor;
 
     if (mDefaultColor != mColor) {
-    ui.mCombo->setCurrentIndex(1);
+        ui.mCombo->setCurrentIndex(1);
     }
 
     ui.mColorButton->setPalette(QPalette(mColor));
 }
 
+/*!
+ * \brief Init the dialog 
+ */
 void
 SelectColorWidget::init()
 {
@@ -159,10 +182,9 @@ SelectColorWidget::init()
 
     // select default color
     if (mDefaultColor != mColor) {
-    ui.mCombo->setCurrentIndex(1);
+        ui.mCombo->setCurrentIndex(1);
     }
 
     ui.mColorButton->setPalette(QPalette(mColor));
-
 }
 

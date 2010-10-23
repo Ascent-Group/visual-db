@@ -43,7 +43,7 @@ const QString DescriptionWidget::sCreateSchemaScript = "CREATE SCHEMA %1 \n"
             "AUTHORIZATION %2;\n";
 const QString DescriptionWidget::sAddSchemaDecriptionScript = "\nCOMMENT ON SCHEMA public IS '%1';";
 
-/*
+/*!
  * Ctor
  */
 DescriptionWidget::DescriptionWidget(QWidget *ipParent)
@@ -52,15 +52,17 @@ DescriptionWidget::DescriptionWidget(QWidget *ipParent)
     ui.setupUi(this);
 }
 
-/*
+/*!
  * Dtor
  */
 DescriptionWidget::~DescriptionWidget()
 {
 }
 
-/*
- * Generates and represents schema's description
+/*!
+ * \brief Generates and represents schema's description
+ *
+ * \param[in] ipSchema - Pointer to the db schema
  */
 void
 DescriptionWidget::describe(const DbObjects::Common::DbSchema *ipSchema)
@@ -116,8 +118,10 @@ DescriptionWidget::describe(const DbObjects::Common::DbSchema *ipSchema)
     ui.mBodyEdit->setText(body);
 }
 
-/*
- * Generates and represents table's description
+/*!
+ * \breif Generates and represents table's description
+ *
+ * \param[in] ipTable - Pointer to the db table
  */
 void
 DescriptionWidget::describe(const DbObjects::Common::DbTable *ipTable)
@@ -251,8 +255,10 @@ DescriptionWidget::describe(const DbObjects::Common::DbTable *ipTable)
 
 }
 
-/*
- * Generates and represents role's description
+/*!
+ * \breif Generates and represents role's description
+ *
+ * \param[in] ipRole - Pointer to the db role
  */
 void
 DescriptionWidget::describe(const DbObjects::Common::DbRole *ipRole)
@@ -383,8 +389,10 @@ DescriptionWidget::describe(const DbObjects::Common::DbRole *ipRole)
 
 }
 
-/*
- * Generates and represents view's description
+/*!
+ * \breif Generates and represents view's description
+ *
+ * \param[in] ipView - Pointer to the db view
  */
 void
 DescriptionWidget::describe(const DbObjects::Common::DbView *ipView)
@@ -445,8 +453,10 @@ DescriptionWidget::describe(const DbObjects::Common::DbView *ipView)
     ui.mBodyEdit->setText(def.trimmed());
 }
 
-/*
- * Generates and represents index's description
+/*!
+ * \brief Generates and represents index's description
+ *
+ * \param[in] ipIndex - Pointer to the db index
  */
 void
 DescriptionWidget::describe(const DbObjects::Common::DbIndex *ipIndex)
@@ -602,8 +612,10 @@ DescriptionWidget::describe(const DbObjects::Common::DbIndex *ipIndex)
     ui.mBodyEdit->setText(body);
 }
 
-/*
- * Generates and represents trig's description
+/*!
+ * \brief Generates and represents trig's description
+ *
+ * \param[in] ipTrigger - Pointer to the db trigger
  */
 void
 DescriptionWidget::describe(const DbObjects::Common::DbTrigger *ipTrigger)

@@ -36,7 +36,7 @@
 
 #include <QtDebug>
 
-/*
+/*!
  * Constructor
  */
 OptionsDialog::OptionsDialog(QWidget *ipParent)
@@ -45,15 +45,15 @@ OptionsDialog::OptionsDialog(QWidget *ipParent)
     ui.setupUi(this);
 }
 
-/*
+/*!
  * Destructor
  */
 OptionsDialog::~OptionsDialog()
 {
 }
 
-/*
- * Save settings
+/*!
+ * \brief Save settings
  */
 void
 OptionsDialog::writeSettings()
@@ -72,8 +72,8 @@ OptionsDialog::writeSettings()
     mSettings.setValue(COLOR_GRP + "/" + BORDER_SETTING, ui.mColorsPage->borderColor());
 }
 
-/*
- * Overriden accept() method
+/*!
+ * \brief Overriden accept() method
  */
 void
 OptionsDialog::accept()
@@ -82,8 +82,11 @@ OptionsDialog::accept()
     QDialog::accept();
 }
 
-/*
- * Handle page change
+/*!
+ * \brief Handle page change
+ *
+ * \param[in] ipCurrent - Pointer to the current item
+ * \param[in] ipPrevious - Pointer to the previous item
  */
 void
 OptionsDialog::changePage(QListWidgetItem *ipCurrent, QListWidgetItem *ipPrevious)

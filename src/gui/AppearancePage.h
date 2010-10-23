@@ -36,8 +36,10 @@
 
 class QComboBox;
 
-/*
- * Appearance page in the settings dialog
+/*!
+ * \class AppearancePage 
+ * \headfile gui/AppearancePage.h 
+ * \brief Appearance page in the settings dialog
  */
 class AppearancePage : public QWidget
 {

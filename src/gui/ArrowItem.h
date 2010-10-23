@@ -40,8 +40,10 @@ class QGraphicsSceneMouseEvent;
 class QPainterPath;
 class QRectF;
 
-/*
- * Implement the visual relations between tables
+/*!
+ * \class ArrowItem
+ * \headerfile gui/ArrowItem.h
+ * \brief Implement the visual relations between tables
  */
 class ArrowItem : public QGraphicsLineItem
 {

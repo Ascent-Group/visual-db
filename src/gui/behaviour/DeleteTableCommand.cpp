@@ -34,7 +34,7 @@
 #include <gui/TableItemGroup.h>
 #include <gui/behaviour/DeleteTableCommand.h>
 
-/*
+/*!
  * Ctor
  */
 DeleteTableCommand::DeleteTableCommand(GraphicsScene &ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *ipParent)
@@ -45,15 +45,15 @@ DeleteTableCommand::DeleteTableCommand(GraphicsScene &ipScene, QList<QGraphicsIt
     setText(QObject::tr("Delete table"));
 }
 
-/*
+/*!
  * Dtor
  */
 DeleteTableCommand::~DeleteTableCommand()
 {
 }
 
-/*
- * Undo add node
+/*!
+ * \brief Undo add node
  */
 void
 DeleteTableCommand::undo()
@@ -61,8 +61,8 @@ DeleteTableCommand::undo()
     mScene.addTableItems(mTableList);
 }
 
-/*
- * Redo add node
+/*!
+ * \brief Redo add node
  */
 void
 DeleteTableCommand::redo()

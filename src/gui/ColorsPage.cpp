@@ -33,7 +33,7 @@
 #include <gui/ColorsPage.h>
 #include <gui/SelectColorWidget.h>
 
-/*
+/*!
  * Constructor
  */
 ColorsPage::ColorsPage(QWidget *ipParent)
@@ -43,15 +43,17 @@ ColorsPage::ColorsPage(QWidget *ipParent)
 
 }
 
-/*
+/*!
  * Destructor
  */
 ColorsPage::~ColorsPage()
 {
 }
 
-/*
- * Get default background color
+/*!
+ * \brief Get default background color
+ *
+ * \return Background color
  */
 QColor
 ColorsPage::backgroundColor() const
@@ -59,8 +61,10 @@ ColorsPage::backgroundColor() const
     return ui.mBackgroundWidget->color();
 }
 
-/*
- * Get default table color
+/*!
+ * \brief Get default table color
+ *
+ * \return Table color
  */
 QColor
 ColorsPage::tableColor() const
@@ -68,17 +72,10 @@ ColorsPage::tableColor() const
     return ui.mTableWidget->color();
 }
 
-/*
- * Get default font color
- */
-//QColor
-//ColorsPage::fontColor() const
-//{
-//    return mFontWidget->color();
-//}
-
-/*
- * Get default arrow color
+/*!
+ * \brief Get default arrow color
+ *
+ * \return Arrow color
  */
 QColor
 ColorsPage::arrowColor() const
@@ -86,8 +83,10 @@ ColorsPage::arrowColor() const
     return ui.mArrowItemWidget->color();
 }
 
-/*
- * Get default border color
+/*!
+ * \brief Get default border color
+ *
+ * \return Border color
  */
 QColor
 ColorsPage::borderColor() const

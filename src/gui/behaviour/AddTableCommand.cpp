@@ -34,7 +34,7 @@
 #include <gui/TableItemGroup.h>
 #include <gui/behaviour/AddTableCommand.h>
 
-/*
+/*!
  * Ctor
  */
 AddTableCommand::AddTableCommand(GraphicsScene *ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *ipParent)
@@ -45,15 +45,15 @@ AddTableCommand::AddTableCommand(GraphicsScene *ipScene, QList<QGraphicsItem *> 
     setText(QObject::tr("Add table"));
 }
 
-/*
+/*!
  * Dtor
  */
 AddTableCommand::~AddTableCommand()
 {
 }
 
-/*
- * Undo add node
+/*!
+ * \breif Undo add node
  */
 void
 AddTableCommand::undo()
@@ -61,8 +61,8 @@ AddTableCommand::undo()
     mScene->deleteTableItems(mTableList);
 }
 
-/*
- * Redo add node
+/*!
+ * \brief Redo add node
  */
 void
 AddTableCommand::redo()

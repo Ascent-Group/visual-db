@@ -32,8 +32,10 @@
 
 #include <QDockWidget>
 
-/*
- * Tab widget
+/*!
+ * \class DockWidget
+ * \headerfile gui/DockWidget.h
+ * \brief Custom dock widget with closed and shown signals
  */
 class DockWidget : public QDockWidget
 {
@@ -45,9 +47,11 @@ class DockWidget : public QDockWidget
 
     signals:
         void closed();
+        void shown();
 
     protected:
         virtual void closeEvent(QCloseEvent *);
+        virtual void showEvent(QShowEvent *);
 };
 
 #endif // DOCKWIDGET_H

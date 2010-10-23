@@ -35,7 +35,7 @@
 #include <gui/TableItem.h>
 #include <gui/TableItemGroup.h>
 
-/*
+/*!
  * Constructor
  */
 TableItemGroup::TableItemGroup(QGraphicsItem *parent)
@@ -47,15 +47,17 @@ TableItemGroup::TableItemGroup(QGraphicsItem *parent)
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
-/*
+/*!
  * Destructor
  */
 TableItemGroup::~TableItemGroup()
 {
 }
 
-/*
- * Return the item's type
+/*!
+ * \brief Get the item's type
+ *
+ * \return Item's type
  */
 int
 TableItemGroup::type() const
@@ -63,8 +65,10 @@ TableItemGroup::type() const
     return Type;
 }
 
-/*
- * Set context menu
+/*!
+ * \brief Set context menu
+ *
+ * \param[in] ipContextMenu - Context menu for group
  */
 void
 TableItemGroup::setContextMenu(QMenu *ipContextMenu)
@@ -72,71 +76,49 @@ TableItemGroup::setContextMenu(QMenu *ipContextMenu)
     mContextMenu = ipContextMenu;
 }
 
-/*
-void
-TableItemGroup::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
-{
-    foreach (QGraphicsItem *item, children()) {
-    if (item->type() == TableItem::Type) {
-        qgraphicsitem_cast<TableItem *>(item)->onPressEvent(ipEvent);
-    }
-    }
-}
-
-void
-TableItemGroup::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
-{
-    foreach (QGraphicsItem *item, children()) {
-    if (item->type() == TableItem::Type) {
-        qgraphicsitem_cast<TableItem *>(item)->onMoveEvent(ipEvent);
-    }
-    }
-}
-
-void
-TableItemGroup::hoverMoveEvent(QGraphicsSceneHoverEvent *ipEvent)
-{
-    foreach (QGraphicsItem *item, children()) {
-    if (item->type() == TableItem::Type) {
-        qgraphicsitem_cast<TableItem *>(item)->onHoverEvent(ipEvent);
-    }
-    }
-}
-*/
-
-/*
- * Handler of the right mouse button click
+/*!
+ * \brief Handler of the right mouse button click
+ *
+ * param[in] ipEvent - Context menu event
  */
 void
 TableItemGroup::contextMenuEvent(QGraphicsSceneContextMenuEvent *ipEvent)
 {
     if (mContextMenu == 0) {
-    return;
+        return;
     }
 
     // show context menu
     mContextMenu->exec(ipEvent->screenPos());
 }
 
-/*
- * Convert table group to xml
+/*!
+ * \brief Convert table group to xml
+ *
+ * \param[in] ipDoc - Dom document where the xml representation will be created
+ * 
+ * \return Xml representation of the items group 
  */
 QDomElement
 TableItemGroup::toXml(QDomDocument &ipDoc)
 {
     QDomElement element = ipDoc.createElement("tableGroup");
     foreach (QGraphicsItem *item, childItems()) {
-    if (qgraphicsitem_cast<TableItemGroup *>(item)) {
-        element.appendChild(qgraphicsitem_cast<TableItemGroup *>(item)->toXml(ipDoc));
-    } else if (qgraphicsitem_cast<TableItem *>(item)) {
-        element.appendChild(qgraphicsitem_cast<TableItem *>(item)->toXml(ipDoc));
-    }
+        if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+            element.appendChild(qgraphicsitem_cast<TableItemGroup *>(item)->toXml(ipDoc));
+        } else if (qgraphicsitem_cast<TableItem *>(item)) {
+            element.appendChild(qgraphicsitem_cast<TableItem *>(item)->toXml(ipDoc));
+        }
     }
     return element;
 }
 
-/*
- * Check if input graphics item is group item
+/*!
+ * \brief Check if input graphics item is group item
+ *
+ * \param[in] ipItem - Graphics item
+ *
+ * \return True if given item is a group item, false if not
  */
 bool
 isTableGroup(QGraphicsItem *ipItem)

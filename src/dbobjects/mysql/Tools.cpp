@@ -69,6 +69,21 @@ version()
 }
 
 /*!
+ * \brief Read schemas that are available in the database
+ *
+ * \param[out] opList - The list that will containt schemas' names
+ *
+ * \return The number of schemas read.
+ */
+quint32
+schemasList(QStringList &opList)
+{
+    QString qstr = QString("SELECT schema_name AS name FROM information_schema.schemata;");
+
+    return objectNamesList(qstr, opList);
+}
+
+/*!
  * \todo Implement
  * \brief Read indices that are in available in the database
  *

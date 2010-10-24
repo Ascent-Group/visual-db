@@ -77,9 +77,7 @@ class DbTable : public Common::DbObject
         QStringList foreignFields(qint16 ipColId) const;
         bool isColumnUnique(qint16 ipColId) const;
 
-        /*! \see PsqlTable::loadData() */
-        /*! \todo remove next line */
-//        virtual void loadData() = 0;
+        virtual void resetData();
         // lyuts: for further functionality
         // lyuts: will save the changes made to the table
         // lyuts: virtual void save() = 0;

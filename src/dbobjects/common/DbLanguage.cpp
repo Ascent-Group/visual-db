@@ -77,6 +77,18 @@ DbLanguage::setTrusted(bool ipFlag)
 }
 
 /*!
+ * \brief Resets language data read from database
+ */
+void
+DbLanguage::resetData()
+{
+    /*! \todo Implement */
+    mIsTrusted = false;
+
+    DbObject::resetData();
+}
+
+/*!
  * \return Database object type
  */
 DbObject::Type

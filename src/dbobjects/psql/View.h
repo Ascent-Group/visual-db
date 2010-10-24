@@ -50,7 +50,6 @@ class View : public Common::DbView
         ~View();
 
         bool loadData();
-        void resetData();
 };
 
 } // namespace Psql

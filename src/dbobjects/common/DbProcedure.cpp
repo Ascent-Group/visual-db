@@ -154,6 +154,22 @@ DbProcedure::setSourceCode(const QString &ipText)
     mSourceCode = ipText;
 }
 
+/*!
+ * \brief Resets procedure description read from database
+ */
+void
+DbProcedure::resetData()
+{
+    /*! \todo Implement */
+    mSchemaName = "";
+    mSchema = 0;
+    mOwner = 0;
+    mLanguage = 0;
+    mSourceCode = "";
+
+    DbObject::resetData();
+}
+
 } // namespace Common
 
 } // namespace DbObjects

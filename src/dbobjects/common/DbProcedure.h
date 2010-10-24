@@ -79,12 +79,7 @@ class DbProcedure : public DbObject
 
     protected:
         DbProcedure(QString ipSchemaName, QString ipName);
-        /*!
-         * \see PsqlProcedure::loadData()
-         * \see MysqlProcedure::loadData()
-         */
-        /*! \todo remove next line */
-//        virtual void loadData() = 0;
+        virtual void resetData();
 
 };
 

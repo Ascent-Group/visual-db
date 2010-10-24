@@ -72,6 +72,15 @@ DbObject::setName(const QString &ipName)
     mName = ipName;
 }
 
+/*!
+ * \brief Resets object information read from database
+ */
+void
+DbObject::resetData()
+{
+    mName = "";
+}
+
 } // namespace Common
 
 } // namespace DbObjects

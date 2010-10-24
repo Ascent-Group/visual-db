@@ -81,12 +81,8 @@ class DbTrigger : public DbObject
         void setNumArgs(const quint16 &ipNum);
 
         virtual DbObject::Type type() const;
-        /*!
-         * \see PsqlTrigger::loadData()
-         * \see MysqlTrigger::loadData()
-         */
-        /*! \todo remove next line */
-//        virtual void loadData() = 0;
+
+        virtual void resetData();
 
         QString schemaName() const;
         QString fullName() const;

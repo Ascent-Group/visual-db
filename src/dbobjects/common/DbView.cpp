@@ -122,6 +122,21 @@ DbView::setDefinition(QString ipDef)
 }
 
 /*!
+ * \brief Resets view description read from database
+ */
+void
+DbView::resetData()
+{
+    /*! \todo Implement */
+    mSchemaName = "";
+    mSchema = 0;
+    mOwner = 0;
+    mDefinition = "";
+
+    DbObject::resetData();
+}
+
+/*!
  * \return Database object type identifier
  */
 DbObject::Type

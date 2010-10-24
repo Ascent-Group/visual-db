@@ -341,6 +341,20 @@ DbTable::isColumnUnique(qint16 ipColId) const
 }
 
 /*!
+ * \brief Resets table description read from database
+ */
+void
+DbTable::resetData()
+{
+    /*! \todo Implement */
+    mSchemaName = "";
+    mSchema = 0;
+    mColumnDefs.clear();
+
+    DbObject::resetData();
+}
+
+/*!
  * \param[out] opIndicesList - A list of indices assigned to the given table
  *
  * \returns The number of indices for the given table and populates the

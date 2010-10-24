@@ -195,17 +195,6 @@ Index::loadData()
     return true;
 }
 
-/*!
- * Reset psql index's data
- */
-void
-Index::resetData()
-{
-    mColumnsNumbers.clear();
-    /*! \todo Implement */
-//    Database::reload(this);
-}
-
 } // namespace Psql
 
 } // namespace DbObjects

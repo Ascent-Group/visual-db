@@ -78,7 +78,7 @@ DescriptionWidget::describe(const DbObjects::Common::DbSchema *ipSchema)
 
     // get the Schema data
     QString name = ipSchema->name();
-    QString ownerName = ipSchema->ownerName();
+    QString ownerName = ipSchema->owner()->name();
     QString description = ipSchema->description();
 
     ui.mTable->setRowCount(1);

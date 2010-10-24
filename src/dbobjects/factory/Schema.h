@@ -27,36 +27,48 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECTS_PSQL_ROLE_H
-#define DBOBJECTS_PSQL_ROLE_H
+#ifndef DBOBJECTS_FACTORY_SCHEMA_H
+#define DBOBJECTS_FACTORY_SCHEMA_H
 
-#include <common/DbRole.h>
-#include <QDate>
+#include <QtCore/qglobal.h>
 
 namespace DbObjects
 {
 
+namespace Common
+{
+class DbSchema;
+}
+
 namespace Psql
+{
+class Schema;
+}
+
+namespace Factory
 {
 
 /*!
- * \class Role
- * \headerfile psql/Role.h
- * \brief Defines PostgreSQL database role object
+ * \class Schema
+ * \headerfile factory/Schema.h
+ * \brief Defines database schema factory
  */
-class Role : public Common::DbRole
+class Schema
 {
     public:
-        Role(QString ipName = 0);
-        ~Role();
+        static Common::DbSchema* createSchema(const QString &ipName);
+
+    protected:
+        static Psql::Schema* createPsqlSchema(const QString &ipName);
+//        static Mysql::Schema* createMysqlSchema(const QString &ipName);
 
     private:
-        bool loadData();
+        Q_DISABLE_COPY(Schema);
 };
 
-} // namespace Psql
+} // namespace Factory
 
 } // namespace DbObjects
 
-#endif // DBOBJECTS_PSQL_ROLE_H
+#endif // DBOBJECTS_FACTORY_SCHEMA_H
 

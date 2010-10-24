@@ -89,12 +89,7 @@ class DbIndex : public DbObject
         bool isReady() const;
         void setReady(bool ipFlag);
 
-        /*!
-         * \see PsqlIndex::loadData()
-         * \see MysqlIndex::loadData()
-         */
-        /*! \todo remove next line */
-//        virtual void loadData() = 0;
+        virtual void resetData();
 
         virtual DbObject::Type type() const;
 

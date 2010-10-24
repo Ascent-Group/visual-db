@@ -123,14 +123,6 @@ Language::loadData()
     return true;
 }
 
-/*!
- * \todo Implement
- */
-void
-Language::resetData()
-{
-
-}
 
 } // namespace Psql
 

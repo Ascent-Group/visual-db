@@ -48,7 +48,7 @@ namespace Tools
 
 /*!
  * \todo Implement
- * \todo Comments
+ * \brief Detects the version of PostgreSQL
  * \return The version of PostgreSQL that is currently used
  */
 Tools::Version
@@ -66,6 +66,28 @@ version()
     /* \todo detect the version */
 
     return Tools::PostgreSQL_Unknown;
+}
+
+/*!
+ * \brief Read schemas that are available in the database
+ *
+ * \param[out] opList - The list that will containt schemas' names
+ *
+ * \return The number of schemas read.
+ */
+quint32
+schemasList(QStringList &opList)
+{
+    QString qstr = QString("SELECT "
+                               "nspname AS name, "
+                               "roles.rolname AS ownername, "
+                               "description "
+                           "FROM "
+                               "pg_catalog.pg_namespace pgn "
+                               "LEFT JOIN pg_roles roles ON roles.oid = pgn.nspowner "
+                               "LEFT JOIN pg_description descr ON descr.objoid = pgn.oid;");
+
+    return objectNamesList(qstr, opList);
 }
 
 /*!
@@ -150,8 +172,14 @@ rolesList(QStringList &opList)
 }
 
 /*!
+ * \brief Reads thelist of objects' names
+ *
  * \note The functions looks for a field by name 'name' !!!
- * \todo Comments
+ *
+ * \param[in] ipQstr - The query used to select names of objects
+ * \param[out] opList - List that will hold objects' names
+ *
+ * \return The number of names in the list
  */
 quint32
 objectNamesList(const QString &ipQstr, QStringList &opList)
@@ -178,11 +206,18 @@ objectNamesList(const QString &ipQstr, QStringList &opList)
         ++count;
     } while (query.next());
 
+    // we return count instead of opList.count() because opList might come not empty to
+    // this function (since it is passed by reference
     return count;
 }
 
 /*!
- * \todo Comments
+ * Read names of all tables in the given schema
+ *
+ * \param[in] ipSchemaName - The name of schema
+ * \param[out] opList - List that will contain names of tables
+ *
+ * \return The number of tables' names read from db
  */
 quint32
 tablesList(const QString &ipSchemaName, QStringList &opList)
@@ -196,7 +231,12 @@ tablesList(const QString &ipSchemaName, QStringList &opList)
 }
 
 /*!
- * \todo Comments
+ * Read names of all triggers in the given schema
+ *
+ * \param[in] ipSchemaName - The name of schema
+ * \param[out] opList - List that will contain names of triggers
+ *
+ * \return The number of triggers' names read from db
  */
 quint32
 triggersList(const QString &ipSchemaName, QStringList &opList)
@@ -239,7 +279,12 @@ triggersList(const QString &ipSchemaName, QStringList &opList)
 }
 
 /*!
- * \todo Comments
+ * Read names of all views in the given schema
+ *
+ * \param[in] ipSchemaName - The name of schema
+ * \param[out] opList - List that will contain names of views
+ *
+ * \return The number of views' names read from db
  */
 quint32
 viewsList(const QString &ipSchemaName, QStringList &opList)

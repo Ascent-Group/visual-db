@@ -55,7 +55,6 @@ class Table : public Common::DbTable
 
     private:
         bool loadData();
-        void resetData();
 };
 
 } // namespace Mysql

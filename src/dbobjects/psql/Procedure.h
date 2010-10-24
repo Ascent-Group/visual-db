@@ -51,7 +51,6 @@ class Procedure : public Common::DbProcedure
 
     private:
         bool loadData();
-        void resetData();
 
 };
 

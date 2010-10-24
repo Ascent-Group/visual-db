@@ -54,7 +54,7 @@ class DbView;
 class DbSchema : public DbObject
 {
     public:
-        DbSchema(QString ipName, DbRole *ipOwner);
+        DbSchema(QString ipName);
         virtual ~DbSchema();
 
         bool addTable(DbTable *ipTable);
@@ -89,7 +89,8 @@ class DbSchema : public DbObject
 
         virtual DbObject::Type type() const;
 
-        QString ownerName() const;
+        DbRole* owner() const;
+        void setOwner(DbRole *);
 
         QString description() const;
         void setDescription(const QString & ipDescription);

@@ -51,7 +51,6 @@ class Index : public Common::DbIndex
 
     private:
         bool loadData();
-        void resetData();
 };
 
 } // namespace Psql

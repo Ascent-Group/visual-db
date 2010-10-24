@@ -130,15 +130,6 @@ View::loadData()
     return true;
 }
 
-/*!
- * \todo Implement
- */
-void
-View::resetData()
-{
-
-}
-
 } // namespace Psql
 
 } // namespace DbObjects

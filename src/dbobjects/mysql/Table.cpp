@@ -268,15 +268,6 @@ Table::checkUnique(const QString &ipColumnName) const
     return query.first();
 }
 
-/*!
- * \todo Implement
- */
-void
-Table::resetData()
-{
-
-}
-
 } // namespace Mysql
 
 } // namespace DbObjects

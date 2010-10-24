@@ -51,7 +51,6 @@ class Language : public Common::DbLanguage
 
     private:
         bool loadData();
-        void resetData();
 };
 
 } // namespace Psql

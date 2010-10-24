@@ -46,7 +46,7 @@ MOC_DIR = .moc
 OBJECTS_DIR = .obj
 
 UI_DIR = .uic
-UI_HEADERS_DIR = gui/ui
+UI_HEADERS_DIR = $$OUT_PWD/gui/ui
 
 QMAKE_CXXFLAGS += -O2 -g2 -Wextra
 
@@ -67,6 +67,9 @@ SOURCES += $$PWD/main.cpp \
 RESOURCES += $$PWD/visual_db.qrc
 
 TRANSLATIONS += $$files($$PWD/*.ts)
+
+### Extra command to execute after linking the target
+#QMAKE_POST_LINK += ./run_test.sh
 
 ### Expanding clean target
 QMAKE_CLEAN += $$OUT_PWD/$$DESTDIR/$$TARGET

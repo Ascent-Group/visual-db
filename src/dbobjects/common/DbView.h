@@ -62,12 +62,7 @@ class DbView : public DbObject
         QString definition() const;
         void setDefinition(QString ipDef);
 
-        /*!
-         * \see PsqlView::loadData()
-         * \see MysqlView::loadData()
-         */
-        /*! \todo remove next line */
-//        virtual void loadData() = 0;
+        virtual void resetData();
 
         virtual DbObject::Type type() const;
 

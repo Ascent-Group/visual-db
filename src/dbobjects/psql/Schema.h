@@ -27,36 +27,27 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECTS_PSQL_ROLE_H
-#define DBOBJECTS_PSQL_ROLE_H
+#ifndef DBOBJECTS_PSQL_SCHEMA_H
+#define DBOBJECTS_PSQL_SCHEMA_H
 
-#include <common/DbRole.h>
-#include <QDate>
+#include <common/DbSchema.h>
 
 namespace DbObjects
 {
-
 namespace Psql
 {
 
-/*!
- * \class Role
- * \headerfile psql/Role.h
- * \brief Defines PostgreSQL database role object
- */
-class Role : public Common::DbRole
+class Schema : public DbObjects::Common::DbSchema
 {
     public:
-        Role(QString ipName = 0);
-        ~Role();
+        Schema(QString ipName);
+        ~Schema();
 
-    private:
-        bool loadData();
+        virtual bool loadData();
 };
 
 } // namespace Psql
-
 } // namespace DbObjects
 
-#endif // DBOBJECTS_PSQL_ROLE_H
+#endif // DBOBJECTS_PSQL_SCHEMA_H
 

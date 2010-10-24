@@ -62,6 +62,7 @@ namespace Tools
 
     Tools::Version version();
 
+    quint32 schemasList(QStringList &opList);
     quint32 indicesList(QStringList &opList);
     quint32 languagesList(QStringList &opList);
     quint32 proceduresList(const QString &ipSchemaName, QStringList &opList);

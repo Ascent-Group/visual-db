@@ -57,9 +57,8 @@ namespace Common
  * On creation automatically adds newly created schema object to
  * a Database's vector of schemas
  */
-DbSchema::DbSchema(QString ipName, DbRole *ipOwner)
-    :DbObject(ipName),
-     mOwner(ipOwner)
+DbSchema::DbSchema(QString ipName)
+    : DbObject(ipName)
 {
 }
 
@@ -653,12 +652,23 @@ DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) c
 }
 
 /*!
- * \return Name of the given schema's owner
+ * \return Handle to owner object
  */
-QString
-DbSchema::ownerName() const
+DbRole*
+DbSchema::owner() const
 {
-    return mOwner->name();
+    return mOwner;
+}
+
+/*!
+ * \brief Set owner of schema
+ *
+ * \param[in] ipRole - handle for role object
+ */
+void
+DbSchema::setOwner(DbRole *ipRole)
+{
+    mOwner = ipRole;
 }
 
 /*!

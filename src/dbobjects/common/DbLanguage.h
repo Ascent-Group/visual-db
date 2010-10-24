@@ -51,12 +51,7 @@ class DbLanguage : public DbObject
         bool isTrusted() const;
         void setTrusted(bool ipFlag);
 
-        /*!
-         * \see PsqlLanguage::loadData()
-         * \see MysqlLanguage::loadData()
-         */
-        /*! \todo remove next line */
-//        virtual void loadData() = 0;
+        virtual void resetData();
 
         virtual DbObject::Type type() const;
 

@@ -163,15 +163,6 @@ Role::loadData()
     return true;
 }
 
-/*!
- * \todo Implement
- */
-void
-Role::resetData()
-{
-
-}
-
 } // namespace Psql
 
 } // namespace DbObjects

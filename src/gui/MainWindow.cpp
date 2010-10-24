@@ -803,7 +803,6 @@ MainWindow::saveSession()
 {
     using namespace Consts;
     QString defaultFileName = "session_" +
-        /*! \todo Fix these hard coded strings approach */
         mSettings.value(LAST_SESSION_GRP + "/" + DB_NAME_SETTING, "undefined").toString() + "_" +
         mSettings.value(LAST_SESSION_GRP + "/" + DB_USER_SETTING, "undefined").toString() + "_" +
         QDate::currentDate().toString(Qt::DefaultLocaleShortDate) + "_" + QTime::currentTime().toString() + ".vdb";

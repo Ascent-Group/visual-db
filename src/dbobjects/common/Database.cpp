@@ -34,6 +34,7 @@
 #include <factory/Index.h>
 #include <factory/Language.h>
 #include <factory/Role.h>
+#include <factory/Schema.h>
 #include <mysql/Tools.h>
 #include <psql/Role.h>
 #include <psql/Tools.h>
@@ -519,9 +520,7 @@ Database::sqlDriver() const
 void
 Database::readSchemas()
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
-    QString qstr;
+    QStringList schemasNamesList;
 
     // clear schemas list
     mSchemas.clear();
@@ -531,20 +530,10 @@ Database::readSchemas()
         case Database::Unknown:
             qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
         case Database::PostgreSQL:
-            qstr = QString("SELECT "
-                                "nspname as name, "
-                                "roles.rolname as ownername, "
-                                "description "
-                           "FROM "
-                                "pg_catalog.pg_namespace pgn "
-                                "left join pg_roles roles on roles.oid = pgn.nspowner "
-                                "left join pg_description descr on descr.objoid = pgn.oid "
-                    ";");
-                    //"WHERE nspname NOT LIKE 'pg_%';");
+            Psql::Tools::schemasList(schemasNamesList);
             break;
         case Database::MySQL:
-            qstr = QString("SELECT schema_name "
-                    "FROM information_schema.schemata;");
+            Mysql::Tools::schemasList(schemasNamesList);
             break;
         case Database::Oracle:
         case Database::SQLite:
@@ -554,65 +543,16 @@ Database::readSchemas()
             break;
     }
 
-#ifdef DEBUG_QUERY
-    qDebug() << __PRETTY_FUNCTION__ << qstr;
-#endif
-
-    // if query execution failed
-    if (!query.exec(qstr)) {
-        qDebug() << __PRETTY_FUNCTION__ << "> Unable to retrieve schemas.";
-        qDebug() << __PRETTY_FUNCTION__ << query.lastError().text();
-
-        return;
-    }
-
-    // if query returned nothing
-    if (!query.first()) {
-        qDebug() << __PRETTY_FUNCTION__ << "> No schemas were found.";
-
-        return;
-    }
-
     // for every retrieved row
-    do {
-        // get data from query
-        qint32 colId = query.record().indexOf("name");
-        QString name = query.value(colId).toString();
-
-        colId = query.record().indexOf("ownername");
-        QString ownerName = query.value(colId).toString();
-
-        colId = query.record().indexOf("description");
-        QString description = query.value(colId).toString();
-
-        // find owner for scheme
-        DbRole *dbRole = findRole(ownerName);
-        Q_CHECK_PTR(dbRole);
-
+    foreach (const QString &name, schemasNamesList) {
         // create new schema object
-        DbSchema *schema = new(std::nothrow) DbSchema(name, dbRole);
+        DbSchema *schema = Factory::Schema::createSchema(name);
 
         Q_CHECK_PTR(schema);
 
-        // set scheme description
-        schema->setDescription(description);
-
-        /*!
-         * We need to add schema to database's vector BEFORE we start
-         * caling schema->read*() methods !!!
-         */
-        addSchema(schema);
-
-        // read tables
-        schema->readTables();
-        // read views
-        schema->readViews();
-        // read procs
-        schema->readProcedures();
-        // read trigs
-        schema->readTriggers();
-
-    } while (query.next());
+        // \note Adding schema will be done in Schema::loadData()
+        //addSchema(schema);
+    }
 }
 
 /*!

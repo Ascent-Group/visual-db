@@ -207,15 +207,6 @@ Trigger::loadData()
     return true;
 }
 
-/*!
- * \todo Implement
- */
-void
-Trigger::resetData()
-{
-
-}
-
 } // namespace Psql
 
 } // namespace DbObjects

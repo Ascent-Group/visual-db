@@ -326,6 +326,29 @@ DbIndex::setReady(bool ipFlag)
 }
 
 /*!
+ * \todo Reset index description read from database
+ */
+void
+DbIndex::resetData()
+{
+    /*! \todo Implement */
+    mTableName = "";
+    mSchemaName = "";
+    mTable = 0;
+    mSchema = 0;
+    mColumnsCount = 0;
+    mColumnsNumbers.clear();
+    mIsUnique = false;
+    mIsPrimary = false;
+    mIsClustered = false;
+    mIsValid = false;
+    mChecksXMin = false;
+    mIsReady = false;
+
+    DbObject::resetData();
+}
+
+/*!
  * \return Database object type
  */
 DbObject::Type

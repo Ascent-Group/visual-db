@@ -50,7 +50,6 @@ class Trigger : public Common::DbTrigger
         ~Trigger();
 
         bool loadData();
-        void resetData();
 };
 
 } // namespace Psql

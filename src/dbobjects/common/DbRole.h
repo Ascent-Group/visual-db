@@ -76,13 +76,7 @@ class DbRole : public DbObject
         quint64 id() const;
         void setId(quint64 ipId);
 
-        /*!
-         * \see PsqlRole::loadData()
-         * \see MysqlRole::loadData()
-         */
-        /*! \todo remove next line */
-//        virtual void loadData() = 0;
-        // lyuts: for future use
+        virtual void resetData();
         // virtual void save() = 0;
 
         virtual DbObject::Type type() const;

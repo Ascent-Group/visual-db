@@ -288,6 +288,28 @@ DbTrigger::type() const
     return DbObject::TriggerObject;
 }
 
+/*!
+ * \brief Resets data read from database
+ */
+void
+DbTrigger::resetData()
+{
+    /*! \todo Implement */
+    mSchemaName = "";
+    mTable = 0;
+    mSchema = 0;
+    mProcedure = 0;
+    mEnabled = 0;
+    mIsConstraint = false;
+    mConstraintName = "";
+    mReferencedTable = 0;
+    mIsDeferrable = false;
+    mIsInitiallyDeferred = false;
+    mNumArgs = 0;
+
+    DbObject::resetData();
+}
+
 } // namespace Common
 
 } // namespace DbObjects

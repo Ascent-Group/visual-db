@@ -240,6 +240,26 @@ DbRole::setId(quint64 ipId)
 }
 
 /*!
+ * \brief Resets role description read from database
+ */
+void
+DbRole::resetData()
+{
+    /*! \todo Implement */
+    mIsSuperUser = false;
+    mInheritsPrivileges = false;
+    mCanCreateRole = false;
+    mCanCreateDb = false;
+    mCanUpdateSysCat = false;
+    mCanLogin = false;
+    mConnectionLimit = 0;
+    mExpiryDate = QDate();
+    mId = 0;
+
+    DbObject::resetData();
+}
+
+/*!
  * \return Database object type
  *
  * \see DbObject::Type

@@ -54,7 +54,7 @@ Table::Table(QString ipSchemaName, QString ipTableName)
     :DbTable(ipSchemaName, ipTableName)
 {
     // load column definitions
-    loadData();
+//    loadData();
 }
 
 /*!
@@ -350,15 +350,6 @@ Table::checkUnique(const QString &ipColumnName) const
 
     // unique constraint definition found
     return query.first();
-}
-
-/*!
- * \todo Implement
- */
-void
-Table::resetData()
-{
-
 }
 
 } // namespace Psql

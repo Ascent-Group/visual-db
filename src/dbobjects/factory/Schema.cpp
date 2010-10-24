@@ -27,36 +27,74 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECTS_PSQL_ROLE_H
-#define DBOBJECTS_PSQL_ROLE_H
-
-#include <common/DbRole.h>
-#include <QDate>
+#include <common/Database.h>
+#include <factory/Schema.h>
+//#include <mysql/Schema.h>
+#include <psql/Schema.h>
 
 namespace DbObjects
 {
 
-namespace Psql
+namespace Factory
 {
 
 /*!
- * \class Role
- * \headerfile psql/Role.h
- * \brief Defines PostgreSQL database role object
+ * \param[in] ipName - Name of the schema to construct
+ *
+ * \return Database schema objects
  */
-class Role : public Common::DbRole
+DbObjects::Common::DbSchema*
+Schema::createSchema(const QString &ipName)
 {
-    public:
-        Role(QString ipName = 0);
-        ~Role();
+    using namespace DbObjects::Common;
 
-    private:
-        bool loadData();
-};
+    DbSchema *schema = 0;
 
-} // namespace Psql
+    switch (Database::instance()->sqlDriver()) {
+        case Database::PostgreSQL:
+                schema = createPsqlSchema(ipName);
+                break;
+        case Database::MySQL:
+//                schema = createMysqlSchema(ipName);
+                break;
+        case Database::Oracle:
+        case Database::SQLite:
+        case Database::Unknown:
+        default:
+                break;
+    }
+
+    // if the schema creation failed or schema inforamtion could not be read from database.
+    if (!schema || !schema->loadData()) {
+        delete schema;
+        schema = 0;
+    }
+
+    return schema;
+}
+
+/*!
+ * \param[in] ipName - Name of schema to construct
+ * \return Pointer to PostgreSQL schema object
+ */
+Psql::Schema*
+Schema::createPsqlSchema(const QString &ipName)
+{
+    return new Psql::Schema(ipName);
+}
+
+/*!
+ *
+ * \param[in] ipName - Name of schema to construct
+ * \return Pointer to MySQL schema object
+ */
+//Mysql::Schema*
+//Schema::createMysqlSchema(const QString &ipName)
+//{
+//    return new Mysql::Schema(ipName);
+//}
+
+} // namespace Factory
 
 } // namespace DbObjects
-
-#endif // DBOBJECTS_PSQL_ROLE_H
 

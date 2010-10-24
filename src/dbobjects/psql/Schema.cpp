@@ -27,10 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <common/DbSchema.h>
-#include <psql/Language.h>
-#include <psql/Procedure.h>
-#include <psql/Role.h>
+#include <psql/Schema.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -41,100 +38,88 @@
 
 namespace DbObjects
 {
-
 namespace Psql
 {
 
-/*
- * Ctor
+/*!
+ * Constructor
  */
-Procedure::Procedure(QString ipSchemaName, QString ipName)
-    : DbProcedure(ipSchemaName, ipName)
+Schema::Schema(QString ipName)
+    : Common::DbSchema(ipName)
 {
 
 }
 
-/*
- * Dtor
+/*!
+ * Destructor
  */
-Procedure::~Procedure()
+Schema::~Schema()
 {
 
 }
 
-/*
- * Loads database proc's definition
+/*!
+ * \brief Load the definition of the given schema
+ * \return true - If the loading succeeded
+ * \return false - Otherwise
  */
 bool
-Procedure::loadData()
+Schema::loadData()
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;
 
-    // prepare a query
     qstr = QString("SELECT "
-                        "p.proname AS name, "
-                        "n.nspname AS schema, "
-                        "o.rolname AS owner, "
-                        "l.lanname AS lang, "
-                        "p.prosrc AS src "
-                    "FROM "
-                        "pg_catalog.pg_proc p, "
-                        "pg_catalog.pg_namespace n, "
-                        "pg_catalog.pg_roles o, "
-                        "pg_catalog.pg_language l "
-                    "WHERE "
-                        "p.pronamespace = n.oid "
-                        "AND p.proowner = o.oid "
-                        "AND p.prolang = l.oid "
-                        "AND p.proname = '%1' "
-                        "AND n.nspname = '%2';")
-            .arg(mName)
-            .arg(mSchemaName);
+//                       "nspname AS name, "
+                       "roles.rolname AS ownername, "
+                       "description "
+                   "FROM "
+                       "pg_catalog.pg_namespace pgn "
+                       "LEFT JOIN pg_roles roles ON roles.oid = pgn.nspowner "
+                       "LEFT JOIN pg_description descr ON descr.objoid = pgn.oid "
+                   "WHERE "
+                       "nspname = '%1';")
+        .arg(mName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "Procedure::loadData> " << qstr;
+    qDebug() << "Psql::Role::loadData> " << qstr;
 #endif
 
-    // if query execution failed
+    // if query failed
     if (!query.exec(qstr)) {
         qDebug() << query.lastError().text();
-
-        return false;;
+        return false;
     }
 
-    // if record was not found
+    // if query didn't retrieve a row
     if (!query.first()) {
         return false;
     }
 
-    qint32 colId = query.record().indexOf("owner");
-    Q_ASSERT(colId > 0);
+    // get data from query
+    int colId = 0;
+    colId = query.record().indexOf("ownername");
     QString ownerName = query.value(colId).toString();
-    mOwner = Common::Database::instance()->findRole(ownerName);
 
-    colId = query.record().indexOf("lang");
-    Q_ASSERT(colId > 0);
-    QString languageName = query.value(colId).toString();
-    mLanguage = Common::Database::instance()->findLanguage(languageName);
+    colId = query.record().indexOf("description");
+    QString description = query.value(colId).toString();
 
-    colId = query.record().indexOf("src");
-    Q_ASSERT(colId > 0);
-    mSourceCode = query.value(colId).toString();
+    // find owner for scheme
+    Common::DbRole *dbRole = Common::Database::instance()->findRole(ownerName);
+    Q_CHECK_PTR(dbRole);
 
-#if DEBUG_TRACE
-    qDebug() << "Psql::Procedure::loadData> name = " << mName;
-    qDebug() << "Psql::Procedure::loadData> schema = " << mSchema->name();
-    qDebug() << "Psql::Procedure::loadData> owner = " << mOwner->name();
-    qDebug() << "Psql::Procedure::loadData> lang = " << mLanguage->name();
-    qDebug() << "Psql::Procedure::loadData> src = " << mSourceCode;
-#endif
+    setOwner(dbRole);
 
-    return true;
+    // set scheme description
+    setDescription(description);
+
+    // we should add schema to database vector BEFORE we start calling read* functions
+    Common::Database::instance()->addSchema(this);
+
+    return DbSchema::loadData();
 }
 
 } // namespace Psql
-
 } // namespace DbObjects
 

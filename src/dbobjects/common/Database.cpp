@@ -550,8 +550,11 @@ Database::readSchemas()
 
         Q_CHECK_PTR(schema);
 
-        // \note Adding schema will be done in Schema::loadData()
-        //addSchema(schema);
+        // we should add schema to database vector BEFORE we start calling read* functions
+        addSchema(schema);
+
+        qDebug() << "#####";
+        schema->loadData();
     }
 }
 

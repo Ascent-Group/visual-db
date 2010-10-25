@@ -120,7 +120,7 @@ Language::loadData()
     qDebug() << "Language::loadData> trusted = " << mIsTrusted;
 #endif
 
-    return true;
+    return DbLanguage::loadData();
 }
 
 

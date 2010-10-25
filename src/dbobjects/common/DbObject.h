@@ -68,12 +68,14 @@ class DbObject
 
         /*! \see Descendants' implementation */
         virtual DbObject::Type type() const = 0;
-        virtual bool loadData() = 0;
+        virtual bool loadData();
         virtual void resetData();
 
     protected:
         /*! Name of db object */
         QString mName;
+
+        bool mIsLoaded;
 
     protected:
         DbObject(QString ipName = 0);

@@ -532,6 +532,8 @@ DbSchema::loadData()
     readProcedures();
     readTriggers();
 
+    mIsLoaded = true;
+
     return true;
 }
 

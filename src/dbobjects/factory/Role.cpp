@@ -69,10 +69,10 @@ Role::createRole(const QString &ipName)
     }
 
     // if role creation failed or role information cannont be read from database
-    if (!role || !role->loadData()) {
-        delete role;
-        role = 0;
-    }
+//    if (!role || !role->loadData()) {
+//        delete role;
+//        role = 0;
+//    }
 
     return role;
 }

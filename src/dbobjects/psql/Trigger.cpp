@@ -204,7 +204,7 @@ Trigger::loadData()
     qDebug() << "Psql::Trigger::loadData> nargs = " << mNumArgs;
 #endif
 
-    return true;
+    return DbTrigger::loadData();
 }
 
 } // namespace Psql

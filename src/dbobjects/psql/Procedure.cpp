@@ -131,7 +131,7 @@ Procedure::loadData()
     qDebug() << "Psql::Procedure::loadData> src = " << mSourceCode;
 #endif
 
-    return true;
+    return DbProcedure::loadData();
 }
 
 } // namespace Psql

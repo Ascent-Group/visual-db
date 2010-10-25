@@ -39,7 +39,8 @@ namespace Common
  * Ctor
  */
 DbObject::DbObject(QString ipName)
-    : mName(ipName)
+    : mName(ipName),
+      mIsLoaded(false)
 {
 
 }
@@ -73,12 +74,27 @@ DbObject::setName(const QString &ipName)
 }
 
 /*!
+ * \brief Loads object informaton from datase
+ *
+ * \return true If the information has been successfully read
+ * \return false Otherwise
+ */
+bool
+DbObject::loadData()
+{
+    mIsLoaded = true;
+
+    return true;
+}
+
+/*!
  * \brief Resets object information read from database
  */
 void
 DbObject::resetData()
 {
     mName = "";
+    mIsLoaded = false;
 }
 
 } // namespace Common

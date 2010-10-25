@@ -66,6 +66,10 @@ DbTable::~DbTable()
 quint16
 DbTable::columnsCount() const
 {
+    // \todo Solve this problem: due to lazy intialization, we check whether the object
+    // has been read from db in each public getter. But each getter has const qualifier!
+    // So it looks like we are trying to modify an object in a const method.
+//    loadData();
     return mColumnDefs.size();
 }
 

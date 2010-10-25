@@ -65,10 +65,10 @@ Schema::createSchema(const QString &ipName)
     }
 
     // if the schema creation failed or schema inforamtion could not be read from database.
-    if (!schema || !schema->loadData()) {
-        delete schema;
-        schema = 0;
-    }
+//    if (!schema || !schema->loadData()) {
+//        delete schema;
+//        schema = 0;
+//    }
 
     return schema;
 }
@@ -80,7 +80,7 @@ Schema::createSchema(const QString &ipName)
 Psql::Schema*
 Schema::createPsqlSchema(const QString &ipName)
 {
-    return new Psql::Schema(ipName);
+    return new(std::nothrow) Psql::Schema(ipName);
 }
 
 /*!

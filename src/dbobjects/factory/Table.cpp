@@ -66,10 +66,10 @@ Table::createTable(const QString &ipSchemaName, const QString &ipName)
     }
 
     //if the table creation failed or table inforamtion could not be read from database.
-    if (!table || !table->loadData()) {
-        delete table;
-        table = 0;
-    }
+//    if (!table || !table->loadData()) {
+//        delete table;
+//        table = 0;
+//    }
 
     return table;
 }
@@ -83,7 +83,7 @@ Table::createTable(const QString &ipSchemaName, const QString &ipName)
 Psql::Table*
 Table::createPsqlTable(const QString &ipSchemaName, const QString &ipName)
 {
-    return new Psql::Table(ipSchemaName, ipName);
+    return new(std::nothrow) Psql::Table(ipSchemaName, ipName);
 }
 
 /*!

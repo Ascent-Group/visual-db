@@ -114,9 +114,6 @@ Schema::loadData()
     // set scheme description
     setDescription(description);
 
-    // we should add schema to database vector BEFORE we start calling read* functions
-    Common::Database::instance()->addSchema(this);
-
     return DbSchema::loadData();
 }
 

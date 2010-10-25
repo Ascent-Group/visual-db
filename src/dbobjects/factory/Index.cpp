@@ -65,10 +65,10 @@ Index::createIndex(const QString &ipName)
     }
 
     //if the index creation failed or index inforamtion could not be read from database.
-    if (!index || !index->loadData()) {
-        delete index;
-        index = 0;
-    }
+//    if (!index || !index->loadData()) {
+//        delete index;
+//        index = 0;
+//    }
 
     return index;
 }
@@ -80,7 +80,7 @@ Index::createIndex(const QString &ipName)
 Psql::Index*
 Index::createPsqlIndex(const QString &ipName)
 {
-    return new Psql::Index(ipName);
+    return new(std::nothrow) Psql::Index(ipName);
 }
 
 /*!

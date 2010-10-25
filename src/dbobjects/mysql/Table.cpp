@@ -154,6 +154,8 @@ Table::loadData()
         return true;
     }
 
+    mIsLoaded = true;
+
     return false;
 }
 

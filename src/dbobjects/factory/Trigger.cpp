@@ -65,10 +65,10 @@ Trigger::createTrigger(const QString &ipSchemaName, const QString &ipName)
     }
 
     //if the trigger creation failed or trigger inforamtion could not be read from database.
-    if (!trigger || !trigger->loadData()) {
-        delete trigger;
-        trigger = 0;
-    }
+//    if (!trigger || !trigger->loadData()) {
+//        delete trigger;
+//        trigger = 0;
+//    }
 
     return trigger;
 }
@@ -82,7 +82,7 @@ Trigger::createTrigger(const QString &ipSchemaName, const QString &ipName)
 Psql::Trigger*
 Trigger::createPsqlTrigger(const QString &ipSchemaName, const QString &ipName)
 {
-    return new Psql::Trigger(ipSchemaName, ipName);
+    return new(std::nothrow) Psql::Trigger(ipSchemaName, ipName);
 }
 
 /*!

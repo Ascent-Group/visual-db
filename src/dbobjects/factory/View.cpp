@@ -65,10 +65,10 @@ View::createView(const QString &ipSchemaName, const QString &ipName)
     }
 
     //if the view creation failed or view inforamtion could not be read from database.
-    if (!view || !view->loadData()) {
-        delete view;
-        view = 0;
-    }
+//    if (!view || !view->loadData()) {
+//        delete view;
+//        view = 0;
+//    }
 
     return view;
 }
@@ -82,7 +82,7 @@ View::createView(const QString &ipSchemaName, const QString &ipName)
 Psql::View*
 View::createPsqlView(const QString &ipSchemaName, const QString &ipName)
 {
-    return new Psql::View(ipSchemaName, ipName);
+    return new(std::nothrow) Psql::View(ipSchemaName, ipName);
 }
 
 /*!

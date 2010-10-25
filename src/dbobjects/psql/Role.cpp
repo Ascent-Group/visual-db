@@ -160,7 +160,7 @@ Role::loadData()
     qDebug() << "Psql::Role::mId: " << mId;
 #endif
 
-    return true;
+    return DbRole::loadData();
 }
 
 } // namespace Psql

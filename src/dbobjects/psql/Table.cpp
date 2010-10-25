@@ -154,7 +154,7 @@ Table::loadData()
         mColumnDefs.push_back(cDef);
     } while (query.next());
 
-    return true;
+    return DbTable::loadData();
 }
 
 /*!

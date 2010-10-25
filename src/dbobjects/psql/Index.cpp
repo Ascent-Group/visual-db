@@ -192,7 +192,7 @@ Index::loadData()
     qDebug() << "mColumnsNumbers: " << mColumnsNumbers;
 #endif
 
-    return true;
+    return DbIndex::loadData();
 }
 
 } // namespace Psql

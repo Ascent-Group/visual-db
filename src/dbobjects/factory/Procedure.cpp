@@ -65,10 +65,10 @@ Procedure::createProcedure(const QString &ipSchemaName, const QString &ipName)
     }
 
     //if the procedure creation failed or procedure inforamtion could not be read from database.
-    if (!procedure || !procedure->loadData()) {
-        delete procedure;
-        procedure = 0;
-    }
+//    if (!procedure || !procedure->loadData()) {
+//        delete procedure;
+//        procedure = 0;
+//    }
 
     return procedure;
 }
@@ -82,7 +82,7 @@ Procedure::createProcedure(const QString &ipSchemaName, const QString &ipName)
 Psql::Procedure*
 Procedure::createPsqlProcedure(const QString &ipSchemaName, const QString &ipName)
 {
-    return new Psql::Procedure(ipSchemaName, ipName);
+    return new(std::nothrow) Psql::Procedure(ipSchemaName, ipName);
 }
 
 /*!

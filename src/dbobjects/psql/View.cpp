@@ -127,7 +127,7 @@ View::loadData()
     qDebug() << "Psql::View::loadData> def = " << mDefinition;
 #endif
 
-    return true;
+    return DbView::loadData();
 }
 
 } // namespace Psql

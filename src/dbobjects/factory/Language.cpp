@@ -62,10 +62,10 @@ Language::createLanguage(const QString &ipName)
     }
 
     // if language creation failed or the information cannot be read from database
-    if (!lang || !lang->loadData()) {
-        delete lang;
-        lang = 0;
-    }
+//    if (!lang || !lang->loadData()) {
+//        delete lang;
+//        lang = 0;
+//    }
 
     return lang;
 }

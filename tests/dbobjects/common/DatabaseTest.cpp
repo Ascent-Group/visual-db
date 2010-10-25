@@ -203,7 +203,7 @@ DatabaseTest::addSchemaTest()
     QVERIFY(0 < count);
 
     // add dummy schema
-    Common::DbSchema *dummySchema = new(std::nothrow) Common::DbSchema("dummy", mDbInst->findRole("music_user"));
+    Common::DbSchema *dummySchema = new(std::nothrow) Common::DbSchema("dummy");
 
     QVERIFY(0 != dummySchema);
 
@@ -230,10 +230,11 @@ DatabaseTest::resetDataTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->readIndices();
-    mDbInst->readLanguages();
-    mDbInst->readRoles();
-    mDbInst->readSchemas();
+    mDbInst->loadData();
+//    mDbInst->readIndices();
+//    mDbInst->readLanguages();
+//    mDbInst->readRoles();
+//    mDbInst->readSchemas();
 
     QVERIFY(0 != mDbInst->indicesCount());
     QVERIFY(0 != mDbInst->languagesCount());
@@ -311,9 +312,7 @@ DatabaseTest::findTableIndicesTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->readIndices();
-    mDbInst->readRoles();
-    mDbInst->readSchemas();
+    mDbInst->loadData();
 
     QVector<Common::DbIndex*> indicesList;
 
@@ -335,10 +334,7 @@ DatabaseTest::flushTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->readIndices();
-    mDbInst->readLanguages();
-    mDbInst->readRoles();
-    mDbInst->readSchemas();
+    mDbInst->loadData();
 
     QVERIFY(0 != mDbInst->indicesCount());
     QVERIFY(0 != mDbInst->languagesCount());
@@ -516,9 +512,7 @@ DatabaseTest::readSchemasTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->readRoles();
-    // read schemas
-    mDbInst->readSchemas();
+    mDbInst->loadData();
 
     Common::DbSchema *schema;
     // validate their names
@@ -584,8 +578,7 @@ DatabaseTest::schemasCountTest()
 
     QCOMPARE(mDbInst->schemasCount(), (quint64)0);
 
-    mDbInst->readRoles();
-    mDbInst->readSchemas();
+    mDbInst->loadData();
 
 //    QDEBUG_PRINT_ALL(schemas);
 
@@ -607,8 +600,7 @@ DatabaseTest::schemasListTest()
           << "information_schema"
           << "vtunes";
 
-    mDbInst->readRoles();
-    mDbInst->readSchemas();
+    mDbInst->loadData();
 
     QStringList schemasList;
 

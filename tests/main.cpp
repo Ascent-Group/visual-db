@@ -43,6 +43,13 @@
 #include <dbobjects/common/DbTableTest.h>
 #include <dbobjects/common/DbTriggerTest.h>
 #include <dbobjects/common/DbViewTest.h>
+#include <dbobjects/factory/IndexFactoryTest.h>
+#include <dbobjects/factory/LanguageFactoryTest.h>
+#include <dbobjects/factory/ProcedureFactoryTest.h>
+#include <dbobjects/factory/RoleFactoryTest.h>
+#include <dbobjects/factory/TableFactoryTest.h>
+#include <dbobjects/factory/TriggerFactoryTest.h>
+#include <dbobjects/factory/ViewFactoryTest.h>
 #include <dbobjects/mysql/MysqlTableTest.h>
 #include <dbobjects/mysql/MysqlToolsTest.h>
 #include <dbobjects/psql/PsqlIndexTest.h>
@@ -207,33 +214,54 @@ int main(int argc, char *argv[])
     DbIndexTest dbIndexTest;
     QTest::qExec(&dbIndexTest, argc, argv);
 
-//    DbLanguageTest dbLanguageTest;
-//    QTest::qExec(&dbLanguageTest, argc, argv);
-//
-//    DbObjectTest dbObjectTest;
-//    QTest::qExec(&dbObjectTest, argc, argv);
-//
-//    DbProcedureTest dbProcedureTest;
-//    QTest::qExec(&dbProcedureTest, argc, argv);
-//
-//    DbRoleTest dbRoleTest;
-//    QTest::qExec(&dbRoleTest, argc, argv);
-//
-//    DbSchemaTest dbSchemaTest;
-//    QTest::qExec(&dbSchemaTest, argc, argv);
-//
-//    DbTableTest dbTableTest;
-//    QTest::qExec(&dbTableTest, argc, argv);
-//
-//    DbTriggerTest dbTriggerTest;
-//    QTest::qExec(&dbTriggerTest, argc, argv);
-//
-//    DbViewTest dbViewTest;
-//    QTest::qExec(&dbViewTest, argc, argv);
-//
-//    MysqlTableTest mysqlTableTest;
-//    QTest::qExec(&mysqlTableTest, argc, argv);
-//
+    DbLanguageTest dbLanguageTest;
+    QTest::qExec(&dbLanguageTest, argc, argv);
+
+    DbObjectTest dbObjectTest;
+    QTest::qExec(&dbObjectTest, argc, argv);
+
+    DbProcedureTest dbProcedureTest;
+    QTest::qExec(&dbProcedureTest, argc, argv);
+
+    DbRoleTest dbRoleTest;
+    QTest::qExec(&dbRoleTest, argc, argv);
+
+    DbSchemaTest dbSchemaTest;
+    QTest::qExec(&dbSchemaTest, argc, argv);
+
+    DbTableTest dbTableTest;
+    QTest::qExec(&dbTableTest, argc, argv);
+
+    DbTriggerTest dbTriggerTest;
+    QTest::qExec(&dbTriggerTest, argc, argv);
+
+    DbViewTest dbViewTest;
+    QTest::qExec(&dbViewTest, argc, argv);
+
+    IndexFactoryTest indexFactoryTest;
+    QTest::qExec(&indexFactoryTest, argc, argv);
+
+    LanguageFactoryTest languageFactoryTest;
+    QTest::qExec(&languageFactoryTest, argc, argv);
+
+    ProcedureFactoryTest procedureFactoryTest;
+    QTest::qExec(&procedureFactoryTest, argc, argv);
+
+    RoleFactoryTest roleFactoryTest;
+    QTest::qExec(&roleFactoryTest, argc, argv);
+
+    TableFactoryTest tableFactoryTest;
+    QTest::qExec(&tableFactoryTest, argc, argv);
+
+    TriggerFactoryTest triggerFactoryTest;
+    QTest::qExec(&triggerFactoryTest, argc, argv);
+
+    ViewFactoryTest viewFactoryTest;
+    QTest::qExec(&viewFactoryTest, argc, argv);
+
+    MysqlTableTest mysqlTableTest;
+    QTest::qExec(&mysqlTableTest, argc, argv);
+
 //    PsqlIndexTest psqlIndexTest;
 //    QTest::qExec(&psqlIndexTest, argc, argv);
 //

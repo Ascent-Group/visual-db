@@ -58,7 +58,13 @@ namespace Common
  * a Database's vector of schemas
  */
 DbSchema::DbSchema(QString ipName)
-    : DbObject(ipName)
+    : DbObject(ipName),
+      mOwner(0),
+      mDescription(""),
+      mTables(),
+      mViews(),
+      mProcedures(),
+      mTriggers()
 {
 }
 

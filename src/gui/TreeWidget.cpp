@@ -114,24 +114,23 @@ TreeWidget::refresh()
     // populate object tree
     // (better place rather than inside ctor)
     DbObjects::Common::Database *dbInst = DbObjects::Common::Database::instance();
+    dbInst->resetData();
+    dbInst->loadData();
 
     //// ROLES
     // read roles
-    dbInst->readRoles();
     QStringList rolesList;
     dbInst->rolesList(&rolesList);
     insertItems(rolesNode, &rolesList, TreeWidget::RoleItem);
 
     //// LANGS
     // get and sort langs list
-    dbInst->readLanguages();
     QStringList langsList;
     dbInst->languagesList(&langsList);
     insertItems(langsNode, &langsList, TreeWidget::LanguageItem);
 
     //// SCHEMAS
     // get and sort schemas list
-    dbInst->readSchemas();
     QStringList schemasList;
     dbInst->schemasList(&schemasList);
 
@@ -196,7 +195,6 @@ TreeWidget::refresh()
     }
 
     //// INDICES
-    dbInst->readIndices();
 
     // get and sort indices list
     QStringList indicesList;

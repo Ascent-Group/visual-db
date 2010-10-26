@@ -65,6 +65,7 @@ Database *Database::mInstance = 0;
  * Constructor
  */
 Database::Database()
+    // \todo Initialization list should not be empty
 {
 
 }

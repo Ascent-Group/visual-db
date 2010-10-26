@@ -44,7 +44,11 @@ namespace Common
  * \param[in] ipName - View name
  */
 DbView::DbView(QString ipSchemaName, QString ipName)
-    : DbObject(ipName), mSchemaName(ipSchemaName)
+    : DbObject(ipName),
+      mSchemaName(ipSchemaName),
+      mSchema(0),
+      mOwner(0),
+      mDefinition("")
 {
     setSchema(Database::instance()->findSchema(mSchemaName));
 }

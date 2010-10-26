@@ -42,7 +42,8 @@ namespace Common
  * \param[in] ipName - Name of the language
  */
 DbLanguage::DbLanguage(QString ipName)
-    : DbObject(ipName)
+    : DbObject(ipName),
+      mIsTrusted(false)
 {
 
 }

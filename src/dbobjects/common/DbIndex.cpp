@@ -43,7 +43,19 @@ namespace Common
  * Ctor
  */
 DbIndex::DbIndex(QString ipName)
-    : DbObject(ipName)
+    : DbObject(ipName),
+      mTableName(""),
+      mSchemaName(""),
+      mTable(0),
+      mSchema(0),
+      mColumnsCount(0),
+      mColumnsNumbers(),
+      mIsUnique(false),
+      mIsPrimary(false),
+      mIsClustered(false),
+      mIsValid(false),
+      mChecksXMin(false),
+      mIsReady(false)
 {
 
 }

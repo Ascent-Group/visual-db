@@ -42,7 +42,12 @@ namespace Common
  * parent schema object with setSchema() function.
  */
 DbProcedure::DbProcedure(QString ipSchemaName, QString ipName)
-    : DbObject(ipName), mSchemaName(ipSchemaName)
+    : DbObject(ipName),
+      mSchemaName(ipSchemaName),
+      mSchema(0),
+      mOwner(0),
+      mLanguage(0),
+      mSourceCode("")
 {
     setSchema(Database::instance()->findSchema(mSchemaName));
 }

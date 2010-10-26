@@ -47,7 +47,10 @@ namespace Common
  * \param[in] ipTableName - Table name
  */
 DbTable::DbTable(QString ipSchemaName, QString ipTableName)
-    : DbObject(ipTableName), mSchemaName(ipSchemaName)
+    : DbObject(ipTableName),
+      mSchemaName(ipSchemaName),
+      mSchema(0),
+      mColumnDefs()
 {
     setSchema(Database::instance()->findSchema(mSchemaName));
 }

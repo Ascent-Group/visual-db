@@ -40,7 +40,16 @@ namespace Common
  * Ctor
  */
 DbRole::DbRole(QString ipName)
-    : DbObject(ipName), mId(0)
+    : DbObject(ipName),
+      mIsSuperUser(false),
+      mInheritsPrivileges(false),
+      mCanCreateRole(false),
+      mCanCreateDb(false),
+      mCanUpdateSysCat(false),
+      mCanLogin(false),
+      mConnectionLimit(false),
+      mExpiryDate(),
+      mId(0)
 {
 
 }

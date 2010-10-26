@@ -79,13 +79,9 @@ quint32
 schemasList(QStringList &opList)
 {
     QString qstr = QString("SELECT "
-                               "nspname AS name, "
-                               "roles.rolname AS ownername, "
-                               "description "
+                               "nspname AS name "
                            "FROM "
-                               "pg_catalog.pg_namespace pgn "
-                               "LEFT JOIN pg_roles roles ON roles.oid = pgn.nspowner "
-                               "LEFT JOIN pg_description descr ON descr.objoid = pgn.oid;");
+                               "pg_catalog.pg_namespace pgn;");
 
     return objectNamesList(qstr, opList);
 }
@@ -101,17 +97,16 @@ quint32
 indicesList(QStringList &opList)
 {
     QString qstr = QString("SELECT "
-                "index.relname as name "
-            "FROM "
-                "pg_catalog.pg_index pgi, "
-                "pg_catalog.pg_class index, "
-                "pg_catalog.pg_namespace pgn, "
-                "pg_catalog.pg_class rel "
-            "WHERE "
-                "pgi.indrelid = rel.oid "
-                "AND pgn.oid = rel.relnamespace "
-                //"AND index.relname NOT LIKE 'pg_%' "
-                "AND pgi.indexrelid = index.oid;");
+                                "index.relname as name "
+                            "FROM "
+                                "pg_catalog.pg_index pgi, "
+                                "pg_catalog.pg_class index, "
+                                "pg_catalog.pg_namespace pgn, "
+                                "pg_catalog.pg_class rel "
+                            "WHERE "
+                                "pgi.indrelid = rel.oid "
+                                "AND pgn.oid = rel.relnamespace "
+                                "AND pgi.indexrelid = index.oid;");
 
     return objectNamesList(qstr, opList);
 }
@@ -140,13 +135,9 @@ proceduresList(const QString &ipSchemaName, QStringList &opList)
                                 "p.proname AS name "
                            "FROM "
                                 "pg_catalog.pg_proc p, "
-                                "pg_catalog.pg_namespace n, "
-                                "pg_catalog.pg_roles o, "
-                                "pg_catalog.pg_language l "
+                                "pg_catalog.pg_namespace n "
                            "WHERE "
                                 "p.pronamespace = n.oid "
-                                "AND p.proowner = o.oid "
-                                "AND p.prolang = l.oid "
                                 "AND n.nspname = '%1';")
         .arg(ipSchemaName);
 
@@ -164,9 +155,9 @@ quint32
 rolesList(QStringList &opList)
 {
     QString qstr = QString("SELECT "
-                "r.rolname as name "
-            "FROM "
-                "pg_catalog.pg_roles r;");
+                               "r.rolname as name "
+                           "FROM "
+                               "pg_catalog.pg_roles r;");
 
     return objectNamesList(qstr, opList);
 }

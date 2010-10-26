@@ -42,7 +42,18 @@ namespace Common
  * \param[in] ipName - Trigger name
  */
 DbTrigger::DbTrigger(QString ipSchemaName, QString ipName)
-    : DbObject(ipName), mSchemaName(ipSchemaName)
+    : DbObject(ipName),
+      mSchemaName(ipSchemaName),
+      mTable(0),
+      mSchema(0),
+      mProcedure(0),
+      mEnabled(),
+      mIsConstraint(false),
+      mConstraintName(""),
+      mReferencedTable(0),
+      mIsDeferrable(false),
+      mIsInitiallyDeferred(false),
+      mNumArgs(0)
 {
     setSchema(Database::instance()->findSchema(mSchemaName));
 }

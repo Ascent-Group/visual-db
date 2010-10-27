@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <common/DbSchema.h>
+#include <psql/Schema.h>
 #include <psql/Trigger.h>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -43,11 +43,15 @@ namespace DbObjects
 namespace Psql
 {
 
-/*
- * Ctor
+/*!
+ * Constructor
+ *
+ * \param[in] ipName - Name of the given view
+ * \param[in] ipSchema - Handle to schema containing this view
+
  */
-Trigger::Trigger(QString ipSchemaName, QString ipName)
-    : DbTrigger(ipSchemaName, ipName)
+Trigger::Trigger(QString ipName, Common::DbSchema *ipSchema)
+    : DbTrigger(ipName, ipSchema)
 {
 
 }
@@ -105,7 +109,8 @@ Trigger::loadData()
                         //"AND ref_tbl_nsp.nspname NOT LIKE 'pg_%' "
                         //"AND proc_nsp.nspname NOT LIKE 'pg_%' "
                         "AND t.tgname = '%1';")
-            .arg(mName).arg(schemaName());
+            .arg(mName)
+            .arg(mSchema->name());
 
 #ifdef DEBUG_QUERY
     qDebug() << "Trigger::loadData> " << qstr;

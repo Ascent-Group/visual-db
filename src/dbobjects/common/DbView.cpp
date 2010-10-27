@@ -28,6 +28,7 @@
  */
 
 #include <common/Database.h>
+#include <common/DbSchema.h>
 #include <common/DbView.h>
 
 #include <QtDebug>
@@ -39,19 +40,20 @@ namespace Common
 {
 
 /*!
- * Ctor
- * \param[in] ipSchemaName - Schema name
- * \param[in] ipName - View name
+ * Constructor
+ *
+ * \param[in] ipName - Name of a view
+ * \param[in] ipSchema - Handle to schema that contains the given view
  */
-DbView::DbView(QString ipSchemaName, QString ipName)
+DbView::DbView(QString ipName, DbSchema *ipSchema)
     : DbObject(ipName),
-      mSchemaName(ipSchemaName),
-      mSchema(0),
+      mSchema(ipSchema),
       mOwner(0),
       mDefinition("")
 {
-    setSchema(Database::instance()->findSchema(mSchemaName));
+    if (!mSchema) qDebug() << "DbView::DbView> mSchema is NULL!";
 }
+
 /*!
  * Dtor
  */
@@ -66,7 +68,7 @@ DbView::~DbView()
 QString
 DbView::fullName() const
 {
-    return QString("%1.%2").arg(mSchemaName).arg(mName);
+    return QString("%1.%2").arg(mSchema->name()).arg(mName);
 }
 
 /*!
@@ -132,7 +134,6 @@ void
 DbView::resetData()
 {
     /*! \todo Implement */
-    mSchemaName = "";
     mSchema = 0;
     mOwner = 0;
     mDefinition = "";

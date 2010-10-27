@@ -46,9 +46,10 @@ namespace Psql
 class Trigger : public Common::DbTrigger
 {
     public:
-        Trigger(QString ipSchemaName, QString ipName);
+        Trigger(QString ipName, Common::DbSchema *ipSchema = 0);
         ~Trigger();
 
+    protected:
         bool loadData();
 };
 

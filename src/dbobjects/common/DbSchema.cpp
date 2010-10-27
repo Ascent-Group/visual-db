@@ -91,6 +91,8 @@ DbSchema::addTable(DbTable *ipTable)
         return false;
     }
 
+    ipTable->setSchema(this);
+
     mTables.push_back(ipTable);
     return true;
 }
@@ -109,6 +111,8 @@ DbSchema::addView(DbView *ipView)
     if (mViews.contains(ipView)) {
         return false;
     }
+
+    ipView->setSchema(this);
 
     mViews.push_back(ipView);
     return true;
@@ -129,6 +133,8 @@ DbSchema::addProcedure(DbProcedure *ipProc)
         return false;
     }
 
+    ipProc->setSchema(this);
+
     mProcedures.push_back(ipProc);
     return true;
 }
@@ -147,6 +153,8 @@ DbSchema::addTrigger(DbTrigger *ipTrig)
     if (mTriggers.contains(ipTrig)) {
         return false;
     }
+
+    ipTrig->setSchema(this);
 
     mTriggers.push_back(ipTrig);
     return true;
@@ -378,7 +386,7 @@ DbSchema::readTables()
     foreach (const QString &name, tablesNamesList) {
 
         DbTable *table = 0;
-        table = Factory::Table::createTable(mName, name);
+        table = Factory::Table::createTable(name, this);
 
         Q_ASSERT(0 != table);
 
@@ -425,7 +433,7 @@ DbSchema::readViews()
     foreach (const QString &name, viewsNamesList) {
 
         // declare new view object
-        DbView *view = Factory::View::createView(mName, name);
+        DbView *view = Factory::View::createView(name, this);
 
         Q_ASSERT(0 != view);
 
@@ -469,7 +477,7 @@ DbSchema::readProcedures()
 
         // declare new proc object
         DbProcedure *proc = 0;
-        proc = Factory::Procedure::createProcedure(mName, name);
+        proc = Factory::Procedure::createProcedure(name, this);
 
         Q_ASSERT(0 != proc);
 
@@ -516,7 +524,7 @@ DbSchema::readTriggers()
         // declare new trigger object
         DbTrigger *trigger;
 
-        trigger = Factory::Trigger::createTrigger(mName, name);
+        trigger = Factory::Trigger::createTrigger(name, this);
 
         Q_ASSERT(0 != trigger);
 

@@ -46,9 +46,10 @@ namespace Psql
 class View : public Common::DbView
 {
     public:
-        View(QString ipSchema, QString ipName);
+        View(QString ipName, Common::DbSchema *ipSchema = 0);
         ~View();
 
+    protected:
         bool loadData();
 };
 

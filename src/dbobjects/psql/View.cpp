@@ -27,8 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <common/DbSchema.h>
 #include <psql/Role.h>
+#include <psql/Schema.h>
 #include <psql/View.h>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -44,27 +44,31 @@ namespace DbObjects
 namespace Psql
 {
 
-/*
- * Ctor
+/*!
+ * Constructor
+ *
+ * \param[in] ipName - Name of the given view
+ * \param[in] ipSchema - Handle to schema containing this view
  */
-View::View(QString ipSchema, QString ipName)
-    : DbView(ipSchema, ipName)
+View::View(QString ipName, Common::DbSchema *ipSchema)
+    : DbView(ipName, ipSchema)
 {
 
 }
 
-/*
- * Dtor
+/*!
+ * Destructor
  */
 View::~View()
 {
 
 }
 
-/*
- * Load view's data
+/*!
+ * \brief Load view's data
+ *
  * \return true - If the view information has been successfully loaded
- *         false - Otherwise
+ * \return false - Otherwise
  */
 bool
 View::loadData()
@@ -84,7 +88,7 @@ View::loadData()
                     "WHERE "
                         "schemaname = '%1' "
                         "AND viewname = '%2';")
-            .arg(mSchemaName)
+            .arg(mSchema->name())
             .arg(mName);
 
 #ifdef DEBUG_QUERY
@@ -104,8 +108,8 @@ View::loadData()
 
     qint32 colId = query.record().indexOf("schema");
     Q_ASSERT(colId > 0);
-    mSchemaName = query.value(colId).toString();
-    mSchema->setName(mSchemaName);
+//    mSchemaName = query.value(colId).toString();
+//    mSchema->setName(mSchemaName);
 
 //    colId = query.record().indexOf("name");
 //    Q_ASSERT(colId > 0);

@@ -27,6 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+//#include <mysql/Schema.h>
 #include <mysql/Table.h>
 #include <mysql/Tools.h>
 #include <QSqlDatabase>
@@ -42,18 +43,18 @@ namespace DbObjects
 namespace Mysql
 {
 
-/*
+/*!
  * Constructor
+ *
+ * \param[in] ipName - Name of the given table
+ * \param[in] ipSchema - Handle to schema containing the table
  */
-Table::Table(QString ipSchemaName, QString ipTableName)
-    :DbTable(ipSchemaName, ipTableName)
+Table::Table(QString ipName, Common::DbSchema *ipSchema)
+    : DbTable(ipName, ipSchema)
 {
-    // load column definitions
-    loadData();
-
 }
 
-/*
+/*!
  * Destructor
  */
 Table::~Table()
@@ -61,8 +62,11 @@ Table::~Table()
 
 }
 
-/*
- * Load column definitions data
+/*!
+ * \brief Load column definitions data
+ *
+ * \return true - If column definitions have been successfully read
+ * \return false - Otherwise
  */
 bool
 Table::loadData()
@@ -154,13 +158,16 @@ Table::loadData()
         return true;
     }
 
-    mIsLoaded = true;
-
-    return false;
+    return DbTable::loadData();
 }
 
-/*
- * Checks if Óolumn is a primary key for the given table
+/*!
+ * Checks if a column is a primary key for the given table
+ *
+ * \param[in] ipColumnName - Name of a column
+ *
+ * \return true If a column is a primary key
+ * \return false Otherwise
  */
 bool
 Table::checkPrimaryKey(const QString &ipColumnName) const
@@ -195,8 +202,15 @@ Table::checkPrimaryKey(const QString &ipColumnName) const
     return query.first();
 }
 
-/*
- * Checks if ipColumnName is a foreign key for ipTableName
+/*!
+ * Checks if column is a foreign key for the given table
+ *
+ * \param[in] ipColumnName - Name of a column
+ * \param[out] opForeignSchemaName - Name of a schema containing the referenced table
+ * \param[out] opForeignTableName - Name of a table references by this foreign key
+ *
+ * \return true If a column is a foreign key
+ * \return false Otherwise
  */
 bool
 Table::checkForeignKey(const QString &ipColumnName, QString *opForeignSchemaName, QString *opForeignTableName) const
@@ -234,8 +248,13 @@ Table::checkForeignKey(const QString &ipColumnName, QString *opForeignSchemaName
     return query.first();
 }
 
-/*
- * Checks if ipColumnName is unique for ipTableName
+/*!
+ * Checks if a column is unique for the given table
+ *
+ * \param[in] ipColumnName - Name of a column
+ *
+ * \return true If the column has UNIQUE constraint
+ * \return false Otherwise
  */
 bool
 Table::checkUnique(const QString &ipColumnName) const

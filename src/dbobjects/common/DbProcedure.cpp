@@ -28,6 +28,9 @@
  */
 
 #include <common/DbProcedure.h>
+#include <common/DbSchema.h>
+
+#include <QtDebug>
 
 namespace DbObjects
 {
@@ -41,15 +44,14 @@ namespace Common
  * On creation finds the parent schema by its name ipSchemaName and sets it as
  * parent schema object with setSchema() function.
  */
-DbProcedure::DbProcedure(QString ipSchemaName, QString ipName)
+DbProcedure::DbProcedure(QString ipName, DbSchema *ipSchema)
     : DbObject(ipName),
-      mSchemaName(ipSchemaName),
-      mSchema(0),
+      mSchema(ipSchema),
       mOwner(0),
       mLanguage(0),
       mSourceCode("")
 {
-    setSchema(Database::instance()->findSchema(mSchemaName));
+    if (!mSchema) qDebug() << "DbProcedure::DbProcedure> mSchema is NULL!";
 }
 
 /*!
@@ -76,7 +78,7 @@ DbProcedure::type() const
 QString
 DbProcedure::fullName() const
 {
-    return QString("%1.%2").arg(mSchemaName).arg(mName);
+    return QString("%1.%2").arg(mSchema->name()).arg(mName);
 }
 
 /*!
@@ -166,7 +168,6 @@ void
 DbProcedure::resetData()
 {
     /*! \todo Implement */
-    mSchemaName = "";
     mSchema = 0;
     mOwner = 0;
     mLanguage = 0;

@@ -84,14 +84,11 @@ class DbTrigger : public DbObject
 
         virtual void resetData();
 
-        QString schemaName() const;
         QString fullName() const;
 
     protected:
-        DbTrigger(QString ipSchemaName, QString ipName);
+        DbTrigger(QString ipName, DbSchema *ipSchema = 0);
 
-        /*! Parent schema name */
-        QString mSchemaName; // for internal use only
         /*! Table */
         DbTable *mTable;
         /*! Parent schema */

@@ -38,13 +38,13 @@ namespace Factory
 {
 
 /*!
- * \param[in] ipSchemaName - Name of the view to construct
  * \param[in] ipName - Name of the view to construct
+ * \param[in] ipSchema - Handle to schema containing the procedure
  *
  * \return Database view object
  */
 DbObjects::Common::DbView*
-View::createView(const QString &ipSchemaName, const QString &ipName)
+View::createView(const QString &ipName, Common::DbSchema *ipSchema)
 {
     using namespace DbObjects::Common;
 
@@ -52,10 +52,10 @@ View::createView(const QString &ipSchemaName, const QString &ipName)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                view = createPsqlView(ipSchemaName, ipName);
+                view = createPsqlView(ipName, ipSchema);
                 break;
         case Database::MySQL:
-//                view = createMysqlView(ipName);
+//                view = createMysqlView(ipName, ipSchema);
                 break;
         case Database::Oracle:
         case Database::SQLite:
@@ -74,27 +74,27 @@ View::createView(const QString &ipSchemaName, const QString &ipName)
 }
 
 /*!
- * \param[in] ipSchemaName - Name of schema containing the view
  * \param[in] ipName - Name of view to construct
+ * \param[in] ipSchema - Handle to schema containing the procedure
  *
  * \return Pointer to PostgreSQL view object
  */
 Psql::View*
-View::createPsqlView(const QString &ipSchemaName, const QString &ipName)
+View::createPsqlView(const QString &ipName, Common::DbSchema *ipSchema)
 {
-    return new(std::nothrow) Psql::View(ipSchemaName, ipName);
+    return new(std::nothrow) Psql::View(ipName, ipSchema);
 }
 
 /*!
- * \param[in] ipSchemaName - Name of schema containing the view
  * \param[in] ipName - Name of view to construct
+ * \param[in] ipSchema - Handle to schema containing the procedure
  *
  * \return Pointer to MySQL view object
  */
 //Mysql::View*
-//View::createMysqlView(const QString &ipSchemaName, const QString &ipName)
+//View::createMysqlView(const QString &ipName, Common::DbSchema *ipSchema)
 //{
-//    return new Mysql::View(ipSchemaName, ipName);
+//    return new Mysql::View(ipName, ipSchema);
 //}
 
 } // namespace Factory

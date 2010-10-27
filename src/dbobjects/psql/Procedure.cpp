@@ -27,9 +27,9 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <common/DbSchema.h>
 #include <psql/Language.h>
 #include <psql/Procedure.h>
+#include <psql/Schema.h>
 #include <psql/Role.h>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -45,11 +45,14 @@ namespace DbObjects
 namespace Psql
 {
 
-/*
- * Ctor
+/*!
+ * Constructor
+ *
+ * \param[in] ipName - Name of the given procedure
+ * \param[in] ipSchema - Handle to schema containing the procedure
  */
-Procedure::Procedure(QString ipSchemaName, QString ipName)
-    : DbProcedure(ipSchemaName, ipName)
+Procedure::Procedure(QString ipName, Common::DbSchema *ipSchema)
+    : DbProcedure(ipName, ipSchema)
 {
 
 }
@@ -91,7 +94,7 @@ Procedure::loadData()
                         "AND p.proname = '%1' "
                         "AND n.nspname = '%2';")
             .arg(mName)
-            .arg(mSchemaName);
+            .arg(mSchema->name());
 
 #ifdef DEBUG_QUERY
     qDebug() << "Procedure::loadData> " << qstr;

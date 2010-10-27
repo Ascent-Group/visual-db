@@ -54,22 +54,24 @@ ProcedureFactoryTest::createProcedureTest()
     QString schemaName("vtunes");
 
     Common::Database *dbInst = Common::Database::instance();
-
     QVERIFY(0 != dbInst);
 
+    Common::DbSchema *schema = dbInst->findSchema(schemaName);
+    QVERIFY(0 != schema);
+
     dbInst->setSqlDriver("QPSQL");
-    QVERIFY(0 != dynamic_cast<Psql::Procedure*>(Factory::Procedure::createProcedure(schemaName, procName)));
+    QVERIFY(0 != dynamic_cast<Psql::Procedure*>(Factory::Procedure::createProcedure(procName, schema)));
 
     dbInst->setSqlDriver("QMYSQL");
-    QVERIFY(0 == Factory::Procedure::createProcedure(schemaName, procName));
+    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schema));
 
     dbInst->setSqlDriver("QIODBC");
-    QVERIFY(0 == Factory::Procedure::createProcedure(schemaName, procName));
+    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schema));
 
     dbInst->setSqlDriver("QSQLITE");
-    QVERIFY(0 == Factory::Procedure::createProcedure(schemaName, procName));
+    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schema));
 
     dbInst->setSqlDriver("NODRV");
-    QVERIFY(0 == Factory::Procedure::createProcedure(schemaName, procName));
+    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schema));
 }
 

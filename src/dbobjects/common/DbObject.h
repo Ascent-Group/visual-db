@@ -74,7 +74,7 @@ class DbObject
     protected:
         /*! Name of db object */
         QString mName;
-
+        /*! Flag the indicates whether the object's data has been already read or not */
         bool mIsLoaded;
 
     protected:

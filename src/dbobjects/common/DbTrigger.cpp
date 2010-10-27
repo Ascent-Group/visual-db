@@ -30,6 +30,8 @@
 #include <common/DbSchema.h>
 #include <common/DbTrigger.h>
 
+#include <QtDebug>
+
 namespace DbObjects
 {
 
@@ -38,14 +40,14 @@ namespace Common
 
 /*!
  * Constructor
- * \param[in] ipSchemaName - Parent schema name
- * \param[in] ipName - Trigger name
+ *
+ * \param[in] ipName - Name of a trigger
+ * \param[in] ipSchema - Handle to schema that contains the given trigger
  */
-DbTrigger::DbTrigger(QString ipSchemaName, QString ipName)
+DbTrigger::DbTrigger(QString ipName, DbSchema *ipSchema)
     : DbObject(ipName),
-      mSchemaName(ipSchemaName),
       mTable(0),
-      mSchema(0),
+      mSchema(ipSchema),
       mProcedure(0),
       mEnabled(),
       mIsConstraint(false),
@@ -55,7 +57,7 @@ DbTrigger::DbTrigger(QString ipSchemaName, QString ipName)
       mIsInitiallyDeferred(false),
       mNumArgs(0)
 {
-    setSchema(Database::instance()->findSchema(mSchemaName));
+    if (!mSchema) qDebug() << "DbTrigger::DbTrigger> mSchema is NULL!";
 }
 
 /*!
@@ -133,25 +135,12 @@ DbTrigger::enabled() const
 }
 
 /*!
- * \return Parent schema name
- */
-QString
-DbTrigger::schemaName() const
-{
-    if (mSchema) {
-    return mSchema->name();
-    }
-
-    return mSchemaName;
-}
-
-/*!
  * \return Trigger's fullname in "Schema.Trigger" format
  */
 QString
 DbTrigger::fullName() const
 {
-    return QString("%1.%2").arg(mSchemaName).arg(mName);
+    return QString("%1.%2").arg(mSchema->name()).arg(mName);
 }
 
 /*!
@@ -306,7 +295,6 @@ void
 DbTrigger::resetData()
 {
     /*! \todo Implement */
-    mSchemaName = "";
     mTable = 0;
     mSchema = 0;
     mProcedure = 0;

@@ -46,7 +46,7 @@ namespace Psql
 class Table : public Common::DbTable
 {
     public:
-        Table(QString ipSchemaName, QString ipTableName);
+        Table(QString ipName, Common::DbSchema *ipSchema = 0);
         ~Table();
 
         bool checkPrimaryKey(const QString &) const;

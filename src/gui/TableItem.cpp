@@ -505,7 +505,7 @@ TableItem::setIndicesVisible(bool ipFlag)
 QString
 TableItem::schemaName() const
 {
-    return mTableModel->schemaName();
+    return mTableModel->schema()->name();
 }
 
 /*

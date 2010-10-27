@@ -38,13 +38,13 @@ namespace Factory
 {
 
 /*!
- * \param[in] ipSchemaName - Name of schema containing the procedure
  * \param[in] ipName - Name of the procedure to construct
+ * \param[in] ipSchema - Handle to schema containing the procedure
  *
  * \return Database procedure object
  */
 DbObjects::Common::DbProcedure*
-Procedure::createProcedure(const QString &ipSchemaName, const QString &ipName)
+Procedure::createProcedure(const QString &ipName, Common::DbSchema *ipSchema)
 {
     using namespace DbObjects::Common;
 
@@ -52,10 +52,10 @@ Procedure::createProcedure(const QString &ipSchemaName, const QString &ipName)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                procedure = createPsqlProcedure(ipSchemaName, ipName);
+                procedure = createPsqlProcedure(ipName, ipSchema);
                 break;
         case Database::MySQL:
-//                procedure = createMysqlProcedure(ipName);
+//                procedure = createMysqlProcedure(ipName, ipSchema);
                 break;
         case Database::Oracle:
         case Database::SQLite:
@@ -74,15 +74,15 @@ Procedure::createProcedure(const QString &ipSchemaName, const QString &ipName)
 }
 
 /*!
- * \param[in] ipSchemaName - Name of schema containing the procedure
  * \param[in] ipName - Name of procedure to construct
+ * \param[in] ipSchema - Handle to schema containing the procedure
  *
  * \return Pointer to PostgreSQL procedure object
  */
 Psql::Procedure*
-Procedure::createPsqlProcedure(const QString &ipSchemaName, const QString &ipName)
+Procedure::createPsqlProcedure(const QString &ipName, Common::DbSchema *ipSchema)
 {
-    return new(std::nothrow) Psql::Procedure(ipSchemaName, ipName);
+    return new(std::nothrow) Psql::Procedure(ipName, ipSchema);
 }
 
 /*!
@@ -92,9 +92,9 @@ Procedure::createPsqlProcedure(const QString &ipSchemaName, const QString &ipNam
  * \return Pointer to MySQL procedure object
  */
 //Mysql::Procedure*
-//Procedure::createMysqlProcedure(const QString &ipSchemaName, const QString &ipName)
+//Procedure::createMysqlProcedure(const QString &ipName, Common::DbSchema *ipSchema)
 //{
-//    return new Mysql::Procedure(ipSchemaName, ipName);
+//    return new Mysql::Procedure(ipName, ipSchema);
 //}
 
 } // namespace Factory

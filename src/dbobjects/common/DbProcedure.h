@@ -66,8 +66,6 @@ class DbProcedure : public DbObject
         virtual DbObject::Type type() const;
 
     protected:
-        /*! Name of the schema that holds this procedure */
-        QString mSchemaName; // !!! for internal use only
         /*! Schema that holds this procedure */
         DbSchema *mSchema;
         /*! Procedure's owner */
@@ -78,7 +76,7 @@ class DbProcedure : public DbObject
         QString mSourceCode;
 
     protected:
-        DbProcedure(QString ipSchemaName, QString ipName);
+        DbProcedure(QString ipName, DbSchema *ipSchema = 0);
         virtual void resetData();
 
 };

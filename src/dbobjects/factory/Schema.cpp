@@ -43,7 +43,7 @@ namespace Factory
  *
  * \return Database schema objects
  */
-DbObjects::Common::DbSchema*
+Common::DbSchema*
 Schema::createSchema(const QString &ipName)
 {
     using namespace DbObjects::Common;

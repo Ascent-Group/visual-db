@@ -39,13 +39,13 @@ namespace Factory
 {
 
 /*!
- * \param[in] ipSchemaName - Name of schema containing the table
  * \param[in] ipName - Name of the table to construct
+ * \param[in] ipSchema - Handle to schema containing the procedure
  *
  * \return Database table object
  */
 DbObjects::Common::DbTable*
-Table::createTable(const QString &ipSchemaName, const QString &ipName)
+Table::createTable(const QString &ipName, Common::DbSchema *ipSchema)
 {
     using namespace DbObjects::Common;
 
@@ -53,10 +53,10 @@ Table::createTable(const QString &ipSchemaName, const QString &ipName)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                table = createPsqlTable(ipSchemaName, ipName);
+                table = createPsqlTable(ipName, ipSchema);
                 break;
         case Database::MySQL:
-//                table = createMysqlTable(ipName);
+//                table = createMysqlTable(ipName, ipSchema);
                 break;
         case Database::Oracle:
         case Database::SQLite:
@@ -75,27 +75,27 @@ Table::createTable(const QString &ipSchemaName, const QString &ipName)
 }
 
 /*!
- * \param[in] ipSchemaName - Name of schema containing the table
  * \param[in] ipName - Name of table to construct
+ * \param[in] ipSchema - Handle to schema containing the procedure
  *
  * \return Pointer to PostgreSQL table object
  */
 Psql::Table*
-Table::createPsqlTable(const QString &ipSchemaName, const QString &ipName)
+Table::createPsqlTable(const QString &ipName, Common::DbSchema *ipSchema)
 {
-    return new(std::nothrow) Psql::Table(ipSchemaName, ipName);
+    return new(std::nothrow) Psql::Table(ipName, ipSchema);
 }
 
 /*!
- * \param[in] ipSchemaName - Name of schema containing the table
  * \param[in] ipName - Name of table to construct
+ * \param[in] ipSchema - Handle to schema containing the procedure
  *
  * \return Pointer to MySQL table object
  */
 //Mysql::Table*
-//Table::createMysqlTable(const QString &ipSchemaName, const QString &ipName)
+//Table::createMysqlTable(const QString &ipName, Common::DbSchema *ipSchema)
 //{
-//    return new Mysql::Table(ipSchemaName, ipName);
+//    return new Mysql::Table(ipName, ipSchema);
 //}
 
 } // namespace Factory

@@ -43,16 +43,15 @@ namespace Common
 /*!
  * Constructor
  *
- * \param[in] ipSchemaName - Parent schema name
- * \param[in] ipTableName - Table name
+ * \param[in] ipName - Name of a table
+ * \param[in] ipSchema - Handle to schema that contains the given table
  */
-DbTable::DbTable(QString ipSchemaName, QString ipTableName)
-    : DbObject(ipTableName),
-      mSchemaName(ipSchemaName),
-      mSchema(0),
+DbTable::DbTable(QString ipName, DbSchema *ipSchema)
+    : DbObject(ipName),
+      mSchema(ipSchema),
       mColumnDefs()
 {
-    setSchema(Database::instance()->findSchema(mSchemaName));
+    if (!mSchema) qDebug() << "DbTable::DbTable> mSchema is NULL!";
 }
 
 /*!
@@ -95,25 +94,12 @@ DbTable::setSchema(DbSchema *ipSchema)
 }
 
 /*!
- * \return Parent schema's name
- */
-QString
-DbTable::schemaName() const
-{
-    if (mSchema) {
-        return mSchema->name();
-    }
-
-    return mSchemaName;
-}
-
-/*!
  * \return Fhe full name of the given table in a 'schema.name' format
  */
 QString
 DbTable::fullName() const
 {
-    return QString("%1.%2").arg(mSchemaName).arg(mName);
+    return QString("%1.%2").arg(mSchema->name()).arg(mName);
 }
 
 /*!
@@ -354,7 +340,6 @@ void
 DbTable::resetData()
 {
     /*! \todo Implement */
-    mSchemaName = "";
     mSchema = 0;
     mColumnDefs.clear();
 

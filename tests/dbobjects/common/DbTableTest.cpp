@@ -145,12 +145,6 @@ DbTableTest::typeTest()
 }
 
 void
-DbTableTest::schemaNameTest()
-{
-    QVERIFY(0);
-}
-
-void
 DbTableTest::schemaTest()
 {
     QVERIFY(0);

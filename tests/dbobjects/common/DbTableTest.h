@@ -57,7 +57,6 @@ class DbTableTest : public QObject
         void isColumnUniqueTest();
         void loadDataTest();
         void typeTest();
-        void schemaNameTest();
         void schemaTest();
         void setSchemaTest();
 };

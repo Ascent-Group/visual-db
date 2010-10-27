@@ -85,8 +85,6 @@ class DbSchema : public DbObject
         void readProcedures();
         void readTriggers();
 
-        void cleanup();
-
         virtual DbObject::Type type() const;
 
         DbRole* owner() const;

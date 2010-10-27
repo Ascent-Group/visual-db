@@ -37,6 +37,7 @@ namespace DbObjects
 
 namespace Common
 {
+class DbSchema;
 class DbTable;
 }
 
@@ -56,11 +57,11 @@ namespace Factory
 class Table
 {
     public:
-        static Common::DbTable* createTable(const QString &ipSchemaName, const QString &ipName);
+        static Common::DbTable* createTable(const QString &ipName, Common::DbSchema *ipSchema = 0);
 
     protected:
-        static Psql::Table* createPsqlTable(const QString &ipSchemaName, const QString &ipName);
-//        static Mysql::Table* createMysqlTable(const QString &ipName);
+        static Psql::Table* createPsqlTable(const QString &ipName, Common::DbSchema *ipSchema = 0);
+//        static Mysql::Table* createMysqlTable(const QString &ipName, Common::DbSchema *ipSchema = 0);
 
     private:
         Q_DISABLE_COPY(Table);

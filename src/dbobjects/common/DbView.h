@@ -67,8 +67,6 @@ class DbView : public DbObject
         virtual DbObject::Type type() const;
 
     protected:
-        /*! Containing schema's name */
-        QString mSchemaName; // for internal use only => no accessors for it
         /*! Schema containing this view */
         DbSchema *mSchema;
         /*! View's owner */
@@ -77,7 +75,7 @@ class DbView : public DbObject
         QString mDefinition;
 
     protected:
-        DbView(QString ipSchema, QString ipName);
+        DbView(QString ipName, DbSchema *ipSchema = 0);
 };
 
 } // namespace Common

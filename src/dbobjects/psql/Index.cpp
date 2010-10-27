@@ -51,7 +51,6 @@ namespace Psql
 Index::Index(QString ipName)
     : DbIndex(ipName)
 {
-
 }
 
 /*!

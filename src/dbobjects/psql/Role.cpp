@@ -42,8 +42,10 @@ namespace DbObjects
 namespace Psql
 {
 
-/*
- * Ctor
+/*!
+ * Constructor
+ *
+ * \param[in] ipName - Name of the given table
  */
 Role::Role(QString ipName)
     : DbRole(ipName)

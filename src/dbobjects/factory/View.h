@@ -37,6 +37,7 @@ namespace DbObjects
 
 namespace Common
 {
+class DbSchema;
 class DbView;
 }
 
@@ -56,11 +57,11 @@ namespace Factory
 class View
 {
     public:
-        static Common::DbView* createView(const QString &ipSchemaName, const QString &ipName);
+        static Common::DbView* createView(const QString &ipName, Common::DbSchema *ipSchema = 0);
 
     protected:
-        static Psql::View* createPsqlView(const QString &ipSchemaName, const QString &ipName);
-//        static Mysql::View* createMysqlView(const QString &ipName);
+        static Psql::View* createPsqlView(const QString &ipName, Common::DbSchema *ipSchema = 0);
+//        static Mysql::View* createMysqlView(const QString &ipName, Common::DbSchema *ipSchema = 0);
 
     private:
         Q_DISABLE_COPY(View);

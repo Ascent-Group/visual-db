@@ -46,7 +46,7 @@ namespace Psql
 class Procedure : public Common::DbProcedure
 {
     public:
-        Procedure(QString ipSchemaName, QString ipName);
+        Procedure(QString ipName, Common::DbSchema *ipSchema = 0);
         ~Procedure();
 
     private:

@@ -132,9 +132,7 @@ class Database
         friend class DatabaseManager;
 
     private:
-        Database(const Database &iInst);
-
-        const Database& operator=(const Database &iRhs);
+        Q_DISABLE_COPY(Database);
 
         DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
 };

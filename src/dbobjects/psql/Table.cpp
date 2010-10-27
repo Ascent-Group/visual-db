@@ -28,6 +28,7 @@
  */
 
 #include <common/Database.h>
+#include <psql/Schema.h>
 #include <psql/Table.h>
 #include <psql/Tools.h>
 #include <QSqlDatabase>
@@ -47,11 +48,11 @@ namespace Psql
 /*!
  * Constructor
  *
- * \param[in] ipSchemaName - Name of the schema that contains this table
- * \param[in] ipTableName - Table name
+ * \param[in] ipName - Name of the given table
+ * \param[in] ipSchema - Handle to schema containing this view
  */
-Table::Table(QString ipSchemaName, QString ipTableName)
-    :DbTable(ipSchemaName, ipTableName)
+Table::Table(QString ipName, Common::DbSchema *ipSchema)
+    :DbTable(ipName, ipSchema)
 {
     // load column definitions
 //    loadData();
@@ -103,7 +104,7 @@ Table::loadData()
                         "WHERE pgc.relname = '%1' and pgn.nspname = '%2'); ")
 //          "AND pg_catalog.pg_table_is_visible(pgc.oid));")
         .arg(mName)
-        .arg(mSchemaName);
+        .arg(mSchema->name());
 
 #ifdef DEBUG_QUERY
     qDebug() << "Psql::Table::loadData> " << qstr;
@@ -189,7 +190,7 @@ Table::checkPrimaryKey(const QString &ipColumnName) const
                         "AND pgn.nspname = '%1' "
                         "AND pgc.relname = '%2' "
                         "AND pga.attname = '%3';")
-                .arg(mSchemaName)
+                .arg(mSchema->name())
                 .arg(mName)
                 .arg(ipColumnName);
 
@@ -257,7 +258,7 @@ Table::checkForeignKey(const QString &ipColumnName,
                                 "AND pgn1.nspname = '%1' "
                                 "AND p1.relname = '%2' "
                                 "AND a1.attname = '%3';")
-        .arg(mSchemaName)
+        .arg(mSchema->name())
         .arg(mName)
         .arg(ipColumnName);
 
@@ -333,7 +334,7 @@ Table::checkUnique(const QString &ipColumnName) const
                                 "AND pgn.nspname = '%1' "
                                 "AND pgc.relname = '%2' "
                                 "AND pga.attname = '%3';")
-        .arg(mSchemaName)
+        .arg(mSchema->name())
         .arg(mName)
         .arg(ipColumnName);
 

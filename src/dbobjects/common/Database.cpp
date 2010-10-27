@@ -65,21 +65,14 @@ Database *Database::mInstance = 0;
  * Constructor
  */
 Database::Database()
-    // \todo Initialization list should not be empty
-{
-
-}
-
-/*!
- * Constructor. FORBIDDEN
- */
-Database::Database(const Database &iInst)
-    : //mInstance(iInst.mInstance),
-      mSchemas(iInst.mSchemas),
-      mRoles(iInst.mRoles),
-      mIndices(iInst.mIndices),
-      mLanguages(iInst.mLanguages),
-      mSqlDriver(iInst.mSqlDriver)
+    : mSchemas(),
+      mRoles(),
+      mIndices(),
+      mLanguages(),
+      mSqlDriver(Unknown),
+      mNewObjects(),
+      mModifiedObjects(),
+      mDeletedObjects()
 {
 
 }
@@ -91,24 +84,6 @@ Database::~Database()
 {
     resetData();
     Database::mInstance = 0;
-}
-
-/*!
- * Assignment operator. FORBIDDEN
- */
-const Database&
-Database::operator=(const Database &iRhs)
-{
-    if (this != &iRhs)
-    {
-        mSchemas = iRhs.mSchemas;
-        mRoles = iRhs.mRoles;
-        mIndices = iRhs.mIndices;
-        mLanguages = iRhs.mLanguages;
-        mSqlDriver = iRhs.mSqlDriver;
-    }
-
-    return *this;
 }
 
 /*!
@@ -465,7 +440,7 @@ Database::findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &opList) co
         return 0;
     }
 
-    QString schemaName = ipTable->schemaName();
+    QString schemaName = ipTable->schema()->name();
     QString tableName = ipTable->name();
 
     // look through index's table names

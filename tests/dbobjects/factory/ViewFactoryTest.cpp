@@ -54,22 +54,24 @@ ViewFactoryTest::createViewTest()
     QString schemaName("vtunes");
 
     Common::Database *dbInst = Common::Database::instance();
-
     QVERIFY(0 != dbInst);
 
+    Common::DbSchema *schema = dbInst->findSchema(schemaName);
+    QVERIFY(0 != schema);
+
     dbInst->setSqlDriver("QPSQL");
-    QVERIFY(0 != dynamic_cast<Psql::View*>(Factory::View::createView(schemaName, viewName)));
+    QVERIFY(0 != dynamic_cast<Psql::View*>(Factory::View::createView(viewName, schema)));
 
     dbInst->setSqlDriver("QMYSQL");
-    QVERIFY(0 == Factory::View::createView(schemaName, viewName));
+    QVERIFY(0 == Factory::View::createView(viewName, schema));
 
     dbInst->setSqlDriver("QIODBC");
-    QVERIFY(0 == Factory::View::createView(schemaName, viewName));
+    QVERIFY(0 == Factory::View::createView(viewName, schema));
 
     dbInst->setSqlDriver("QSQLITE");
-    QVERIFY(0 == Factory::View::createView(schemaName, viewName));
+    QVERIFY(0 == Factory::View::createView(viewName, schema));
 
     dbInst->setSqlDriver("NODRV");
-    QVERIFY(0 == Factory::View::createView(schemaName, viewName));
+    QVERIFY(0 == Factory::View::createView(viewName, schema));
 }
 

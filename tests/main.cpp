@@ -67,6 +67,7 @@
 const QString DBHOST = "localhost";
 const QString DBNAME = "music_db";
 const QString DBUSER = "music_user";
+const QString DBPASS = "qwe";
 
 /*!
  *
@@ -80,9 +81,9 @@ int main(int argc, char *argv[])
      * find another way of specifying db driver. As a solution, we can use environment
      * variable for that.
      */
-    const char *drv = getenv("VDB_DB_DRV");
+    QString drv(getenv("VDB_DB_DRV"));
 
-    if (!drv) {
+    if (drv.isEmpty()) {
         qCritical("[ERROR] db driver not set!");
         return -1;
     }
@@ -95,7 +96,7 @@ int main(int argc, char *argv[])
     dbParams.setDbHost(DBHOST);
     dbParams.setDbName(DBNAME);
     dbParams.setDbUser(DBUSER);
-//    dbParams.setDbPassword();
+    dbParams.setDbPassword(DBPASS);
 
     if (!createConnection(dbParams)) {
         qCritical() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
@@ -259,29 +260,31 @@ int main(int argc, char *argv[])
     ViewFactoryTest viewFactoryTest;
     QTest::qExec(&viewFactoryTest, argc, argv);
 
-    MysqlTableTest mysqlTableTest;
-    QTest::qExec(&mysqlTableTest, argc, argv);
+    if (drv.contains("MYSQL")) {
+        MysqlTableTest mysqlTableTest;
+        QTest::qExec(&mysqlTableTest, argc, argv);
+    } else if (drv.contains("PSQL")) {
+        PsqlIndexTest psqlIndexTest;
+        QTest::qExec(&psqlIndexTest, argc, argv);
 
-//    PsqlIndexTest psqlIndexTest;
-//    QTest::qExec(&psqlIndexTest, argc, argv);
-//
-//    PsqlLanguageTest psqlLanguageTest;
-//    QTest::qExec(&psqlLanguageTest, argc, argv);
-//
-//    PsqlProcedureTest psqlProcedureTest;
-//    QTest::qExec(&psqlProcedureTest, argc, argv);
-//
-//    PsqlRoleTest psqlRoleTest;
-//    QTest::qExec(&psqlRoleTest, argc, argv);
-//
-//    PsqlTableTest psqlTableTest;
-//    QTest::qExec(&psqlTableTest, argc, argv);
-//
-//    PsqlTriggerTest psqlTriggerTest;
-//    QTest::qExec(&psqlTriggerTest, argc, argv);
-//
-//    PsqlViewTest psqlViewTest;
-//    QTest::qExec(&psqlViewTest, argc, argv);
+        PsqlLanguageTest psqlLanguageTest;
+        QTest::qExec(&psqlLanguageTest, argc, argv);
+
+        PsqlProcedureTest psqlProcedureTest;
+        QTest::qExec(&psqlProcedureTest, argc, argv);
+
+        PsqlRoleTest psqlRoleTest;
+        QTest::qExec(&psqlRoleTest, argc, argv);
+
+        PsqlTableTest psqlTableTest;
+        QTest::qExec(&psqlTableTest, argc, argv);
+
+        PsqlTriggerTest psqlTriggerTest;
+        QTest::qExec(&psqlTriggerTest, argc, argv);
+
+        PsqlViewTest psqlViewTest;
+        QTest::qExec(&psqlViewTest, argc, argv);
+    }
 #endif // TEST_DBOBJECTS
 
     return 0;

@@ -58,7 +58,7 @@ class DbTable : public Common::DbObject
         DbSchema* schema() const;
         void setSchema(DbSchema *ipSchema);
 
-        QString schemaName() const;
+        // \todo do we need these functions?
         QString fullName() const;
 
         // params: [in] int ipColId
@@ -119,15 +119,13 @@ class DbTable : public Common::DbObject
             bool isUnique;
         };
 
-        /*! Parent schema name */
-        QString mSchemaName; // for internal use only
         /*! Parent schema handle */
         DbSchema *mSchema;
         /*! Column definitions */
         QVector<ColumnDefinition> mColumnDefs;
 
     protected:
-        DbTable(QString ipSchemaName, QString ipTableName);
+        DbTable(QString ipName, DbSchema *ipSchema = 0);
 };
 
 } // namespace Common

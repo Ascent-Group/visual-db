@@ -156,7 +156,7 @@ DescriptionWidget::describe(const DbObjects::Common::DbTable *ipTable)
 
     // generate body text
     QString body = QString("CREATE TABLE %1.%2 (")
-                   .arg(ipTable->schemaName())
+                   .arg(ipTable->schema()->name())
                    .arg(ipTable->name());
 
     // for each db table's column fill the rows and generate body text

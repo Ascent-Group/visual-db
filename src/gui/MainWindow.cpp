@@ -483,42 +483,47 @@ MainWindow::closeEvent(QCloseEvent *ipEvent)
      *        if Yes, do the rest, else - return
      */
 
-    int result = QMessageBox::question(
-            this,
-            tr("Confirm exit"),
-            tr("Do you want to save current session?"),
-            QMessageBox::Yes,
-            QMessageBox::No,
-            QMessageBox::Cancel);
+    do {
+        int result = QMessageBox::question(
+                this,
+                tr("Confirm exit"),
+                tr("Do you want to save current session?"),
+                QMessageBox::Yes,
+                QMessageBox::No,
+                QMessageBox::Cancel);
 
-    //    int result = QMessageBox::question(
-    //            this,
-    //            tr("Confirm exit"),
-    //            tr("Do you really want to exit?"),
-    //            QMessageBox::Yes,
-    //            QMessageBox::No);
+        //    int result = QMessageBox::question(
+        //            this,
+        //            tr("Confirm exit"),
+        //            tr("Do you really want to exit?"),
+        //            QMessageBox::Yes,
+        //            QMessageBox::No);
 
-    // if yes || no
-    if (QMessageBox::Cancel != result) {
+        // if yes || no
+        if (QMessageBox::Cancel != result) {
 
-        if (QMessageBox::Yes == result) {
-            // save parameters to xml file
-            saveSession();
+            if (QMessageBox::Yes == result) {
+                // save parameters to xml file
+                if (!saveSession()) {
+                    continue;
+                }
+            }
+
+            // get singleton instance and cleanup
+            Database *dbInst = Database::instance();
+
+            dbInst->resetData();
+
+            DatabaseManager dbMngr;
+            dbMngr.flush();
+
+            ipEvent->accept();
+        } else {
+            ipEvent->ignore();
         }
-
-        // get singleton instance and cleanup
-        Database *dbInst = Database::instance();
-
-        dbInst->resetData();
-
-        DatabaseManager dbMngr;
-        dbMngr.flush();
-
-        ipEvent->accept();
-    } else {
-        ipEvent->ignore();
+        break;
     }
-
+    while (true);
 }
 
 /*
@@ -788,6 +793,10 @@ MainWindow::loadFromXml(QString ipFileName)
             QDomElement element = child.toElement();
             if (element.tagName() == "scene") {
                 ui.mSceneWidget->fromXml(element);
+                ui.mShowLegendAction->setChecked(element.attribute("legend").toInt());
+                ui.mShowGridAction->setChecked(element.attribute("grid").toInt());
+                ui.mDivideIntoPagesAction->setChecked(element.attribute("divideIntoPages").toInt());
+                ui.mShowControlWidgetAction->setChecked(element.attribute("controlWidget").toInt());
                 break;
             }
             child = child.nextSibling();
@@ -798,7 +807,7 @@ MainWindow::loadFromXml(QString ipFileName)
 /*
  * Save session
  */
-void
+bool
 MainWindow::saveSession()
 {
     using namespace Consts;
@@ -811,7 +820,7 @@ MainWindow::saveSession()
             tr("Xml files (*.vdb)"));
     // return if we don't select any file to save
     if (fileName == "") {
-        return;
+        return false;
     }
 
     for (int i = 9; i > 0; --i) {
@@ -823,6 +832,8 @@ MainWindow::saveSession()
     mSettings.setValue(LAST_SESSION_GRP + "/" + SAVED_SESSION_SETTING + "0", fileName);
     updateSessionMenu();
     saveToXml(fileName);
+
+    return true;
 }
 
 /*

@@ -31,20 +31,12 @@
 #define TABLEITEM_H
 
 #include <gui/GraphicsItem.h>
-#include <QFont>
 #include <QSettings>
 
 class QAction;
-class QColor;
-class QCursor;
 class QDomDocument;
 class QDomElement;
-class QGraphicsSceneContextMenuEvent;
-class QGraphicsTextItem;
-class QImage;
 class QMenu;
-
-class ArrowItem;
 
 namespace DbObjects
 {
@@ -73,70 +65,35 @@ class TableItem : public GraphicsItem
         virtual int type() const;
 
         void addIndexItem(QGraphicsTextItem *);
-        void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *widget = 0);
-        void addArrowItem(ArrowItem *);
-        void removeArrowItem(ArrowItem *);
-        void removeArrowItems();
-        void setFieldsTypesVisible(bool);
         void setIndicesVisible(bool);
 
-        QList<ArrowItem *> arrows() const;
-        QString tableName() const;
-        QString schemaName() const;
-        DbObjects::Common::DbTable *tableModel() const;
-        QDomElement toXml(QDomDocument &);
+        QString foreignSchemaName(int) const;
+        QString foreignTableName(int) const;
+        bool isColumnForeignKey(int) const;
+        int columnsCount() const;
 
-        static void setSeek(int);
+        QString name() const;
+        QString schemaName() const;
+
+        QDomElement toXml(QDomDocument &) const;
 
     protected:
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
-        QVariant itemChange(GraphicsItemChange, const QVariant &);
-        void mouseMoveEvent(QGraphicsSceneMouseEvent *);
-        void mousePressEvent(QGraphicsSceneMouseEvent *);
-        void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
-        void hoverMoveEvent(QGraphicsSceneHoverEvent *);
-        void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
+        void paintFieldImage(QPainter *, int);
+        void paintIndeces(QPainter *);
 
     private:
-        // mode for table (you can resize table from different positions or move it)
-        enum Mode {
-            RIGHT_BOTTOM_CORNER_RESIZE,
-            LEFT_BOTTOM_CORNER_RESIZE,
-            LEFT_TOP_CORNER_RESIZE,
-            RIGHT_TOP_CORNER_RESIZE,
-
-            LEFT_VERTICAL_RESIZE,
-            RIGHT_VERTICAL_RESIZE,
-            TOP_HORIZONTAL_RESIZE,
-            BOTTOM_HORIZONTAL_RESIZE,
-
-            MOVE
-        };
-
-        static int mSeek;
 
         QSettings mSettings;
-        DbObjects::Common::DbTable *mTableModel;
+
         QVector<DbObjects::Common::DbIndex *> mIndices;
-
-        QMenu *mContextMenu;
-
-        QList<ArrowItem *> mArrowItems;
-
         QList<QGraphicsTextItem *> mIndexItems;
 
-        Mode mMode;
-        bool mFieldsTypesVisible;
         bool mIndicesVisible;
-        QFont mFont;
-
-        QImage *mTableImage;
+        
         QImage *mKeyImage;
         QImage *mForeignKeyImage;
-        QImage *mFieldImage;
-        QImage *mAnchorImage;
 
-        static const int SEEK_STEP = 20;
+        DbObjects::Common::DbTable *mModel;
 };
 
 bool isTable(QGraphicsItem *);

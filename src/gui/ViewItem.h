@@ -31,17 +31,11 @@
 #define VIEWEITEM_H
 
 #include <gui/GraphicsItem.h>
-#include <QFont>
 #include <QSettings>
 
 class QAction;
-class QColor;
-class QCursor;
 class QDomDocument;
 class QDomElement;
-class QGraphicsSceneContextMenuEvent;
-class QGraphicsTextItem;
-class QImage;
 class QMenu;
 
 class ArrowItem;
@@ -65,74 +59,22 @@ class ViewItem : public GraphicsItem
         ~ViewItem();
         virtual int type() const;
 
-        void addIndexItem(QGraphicsTextItem *);
-        void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *widget = 0);
-        void addArrowItem(ArrowItem *);
-        void removeArrowItem(ArrowItem *);
-        void removeArrowItems();
-        void setFieldsTypesVisible(bool);
-        void setIndicesVisible(bool);
-
-        QList<ArrowItem *> arrows() const;
-        QString viewName() const;
+        QString name() const;
         QString schemaName() const;
-        DbObjects::Common::DbView *viewModel() const;
-        QDomElement toXml(QDomDocument &);
-
-        static void setSeek(int);
+        
+        QDomElement toXml(QDomDocument &) const;
 
     public:
         enum { Type = UserType + 8 };
 
-    protected:
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
-        QVariant itemChange(GraphicsItemChange, const QVariant &);
-        void mouseMoveEvent(QGraphicsSceneMouseEvent *);
-        void mousePressEvent(QGraphicsSceneMouseEvent *);
-        void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
-        void hoverMoveEvent(QGraphicsSceneHoverEvent *);
-        void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
+//    protected:
+//        void paintFieldImage(QPainter *, int);
+//        void paintIndeces(QPainter *);
 
     private:
-        // mode for view (you can resize view from different positions or move it)
-        enum Mode {
-            RIGHT_BOTTOM_CORNER_RESIZE,
-            LEFT_BOTTOM_CORNER_RESIZE,
-            LEFT_TOP_CORNER_RESIZE,
-            RIGHT_TOP_CORNER_RESIZE,
-
-            LEFT_VERTICAL_RESIZE,
-            RIGHT_VERTICAL_RESIZE,
-            TOP_HORIZONTAL_RESIZE,
-            BOTTOM_HORIZONTAL_RESIZE,
-
-            MOVE
-        };
-
-        static int mSeek;
 
         QSettings mSettings;
-        DbObjects::Common::DbView *mViewModel;
-        QVector<DbObjects::Common::DbIndex *> mIndices;
-
-        QMenu *mContextMenu;
-
-        QList<ArrowItem *> mArrowItems;
-
-        QList<QGraphicsTextItem *> mIndexItems;
-
-        Mode mMode;
-        bool mFieldsTypesVisible;
-        bool mIndicesVisible;
-        QFont mFont;
-
-        QImage *mViewImage;
-        QImage *mKeyImage;
-        QImage *mForeignKeyImage;
-        QImage *mFieldImage;
-        QImage *mAnchorImage;
-
-        static const int SEEK_STEP = 20;
+        DbObjects::Common::DbView *mModel;
 };
 
 bool isView(QGraphicsItem *);

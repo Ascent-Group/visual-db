@@ -44,11 +44,18 @@ class Legend : public GraphicsItem
         ~Legend();
         virtual int type() const;
 
+        QString name() const { return ""; };
+        QString schemaName() const { return ""; };
+
         void refresh();
         void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
     public:
         enum { Type = UserType + 7 };
+
+//    protected:
+//        void paintFieldImage(QPainter *, int);
+//        void paintIndeces(QPainter *);
 
     private:
         static const int DEFAULT_X = 335;

@@ -217,14 +217,13 @@ GraphicsScene::drawRelations()
 void
 GraphicsScene::createRelations(TableItem *ipSourceItem)
 {
-    DbObjects::Common::DbTable *tableModel = ipSourceItem->tableModel();
     // find foreign keys and tables related to this keys
-    for (int i = 0; i < tableModel->columnsCount(); ++i) {
-        if (tableModel->isColumnForeignKey(i)) {
+    for (int i = 0; i < ipSourceItem->columnsCount(); ++i) {
+        if (ipSourceItem->isColumnForeignKey(i)) {
             TableItem *destItem = 0;
 
             // if founded, create arrow
-            if ((destItem = findTableItem(tableModel->foreignSchemaName(i), tableModel->foreignTableName(i))) != 0) {
+            if ((destItem = findTableItem(ipSourceItem->foreignSchemaName(i), ipSourceItem->foreignTableName(i))) != 0) {
                 ArrowItem *arrow = new ArrowItem(ipSourceItem, destItem);
                 ipSourceItem->addArrowItem(arrow);
                 destItem->addArrowItem(arrow);
@@ -245,7 +244,7 @@ GraphicsScene::findTableItem(const QString &ipSchemaName, const QString &ipTable
     foreach (QGraphicsItem *item, items()) {
         if (qgraphicsitem_cast<TableItem *>(item)) {
             TableItem *tableItem = qgraphicsitem_cast<TableItem *>(item);
-            if (tableItem->schemaName() == ipSchemaName && tableItem->tableName() == ipTableName) {
+            if (tableItem->schemaName() == ipSchemaName && tableItem->name() == ipTableName) {
                 return tableItem;
             }
         }

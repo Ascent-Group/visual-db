@@ -30,10 +30,29 @@
 #ifndef GRAPHICSITEM_H
 #define GRAPHICSITEM_H
 
+#include <QDomElement>
+#include <QFont>
 #include <QGraphicsPolygonItem>
 #include <QSettings>
 
+class ArrowItem;
+class QColor;
+class QGraphicsSceneContextMenuEvent;
 class QGraphicsTextItem;
+class QGraphicsTextItem;
+class QImage;
+
+namespace DbObjects
+{
+
+namespace Common
+{
+
+class DbTable;
+
+} // namespace Common
+
+} // namespace DbObjects
 
 /*!
  * \class GraphicsItem
@@ -52,7 +71,7 @@ class GraphicsItem : public QGraphicsPolygonItem
         static const int IMG_HEIGHT = IMG_WIDTH;
 
     public:
-        GraphicsItem();
+        explicit GraphicsItem(QMenu *ipMenu = 0);
         virtual ~GraphicsItem();
 
         virtual void setX(qreal);
@@ -108,6 +127,35 @@ class GraphicsItem : public QGraphicsPolygonItem
         virtual void updatePolygon();
         virtual void adjustSize();
 
+        virtual void addArrowItem(ArrowItem *);
+        virtual void removeArrowItem(ArrowItem *);
+        virtual void removeArrowItems();
+        virtual void setFieldsTypesVisible(bool);
+
+        virtual QList<ArrowItem *> arrows() const;
+        virtual QString name() const = 0;
+        virtual QString schemaName() const = 0;
+
+        virtual void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
+        virtual QDomElement toXml(QDomDocument &, const QString &) const;
+
+        static void setSeek(int);
+        static int seek();
+
+    protected:
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
+        QVariant itemChange(GraphicsItemChange, const QVariant &);
+        void mouseMoveEvent(QGraphicsSceneMouseEvent *);
+        void mousePressEvent(QGraphicsSceneMouseEvent *);
+        void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
+        void hoverMoveEvent(QGraphicsSceneHoverEvent *);
+        void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
+
+        virtual void paintFieldImage(QPainter *, int) { };
+        virtual void paintIndeces(QPainter *) { };
+
+        static const int SEEK_STEP = 20;
+
     private:
         QSettings mSettings;
 
@@ -117,13 +165,42 @@ class GraphicsItem : public QGraphicsPolygonItem
         QPointF mLeftTopPoint;
         QPointF mRightBottomPoint;
 
+        QPolygonF mPolygon;
+        
         QColor mItemColor;
         QColor mFontColor;
         QColor mBorderColor;
 
-        QPolygonF mPolygon;
+        QFont mFont;
+
+        QImage *mTableImage;
+        QImage *mFieldImage;
+        QImage *mAnchorImage;
 
         static const int BORDER_WIDTH = 5;
+
+        // mode for table (you can resize table from different positions or move it)
+        enum Mode {
+            RIGHT_BOTTOM_CORNER_RESIZE,
+            LEFT_BOTTOM_CORNER_RESIZE,
+            LEFT_TOP_CORNER_RESIZE,
+            RIGHT_TOP_CORNER_RESIZE,
+
+            LEFT_VERTICAL_RESIZE,
+            RIGHT_VERTICAL_RESIZE,
+            TOP_HORIZONTAL_RESIZE,
+            BOTTOM_HORIZONTAL_RESIZE,
+
+            MOVE
+        };
+
+        static int mSeek;
+        Mode mMode;
+        bool mFieldsTypesVisible;
+
+        QList<ArrowItem *> mArrowItems;
+
+        QMenu *mContextMenu;
 };
 
 #endif // GRAPHICSITEM_H

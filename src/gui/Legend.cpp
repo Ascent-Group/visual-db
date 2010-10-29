@@ -86,6 +86,22 @@ Legend::refresh()
     adjustSize();
 }
 
+///*
+// *
+// */
+//void
+//Legend::paintFieldImage(QPainter * /*ipPainter*/, int /*ipIdx*/)
+//{
+//}
+//
+///*
+// *
+// */
+//void
+//Legend::paintIndeces(QPainter * /*ipPainter*/)
+//{
+//}
+
 /*!
  * \brief Paint the legend
  */

@@ -106,7 +106,7 @@ class MainWindow : public QMainWindow
         int showConnectionDialog(bool ipLoadSession = false);
         void addCommand(QUndoCommand*);
         void reloadData();
-        void saveSession();
+        bool saveSession();
         void loadSession();
         void loadLastSession();
         void setFullScreen(bool);

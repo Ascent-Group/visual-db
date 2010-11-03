@@ -48,7 +48,7 @@ int GraphicsItem::mSeek = 80;
  * Constructor
  */
 GraphicsItem::GraphicsItem(QMenu *ipMenu)
-    : QGraphicsPolygonItem(), mLeftTopPoint(0, 0), mRightBottomPoint(0, 0)
+    : QGraphicsPolygonItem(), mLeftTopPoint(0, 0), mRightBottomPoint(0, 0), mFont("Arial", 10)
     , mFont("Arial", 10), mMode(GraphicsItem::MOVE), mFieldsTypesVisible(true), mContextMenu(ipMenu)
 {
     mFieldItems = QList<QGraphicsTextItem *>();
@@ -181,11 +181,11 @@ GraphicsItem::updatePolygon()
 {
     mPolygon.clear();
     mPolygon
-    << QPointF(mLeftTopPoint)
-    << QPointF(mRightBottomPoint.x(), mLeftTopPoint.y())
-    << QPointF(mRightBottomPoint)
-    << QPointF(mLeftTopPoint.x(), mRightBottomPoint.y())
-    << QPointF(mLeftTopPoint);
+        << QPointF(mLeftTopPoint)
+        << QPointF(mRightBottomPoint.x(), mLeftTopPoint.y())
+        << QPointF(mRightBottomPoint)
+        << QPointF(mLeftTopPoint.x(), mRightBottomPoint.y())
+        << QPointF(mLeftTopPoint);
     setPolygon(mPolygon);
 }
 
@@ -520,9 +520,29 @@ GraphicsItem::adjustSize()
 void
 GraphicsItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidget *ipWidget)
 {
+    // set the color of painting
+    ipPainter->setPen(fontColor());
+    ipPainter->setFont(mFont);
+
+    paintBorder(ipPainter, ipItem, ipWidget);
+    paintTitle(ipPainter);
+    paintTitleImage(ipPainter);
+    paintTitleText(ipPainter);
+    paintFields(ipPainter);
+    paintAdditionalInfo(ipPainter);
+    paintAnchor(ipPainter);
+}
+
+void
+GraphicsItem::paintBorder(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidget *ipWidget)
+{
     // draw the board of the table
     QGraphicsPolygonItem::paint(ipPainter, ipItem, ipWidget);
+}
 
+void
+GraphicsItem::paintTitle(QPainter *ipPainter)
+{
     // fill title with a little darker color then another table
     ipPainter->fillRect((int)x() + 1, (int)y() + 1,
             (int)width() - 1, (int)y() + FIELD_HEIGHT + INTERVAL * 2 - (int)y() - 1,
@@ -531,23 +551,42 @@ GraphicsItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem,
     // draw line under the title
     ipPainter->drawLine((int)x(), (int)y() + FIELD_HEIGHT + INTERVAL * 2,
             (int)(x() + width()), (int)y() + FIELD_HEIGHT + INTERVAL * 2);
+}
 
-    // set the color of painting
-    ipPainter->setPen(fontColor());
-    ipPainter->setFont(mFont);
-
+void
+GraphicsItem::paintTitleImage(QPainter *ipPainter)
+{
     // draw image for table
     QRectF target((int)x() + INTERVAL, (int)y() + INTERVAL,
             IMG_HEIGHT + INTERVAL, IMG_HEIGHT + INTERVAL);
     QRectF source(0.0, 0.0, mTableImage->width(), mTableImage->height());
     ipPainter->drawImage(target, *mTableImage, source);
+}
 
+void
+GraphicsItem::paintTitleText(QPainter *ipPainter)
+{
     // draw the title aligned on the center in upper case
     ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + INTERVAL,
             (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL,
             Qt::AlignCenter,
             titleText());
+}
 
+void
+GraphicsItem::paintAnchor(QPainter *ipPainter)
+{
+    // if anchor was setted for this table - draw the anchor
+    if (!(flags() & QGraphicsItem::ItemIsMovable)) {
+        QRectF target(x() + width() - IMG_WIDTH - INTERVAL, y() + height() - IMG_HEIGHT - INTERVAL, IMG_WIDTH, IMG_HEIGHT);
+        QRectF source(0.0, 0.0, mAnchorImage->width(), mAnchorImage->height());
+        ipPainter->drawImage(target, *mAnchorImage, source);
+    }
+}
+
+void
+GraphicsItem::paintFields(QPainter *ipPainter)
+{
     // row in the graphic table (some items may be missed)
     // draw each field
     for (int i = 0; i < countFields(); ++i) {
@@ -557,280 +596,17 @@ GraphicsItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem,
         }
 
         paintFieldImage(ipPainter, i);
-
-        // draw field name with margins = INTERVAL for top, bottom, left and right sizes
-        ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
-                (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2,
-                Qt::AlignLeft,
-                fieldText(i));
-    }
-
-    paintIndeces(ipPainter);
-
-    // if anchor was setted for this table - draw the anchor
-    if (!(flags() & QGraphicsItem::ItemIsMovable)) {
-        QRectF target(x() + width() - IMG_WIDTH - INTERVAL, y() + height() - IMG_HEIGHT - INTERVAL, IMG_WIDTH, IMG_HEIGHT);
-        QRectF source(0.0, 0.0, mAnchorImage->width(), mAnchorImage->height());
-        ipPainter->drawImage(target, *mAnchorImage, source);
+        paintFieldText(ipPainter, i);
     }
 }
 
-/*
- * Handler of the right mouse button click
- */
 void
-GraphicsItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *ipEvent)
+GraphicsItem::paintFieldText(QPainter *ipPainter, int ipIdx)
 {
-    if (mContextMenu) {
-        setSelected(true);
-        // show context menu
-        mContextMenu->exec(ipEvent->screenPos());
-    }
+    // draw field name with margins = INTERVAL for top, bottom, left and right sizes
+    ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (ipIdx + 1) + INTERVAL,
+            (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2,
+            Qt::AlignLeft,
+            fieldText(ipIdx));
 }
 
-/*
- * Add given arrow to the list of arrows related with this item 
- */
-void
-GraphicsItem::addArrowItem(ArrowItem *arrow)
-{
-    mArrowItems.append(arrow);
-}
-
-/*
- * Remove given arrow from the list of arrows related with this item 
- */
-void
-GraphicsItem::removeArrowItem(ArrowItem *ipArrowItem)
-{
-    int index = mArrowItems.indexOf(ipArrowItem);
-    if (index != -1) {
-        mArrowItems.removeAt(index);
-    }
-}
-
-/*
- * Remove all arrows from the list of arrows related with this item 
- */
-void
-GraphicsItem::removeArrowItems()
-{
-    for (QList<ArrowItem *>::const_iterator iter = mArrowItems.constBegin(); iter != mArrowItems.constEnd(); ++iter) {
-        (*iter)->startItem()->removeArrowItem(*iter);
-        (*iter)->endItem()->removeArrowItem(*iter);
-        if (scene()) {
-            scene()->removeItem(*iter);
-        }
-        // FIXME we must delete this item but program chashed in this case...
-//        delete (*iter);
-    }
-}
-
-/*
- * Handler for item change event
- */
-QVariant
-GraphicsItem::itemChange(GraphicsItemChange ipChange, const QVariant &ipValue)
-{
-    // if we change the position of the item - redraw all related arrows
-    if (ipChange == QGraphicsItem::ItemPositionChange) {
-        foreach (ArrowItem *arrow, mArrowItems) {
-            arrow->updatePosition();
-        }
-    }
-
-    return ipValue;
-}
-
-/*
- * Handler for a mouse press event. Analyze a position of an event and change a mode according to it
- */
-void
-GraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
-{
-    if (isRightBottomCorner(ipEvent->pos())) {
-        mMode = GraphicsItem::RIGHT_BOTTOM_CORNER_RESIZE;
-    } else if (isLeftBottomCorner(ipEvent->pos())) {
-        mMode = GraphicsItem::LEFT_BOTTOM_CORNER_RESIZE;
-    } else if (isLeftTopCorner(ipEvent->pos())) {
-        mMode = GraphicsItem::LEFT_TOP_CORNER_RESIZE;
-    } else if (isRightTopCorner(ipEvent->pos())) {
-        mMode = GraphicsItem::RIGHT_TOP_CORNER_RESIZE;
-    } else if (isLeftVerticalBorder(ipEvent->pos())) {
-        mMode = GraphicsItem::LEFT_VERTICAL_RESIZE;
-    } else if (isRightVerticalBorder(ipEvent->pos())) {
-        mMode = GraphicsItem::RIGHT_VERTICAL_RESIZE;
-    } else if (isBottomHorizontalBorder(ipEvent->pos())) {
-        mMode = GraphicsItem::BOTTOM_HORIZONTAL_RESIZE;
-    } else if (isTopHorizontalBorder(ipEvent->pos())) {
-        mMode = GraphicsItem::TOP_HORIZONTAL_RESIZE;
-    } else {
-        mMode = GraphicsItem::MOVE;
-    }
-
-    //    setZValue(1);
-
-    QGraphicsItem::mousePressEvent(ipEvent);
-}
-
-/*
- * Handler for mouse realease event
- */
-void
-GraphicsItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
-{
-    //    setZValue(0);
-
-    QGraphicsItem::mouseReleaseEvent(ipEvent);
-    if (mSettings.value(Consts::VIEW_GRP + "/" + Consts::ALIGN_TO_GRID_SETTING, false).toBool()) {
-        moveBy(-(int)pos().x() % GraphicsScene::LOW_GRID_DX, -(int)pos().y() % GraphicsScene::LOW_GRID_DY);
-    }
-}
-
-/*
- * Handler for mouse hover event. Analyze a position of an event and change a cursor
- */
-void
-GraphicsItem::hoverMoveEvent(QGraphicsSceneHoverEvent *ipEvent)
-{
-    if (isRightBottomCorner(ipEvent->pos())) {
-        setCursor(Qt::SizeFDiagCursor);
-    } else if (isLeftBottomCorner(ipEvent->pos())) {
-        setCursor(Qt::SizeBDiagCursor);
-    } else if (isLeftTopCorner(ipEvent->pos())) {
-        setCursor(Qt::SizeFDiagCursor);
-    } else if (isRightTopCorner(ipEvent->pos())) {
-        setCursor(Qt::SizeBDiagCursor);
-    } else if (isLeftVerticalBorder(ipEvent->pos())) {
-        setCursor(Qt::SizeHorCursor);
-    } else if (isRightVerticalBorder(ipEvent->pos())) {
-        setCursor(Qt::SizeHorCursor);
-    } else if (isBottomHorizontalBorder(ipEvent->pos())) {
-        setCursor(Qt::SizeVerCursor);
-    } else if (isTopHorizontalBorder(ipEvent->pos())) {
-        setCursor(Qt::SizeVerCursor);
-    } else {
-        setCursor(Qt::SizeAllCursor);
-    }
-
-    QGraphicsItem::hoverMoveEvent(ipEvent);
-}
-
-/*
- * Handle for mouse hover leave event
- */
-void
-GraphicsItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
-{
-    setCursor(Qt::ArrowCursor);
-}
-
-/*
- * Handler for mouse move event. Analyze a mode of an event and 
- * change the position of the item if mode = move or resize it if mode = resize
- */
-void
-GraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
-{
-    if (mMode == GraphicsItem::RIGHT_BOTTOM_CORNER_RESIZE) {
-        if (ipEvent->pos().x() - x() < MIN_WIDTH || ipEvent->pos().y() - y() < MIN_HEIGHT) return;
-        setWidth((int)ipEvent->pos().x() - x());
-        setHeight((int)ipEvent->pos().y() - y());
-        updatePolygon();
-    } else if (mMode == GraphicsItem::LEFT_BOTTOM_CORNER_RESIZE) {
-        if (ipEvent->pos().x() - x() < MIN_WIDTH || height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
-        setWidth((int)ipEvent->pos().x() - x());
-        setY((int)ipEvent->pos().y());
-        updatePolygon();
-    } else if (mMode == GraphicsItem::LEFT_TOP_CORNER_RESIZE) {
-        if (width() + x() - ipEvent->pos().x() < MIN_WIDTH || height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
-        setX((int)ipEvent->pos().x());
-        setY((int)ipEvent->pos().y());
-        updatePolygon();
-    } else if (mMode == GraphicsItem::RIGHT_TOP_CORNER_RESIZE) {
-        if (width() + x() - ipEvent->pos().x() < MIN_WIDTH || ipEvent->pos().y() - y() < MIN_HEIGHT) return;
-        setX((int)ipEvent->pos().x());
-        setHeight((int)ipEvent->pos().y() - y());
-        updatePolygon();
-    } else if (mMode == GraphicsItem::LEFT_VERTICAL_RESIZE) {
-        if (width() + x() - ipEvent->pos().x() < MIN_WIDTH) return;
-        setX((int)ipEvent->pos().x());
-        updatePolygon();
-    } else if (mMode == GraphicsItem::RIGHT_VERTICAL_RESIZE) {
-        if (ipEvent->pos().x() - x() < MIN_WIDTH) return;
-        setWidth((int)ipEvent->pos().x() - x());
-        updatePolygon();
-    } else if (mMode == GraphicsItem::BOTTOM_HORIZONTAL_RESIZE) {
-        if (ipEvent->pos().y() - y() < MIN_HEIGHT) return;
-        setHeight((int)ipEvent->pos().y() - y());
-        updatePolygon();
-    } else if (mMode == GraphicsItem::TOP_HORIZONTAL_RESIZE) {
-        if (height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
-        setY((int)ipEvent->pos().y());
-        updatePolygon();
-    } else {
-        QGraphicsItem::mouseMoveEvent(ipEvent);
-    }
-}
-
-/*
- * According to the given flag show or hide fields' types
- */
-void
-GraphicsItem::setFieldsTypesVisible(bool ipFlag)
-{
-    // TODO: temporary commented
-//    for (int i = 0; i < countFields(); ++i) {
-//        if (ipFlag) {
-//            setFieldText(i, mModel->columnName(i) + ": " + mModel->columnType(i));
-//        } else {
-//            setFieldText(i, mModel->columnName(i));
-//        }
-//    }
-//    mFieldsTypesVisible = ipFlag;
-//    update(x(), y(), width(), height());
-}
-
-/*
- * Get all arrows related to this item 
- */
-QList<ArrowItem *>
-GraphicsItem::arrows() const
-{
-    return mArrowItems;
-}
-
-QDomElement 
-GraphicsItem::toXml(QDomDocument &ipDoc, const QString &elementName) const
-{
-    QDomElement element = ipDoc.createElement(elementName);
-    element.setAttribute("schema", schemaName());
-    element.setAttribute("name", name());
-    QPointF point = mapToScene(QPointF(x(), y()));
-    element.setAttribute("x", (int)point.x());
-    element.setAttribute("y", (int)point.y());
-    element.setAttribute("width", width());
-    element.setAttribute("height", height());
-    element.setAttribute("red", itemColor().red());
-    element.setAttribute("green", itemColor().green());
-    element.setAttribute("blue", itemColor().blue());
-    return element;
-}
-
-/*
- * Set the seek
- */
-void
-GraphicsItem::setSeek(int ipSeek)
-{
-    mSeek = ipSeek;
-}
-
-/*
- * Get the seek
- */
-int
-GraphicsItem::seek()
-{
-    return mSeek;
-}

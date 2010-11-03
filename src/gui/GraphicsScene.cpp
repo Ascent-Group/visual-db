@@ -41,6 +41,7 @@
 #include <consts.h>
 #include <gui/ArrowItem.h>
 #include <gui/ControlWidget.h>
+#include <gui/DbObjectsItem.h>
 #include <gui/GraphicsScene.h>
 #include <gui/Legend.h>
 #include <gui/TableItem.h>
@@ -93,12 +94,12 @@ GraphicsScene::setTableMenu(QMenu *ipTableMenu)
 QList<QGraphicsItem *>
 GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint &ipPos)
 {
-    QList<QGraphicsItem *> tableList;
+    QList<QGraphicsItem *> objectList;
 
     if (!ipTreeItem) {
         qDebug() << "[E][" << __func__ << "][" << __LINE__ << 
             "]Can't show selected items on the scene because input tree item is empty";   
-        return tableList;
+        return objectList;
     }
 
     // get database object id
@@ -114,24 +115,24 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
                         TreeWidget::ViewNode == ipTreeItem->child(i)->text(TreeWidget::IdCol).toInt()) {
                     for (int j = 0; j < ipTreeItem->child(i)->childCount(); ++j) {
                         QPoint pos(ipPos.x() + j * SEEK_STEP, ipPos.y() + j * SEEK_STEP);
-                        tableList << showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol, pos);
+                        objectList << showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol, pos);
                     }
                 }
             }
             // don't add schema item itself
-            return tableList;
+            return objectList;
         }
 
         if (TreeWidget::TableItem == objId) {
             TableItem *table = newTableItem(ipTreeItem->parent()->parent()->text(TreeWidget::NameCol),
                     ipTreeItem->text(TreeWidget::NameCol), mTableMenu, ipPos);
-            tableList.append(table);
+            objectList.append(table);
         }
 
         if (TreeWidget::ViewItem == objId) {
             ViewItem *view = newViewItem(ipTreeItem->parent()->parent()->text(TreeWidget::NameCol),
                     ipTreeItem->text(TreeWidget::NameCol), mTableMenu, ipPos);
-            tableList.append(view);
+            objectList.append(view);
         }
 
     } else if (TreeWidget::TableNode == objId) {
@@ -140,7 +141,7 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
         }
     }
 
-    return tableList;
+    return objectList;
 }
 
 /*
@@ -149,15 +150,14 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
 TableItem *
 GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ipMenu, const QPoint &ipPos)
 {
-    TableItem *newItem = findTableItem(ipSchemaName, ipTableName);
+    DbObjectsItem *newItem = findItem(ipSchemaName, ipTableName);
     // check if such item is already on the scene
-    if (newItem) {
-        return newItem;
+    if (isTable(newItem)) {
+        return qgraphicsitem_cast<TableItem *>(newItem);
     }
 
     // create new table
-    newItem = new TableItem(ipSchemaName, ipTableName, ipMenu, ipPos);
-    return newItem;
+    return new TableItem(ipSchemaName, ipTableName, ipMenu, ipPos);
 }
 
 /*
@@ -166,15 +166,14 @@ GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ip
 ViewItem *
 GraphicsScene::newViewItem(QString ipSchemaName, QString ipViewName, QMenu *ipMenu, const QPoint &ipPos)
 {
-//    ViewItem *newItem = findViewItem(ipSchemaName, ipViewName);
-//    // check if such item is already on the scene
-//    if (newItem) {
-//        return newItem;
-//    }
+    DbObjectsItem *newItem = findItem(ipSchemaName, ipViewName);
+    // check if such item is already on the scene
+    if (isView(newItem)) {
+        return qgraphicsitem_cast<ViewItem *>(newItem);
+    }
 
     // create new view
-    ViewItem *newItem = new ViewItem(ipSchemaName, ipViewName, ipMenu, ipPos);
-    return newItem;
+    return new ViewItem(ipSchemaName, ipViewName, ipMenu, ipPos);
 }
 
 /*
@@ -184,7 +183,7 @@ void
 GraphicsScene::addTableItems(const QList<QGraphicsItem *> &ipItems)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+        if (isGroup(item)) {
             TableItemGroup *group = qgraphicsitem_cast<TableItemGroup *>(item);
             addTableItems(group->children());
             createItemGroup(group->children());
@@ -215,37 +214,39 @@ GraphicsScene::drawRelations()
  * Create relations between given table item and anothers ones already painted
  */
 void
-GraphicsScene::createRelations(TableItem *ipSourceItem)
+GraphicsScene::createRelations(DbObjectsItem *ipSourceItem)
 {
+    // TODO: implement this according to new class structure
     // find foreign keys and tables related to this keys
-    for (int i = 0; i < ipSourceItem->columnsCount(); ++i) {
-        if (ipSourceItem->isColumnForeignKey(i)) {
-            TableItem *destItem = 0;
-
-            // if founded, create arrow
-            if ((destItem = findTableItem(ipSourceItem->foreignSchemaName(i), ipSourceItem->foreignTableName(i))) != 0) {
-                ArrowItem *arrow = new ArrowItem(ipSourceItem, destItem);
-                ipSourceItem->addArrowItem(arrow);
-                destItem->addArrowItem(arrow);
-                arrow->setZValue(-1000.0);
-                addItem(arrow);
-                arrow->updatePosition();
-            }
-        }
-    }
+//    for (int i = 0; i < ipSourceItem->columnsCount(); ++i) {
+//        if (ipSourceItem->isColumnForeignKey(i)) {
+//            DbObjectsItem *destItem = 0;
+//
+//            // if founded, create arrow
+//            if ((destItem = findItem(ipSourceItem->foreignSchemaName(i), ipSourceItem->foreignTableName(i))) != 0) {
+//                ArrowItem *arrow = new ArrowItem(ipSourceItem, destItem);
+//                ipSourceItem->addArrowItem(arrow);
+//                destItem->addArrowItem(arrow);
+//                arrow->setZValue(-1000.0);
+//                addItem(arrow);
+//                arrow->updatePosition();
+//            }
+//        }
+//    }
 }
 
 /*
  * Find table by his name on the scene
  */
-TableItem *
-GraphicsScene::findTableItem(const QString &ipSchemaName, const QString &ipTableName)
+DbObjectsItem *
+GraphicsScene::findItem(const QString &ipSchemaName, const QString &ipTableName)
 {
     foreach (QGraphicsItem *item, items()) {
-        if (qgraphicsitem_cast<TableItem *>(item)) {
-            TableItem *tableItem = qgraphicsitem_cast<TableItem *>(item);
-            if (tableItem->schemaName() == ipSchemaName && tableItem->name() == ipTableName) {
-                return tableItem;
+        if (isDbObjectItem(item)) {
+            DbObjectsItem *dbItem = qgraphicsitem_cast<TableItem *>(item);
+            // TODO: check if the view and table may have equal names (if yes - code below isn't correct)
+            if (dbItem->schemaName() == ipSchemaName && dbItem->name() == ipTableName) {
+                return dbItem;
             }
         }
     }
@@ -276,7 +277,7 @@ GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
     if (!mMoveMode) {
         // if we pressed under item - do default actions and return
         QGraphicsItem *item = itemAt(ipEvent->scenePos());
-        if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item))) {
+        if (isTable(item) || isGroup(item)) {
             mOldPos = item->scenePos();
         } else {
             clearSelection();
@@ -293,8 +294,7 @@ void
 GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     QGraphicsItem *item = itemAt(ipEvent->scenePos());
-    if (item && (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) &&
-            item->scenePos() != mOldPos) {
+    if ((isTable(item) || isGroup(item)) && item->scenePos() != mOldPos) {
         emit tableMoved(selectedItems(), (int)(item->scenePos().x() - mOldPos.x()), (int)(item->scenePos().y() - mOldPos.y()));
     }
 
@@ -375,8 +375,7 @@ GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
             break;
         case Qt::Key_Left:
             foreach (QGraphicsItem *item, selectedItems()) {
-                if ((item->type() == TableItem::Type
-                            || item->type() == TableItemGroup::Type)
+                if ((isTable(item) || isView(item) || isGroup(item))
                         && item->flags() & QGraphicsItem::ItemIsMovable) {
                     item->moveBy(-MOVE_STEP, 0);
                     mDiffX -= MOVE_STEP;
@@ -386,8 +385,7 @@ GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
             break;
         case Qt::Key_Right:
             foreach (QGraphicsItem *item, selectedItems()) {
-                if ((item->type() == TableItem::Type
-                            || item->type() == TableItemGroup::Type)
+                if ((isTable(item) || isView(item) || isGroup(item))
                         && item->flags() & QGraphicsItem::ItemIsMovable) {
                     item->moveBy(MOVE_STEP, 0);
                     mDiffX += MOVE_STEP;
@@ -397,8 +395,7 @@ GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
             break;
         case Qt::Key_Up:
             foreach (QGraphicsItem *item, selectedItems()) {
-                if ((item->type() == TableItem::Type
-                            || item->type() == TableItemGroup::Type)
+                if ((isTable(item) || isView(item) || isGroup(item))
                         && item->flags() & QGraphicsItem::ItemIsMovable) {
                     item->moveBy(0, -MOVE_STEP);
                     mDiffY -= MOVE_STEP;
@@ -408,8 +405,7 @@ GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
             break;
         case Qt::Key_Down:
             foreach (QGraphicsItem *item, selectedItems()) {
-                if ((item->type() == TableItem::Type
-                            || item->type() == TableItemGroup::Type)
+                if ((isTable(item) || isView(item) || isGroup(item))
                         && item->flags() & QGraphicsItem::ItemIsMovable) {
                     item->moveBy(0, MOVE_STEP);
                     mDiffY += MOVE_STEP;
@@ -435,7 +431,7 @@ GraphicsScene::movingTimerExpired()
 /*
  * Create table item group from the given items
  */
-    TableItemGroup *
+TableItemGroup *
 GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
 {
     clearSelection();
@@ -479,7 +475,7 @@ GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
     }
 
     foreach (QGraphicsItem *item, items) {
-        if (qgraphicsitem_cast<TableItem *>(item) || qgraphicsitem_cast<TableItemGroup *>(item)) {
+        if (isTable(item) || isGroup(item)) {
             group->addToGroup(item);
         }
     }
@@ -622,9 +618,9 @@ GraphicsScene::deleteTableItems(QList<QGraphicsItem *> &ipItems)
         if (qgraphicsitem_cast<Legend *>(item)) {
             continue;
         }
-        if (item && qgraphicsitem_cast<TableItem *>(item)) {
+        if (isTable(item)) {
             qgraphicsitem_cast<TableItem *>(item)->removeArrowItems();
-        } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+        } else if (isGroup(item)) {
             QList<QGraphicsItem *> children = qgraphicsitem_cast<TableItemGroup *>(item)->children();
             deleteTableItems(children);
         }
@@ -661,9 +657,9 @@ void
 GraphicsScene::setFieldsTypesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (qgraphicsitem_cast<TableItem *>(item)) {
+        if (isTable(item)) {
             qgraphicsitem_cast<TableItem *>(item)->setFieldsTypesVisible(ipFlag);
-        } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+        } else if (isGroup(item)) {
             setFieldsTypesVisible(qgraphicsitem_cast<TableItemGroup *>(item)->children(), ipFlag);
         }
     }
@@ -685,9 +681,9 @@ void
 GraphicsScene::setIndicesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (qgraphicsitem_cast<TableItem *>(item)) {
+        if (isTable(item)) {
             qgraphicsitem_cast<TableItem *>(item)->setIndicesVisible(ipFlag);
-        } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+        } else if (isGroup(item)) {
             setIndicesVisible(qgraphicsitem_cast<TableItemGroup *>(item)->children(), ipFlag);
         }
     }
@@ -718,9 +714,9 @@ GraphicsScene::setTableColor(QList<QGraphicsItem *> ipItems, QColor ipColor)
 {
     // ipColorize each table that is on the scene
     foreach (QGraphicsItem *item, ipItems) {
-        if (qgraphicsitem_cast<TableItem *>(item)) {
+        if (isTable(item)) {
             setTableColor(qgraphicsitem_cast<TableItem *>(item), ipColor);
-        } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+        } else if (isGroup(item)) {
             setTableColor(qgraphicsitem_cast<TableItemGroup *>(item)->children(), ipColor);
         }
     }
@@ -730,7 +726,7 @@ GraphicsScene::setTableColor(QList<QGraphicsItem *> ipItems, QColor ipColor)
  * Set item to given color
  */
 void
-GraphicsScene::setTableColor(TableItem *ipItem, QColor ipColor)
+GraphicsScene::setTableColor(DbObjectsItem *ipItem, QColor ipColor)
 {
     ipItem->setItemColor(ipColor);
 }
@@ -743,7 +739,7 @@ GraphicsScene::selectAllTables()
 {
     // items can mutate in the loop
     foreach (QGraphicsItem *item, items()) {
-        if (qgraphicsitem_cast<TableItem *>(item)) {
+        if (isTable(item)) {
             qgraphicsitem_cast<TableItem *>(item)->setSelected(true);
         }
     }
@@ -765,9 +761,9 @@ void
 GraphicsScene::adjustTables(QList<QGraphicsItem *> ipItems)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (qgraphicsitem_cast<TableItem *>(item)) {
+        if (isTable(item)) {
             qgraphicsitem_cast<TableItem *>((item))->adjustSize();
-        } else if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+        } else if (isGroup(item)) {
             adjustTables(qgraphicsitem_cast<TableItemGroup *>((item))->children());
         }
     }
@@ -804,7 +800,7 @@ void
 GraphicsScene::ungroupItems(QList<QGraphicsItem *> ipItems)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (qgraphicsitem_cast<TableItemGroup *>(item)) {
+        if (isGroup(item)) {
             destroyItemGroup(qgraphicsitem_cast<TableItemGroup *>(item));
         }
     }
@@ -833,13 +829,19 @@ GraphicsScene::colorizeAccordingSchemas()
     for (int i = 0; i < schemasNames.count(); ++i) {
         // items can mutate in the loop
         foreach (QGraphicsItem *item, items()) {
-            TableItem *tableItem = qgraphicsitem_cast<TableItem *>(item);
-            if (tableItem && tableItem->schemaName() == schemasNames.at(i)) {
+//            if (!isDbObjectItem(item)) {
+//                continue;
+//            }
+            qDebug() << "i: " << item;
+
+//            DbObjectsItem *dbItem = qgraphicsitem_cast<DbObjectsItem *>(item);
+
+            if ((isTable(item) || isView(item)) && qgraphicsitem_cast<DbObjectsItem *>(item)->schemaName() == schemasNames.at(i)) {
                 // use only two colors from the palette
                 int red = (0 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
                 int green = (1 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
                 int blue = (2 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
-                setTableColor(tableItem, QColor(red, green, blue));
+                setTableColor(qgraphicsitem_cast<DbObjectsItem *>(item), QColor(red, green, blue));
             }
         }
     }
@@ -887,8 +889,7 @@ GraphicsScene::selectAllTablesInSchema()
     foreach (QGraphicsItem *itemFromSelected, selectedItems()) {
         // items can mutate in the loop
         foreach (QGraphicsItem *itemFromAll, items()) {
-            if (qgraphicsitem_cast<TableItem *>(itemFromAll) &&
-                    qgraphicsitem_cast<TableItem *>(itemFromSelected) &&
+            if (isTable(itemFromAll) && isTable(itemFromSelected) &&
                     qgraphicsitem_cast<TableItem *>(itemFromAll)->schemaName() ==
                     qgraphicsitem_cast<TableItem *>(itemFromSelected)->schemaName()) {
                 (itemFromAll)->setSelected(true);

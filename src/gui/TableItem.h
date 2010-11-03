@@ -30,7 +30,7 @@
 #ifndef TABLEITEM_H
 #define TABLEITEM_H
 
-#include <gui/GraphicsItem.h>
+#include <gui/DbObjectsItem.h>
 #include <QSettings>
 
 class QAction;
@@ -54,7 +54,7 @@ class DbTable;
 /*
  * Graphics item, implements the database table. Support moving, resizing, changing of the color etc.
  */
-class TableItem : public GraphicsItem
+class TableItem : public DbObjectsItem 
 {
     public:
         enum { Type = UserType + 5 };

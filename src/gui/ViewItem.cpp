@@ -45,7 +45,7 @@
  * Constructor
  */
 ViewItem::ViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu *ipMenu, const QPoint &ipPos)
-    : GraphicsItem(ipMenu)
+    : DbObjectsItem(ipMenu)
 {
     using namespace DbObjects::Common;
     Database *dbInst = Database::instance();
@@ -160,7 +160,7 @@ ViewItem::schemaName() const
 QDomElement
 ViewItem::toXml(QDomDocument &ipDoc) const
 {
-    return GraphicsItem::toXml(ipDoc, "view");
+    return DbObjectsItem::toXml(ipDoc, "view");
 }
 
 /*

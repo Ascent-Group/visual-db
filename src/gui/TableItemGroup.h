@@ -63,7 +63,7 @@ class TableItemGroup : public QGraphicsItemGroup
         QMenu *mContextMenu;
 };
 
-bool isTableGroup(QGraphicsItem *);
+bool isGroup(QGraphicsItem *);
 
 #endif // TABLEITEMGROUP_H
 

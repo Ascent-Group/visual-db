@@ -104,16 +104,6 @@ class GraphicsItem : public QGraphicsPolygonItem
         virtual void setTitleItem(QGraphicsTextItem *);
         virtual QGraphicsTextItem *titleItem() const;
 
-        virtual bool isRightBottomCorner(const QPointF &ipPos) const;
-        virtual bool isLeftBottomCorner(const QPointF &ipPos) const;
-        virtual bool isLeftTopCorner(const QPointF &ipPos) const;
-        virtual bool isRightTopCorner(const QPointF &ipPos) const;
-
-        virtual bool isLeftVerticalBorder(const QPointF &ipPos) const;
-        virtual bool isRightVerticalBorder(const QPointF &ipPos) const;
-        virtual bool isTopHorizontalBorder(const QPointF &ipPos) const;
-        virtual bool isBottomHorizontalBorder(const QPointF &ipPos) const;
-
         virtual QPointF centerPoint() const;
 
         virtual QRectF rect() const;
@@ -127,32 +117,28 @@ class GraphicsItem : public QGraphicsPolygonItem
         virtual void updatePolygon();
         virtual void adjustSize();
 
-        virtual void addArrowItem(ArrowItem *);
-        virtual void removeArrowItem(ArrowItem *);
-        virtual void removeArrowItems();
-        virtual void setFieldsTypesVisible(bool);
-
-        virtual QList<ArrowItem *> arrows() const;
-        virtual QString name() const = 0;
-        virtual QString schemaName() const = 0;
-
         virtual void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
-        virtual QDomElement toXml(QDomDocument &, const QString &) const;
-
-        static void setSeek(int);
-        static int seek();
 
     protected:
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
-        QVariant itemChange(GraphicsItemChange, const QVariant &);
-        void mouseMoveEvent(QGraphicsSceneMouseEvent *);
-        void mousePressEvent(QGraphicsSceneMouseEvent *);
-        void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
-        void hoverMoveEvent(QGraphicsSceneHoverEvent *);
-        void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
+        virtual bool isRightBottomCorner(const QPointF &ipPos) const;
+        virtual bool isLeftBottomCorner(const QPointF &ipPos) const;
+        virtual bool isLeftTopCorner(const QPointF &ipPos) const;
+        virtual bool isRightTopCorner(const QPointF &ipPos) const;
 
+        virtual bool isLeftVerticalBorder(const QPointF &ipPos) const;
+        virtual bool isRightVerticalBorder(const QPointF &ipPos) const;
+        virtual bool isTopHorizontalBorder(const QPointF &ipPos) const;
+        virtual bool isBottomHorizontalBorder(const QPointF &ipPos) const;
+
+        virtual void paintBorder(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
+        virtual void paintTitle(QPainter *);
+        virtual void paintTitleImage(QPainter *);
+        virtual void paintTitleText(QPainter *);
+        virtual void paintFields(QPainter *);
         virtual void paintFieldImage(QPainter *, int) { };
-        virtual void paintIndeces(QPainter *) { };
+        virtual void paintFieldText(QPainter *, int);
+        virtual void paintAdditionalInfo(QPainter *) { };
+        virtual void paintAnchor(QPainter *);
 
         static const int SEEK_STEP = 20;
 

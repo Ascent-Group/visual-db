@@ -121,7 +121,7 @@ TableItemGroup::toXml(QDomDocument &ipDoc)
  * \return True if given item is a group item, false if not
  */
 bool
-isTableGroup(QGraphicsItem *ipItem)
+isGroup(QGraphicsItem *ipItem)
 {
     return qgraphicsitem_cast<TableItemGroup *>(ipItem) != 0;
 }

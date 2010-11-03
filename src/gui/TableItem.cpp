@@ -51,7 +51,7 @@
  * Constructor
  */
 TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QMenu *ipMenu, const QPoint &ipPos)
-    : GraphicsItem(ipMenu), mIndicesVisible(true)
+    : DbObjectsItem(ipMenu), mIndicesVisible(true)
 {
     using namespace DbObjects::Common;
     Database *dbInst = Database::instance();
@@ -268,7 +268,7 @@ TableItem::schemaName() const
 QDomElement
 TableItem::toXml(QDomDocument &ipDoc) const
 {
-    return GraphicsItem::toXml(ipDoc, "table");
+    return DbObjectsItem::toXml(ipDoc, "table");
 }
 
 /*

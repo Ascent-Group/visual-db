@@ -44,6 +44,7 @@ class QSlider;
 class QTreeWidgetItem;
 
 class ControlWidget;
+class DbObjectsItem;
 class Legend;
 class TableItem;
 class TableItemGroup;
@@ -75,10 +76,10 @@ class GraphicsScene : public QGraphicsScene {
         void refreshLegend();
         void updateLegend();
         void drawRelations();
-        void createRelations(TableItem *);
+        void createRelations(DbObjectsItem *);
         TableItem *newTableItem(QString, QString, QMenu *, const QPoint &);
         ViewItem *newViewItem(QString, QString, QMenu *, const QPoint &);
-        void setTableColor(TableItem *, QColor);
+        void setTableColor(DbObjectsItem*, QColor);
         bool moveMode() const;
 
     signals:
@@ -112,7 +113,7 @@ class GraphicsScene : public QGraphicsScene {
         virtual void drawBackground(QPainter *, const QRectF &);
 
     private:
-        TableItem *findTableItem(const QString &, const QString &);
+        DbObjectsItem *findItem(const QString &, const QString &);
         void setFieldsTypesVisible(QList<QGraphicsItem *>, bool);
         void setIndicesVisible(QList<QGraphicsItem *>, bool);
         void setTableColor(QList<QGraphicsItem *>, QColor);
@@ -138,7 +139,7 @@ class GraphicsScene : public QGraphicsScene {
 
         QMenu *mSchemeMenu;
         QMenu *mTableMenu;
-        QVector<TableItem *> mTables;
+        QVector<DbObjectsItem *> mDbItems;
 
         QPointF mOldPos;
 

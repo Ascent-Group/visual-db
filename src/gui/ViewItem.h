@@ -30,7 +30,7 @@
 #ifndef VIEWEITEM_H
 #define VIEWEITEM_H
 
-#include <gui/DbObjectsItem.h>
+#include <gui/DbObjectItem.h>
 #include <QSettings>
 
 class QAction;
@@ -52,7 +52,7 @@ namespace DbObjects
 /*
  * Graphics item, implements the database view. Support moving, resizing, changing of the color etc.
  */
-class ViewItem : public DbObjectsItem
+class ViewItem : public DbObjectItem
 {
     public:
         ViewItem(const QString &, const QString &, QMenu *, const QPoint &);
@@ -68,17 +68,13 @@ class ViewItem : public DbObjectsItem
     public:
         enum { Type = UserType + 8 };
 
-//    protected:
-//        void paintFieldImage(QPainter *, int);
-//        void paintIndeces(QPainter *);
-
     private:
-
         QSettings mSettings;
+        
         DbObjects::Common::DbView *mModel;
 };
 
-bool isView(QGraphicsItem *);
+ViewItem *toView(QGraphicsItem *);
 
 #endif // VIEWEITEM_H
 

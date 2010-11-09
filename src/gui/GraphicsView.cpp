@@ -39,10 +39,8 @@
 
 #include <gui/GraphicsScene.h>
 #include <gui/GraphicsView.h>
-#include <gui/TableItem.h>
-#include <gui/TableItemGroup.h>
 #include <gui/TreeWidget.h>
-#include <gui/behaviour/AddTableCommand.h>
+#include <gui/behaviour/AddItemCommand.h>
 
 #include <QDebug>
 
@@ -93,7 +91,7 @@ GraphicsView::wheelEvent(QWheelEvent *ipEvent)
 }
 
 /*
- * Scaling the table scheme
+ * Scaling the scheme
  */
 void
 GraphicsView::scaleView(int ipScaleFactor)
@@ -134,7 +132,7 @@ GraphicsView::dragEnterEvent(QDragEnterEvent *ipEvent)
 }
 
 /*
- * Drag enter event
+ * Drag move event
  */
 void 
 GraphicsView::dragMoveEvent(QDragMoveEvent *ipEvent)
@@ -162,22 +160,18 @@ GraphicsView::dropEvent(QDropEvent *ipEvent)
     }
 
     if (ipEvent->mimeData()->hasFormat("table/x-table")) {
-//        QByteArray pieceData = ipEvent->mimeData()->data("table/x-table");
-//        QDataStream dataStream(&pieceData, QIODevice::ReadOnly);
-//        QString tableName;
-//        dataStream >> tableName;
         GraphicsScene *graphicsScene = dynamic_cast<GraphicsScene *>(scene());
-        QTreeWidget *tableTree = dynamic_cast<QTreeWidget *>(ipEvent->source());
-        if (graphicsScene && tableTree) {
+        QTreeWidget *itemTree = dynamic_cast<QTreeWidget *>(ipEvent->source());
+        if (graphicsScene && itemTree) {
             int i = 0;
-            foreach (QTreeWidgetItem *treeItem, tableTree->selectedItems()) {
-                QList<QGraphicsItem *> tableList = graphicsScene->showOnScene(treeItem, TreeWidget::NameCol, ipEvent->pos() + QPoint(i * SEEK_STEP, i * SEEK_STEP));
-                emit tableActionDone(new AddTableCommand(graphicsScene, tableList));
+            foreach (QTreeWidgetItem *treeItem, itemTree->selectedItems()) {
+                QList<QGraphicsItem *> itemList = graphicsScene->showOnScene(treeItem, TreeWidget::NameCol, ipEvent->pos() + QPoint(i * SEEK_STEP, i * SEEK_STEP));
+                emit itemActionDone(new AddItemCommand(graphicsScene, itemList));
                 ++i;
             }
         } else {
             qDebug() << "[E][" << __func__ << "][" << __LINE__ << 
-                "]Can't handle drop event because graphics scene or table tree doesn't have appropriate type";   
+                "]Can't handle drop event because graphics scene or item tree doesn't have appropriate type";   
         }
         ipEvent->setDropAction(Qt::CopyAction);
         ipEvent->accept();    
@@ -238,42 +232,6 @@ GraphicsView::moveRight()
 {
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() + MOVE_STEP);
 }
-
-//void
-//GraphicsView::mousePressEvent(QMouseEvent *ipEvent)
-//{
-//    if (dynamic_cast<GraphicsScene *>(scene())->moveMode()) {
-//        if (!mMovingNow) {
-//            mMovingNow = true;
-//            mBeginPoint = ipEvent->pos();
-//        }
-//        QWidget::setCursor(Qt::ClosedHandCursor);
-//    }
-//    QGraphicsView::mousePressEvent(ipEvent);
-//}
-//
-//void
-//GraphicsView::mouseMoveEvent(QMouseEvent *ipEvent)
-//{
-//    if (dynamic_cast<GraphicsScene *>(scene())->moveMode()) {
-//        if (mMovingNow) {
-//            horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (int)(ipEvent->pos().x() - mBeginPoint.x()));
-//            verticalScrollBar()->setValue(verticalScrollBar()->value() - (int)(ipEvent->pos().y() - mBeginPoint.y()));
-//            mBeginPoint = ipEvent->pos();
-//        }
-//    }
-//    QGraphicsView::mouseMoveEvent(ipEvent);
-//}
-//
-//void
-//GraphicsView::mouseReleaseEvent(QMouseEvent *ipEvent)
-//{
-//    if (dynamic_cast<GraphicsScene *>(scene())->moveMode()) {
-//        mMovingNow = false;
-//        QWidget::setCursor(Qt::OpenHandCursor);
-//    }
-//    QGraphicsView::mouseReleaseEvent(ipEvent);
-//}
 
 void
 GraphicsView::setMoveMode(bool ipFlag)

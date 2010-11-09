@@ -41,11 +41,11 @@
 #include <consts.h>
 #include <gui/ArrowItem.h>
 #include <gui/ControlWidget.h>
-#include <gui/DbObjectsItem.h>
+#include <gui/DbObjectItem.h>
 #include <gui/GraphicsScene.h>
 #include <gui/Legend.h>
 #include <gui/TableItem.h>
-#include <gui/TableItemGroup.h>
+#include <gui/ItemGroup.h>
 #include <gui/TreeWidget.h>
 #include <gui/ViewItem.h>
 #include <math.h>
@@ -150,10 +150,10 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
 TableItem *
 GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ipMenu, const QPoint &ipPos)
 {
-    DbObjectsItem *newItem = findItem(ipSchemaName, ipTableName);
+    DbObjectItem *newItem = findItem(ipSchemaName, ipTableName);
     // check if such item is already on the scene
-    if (isTable(newItem)) {
-        return qgraphicsitem_cast<TableItem *>(newItem);
+    if (toTable(newItem)) {
+        return toTable(newItem);
     }
 
     // create new table
@@ -166,10 +166,10 @@ GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ip
 ViewItem *
 GraphicsScene::newViewItem(QString ipSchemaName, QString ipViewName, QMenu *ipMenu, const QPoint &ipPos)
 {
-    DbObjectsItem *newItem = findItem(ipSchemaName, ipViewName);
+    DbObjectItem *newItem = findItem(ipSchemaName, ipViewName);
     // check if such item is already on the scene
-    if (isView(newItem)) {
-        return qgraphicsitem_cast<ViewItem *>(newItem);
+    if (toView(newItem)) {
+        return toView(newItem);
     }
 
     // create new view
@@ -177,17 +177,16 @@ GraphicsScene::newViewItem(QString ipSchemaName, QString ipViewName, QMenu *ipMe
 }
 
 /*
- * Add existent table items to the scene
+ * Add given items to the scene
  */
 void
-GraphicsScene::addTableItems(const QList<QGraphicsItem *> &ipItems)
+GraphicsScene::addItems(const QList<QGraphicsItem *> &ipItems)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (isGroup(item)) {
-            TableItemGroup *group = qgraphicsitem_cast<TableItemGroup *>(item);
-            addTableItems(group->children());
-            createItemGroup(group->children());
-        } else if (isTable(item) || isView(item)) {
+        if (toGroup(item)) {
+            addItems(toGroup(item)->children());
+            createItemGroup(toGroup(item)->children());
+        } else if (toDbObject(item)) {
             addItem(item);
         }
     }
@@ -204,8 +203,8 @@ GraphicsScene::drawRelations()
 {
     // draw all relations between new table and already added ones
     foreach (QGraphicsItem *item, items()) {
-        if (isTable(item)) {
-            createRelations(qgraphicsitem_cast<TableItem *>(item));
+        if (toTable(item)) {
+            createRelations(toTable(item));
         }
     }
 }
@@ -214,13 +213,13 @@ GraphicsScene::drawRelations()
  * Create relations between given table item and anothers ones already painted
  */
 void
-GraphicsScene::createRelations(DbObjectsItem *ipSourceItem)
+GraphicsScene::createRelations(DbObjectItem *ipSourceItem)
 {
     // TODO: implement this according to new class structure
     // find foreign keys and tables related to this keys
 //    for (int i = 0; i < ipSourceItem->columnsCount(); ++i) {
 //        if (ipSourceItem->isColumnForeignKey(i)) {
-//            DbObjectsItem *destItem = 0;
+//            DbObjectItem *destItem = 0;
 //
 //            // if founded, create arrow
 //            if ((destItem = findItem(ipSourceItem->foreignSchemaName(i), ipSourceItem->foreignTableName(i))) != 0) {
@@ -236,16 +235,16 @@ GraphicsScene::createRelations(DbObjectsItem *ipSourceItem)
 }
 
 /*
- * Find table by his name on the scene
+ * Find item by his name on the scene
  */
-DbObjectsItem *
-GraphicsScene::findItem(const QString &ipSchemaName, const QString &ipTableName)
+DbObjectItem *
+GraphicsScene::findItem(const QString &ipSchemaName, const QString &ipItemName)
 {
     foreach (QGraphicsItem *item, items()) {
-        if (isDbObjectItem(item)) {
-            DbObjectsItem *dbItem = qgraphicsitem_cast<TableItem *>(item);
+        DbObjectItem *dbItem = toDbObject(item);
+        if (dbItem) {
             // TODO: check if the view and table may have equal names (if yes - code below isn't correct)
-            if (dbItem->schemaName() == ipSchemaName && dbItem->name() == ipTableName) {
+            if (dbItem->schemaName() == ipSchemaName && dbItem->name() == ipItemName) {
                 return dbItem;
             }
         }
@@ -277,7 +276,7 @@ GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
     if (!mMoveMode) {
         // if we pressed under item - do default actions and return
         QGraphicsItem *item = itemAt(ipEvent->scenePos());
-        if (isTable(item) || isGroup(item)) {
+        if (toDbObject(item) || toGroup(item)) {
             mOldPos = item->scenePos();
         } else {
             clearSelection();
@@ -294,8 +293,8 @@ void
 GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     QGraphicsItem *item = itemAt(ipEvent->scenePos());
-    if ((isTable(item) || isGroup(item)) && item->scenePos() != mOldPos) {
-        emit tableMoved(selectedItems(), (int)(item->scenePos().x() - mOldPos.x()), (int)(item->scenePos().y() - mOldPos.y()));
+    if ((toDbObject(item) || toGroup(item)) && item->scenePos() != mOldPos) {
+        emit itemMoved(selectedItems(), (int)(item->scenePos().x() - mOldPos.x()), (int)(item->scenePos().y() - mOldPos.y()));
     }
 
     if (!mMoveMode) {
@@ -359,8 +358,8 @@ GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
 
 /*
  * Handler for key press ipEvent
- * + - maximize the table scheme view
- * - - minimize the table scheme view
+ * + - maximize the scheme view
+ * - - minimize the scheme view
  * arrow keys - move items to the appropriate sides
  */
 void
@@ -375,7 +374,7 @@ GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
             break;
         case Qt::Key_Left:
             foreach (QGraphicsItem *item, selectedItems()) {
-                if ((isTable(item) || isView(item) || isGroup(item))
+                if ((toDbObject(item) || toGroup(item))
                         && item->flags() & QGraphicsItem::ItemIsMovable) {
                     item->moveBy(-MOVE_STEP, 0);
                     mDiffX -= MOVE_STEP;
@@ -385,7 +384,7 @@ GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
             break;
         case Qt::Key_Right:
             foreach (QGraphicsItem *item, selectedItems()) {
-                if ((isTable(item) || isView(item) || isGroup(item))
+                if ((toDbObject(item) || toGroup(item))
                         && item->flags() & QGraphicsItem::ItemIsMovable) {
                     item->moveBy(MOVE_STEP, 0);
                     mDiffX += MOVE_STEP;
@@ -395,7 +394,7 @@ GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
             break;
         case Qt::Key_Up:
             foreach (QGraphicsItem *item, selectedItems()) {
-                if ((isTable(item) || isView(item) || isGroup(item))
+                if ((toDbObject(item) || toGroup(item))
                         && item->flags() & QGraphicsItem::ItemIsMovable) {
                     item->moveBy(0, -MOVE_STEP);
                     mDiffY -= MOVE_STEP;
@@ -405,7 +404,7 @@ GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
             break;
         case Qt::Key_Down:
             foreach (QGraphicsItem *item, selectedItems()) {
-                if ((isTable(item) || isView(item) || isGroup(item))
+                if ((toDbObject(item) || toGroup(item))
                         && item->flags() & QGraphicsItem::ItemIsMovable) {
                     item->moveBy(0, MOVE_STEP);
                     mDiffY += MOVE_STEP;
@@ -419,19 +418,17 @@ GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
 void
 GraphicsScene::movingTimerExpired()
 {
-    qDebug() << "DIFF: " << mDiffX << ":" << mDiffY;
-
     mStartMovingTimer.stop();
 
-    emit tableMoved(selectedItems(), mDiffX, mDiffY);
+    emit itemMoved(selectedItems(), mDiffX, mDiffY);
     mDiffX = 0;
     mDiffY = 0;
 }
 
 /*
- * Create table item group from the given items
+ * Create item group from the given items
  */
-TableItemGroup *
+ItemGroup *
 GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
 {
     clearSelection();
@@ -469,13 +466,13 @@ GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
     }
 
     // Create a new group at that level
-    TableItemGroup *group = new TableItemGroup(commonAncestor);
+    ItemGroup *group = new ItemGroup(commonAncestor);
     if (!commonAncestor) {
         addItem(group);
     }
 
     foreach (QGraphicsItem *item, items) {
-        if (isTable(item) || isGroup(item)) {
+        if (toDbObject(item) || toGroup(item)) {
             group->addToGroup(item);
         }
     }
@@ -612,17 +609,18 @@ GraphicsScene::updateLegend()
  * Delete given items (recursivelly for groups)
  */
 void
-GraphicsScene::deleteTableItems(QList<QGraphicsItem *> &ipItems)
+GraphicsScene::deleteItems(QList<QGraphicsItem *> &ipItems)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (qgraphicsitem_cast<Legend *>(item)) {
+        if (toLegend(item)) {
             continue;
         }
-        if (isTable(item)) {
-            qgraphicsitem_cast<TableItem *>(item)->removeArrowItems();
-        } else if (isGroup(item)) {
-            QList<QGraphicsItem *> children = qgraphicsitem_cast<TableItemGroup *>(item)->children();
-            deleteTableItems(children);
+       
+        if (toDbObject(item)) {
+            toDbObject(item)->removeArrowItems();
+        } else if (toGroup(item)) {
+            QList<QGraphicsItem *> children = toGroup(item)->children();
+            deleteItems(children);
         }
         removeItem(item);
     }
@@ -657,10 +655,10 @@ void
 GraphicsScene::setFieldsTypesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (isTable(item)) {
-            qgraphicsitem_cast<TableItem *>(item)->setFieldsTypesVisible(ipFlag);
-        } else if (isGroup(item)) {
-            setFieldsTypesVisible(qgraphicsitem_cast<TableItemGroup *>(item)->children(), ipFlag);
+        if (toDbObject(item)) {
+            toDbObject(item)->setFieldsTypesVisible(ipFlag);
+        } else if (toGroup(item)) {
+            setFieldsTypesVisible(toGroup(item)->children(), ipFlag);
         }
     }
 }
@@ -681,43 +679,45 @@ void
 GraphicsScene::setIndicesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (isTable(item)) {
-            qgraphicsitem_cast<TableItem *>(item)->setIndicesVisible(ipFlag);
-        } else if (isGroup(item)) {
-            setIndicesVisible(qgraphicsitem_cast<TableItemGroup *>(item)->children(), ipFlag);
+        if (toTable(item)) {
+            toTable(item)->setIndicesVisible(ipFlag);
+        } else if (toGroup(item)) {
+            setIndicesVisible(toGroup(item)->children(), ipFlag);
         }
     }
 }
 
 /*
- * Set all selected tables' color to user choosed color
+ * Set all selected items' color to user choosed color
  */
 void
-GraphicsScene::setTableColor()
+GraphicsScene::setItemColor()
 {
     // prompt for color
     QColor color = QColorDialog::getColor(Qt::white);
 
     // if color is valid
     if (color.isValid()) {
-        setTableColor(selectedItems(), color);
+        setItemColor(selectedItems(), color);
     }
 
     updateLegend();
 }
 
 /*
- * Set all items to given color (recursivelly for groups)
+ * Colorize all items in the list (recursivelly for groups)
  */
 void
-GraphicsScene::setTableColor(QList<QGraphicsItem *> ipItems, QColor ipColor)
+GraphicsScene::setItemColor(QList<QGraphicsItem *> ipItems, QColor ipColor)
 {
-    // ipColorize each table that is on the scene
+    // colorize each item that is on the scene
     foreach (QGraphicsItem *item, ipItems) {
-        if (isTable(item)) {
-            setTableColor(qgraphicsitem_cast<TableItem *>(item), ipColor);
-        } else if (isGroup(item)) {
-            setTableColor(qgraphicsitem_cast<TableItemGroup *>(item)->children(), ipColor);
+        if (toDbObject(item)) {
+            setItemColor(toDbObject(item), ipColor);
+        } 
+        
+        if (toGroup(item)) {
+            setItemColor(toGroup(item)->children(), ipColor);
         }
     }
 }
@@ -726,45 +726,45 @@ GraphicsScene::setTableColor(QList<QGraphicsItem *> ipItems, QColor ipColor)
  * Set item to given color
  */
 void
-GraphicsScene::setTableColor(DbObjectsItem *ipItem, QColor ipColor)
+GraphicsScene::setItemColor(DbObjectItem *ipItem, QColor ipColor)
 {
     ipItem->setItemColor(ipColor);
 }
 
 /*
- * Select all tables if ctrl-a is pressed
+ * Select all items if ctrl-a is pressed
  */
 void
-GraphicsScene::selectAllTables()
+GraphicsScene::selectAllItems()
 {
     // items can mutate in the loop
     foreach (QGraphicsItem *item, items()) {
-        if (isTable(item)) {
-            qgraphicsitem_cast<TableItem *>(item)->setSelected(true);
+        if (toDbObject(item)) {
+            toDbObject(item)->setSelected(true);
         }
     }
 }
 
 /*
- * Auto resize selected tables' sizes to adjusted
+ * Auto resize selected items' sizes to adjusted
  */
 void
-GraphicsScene::adjustTables()
+GraphicsScene::adjustItems()
 {
-    adjustTables(selectedItems());
+    adjustItems(selectedItems());
 }
 
 /*
  * Auto resize items (recursivelly for groups)
  */
 void
-GraphicsScene::adjustTables(QList<QGraphicsItem *> ipItems)
+GraphicsScene::adjustItems(QList<QGraphicsItem *> ipItems)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (isTable(item)) {
-            qgraphicsitem_cast<TableItem *>((item))->adjustSize();
-        } else if (isGroup(item)) {
-            adjustTables(qgraphicsitem_cast<TableItemGroup *>((item))->children());
+        if (toDbObject(item)) {
+            toDbObject(item)->adjustSize();
+        } else if (toGroup(item)) {
+            adjustItems(toGroup(item)->children());
         }
     }
 }
@@ -780,7 +780,7 @@ GraphicsScene::groupItems(QList<QGraphicsItem *> ipItems)
         return;
     }
 
-    TableItemGroup *group = createItemGroup(ipItems);
+    ItemGroup *group = createItemGroup(ipItems);
     group->setContextMenu(mTableMenu);
 }
 
@@ -800,8 +800,8 @@ void
 GraphicsScene::ungroupItems(QList<QGraphicsItem *> ipItems)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (isGroup(item)) {
-            destroyItemGroup(qgraphicsitem_cast<TableItemGroup *>(item));
+        if (toGroup(item)) {
+            destroyItemGroup(toGroup(item));
         }
     }
 }
@@ -816,7 +816,7 @@ GraphicsScene::ungroupItems()
 }
 
 /*
- * Colorize tables according schemas
+ * Colorize items according schemas
  */
 void
 GraphicsScene::colorizeAccordingSchemas()
@@ -829,24 +829,44 @@ GraphicsScene::colorizeAccordingSchemas()
     for (int i = 0; i < schemasNames.count(); ++i) {
         // items can mutate in the loop
         foreach (QGraphicsItem *item, items()) {
-//            if (!isDbObjectItem(item)) {
-//                continue;
-//            }
-            qDebug() << "i: " << item;
-
-//            DbObjectsItem *dbItem = qgraphicsitem_cast<DbObjectsItem *>(item);
-
-            if ((isTable(item) || isView(item)) && qgraphicsitem_cast<DbObjectsItem *>(item)->schemaName() == schemasNames.at(i)) {
+            // FIXME doesn't work for views because schemaName returns empty string now for ViewItem
+            if (toDbObject(item) && toDbObject(item)->schemaName() == schemasNames.at(i)) {
                 // use only two colors from the palette
                 int red = (0 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
                 int green = (1 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
                 int blue = (2 == i % 3) ? 255 * (i + 1) / schemasNames.count() : 0;
-                setTableColor(qgraphicsitem_cast<DbObjectsItem *>(item), QColor(red, green, blue));
+
+                setItemColor(toDbObject(item), QColor(red, green, blue));
             }
         }
     }
 
     updateLegend();
+}
+
+/*
+ * Set the anchor for selected items
+ */
+void
+GraphicsScene::setAnchor(bool ipFlag)
+{
+    setAnchor(selectedItems(), ipFlag);
+}
+
+/*
+ * Set the anchor for selected items
+ */
+void
+GraphicsScene::setAnchor(QList<QGraphicsItem *> ipItems, bool ipFlag)
+{
+    foreach (QGraphicsItem *item, ipItems) {
+        if (toGroup(item)) {
+            item->setFlag(QGraphicsItem::ItemIsMovable, ipFlag);
+            setAnchor(item->children(), ipFlag);
+        } else if (toDbObject(item)) {
+            item->setFlag(QGraphicsItem::ItemIsMovable, ipFlag);
+        }
+    }
 }
 
 /*
@@ -861,7 +881,7 @@ GraphicsScene::showGrid(bool ipFlag)
 }
 
 /*
- * (Un)Align tables to the grid
+ * (Un)Align items to the grid
  */
 void
 GraphicsScene::alignToGrid(bool ipFlag)
@@ -881,21 +901,75 @@ GraphicsScene::divideIntoPages(bool ipFlag)
 }
 
 /*
- * Select all tables in schema
+ * Select all items in schema
  */
 void
-GraphicsScene::selectAllTablesInSchema()
+GraphicsScene::selectAllItemsInSchema()
 {
     foreach (QGraphicsItem *itemFromSelected, selectedItems()) {
         // items can mutate in the loop
         foreach (QGraphicsItem *itemFromAll, items()) {
-            if (isTable(itemFromAll) && isTable(itemFromSelected) &&
-                    qgraphicsitem_cast<TableItem *>(itemFromAll)->schemaName() ==
-                    qgraphicsitem_cast<TableItem *>(itemFromSelected)->schemaName()) {
+            if (toDbObject(itemFromAll) && toDbObject(itemFromSelected) &&
+                    toDbObject(itemFromAll)->schemaName() ==
+                    toDbObject(itemFromSelected)->schemaName()) {
                 (itemFromAll)->setSelected(true);
             }
         }
     }
+}
+
+
+/*
+ * Save scene to xml
+ */
+QDomElement
+GraphicsScene::toXml(QDomDocument &ipDoc, bool ipShowGrid, bool ipDivideIntoPages, bool ipShowLegend, bool ipShowControlWidget) const
+{
+    QDomElement element = ipDoc.createElement("scene");
+    element.setAttribute("grid", ipShowGrid);
+    element.setAttribute("divideIntoPages", ipDivideIntoPages);
+    element.setAttribute("legend", ipShowLegend);
+    element.setAttribute("controlWidget", ipShowControlWidget);
+
+    foreach (QGraphicsItem *item, items()) {
+        if (toGroup(item) && 0 == toGroup(item)->parentItem()) {
+            element.appendChild(toGroup(item)->toXml(ipDoc));
+        } else if (toDbObject(item) && 0 == toDbObject(item)->parentItem()) {
+            element.appendChild(toDbObject(item)->toXml(ipDoc));
+        }
+    }
+
+    return element;
+}
+
+/*
+ * Restore scene from xml
+ */
+QList<QGraphicsItem *>
+GraphicsScene::fromXml(const QDomNode &ipNode)
+{
+    QList<QGraphicsItem *> itemList;
+    QDomNode node = ipNode;
+    // show all elements
+    while (!node.isNull()) {
+        QDomElement element = node.toElement();
+        if (!element.isNull()) {
+            // it's a table
+            if (element.tagName() == "table") {
+                itemList << TableItem::fromXml(element, this, mTableMenu);
+            // it's a view
+            } else if (element.tagName() == "view") {
+//                itemList << ViewItem::fromXml(element, this, mTableMenu);
+            // it's a table group
+            } else if (element.tagName() == "tableGroup") {
+                itemList << ItemGroup::fromXml(element, this, mTableMenu);
+            }
+        }
+        // go to the next element
+        node = node.nextSibling();
+    }
+
+    return itemList;
 }
 
 /*

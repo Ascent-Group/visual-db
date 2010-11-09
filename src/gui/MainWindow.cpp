@@ -66,7 +66,6 @@
 #include <gui/SqlWidget.h>
 #include <gui/TabWidget.h>
 #include <gui/TableItem.h>
-#include <gui/TableItemGroup.h>
 #include <gui/TreeWidget.h>
 
 #include <QtDebug>
@@ -218,7 +217,7 @@ int
 importDatabase(const Ui::MainWindow &ui)
 {
     if (QSqlDatabase::database("mainConnect").open()) {
-        ui.mSceneWidget->cleanTableSchemeScene();
+        ui.mSceneWidget->cleanSchemeScene();
         ui.mTree->refresh();
         ui.mSceneWidget->refreshLegend();
         return QDialog::Accepted;
@@ -409,7 +408,7 @@ MainWindow::showLogPanel()
  * Add table to scene
  */
 void
-MainWindow::addTableItem()
+MainWindow::addItem()
 {
     QTreeWidgetItemIterator treeIter(ui.mTree);
 
@@ -422,19 +421,6 @@ MainWindow::addTableItem()
 
     ui.mSceneWidget->updateLegend();
 }
-
-/*
- * Add table to scene
- */
-//void
-//MainWindow::addTableItem(QTreeWidgetItem *ipItem, int ipCol)
-//{
-//    //printMsg("Adding table '" + ipItem->text(ipCol) + "' to scene");
-//
-////    ui.mSceneWidget->showOnScene(ipItem, ipCol);
-////    ui.mSceneWidget->updateLegend();
-//    addTableItem();
-//}
 
 /*
  * Draw full db scheme
@@ -885,7 +871,7 @@ MainWindow::setFullScreen(bool ipFlag)
 void
 MainWindow::reloadData()
 {
-    ui.mSceneWidget->cleanTableSchemeScene();
+    ui.mSceneWidget->cleanSchemeScene();
     Database::instance()->resetData();
     ui.mTree->refresh();
 }

@@ -27,45 +27,34 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QDebug>
+#ifndef ADDTABLECOMMAND_H
+#define ADDTABLECOMMAND_H
+
+#include <QPointF>
 #include <QUndoCommand>
-#include <gui/GraphicsScene.h>
-#include <gui/TableItem.h>
-#include <gui/TableItemGroup.h>
-#include <gui/behaviour/DeleteTableCommand.h>
+
+class GraphicsScene;
+class QGraphicsItem;
 
 /*!
- * Ctor
+ * \class AddItemCommand
+ * \headerfile gui/behaviour/AddItemCommand.h
+ * \brief Implement add table command
  */
-DeleteTableCommand::DeleteTableCommand(GraphicsScene &ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *ipParent)
-: QUndoCommand(ipParent)
-, mScene(ipScene)
-, mTableList(ipTableList)
+class AddItemCommand : public QUndoCommand
 {
-    setText(QObject::tr("Delete table"));
-}
+    public:
+        AddItemCommand(GraphicsScene *, QList<QGraphicsItem *>, QUndoCommand *parent = 0);
+        ~AddItemCommand();
 
-/*!
- * Dtor
- */
-DeleteTableCommand::~DeleteTableCommand()
-{
-}
+        void undo();
+        void redo();
 
-/*!
- * \brief Undo add node
- */
-void
-DeleteTableCommand::undo()
-{
-    mScene.addTableItems(mTableList);
-}
+    private:
+        QList<QGraphicsItem *> mTableList;
+        GraphicsScene *mScene;
+        QPointF mInitialPosition;
+};
 
-/*!
- * \brief Redo add node
- */
-void
-DeleteTableCommand::redo()
-{
-    mScene.deleteTableItems(mTableList);
-}
+#endif // ADDTABLECOMMAND_H
+

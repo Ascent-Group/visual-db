@@ -33,9 +33,6 @@
 #include <QGraphicsTextItem>
 #include <QMenu>
 #include <QPainter>
-#include <QPen>
-#include <QPixmap>
-#include <QTextDocument>
 #include <QtDebug>
 #include <common/Database.h>
 #include <common/DbIndex.h>
@@ -44,14 +41,12 @@
 #include <consts.h>
 #include <gui/TableItem.h>
 #include <math.h>
-#include <mysql/Table.h>
-#include <psql/Table.h>
 
 /*
  * Constructor
  */
 TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QMenu *ipMenu, const QPoint &ipPos)
-    : DbObjectsItem(ipMenu), mIndicesVisible(true)
+    : DbObjectItem(ipMenu), mIndicesVisible(true)
 {
     using namespace DbObjects::Common;
     Database *dbInst = Database::instance();
@@ -268,14 +263,37 @@ TableItem::schemaName() const
 QDomElement
 TableItem::toXml(QDomDocument &ipDoc) const
 {
-    return DbObjectsItem::toXml(ipDoc, "table");
+    return DbObjectItem::toXml(ipDoc, "table");
+}
+
+/*
+ * Load table from the xml file
+ */
+TableItem *
+TableItem::fromXml(const QDomElement &ipElement, GraphicsScene *ipScene, QMenu *ipMenu)
+{
+    // get table's coordinates
+    TableItem *newTable = ipScene->newTableItem(ipElement.attribute("schema"),
+            ipElement.attribute("name"), ipMenu, QPoint(ipElement.attribute("x").toInt(),
+            ipElement.attribute("y").toInt()));
+
+    // get table's size
+    newTable->setWidth(ipElement.attribute("width").toInt());
+    newTable->setHeight(ipElement.attribute("height").toInt());
+    newTable->updatePolygon();
+
+    // get table's color
+    newTable->setItemColor(QColor(ipElement.attribute("red").toInt(),
+                ipElement.attribute("green").toInt(), ipElement.attribute("blue").toInt()));
+
+    return newTable;
 }
 
 /*
  * Check if input graphics item is table item
  */
-bool
-isTable(QGraphicsItem *ipItem)
+TableItem *
+toTable(QGraphicsItem *ipItem)
 {
-    return qgraphicsitem_cast<TableItem *>(ipItem) != 0;
+    return qgraphicsitem_cast<TableItem *>(ipItem);
 }

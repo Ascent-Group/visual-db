@@ -58,8 +58,8 @@ class GraphicsView : public QGraphicsView
     signals:
         void valueDecreased();
         void valueIncreased();
-        void tableMoved(QList <QGraphicsItem *>, int, int);
-        void tableActionDone(QUndoCommand *);
+//        void itemMoved(QList <QGraphicsItem *>, int, int);
+        void itemActionDone(QUndoCommand *);
 
     protected:
         virtual void wheelEvent(QWheelEvent *);
@@ -67,9 +67,6 @@ class GraphicsView : public QGraphicsView
         virtual void dragMoveEvent(QDragMoveEvent *);
         virtual void dropEvent(QDropEvent *);
         virtual void scrollContentsBy(int, int);
-//        virtual void mousePressEvent(QMouseEvent *);
-//        virtual void mouseMoveEvent(QMouseEvent *);
-//        virtual void mouseReleaseEvent(QMouseEvent *);
 
     private:
         QAction *mDeleteTableAction;

@@ -113,13 +113,13 @@ Legend::paintFieldImage(QPainter *ipPainter, int ipIdx)
     bool hasAllSameColor = true;
     foreach (QGraphicsItem *item, scene()->items()) {
         // if it's a table
-        // important: i use dynamic_cast because qgraphicsitem_cast doesn't work correctly
-        if (isTable(item) && qgraphicsitem_cast<TableItem *>(item)->schemaName() == fieldText(ipIdx)) {
+        TableItem *tableItem = toTable(item);
+        if (tableItem && tableItem->schemaName() == fieldText(ipIdx)) {
             if (!initializedColor) {
                 initializedColor = true;
-                color = qgraphicsitem_cast<TableItem *>(item)->itemColor();
+                color = tableItem->itemColor();
                 // and if this table color is another than all privious table colors in this scene - break
-            } else if (qgraphicsitem_cast<TableItem *>(item)->itemColor() != color) {
+            } else if (tableItem->itemColor() != color) {
                 hasAllSameColor = false;
                 break;
             }
@@ -135,49 +135,11 @@ Legend::paintFieldImage(QPainter *ipPainter, int ipIdx)
     }
 }
 
-/*!
- * \brief Paint the legend
+/*
+ *
  */
-//void
-//Legend::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidget *ipWidget)
-//{
-//    // draw the board of the table
-//    QGraphicsPolygonItem::paint(ipPainter, ipItem, ipWidget);
-//
-//    ipPainter->drawRect(rect());
-//
-//    ipPainter->drawText((int)x() + INTERVAL, (int)y() + INTERVAL, (int)width() + INTERVAL, FIELD_HEIGHT + INTERVAL, Qt::AlignCenter, titleText());
-//
-//    // draw each field
-//    for (int i = 0; i < countFields(); ++i) {
-//        ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
-//                (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2,
-//                Qt::AlignLeft, fieldText(i));
-//
-//        QColor color = QColor();
-//        bool initializedColor = false;
-//        bool hasAllSameColor = true;
-//        foreach (QGraphicsItem *item, scene()->items()) {
-//            // if it's a table
-//            // important: i use dynamic_cast because qgraphicsitem_cast doesn't work correctly
-//            if (dynamic_cast<TableItem *>(item) != 0 && qgraphicsitem_cast<TableItem *>(item)->schemaName() == fieldText(i)) {
-//                if (!initializedColor) {
-//                    initializedColor = true;
-//                    color = qgraphicsitem_cast<TableItem *>(item)->itemColor();
-//                    // and if this table color is another than all privious table colors in this scene - break
-//                } else if (qgraphicsitem_cast<TableItem *>(item)->itemColor() != color) {
-//                    hasAllSameColor = false;
-//                    break;
-//                }
-//            }
-//        }
-//
-//        if (hasAllSameColor) {
-//            ipPainter->fillRect((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
-//                    IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL - 1, color);
-//        } else {
-//            ipPainter->drawText((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (i + 1) + INTERVAL,
-//                    IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL - 1, Qt::AlignCenter, QString("N"));
-//        }
-//    }
-//}
+Legend *
+toLegend(QGraphicsItem *ipItem)
+{
+    return qgraphicsitem_cast<Legend *>(ipItem);
+}

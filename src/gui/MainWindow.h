@@ -113,8 +113,7 @@ class MainWindow : public QMainWindow
         void queryData();
         void describeObject();
         void drawFullDbScheme();
-        void addTableItem();
-//        void addTableItem(QTreeWidgetItem*, int);
+        void addItem();
         void showDatabaseTree(bool);
         void closeDatabaseTree();
         void showDatabaseTree();

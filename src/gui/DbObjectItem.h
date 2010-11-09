@@ -55,18 +55,18 @@ class DbTable;
 } // namespace DbObjects
 
 /*!
- * \class DbObjectsItem
- * \headerfile gui/DbObjectsItem.h
+ * \class DbObjectItem
+ * \headerfile gui/DbObjectItem.h
  * \brief Parent class for graphics items that implements real database objects on the scene (like table or view)
  */
-class DbObjectsItem : public GraphicsItem 
+class DbObjectItem : public GraphicsItem 
 {
     public:
         enum { Type = UserType + 10 };
 
     public:
-        explicit DbObjectsItem(QMenu *ipMenu = 0);
-        virtual ~DbObjectsItem();
+        explicit DbObjectItem(QMenu *ipMenu = 0);
+        virtual ~DbObjectItem();
 
         virtual void setFieldsTypesVisible(bool);
         
@@ -78,7 +78,7 @@ class DbObjectsItem : public GraphicsItem
         virtual QString name() const = 0;
         virtual QString schemaName() const = 0;
 
-        virtual QDomElement toXml(QDomDocument &, const QString &) const;
+        virtual QDomElement toXml(QDomDocument &) const = 0;
 
         static void setSeek(int);
         static int seek();
@@ -94,6 +94,8 @@ class DbObjectsItem : public GraphicsItem
 
         virtual void paintFieldImage(QPainter *, int) { };
         virtual void paintAdditionalInfo(QPainter *) { };
+
+        virtual QDomElement toXml(QDomDocument &, const QString &) const;
 
         static const int SEEK_STEP = 20;
 
@@ -125,7 +127,7 @@ class DbObjectsItem : public GraphicsItem
         Mode mMode;
 };
 
-bool isDbObjectItem(QGraphicsItem *);
+DbObjectItem * toDbObject(QGraphicsItem *);
 
 #endif // DBOBJECTSITEM_H
 

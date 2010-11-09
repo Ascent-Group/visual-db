@@ -28,52 +28,44 @@
  */
 
 #include <QDebug>
-#include <QGraphicsItem>
+#include <QUndoCommand>
 #include <gui/GraphicsScene.h>
-#include <gui/behaviour/MoveTableCommand.h>
+#include <gui/TableItem.h>
+#include <gui/ItemGroup.h>
+#include <gui/behaviour/AddItemCommand.h>
 
 /*!
  * Ctor
  */
-MoveTableCommand::MoveTableCommand(QList<QGraphicsItem *> ipTableList,
-        int ipDiffX,
-        int ipDiffY,
-        QUndoCommand *ipParent)
-: QUndoCommand(ipParent), mDiffX(ipDiffX), mDiffY(ipDiffY), mNeedMove(false)
+AddItemCommand::AddItemCommand(GraphicsScene *ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *ipParent)
+    : QUndoCommand(ipParent)
 {
+    mScene = ipScene;
     mTableList = ipTableList;
-    setText(QObject::tr("Move table"));
+    setText(QObject::tr("Add table"));
 }
 
 /*!
  * Dtor
  */
-MoveTableCommand::~MoveTableCommand()
+AddItemCommand::~AddItemCommand()
 {
 }
 
 /*!
- * \brief Undo move command
+ * \breif Undo add node
  */
 void
-MoveTableCommand::undo()
+AddItemCommand::undo()
 {
-    foreach (QGraphicsItem *item, mTableList) {
-        item->moveBy(-mDiffX, -mDiffY);
-    }
+    mScene->deleteItems(mTableList);
 }
 
 /*!
- * \brief Redo move command
+ * \brief Redo add node
  */
 void
-MoveTableCommand::redo()
+AddItemCommand::redo()
 {
-    if (mNeedMove) {
-        foreach (QGraphicsItem *item, mTableList) {
-            item->moveBy(mDiffX, mDiffY);
-        }
-    } else {
-        mNeedMove = true;
-    }
+    mScene->addItems(mTableList);
 }

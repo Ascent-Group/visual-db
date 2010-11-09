@@ -27,34 +27,37 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ADDTABLECOMMAND_H
-#define ADDTABLECOMMAND_H
+#ifndef MOVETABLECOMMAND_H
+#define MOVETABLECOMMAND_H
 
 #include <QPointF>
 #include <QUndoCommand>
 
-class GraphicsScene;
 class QGraphicsItem;
 
 /*!
- * \class AddTableCommand
- * \headerfile gui/behaviour/AddTableCommand.h
- * \brief Implement add table command
+ * \class MoveItemCommand
+ * \headerfile gui/behaviour/MoveItemCommand.h
+ * \brief Incapsulate move table command
  */
-class AddTableCommand : public QUndoCommand
+class MoveItemCommand : public QUndoCommand
 {
     public:
-        AddTableCommand(GraphicsScene *, QList<QGraphicsItem *>, QUndoCommand *parent = 0);
-        ~AddTableCommand();
+        MoveItemCommand(QList <QGraphicsItem *>, int, int, QUndoCommand *parent = 0);
+        ~MoveItemCommand();
+
+        enum { Id = 1234 };
 
         void undo();
         void redo();
+        int id() const { return Id; }
 
     private:
-        QList<QGraphicsItem *> mTableList;
-        GraphicsScene *mScene;
-        QPointF mInitialPosition;
+        QList <QGraphicsItem *> mTableList;
+        int mDiffX;
+        int mDiffY;
+        bool mNeedMove;
 };
 
-#endif // ADDTABLECOMMAND_H
+#endif // MOVETABLECOMMAND_H
 

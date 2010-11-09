@@ -538,6 +538,7 @@ GraphicsItem::paintBorder(QPainter *ipPainter, const QStyleOptionGraphicsItem *i
 {
     // draw the board of the table
     QGraphicsPolygonItem::paint(ipPainter, ipItem, ipWidget);
+//    ipPainter->fillRect((int)x() + 5, (int)y() + (int)height(), 5, width(), QColor(80, 80, 80));
 }
 
 void

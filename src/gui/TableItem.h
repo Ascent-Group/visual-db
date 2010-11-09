@@ -30,7 +30,8 @@
 #ifndef TABLEITEM_H
 #define TABLEITEM_H
 
-#include <gui/DbObjectsItem.h>
+#include <gui/GraphicsScene.h>
+#include <gui/DbObjectItem.h>
 #include <QSettings>
 
 class QAction;
@@ -54,7 +55,7 @@ class DbTable;
 /*
  * Graphics item, implements the database table. Support moving, resizing, changing of the color etc.
  */
-class TableItem : public DbObjectsItem 
+class TableItem : public DbObjectItem 
 {
     public:
         enum { Type = UserType + 5 };
@@ -76,13 +77,13 @@ class TableItem : public DbObjectsItem
         QString schemaName() const;
 
         QDomElement toXml(QDomDocument &) const;
+        static TableItem *fromXml(const QDomElement &, GraphicsScene *, QMenu *);
 
     protected:
         void paintFieldImage(QPainter *, int);
         void paintIndeces(QPainter *);
 
     private:
-
         QSettings mSettings;
 
         QVector<DbObjects::Common::DbIndex *> mIndices;
@@ -96,7 +97,7 @@ class TableItem : public DbObjectsItem
         DbObjects::Common::DbTable *mModel;
 };
 
-bool isTable(QGraphicsItem *);
+TableItem *toTable(QGraphicsItem *);
 
 #endif // TABLEITEM_H
 

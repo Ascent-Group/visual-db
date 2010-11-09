@@ -63,5 +63,7 @@ class Legend : public GraphicsItem
         static const int DEFAULT_Y = 15;
 };
 
+Legend * toLegend(QGraphicsItem *);
+
 #endif // LEGEND_H
 

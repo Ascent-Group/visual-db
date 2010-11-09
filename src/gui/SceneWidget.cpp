@@ -39,10 +39,10 @@
 #include <gui/GraphicsView.h>
 #include <gui/SceneWidget.h>
 #include <gui/TableItem.h>
-#include <gui/TableItemGroup.h>
-#include <gui/behaviour/AddTableCommand.h>
-#include <gui/behaviour/DeleteTableCommand.h>
-#include <gui/behaviour/MoveTableCommand.h>
+#include <gui/ItemGroup.h>
+#include <gui/behaviour/AddItemCommand.h>
+#include <gui/behaviour/DeleteItemCommand.h>
+#include <gui/behaviour/MoveItemCommand.h>
 
 #include <QDebug>
 
@@ -69,12 +69,12 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
     connect(mControlWidget, SIGNAL(movedRight()), mView, SLOT(moveRight()));
     connect(mControlWidget, SIGNAL(moveModeSet(bool)), mView, SLOT(setMoveMode(bool)));
 
-    connect(mScene, SIGNAL(tableMoved(QList <QGraphicsItem *>, int, int)),
-            this, SLOT(sendTableMoved(QList <QGraphicsItem *>, int, int)));
+    connect(mScene, SIGNAL(itemMoved(QList <QGraphicsItem *>, int, int)),
+            this, SLOT(sendItemMoved(QList <QGraphicsItem *>, int, int)));
 
     connect(mView, SIGNAL(valueIncreased()), mControlWidget, SLOT(increaseValue()));
     connect(mView, SIGNAL(valueDecreased()), mControlWidget, SLOT(decreaseValue()));
-    connect(mView, SIGNAL(tableActionDone(QUndoCommand *)), this, SLOT(sendTableActionDone(QUndoCommand *)));
+    connect(mView, SIGNAL(itemActionDone(QUndoCommand *)), this, SLOT(sendItemActionDone(QUndoCommand *)));
 
     mainLayout = new QGridLayout(this);
     mainLayout->setAlignment(Qt::AlignCenter);
@@ -116,13 +116,13 @@ SceneWidget::setTableMenu(QMenu *ipMenu)
 }
 
 /*
- * Add table from tree event to the scene
+ * Add item from tree event to the scene
  */
 void
 SceneWidget::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
 {
-    QList<QGraphicsItem *> tableList = mScene->showOnScene(ipTreeItem, ipCol, QPoint(0, 0));
-    emit tableActionDone(new AddTableCommand(mScene, tableList));
+    QList<QGraphicsItem *> itemLIst = mScene->showOnScene(ipTreeItem, ipCol, QPoint(0, 0));
+    emit itemActionDone(new AddItemCommand(mScene, itemLIst));
 }
 
 /*
@@ -135,25 +135,25 @@ SceneWidget::showLegend(bool ipFlag)
 }
 
 /*
- * Delete selected tables from scheme
+ * Delete selected items from scheme
  */
 void
-SceneWidget::deleteTableItem()
+SceneWidget::deleteItem()
 {
     if (mScene->selectedItems().count() > 0) {
-        emit tableActionDone(new DeleteTableCommand(*mScene, mScene->selectedItems()));
+        emit itemActionDone(new DeleteItemCommand(*mScene, mScene->selectedItems()));
     }
 }
 
 /*
- * Clean table scheme scene
+ * Clean scheme scene
  */
 void
-SceneWidget::cleanTableSchemeScene()
+SceneWidget::cleanSchemeScene()
 {
     if (mScene->items().count() > 0) {
         // first send the signal to remember deleted items
-        emit tableActionDone(new DeleteTableCommand(*mScene, mScene->items()));
+        emit itemActionDone(new DeleteItemCommand(*mScene, mScene->items()));
     }
     TableItem::setSeek(20);
 }
@@ -177,7 +177,7 @@ SceneWidget::setFieldsTypesInvisible()
 }
 
 /*
- * Show indices for selected tables
+ * Show indices for selected items
  */
 void
 SceneWidget::setIndicesVisible()
@@ -186,7 +186,7 @@ SceneWidget::setIndicesVisible()
 }
 
 /*
- * Hide indices for selected tables
+ * Hide indices for selected items
  */
 void
 SceneWidget::setIndicesInvisible()
@@ -195,30 +195,30 @@ SceneWidget::setIndicesInvisible()
 }
 
 /*
- * Set all selected tables' color to user choosed color
+ * Set all selected items' color to user choosed color
  */
 void
-SceneWidget::setTableColor()
+SceneWidget::setItemColor()
 {
-    mScene->setTableColor();
+    mScene->setItemColor();
 }
 
 /*
- * Select all tables if ctrl-a is pressed
+ * Select all items if ctrl-a is pressed
  */
 void
-SceneWidget::selectAllTables()
+SceneWidget::selectAllItems()
 {
-    mScene->selectAllTables();
+    mScene->selectAllItems();
 }
 
 /*
- * Auto resize selected tables' sizes to adjusted
+ * Auto resize selected items' sizes to adjusted
  */
 void
-SceneWidget::adjustTables()
+SceneWidget::adjustItems()
 {
-    mScene->adjustTables();
+    mScene->adjustItems();
 }
 
 /*
@@ -243,37 +243,22 @@ SceneWidget::ungroupItems()
  * Anchor selected items
  */
 void
-SceneWidget::anchorTables()
+SceneWidget::anchorItems()
 {
-    setAnchor(mScene->selectedItems(), false);
+    mScene->setAnchor(false);
 }
 
 /*
  * Disable anchor selected items
  */
 void
-SceneWidget::disableAnchorTables()
+SceneWidget::disableAnchorItems()
 {
-    setAnchor(mScene->selectedItems(), true);
+    mScene->setAnchor(true);
 }
 
 /*
- * Set the anchor for selected items
- */
-void
-SceneWidget::setAnchor(QList<QGraphicsItem *> ipItems, bool ipFlag)
-{
-    foreach (QGraphicsItem *item, ipItems) {
-        if (qgraphicsitem_cast<TableItemGroup *>(item)) {
-            setAnchor(item->children(), ipFlag);
-        } else if (qgraphicsitem_cast<TableItem *>(item)) {
-            item->setFlag(QGraphicsItem::ItemIsMovable, ipFlag);
-        }
-    }
-}
-
-/*
- * Colorize tables according schemas
+ * Colorize items according schemas
  */
 void
 SceneWidget::colorizeAccordingSchemas()
@@ -291,7 +276,7 @@ SceneWidget::showGrid(bool ipFlag)
 }
 
 /*
- * (Un)Align tables to the grid
+ * (Un)Align items to the grid
  */
 void
 SceneWidget::alignToGrid(bool ipFlag)
@@ -309,12 +294,12 @@ SceneWidget::divideIntoPages(bool ipFlag)
 }
 
 /*
- * Select all tables in schema
+ * Select all items in schema
  */
 void
-SceneWidget::selectAllTablesInSchema()
+SceneWidget::selectAllItemsInSchema()
 {
-    mScene->selectAllTablesInSchema();
+    mScene->selectAllItemsInSchema();
 }
 
 /*
@@ -336,9 +321,9 @@ SceneWidget::updateLegend()
 }
 
 /*
- * Create table item group from the given items
+ * Create item group from the given items
  */
-TableItemGroup *
+ItemGroup *
 SceneWidget::createItemGroup(const QList<QGraphicsItem *> &ipItems)
 {
     return mScene->createItemGroup(ipItems);
@@ -348,7 +333,7 @@ SceneWidget::createItemGroup(const QList<QGraphicsItem *> &ipItems)
  * Return all items for the scene
  */
 QList<QGraphicsItem *>
-SceneWidget::items () const
+SceneWidget::items() const
 {
     return mScene->items();
 }
@@ -394,23 +379,7 @@ SceneWidget::showControlWidget(bool ipFlag)
 QDomElement
 SceneWidget::toXml(QDomDocument &ipDoc, bool ipShowGrid, bool ipDivideIntoPages, bool ipShowLegend, bool ipShowControlWidget)
 {
-    QDomElement element = ipDoc.createElement("scene");
-    element.setAttribute("grid", ipShowGrid);
-    element.setAttribute("divideIntoPages", ipDivideIntoPages);
-    element.setAttribute("legend", ipShowLegend);
-    element.setAttribute("controlWidget", ipShowControlWidget);
-
-    foreach (QGraphicsItem *item, items()) {
-        TableItem *tableItem;
-        TableItemGroup *groupItem;
-        if ((groupItem = qgraphicsitem_cast<TableItemGroup *>(item)) && 0 == groupItem->parentItem()) {
-            element.appendChild(groupItem->toXml(ipDoc));
-        } else if ((tableItem = qgraphicsitem_cast<TableItem *>(item)) && 0 == tableItem->parentItem()) {
-            element.appendChild(tableItem->toXml(ipDoc));
-        }
-    }
-
-    return element;
+    return mScene->toXml(ipDoc, ipShowGrid, ipDivideIntoPages, ipShowLegend, ipShowControlWidget);
 }
 
 /*
@@ -429,74 +398,9 @@ SceneWidget::fromXml(QDomElement &ipElement)
     bool controlWidget = ipElement.attribute("controlWidget").toInt();
     showControlWidget(controlWidget);
 
-    QList<QGraphicsItem *> tableList;
-    // show all elements
-    while (!child.isNull()) {
-        QDomElement element = child.toElement();
-        if (!element.isNull()) {
-            // it's a table
-            if (element.tagName() == "table") {
-                tableList << tableFromXml(element);
-                // it's a table group
-            } else if (element.tagName() == "tableGroup") {
-                tableList << tableGroupFromXml(element);
-            }
-        }
-        // go to the next element
-        child = child.nextSibling();
-    }
+    QList<QGraphicsItem *> itemLIst = mScene->fromXml(child);
 
-    emit tableActionDone(new AddTableCommand(mScene, tableList));
-}
-
-/*
- * Load table from the xml file
- */
-TableItem *
-SceneWidget::tableFromXml(QDomElement &ipElement)
-{
-    // get table's coordinates
-    TableItem *newTable = mScene->newTableItem(ipElement.attribute("schema"),
-            ipElement.attribute("name"), mTableMenu, QPoint(ipElement.attribute("x").toInt()/* - (int)newTable->x()*/,
-            ipElement.attribute("y").toInt()/* - (int)newTable->y()*/));
-
-    // get table's size
-    newTable->setWidth(ipElement.attribute("width").toInt());
-    newTable->setHeight(ipElement.attribute("height").toInt());
-    newTable->updatePolygon();
-
-    // get table's color
-    newTable->setItemColor(QColor(ipElement.attribute("red").toInt(),
-                ipElement.attribute("green").toInt(), ipElement.attribute("blue").toInt()));
-
-    return newTable;
-}
-
-/*
- * Load table group from the xml file
- */
-QList<QGraphicsItem *>
-SceneWidget::tableGroupFromXml(QDomElement &ipElement)
-{
-    QList<QGraphicsItem *> tableList;
-    // loop for all childs of this group
-    QDomNode child = ipElement.firstChild();
-    while (!child.isNull()) {
-        QDomElement element = child.toElement();
-        if (!element.isNull()) {
-            if (element.tagName() == "table") {
-                tableList << tableFromXml(element);
-            } else if (element.tagName() == "tableGroup") {
-                tableList << tableGroupFromXml(element);
-            }
-        }
-        child = child.nextSibling();
-    }
-
-    TableItemGroup *group = mScene->createItemGroup(tableList);
-    group->setContextMenu(mTableMenu);
-    tableList << group;
-    return tableList;
+    emit itemActionDone(new AddItemCommand(mScene, itemLIst));
 }
 
 /*
@@ -526,16 +430,16 @@ SceneWidget::print(QPrinter *ipPrinter)
 }
 
 /*
- * Send 'table moved' signal
+ * Send 'item moved' signal
  */
 void
-SceneWidget::sendTableMoved(QList <QGraphicsItem *> ipTableList, int ipDiffX, int ipDiffY)
+SceneWidget::sendItemMoved(QList <QGraphicsItem *> ipItemList, int ipDiffX, int ipDiffY)
 {
-    emit tableActionDone(new MoveTableCommand(ipTableList, ipDiffX, ipDiffY));
+    emit itemActionDone(new MoveItemCommand(ipItemList, ipDiffX, ipDiffY));
 }
 
 void
-SceneWidget::sendTableActionDone(QUndoCommand *ipCommand)
+SceneWidget::sendItemActionDone(QUndoCommand *ipCommand)
 {
-    emit tableActionDone(ipCommand);
+    emit itemActionDone(ipCommand);
 }

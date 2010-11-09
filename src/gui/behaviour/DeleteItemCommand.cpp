@@ -27,43 +27,45 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-
-#ifndef TABLEITEMGROUP_H
-#define TABLEITEMGROUP_H
-
-#include <QGraphicsItemGroup>
-
-class QDomDocument;
-class QDomElement;
-class QGraphicsSceneContextMenuEvent;
-class QMenu;
+#include <QDebug>
+#include <QUndoCommand>
+#include <gui/GraphicsScene.h>
+#include <gui/TableItem.h>
+#include <gui/ItemGroup.h>
+#include <gui/behaviour/DeleteItemCommand.h>
 
 /*!
- * \class TableItemGroup
- * \headerfile TableItemGroup.h
- * \brief Graphics item, iplements group of tables.
+ * Ctor
  */
-class TableItemGroup : public QGraphicsItemGroup
+DeleteItemCommand::DeleteItemCommand(GraphicsScene &ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *ipParent)
+: QUndoCommand(ipParent)
+, mScene(ipScene)
+, mTableList(ipTableList)
 {
-    public:
-        TableItemGroup(QGraphicsItem *parent = 0);
-        ~TableItemGroup();
-        virtual int type() const;
+    setText(QObject::tr("Delete table"));
+}
 
-        void setContextMenu(QMenu *);
-        QDomElement toXml(QDomDocument &);
+/*!
+ * Dtor
+ */
+DeleteItemCommand::~DeleteItemCommand()
+{
+}
 
-    public:
-        enum { Type = UserType + 6 };
+/*!
+ * \brief Undo add node
+ */
+void
+DeleteItemCommand::undo()
+{
+    mScene.addItems(mTableList);
+}
 
-    protected:
-        void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
-
-    private:
-        QMenu *mContextMenu;
-};
-
-bool isGroup(QGraphicsItem *);
-
-#endif // TABLEITEMGROUP_H
-
+/*!
+ * \brief Redo add node
+ */
+void
+DeleteItemCommand::redo()
+{
+    mScene.deleteItems(mTableList);
+}

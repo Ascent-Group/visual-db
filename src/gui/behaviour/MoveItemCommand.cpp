@@ -27,33 +27,53 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DELETETABLECOMMAND_H
-#define DELETETABLECOMMAND_H
-
-#include <QPointF>
-#include <QUndoCommand>
-
-class GraphicsScene;
-class QGraphicsItem;
+#include <QDebug>
+#include <QGraphicsItem>
+#include <gui/GraphicsScene.h>
+#include <gui/behaviour/MoveItemCommand.h>
 
 /*!
- * \class DeleteTableCommand
- * \headerfile gui/behaviour/DeleteTableCommand.h
- * \brief Implement add table command
+ * Ctor
  */
-class DeleteTableCommand : public QUndoCommand
+MoveItemCommand::MoveItemCommand(QList<QGraphicsItem *> ipTableList,
+        int ipDiffX,
+        int ipDiffY,
+        QUndoCommand *ipParent)
+: QUndoCommand(ipParent), mDiffX(ipDiffX), mDiffY(ipDiffY), mNeedMove(false)
 {
-    public:
-        DeleteTableCommand(GraphicsScene &ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *parent = 0);
-        ~DeleteTableCommand();
+    mTableList = ipTableList;
+    setText(QObject::tr("Move table"));
+}
 
-        void undo();
-        void redo();
+/*!
+ * Dtor
+ */
+MoveItemCommand::~MoveItemCommand()
+{
+}
 
-    private:
-        GraphicsScene &mScene;
-        QList<QGraphicsItem *> mTableList;
-};
+/*!
+ * \brief Undo move command
+ */
+void
+MoveItemCommand::undo()
+{
+    foreach (QGraphicsItem *item, mTableList) {
+        item->moveBy(-mDiffX, -mDiffY);
+    }
+}
 
-#endif // DELETETABLECOMMAND_H
-
+/*!
+ * \brief Redo move command
+ */
+void
+MoveItemCommand::redo()
+{
+    if (mNeedMove) {
+        foreach (QGraphicsItem *item, mTableList) {
+            item->moveBy(mDiffX, mDiffY);
+        }
+    } else {
+        mNeedMove = true;
+    }
+}

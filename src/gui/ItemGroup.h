@@ -27,37 +27,45 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef MOVETABLECOMMAND_H
-#define MOVETABLECOMMAND_H
 
-#include <QPointF>
-#include <QUndoCommand>
+#ifndef ITEMGROUP_H
+#define ITEMGROUP_H
 
-class QGraphicsItem;
+#include <QGraphicsItemGroup>
+#include <gui/GraphicsScene.h>
+
+class QDomDocument;
+class QDomElement;
+class QGraphicsSceneContextMenuEvent;
+class QMenu;
 
 /*!
- * \class MoveTableCommand
- * \headerfile gui/behaviour/MoveTableCommand.h
- * \brief Incapsulate move table command
+ * \class ItemGroup
+ * \headerfile ItemGroup.h
+ * \brief Graphics item, iplements group of tables.
  */
-class MoveTableCommand : public QUndoCommand
+class ItemGroup : public QGraphicsItemGroup
 {
     public:
-        MoveTableCommand(QList <QGraphicsItem *>, int, int, QUndoCommand *parent = 0);
-        ~MoveTableCommand();
+        ItemGroup(QGraphicsItem *parent = 0);
+        ~ItemGroup();
+        virtual int type() const;
 
-        enum { Id = 1234 };
+        void setContextMenu(QMenu *);
+        QDomElement toXml(QDomDocument &);
+        static QList<QGraphicsItem *> fromXml(const QDomElement &, GraphicsScene *, QMenu *);
 
-        void undo();
-        void redo();
-        int id() const { return Id; }
+    public:
+        enum { Type = UserType + 6 };
+
+    protected:
+        void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
 
     private:
-        QList <QGraphicsItem *> mTableList;
-        int mDiffX;
-        int mDiffY;
-        bool mNeedMove;
+        QMenu *mContextMenu;
 };
 
-#endif // MOVETABLECOMMAND_H
+ItemGroup * toGroup(QGraphicsItem *);
+
+#endif // ITEMGROUP_H
 

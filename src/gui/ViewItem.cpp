@@ -39,13 +39,12 @@
 #include <consts.h>
 #include <gui/ViewItem.h>
 #include <math.h>
-#include <psql/View.h>
 
 /*
  * Constructor
  */
 ViewItem::ViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu *ipMenu, const QPoint &ipPos)
-    : DbObjectsItem(ipMenu)
+    : DbObjectItem(ipMenu)
 {
     using namespace DbObjects::Common;
     Database *dbInst = Database::instance();
@@ -151,6 +150,7 @@ ViewItem::name() const
 QString
 ViewItem::schemaName() const
 {
+    return "";
 //    return mModel->schemaName();
 }
 
@@ -160,14 +160,14 @@ ViewItem::schemaName() const
 QDomElement
 ViewItem::toXml(QDomDocument &ipDoc) const
 {
-    return DbObjectsItem::toXml(ipDoc, "view");
+    return DbObjectItem::toXml(ipDoc, "view");
 }
 
 /*
  * Check if input graphics item is view item
  */
-bool
-isView(QGraphicsItem *ipItem)
+ViewItem *
+toView(QGraphicsItem *ipItem)
 {
-    return qgraphicsitem_cast<ViewItem *>(ipItem) != 0;
+    return qgraphicsitem_cast<ViewItem *>(ipItem);
 }

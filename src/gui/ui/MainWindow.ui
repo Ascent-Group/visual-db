@@ -392,10 +392,10 @@
   </action>
   <action name="mSelectAllTablesAction">
    <property name="text">
-    <string>Select all tables</string>
+    <string>Select all</string>
    </property>
    <property name="statusTip">
-    <string>Select all tables</string>
+    <string>Select all</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
@@ -407,10 +407,10 @@
      <normaloff>:/img/eraser.png</normaloff>:/img/eraser.png</iconset>
    </property>
    <property name="text">
-    <string>Remove all tables</string>
+    <string>Remove all</string>
    </property>
    <property name="statusTip">
-    <string>Remove all tables from scheme</string>
+    <string>Remove all from scheme</string>
    </property>
   </action>
   <action name="mShowGridAction">
@@ -435,7 +435,7 @@
     <string>Align to grid</string>
    </property>
    <property name="statusTip">
-    <string>Align tables to the grid</string>
+    <string>Align to the grid</string>
    </property>
   </action>
   <action name="mDivideIntoPagesAction">
@@ -558,7 +558,7 @@
     <string>Table color...</string>
    </property>
    <property name="statusTip">
-    <string>Set table color</string>
+    <string>Set color</string>
    </property>
   </action>
   <action name="mAdjustTableSizeAction">
@@ -570,7 +570,7 @@
     <string>Adjust</string>
    </property>
    <property name="statusTip">
-    <string>Adjust tables sizes</string>
+    <string>Adjust size</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+J</string>
@@ -615,7 +615,7 @@
     <string>Anchor</string>
    </property>
    <property name="statusTip">
-    <string>Set anchor for selected tables</string>
+    <string>Set anchor for selected</string>
    </property>
   </action>
   <action name="mDisableAnchorAction">
@@ -623,12 +623,12 @@
     <string>Disable anchor</string>
    </property>
    <property name="statusTip">
-    <string>Disable anchor for selected tables</string>
+    <string>Disable anchor for selected</string>
    </property>
   </action>
   <action name="mSelectAllTablesInSchemaAction">
    <property name="text">
-    <string>Select all tables in schema</string>
+    <string>Select all in schema</string>
    </property>
   </action>
   <action name="mReloadDataAction">
@@ -717,22 +717,6 @@
  </resources>
  <connections>
   <connection>
-   <sender>mTree</sender>
-   <signal>itemDoubleClicked(QTreeWidgetItem*,int)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>addTableItem(QTreeWidgetItem*,int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>127</x>
-     <y>142</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>414</x>
-     <y>-8</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>mExitAction</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
@@ -750,7 +734,7 @@
   </connection>
   <connection>
    <sender>mSceneWidget</sender>
-   <signal>tableActionDone(QUndoCommand*)</signal>
+   <signal>itemActionDone(QUndoCommand*)</signal>
    <receiver>MainWindow</receiver>
    <slot>addCommand(QUndoCommand*)</slot>
    <hints>
@@ -864,7 +848,7 @@
    <sender>mAddTableAction</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
-   <slot>addTableItem()</slot>
+   <slot>addItem()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -880,7 +864,7 @@
    <sender>mDeleteTableAction</sender>
    <signal>triggered()</signal>
    <receiver>mSceneWidget</receiver>
-   <slot>deleteTableItem()</slot>
+   <slot>deleteItem()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -960,7 +944,7 @@
    <sender>mSetTableColorAction</sender>
    <signal>triggered()</signal>
    <receiver>mSceneWidget</receiver>
-   <slot>setTableColor()</slot>
+   <slot>setItemColor()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -976,7 +960,7 @@
    <sender>mSelectAllTablesAction</sender>
    <signal>triggered()</signal>
    <receiver>mSceneWidget</receiver>
-   <slot>selectAllTables()</slot>
+   <slot>selectAllItems()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -992,7 +976,7 @@
    <sender>mRemoveAllTablesAction</sender>
    <signal>triggered()</signal>
    <receiver>mSceneWidget</receiver>
-   <slot>cleanTableSchemeScene()</slot>
+   <slot>cleanSchemeScene()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -1008,7 +992,7 @@
    <sender>mAdjustTableSizeAction</sender>
    <signal>triggered()</signal>
    <receiver>mSceneWidget</receiver>
-   <slot>adjustTables()</slot>
+   <slot>adjustItems()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -1072,7 +1056,7 @@
    <sender>mAnchorAction</sender>
    <signal>triggered()</signal>
    <receiver>mSceneWidget</receiver>
-   <slot>anchorTables()</slot>
+   <slot>anchorItems()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -1088,7 +1072,7 @@
    <sender>mDisableAnchorAction</sender>
    <signal>triggered()</signal>
    <receiver>mSceneWidget</receiver>
-   <slot>disableAnchorTables()</slot>
+   <slot>disableAnchorItems()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -1104,7 +1088,7 @@
    <sender>mSelectAllTablesInSchemaAction</sender>
    <signal>triggered()</signal>
    <receiver>mSceneWidget</receiver>
-   <slot>selectAllTablesInSchema()</slot>
+   <slot>selectAllItemsInSchema()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -1315,8 +1299,7 @@
   <slot>showPrintPreviewDialog()</slot>
   <slot>showPrintDialog()</slot>
   <slot>showDatabaseTree(bool)</slot>
-  <slot>addTableItem()</slot>
-  <slot>addTableItem(QTreeWidgetItem*,int)</slot>
+  <slot>addItem()</slot>
   <slot>describeObject()</slot>
   <slot>queryData()</slot>
   <slot>saveSession()</slot>

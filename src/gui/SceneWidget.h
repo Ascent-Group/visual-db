@@ -44,7 +44,7 @@ class QPrinter;
 class QTreeWidgetItem;
 class QUndoCommand;
 class TableItem;
-class TableItemGroup;
+class ItemGroup;
 
 /*
  * This is widget to provide the visualization.
@@ -60,9 +60,7 @@ class SceneWidget : public QWidget
 
         QDomElement toXml(QDomDocument &, bool, bool, bool, bool);
         QList<QGraphicsItem *> items () const;
-        TableItem *tableFromXml(QDomElement &);
-        TableItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
-        QList<QGraphicsItem *> tableGroupFromXml(QDomElement &);
+        ItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
         void fromXml(QDomElement &);
         void print(QPrinter *);
         void refreshLegend();
@@ -75,19 +73,19 @@ class SceneWidget : public QWidget
         void movedDown();
         void movedLeft();
         void movedRight();
-        void tableActionDone(QUndoCommand *);
+        void itemActionDone(QUndoCommand *);
 
     public slots:
-        void adjustTables();
-        void anchorTables();
+        void adjustItems();
+        void anchorItems();
         void alignToGrid(bool);
         void colorizeAccordingSchemas();
-        void deleteTableItem();
+        void deleteItem();
         void divideIntoPages(bool);
         void groupItems();
         void saveToImage();
-        void selectAllTables();
-        void selectAllTablesInSchema();
+        void selectAllItems();
+        void selectAllItemsInSchema();
         void setFieldsTypesInvisible();
         void setFieldsTypesVisible();
         void setIndicesInvisible();
@@ -97,16 +95,16 @@ class SceneWidget : public QWidget
         void showLegend(bool);
         void showOnScene(QTreeWidgetItem *, int);
         void ungroupItems();
-        void disableAnchorTables();
-        void cleanTableSchemeScene();
-        void setTableColor();
-        void sendTableActionDone(QUndoCommand *);
+        void disableAnchorItems();
+        void cleanSchemeScene();
+        void setItemColor();
+        void sendItemActionDone(QUndoCommand *);
 
     private:
         void setAnchor(QList<QGraphicsItem *>, bool);
 
     private slots:
-        void sendTableMoved(QList <QGraphicsItem *>, int, int);
+        void sendItemMoved(QList <QGraphicsItem *>, int, int);
 
     private:
         GraphicsScene *mScene;

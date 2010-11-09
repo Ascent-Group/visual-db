@@ -30,6 +30,9 @@
 #ifndef GRAPHICSSCENE_H
 #define GRAPHICSSCENE_H
 
+#include <QDomDocument>
+#include <QDomElement>
+#include <QDomNode>
 #include <QGraphicsScene>
 #include <QSettings>
 #include <QTimer>
@@ -44,14 +47,14 @@ class QSlider;
 class QTreeWidgetItem;
 
 class ControlWidget;
-class DbObjectsItem;
+class DbObjectItem;
 class Legend;
 class TableItem;
-class TableItemGroup;
+class ItemGroup;
 class ViewItem;
 
 /*
- * Scene for tables. Allow browsing the tables, relations between them and move tables on it.
+ * Scene for db items. Allow browsing db items, relations between them and move them.
  */
 class GraphicsScene : public QGraphicsScene {
 
@@ -67,42 +70,46 @@ class GraphicsScene : public QGraphicsScene {
         GraphicsScene();
         ~GraphicsScene();
 
-        void addTableItems(const QList<QGraphicsItem *> &);
+        void addItems(const QList<QGraphicsItem *> &);
         void setSchemeMenu(QMenu *);
         void setTableMenu(QMenu *);
-        TableItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
-        void deleteTableItems(QList<QGraphicsItem *> &ipTabliList);
+        ItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
+        void deleteItems(QList<QGraphicsItem *> &ipTabliList);
         void setAcceptsHoverEvents(bool);
         void refreshLegend();
         void updateLegend();
         void drawRelations();
-        void createRelations(DbObjectsItem *);
+        void createRelations(DbObjectItem *);
         TableItem *newTableItem(QString, QString, QMenu *, const QPoint &);
         ViewItem *newViewItem(QString, QString, QMenu *, const QPoint &);
-        void setTableColor(DbObjectsItem*, QColor);
+        void setItemColor(DbObjectItem*, QColor);
         bool moveMode() const;
 
     signals:
-        void tableMoved(QList <QGraphicsItem *>, int, int);
+        void itemMoved(QList <QGraphicsItem *>, int, int);
 
     public slots:
         QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int, const QPoint &);
         void setFieldsTypesVisible();
         void setFieldsTypesInvisible();
         void setIndicesVisible(bool);
-        void setTableColor();
-        void selectAllTables();
-        void adjustTables();
+        void setItemColor();
+        void selectAllItems();
+        void adjustItems();
         void groupItems();
         void ungroupItems();
         void colorizeAccordingSchemas();
+        void setAnchor(bool);
         void showGrid(bool);
         void alignToGrid(bool);
         void divideIntoPages(bool);
         void showLegend(bool);
         void moveLegend(int, int);
-        void selectAllTablesInSchema();
+        void selectAllItemsInSchema();
         void setMoveMode(bool);
+        QDomElement toXml(QDomDocument &, bool, bool, bool, bool) const;
+        QList<QGraphicsItem *> fromXml(const QDomNode &);
+
 
     protected:
         virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
@@ -113,11 +120,12 @@ class GraphicsScene : public QGraphicsScene {
         virtual void drawBackground(QPainter *, const QRectF &);
 
     private:
-        DbObjectsItem *findItem(const QString &, const QString &);
+        DbObjectItem *findItem(const QString &, const QString &);
         void setFieldsTypesVisible(QList<QGraphicsItem *>, bool);
         void setIndicesVisible(QList<QGraphicsItem *>, bool);
-        void setTableColor(QList<QGraphicsItem *>, QColor);
-        void adjustTables(QList<QGraphicsItem *>);
+        void setItemColor(QList<QGraphicsItem *>, QColor);
+        void adjustItems(QList<QGraphicsItem *>);
+        void setAnchor(QList<QGraphicsItem *>, bool);
         void groupItems(QList<QGraphicsItem *>);
         void ungroupItems(QList<QGraphicsItem *>);
         void drawGrid(QPainter *);
@@ -139,7 +147,7 @@ class GraphicsScene : public QGraphicsScene {
 
         QMenu *mSchemeMenu;
         QMenu *mTableMenu;
-        QVector<DbObjectsItem *> mDbItems;
+        QVector<DbObjectItem *> mDbItems;
 
         QPointF mOldPos;
 

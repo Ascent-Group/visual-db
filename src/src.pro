@@ -17,19 +17,17 @@ INCLUDEPATH += $$PWD $$PWD/dbobjects
 
 ### Windows specific paths
 win32 {
-    Debug:LIBS += -L$$OUT_PWD/dbobjects/common/debug \
-                  -L$$OUT_PWD/dbobjects/factory/debug \
-                  -L$$OUT_PWD/dbobjects/psql/debug \
-                  -L$$OUT_PWD/dbobjects/mysql/debug
-
-    Release:LIBS += -L$$OUT_PWD/dbobjects/common/release \
-                    -L$$OUT_PWD/dbobjects/factory/release \
-                    -L$$OUT_PWD/dbobjects/psql/release \
-                    -L$$OUT_PWD/dbobjects/mysql/release
-}
+    CONFIG(debug, debug|release):LIBS += -L$$OUT_PWD/dbobjects/common/debug \
+                                         -L$$OUT_PWD/dbobjects/factory/debug \
+                                         -L$$OUT_PWD/dbobjects/psql/debug \
+                                         -L$$OUT_PWD/dbobjects/mysql/debug
+    else:LIBS += -L$$OUT_PWD/dbobjects/common/release \
+                 -L$$OUT_PWD/dbobjects/factory/release \
+                 -L$$OUT_PWD/dbobjects/psql/release \
+                 -L$$OUT_PWD/dbobjects/mysql/release
 
 ### Unix specific paths
-unix {
+} else:unix {
     LIBS += -L$$OUT_PWD/dbobjects/common \
             -L$$OUT_PWD/dbobjects/factory \
             -L$$OUT_PWD/dbobjects/psql \

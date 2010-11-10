@@ -34,7 +34,8 @@ win32 {
             -L$$OUT_PWD/dbobjects/mysql
 }
 
-LIBS += -lcommon -lpsql -lmysql -lfactory -lpsql
+LIBS += -lcommon -lfactory -lpsql -lmysql -lcommon -lmysql
+#LIBS += -lcommon -lpsql -lmysql -lfactory -lpsql
 
 ## check dependencies
 #CONFIG += link_pkgconfig

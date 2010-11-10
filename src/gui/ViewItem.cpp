@@ -40,7 +40,7 @@
 #include <gui/ViewItem.h>
 #include <math.h>
 
-/*
+/*!
  * Constructor
  */
 ViewItem::ViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu *ipMenu, const QPoint &ipPos)
@@ -103,15 +103,17 @@ ViewItem::ViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
-/*
+/*!
  * Destructor
  */
 ViewItem::~ViewItem()
 {
 }
 
-/*
- * Return the type
+/*!
+ * @brief Return the type identifier
+ *
+ * @return Type identifier
  */
 int
 ViewItem::type() const
@@ -119,24 +121,10 @@ ViewItem::type() const
     return Type;
 }
 
-///*
-// *
-// */
-//void
-//ViewItem::paintFieldImage(QPainter * /*ipPainter*/, int /*ipIdx*/)
-//{
-//}
-//
-///*
-// *
-// */
-//void
-//ViewItem::paintIndeces(QPainter * /*ipPainter*/)
-//{
-//}
-
-/*
- * Get the name of the view item
+/*!
+ * @brief Get the name of the view
+ *
+ * @return Name of the view
  */
 QString
 ViewItem::name() const
@@ -144,18 +132,23 @@ ViewItem::name() const
     return mModel->name();
 }
 
-/*
- * Get the name of the schema
+/*!
+ * @brief Get the schema name
+ *
+ * @return Schema name
  */
 QString
 ViewItem::schemaName() const
 {
     return "";
-//    return mModel->schemaName();
 }
 
-/*
- * Create the xml represantation for the view
+/*!
+ * @brief Create the xml represantation for the view
+ *
+ * @param[in] ipDoc - Parent xml dom document
+ *
+ * @return Filled with schema info xml dom element connected to input document
  */
 QDomElement
 ViewItem::toXml(QDomDocument &ipDoc) const
@@ -163,8 +156,12 @@ ViewItem::toXml(QDomDocument &ipDoc) const
     return DbObjectItem::toXml(ipDoc, "view");
 }
 
-/*
- * Check if input graphics item is view item
+/*!
+ * @brief Check if input graphics item is view item
+ *
+ * @param[in] ipItem - any graphics item
+ *
+ * @return Converted to ViewItem element or 0 otherwise
  */
 ViewItem *
 toView(QGraphicsItem *ipItem)

@@ -1,8 +1,8 @@
 TEMPLATE = subdirs
 
 SUBDIRS +=  $$PWD/src/dbobjects \
-            $$PWD/src \
-            $$PWD/tests
+            $$PWD/src
+#            $$PWD/tests
 
 CONFIG += ordered warn_on
 

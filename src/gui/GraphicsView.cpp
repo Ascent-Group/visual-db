@@ -44,7 +44,7 @@
 
 #include <QDebug>
 
-/*
+/*!
  * Constructor
  */
 GraphicsView::GraphicsView()
@@ -54,7 +54,7 @@ GraphicsView::GraphicsView()
     setAcceptDrops(true);
 }
 
-/*
+/*!
  * Constructor
  */
     GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent = 0)
@@ -63,15 +63,17 @@ GraphicsView::GraphicsView()
     centerOn(GraphicsScene::DEFAULT_WIDTH / 2, GraphicsScene::DEFAULT_HEIGHT / 2);
 }
 
-/*
+/*!
  * Destructor
  */
 GraphicsView::~GraphicsView()
 {
 }
 
-/*
- * Handler for scrolling event
+/*!
+ * @brief Handler for scrolling event
+ *
+ * @param[in] ipEvent - Wheel event
  */
 void
 GraphicsView::wheelEvent(QWheelEvent *ipEvent)
@@ -90,8 +92,10 @@ GraphicsView::wheelEvent(QWheelEvent *ipEvent)
     }
 }
 
-/*
- * Scaling the scheme
+/*!
+ * @brief Scaling the scheme
+ *
+ * @param[in] ipScaleFactor - Scale factor
  */
 void
 GraphicsView::scaleView(int ipScaleFactor)
@@ -120,8 +124,10 @@ GraphicsView::scaleView(int ipScaleFactor)
     }
 }
 
-/*
- * Drag enter event
+/*!
+ * @brief Drag enter event
+ *
+ * @param[in] ipEvent - Drag enter event
  */
 void 
 GraphicsView::dragEnterEvent(QDragEnterEvent *ipEvent)
@@ -131,8 +137,10 @@ GraphicsView::dragEnterEvent(QDragEnterEvent *ipEvent)
     }
 }
 
-/*
- * Drag move event
+/*!
+ * @brief Drag move event
+ *
+ * @param[in] ipEvent - Drag move event
  */
 void 
 GraphicsView::dragMoveEvent(QDragMoveEvent *ipEvent)
@@ -148,8 +156,10 @@ GraphicsView::dragMoveEvent(QDragMoveEvent *ipEvent)
     }
 }
 
-/*
- * Drop event
+/*!
+ * @brief Drop event
+ *
+ * @param[in] ipEvent - Drop event
  */
 void
 GraphicsView::dropEvent(QDropEvent *ipEvent)
@@ -181,8 +191,11 @@ GraphicsView::dropEvent(QDropEvent *ipEvent)
     }
 }
 
-/*
- * Handle scrolling event
+/*!
+ * @brief Handle scrolling event
+ *
+ * @param[in] ipDx - Gorizontal distance
+ * @param[in] ipDy - Vertical distance
  */
 void
 GraphicsView::scrollContentsBy(int ipDx, int ipDy)
@@ -197,8 +210,8 @@ GraphicsView::scrollContentsBy(int ipDx, int ipDy)
     }
 }
 
-/*
- * Move the widget up
+/*!
+ * @brief Move the widget up
  */
 void
 GraphicsView::moveUp()
@@ -206,8 +219,8 @@ GraphicsView::moveUp()
     verticalScrollBar()->setValue(verticalScrollBar()->value() - MOVE_STEP);
 }
 
-/*
- * Move the widget down
+/*!
+ * @brief Move the widget down
  */
 void
 GraphicsView::moveDown()
@@ -215,8 +228,8 @@ GraphicsView::moveDown()
     verticalScrollBar()->setValue(verticalScrollBar()->value() + MOVE_STEP);
 }
 
-/*
- * Move the widget left
+/*!
+ * @brief Move the widget left
  */
 void
 GraphicsView::moveLeft()
@@ -224,8 +237,8 @@ GraphicsView::moveLeft()
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() - MOVE_STEP);
 }
 
-/*
- * Move the widget right
+/*!
+ * @brief Move the widget right
  */
 void
 GraphicsView::moveRight()
@@ -233,6 +246,11 @@ GraphicsView::moveRight()
     horizontalScrollBar()->setValue(horizontalScrollBar()->value() + MOVE_STEP);
 }
 
+/*!
+ * @brief Set move mode for the scene (when you drag and drop scene itself with mouse)
+ *
+ * @param[in] ipFlag - True if move mode is enabled, false otherwise
+ */
 void
 GraphicsView::setMoveMode(bool ipFlag)
 {

@@ -39,7 +39,7 @@
 static QString qDBCaption(const QSqlDatabase &);
 static void setBold(QTreeWidgetItem *, bool);
 
-/*
+/*!
  * Constructor
  */
 TreeWidget::TreeWidget(/*QMenu *ipMenu, */QWidget *ipParent)
@@ -49,15 +49,17 @@ TreeWidget::TreeWidget(/*QMenu *ipMenu, */QWidget *ipParent)
     setAnimated(true);
 }
 
-/*
+/*!
  * Desctuctor
  */
 TreeWidget::~TreeWidget()
 {
 }
 
-/*
- * Set context menu
+/*!
+ * @brief Set context menu
+ *
+ * @param[in] ipMenu - Context menu
  */
 void
 TreeWidget::setContextMenu(QMenu *ipMenu)
@@ -65,8 +67,8 @@ TreeWidget::setContextMenu(QMenu *ipMenu)
     mContextMenu = ipMenu;
 }
 
-/*
- * Populate the tree with tables
+/*!
+ * @brief Read database and fill the tree
  */
 void
 TreeWidget::refresh()
@@ -77,14 +79,7 @@ TreeWidget::refresh()
 
     setHeaderLabel(qDBCaption(db));
 
-//    QFont font;
-//    font.setBold(true);
-//    QTreeWidgetItem *topSchemaItem = new QTreeWidgetItem;
-//    topSchemaItem->setFont(0, font);
-//    topSchemaItem->setText(TreeWidget::NameCol, "Schemas");
-//    addTopLevelItem(topSchemaItem);
-
-    // construct the tree skeleton
+        // construct the tree skeleton
     QTreeWidgetItem *rolesNode = new QTreeWidgetItem();
     rolesNode->setText(TreeWidget::NameCol, tr("Roles"));
     rolesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::RoleNode));
@@ -203,8 +198,10 @@ TreeWidget::refresh()
     insertItems(indicesNode, &indicesList, TreeWidget::IndexItem);
 }
 
-/*
- * Handler for context menu event
+/*!
+ * @brief Handler for context menu event
+ *
+ * @param[in] ipEvent - Context menu event
  */
 void
 TreeWidget::contextMenuEvent(QContextMenuEvent *ipEvent)
@@ -212,8 +209,8 @@ TreeWidget::contextMenuEvent(QContextMenuEvent *ipEvent)
     mContextMenu->exec(ipEvent->globalPos());
 }
 
-/*
- * Start drag
+/*!
+ * @@brief This function is called when we start draggin the tree element
  */
 void
 TreeWidget::startDrag(Qt::DropActions)
@@ -222,10 +219,7 @@ TreeWidget::startDrag(Qt::DropActions)
 
     QByteArray itemData;
     QDataStream dataStream(&itemData, QIODevice::WriteOnly);
-//    QPixmap pixmap = qVariantValue<QPixmap>(item->data(Qt::UserRole));
-//    QPoint location = item->data(Qt::UserRole+1).toPoint();
 
-//    dataStream << pixmap << location;
     dataStream << item->data(TreeWidget::NameCol, Qt::DisplayRole).toString();
     qDebug() << "startDrag: " << item->data(TreeWidget::NameCol, Qt::DisplayRole).toString();
 
@@ -234,15 +228,17 @@ TreeWidget::startDrag(Qt::DropActions)
 
     QDrag *drag = new QDrag(this);
     drag->setMimeData(mimeData);
-//    drag->setHotSpot(QPoint(pixmap.width() / 2, pixmap.height() / 2));
-//    drag->setPixmap(pixmap);
 
     drag->exec(Qt::MoveAction);
 }
 
 
-/*
- * Create the database caption
+/*!
+ * @brief Create the database caption
+ *
+ * @param[in] ipDb - Database connection
+ *
+ * @return Database caption
  */
 static QString
 qDBCaption(const QSqlDatabase &ipDb)
@@ -259,18 +255,26 @@ qDBCaption(const QSqlDatabase &ipDb)
     return driverName;
 }
 
-/*
- * Set font to bold
+/*!
+ * @brief Set font to bold
+ *
+ * @param[in] ipItem - Tree item we need to change the boldness
+ * @param[in] ipBold - True for bold font or false for normal one
  */
-static void setBold(QTreeWidgetItem *ipItem, bool ipBold)
+static void
+setBold(QTreeWidgetItem *ipItem, bool ipBold)
 {
     QFont font = ipItem->font(0);
     font.setBold(ipBold);
     ipItem->setFont(0, font);
 }
 
-/*
- * Populate tree under parent-item with triggers
+/*!
+ * @brief Populate tree under parent-item with triggers
+ *
+ * @param[in] ipParentItem - Parent item we will populate
+ * @param[in] ipList - The list of captions we need to fill with the parent item
+ * @param[in] ipType - Item type
  */
 void
 TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, TreeWidget::Item ipType, bool /*ipDragEnabled*/)
@@ -279,15 +283,12 @@ TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, Tree
 
     QStringList::const_iterator iter;
 
-    // for each item on the list
+    // for each item in the list
     for (iter = ipList->begin(); iter != ipList->end(); ++iter) {
         QString name = *iter;
 
         // create an item
         QTreeWidgetItem *item = new QTreeWidgetItem(ipParentItem);
-//        if (ipDragEnabled) {
-//            item->setFlags(item->flags() | Qt::ItemIsDragEnabled);
-//        }
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled);
         item->setText(TreeWidget::NameCol, name);
         item->setText(TreeWidget::IdCol, QString::number(ipType));

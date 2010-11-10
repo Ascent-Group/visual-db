@@ -38,7 +38,7 @@
 
 #include <QtDebug>
 
-/*
+/*!
  * Ctor
  */
 SqlWidget::SqlWidget(QWidget *ipParent)
@@ -51,7 +51,7 @@ SqlWidget::SqlWidget(QWidget *ipParent)
 
 }
 
-/*
+/*!
  * Dtor
  */
 SqlWidget::~SqlWidget()
@@ -59,17 +59,20 @@ SqlWidget::~SqlWidget()
 
 }
 
-/*
- * Sets default query for db object
+/*!
+ * @brief Sets default query for db object
+ *
+ * @param[in] ipQueryText - Default query text
  */
+// FIXME: parameter should be const reference
 void
 SqlWidget::setDefaultQuery(QString ipQueryText)
 {
     ui.mQueryEdit->setText(ipQueryText);
 }
 
-/*
- * Run button click slot
+/*!
+ * @brief Run button click slot
  */
 void
 SqlWidget::runQuery()
@@ -98,8 +101,8 @@ SqlWidget::runQuery()
     mainWindow->printMsg("Query successfully executed.");
 }
 
-/*
- * Reads the previous portion of results
+/*!
+ * @brief Reads the previous portion of results
  */
 void
 SqlWidget::readPrevPortion()
@@ -107,8 +110,8 @@ SqlWidget::readPrevPortion()
     readPortion(SqlWidget::PreviousPortion);
 }
 
-/*
- * Reads the next portion of results
+/*!
+ * @brief Reads the next portion of results
  */
 void
 SqlWidget::readNextPortion()
@@ -116,8 +119,8 @@ SqlWidget::readNextPortion()
     readPortion(SqlWidget::NextPortion);
 }
 
-/*
- * Reads full result
+/*!
+ * @brief Reads full result
  */
 void
 SqlWidget::readFullResult()
@@ -141,9 +144,13 @@ SqlWidget::readFullResult()
     ui.mNextPortionButton->setEnabled(false);
 }
 
-/*
- * Checks the query for safety
- * lyuts: later will allow users to define and use their own rules
+/*!
+ * @brief Checks the query for safety
+ * 		  lyuts: later will allow users to define and use their own rules
+ *
+ * @param[in] ipQueryText - Query text we will check for safety
+ *
+ * @return True if query is safe, false otherwise
  */
 bool
 isQuerySafe(const QString &ipQueryText)
@@ -160,9 +167,12 @@ isQuerySafe(const QString &ipQueryText)
     return true;
 }
 
-/*
- * Reads a portion of records
+/*!
+ * @brief Reads a portion of records
+ *
+ * @param[in] ipDirection - Direction we will read in (next or previous)
  */
+// FIXME: ipDirection should be const reference
 void
 SqlWidget::readPortion(Portions ipDirection)
 {

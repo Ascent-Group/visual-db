@@ -72,7 +72,7 @@
 
 using namespace QtConcurrent;
 
-/*
+/*!
  * Constructor
  */
 MainWindow::MainWindow()
@@ -104,8 +104,8 @@ MainWindow::MainWindow()
     connect(ui.mDatabaseTreeWidget, SIGNAL(shown()), this, SLOT(showDatabaseTree()));
 }
 
-/*
- * Create actions
+/*!
+ * @brief Create actions
  */
 void MainWindow::createActions()
 {
@@ -129,8 +129,8 @@ void MainWindow::createActions()
     ui.mAlignToGridAction->setChecked(mSettings.value(Consts::VIEW_GRP + "/" + Consts::ALIGN_TO_GRID_SETTING, false).toBool());
 }
 
-/*
- * Create menus
+/*!
+ * @brief Create menus
  */
 void
 MainWindow::createMenus()
@@ -151,8 +151,8 @@ MainWindow::createMenus()
     ui.mSceneWidget->setTableMenu(ui.mTableMenu);
 }
 
-/*
- * Update session menu
+/*!
+ * @brief Update session menu
  */
 void
 MainWindow::updateSessionMenu()
@@ -178,8 +178,10 @@ MainWindow::updateSessionMenu()
     ui.mSessionMenu->addAction(ui.mSaveSessionAction);
 }
 
-/*
- * Enable or disable some menu actions
+/*!
+ * @brief Enable or disable some menu actions
+ *
+ * @param[in] ipFlag - True if we want to enable actions, false otherwise
  */
 void
 MainWindow::setEnableForActions(bool ipFlag)
@@ -210,8 +212,12 @@ MainWindow::setEnableForActions(bool ipFlag)
     ui.mReloadDataAction->setEnabled(ipFlag);
 }
 
-/*
- * Import database
+/*!
+ * @brief Import database
+ *
+ * @param[in] ui - UI of main window
+ *
+ * @return Result of dialog processing
  */
 int
 importDatabase(const Ui::MainWindow &ui)
@@ -226,8 +232,12 @@ importDatabase(const Ui::MainWindow &ui)
     return QDialog::Rejected;
 }
 
-/*
- * Show connection dialog
+/*!
+ * @brief Show connection dialog
+ *
+ * @param[in] ipLoadSession - True if we want to load session parameters, false otherwise
+ *
+ * @return Result of dialog processing
  */
 int
 MainWindow::showConnectionDialog(bool ipLoadSession)
@@ -267,8 +277,8 @@ MainWindow::showConnectionDialog(bool ipLoadSession)
     return futureWatcher.result();
 }
 
-/*
- * Show options dialog
+/*!
+ * @brief Show options dialog
  */
 void
 MainWindow::showOptionsDialog()
@@ -282,8 +292,8 @@ MainWindow::showOptionsDialog()
     }
 }
 
-/*
- * Show print preview dialog
+/*!
+ * @brief Show print preview dialog
  */
 void
 MainWindow::showPrintPreviewDialog()
@@ -295,8 +305,8 @@ MainWindow::showPrintPreviewDialog()
     previewDialog.exec();
 }
 
-/*
- * Show print dialog
+/*!
+ * @brief Show print dialog
  */
 void
 MainWindow::showPrintDialog()
@@ -310,8 +320,10 @@ MainWindow::showPrintDialog()
 #endif
 }
 
-/*
- * Print the preview page
+/*!
+ * @brief Print the preview page
+ *
+ * @param[in] ipPrinter - Printer
  */
 void
 MainWindow::printPreview(QPrinter *ipPrinter)
@@ -323,8 +335,8 @@ MainWindow::printPreview(QPrinter *ipPrinter)
 #endif
 }
 
-/*
- * Create status bar
+/*!
+ * @brief Create status bar
  */
 void
 MainWindow::createStatusBar()
@@ -342,8 +354,10 @@ MainWindow::createStatusBar()
     setStatusBar(statusBar);
 }
 
-/*
- * Make docked table list (in)visible
+/*!
+ * @brief Make docked table list (in)visible
+ *
+ * @param[in] ipFlag - True if we want to show tree, false otherwise
  */
 void
 MainWindow::showDatabaseTree(bool ipFlag)
@@ -355,8 +369,8 @@ MainWindow::showDatabaseTree(bool ipFlag)
     }
 }
 
-/*
- * Close database tree window
+/*!
+ * @brief Close database tree window
  */
 void
 MainWindow::closeDatabaseTree()
@@ -364,8 +378,8 @@ MainWindow::closeDatabaseTree()
     ui.mShowTableListAction->setChecked(false);
 }
 
-/*
- * Show database tree view
+/*!
+ * @brief Show database tree view
  */
 void 
 MainWindow::showDatabaseTree()
@@ -373,8 +387,10 @@ MainWindow::showDatabaseTree()
     ui.mShowTableListAction->setChecked(true);
 }
 
-/*
- * Make docked log panel (in)visible
+/*!
+ * @brief Make docked log panel (in)visible
+ *
+ * @param[in] ipFlag - True if we want to show log panel, false otherwise
  */
 void
 MainWindow::showLogPanel(bool ipFlag)
@@ -386,8 +402,8 @@ MainWindow::showLogPanel(bool ipFlag)
     }
 }
 
-/*
- * Close log panel
+/*!
+ * @brief Close log panel
  */
 void 
 MainWindow::closeLogPanel()
@@ -395,8 +411,8 @@ MainWindow::closeLogPanel()
     ui.mShowLogPanelAction->setChecked(false);
 }
 
-/*
- * Show log panel
+/*!
+ * @brief Show log panel
  */
 void
 MainWindow::showLogPanel()
@@ -404,8 +420,8 @@ MainWindow::showLogPanel()
     ui.mShowLogPanelAction->setChecked(true);
 }
 
-/*
- * Add table to scene
+/*!
+ * @brief Add table to scene
  */
 void
 MainWindow::addItem()
@@ -422,8 +438,8 @@ MainWindow::addItem()
     ui.mSceneWidget->updateLegend();
 }
 
-/*
- * Draw full db scheme
+/*!
+ * @brief Draw full db scheme
  */
 void
 MainWindow::drawFullDbScheme()
@@ -455,8 +471,10 @@ MainWindow::drawFullDbScheme()
     }
 }
 
-/*
- * Do smth before mainwindows is closed
+/*!
+ * @brief Do smth before mainwindows is closed
+ *
+ * @param[in] ipEvent - Close event
  */
 void
 MainWindow::closeEvent(QCloseEvent *ipEvent)
@@ -512,8 +530,8 @@ MainWindow::closeEvent(QCloseEvent *ipEvent)
     while (true);
 }
 
-/*
- * Describe selected database object
+/*!
+ * @brief Describe selected database object
  */
 void
 MainWindow::describeObject()
@@ -638,8 +656,8 @@ MainWindow::describeObject()
     }
 }
 
-/*
- *
+/*!
+ * @brief Show query dialog tab
  */
 void
 MainWindow::queryData()
@@ -709,9 +727,12 @@ MainWindow::queryData()
     }
 }
 
-/*
- * Save all parameters to xml file
+/*!
+ * @brief Save all parameters to xml file
+ *
+ * @param[in] ipFileName - Xml file name were we will store parameters to
  */
+// FIXME: ipFileName should be const reference
 void
 MainWindow::saveToXml(QString ipFileName)
 {
@@ -736,8 +757,10 @@ MainWindow::saveToXml(QString ipFileName)
     file.close();
 }
 
-/*
- * Load parameters from xml file
+/*!
+ * @brief Load parameters from xml file
+ *
+ * @param[in] ipFileName - Xml file name were load parameter from
  */
 void
 MainWindow::loadFromXml(QString ipFileName)
@@ -790,8 +813,10 @@ MainWindow::loadFromXml(QString ipFileName)
     }
 }
 
-/*
- * Save session
+/*!
+ * @brief Save session
+ *
+ * @return True if we save was successfull, false otherwise
  */
 bool
 MainWindow::saveSession()
@@ -822,8 +847,8 @@ MainWindow::saveSession()
     return true;
 }
 
-/*
- * Load session
+/*!
+ * @brief Load session
  */
 void
 MainWindow::loadSession()
@@ -842,8 +867,8 @@ MainWindow::loadSession()
     loadFromXml(fileName);
 }
 
-/*
- * Load last session
+/*!
+ * @brief Load last session
  */
 void
 MainWindow::loadLastSession()
@@ -852,8 +877,10 @@ MainWindow::loadLastSession()
     loadFromXml(action->text());
 }
 
-/*
- * Show window with full screen or not
+/*!
+ * @brief Show window with full screen or not
+ *
+ * @param[in] ipFlag - True if we want to show in fullscreen, false otherwise
  */
 void
 MainWindow::setFullScreen(bool ipFlag)
@@ -865,8 +892,8 @@ MainWindow::setFullScreen(bool ipFlag)
     }
 }
 
-/*
- * Reload data from DB
+/*!
+ * @brief Reload data from DB
  */
 void
 MainWindow::reloadData()
@@ -876,8 +903,8 @@ MainWindow::reloadData()
     ui.mTree->refresh();
 }
 
-/*
- * Initialize session
+/*!
+ * @brief Initialize session
  */
 void
 MainWindow::initSession()
@@ -893,8 +920,8 @@ MainWindow::initSession()
     }
 }
 
-/*
- * Move table slot
+/*!
+ * @brief Add command to the stack
  */
 void
 MainWindow::addCommand(QUndoCommand *ipCommand)
@@ -902,10 +929,12 @@ MainWindow::addCommand(QUndoCommand *ipCommand)
     mUndoStack->push(ipCommand);
 }
 
-/*
- * [static]
- * Prints the message to the log panel
+/*!
+ * @brief Prints the message to the log panel
+ *
+ * @param[in] ipText - Message text
  */
+// FIXME: ipText should be const reference
 void
 MainWindow::printMsg(QString ipText) const
 {

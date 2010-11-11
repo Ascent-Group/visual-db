@@ -65,6 +65,8 @@ GraphicsItem::GraphicsItem(QMenu *ipMenu)
     mTableImage = new QImage(":/img/table.png");
     mFieldImage = new QImage(":/img/field.png");
     mAnchorImage = new QImage(":/img/anchor.png");
+
+    mShadowColor = QColor(60, 60, 60, 175);
 }
 
 /*!
@@ -520,6 +522,15 @@ GraphicsItem::adjustSize()
 }
 
 /*
+ *
+ */
+QRectF
+GraphicsItem::boundingRect() const
+{
+    return QRectF(x(), y(), width() + SHADOW_SIZE, height() + SHADOW_SIZE);
+}
+
+/*
  * Paint the table. Height is adjusting, but width is setted to default.
  */
 void
@@ -543,7 +554,8 @@ GraphicsItem::paintBorder(QPainter *ipPainter, const QStyleOptionGraphicsItem *i
 {
     // draw the board of the table
     QGraphicsPolygonItem::paint(ipPainter, ipItem, ipWidget);
-//    ipPainter->fillRect((int)x() + 5, (int)y() + (int)height(), 5, width(), QColor(80, 80, 80));
+    ipPainter->fillRect((int)x() + SHADOW_SIZE, (int)y() + (int)height() + 1, width() + 1, SHADOW_SIZE, mShadowColor);
+    ipPainter->fillRect((int)x() + (int)width() + 1, (int)y() + SHADOW_SIZE, SHADOW_SIZE, (int)height() - SHADOW_SIZE + 1, mShadowColor);
 }
 
 void

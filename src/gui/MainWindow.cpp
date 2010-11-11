@@ -505,7 +505,6 @@ MainWindow::closeEvent(QCloseEvent *ipEvent)
 
         // if yes || no
         if (QMessageBox::Cancel != result) {
-
             if (QMessageBox::Yes == result) {
                 // save parameters to xml file
                 if (!saveSession()) {
@@ -819,13 +818,14 @@ bool
 MainWindow::saveSession()
 {
     using namespace Consts;
-    QString defaultFileName = "session_" +
-        mSettings.value(LAST_SESSION_GRP + "/" + DB_NAME_SETTING, "undefined").toString() + "_" +
-        mSettings.value(LAST_SESSION_GRP + "/" + DB_USER_SETTING, "undefined").toString() + "_" +
-        QDate::currentDate().toString(Qt::DefaultLocaleShortDate) + "_" + QTime::currentTime().toString() + ".vdb";
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save session..."),
-            mSettings.value(PREFS_GRP + "/" + SESSION_DIR_SETTING, "./").toString() + defaultFileName,
-            tr("Xml files (*.vdb)"));
+//    QString defaultFileName = "session_" +
+//        mSettings.value(LAST_SESSION_GRP + "/" + DB_NAME_SETTING, "undefined").toString() + "_" +
+//        mSettings.value(LAST_SESSION_GRP + "/" + DB_USER_SETTING, "undefined").toString() + "_" +
+//        QDate::currentDate().toString(Qt::DefaultLocaleShortDate) + "_" + QTime::currentTime().toString() + ".vdb";
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save session..."), mSettings.value(PREFS_GRP + "/" + SESSION_DIR_SETTING, "./").toString(), tr("Xml files (*.vdb)"));
+//    QString fileName = QFileDialog::getSaveFileName(this, tr("Save session..."),
+//            mSettings.value(PREFS_GRP + "/" + SESSION_DIR_SETTING, "./").toString() + defaultFileName,
+//            tr("Xml files (*.vdb)"));
     // return if we don't select any file to save
     if (fileName == "") {
         return false;

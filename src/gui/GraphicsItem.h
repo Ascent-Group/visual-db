@@ -117,6 +117,7 @@ class GraphicsItem : public QGraphicsPolygonItem
         virtual void updatePolygon();
         virtual void adjustSize();
 
+        virtual QRectF boundingRect() const;
         virtual void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
     protected:
@@ -164,6 +165,8 @@ class GraphicsItem : public QGraphicsPolygonItem
         QImage *mAnchorImage;
 
         static const int BORDER_WIDTH = 5;
+        static const int SHADOW_SIZE = 3;
+        QColor mShadowColor;
 
         // mode for table (you can resize table from different positions or move it)
         enum Mode {

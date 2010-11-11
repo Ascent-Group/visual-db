@@ -30,9 +30,10 @@
 #ifndef DBOBJECTS_COMMON_DBTABLE_H
 #define DBOBJECTS_COMMON_DBTABLE_H
 
+#include <common/DbObject.h>
+#include <common/DbObjectPtr.h>
 #include <QStringList>
 #include <QVector>
-#include <common/DbObject.h>
 
 namespace DbObjects
 {
@@ -40,8 +41,11 @@ namespace DbObjects
 namespace Common
 {
 
+template<typename T> class DbObjectPtr;
 class DbIndex;
 class DbSchema;
+typedef DbObjectPtr<DbIndex> DbIndexPtr;
+typedef DbObjectPtr<DbSchema> DbSchemaPtr;
 
 /*!
  * \class DbTable
@@ -55,8 +59,8 @@ class DbTable : public Common::DbObject
 
         quint16 columnsCount() const;
 
-        DbSchema* schema() const;
-        void setSchema(DbSchema *ipSchema);
+        DbSchemaPtr schema() const;
+        void setSchema(const DbSchemaPtr &ipSchema);
 
         // \todo do we need these functions?
         QString fullName() const;
@@ -84,11 +88,11 @@ class DbTable : public Common::DbObject
         /*! \return true - if the column is PK */
         virtual bool checkPrimaryKey(const QString &) const = 0;
         /*! \return true - if the column is FK */
-        virtual bool checkForeignKey(const QString &, QString *, QString *, QStringList *) const = 0;
+        virtual bool checkForeignKey(const QString &, QString &, QString &, QStringList &) const = 0;
         /*! \return true - if the column is unique */
         virtual bool checkUnique(const QString &) const = 0;
 
-        quint64 getIndices(QVector<DbIndex*> &ipIndicesList);
+        quint64 getIndices(QVector<DbIndexPtr> &ipIndicesList);
 
         virtual DbObject::Type type() const;
 
@@ -120,12 +124,12 @@ class DbTable : public Common::DbObject
         };
 
         /*! Parent schema handle */
-        DbSchema *mSchema;
+        DbSchemaPtr mSchema;
         /*! Column definitions */
         QVector<ColumnDefinition> mColumnDefs;
 
     protected:
-        DbTable(QString ipName, DbSchema *ipSchema = 0);
+        DbTable(QString ipName, const DbSchemaPtr &ipSchema);
 };
 
 } // namespace Common

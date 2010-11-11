@@ -66,6 +66,11 @@ Schema::~Schema()
 bool
 Schema::loadData()
 {
+    if (mIsLoaded) {
+        return true;
+    }
+
+    qDebug() << "Psql::Schema::loadData> ";
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;
@@ -106,8 +111,8 @@ Schema::loadData()
     QString description = query.value(colId).toString();
 
     // find owner for scheme
-    Common::DbRole *dbRole = Common::Database::instance()->findRole(ownerName);
-    Q_CHECK_PTR(dbRole);
+    DbRolePtr dbRole = Common::Database::instance()->findRole(ownerName);
+//    Q_CHECK_PTR(dbRole);
 
     setOwner(dbRole);
 

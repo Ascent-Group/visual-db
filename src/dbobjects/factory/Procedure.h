@@ -38,7 +38,6 @@ namespace DbObjects
 namespace Common
 {
 class DbProcedure;
-class DbSchema;
 }
 
 namespace Psql
@@ -57,13 +56,14 @@ namespace Factory
 class Procedure
 {
     public:
-        static Common::DbProcedure* createProcedure(const QString &ipName, Common::DbSchema *ipSchema = 0);
+        static Common::DbProcedure* createProcedure(const QString &ipName, const QString &ipSchemaName);
 
     protected:
-        static Psql::Procedure* createPsqlProcedure(const QString &ipName, Common::DbSchema *ipSchema = 0);
-//        static Mysql::Procedure* createMysqlProcedure(const QString &ipName, Common::DbSchema *ipSchema = 0);
+        static Psql::Procedure* createPsqlProcedure(const QString &ipName, const QString &ipSchemaName);
+//        static Mysql::Procedure* createMysqlProcedure(const QString &ipName, const QString &ipSchemaName);
 
     private:
+        // \todo forbid default constructor
         Q_DISABLE_COPY(Procedure);
 };
 

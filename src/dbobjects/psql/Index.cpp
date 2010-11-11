@@ -28,6 +28,7 @@
  */
 
 #include <common/Database.h>
+#include <common/DbObjectPtr.h>
 #include <common/DbSchema.h>
 #include <psql/Index.h>
 #include <QSqlDatabase>
@@ -67,6 +68,10 @@ Index::~Index()
 bool
 Index::loadData()
 {
+    if (mIsLoaded) {
+        return true;
+    }
+
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;
@@ -145,21 +150,20 @@ Index::loadData()
 
     colId = query.record().indexOf("table");
     Q_ASSERT(colId > 0);
-    mTableName = query.value(colId).toString();
+    QString tableName = query.value(colId).toString();
 
     colId = query.record().indexOf("schema");
     Q_ASSERT(colId > 0);
-    mSchemaName = query.value(colId).toString();
+    QString schemaName = query.value(colId).toString();
 
-    Common::DbSchema *schema = Common::Database::instance()->findSchema(mSchemaName);
-    Common::DbTable *table = 0;
+    DbSchemaPtr schema = Common::Database::instance()->findSchema(schemaName);
 
-    if (schema) {
-        table = schema->findTable(mTableName);
+    if (schema.get()) {
+        DbTablePtr table = schema->findTable(tableName);
+
+        setSchema(schema);
+        setTable(table);
     }
-
-    setSchema(schema);
-    setTable(table);
 
     colId = query.record().indexOf("colcount");
     Q_ASSERT(colId > 0);

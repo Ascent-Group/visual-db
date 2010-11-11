@@ -48,7 +48,7 @@ namespace Psql
  * \param[in] ipName - Name of the language
  */
 Language::Language(QString ipName)
-    :DbLanguage(ipName)
+    : DbLanguage(ipName)
 {
 
 }
@@ -67,6 +67,10 @@ Language::~Language()
 bool
 Language::loadData()
 {
+    if (mIsLoaded) {
+        return true;
+    }
+
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;

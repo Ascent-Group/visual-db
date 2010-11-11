@@ -31,6 +31,8 @@
 #include <factory/Procedure.h>
 #include <psql/Procedure.h>
 
+using namespace DbObjects::Common;
+
 namespace DbObjects
 {
 
@@ -44,7 +46,7 @@ namespace Factory
  * \return Database procedure object
  */
 DbObjects::Common::DbProcedure*
-Procedure::createProcedure(const QString &ipName, Common::DbSchema *ipSchema)
+Procedure::createProcedure(const QString &ipName, const QString &ipSchemaName)
 {
     using namespace DbObjects::Common;
 
@@ -52,10 +54,10 @@ Procedure::createProcedure(const QString &ipName, Common::DbSchema *ipSchema)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                procedure = createPsqlProcedure(ipName, ipSchema);
+                procedure = createPsqlProcedure(ipName, ipSchemaName);
                 break;
         case Database::MySQL:
-//                procedure = createMysqlProcedure(ipName, ipSchema);
+//                procedure = createMysqlProcedure(ipName, ipSchemaName);
                 break;
         case Database::Oracle:
         case Database::SQLite:
@@ -64,7 +66,7 @@ Procedure::createProcedure(const QString &ipName, Common::DbSchema *ipSchema)
                 break;
     }
 
-    //if the procedure creation failed or procedure inforamtion could not be read from database.
+    // if the procedure creation failed or procedure inforamtion could not be read from database.
 //    if (!procedure || !procedure->loadData()) {
 //        delete procedure;
 //        procedure = 0;
@@ -80,9 +82,12 @@ Procedure::createProcedure(const QString &ipName, Common::DbSchema *ipSchema)
  * \return Pointer to PostgreSQL procedure object
  */
 Psql::Procedure*
-Procedure::createPsqlProcedure(const QString &ipName, Common::DbSchema *ipSchema)
+Procedure::createPsqlProcedure(const QString &ipName, const QString &ipSchemaName)
 {
-    return new(std::nothrow) Psql::Procedure(ipName, ipSchema);
+    // \note we duplicate some code so that we don't make our signature (and therefore,
+    // headers be dependent on DbObjectPtr
+    // \todo but it should take dbschemaptr
+    return new(std::nothrow) Psql::Procedure(ipName, Database::instance()->findSchema(ipSchemaName));
 }
 
 /*!
@@ -92,9 +97,9 @@ Procedure::createPsqlProcedure(const QString &ipName, Common::DbSchema *ipSchema
  * \return Pointer to MySQL procedure object
  */
 //Mysql::Procedure*
-//Procedure::createMysqlProcedure(const QString &ipName, Common::DbSchema *ipSchema)
+//Procedure::createMysqlProcedure(const QString &ipName, const QString &ipSchemaName)
 //{
-//    return new Mysql::Procedure(ipName, ipSchema);
+//    return new Mysql::Procedure(ipName, Database::instance()->findSchema(mSchemaName));
 //}
 
 } // namespace Factory

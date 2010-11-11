@@ -30,10 +30,11 @@
 #ifndef TABLEITEM_H
 #define TABLEITEM_H
 
-#include <gui/GraphicsScene.h>
+#include <common/DbObjectPtr.h>
 #include <gui/DbObjectItem.h>
 #include <QSettings>
 
+class GraphicsScene;
 class QAction;
 class QDomDocument;
 class QDomElement;
@@ -41,16 +42,14 @@ class QMenu;
 
 namespace DbObjects
 {
-
 namespace Common
 {
-
 class DbIndex;
-class DbTable;
 
-} // namespace Common
-
-} // namespace DbObjects
+typedef DbObjectPtr<DbIndex> DbIndexPtr;
+typedef DbObjectPtr<DbTable> DbTablePtr;
+}
+}
 
 /*
  * Graphics item, implements the database table. Support moving, resizing, changing of the color etc.
@@ -86,7 +85,7 @@ class TableItem : public DbObjectItem
     private:
         QSettings mSettings;
 
-        QVector<DbObjects::Common::DbIndex *> mIndices;
+        QVector<DbObjects::Common::DbIndexPtr> mIndices;
         QList<QGraphicsTextItem *> mIndexItems;
 
         bool mIndicesVisible;
@@ -94,7 +93,7 @@ class TableItem : public DbObjectItem
         QImage *mKeyImage;
         QImage *mForeignKeyImage;
 
-        DbObjects::Common::DbTable *mModel;
+        DbObjects::Common::DbTablePtr mModel;
 };
 
 TableItem *toTable(QGraphicsItem *);

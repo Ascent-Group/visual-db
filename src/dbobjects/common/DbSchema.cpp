@@ -85,13 +85,13 @@ DbSchema::~DbSchema()
  * \return false - If the table object has alread existed in the vector
  */
 bool
-DbSchema::addTable(DbTable *ipTable)
+DbSchema::addTable(const DbTablePtr &ipTable)
 {
     if (mTables.contains(ipTable)) {
         return false;
     }
 
-    ipTable->setSchema(this);
+//    ipTable->setSchema(Database::instance()->findSchema(mName));
 
     mTables.push_back(ipTable);
     return true;
@@ -106,13 +106,13 @@ DbSchema::addTable(DbTable *ipTable)
  * \return false - If the view object has already existed in the vector
  */
 bool
-DbSchema::addView(DbView *ipView)
+DbSchema::addView(const DbViewPtr &ipView)
 {
     if (mViews.contains(ipView)) {
         return false;
     }
 
-    ipView->setSchema(this);
+//    ipView->setSchema(Database::instance()->findSchema(mName));
 
     mViews.push_back(ipView);
     return true;
@@ -127,13 +127,13 @@ DbSchema::addView(DbView *ipView)
  * \return false - If the proc object has already existed in the vector
  */
 bool
-DbSchema::addProcedure(DbProcedure *ipProc)
+DbSchema::addProcedure(const DbProcedurePtr &ipProc)
 {
     if (mProcedures.contains(ipProc)) {
         return false;
     }
 
-    ipProc->setSchema(this);
+//    ipProc->setSchema(Database::instance()->findSchema(mName));
 
     mProcedures.push_back(ipProc);
     return true;
@@ -148,13 +148,13 @@ DbSchema::addProcedure(DbProcedure *ipProc)
  * \return false - If the trigger object has laready existed in the vector
  */
 bool
-DbSchema::addTrigger(DbTrigger *ipTrig)
+DbSchema::addTrigger(const DbTriggerPtr &ipTrig)
 {
     if (mTriggers.contains(ipTrig)) {
         return false;
     }
 
-    ipTrig->setSchema(this);
+//    ipTrig->setSchema(Database::instance()->findSchema(mName));
 
     mTriggers.push_back(ipTrig);
     return true;
@@ -166,21 +166,16 @@ DbSchema::addTrigger(DbTrigger *ipTrig)
  * \param[out] opList - List of tables' names
  */
 void
-DbSchema::tablesList(QStringList *opList) const
+DbSchema::tablesList(QStringList &opList) const
 {
-    if (0 == opList) {
-        return;
-    }
+    opList.clear();
 
-    opList->clear();
-
-    QVector<DbTable*>::const_iterator iter;
+    // \todo use foreach with const refs
+    QVector<DbTablePtr>::const_iterator iter;
 
     for (iter = mTables.constBegin(); iter != mTables.constEnd(); ++iter) {
-        opList->append((*iter)->name());
+        opList.append(iter->name());
     }
-
-    //opList->sort();
 }
 
 /*!
@@ -200,21 +195,15 @@ DbSchema::tablesCount() const
  * \param[out] opList - List of views' names
  */
 void
-DbSchema::viewsList(QStringList *opList) const
+DbSchema::viewsList(QStringList &opList) const
 {
-    if (0 == opList) {
-        return;
-    }
+    opList.clear();
 
-    opList->clear();
-
-    QVector<DbView*>::const_iterator iter;
+    QVector<DbViewPtr>::const_iterator iter;
 
     for (iter = mViews.constBegin(); iter != mViews.constEnd(); ++iter) {
-        opList->append((*iter)->name());
+        opList.append(iter->name());
     }
-
-    //opList->sort();
 }
 
 /*!
@@ -234,21 +223,15 @@ DbSchema::viewsCount() const
  * \param[out] opList - List of procs' names
  */
 void
-DbSchema::proceduresList(QStringList *opList) const
+DbSchema::proceduresList(QStringList &opList) const
 {
-    if (0 == opList) {
-        return;
-    }
+    opList.clear();
 
-    opList->clear();
-
-    QVector<DbProcedure*>::const_iterator iter;
+    QVector<DbProcedurePtr>::const_iterator iter;
 
     for (iter = mProcedures.constBegin(); iter != mProcedures.constEnd(); ++iter) {
-        opList->append((*iter)->name());
+        opList.append(iter->name());
     }
-
-    //opList->sort();
 }
 
 /*!
@@ -257,21 +240,15 @@ DbSchema::proceduresList(QStringList *opList) const
  * \param[out] opList - List of triggers' names
  */
 void
-DbSchema::triggersList(QStringList *opList) const
+DbSchema::triggersList(QStringList &opList) const
 {
-    if (0 == opList) {
-        return;
-    }
+    opList.clear();
 
-    opList->clear();
-
-    QVector<DbTrigger*>::const_iterator iter;
+    QVector<DbTriggerPtr>::const_iterator iter;
 
     for (iter = mTriggers.constBegin(); iter != mTriggers.constEnd(); ++iter) {
-        opList->append((*iter)->name());
+        opList.append(iter->name());
     }
-
-    //opList->sort();
 }
 
 /*!
@@ -303,10 +280,15 @@ DbSchema::triggersCount() const
  *
  * \return Handle to the found table or NULL is not found.
  */
-DbTable*
+DbTablePtr
 DbSchema::findTable(const QString &ipTableName) const
 {
-    return dynamic_cast<DbTable*>(findObject(ipTableName, DbObject::TableObject));
+    foreach (const DbTablePtr &table, mTables) {
+        if (ipTableName == table.name()) {
+            return table;
+        }
+    }
+    return DbTablePtr();
 }
 
 /*!
@@ -316,10 +298,15 @@ DbSchema::findTable(const QString &ipTableName) const
  *
  * \return Handle to the found view or NULL is not found.
  */
-DbView*
+DbViewPtr
 DbSchema::findView(const QString &ipViewName) const
 {
-    return dynamic_cast<DbView*>(findObject(ipViewName, DbObject::ViewObject));
+    foreach (const DbViewPtr &view, mViews) {
+        if (ipViewName == view.name()) {
+            return view;
+        }
+    }
+    return DbViewPtr();
 }
 
 /*!
@@ -329,10 +316,15 @@ DbSchema::findView(const QString &ipViewName) const
  *
  * \return Handle to the found procedure or NULL is not found.
  */
-DbProcedure*
-DbSchema::findProcedure(const QString &ipProcName) const
+DbProcedurePtr
+DbSchema::findProcedure(const QString &ipProcedureName) const
 {
-    return dynamic_cast<DbProcedure*>(findObject(ipProcName, DbObject::ProcedureObject));
+    foreach (const DbProcedurePtr &procedure, mProcedures) {
+        if (ipProcedureName == procedure.name()) {
+            return procedure;
+        }
+    }
+    return DbProcedurePtr();
 }
 
 /*!
@@ -342,10 +334,15 @@ DbSchema::findProcedure(const QString &ipProcName) const
  *
  * \return Handle to the found trigger or NULL is not found.
  */
-DbTrigger*
-DbSchema::findTrigger(const QString &ipTrigName) const
+DbTriggerPtr
+DbSchema::findTrigger(const QString &ipTriggerName) const
 {
-    return dynamic_cast<DbTrigger*>(findObject(ipTrigName, DbObject::TriggerObject));
+    foreach (const DbTriggerPtr &trigger, mTriggers) {
+        if (ipTriggerName == trigger.name()) {
+            return trigger;
+        }
+    }
+    return DbTriggerPtr();
 }
 
 /*!
@@ -385,10 +382,7 @@ DbSchema::readTables()
     // for every retrieved row
     foreach (const QString &name, tablesNamesList) {
 
-        DbTable *table = 0;
-        table = Factory::Table::createTable(name, this);
-
-        Q_ASSERT(0 != table);
+        DbTablePtr table(name, mName);
 
         // add table
         addTable(table);
@@ -433,9 +427,7 @@ DbSchema::readViews()
     foreach (const QString &name, viewsNamesList) {
 
         // declare new view object
-        DbView *view = Factory::View::createView(name, this);
-
-        Q_ASSERT(0 != view);
+        DbViewPtr view(name, mName);
 
         // add view
         addView(view);
@@ -476,10 +468,7 @@ DbSchema::readProcedures()
     foreach (const QString &name, proceduresNamesList) {
 
         // declare new proc object
-        DbProcedure *proc = 0;
-        proc = Factory::Procedure::createProcedure(name, this);
-
-        Q_ASSERT(0 != proc);
+        DbProcedurePtr proc(name, mName);
 
         // add proc
         addProcedure(proc);
@@ -522,11 +511,7 @@ DbSchema::readTriggers()
     // for every retrieved row
     foreach (const QString &name, triggersNamesList) {
         // declare new trigger object
-        DbTrigger *trigger;
-
-        trigger = Factory::Trigger::createTrigger(name, this);
-
-        Q_ASSERT(0 != trigger);
+        DbTriggerPtr trigger(name, mName);
 
         // add trigger
         addTrigger(trigger);
@@ -539,16 +524,15 @@ DbSchema::readTriggers()
  * \return true - Even if nothing has been read
  */
 bool
-DbSchema::loadData()
+DbSchema::loadChildren()
 {
+    qDebug() << "Common::DbSchema::loadChildren> ";
     readTables();
     readViews();
     readProcedures();
     readTriggers();
 
-    mIsLoaded = true;
-
-    return true;
+    return true/*DbObject::loadData()*/;
 }
 
 /*!
@@ -561,17 +545,10 @@ DbSchema::resetData()
     qDebug() << "DbSchema::resetData> cleaning for " << mName;
 #endif
 
-    // clear lists
-    qDeleteAll(mTables);
+    // clear vectors
     mTables.clear();
-
-    qDeleteAll(mViews);
     mViews.clear();
-
-    qDeleteAll(mProcedures);
     mProcedures.clear();
-
-    qDeleteAll(mTriggers);
     mTriggers.clear();
 }
 
@@ -592,85 +569,85 @@ DbSchema::type() const
  *
  * \return Handle to the found object or NULL if not found.
  */
-DbObject*
-DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
-{
-    quint64 count;
-    QStringList list;
-
-    //
-    switch (ipObjectType) {
-        case DbObject::TableObject:
-                count = mTables.count();
-                tablesList(&list);
-                break;
-
-        case DbObject::ViewObject:
-                count = mViews.count();
-                viewsList(&list);
-                break;
-
-        case DbObject::ProcedureObject:
-                count = mProcedures.count();
-                proceduresList(&list);
-                break;
-
-        case DbObject::TriggerObject:
-                count = mTriggers.count();
-                triggersList(&list);
-                break;
-
-        case DbObject::UnkObject:
-        default:
-                qDebug() << "DbSchema::findObject> Unknown object type";
-                return 0;
-    }
-
-    // declare empty ptrs
-    DbObject *object = 0;
-
-    // if we don't have any objects of the given type
-    if (0 == count) {
-        // return nothing
-        return 0;
-    }
-
-    quint64 i = 0;
-    // look through objects' names
-    while ( i < count && ipObjectName != list.at(i) ) {
-        i++;
-    }
-
-    // if lang was found
-    if ( !(i == count - 1 && ipObjectName != list.at(i)) ) {
-        switch (ipObjectType) {
-            case DbObject::TableObject:
-                    object = mTables.at(i);
-                    break;
-            case DbObject::ViewObject:
-                    object = mViews.at(i);
-                    break;
-            case DbObject::ProcedureObject:
-                    object = mProcedures.at(i);
-                    break;
-            case DbObject::TriggerObject:
-                    object = mTriggers.at(i);
-                    break;
-
-            // useless - done just to remove warning
-            case DbObject::UnkObject:
-            default:
-                    break;
-        }
-    }
-
-    return object;
-}
+//DbObject*
+//DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
+//{
+//    quint64 count;
+//    QStringList list;
+//
+//    //
+//    switch (ipObjectType) {
+//        case DbObject::TableObject:
+//                count = mTables.count();
+//                tablesList(&list);
+//                break;
+//
+//        case DbObject::ViewObject:
+//                count = mViews.count();
+//                viewsList(&list);
+//                break;
+//
+//        case DbObject::ProcedureObject:
+//                count = mProcedures.count();
+//                proceduresList(&list);
+//                break;
+//
+//        case DbObject::TriggerObject:
+//                count = mTriggers.count();
+//                triggersList(&list);
+//                break;
+//
+//        case DbObject::UnkObject:
+//        default:
+//                qDebug() << "DbSchema::findObject> Unknown object type";
+//                return 0;
+//    }
+//
+//    // declare empty ptrs
+//    DbObject *object = 0;
+//
+//    // if we don't have any objects of the given type
+//    if (0 == count) {
+//        // return nothing
+//        return 0;
+//    }
+//
+//    quint64 i = 0;
+//    // look through objects' names
+//    while ( i < count && ipObjectName != list.at(i) ) {
+//        i++;
+//    }
+//
+//    // if lang was found
+//    if ( !(i == count - 1 && ipObjectName != list.at(i)) ) {
+//        switch (ipObjectType) {
+//            case DbObject::TableObject:
+//                    object = mTables.at(i);
+//                    break;
+//            case DbObject::ViewObject:
+//                    object = mViews.at(i);
+//                    break;
+//            case DbObject::ProcedureObject:
+//                    object = mProcedures.at(i);
+//                    break;
+//            case DbObject::TriggerObject:
+//                    object = mTriggers.at(i);
+//                    break;
+//
+//            // useless - done just to remove warning
+//            case DbObject::UnkObject:
+//            default:
+//                    break;
+//        }
+//    }
+//
+//    return object;
+//}
 
 /*!
  * \return Handle to owner object
  */
-DbRole*
+DbRolePtr
 DbSchema::owner() const
 {
     return mOwner;
@@ -682,7 +659,7 @@ DbSchema::owner() const
  * \param[in] ipRole - handle for role object
  */
 void
-DbSchema::setOwner(DbRole *ipRole)
+DbSchema::setOwner(const DbRolePtr &ipRole)
 {
     mOwner = ipRole;
 }

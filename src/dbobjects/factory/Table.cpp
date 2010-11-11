@@ -32,6 +32,8 @@
 //#include <mysql/Table.h>
 #include <psql/Table.h>
 
+using namespace DbObjects::Common;
+
 namespace DbObjects
 {
 
@@ -45,7 +47,7 @@ namespace Factory
  * \return Database table object
  */
 DbObjects::Common::DbTable*
-Table::createTable(const QString &ipName, Common::DbSchema *ipSchema)
+Table::createTable(const QString &ipName, const QString &ipSchemaName)
 {
     using namespace DbObjects::Common;
 
@@ -53,10 +55,10 @@ Table::createTable(const QString &ipName, Common::DbSchema *ipSchema)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                table = createPsqlTable(ipName, ipSchema);
+                table = createPsqlTable(ipName, ipSchemaName);
                 break;
         case Database::MySQL:
-//                table = createMysqlTable(ipName, ipSchema);
+//                table = createMysqlTable(ipName, ipSchemaName);
                 break;
         case Database::Oracle:
         case Database::SQLite:
@@ -81,9 +83,9 @@ Table::createTable(const QString &ipName, Common::DbSchema *ipSchema)
  * \return Pointer to PostgreSQL table object
  */
 Psql::Table*
-Table::createPsqlTable(const QString &ipName, Common::DbSchema *ipSchema)
+Table::createPsqlTable(const QString &ipName, const QString &ipSchemaName)
 {
-    return new(std::nothrow) Psql::Table(ipName, ipSchema);
+    return new(std::nothrow) Psql::Table(ipName, Database::instance()->findSchema(ipSchemaName));
 }
 
 /*!
@@ -93,9 +95,9 @@ Table::createPsqlTable(const QString &ipName, Common::DbSchema *ipSchema)
  * \return Pointer to MySQL table object
  */
 //Mysql::Table*
-//Table::createMysqlTable(const QString &ipName, Common::DbSchema *ipSchema)
+//Table::createMysqlTable(const QString &ipName, const QString &ipSchemaName)
 //{
-//    return new Mysql::Table(ipName, ipSchema);
+//    return new Mysql::Table(ipName, Database::instance()->findSchema(ipSchemaName));
 //}
 
 } // namespace Factory

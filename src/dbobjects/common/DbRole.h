@@ -30,8 +30,9 @@
 #ifndef DBOBJECTS_COMMON_DBROLE_H
 #define DBOBJECTS_COMMON_DBROLE_H
 
-#include <QDate>
 #include <common/DbObject.h>
+#include <common/DbObjectPtr.h>
+#include <QDate>
 
 namespace DbObjects
 {

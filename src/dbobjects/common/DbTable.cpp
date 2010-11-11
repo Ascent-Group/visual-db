@@ -46,12 +46,12 @@ namespace Common
  * \param[in] ipName - Name of a table
  * \param[in] ipSchema - Handle to schema that contains the given table
  */
-DbTable::DbTable(QString ipName, DbSchema *ipSchema)
+DbTable::DbTable(QString ipName, const DbSchemaPtr &ipSchema)
     : DbObject(ipName),
       mSchema(ipSchema),
       mColumnDefs()
 {
-    if (!mSchema) qDebug() << "DbTable::DbTable> mSchema is NULL!";
+    if (!mSchema.get()) qDebug() << "DbTable::DbTable> mSchema is NULL!";
 }
 
 /*!
@@ -68,17 +68,13 @@ DbTable::~DbTable()
 quint16
 DbTable::columnsCount() const
 {
-    // \todo Solve this problem: due to lazy intialization, we check whether the object
-    // has been read from db in each public getter. But each getter has const qualifier!
-    // So it looks like we are trying to modify an object in a const method.
-//    loadData();
     return mColumnDefs.size();
 }
 
 /*!
  * \return tParent schema handle
  */
-DbSchema*
+DbSchemaPtr
 DbTable::schema() const
 {
     return mSchema;
@@ -88,7 +84,7 @@ DbTable::schema() const
  * \param[in] ipSchema - Parent schema
  */
 void
-DbTable::setSchema(DbSchema *ipSchema)
+DbTable::setSchema(const DbSchemaPtr &ipSchema)
 {
     mSchema = ipSchema;
 }
@@ -340,7 +336,6 @@ void
 DbTable::resetData()
 {
     /*! \todo Implement */
-    mSchema = 0;
     mColumnDefs.clear();
 
     DbObject::resetData();
@@ -353,9 +348,10 @@ DbTable::resetData()
  * input list with pointers to indices
  */
 quint64
-DbTable::getIndices(QVector<DbIndex*> &opIndicesList)
+DbTable::getIndices(QVector<DbIndexPtr> &opIndicesList)
 {
-    return Database::instance()->findTableIndices(this, opIndicesList);
+    DbTablePtr table = Database::instance()->findSchema(mSchema->name())->findTable(mName);
+    return Database::instance()->findTableIndices(table, opIndicesList);
 }
 
 /*!

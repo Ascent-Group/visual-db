@@ -38,6 +38,9 @@ namespace DbObjects
 namespace Psql
 {
 
+typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
+typedef Common::DbObjectPtr<Common::DbTable> DbTablePtr;
+
 /*!
  * \class Index
  * \headerfile psql/Index.h

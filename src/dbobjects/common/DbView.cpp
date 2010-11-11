@@ -45,13 +45,13 @@ namespace Common
  * \param[in] ipName - Name of a view
  * \param[in] ipSchema - Handle to schema that contains the given view
  */
-DbView::DbView(QString ipName, DbSchema *ipSchema)
+DbView::DbView(QString ipName, const DbSchemaPtr &ipSchema)
     : DbObject(ipName),
       mSchema(ipSchema),
-      mOwner(0),
+      mOwner(),
       mDefinition("")
 {
-    if (!mSchema) qDebug() << "DbView::DbView> mSchema is NULL!";
+    if (!mSchema.get()) qDebug() << "DbView::DbView> mSchema is NULL!";
 }
 
 /*!
@@ -74,7 +74,7 @@ DbView::fullName() const
 /*!
  * \return Schema containing this view
  */
-DbSchema*
+DbSchemaPtr
 DbView::schema() const
 {
     return mSchema;
@@ -84,7 +84,7 @@ DbView::schema() const
  * \param[in] ipSchema - Parent schema for the view
  */
 void
-DbView::setSchema(DbSchema *ipSchema)
+DbView::setSchema(const DbSchemaPtr &ipSchema)
 {
     mSchema = ipSchema;
 }
@@ -92,7 +92,7 @@ DbView::setSchema(DbSchema *ipSchema)
 /*!
  * \return Owner of this view
  */
-DbRole*
+DbRolePtr
 DbView::owner() const
 {
     return mOwner;
@@ -102,7 +102,7 @@ DbView::owner() const
  * \param[in] ipOwner - Owner for this view
  */
 void
-DbView::setOwner(DbRole *ipOwner)
+DbView::setOwner(const DbRolePtr &ipOwner)
 {
     mOwner = ipOwner;
 }
@@ -134,8 +134,8 @@ void
 DbView::resetData()
 {
     /*! \todo Implement */
-    mSchema = 0;
-    mOwner = 0;
+//    mSchema = 0; // \todo How to reset Proxy???
+//    mOwner = 0;
     mDefinition = "";
 
     DbObject::resetData();

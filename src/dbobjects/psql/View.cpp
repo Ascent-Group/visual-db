@@ -50,7 +50,7 @@ namespace Psql
  * \param[in] ipName - Name of the given view
  * \param[in] ipSchema - Handle to schema containing this view
  */
-View::View(QString ipName, Common::DbSchema *ipSchema)
+View::View(QString ipName, const DbSchemaPtr &ipSchema)
     : DbView(ipName, ipSchema)
 {
 
@@ -73,6 +73,10 @@ View::~View()
 bool
 View::loadData()
 {
+    if (mIsLoaded) {
+        return true;
+    }
+
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;

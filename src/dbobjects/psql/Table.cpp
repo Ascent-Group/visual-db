@@ -51,7 +51,7 @@ namespace Psql
  * \param[in] ipName - Name of the given table
  * \param[in] ipSchema - Handle to schema containing this view
  */
-Table::Table(QString ipName, Common::DbSchema *ipSchema)
+Table::Table(QString ipName, const DbSchemaPtr &ipSchema)
     :DbTable(ipName, ipSchema)
 {
     // load column definitions
@@ -75,6 +75,12 @@ Table::~Table()
 bool
 Table::loadData()
 {
+//    int *p = 0;
+//    *p = 7;
+    if (mIsLoaded) {
+        return true;
+    }
+
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;
@@ -138,7 +144,7 @@ Table::loadData()
         cDef.type = query.value(1).toString();
         cDef.isNullable = !query.value(2).toBool();
         cDef.isPrimaryKey = checkPrimaryKey(cDef.name);
-        cDef.isForeignKey = checkForeignKey(cDef.name, &cDef.foreignSchemaName, &cDef.foreignTableName, &cDef.foreignFieldNames);
+        cDef.isForeignKey = checkForeignKey(cDef.name, cDef.foreignSchemaName, cDef.foreignTableName, cDef.foreignFieldNames);
         cDef.isUnique = checkUnique(cDef.name);
 
         /* temporary debug output */
@@ -222,9 +228,9 @@ Table::checkPrimaryKey(const QString &ipColumnName) const
  */
 bool
 Table::checkForeignKey(const QString &ipColumnName,
-               QString *opForeignSchemaName,
-               QString *opForeignTableName,
-               QStringList *opForeignFieldsNames) const
+               QString &opForeignSchemaName,
+               QString &opForeignTableName,
+               QStringList &opForeignFieldsNames) const
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -286,15 +292,15 @@ Table::checkForeignKey(const QString &ipColumnName,
 
     // this needs to be don only once for all fields
     colId = query.record().indexOf("reltable");
-    *opForeignTableName = query.value(colId).toString();
+    opForeignTableName = query.value(colId).toString();
 
     colId = query.record().indexOf("foreign_schema");
-    *opForeignSchemaName = query.value(colId).toString();
+    opForeignSchemaName = query.value(colId).toString();
 
     // fields themselves
     do {
         colId = query.record().indexOf("ref_field");
-        opForeignFieldsNames->push_back(query.value(colId).toString());
+        opForeignFieldsNames.push_back(query.value(colId).toString());
     } while (query.next());
 
     // foreign key constraint definition found

@@ -33,6 +33,8 @@
 
 using namespace DbObjects;
 
+typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
+
 void
 DbSchemaTest::initTestCase()
 {
@@ -102,14 +104,14 @@ DbSchemaTest::findTriggerTest()
 
     dbInst->readSchemas();
 
-    Common::DbSchema *schema = dbInst->findSchema("vtunes");
+    DbSchemaPtr schema = dbInst->findSchema("vtunes");
 
-    QVERIFY(0 != schema);
+    QVERIFY(0 != schema.get());
 
     schema->readTriggers();
 
-    QVERIFY(0 != schema->findTrigger("check_location"));
-    QVERIFY(0 != schema->findTrigger("check_release_date"));
+    QVERIFY(0 != schema->findTrigger("check_location").get());
+    QVERIFY(0 != schema->findTrigger("check_release_date").get());
 }
 
 void

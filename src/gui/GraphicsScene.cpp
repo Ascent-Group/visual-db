@@ -909,7 +909,7 @@ GraphicsScene::colorizeAccordingSchemas()
     Database *dbInst = Database::instance();
 
     QStringList schemasNames;
-    dbInst->schemasList(&schemasNames);
+    dbInst->schemasList(schemasNames);
 
     for (int i = 0; i < schemasNames.count(); ++i) {
         // items can mutate in the loop

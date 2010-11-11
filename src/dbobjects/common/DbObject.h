@@ -66,6 +66,8 @@ class DbObject
         QString name() const;
         void setName(const QString &ipName);
 
+        bool isLoaded() const;
+
         /*! \see Descendants' implementation */
         virtual DbObject::Type type() const = 0;
         virtual bool loadData();

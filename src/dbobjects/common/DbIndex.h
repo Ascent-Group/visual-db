@@ -30,8 +30,10 @@
 #ifndef DBOBJECTS_COMMON_DBINDEX_H
 #define DBOBJECTS_COMMON_DBINDEX_H
 
-#include <QVector>
 #include <common/DbObject.h>
+#include <common/DbObjectPtr.h>
+
+#include <QVector>
 
 namespace DbObjects
 {
@@ -39,8 +41,13 @@ namespace DbObjects
 namespace Common
 {
 
+template<typename T> class DbObjectPtr;
 class DbSchema;
 class DbTable;
+//template class DbObjectPtr<DbTable>;
+//template class DbObjectPtr<DbSchema>;
+typedef DbObjectPtr<DbSchema> DbSchemaPtr;
+typedef DbObjectPtr<DbTable> DbTablePtr;
 
 /*!
  * \class DbIndex
@@ -53,17 +60,11 @@ class DbIndex : public DbObject
     public:
         virtual ~DbIndex();
 
-        QString tableName() const;
-        void setTableName(const QString &ipTableName);
+        DbTablePtr table() const;
+        void setTable(const DbTablePtr &ipTable);
 
-        QString schemaName() const;
-        void setSchemaName(const QString &ipSchemaName);
-
-        DbTable* table() const;
-        void setTable(DbTable *ipTable);
-
-        DbSchema* schema() const;
-        void setSchema(DbSchema *ipSchema);
+        DbSchemaPtr schema() const;
+        void setSchema(const DbSchemaPtr &ipSchema);
 
         quint16 columnsCount() const;
         void setColumnsCount(quint16 ipCount);
@@ -94,14 +95,10 @@ class DbIndex : public DbObject
         virtual DbObject::Type type() const;
 
     protected:
-        /*! Table name this index is assigned to */
-        QString mTableName;
-        /*! Name of a schema containing this index */
-        QString mSchemaName;
         /*! Table this index is assigned to */
-        DbTable *mTable;
+        DbTablePtr mTable;
         /*! Schema containing this index */
-        DbSchema *mSchema;
+        DbSchemaPtr mSchema;
         /*! Number of columns covered by this index */
         quint16 mColumnsCount;
         /*! Columns numbers */

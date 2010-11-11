@@ -76,7 +76,7 @@ Legend::refresh()
     DbObjects::Common::Database *dbInst = DbObjects::Common::Database::instance();
 
     QStringList schemasNames;
-    dbInst->schemasList(&schemasNames);
+    dbInst->schemasList(schemasNames);
 
     clearFields();
     for (int i = 0; i < schemasNames.count(); ++i) {

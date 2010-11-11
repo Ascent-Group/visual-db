@@ -39,8 +39,8 @@
 #include <common/DbSchema.h>
 #include <common/DbTable.h>
 #include <consts.h>
+#include <gui/GraphicsScene.h>
 #include <gui/TableItem.h>
-#include <math.h>
 
 /*!
  * Constructor
@@ -52,15 +52,15 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     Database *dbInst = Database::instance();
 
     // find schema
-    DbSchema *schema = dbInst->findSchema(ipSchemaName);
+    DbSchemaPtr schema = dbInst->findSchema(ipSchemaName);
 
     // if foung
-    if (schema) {
+    if (schema.get()) {
         // find table in this schema
-        DbTable *table = schema->findTable(ipTableName);
+        DbTablePtr table = schema->findTable(ipTableName);
 
         // if found
-        if (table) {
+        if (table.get()) {
             mModel = table;
         } else {
             qDebug() << "Cann't find this table: " << ipTableName;
@@ -82,8 +82,8 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     }
 
     dbInst->findTableIndices(mModel, mIndices);
-    foreach (DbIndex *index, mIndices) {
-        addIndexItem(new QGraphicsTextItem(index->name()));
+    foreach (const DbIndexPtr &index, mIndices) {
+        addIndexItem(new QGraphicsTextItem(index.name()));
     }
 
     // set left top point coordinates
@@ -340,3 +340,4 @@ toTable(QGraphicsItem *ipItem)
 {
     return qgraphicsitem_cast<TableItem *>(ipItem);
 }
+

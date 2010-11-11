@@ -79,7 +79,7 @@ TreeWidget::refresh()
 
     setHeaderLabel(qDBCaption(db));
 
-        // construct the tree skeleton
+    // construct the tree skeleton
     QTreeWidgetItem *rolesNode = new QTreeWidgetItem();
     rolesNode->setText(TreeWidget::NameCol, tr("Roles"));
     rolesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::RoleNode));
@@ -115,19 +115,19 @@ TreeWidget::refresh()
     //// ROLES
     // read roles
     QStringList rolesList;
-    dbInst->rolesList(&rolesList);
+    dbInst->rolesList(rolesList);
     insertItems(rolesNode, &rolesList, TreeWidget::RoleItem);
 
     //// LANGS
     // get and sort langs list
     QStringList langsList;
-    dbInst->languagesList(&langsList);
+    dbInst->languagesList(langsList);
     insertItems(langsNode, &langsList, TreeWidget::LanguageItem);
 
     //// SCHEMAS
     // get and sort schemas list
     QStringList schemasList;
-    dbInst->schemasList(&schemasList);
+    dbInst->schemasList(schemasList);
 
     QStringList::const_iterator schemaIter;
     // for each schema on the list
@@ -145,7 +145,7 @@ TreeWidget::refresh()
         //addTopLevelItem(schemaItem);
 
         // create schema
-        DbSchema *schema = dbInst->findSchema(schemaName);
+        DbSchemaPtr schema = dbInst->findSchema(schemaName);
 
         // create tables node
         QTreeWidgetItem *tablesNode = new QTreeWidgetItem(schemaItem);
@@ -170,22 +170,22 @@ TreeWidget::refresh()
 
         // get tables list for the given schema
         QStringList tablesList;
-        schema->tablesList(&tablesList);
+        schema->tablesList(tablesList);
         insertItems(tablesNode, &tablesList, TreeWidget::TableItem, true);
 
         // get views list for the given schema
         QStringList viewsList;
-        schema->viewsList(&viewsList);
+        schema->viewsList(viewsList);
         insertItems(viewsNode, &viewsList, TreeWidget::ViewItem);
 
         // get procs list for the given schema
         QStringList procsList;
-        schema->proceduresList(&procsList);
+        schema->proceduresList(procsList);
         insertItems(procsNode, &procsList, TreeWidget::ProcedureItem);
 
         // get triggers list for the given schema
         QStringList trigsList;
-        schema->triggersList(&trigsList);
+        schema->triggersList(trigsList);
         insertItems(trigsNode, &trigsList, TreeWidget::TriggerItem);
     }
 
@@ -193,7 +193,7 @@ TreeWidget::refresh()
 
     // get and sort indices list
     QStringList indicesList;
-    dbInst->indicesList(&indicesList);
+    dbInst->indicesList(indicesList);
 
     insertItems(indicesNode, &indicesList, TreeWidget::IndexItem);
 }
@@ -210,7 +210,7 @@ TreeWidget::contextMenuEvent(QContextMenuEvent *ipEvent)
 }
 
 /*!
- * @@brief This function is called when we start draggin the tree element
+ * \brief This function is called when we start draggin the tree element
  */
 void
 TreeWidget::startDrag(Qt::DropActions)

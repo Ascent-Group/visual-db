@@ -44,10 +44,8 @@ namespace Common
  */
 DbIndex::DbIndex(QString ipName)
     : DbObject(ipName),
-      mTableName(""),
-      mSchemaName(""),
-      mTable(0),
-      mSchema(0),
+      mTable(),
+      mSchema(),
       mColumnsCount(0),
       mColumnsNumbers(),
       mIsUnique(false),
@@ -69,72 +67,9 @@ DbIndex::~DbIndex()
 }
 
 /*!
- * \return Table name this index is fassigned to
- */
-QString
-DbIndex::tableName() const
-{
-    if (mTable) {
-        return mTable->name();
-    }
-    return mTableName;
-}
-
-/*!
- * \brief Sets the table this index is for
- *
- * \param[in] ipTableName
- */
-void
-DbIndex::setTableName(const QString &ipTableName)
-{
-    mTableName = ipTableName;
-
-    if (mTable) {
-        mTable->setName(ipTableName);
-    }
-}
-
-/*!
- * \return Parent schema name or name stored within DbIndex object
- *         if the parent schema object is NULL.
- *
- * \note Schema name stored within the object can be set with the
- *       help of setSchemaName().
- *
- * \see setSchemaName()
- */
-QString
-DbIndex::schemaName() const
-{
-    if (mSchema) {
-        return mSchema->name();
-    }
-
-    return mSchemaName;
-}
-
-/*!
- * \brief Sets the name of schema
- *
- * \param[in] ipSchemaName
- *
- * \note Doesn't set the name for the parent schema object
- */
-void
-DbIndex::setSchemaName(const QString &ipSchemaName)
-{
-    mSchemaName = ipSchemaName;
-
-    if (mSchema) {
-        mSchema->setName(ipSchemaName);
-    }
-}
-
-/*!
  * \return Table
  */
-DbTable*
+DbTablePtr
 DbIndex::table() const
 {
     return mTable;
@@ -146,7 +81,7 @@ DbIndex::table() const
  * \param[in] ipTable
  */
 void
-DbIndex::setTable(DbTable *ipTable)
+DbIndex::setTable(const DbTablePtr &ipTable)
 {
     mTable = ipTable;
 }
@@ -154,7 +89,7 @@ DbIndex::setTable(DbTable *ipTable)
 /*!
  * \return Parent schema
  */
-DbSchema*
+DbSchemaPtr
 DbIndex::schema() const
 {
     return mSchema;
@@ -166,7 +101,7 @@ DbIndex::schema() const
  * \param[in] ipSchema - Parent schema of the given index
  */
 void
-DbIndex::setSchema(DbSchema *ipSchema)
+DbIndex::setSchema(const DbSchemaPtr &ipSchema)
 {
     mSchema = ipSchema;
 }
@@ -344,10 +279,8 @@ void
 DbIndex::resetData()
 {
     /*! \todo Implement */
-    mTableName = "";
-    mSchemaName = "";
-    mTable = 0;
-    mSchema = 0;
+//    mTable = 0; // \todo how to reset proxy ?
+//    mSchema = 0;
     mColumnsCount = 0;
     mColumnsNumbers.clear();
     mIsUnique = false;

@@ -31,14 +31,17 @@
 #define DBOBJECTS_COMMON_DBTRIGGER_H
 
 #include <common/DbObject.h>
-#include <common/DbProcedure.h>
-#include <common/DbTable.h>
+#include <common/DbObjectPtr.h>
 
 namespace DbObjects
 {
 
 namespace Common
 {
+
+template<typename T> class DbObjectPtr;
+class DbProcedure;
+typedef DbObjectPtr<DbProcedure> DbProcedurePtr;
 
 /*!
  * \class DbTrigger
@@ -50,14 +53,14 @@ class DbTrigger : public DbObject
     public:
         virtual ~DbTrigger();
 
-        DbSchema* schema() const;
-        void setSchema(DbSchema *ipSchema);
+        DbSchemaPtr schema() const;
+        void setSchema(const DbSchemaPtr &ipSchema);
 
-        DbTable* table() const;
-        void setTable(DbTable *ipTable);
+        DbTablePtr table() const;
+        void setTable(const DbTablePtr &ipTable);
 
-        DbProcedure* procedure() const;
-        void setProcedure(DbProcedure *ipProcedure);
+        DbProcedurePtr procedure() const;
+        void setProcedure(const DbProcedurePtr &ipProcedure);
 
         QChar enabled() const;
         void setEnabled(const QChar &ipFlag);
@@ -68,8 +71,8 @@ class DbTrigger : public DbObject
         QString constraintName() const;
         void setConstraintName(const QString &ipName);
 
-        DbTable* referencedTable() const;
-        void setReferencedTable(DbTable *ipTable);
+        DbTablePtr referencedTable() const;
+        void setReferencedTable(const DbTablePtr &ipTable);
 
         bool isDeferrable() const;
         void setDeferrable(bool ipFlag);
@@ -87,14 +90,14 @@ class DbTrigger : public DbObject
         QString fullName() const;
 
     protected:
-        DbTrigger(QString ipName, DbSchema *ipSchema = 0);
+        DbTrigger(QString ipName, const DbSchemaPtr &ipSchema);
 
         /*! Table */
-        DbTable *mTable;
+        DbTablePtr mTable;
         /*! Parent schema */
-        DbSchema *mSchema;
-        /*! ??? */
-        DbProcedure *mProcedure;
+        DbSchemaPtr mSchema;
+        /*! Procedure that is called whe trigger fires */
+        DbProcedurePtr mProcedure;
         /*! Controls in which session_replication_role modes the trigger fires
          * O - origin and local modes
          * D - disabled
@@ -107,7 +110,7 @@ class DbTrigger : public DbObject
         /*! Constraint name, if a constraint trigger */
         QString mConstraintName;
         /*! The table referenced by a referential integrity constraint */
-        DbTable *mReferencedTable;
+        DbTablePtr mReferencedTable;
         /*! True if constraint trigger is deferrable */
         bool mIsDeferrable;
         /*! True if constraint trigger is initially deferred */

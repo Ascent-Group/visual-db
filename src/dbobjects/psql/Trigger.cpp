@@ -50,7 +50,7 @@ namespace Psql
  * \param[in] ipSchema - Handle to schema containing this view
 
  */
-Trigger::Trigger(QString ipName, Common::DbSchema *ipSchema)
+Trigger::Trigger(QString ipName, const DbSchemaPtr &ipSchema)
     : DbTrigger(ipName, ipSchema)
 {
 
@@ -70,6 +70,10 @@ Trigger::~Trigger()
 bool
 Trigger::loadData()
 {
+    if (mIsLoaded) {
+        return true;
+    }
+
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;
@@ -136,7 +140,7 @@ Trigger::loadData()
     Q_ASSERT(colId > 0);
     QString tableName = query.value(colId).toString();
 
-    Common::DbTable *table = Common::Database::instance()->findSchema(schemaName)->findTable(tableName);
+    DbTablePtr table = Common::Database::instance()->findSchema(schemaName)->findTable(tableName);
 
     setTable(table);
 
@@ -149,7 +153,7 @@ Trigger::loadData()
     Q_ASSERT(colId > 0);
     QString procName = query.value(colId).toString();
 
-    Common::DbProcedure *proc = Common::Database::instance()->findSchema(procSchemaName)->findProcedure(procName);
+    DbProcedurePtr proc = Common::Database::instance()->findSchema(procSchemaName)->findProcedure(procName);
 
     setProcedure(proc);
 
@@ -177,7 +181,7 @@ Trigger::loadData()
     Q_ASSERT(colId > 0);
     QString refTableName = query.value(colId).toString();
 
-    Common::DbTable *refTable = Common::Database::instance()->findSchema(refSchemaName)->findTable(refTableName);
+    DbTablePtr refTable = Common::Database::instance()->findSchema(refSchemaName)->findTable(refTableName);
 
     setReferencedTable(refTable);
 

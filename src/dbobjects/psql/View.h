@@ -34,9 +34,16 @@
 
 namespace DbObjects
 {
+//namespace Common
+//{
+//template<typename T> class DbObjectPtr;
+//class DbSchema;
+//}
 
 namespace Psql
 {
+
+typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
 
 /*!
  * \class View
@@ -46,7 +53,7 @@ namespace Psql
 class View : public Common::DbView
 {
     public:
-        View(QString ipName, Common::DbSchema *ipSchema = 0);
+        View(QString ipName, const DbSchemaPtr &ipSchema);
         ~View();
 
     protected:

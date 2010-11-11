@@ -30,16 +30,14 @@
 #include <common/Database.h>
 #include <common/DbIndex.h>
 #include <common/DbLanguage.h>
+#include <common/DbProcedure.h>
+#include <common/DbRole.h>
 #include <common/DbSchema.h>
-#include <factory/Index.h>
-#include <factory/Language.h>
-#include <factory/Role.h>
-#include <factory/Schema.h>
+#include <common/DbTable.h>
+#include <common/DbTrigger.h>
+#include <common/DbView.h>
 #include <mysql/Tools.h>
-#include <psql/Role.h>
 #include <psql/Tools.h>
-// \todo remove next include
-#include <psql/Trigger.h>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -69,10 +67,10 @@ Database::Database()
       mRoles(),
       mIndices(),
       mLanguages(),
-      mSqlDriver(Unknown),
-      mNewObjects(),
-      mModifiedObjects(),
-      mDeletedObjects()
+      mSqlDriver(Unknown)
+//      mNewObjects(),
+//      mModifiedObjects(),
+//      mDeletedObjects()
 {
 
 }
@@ -110,16 +108,16 @@ Database::instance()
  * \return true If the object has been successfully registered
  * \return false If the object has been registered earlier
  */
-bool
-Database::registerNew(const DbObject *ipObject)
-{
-    if (mNewObjects.contains(ipObject)) {
-        return false;
-    }
-
-    mNewObjects.push_back(ipObject);
-    return true;
-}
+//bool
+//Database::registerNew(const DbObject *ipObject)
+//{
+//    if (mNewObjects.contains(ipObject)) {
+//        return false;
+//    }
+//
+//    mNewObjects.push_back(ipObject);
+//    return true;
+//}
 
 /*!
  * \brief Register an object that has been modified
@@ -129,16 +127,16 @@ Database::registerNew(const DbObject *ipObject)
  * \return true If the object has been successfully registered
  * \return false If the object has been registered earlier
  */
-bool
-Database::registerModified(const DbObject *ipObject)
-{
-    if (mModifiedObjects.contains(ipObject)) {
-        return false;
-    }
-
-    mModifiedObjects.push_back(ipObject);
-    return true;
-}
+//bool
+//Database::registerModified(const DbObject *ipObject)
+//{
+//    if (mModifiedObjects.contains(ipObject)) {
+//        return false;
+//    }
+//
+//    mModifiedObjects.push_back(ipObject);
+//    return true;
+//}
 
 /*!
  * \brief Register an object that has been deleted
@@ -148,16 +146,16 @@ Database::registerModified(const DbObject *ipObject)
  * \return true If the object has been successfully registered
  * \return false If the object has been registered earlier
  */
-bool
-Database::registerDeleted(const DbObject *ipObject)
-{
-    if (mDeletedObjects.contains(ipObject)) {
-        return false;
-    }
-
-    mDeletedObjects.push_back(ipObject);
-    return true;
-}
+//bool
+//Database::registerDeleted(const DbObject *ipObject)
+//{
+//    if (mDeletedObjects.contains(ipObject)) {
+//        return false;
+//    }
+//
+//    mDeletedObjects.push_back(ipObject);
+//    return true;
+//}
 
 /*!
  * \brief Add schema to DB schema list
@@ -168,7 +166,7 @@ Database::registerDeleted(const DbObject *ipObject)
  * \return false - If the schema object has already existed in the vector
  */
 bool
-Database::addSchema(DbSchema *ipSchema)
+Database::addSchema(const DbSchemaPtr &ipSchema)
 {
     if (mSchemas.contains(ipSchema)) {
         return false;
@@ -187,7 +185,7 @@ Database::addSchema(DbSchema *ipSchema)
  * \return false - If the role object has already existed in the vector
  */
 bool
-Database::addRole(DbRole *ipRole)
+Database::addRole(const DbRolePtr &ipRole)
 {
     if (mRoles.contains(ipRole)) {
         return false;
@@ -206,7 +204,7 @@ Database::addRole(DbRole *ipRole)
  * \return false - If the index object has already existed in the vector
  */
 bool
-Database::addIndex(DbIndex *ipIndex)
+Database::addIndex(const DbIndexPtr &ipIndex)
 {
     if (mIndices.contains(ipIndex)) {
         return false;
@@ -225,7 +223,7 @@ Database::addIndex(DbIndex *ipIndex)
  * \return false - If the language object has already existed in the vector
  */
 bool
-Database::addLanguage(DbLanguage *ipLanguage)
+Database::addLanguage(const DbLanguagePtr &ipLanguage)
 {
     if (mLanguages.contains(ipLanguage)) {
         return false;
@@ -241,25 +239,15 @@ Database::addLanguage(DbLanguage *ipLanguage)
  * \param[out] opList List with names of stored schemas
  */
 void
-Database::schemasList(QStringList *opList) const
+Database::schemasList(QStringList &opList) const
 {
-    if (0 == opList) {
-        return;
-    }
+    opList.clear();
 
-    opList->clear();
-
-    QVector<DbSchema*>::const_iterator iter;
+    QVector<DbSchemaPtr>::const_iterator iter;
 
     for (iter = mSchemas.constBegin(); iter != mSchemas.constEnd(); ++iter) {
-        opList->append((*iter)->name());
+        opList.append(iter->name());
     }
-
-    /* lyuts - if uncommented, then something gets wrong with the list, the list
-     * has "public" and "public" 0_0
-     *
-     */
-    //opList->sort();
 }
 
 /*!
@@ -268,21 +256,15 @@ Database::schemasList(QStringList *opList) const
  * \param[out] opList List with names of stored roles
  */
 void
-Database::rolesList(QStringList *opList) const
+Database::rolesList(QStringList &opList) const
 {
-    if (0 == opList) {
-        return;
-    }
+    opList.clear();
 
-    opList->clear();
-
-    QVector<DbRole*>::const_iterator iter;
+    QVector<DbRolePtr>::const_iterator iter;
 
     for (iter = mRoles.constBegin(); iter != mRoles.constEnd(); ++iter) {
-        opList->append((*iter)->name());
+        opList.append(iter->name());
     }
-
-    //opList->sort();
 }
 
 /*!
@@ -291,21 +273,15 @@ Database::rolesList(QStringList *opList) const
  * \param[out] opList List with names of stored indices
  */
 void
-Database::indicesList(QStringList *opList) const
+Database::indicesList(QStringList &opList) const
 {
-    if (0 == opList) {
-        return;
-    }
+    opList.clear();
 
-    opList->clear();
-
-    QVector<DbIndex*>::const_iterator iter;
+    QVector<DbIndexPtr>::const_iterator iter;
 
     for (iter = mIndices.constBegin(); iter != mIndices.constEnd(); ++iter) {
-        opList->append((*iter)->name());
+        opList.append(iter->name());
     }
-
-    //opList->sort();
 }
 
 /*!
@@ -314,21 +290,15 @@ Database::indicesList(QStringList *opList) const
  * \param[out] opList List with names of stored languages
  */
 void
-Database::languagesList(QStringList *opList) const
+Database::languagesList(QStringList &opList) const
 {
-    if (0 == opList) {
-        return;
-    }
+    opList.clear();
 
-    opList->clear();
-
-    QVector<DbLanguage*>::const_iterator iter;
+    QVector<DbLanguagePtr>::const_iterator iter;
 
     for (iter = mLanguages.constBegin(); iter != mLanguages.constEnd(); ++iter) {
-        opList->append((*iter)->name());
+        opList.append(iter->name());
     }
-
-    //opList->sort();
 }
 
 /*!
@@ -374,10 +344,15 @@ Database::languagesCount() const
  *
  * \return Found schema object or NULL if not found
  */
-DbSchema*
+DbSchemaPtr
 Database::findSchema(const QString &ipSchemaName) const
 {
-    return dynamic_cast<DbSchema*>(findObject(ipSchemaName, DbObject::SchemaObject));
+    foreach (const DbSchemaPtr &schema, mSchemas) {
+        if (ipSchemaName == schema.name()) {
+            return schema;
+        }
+    }
+    return DbSchemaPtr();
 }
 
 /*!
@@ -387,10 +362,15 @@ Database::findSchema(const QString &ipSchemaName) const
  *
  * \return Found role object or NULL if not found
  */
-DbRole*
+DbRolePtr
 Database::findRole(const QString &ipRoleName) const
 {
-    return dynamic_cast<DbRole*>(findObject(ipRoleName, DbObject::RoleObject));
+    foreach (const DbRolePtr &role, mRoles) {
+        if (ipRoleName == role.name()) {
+            return role;
+        }
+    }
+    return DbRolePtr();
 }
 
 /*!
@@ -400,23 +380,34 @@ Database::findRole(const QString &ipRoleName) const
  *
  * \return Found index object or NULL if not found
  */
-DbIndex*
+DbIndexPtr
 Database::findIndex(const QString &ipIndexName) const
 {
-    return dynamic_cast<DbIndex*>(findObject(ipIndexName, DbObject::IndexObject));
+    foreach (const DbIndexPtr &index, mIndices) {
+        if (ipIndexName == index.name()) {
+            return index;
+        }
+    }
+
+    return DbIndexPtr();
 }
 
 /*!
  * \brief Finds language by its name
  *
- * \param[in] ipLangName - Name of a language we are looking for
+ * \param[in] ipLanguageName - Name of a language we are looking for
  *
  * \return Found language object or NULL if not found
  */
-DbLanguage*
-Database::findLanguage(const QString &ipLangName) const
+DbLanguagePtr
+Database::findLanguage(const QString &ipLanguageName) const
 {
-    return dynamic_cast<DbLanguage*>(findObject(ipLangName, DbObject::LanguageObject));
+    foreach (const DbLanguagePtr &language, mLanguages) {
+        if (ipLanguageName == language.name()) {
+            return language;
+        }
+    }
+    return DbLanguagePtr();
 }
 
 /*!
@@ -429,14 +420,14 @@ Database::findLanguage(const QString &ipLangName) const
  * \return Number of found indices
  */
 quint64
-Database::findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &opList) const
+Database::findTableIndices(DbTablePtr &ipTable, QVector<DbIndexPtr> &opList) const
 {
     opList.clear();
 
     quint64 count = mIndices.count();
 
     // if we don't have any indices
-    if (0 == count || 0 == ipTable) {
+    if (0 == count || 0 == ipTable.get()) {
         return 0;
     }
 
@@ -446,8 +437,8 @@ Database::findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &opList) co
     // look through index's table names
     for (quint64 i = 0; i < count; ++i) {
         // if index is for our table -- add it
-        if (tableName == mIndices.at(i)->tableName()
-            && schemaName == mIndices.at(i)->schemaName()) {
+        if (tableName == mIndices.at(i)->table().name()
+            && schemaName == mIndices.at(i)->schema().name()) {
             opList.push_back(mIndices.at(i));
         }
     }
@@ -522,15 +513,14 @@ Database::readSchemas()
     // for every retrieved row
     foreach (const QString &name, schemasNamesList) {
         // create new schema object
-        DbSchema *schema = Factory::Schema::createSchema(name);
+        DbSchemaPtr schema(name);
 
-        Q_CHECK_PTR(schema);
+        Q_CHECK_PTR(schema.get());
 
         // we should add schema to database vector BEFORE we start calling read* functions
         addSchema(schema);
 
-        qDebug() << "#####";
-        schema->loadData();
+        schema->loadChildren();
     }
 }
 
@@ -563,13 +553,13 @@ Database::readRoles()
                         break;
     }
 
+    DbRolePtr role;
     // for every retrieved row
     foreach (const QString &name, rolesList) {
-
         // declare new role object
-        DbRole *role = Factory::Role::createRole(name);
+        role = DbRolePtr(name);
 
-        Q_ASSERT(0 != role);
+        Q_ASSERT(0 != role.get());
 
         // add role
         addRole(role);
@@ -608,7 +598,7 @@ Database::readIndices()
     // for every retrieved row
     foreach (const QString &name, indicesList) {
         // declare new index object
-        DbIndex *index = Factory::Index::createIndex(name);
+        DbIndexPtr index(name);
 
         // add index
         addIndex(index);
@@ -649,9 +639,7 @@ Database::readLanguages()
     // for every retrieved row
     foreach (const QString &name, languagesList) {
         // declare new language object
-        DbLanguage *lang = Factory::Language::createLanguage(name);
-
-        Q_ASSERT(0 != lang);
+        DbLanguagePtr lang(name);
 
         // add language
         addLanguage(lang);
@@ -684,32 +672,25 @@ Database::resetData()
     qDebug() << __PRETTY_FUNCTION__ << "> cleaning...";
 #endif
 
-    quint64 schemasCount = mSchemas.count();
 
-    for (quint64 i = 0; i < schemasCount; ++i) {
-        mSchemas.at(i)->resetData();
+    foreach (DbSchemaPtr schema, mSchemas) {
+        schema->resetData();
     }
 
     // clear vectors
-    qDeleteAll(mSchemas);
     mSchemas.clear();
 
-    qDeleteAll(mRoles);
     mRoles.clear();
-
-    qDeleteAll(mIndices);
     mIndices.clear();
-
-    qDeleteAll(mLanguages);
     mLanguages.clear();
 
     /*! We don't need to call qDeleteAll for UnitOfWork pattern's vectors, we just need to
      * flush them.
      * Reason: We don't need to destroy the objects, they should stay alive
      */
-    mNewObjects.clear();
-    mModifiedObjects.clear();
-    mDeletedObjects.clear();
+//    mNewObjects.clear();
+//    mModifiedObjects.clear();
+//    mDeletedObjects.clear();
 }
 
 /*!
@@ -726,79 +707,79 @@ Database::resetData()
  * \todo Try to make the search algorithm more "cute", that will not
  *       have a look of huge switches and ifs
  */
-DbObject*
-Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
-{
-    quint64 count;
-    QStringList list;
-
-    // detect object type and read all objects of that type
-    switch (ipObjectType) {
-        case DbObject::SchemaObject:
-                count = mSchemas.count();
-                schemasList(&list);
-                break;
-
-        case DbObject::RoleObject:
-                count = mRoles.count();
-                rolesList(&list);
-                break;
-
-        case DbObject::IndexObject:
-                count = mIndices.count();
-                indicesList(&list);
-                break;
-
-        case DbObject::LanguageObject:
-                count = mLanguages.count();
-                languagesList(&list);
-                break;
-
-        case DbObject::UnkObject:
-        default:
-                qDebug() << __PRETTY_FUNCTION__ << "> Unknown object type";
-                return 0;
-    }
-
-    // declare empty ptrs
-    DbObject *object = 0;
-
-    // if we don't have any objects of the given type
-    if (0 == count) {
-        // return nothing
-        return 0;
-    }
-
-    quint64 i = 0;
-    // look through objects' names
-    while (i < count && ipObjectName != list.at(i)) {
-        i++;
-    }
-
-    // if object was found
-    if (!(i == count - 1 && ipObjectName != list.at(i))) {
-        switch (ipObjectType) {
-            case DbObject::SchemaObject:
-                    object = mSchemas.at(i);
-                    break;
-            case DbObject::RoleObject:
-                    object = mRoles.at(i);
-                    break;
-            case DbObject::IndexObject:
-                    object = mIndices.at(i);
-                    break;
-            case DbObject::LanguageObject:
-                    object = mLanguages.at(i);
-                    break;
-            // actually useless - done just to remove warning
-            case DbObject::UnkObject:
-            default:
-                    break;
-        }
-    }
-
-    return object;
-}
+//DbObject*
+//Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
+//{
+//    quint64 count;
+//    QStringList list;
+//
+//    // detect object type and read all objects of that type
+//    switch (ipObjectType) {
+//        case DbObject::SchemaObject:
+//                count = mSchemas.count();
+//                schemasList(&list);
+//                break;
+//
+//        case DbObject::RoleObject:
+//                count = mRoles.count();
+//                rolesList(&list);
+//                break;
+//
+//        case DbObject::IndexObject:
+//                count = mIndices.count();
+//                indicesList(&list);
+//                break;
+//
+//        case DbObject::LanguageObject:
+//                count = mLanguages.count();
+//                languagesList(&list);
+//                break;
+//
+//        case DbObject::UnkObject:
+//        default:
+//                qDebug() << __PRETTY_FUNCTION__ << "> Unknown object type";
+//                return 0;
+//    }
+//
+//    // declare empty ptrs
+//    DbObject *object = 0;
+//
+//    // if we don't have any objects of the given type
+//    if (0 == count) {
+//        // return nothing
+//        return 0;
+//    }
+//
+//    quint64 i = 0;
+//    // look through objects' names
+//    while (i < count && ipObjectName != list.at(i)) {
+//        i++;
+//    }
+//
+//    // if object was found
+//    if (!(i == count - 1 && ipObjectName != list.at(i))) {
+//        switch (ipObjectType) {
+//            case DbObject::SchemaObject:
+//                    object = mSchemas.at(i);
+//                    break;
+//            case DbObject::RoleObject:
+//                    object = mRoles.at(i);
+//                    break;
+//            case DbObject::IndexObject:
+//                    object = mIndices.at(i);
+//                    break;
+//            case DbObject::LanguageObject:
+//                    object = mLanguages.at(i);
+//                    break;
+//            // actually useless - done just to remove warning
+//            case DbObject::UnkObject:
+//            default:
+//                    break;
+//        }
+//    }
+//
+//    return object;
+//}
 
 /*!
  * \brief Deletes an instance of the Database class

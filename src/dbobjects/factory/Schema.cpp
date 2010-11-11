@@ -70,6 +70,7 @@ Schema::createSchema(const QString &ipName)
 //        schema = 0;
 //    }
 
+    qDebug() << "---------------" << schema;
     return schema;
 }
 

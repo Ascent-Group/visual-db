@@ -64,7 +64,7 @@ Index::createIndex(const QString &ipName)
                 break;
     }
 
-    //if the index creation failed or index inforamtion could not be read from database.
+    // if the index creation failed or index inforamtion could not be read from database.
 //    if (!index || !index->loadData()) {
 //        delete index;
 //        index = 0;

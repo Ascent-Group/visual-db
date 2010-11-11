@@ -37,6 +37,8 @@
 
 #include <QtDebug>
 
+using namespace DbObjects::Common;
+
 namespace DbObjects
 {
 
@@ -49,7 +51,7 @@ namespace Mysql
  * \param[in] ipName - Name of the given table
  * \param[in] ipSchema - Handle to schema containing the table
  */
-Table::Table(QString ipName, Common::DbSchema *ipSchema)
+Table::Table(QString ipName, const DbSchemaPtr &ipSchema)
     : DbTable(ipName, ipSchema)
 {
 }
@@ -71,6 +73,10 @@ Table::~Table()
 bool
 Table::loadData()
 {
+    if (mIsLoaded) {
+        return true;
+    }
+
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery    query(db);
     QString  qstr;
@@ -213,7 +219,7 @@ Table::checkPrimaryKey(const QString &ipColumnName) const
  * \return false Otherwise
  */
 bool
-Table::checkForeignKey(const QString &ipColumnName, QString *opForeignSchemaName, QString *opForeignTableName) const
+Table::checkForeignKey(const QString &ipColumnName, QString &opForeignSchemaName, QString &opForeignTableName) const
 {
     Q_UNUSED(opForeignSchemaName);
     Q_UNUSED(opForeignTableName);

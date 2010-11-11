@@ -30,13 +30,22 @@
 #ifndef DBOBJECTS_PSQL_TABLE_H
 #define DBOBJECTS_PSQL_TABLE_H
 
+#include <common/DbObjectPtr.h>
 #include <common/DbTable.h>
 
 namespace DbObjects
 {
 
+//namespace Common
+//{
+//template<typename T> class DbObjectPtr;
+//class DbSchema;
+//}
+
 namespace Psql
 {
+
+typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
 
 /*!
  * \class Table
@@ -46,11 +55,11 @@ namespace Psql
 class Table : public Common::DbTable
 {
     public:
-        Table(QString ipName, Common::DbSchema *ipSchema = 0);
+        Table(QString ipName, const DbSchemaPtr &ipSchema);
         ~Table();
 
         bool checkPrimaryKey(const QString &) const;
-        bool checkForeignKey(const QString &, QString *, QString *, QStringList *) const;
+        bool checkForeignKey(const QString &, QString &, QString &, QStringList &) const;
         bool checkUnique(const QString &) const;
 
     private:

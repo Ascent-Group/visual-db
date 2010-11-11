@@ -30,8 +30,10 @@
 #ifndef DBOBJECTS_COMMON_DATABASE_H
 #define DBOBJECTS_COMMON_DATABASE_H
 
+#include <common/DbObjectPtr.h>
+
+#include <QStringList>
 #include <QVector>
-#include <common/DbTable.h>
 
 namespace DbObjects
 {
@@ -39,10 +41,17 @@ namespace DbObjects
 namespace Common
 {
 
+template<typename T> class DbObjectPtr;
 class DbIndex;
 class DbLanguage;
 class DbRole;
 class DbSchema;
+class DbTable;
+typedef DbObjectPtr<DbIndex> DbIndexPtr;
+typedef DbObjectPtr<DbLanguage> DbLanguagePtr;
+typedef DbObjectPtr<DbRole> DbRolePtr;
+typedef DbObjectPtr<DbSchema> DbSchemaPtr;
+typedef DbObjectPtr<DbTable> DbTablePtr;
 
 /*!
  * \class Database
@@ -68,39 +77,39 @@ class Database
             SQLite
         };
 
-        bool registerNew(const DbObject *ipObject);
-        bool registerModified(const DbObject *ipObject);
-        bool registerDeleted(const DbObject *ipObject);
+//        bool registerNew(const DbObject *ipObject);
+//        bool registerModified(const DbObject *ipObject);
+//        bool registerDeleted(const DbObject *ipObject);
 
     public:
-        bool addSchema(DbSchema *);
-        bool addRole(DbRole *);
-        bool addIndex(DbIndex *);
-        bool addLanguage(DbLanguage *);
+        bool addSchema(const DbSchemaPtr &);
+        bool addRole(const DbRolePtr &);
+        bool addIndex(const DbIndexPtr &);
+        bool addLanguage(const DbLanguagePtr &);
 
-        void schemasList(QStringList *ipList) const;
+        void schemasList(QStringList &opList) const;
         quint64 schemasCount() const;
 
-        void rolesList(QStringList *ipList) const;
+        void rolesList(QStringList &opList) const;
         quint64 rolesCount() const;
 
-        void indicesList(QStringList *ipList) const;
+        void indicesList(QStringList &opList) const;
         quint64 indicesCount() const;
 
-        void languagesList(QStringList *ipList) const;
+        void languagesList(QStringList &opList) const;
         quint8 languagesCount() const;
 
-        DbSchema* findSchema(const QString &ipSchemaName) const;
+        DbSchemaPtr findSchema(const QString &ipSchemaName) const;
 
         // \todo lyuts: maybe we will need this
         //Schema* findSchema(DbTable *ipTable) const;
         //DbTable* findTable(QString ipTableName) const;
 
-        DbRole* findRole(const QString &ipRoleName) const;
-        DbIndex* findIndex(const QString &ipIndexName) const;
-        DbLanguage* findLanguage(const QString &ipLangName) const;
+        DbRolePtr findRole(const QString &ipRoleName) const;
+        DbIndexPtr findIndex(const QString &ipIndexName) const;
+        DbLanguagePtr findLanguage(const QString &ipLangName) const;
 
-        quint64 findTableIndices(const DbTable *ipTable, QVector<DbIndex*> &ipList) const;
+        quint64 findTableIndices(DbTablePtr &ipTable, QVector<DbIndexPtr> &ipList) const;
 
         void setSqlDriver(const QString &ipSqlDriverName);
         SqlDriverType sqlDriver() const;
@@ -119,22 +128,26 @@ class Database
 
     private:
         static Database *mInstance;
-        QVector<DbSchema*> mSchemas;
-        QVector<DbRole*> mRoles;
-        QVector<DbIndex*> mIndices;
-        QVector<DbLanguage*> mLanguages;
+        QVector<DbSchemaPtr> mSchemas;
+        QVector<DbRolePtr> mRoles;
+        QVector<DbIndexPtr> mIndices;
+        QVector<DbLanguagePtr> mLanguages;
         SqlDriverType mSqlDriver;
 
-        QVector<const DbObject*> mNewObjects;
-        QVector<const DbObject*> mModifiedObjects;
-        QVector<const DbObject*> mDeletedObjects;
+        /*! \todo Investigate on const DbObject * vs DbObjectPtr */
+        // \todo The next UnitOfWork vector will probably be separate for different object
+        // types, i.e. QVector<DbTablePtr> mNewTables;
+
+//        QVector<const DbObject*> mNewObjects;
+//        QVector<const DbObject*> mModifiedObjects;
+//        QVector<const DbObject*> mDeletedObjects;
 
         friend class DatabaseManager;
 
     private:
         Q_DISABLE_COPY(Database);
 
-        DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
+//        DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
 };
 
 /*!

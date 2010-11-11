@@ -50,15 +50,15 @@ ViewItem::ViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu
     Database *dbInst = Database::instance();
 
     // find schema
-    DbSchema *schema = dbInst->findSchema(ipSchemaName);
+    DbSchemaPtr schema = dbInst->findSchema(ipSchemaName);
 
-    // if foung
-    if (schema) {
+    // if found
+    if (schema.get()) {
         // find view in this schema
-        DbView *view = schema->findView(ipViewName);
+        DbViewPtr view = schema->findView(ipViewName);
 
         // if found
-        if (view) {
+        if (view.get()) {
             mModel = view;
         } else {
             qDebug() << "Cann't find this view: " << ipViewName;

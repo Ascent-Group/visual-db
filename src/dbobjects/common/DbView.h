@@ -31,6 +31,7 @@
 #define DBOBJECTS_COMMON_DBVIEW_H
 
 #include <common/DbObject.h>
+#include <common/DbObjectPtr.h>
 
 namespace DbObjects
 {
@@ -38,8 +39,14 @@ namespace DbObjects
 namespace Common
 {
 
-class DbRole;
-class DbSchema;
+//template<typename T>
+//class DbObjectPtr;
+//
+//class DbRole;
+//class DbSchema;
+//
+//typedef DbObjectPtr<DbRole> DbRolePtr;
+//typedef DbObjectPtr<DbSchema> DbSchemaPtr;
 
 /*!
  * \class DbView
@@ -53,11 +60,11 @@ class DbView : public DbObject
 
         QString fullName() const;
 
-        DbSchema *schema() const;
-        void setSchema(DbSchema *ipSchema);
+        DbSchemaPtr schema() const;
+        void setSchema(const DbSchemaPtr &ipSchema);
 
-        DbRole* owner() const;
-        void setOwner(DbRole *ipOwner);
+        DbRolePtr owner() const;
+        void setOwner(const DbRolePtr &ipOwner);
 
         QString definition() const;
         void setDefinition(QString ipDef);
@@ -68,14 +75,14 @@ class DbView : public DbObject
 
     protected:
         /*! Schema containing this view */
-        DbSchema *mSchema;
+        DbSchemaPtr mSchema;
         /*! View's owner */
-        DbRole *mOwner;
+        DbRolePtr mOwner;
         /*! View's definition */
         QString mDefinition;
 
     protected:
-        DbView(QString ipName, DbSchema *ipSchema = 0);
+        DbView(QString ipName, const DbSchemaPtr &ipSchema);
 };
 
 } // namespace Common

@@ -30,6 +30,7 @@
 #ifndef DBOBJECTS_MYSQL_TABLE_H
 #define DBOBJECTS_MYSQL_TABLE_H
 
+#include <common/DbObjectPtr.h>
 #include <common/DbTable.h>
 
 namespace DbObjects
@@ -37,6 +38,8 @@ namespace DbObjects
 
 namespace Mysql
 {
+
+//typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
 
 /*!
  * \class Table
@@ -46,11 +49,11 @@ namespace Mysql
 class Table : public Common::DbTable
 {
     public:
-        Table(QString ipName, Common::DbSchema *ipSchema = 0);
+        Table(QString ipName, const Common::DbSchemaPtr &ipSchema);
         ~Table();
 
         bool checkPrimaryKey(const QString &) const;
-        bool checkForeignKey(const QString &, QString *, QString *) const;
+        bool checkForeignKey(const QString &, QString &, QString &) const;
         bool checkUnique(const QString &) const;
 
     private:

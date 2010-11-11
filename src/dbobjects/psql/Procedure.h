@@ -30,13 +30,24 @@
 #ifndef DBOBJECTS_PSQL_PROCEDURE_H
 #define DBOBJECTS_PSQL_PROCEDURE_H
 
+#include <common/DbObjectPtr.h>
 #include <common/DbProcedure.h>
+
+
 
 namespace DbObjects
 {
+//namespace Common
+//{
+//template<typename T> class DbObjectPtr;
+//class DbSchema;
+//}
 
 namespace Psql
 {
+
+// \todo Typedef should be in common namespace !!!
+typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
 
 /*!
  * \class Procedure
@@ -46,7 +57,7 @@ namespace Psql
 class Procedure : public Common::DbProcedure
 {
     public:
-        Procedure(QString ipName, Common::DbSchema *ipSchema = 0);
+        Procedure(QString ipName, const DbSchemaPtr &ipSchema);
         ~Procedure();
 
     private:

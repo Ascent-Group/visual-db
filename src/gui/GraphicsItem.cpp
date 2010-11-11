@@ -48,8 +48,13 @@ int GraphicsItem::mSeek = 80;
  * Constructor
  */
 GraphicsItem::GraphicsItem(QMenu *ipMenu)
-    : QGraphicsPolygonItem(), mLeftTopPoint(0, 0), mRightBottomPoint(0, 0), mFont("Arial", 10)
-    , mMode(GraphicsItem::MOVE), mFieldsTypesVisible(true), mContextMenu(ipMenu)
+    : QGraphicsPolygonItem(),
+      mLeftTopPoint(0, 0),
+      mRightBottomPoint(0, 0),
+      mFont("Arial", 10), 
+      mMode(GraphicsItem::MOVE),
+      mFieldsTypesVisible(true),
+      mContextMenu(ipMenu)
 {
     mFieldItems = QList<QGraphicsTextItem *>();
     // get selected color

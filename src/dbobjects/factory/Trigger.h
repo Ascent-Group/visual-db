@@ -37,7 +37,6 @@ namespace DbObjects
 
 namespace Common
 {
-class DbSchema;
 class DbTrigger;
 }
 
@@ -57,11 +56,11 @@ namespace Factory
 class Trigger
 {
     public:
-        static Common::DbTrigger* createTrigger(const QString &ipName, Common::DbSchema *ipSchema = 0);
+        static Common::DbTrigger* createTrigger(const QString &ipName, const QString &ipSchemaName);
 
     protected:
-        static Psql::Trigger* createPsqlTrigger(const QString &ipName, Common::DbSchema *ipSchema = 0);
-//        static Mysql::Trigger* createMysqlTrigger(const QString &ipName, Common::DbSchema *ipSchema = 0);
+        static Psql::Trigger* createPsqlTrigger(const QString &ipName, const QString &ipSchemaName);
+//        static Mysql::Trigger* createMysqlTrigger(const QString &ipName, const QString &ipSchemaName);
 
     private:
         Q_DISABLE_COPY(Trigger);

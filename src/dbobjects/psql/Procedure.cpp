@@ -51,7 +51,7 @@ namespace Psql
  * \param[in] ipName - Name of the given procedure
  * \param[in] ipSchema - Handle to schema containing the procedure
  */
-Procedure::Procedure(QString ipName, Common::DbSchema *ipSchema)
+Procedure::Procedure(QString ipName, const DbSchemaPtr &ipSchema)
     : DbProcedure(ipName, ipSchema)
 {
 
@@ -71,6 +71,10 @@ Procedure::~Procedure()
 bool
 Procedure::loadData()
 {
+    if (mIsLoaded) {
+        return true;
+    }
+
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;

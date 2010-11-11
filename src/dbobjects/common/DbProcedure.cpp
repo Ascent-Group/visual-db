@@ -44,14 +44,14 @@ namespace Common
  * On creation finds the parent schema by its name ipSchemaName and sets it as
  * parent schema object with setSchema() function.
  */
-DbProcedure::DbProcedure(QString ipName, DbSchema *ipSchema)
+DbProcedure::DbProcedure(QString ipName, const DbSchemaPtr &ipSchema)
     : DbObject(ipName),
       mSchema(ipSchema),
-      mOwner(0),
-      mLanguage(0),
+      mOwner(),
+      mLanguage(),
       mSourceCode("")
 {
-    if (!mSchema) qDebug() << "DbProcedure::DbProcedure> mSchema is NULL!";
+    if (!mSchema.get()) qDebug() << "DbProcedure::DbProcedure> mSchema is NULL!";
 }
 
 /*!
@@ -84,7 +84,7 @@ DbProcedure::fullName() const
 /*!
  * \return Parent schema object
  */
-DbSchema*
+DbSchemaPtr
 DbProcedure::schema() const
 {
     return mSchema;
@@ -96,7 +96,7 @@ DbProcedure::schema() const
  * \param[in] ipSchema - Parent schema object
  */
 void
-DbProcedure::setSchema(DbSchema *ipSchema)
+DbProcedure::setSchema(const DbSchemaPtr &ipSchema)
 {
     mSchema = ipSchema;
 }
@@ -104,7 +104,7 @@ DbProcedure::setSchema(DbSchema *ipSchema)
 /*!
  * \return The owner of the given procedure
  */
-DbRole*
+DbRolePtr
 DbProcedure::owner() const
 {
     return mOwner;
@@ -116,15 +116,15 @@ DbProcedure::owner() const
  * \param[in] ipRole - Owner of the procedure
  */
 void
-DbProcedure::setOwner(DbRole *ipRole)
+DbProcedure::setOwner(const DbRolePtr &ipRole)
 {
     mOwner = ipRole;
 }
 
 /*!
- * \return The language
+ * \return The language this procedure is written in
  */
-DbLanguage*
+DbLanguagePtr
 DbProcedure::language() const
 {
     return mLanguage;
@@ -136,7 +136,7 @@ DbProcedure::language() const
  * \param[in] ipLang
  */
 void
-DbProcedure::setLanguage(DbLanguage *ipLang)
+DbProcedure::setLanguage(const DbLanguagePtr &ipLang)
 {
     mLanguage = ipLang;
 }
@@ -168,9 +168,9 @@ void
 DbProcedure::resetData()
 {
     /*! \todo Implement */
-    mSchema = 0;
-    mOwner = 0;
-    mLanguage = 0;
+//    mSchema = 0; // \todo How to reset proxy ???
+//    mOwner = 0;
+//    mLanguage = 0;
     mSourceCode = "";
 
     DbObject::resetData();

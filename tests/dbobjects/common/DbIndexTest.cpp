@@ -36,6 +36,8 @@
 
 using namespace DbObjects;
 
+typedef Common::DbObjectPtr<Common::DbIndex> DbIndexPtr;
+
 void
 DbIndexTest::initTestCase()
 {
@@ -53,9 +55,9 @@ DbIndexTest::addColumnNumberTest()
 {
     mDbInst->readIndices();
 
-    Common::DbIndex *index = mDbInst->findIndex("ind_artists");
+    DbIndexPtr index = mDbInst->findIndex("ind_artists");
 
-    QVERIFY(0 != index);
+    QVERIFY(0 != index.get());
 
     short min = std::numeric_limits<short>::min();
     short max = std::numeric_limits<short>::max();

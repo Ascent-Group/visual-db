@@ -31,6 +31,10 @@
 #include <dbobjects/psql/View.h>
 #include <dbobjects/psql/PsqlViewTest.h>
 
+//using namespace DbObjects;
+//typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
+//typedef Common::DbObjectPtr<Common::DbView> DbViewPtr;
+
 void
 PsqlViewTest::initTestCase()
 {
@@ -56,13 +60,13 @@ PsqlViewTest::loadDataTest()
     dbInst->readSchemas();
     dbInst->readRoles();
 
-    DbSchema *schema = dbInst->findSchema(schemaName);
+    DbSchemaPtr schema = dbInst->findSchema(schemaName);
 
-    QVERIFY(0 != schema);
+    QVERIFY(0 != schema.get());
 
-    DbView *view = schema->findView(viewName);
+    DbViewPtr view = schema->findView(viewName);
 
-    QVERIFY(0 != view);
+    QVERIFY(0 != view.get());
 
     QVERIFY(QString(schemaName) == view->schema()->name());
     QVERIFY(QString(viewName) == view->name());

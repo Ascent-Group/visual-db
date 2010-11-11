@@ -32,12 +32,20 @@
 
 #include <common/Database.h>
 #include <common/DbObject.h>
+#include <common/DbObjectPtr.h>
 
 namespace DbObjects
 {
 
 namespace Common
 {
+template<typename T> class DbObjectPtr;
+class DbLanguage;
+class DbRole;
+//template class DbObjectPtr<DbLanguage>;
+//template class DbObjectPtr<DbRole>;
+typedef DbObjectPtr<DbLanguage> DbLanguagePtr;
+typedef DbObjectPtr<DbRole> DbRolePtr;
 
 /*!
  * \class DbProcedure
@@ -51,14 +59,14 @@ class DbProcedure : public DbObject
 
         QString fullName() const;
 
-        DbSchema* schema() const;
-        void setSchema(DbSchema *ipSchema);
+        DbSchemaPtr schema() const;
+        void setSchema(const DbSchemaPtr &ipSchema);
 
-        DbRole* owner() const;
-        void setOwner(DbRole *ipRole);
+        DbRolePtr owner() const;
+        void setOwner(const DbRolePtr &ipRole);
 
-        DbLanguage* language() const;
-        void setLanguage(DbLanguage *ipLang);
+        DbLanguagePtr language() const;
+        void setLanguage(const DbLanguagePtr &ipLang);
 
         QString sourceCode() const;
         void setSourceCode(const QString &ipText);
@@ -67,16 +75,16 @@ class DbProcedure : public DbObject
 
     protected:
         /*! Schema that holds this procedure */
-        DbSchema *mSchema;
+        DbSchemaPtr mSchema;
         /*! Procedure's owner */
-        DbRole *mOwner;
+        DbRolePtr mOwner;
         /*! pl/sql language this procedure has been written in */
-        DbLanguage *mLanguage;
+        DbLanguagePtr mLanguage;
         /*! Procedure's source code text */
         QString mSourceCode;
 
     protected:
-        DbProcedure(QString ipName, DbSchema *ipSchema = 0);
+        DbProcedure(QString ipName, const DbSchemaPtr &ipSchema);
         virtual void resetData();
 
 };

@@ -42,12 +42,13 @@ class ArrowItem;
 
 namespace DbObjects
 {
-    namespace Common
-    {
-        class DbIndex;
-        class DbView;
-    } // namespace Common
-} // namespace DbObjects
+namespace Common
+{
+class DbView;
+
+typedef DbObjectPtr<DbView> DbViewPtr;
+}
+}
 
 /*
  * Graphics item, implements the database view. Support moving, resizing, changing of the color etc.
@@ -57,7 +58,6 @@ class ViewItem : public DbObjectItem
     public:
         ViewItem(const QString &, const QString &, QMenu *, const QPoint &);
         ~ViewItem();
-
         virtual int type() const;
 
         QString name() const;
@@ -69,9 +69,9 @@ class ViewItem : public DbObjectItem
         enum { Type = UserType + 8 };
 
     private:
+
         QSettings mSettings;
-        
-        DbObjects::Common::DbView *mModel;
+        DbObjects::Common::DbViewPtr mModel;
 };
 
 ViewItem *toView(QGraphicsItem *);

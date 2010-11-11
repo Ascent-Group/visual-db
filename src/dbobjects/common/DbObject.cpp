@@ -28,6 +28,7 @@
  */
 
 #include <common/DbObject.h>
+#include <QtDebug>
 
 namespace DbObjects
 {
@@ -74,6 +75,16 @@ DbObject::setName(const QString &ipName)
 }
 
 /*!
+ * \return true If the object description has been already loaded from db
+ * \return false Otherwise
+ */
+bool
+DbObject::isLoaded() const
+{
+    return mIsLoaded;
+}
+
+/*!
  * \brief Loads object informaton from datase
  *
  * \return true If the information has been successfully read
@@ -82,8 +93,8 @@ DbObject::setName(const QString &ipName)
 bool
 DbObject::loadData()
 {
+    qDebug() << "DbObject::loadData> for " << mName;
     mIsLoaded = true;
-
     return true;
 }
 

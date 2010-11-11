@@ -34,9 +34,18 @@
 
 namespace DbObjects
 {
+//namespace Common
+//{
+//template<typename T> class DbObjectPtr;
+//class DbSchema;
+//}
 
 namespace Psql
 {
+
+typedef Common::DbObjectPtr<Common::DbProcedure> DbProcedurePtr;
+typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
+typedef Common::DbObjectPtr<Common::DbTable> DbTablePtr;
 
 /*!
  * \class Trigger
@@ -46,7 +55,7 @@ namespace Psql
 class Trigger : public Common::DbTrigger
 {
     public:
-        Trigger(QString ipName, Common::DbSchema *ipSchema = 0);
+        Trigger(QString ipName, const DbSchemaPtr &ipSchema);
         ~Trigger();
 
     protected:

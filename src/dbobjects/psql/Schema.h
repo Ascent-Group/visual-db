@@ -37,6 +37,8 @@ namespace DbObjects
 namespace Psql
 {
 
+typedef Common::DbObjectPtr<Common::DbRole> DbRolePtr;
+
 class Schema : public DbObjects::Common::DbSchema
 {
     public:

@@ -31,6 +31,8 @@
 #include <factory/View.h>
 #include <psql/View.h>
 
+using namespace DbObjects::Common;
+
 namespace DbObjects
 {
 
@@ -44,7 +46,7 @@ namespace Factory
  * \return Database view object
  */
 DbObjects::Common::DbView*
-View::createView(const QString &ipName, Common::DbSchema *ipSchema)
+View::createView(const QString &ipName, const QString &ipSchemaName)
 {
     using namespace DbObjects::Common;
 
@@ -52,10 +54,10 @@ View::createView(const QString &ipName, Common::DbSchema *ipSchema)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                view = createPsqlView(ipName, ipSchema);
+                view = createPsqlView(ipName, ipSchemaName);
                 break;
         case Database::MySQL:
-//                view = createMysqlView(ipName, ipSchema);
+//                view = createMysqlView(ipName, ipSchemaName);
                 break;
         case Database::Oracle:
         case Database::SQLite:
@@ -64,7 +66,7 @@ View::createView(const QString &ipName, Common::DbSchema *ipSchema)
                 break;
     }
 
-    //if the view creation failed or view inforamtion could not be read from database.
+    // if the view creation failed or view inforamtion could not be read from database.
 //    if (!view || !view->loadData()) {
 //        delete view;
 //        view = 0;
@@ -80,9 +82,9 @@ View::createView(const QString &ipName, Common::DbSchema *ipSchema)
  * \return Pointer to PostgreSQL view object
  */
 Psql::View*
-View::createPsqlView(const QString &ipName, Common::DbSchema *ipSchema)
+View::createPsqlView(const QString &ipName, const QString &ipSchemaName)
 {
-    return new(std::nothrow) Psql::View(ipName, ipSchema);
+    return new(std::nothrow) Psql::View(ipName, Database::instance()->findSchema(ipSchemaName));
 }
 
 /*!
@@ -92,9 +94,9 @@ View::createPsqlView(const QString &ipName, Common::DbSchema *ipSchema)
  * \return Pointer to MySQL view object
  */
 //Mysql::View*
-//View::createMysqlView(const QString &ipName, Common::DbSchema *ipSchema)
+//View::createMysqlView(const QString &ipName, const QString &ipSchemaName)
 //{
-//    return new Mysql::View(ipName, ipSchema);
+//    return new Mysql::View(ipName, Database::instance()->findSchema(ipSchemaName));
 //}
 
 } // namespace Factory

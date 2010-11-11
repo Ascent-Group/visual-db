@@ -30,6 +30,7 @@
 #ifndef DESCRIPTIONWIDGET_H
 #define DESCRIPTIONWIDGET_H
 
+#include <common/DbObjectPtr.h>
 #include <gui/ui/ui_DescriptionWidget.h>
 #include <QWidget>
 
@@ -46,9 +47,17 @@ class DbTable;
 class DbTrigger;
 class DbView;
 
+typedef DbObjectPtr<DbIndex> DbIndexPtr;
+typedef DbObjectPtr<DbRole> DbRolePtr;
+typedef DbObjectPtr<DbSchema> DbSchemaPtr;
+typedef DbObjectPtr<DbTable> DbTablePtr;
+typedef DbObjectPtr<DbTrigger> DbTriggerPtr;
+typedef DbObjectPtr<DbView> DbViewPtr;
+
 } // namespace Common
 
 } //namespace DbObjects
+
 
 /*!
  * \class DescriptionWidget
@@ -131,12 +140,12 @@ class DescriptionWidget : public QWidget
         DescriptionWidget(QWidget *ipParent = 0);
         ~DescriptionWidget();
 
-        void describe(const DbObjects::Common::DbSchema *ipSchema);
-        void describe(const DbObjects::Common::DbTable *ipTable);
-        void describe(const DbObjects::Common::DbRole *ipRole);
-        void describe(const DbObjects::Common::DbView *ipView);
-        void describe(const DbObjects::Common::DbIndex *ipIndex);
-        void describe(const DbObjects::Common::DbTrigger *ipTrigger);
+        void describe(const DbObjects::Common::DbSchemaPtr &ipSchema);
+        void describe(const DbObjects::Common::DbTablePtr &ipTable);
+        void describe(const DbObjects::Common::DbRolePtr &ipRole);
+        void describe(const DbObjects::Common::DbViewPtr &ipView);
+        void describe(const DbObjects::Common::DbIndexPtr &ipIndex);
+        void describe(const DbObjects::Common::DbTriggerPtr &ipTrigger);
 
     private:
         Ui::DescriptionWidget ui;

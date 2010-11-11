@@ -76,7 +76,7 @@ using namespace QtConcurrent;
  * Constructor
  */
 MainWindow::MainWindow()
-: QMainWindow()
+    : QMainWindow()
 {
     ui.setupUi(this);
 
@@ -562,20 +562,17 @@ MainWindow::describeObject()
     // create description widget
     DescriptionWidget *descWidget = new DescriptionWidget();
 
-    DbSchema *schema;
-    DbTable *table;
-    DbRole *role;
-    DbView *view;
-    DbIndex *index;
-    DbTrigger *trig;
+    DbSchemaPtr schema;
+    DbTablePtr table;
+    DbRolePtr role;
+    DbViewPtr view;
+    DbIndexPtr index;
+    DbTriggerPtr trig;
 
     // find the correct object and describe
     switch ( objId ) {
         case TreeWidget::SchemaItem:
-            schema = dbInst->findSchema(objName);
-
-            // no check for null pointer, describe will handle it
-            descWidget->describe(schema);
+            descWidget->describe(dbInst->findSchema(objName));
             tabTitle = tr("Schema: ");
             break;
 
@@ -585,7 +582,7 @@ MainWindow::describeObject()
 
             schema = dbInst->findSchema(schemaName);
 
-            if ( schema ) {
+            if (schema.get()) {
                 table = schema->findTable(objName);
                 // no check for null pointer, describe will handle it
                 descWidget->describe(table);
@@ -599,7 +596,7 @@ MainWindow::describeObject()
 
             schema = dbInst->findSchema(schemaName);
 
-            if (schema) {
+            if (schema.get()) {
                 view = schema->findView(objName);
                 // no check for null pointer, describe will handle it
                 descWidget->describe(view);
@@ -628,7 +625,7 @@ MainWindow::describeObject()
 
             schema = dbInst->findSchema(schemaName);
 
-            if (schema) {
+            if (schema.get()) {
                 trig = schema->findTrigger(objName);
                 // no check for null pointer, describe will handle it
 
@@ -688,10 +685,10 @@ MainWindow::queryData()
     // create sql widget
     SqlWidget *sqlWidget = new SqlWidget();
 
-    DbSchema *schema;
+    DbSchemaPtr schema;
 
     // find the correct object and query data
-    switch ( objId ) {
+    switch (objId) {
         case TreeWidget::TableItem:
         case TreeWidget::ViewItem:
             // find schema
@@ -699,7 +696,7 @@ MainWindow::queryData()
 
             schema = dbInst->findSchema(schemaName);
 
-            if ( schema ) {
+            if (schema.get()) {
                 sqlWidget->setDefaultQuery(
                         QString("SELECT t.* FROM %1.%2 t;")
                         .arg(schemaName)

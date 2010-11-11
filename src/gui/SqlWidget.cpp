@@ -146,7 +146,7 @@ SqlWidget::readFullResult()
 
 /*!
  * @brief Checks the query for safety
- * 		  lyuts: later will allow users to define and use their own rules
+ * lyuts: later will allow users to define and use their own rules
  *
  * @param[in] ipQueryText - Query text we will check for safety
  *
@@ -172,7 +172,6 @@ isQuerySafe(const QString &ipQueryText)
  *
  * @param[in] ipDirection - Direction we will read in (next or previous)
  */
-// FIXME: ipDirection should be const reference
 void
 SqlWidget::readPortion(Portions ipDirection)
 {

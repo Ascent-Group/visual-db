@@ -29,6 +29,7 @@
 
 #include <common/Database.h>
 #include <common/DbIndex.h>
+#include <common/DbProcedure.h>
 #include <common/DbRole.h>
 #include <common/DbSchema.h>
 #include <common/DbTable.h>
@@ -38,6 +39,8 @@
 #include <QMessageBox>
 #include <QSplitter>
 #include <QtDebug>
+
+using namespace DbObjects::Common;
 
 const QString DescriptionWidget::sCreateSchemaScript = "CREATE SCHEMA %1 \n"
             "AUTHORIZATION %2;\n";
@@ -65,7 +68,7 @@ DescriptionWidget::~DescriptionWidget()
  * \param[in] ipSchema - Pointer to the db schema
  */
 void
-DescriptionWidget::describe(const DbObjects::Common::DbSchema *ipSchema)
+DescriptionWidget::describe(const DbSchemaPtr &ipSchema)
 {
 //    if (0 == ipSchema) {
 //        QMessageBox::critical(
@@ -124,16 +127,16 @@ DescriptionWidget::describe(const DbObjects::Common::DbSchema *ipSchema)
  * \param[in] ipTable - Pointer to the db table
  */
 void
-DescriptionWidget::describe(const DbObjects::Common::DbTable *ipTable)
+DescriptionWidget::describe(const DbTablePtr &ipTable)
 {
-    if ( 0 == ipTable ) {
-        QMessageBox::critical(
-                this,
-                tr("Missing object"),
-                tr("No such table! \n\n Note: Try to reload data from DB."),
-                tr("Ok"));
-        return;
-    }
+//    if (!ipTable.get()) {
+//        QMessageBox::critical(
+//                this,
+//                tr("Missing object"),
+//                tr("No such table! \n\n Note: Try to reload data from DB."),
+//                tr("Ok"));
+//        return;
+//    }
 
     // get columns count
     quint16 columnsCount = ipTable->columnsCount();
@@ -261,16 +264,16 @@ DescriptionWidget::describe(const DbObjects::Common::DbTable *ipTable)
  * \param[in] ipRole - Pointer to the db role
  */
 void
-DescriptionWidget::describe(const DbObjects::Common::DbRole *ipRole)
+DescriptionWidget::describe(const DbRolePtr &ipRole)
 {
-    if ( 0 == ipRole ) {
-        QMessageBox::critical(
-                this,
-                tr("Missing object"),
-                tr("No such role! \n\n Note: Try to reload data from DB."),
-                tr("Ok"));
-        return;
-    }
+//    if ( 0 == ipRole ) {
+//        QMessageBox::critical(
+//                this,
+//                tr("Missing object"),
+//                tr("No such role! \n\n Note: Try to reload data from DB."),
+//                tr("Ok"));
+//        return;
+//    }
 
     ui.mTable->setRowCount(1);
     ui.mTable->setColumnCount(DescriptionWidget::DbRoleColumnsCount);
@@ -395,16 +398,16 @@ DescriptionWidget::describe(const DbObjects::Common::DbRole *ipRole)
  * \param[in] ipView - Pointer to the db view
  */
 void
-DescriptionWidget::describe(const DbObjects::Common::DbView *ipView)
+DescriptionWidget::describe(const DbViewPtr &ipView)
 {
-    if ( 0 == ipView ) {
-        QMessageBox::critical(
-                this,
-                tr("Missing object"),
-                tr("No such view! \n\n Note: Try to reload data from DB."),
-                tr("Ok"));
-        return;
-    }
+//    if ( 0 == ipView ) {
+//        QMessageBox::critical(
+//                this,
+//                tr("Missing object"),
+//                tr("No such view! \n\n Note: Try to reload data from DB."),
+//                tr("Ok"));
+//        return;
+//    }
 
     ui.mTable->setRowCount(1);
     ui.mTable->setColumnCount(DescriptionWidget::DbViewColumnsCount);
@@ -459,16 +462,16 @@ DescriptionWidget::describe(const DbObjects::Common::DbView *ipView)
  * \param[in] ipIndex - Pointer to the db index
  */
 void
-DescriptionWidget::describe(const DbObjects::Common::DbIndex *ipIndex)
+DescriptionWidget::describe(const DbIndexPtr &ipIndex)
 {
-    if ( 0 == ipIndex ) {
-        QMessageBox::critical(
-                this,
-                tr("Missing object"),
-                tr("No such index! \n\n Note: Try to reload data from DB."),
-                tr("Ok"));
-        return;
-    }
+//    if ( 0 == ipIndex ) {
+//        QMessageBox::critical(
+//                this,
+//                tr("Missing object"),
+//                tr("No such index! \n\n Note: Try to reload data from DB."),
+//                tr("Ok"));
+//        return;
+//    }
 
     ui.mTable->setRowCount(1);
     ui.mTable->setColumnCount(DescriptionWidget::DbIndexColumnsCount);
@@ -504,10 +507,10 @@ DescriptionWidget::describe(const DbObjects::Common::DbIndex *ipIndex)
 
     // find table object
     using namespace DbObjects::Common;
-    DbSchema *schema = Database::instance()->findSchema(schemaName);
-    DbTable *table = 0;
+    DbSchemaPtr schema = Database::instance()->findSchema(schemaName);
+    DbTablePtr table;
 
-    if (schema) {
+    if (schema.get()) {
         table = schema->findTable(tableName);
     }
 
@@ -618,16 +621,16 @@ DescriptionWidget::describe(const DbObjects::Common::DbIndex *ipIndex)
  * \param[in] ipTrigger - Pointer to the db trigger
  */
 void
-DescriptionWidget::describe(const DbObjects::Common::DbTrigger *ipTrigger)
+DescriptionWidget::describe(const DbTriggerPtr &ipTrigger)
 {
-    if ( 0 == ipTrigger ) {
-        QMessageBox::critical(
-                this,
-                tr("Missing object"),
-                tr("No such trigger! \n\n Note: Try to reload data from DB."),
-                tr("Ok"));
-        return;
-    }
+//    if ( 0 == ipTrigger ) {
+//        QMessageBox::critical(
+//                this,
+//                tr("Missing object"),
+//                tr("No such trigger! \n\n Note: Try to reload data from DB."),
+//                tr("Ok"));
+//        return;
+//    }
 
     ui.mTable->setRowCount(1);
     ui.mTable->setColumnCount(DescriptionWidget::DbTriggerColumnsCount);

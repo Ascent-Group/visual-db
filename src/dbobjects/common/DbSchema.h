@@ -30,21 +30,30 @@
 #ifndef DBOBJECTS_COMMON_DBSCHEMA_H
 #define DBOBJECTS_COMMON_DBSCHEMA_H
 
-#include <QStringList>
-#include <QVector>
 #include <common/Database.h>
 #include <common/DbObject.h>
+#include <common/DbObjectPtr.h>
+
+#include <QStringList>
+#include <QVector>
 
 namespace DbObjects
 {
 
 namespace Common
 {
-
+template<typename T> class DbObjectPtr;
 class DbProcedure;
+class DbRole;
 class DbTable;
 class DbTrigger;
 class DbView;
+
+typedef DbObjectPtr<DbProcedure> DbProcedurePtr;
+typedef DbObjectPtr<DbRole> DbRolePtr;
+typedef DbObjectPtr<DbTable> DbTablePtr;
+typedef DbObjectPtr<DbTrigger> DbTriggerPtr;
+typedef DbObjectPtr<DbView> DbViewPtr;
 
 /*!
  * \class DbSchema
@@ -57,28 +66,28 @@ class DbSchema : public DbObject
         DbSchema(QString ipName);
         virtual ~DbSchema();
 
-        bool addTable(DbTable *ipTable);
-        bool addView(DbView *ipView);
-        bool addProcedure(DbProcedure *ipProc);
-        bool addTrigger(DbTrigger *);
+        bool addTable(const DbTablePtr &ipTable);
+        bool addView(const DbViewPtr &ipView);
+        bool addProcedure(const DbProcedurePtr &ipProc);
+        bool addTrigger(const DbTriggerPtr &ipTrigger);
 
         /*! \todo pass list by reference */
-        void tablesList(QStringList *) const;
+        void tablesList(QStringList &) const;
         quint64 tablesCount() const;
 
-        void viewsList(QStringList *) const;
+        void viewsList(QStringList &) const;
         quint64 viewsCount() const;
 
-        void proceduresList(QStringList *) const;
+        void proceduresList(QStringList &) const;
         quint64 proceduresCount() const;
 
-        void triggersList(QStringList *) const;
+        void triggersList(QStringList &) const;
         quint16 triggersCount() const;
 
-        DbTable* findTable(const QString &ipTableName) const;
-        DbView* findView(const QString &ipViewName) const;
-        DbProcedure* findProcedure(const QString &ipProcName) const;
-        DbTrigger* findTrigger(const QString &ipTrigName) const;
+        DbTablePtr findTable(const QString &ipTableName) const;
+        DbViewPtr findView(const QString &ipViewName) const;
+        DbProcedurePtr findProcedure(const QString &ipProcName) const;
+        DbTriggerPtr findTrigger(const QString &ipTrigName) const;
 
         void readTables();
         void readViews();
@@ -87,25 +96,25 @@ class DbSchema : public DbObject
 
         virtual DbObject::Type type() const;
 
-        DbRole* owner() const;
-        void setOwner(DbRole *);
+        DbRolePtr owner() const;
+        void setOwner(const DbRolePtr &);
 
         QString description() const;
-        void setDescription(const QString & ipDescription);
+        void setDescription(const QString &ipDescription);
 
-        virtual bool loadData();
+        virtual bool loadChildren();
         virtual void resetData();
 
     private:
-        DbRole *mOwner;
+        DbRolePtr mOwner;
         QString mDescription;
-        QVector<DbTable*> mTables;
-        QVector<DbView*> mViews;
-        QVector<DbProcedure*> mProcedures;
-        QVector<DbTrigger*> mTriggers;
+        QVector<DbTablePtr> mTables;
+        QVector<DbViewPtr> mViews;
+        QVector<DbProcedurePtr> mProcedures;
+        QVector<DbTriggerPtr> mTriggers;
 
     private:
-        DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
+//        DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
 };
 
 } // namespace Common

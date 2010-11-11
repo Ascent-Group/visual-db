@@ -33,6 +33,7 @@
 #include <dbobjects/factory/Procedure.h>
 #include <dbobjects/psql/Procedure.h>
 
+
 void
 ProcedureFactoryTest::initTestCase()
 {
@@ -56,22 +57,22 @@ ProcedureFactoryTest::createProcedureTest()
     Common::Database *dbInst = Common::Database::instance();
     QVERIFY(0 != dbInst);
 
-    Common::DbSchema *schema = dbInst->findSchema(schemaName);
-    QVERIFY(0 != schema);
+//    DbSchemaPtr schema = dbInst->findSchema(schemaName);
+//    QVERIFY(0 != schema.get());
 
     dbInst->setSqlDriver("QPSQL");
-    QVERIFY(0 != dynamic_cast<Psql::Procedure*>(Factory::Procedure::createProcedure(procName, schema)));
+    QVERIFY(0 != dynamic_cast<Psql::Procedure*>(Factory::Procedure::createProcedure(procName, schemaName)));
 
     dbInst->setSqlDriver("QMYSQL");
-    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schema));
+    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
 
     dbInst->setSqlDriver("QIODBC");
-    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schema));
+    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
 
     dbInst->setSqlDriver("QSQLITE");
-    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schema));
+    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
 
     dbInst->setSqlDriver("NODRV");
-    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schema));
+    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
 }
 

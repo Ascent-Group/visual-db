@@ -31,6 +31,8 @@
 #include <factory/Trigger.h>
 #include <psql/Trigger.h>
 
+using namespace DbObjects::Common;
+
 namespace DbObjects
 {
 
@@ -44,7 +46,7 @@ namespace Factory
  * \return Database trigger object
  */
 DbObjects::Common::DbTrigger*
-Trigger::createTrigger(const QString &ipName, Common::DbSchema *ipSchema)
+Trigger::createTrigger(const QString &ipName, const QString &ipSchemaName)
 {
     using namespace DbObjects::Common;
 
@@ -52,10 +54,10 @@ Trigger::createTrigger(const QString &ipName, Common::DbSchema *ipSchema)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                trigger = createPsqlTrigger(ipName, ipSchema);
+                trigger = createPsqlTrigger(ipName, ipSchemaName);
                 break;
         case Database::MySQL:
-//                trigger = createMysqlTrigger(ipName, ipSchema);
+//                trigger = createMysqlTrigger(ipName, ipSchemaName);
                 break;
         case Database::Oracle:
         case Database::SQLite:
@@ -64,7 +66,7 @@ Trigger::createTrigger(const QString &ipName, Common::DbSchema *ipSchema)
                 break;
     }
 
-    //if the trigger creation failed or trigger inforamtion could not be read from database.
+    // if the trigger creation failed or trigger inforamtion could not be read from database.
 //    if (!trigger || !trigger->loadData()) {
 //        delete trigger;
 //        trigger = 0;
@@ -80,9 +82,9 @@ Trigger::createTrigger(const QString &ipName, Common::DbSchema *ipSchema)
  * \return Pointer to PostgreSQL trigger object
  */
 Psql::Trigger*
-Trigger::createPsqlTrigger(const QString &ipName, Common::DbSchema *ipSchema)
+Trigger::createPsqlTrigger(const QString &ipName, const QString &ipSchemaName)
 {
-    return new(std::nothrow) Psql::Trigger(ipName, ipSchema);
+    return new(std::nothrow) Psql::Trigger(ipName, Database::instance()->findSchema(ipSchemaName));
 }
 
 /*!
@@ -92,9 +94,9 @@ Trigger::createPsqlTrigger(const QString &ipName, Common::DbSchema *ipSchema)
  * \return Pointer to MySQL trigger object
  */
 //Mysql::Trigger*
-//Trigger::createMysqlTrigger(const QString &ipName, Common::DbSchema *ipSchema)
+//Trigger::createMysqlTrigger(const QString &ipName, const QString &ipSchemaName)
 //{
-//    return new Mysql::Trigger(ipName, ipSchema);
+//    return new Mysql::Trigger(ipName, Database::instance()->findSchema(ipSchemaName));
 //}
 
 } // namespace Factory

@@ -44,20 +44,20 @@ namespace Common
  * \param[in] ipName - Name of a trigger
  * \param[in] ipSchema - Handle to schema that contains the given trigger
  */
-DbTrigger::DbTrigger(QString ipName, DbSchema *ipSchema)
+DbTrigger::DbTrigger(QString ipName, const DbSchemaPtr &ipSchema)
     : DbObject(ipName),
-      mTable(0),
+      mTable(),
       mSchema(ipSchema),
-      mProcedure(0),
+      mProcedure(),
       mEnabled(),
       mIsConstraint(false),
       mConstraintName(""),
-      mReferencedTable(0),
+      mReferencedTable(),
       mIsDeferrable(false),
       mIsInitiallyDeferred(false),
       mNumArgs(0)
 {
-    if (!mSchema) qDebug() << "DbTrigger::DbTrigger> mSchema is NULL!";
+    if (!mSchema.get()) qDebug() << "DbTrigger::DbTrigger> mSchema is NULL!";
 }
 
 /*!
@@ -71,7 +71,7 @@ DbTrigger::~DbTrigger()
 /*!
  * \return Handle to parent schema
  */
-DbSchema*
+DbSchemaPtr
 DbTrigger::schema() const
 {
     return mSchema;
@@ -81,7 +81,7 @@ DbTrigger::schema() const
  * \param[in] ipSchema - Parent schema handle
  */
 void
-DbTrigger::setSchema(DbSchema *ipSchema)
+DbTrigger::setSchema(const DbSchemaPtr &ipSchema)
 {
     mSchema = ipSchema;
 }
@@ -89,7 +89,7 @@ DbTrigger::setSchema(DbSchema *ipSchema)
 /*!
  * \return Handle for the table this trigger is on
  */
-DbTable*
+DbTablePtr
 DbTrigger::table() const
 {
     return mTable;
@@ -100,7 +100,7 @@ DbTrigger::table() const
  * \param[in] ipTable - Table handle
  */
 void
-DbTrigger::setTable(DbTable *ipTable)
+DbTrigger::setTable(const DbTablePtr &ipTable)
 {
     mTable = ipTable;
 }
@@ -108,7 +108,7 @@ DbTrigger::setTable(DbTable *ipTable)
 /*!
  * \return The procedure that runs when trigger fires
  */
-DbProcedure*
+DbProcedurePtr
 DbTrigger::procedure() const
 {
     return mProcedure;
@@ -120,7 +120,7 @@ DbTrigger::procedure() const
  * \param[in] ipProcedure - Procedure handle
  */
 void
-DbTrigger::setProcedure(DbProcedure *ipProcedure)
+DbTrigger::setProcedure(const DbProcedurePtr &ipProcedure)
 {
     mProcedure = ipProcedure;
 }
@@ -200,7 +200,7 @@ DbTrigger::setConstraintName(const QString &ipName)
 /*!
  * \return The referenced table handle
  */
-DbTable*
+DbTablePtr
 DbTrigger::referencedTable() const
 {
     return mReferencedTable;
@@ -212,7 +212,7 @@ DbTrigger::referencedTable() const
  * \param[in] ipTable
  */
 void
-DbTrigger::setReferencedTable(DbTable *ipTable)
+DbTrigger::setReferencedTable(const DbTablePtr &ipTable)
 {
     mReferencedTable = ipTable;
 }
@@ -295,13 +295,13 @@ void
 DbTrigger::resetData()
 {
     /*! \todo Implement */
-    mTable = 0;
-    mSchema = 0;
-    mProcedure = 0;
+//    mTable = 0; // \todo How to reset proxy
+//    mSchema = 0;
+//    mProcedure = 0;
     mEnabled = 0;
     mIsConstraint = false;
     mConstraintName = "";
-    mReferencedTable = 0;
+//    mReferencedTable = 0;
     mIsDeferrable = false;
     mIsInitiallyDeferred = false;
     mNumArgs = 0;

@@ -1,6 +1,3 @@
-//#include <QSqlDatabase>
-//#include <QSqlError>
-
 /* connect */
 #include <connect/DbParametersTest.h>
 #include <connect/ProxyParametersTest.h>
@@ -47,19 +44,12 @@
 #include <dbobjects/factory/LanguageFactoryTest.h>
 #include <dbobjects/factory/ProcedureFactoryTest.h>
 #include <dbobjects/factory/RoleFactoryTest.h>
+#include <dbobjects/factory/SchemaFactoryTest.h>
 #include <dbobjects/factory/TableFactoryTest.h>
 #include <dbobjects/factory/TriggerFactoryTest.h>
 #include <dbobjects/factory/ViewFactoryTest.h>
-#include <dbobjects/mysql/MysqlTableTest.h>
 #include <dbobjects/mysql/MysqlToolsTest.h>
-#include <dbobjects/psql/PsqlIndexTest.h>
-#include <dbobjects/psql/PsqlLanguageTest.h>
-#include <dbobjects/psql/PsqlProcedureTest.h>
-#include <dbobjects/psql/PsqlRoleTest.h>
-#include <dbobjects/psql/PsqlTableTest.h>
 #include <dbobjects/psql/PsqlToolsTest.h>
-#include <dbobjects/psql/PsqlTriggerTest.h>
-#include <dbobjects/psql/PsqlViewTest.h>
 
 #include <connect/DbParameters.h>
 #include <common/DatabaseCreator.h>
@@ -251,6 +241,9 @@ int main(int argc, char *argv[])
     RoleFactoryTest roleFactoryTest;
     QTest::qExec(&roleFactoryTest, argc, argv);
 
+    SchemaFactoryTest schemaFactoryTest;
+    QTest::qExec(&schemaFactoryTest, argc, argv);
+
     TableFactoryTest tableFactoryTest;
     QTest::qExec(&tableFactoryTest, argc, argv);
 
@@ -261,29 +254,11 @@ int main(int argc, char *argv[])
     QTest::qExec(&viewFactoryTest, argc, argv);
 
     if (drv.contains("MYSQL")) {
-        MysqlTableTest mysqlTableTest;
-        QTest::qExec(&mysqlTableTest, argc, argv);
+        MysqlToolsTest mysqlToolsTest;
+        QTest::qExec(&mysqlToolsTest, argc, argv);
     } else if (drv.contains("PSQL")) {
-        PsqlIndexTest psqlIndexTest;
-        QTest::qExec(&psqlIndexTest, argc, argv);
-
-        PsqlLanguageTest psqlLanguageTest;
-        QTest::qExec(&psqlLanguageTest, argc, argv);
-
-        PsqlProcedureTest psqlProcedureTest;
-        QTest::qExec(&psqlProcedureTest, argc, argv);
-
-        PsqlRoleTest psqlRoleTest;
-        QTest::qExec(&psqlRoleTest, argc, argv);
-
-        PsqlTableTest psqlTableTest;
-        QTest::qExec(&psqlTableTest, argc, argv);
-
-        PsqlTriggerTest psqlTriggerTest;
-        QTest::qExec(&psqlTriggerTest, argc, argv);
-
-        PsqlViewTest psqlViewTest;
-        QTest::qExec(&psqlViewTest, argc, argv);
+        PsqlToolsTest psqlToolsTest;
+        QTest::qExec(&psqlToolsTest, argc, argv);
     }
 #endif // TEST_DBOBJECTS
 

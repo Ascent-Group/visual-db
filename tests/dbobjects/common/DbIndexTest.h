@@ -48,6 +48,9 @@ class DbIndexTest : public QObject
         void initTestCase();
         void cleanupTestCase();
 
+        void init();
+        void cleanup();
+
         void addColumnNumberTest();
         void checksXMinTest();
         void columnsCountTest();

@@ -50,31 +50,63 @@ DbIndexTest::cleanupTestCase()
 
 }
 
+/*!
+ * Called before each test function
+ */
+void
+DbIndexTest::init()
+{
+    mDbInst = DatabaseCreator::createDatabase();
+}
+
+/*!
+ * Called after each test function
+ */
+void
+DbIndexTest::cleanup()
+{
+    mDbInst->resetData();
+
+    Common::DatabaseManager dbMgr;
+    dbMgr.flush();
+}
+
 void
 DbIndexTest::addColumnNumberTest()
 {
     mDbInst->readIndices();
 
-    DbIndexPtr index = mDbInst->findIndex("ind_artists");
+    DbIndexPtr indexPtr = mDbInst->findIndex("ind_artists");
 
-    QVERIFY(0 != index.get());
+    // here we can operate on index directly
+    Common::DbIndex *index = const_cast<Common::DbIndex*>(indexPtr.get());
+
+    QVERIFY(0 != index);
+
+    // we need empty index
+    index->resetData();
 
     short min = std::numeric_limits<short>::min();
     short max = std::numeric_limits<short>::max();
 
-    for (short i = min; i <= max; ++i) {
+    const int limitsCount = 3;
+    int upperLimit[limitsCount] = { min, 0, max };
 
-        for (short j = min; j <= i; ++j) {
+    for (short i = 0; i < limitsCount; ++i) {
+
+//        qDebug() << "DbIndexTest::addColumnNumberTest> using upper limit of " << i;
+
+        for (short j = min; j <= upperLimit[i]; ++j) {
+            index->addColumnNumber(j);
             // check vector
-            index->columnsNumbers().contains(j);
+            QVERIFY(index->columnsNumbers().contains(j));
         }
 
         // expected size should be centered
-        QCOMPARE(index->columnsNumbers().size(), (qint32)(i - min + 1));
+        QCOMPARE(index->columnsNumbers().size(), (qint32)(upperLimit[i] - min + 1));
 
         index->resetData();
     }
-    QVERIFY(0);
 }
 
 void
@@ -218,7 +250,15 @@ DbIndexTest::setValidTest()
 void
 DbIndexTest::tableNameTest()
 {
-    QVERIFY(0);
+    mDbInst->readIndices();
+
+    DbIndexPtr indexPtr = mDbInst->findIndex("ind_artists");
+
+    QVERIFY(indexPtr.name() == indexPtr->name());
+
+    QString newName("dummy");
+    indexPtr->setName(newName);
+    QVERIFY(newName == indexPtr->name());
 }
 
 void

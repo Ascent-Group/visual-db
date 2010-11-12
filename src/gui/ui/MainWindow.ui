@@ -51,6 +51,9 @@
        <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
          <widget class="SceneWidget" name="mSceneWidget" native="true">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -176,10 +179,22 @@
   </widget>
   <widget class="DockWidget" name="mLogPanelWidget">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>524287</width>
+     <height>150</height>
+    </size>
+   </property>
+   <property name="baseSize">
+    <size>
+     <width>0</width>
+     <height>0</height>
+    </size>
    </property>
    <property name="floating">
     <bool>false</bool>
@@ -205,7 +220,7 @@
       <number>3</number>
      </property>
      <item row="0" column="0">
-      <widget class="LogPanel" name="mLogPanel" native="true">
+      <widget class="LogPanel" name="mLogPanel">
        <property name="toolTip">
         <string>Log panel</string>
        </property>

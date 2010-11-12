@@ -728,9 +728,8 @@ MainWindow::queryData()
  *
  * @param[in] ipFileName - Xml file name were we will store parameters to
  */
-// FIXME: ipFileName should be const reference
 void
-MainWindow::saveToXml(QString ipFileName)
+MainWindow::saveToXml(const QString &ipFileName)
 {
     QDomDocument doc("VisualDB");
     QDomElement root = doc.createElement("visual-db");
@@ -931,9 +930,8 @@ MainWindow::addCommand(QUndoCommand *ipCommand)
  *
  * @param[in] ipText - Message text
  */
-// FIXME: ipText should be const reference
 void
-MainWindow::printMsg(QString ipText) const
+MainWindow::printMsg(const QString &ipText) const
 {
     qDebug() << ui.mLogPanel;
     ui.mLogPanel->print(ipText);

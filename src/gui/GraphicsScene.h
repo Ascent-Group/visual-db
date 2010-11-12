@@ -79,9 +79,9 @@ class GraphicsScene : public QGraphicsScene {
         void refreshLegend();
         void updateLegend();
         void drawRelations();
-        void createRelations(DbObjectItem *);
-        TableItem *newTableItem(QString, QString, QMenu *, const QPoint &);
-        ViewItem *newViewItem(QString, QString, QMenu *, const QPoint &);
+        void createRelations(TableItem *);
+        TableItem *newTableItem(const QString &, const QString &, QMenu *, const QPoint &);
+        ViewItem *newViewItem(const QString &, const QString &, QMenu *, const QPoint &);
         void setItemColor(DbObjectItem*, QColor);
         bool moveMode() const;
 

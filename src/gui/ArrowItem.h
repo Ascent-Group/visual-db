@@ -50,10 +50,10 @@ class ArrowItem : public QGraphicsLineItem
     public:
         enum { Type = UserType + 4 };
 
-        static const int ARROW_SIZE = 10;
+        static const int ARROW_SIZE = 12;
 
     public:
-        ArrowItem(TableItem *, TableItem *, QGraphicsItem *ipParent = 0, QGraphicsScene *ipScene = 0);
+        ArrowItem(TableItem *, TableItem *, QString, QGraphicsItem *ipParent = 0, QGraphicsScene *ipScene = 0);
         ~ArrowItem();
 
         virtual int type() const;
@@ -74,6 +74,8 @@ class ArrowItem : public QGraphicsLineItem
 
         QColor mColor;
         QPolygonF mArrowItemHead;
+
+        QString mTitle;
 
     private:
         QLineF makeLine() const;

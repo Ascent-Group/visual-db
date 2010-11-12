@@ -59,7 +59,7 @@ class MainWindow : public QMainWindow
     public:
         MainWindow();
 
-        void printMsg(QString ipText) const;
+        void printMsg(const QString &) const;
 
     private:
         Ui::MainWindow ui;
@@ -96,7 +96,7 @@ class MainWindow : public QMainWindow
 
         void closeEvent(QCloseEvent *ipEvent);
 
-        void saveToXml(QString);
+        void saveToXml(const QString &);
         void loadFromXml(QString);
 
         void initSession();

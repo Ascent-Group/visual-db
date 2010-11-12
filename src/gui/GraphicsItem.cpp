@@ -51,7 +51,7 @@ GraphicsItem::GraphicsItem(QMenu *ipMenu)
     : QGraphicsPolygonItem(),
       mLeftTopPoint(0, 0),
       mRightBottomPoint(0, 0),
-      mFont("Arial", 10), 
+      mFont("Arial", 8), 
       mMode(GraphicsItem::MOVE),
       mFieldsTypesVisible(true),
       mContextMenu(ipMenu)
@@ -585,8 +585,8 @@ void
 GraphicsItem::paintTitleText(QPainter *ipPainter)
 {
     // draw the title aligned on the center in upper case
-    ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + INTERVAL,
-            (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL,
+    ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + INTERVAL,
+            (int)width() - IMG_WIDTH - INTERVAL * 4, FIELD_HEIGHT + INTERVAL,
             Qt::AlignCenter,
             titleText());
 }
@@ -622,8 +622,8 @@ void
 GraphicsItem::paintFieldText(QPainter *ipPainter, int ipIdx)
 {
     // draw field name with margins = INTERVAL for top, bottom, left and right sizes
-    ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (ipIdx + 1) + INTERVAL,
-            (int)width() - IMG_WIDTH - INTERVAL * 3, FIELD_HEIGHT + INTERVAL * 2,
+    ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (ipIdx + 1) + INTERVAL * 2,
+            (int)width() - IMG_WIDTH - INTERVAL * 4, FIELD_HEIGHT + INTERVAL * 2,
             Qt::AlignLeft,
             fieldText(ipIdx));
 }

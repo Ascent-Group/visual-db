@@ -97,7 +97,6 @@ GraphicsScene::setTableMenu(QMenu *ipTableMenu)
 
 //#include <QGraphicsItemAnimation>
 //#include <QTimeLine>
-
 /*!
  * @brief Add table from tree event to the scene
  *
@@ -186,9 +185,8 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
  *
  * @return Existent or new table item
  */
-// FIXME: ipSchemaName and ipTableName should be const reference
 TableItem *
-GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ipMenu, const QPoint &ipPos)
+GraphicsScene::newTableItem(const QString &ipSchemaName, const QString &ipTableName, QMenu *ipMenu, const QPoint &ipPos)
 {
     DbObjectItem *newItem = findItem(ipSchemaName, ipTableName);
     // check if such item is already on the scene
@@ -210,9 +208,8 @@ GraphicsScene::newTableItem(QString ipSchemaName, QString ipTableName, QMenu *ip
  *
  * @return Existent or new view item
  */
-// FIXME: ipSchemaName and ipViewName should be const reference
 ViewItem *
-GraphicsScene::newViewItem(QString ipSchemaName, QString ipViewName, QMenu *ipMenu, const QPoint &ipPos)
+GraphicsScene::newViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu *ipMenu, const QPoint &ipPos)
 {
     DbObjectItem *newItem = findItem(ipSchemaName, ipViewName);
     // check if such item is already on the scene
@@ -265,25 +262,25 @@ GraphicsScene::drawRelations()
  * @param[in] ipSourceItem - Source item
  */
 void
-GraphicsScene::createRelations(DbObjectItem *ipSourceItem)
+GraphicsScene::createRelations(TableItem *ipSourceItem)
 {
-    // TODO: implement this according to new class structure
+    // FIXME: this code is applicable only for tables
     // find foreign keys and tables related to this keys
-//    for (int i = 0; i < ipSourceItem->columnsCount(); ++i) {
-//        if (ipSourceItem->isColumnForeignKey(i)) {
-//            DbObjectItem *destItem = 0;
-//
-//            // if founded, create arrow
-//            if ((destItem = findItem(ipSourceItem->foreignSchemaName(i), ipSourceItem->foreignTableName(i))) != 0) {
-//                ArrowItem *arrow = new ArrowItem(ipSourceItem, destItem);
-//                ipSourceItem->addArrowItem(arrow);
-//                destItem->addArrowItem(arrow);
-//                arrow->setZValue(-1000.0);
-//                addItem(arrow);
-//                arrow->updatePosition();
-//            }
-//        }
-//    }
+    for (int i = 0; i < ipSourceItem->columnsCount(); ++i) {
+        if (ipSourceItem->isColumnForeignKey(i)) {
+            TableItem *destItem = 0;
+
+            // if founded, create arrow
+            if ((destItem = toTable(findItem(ipSourceItem->foreignSchemaName(i), ipSourceItem->foreignTableName(i)))) != 0) {
+                ArrowItem *arrow = new ArrowItem(ipSourceItem, destItem, QString(""));
+                ipSourceItem->addArrowItem(arrow);
+                destItem->addArrowItem(arrow);
+                arrow->setZValue(-1000.0);
+                addItem(arrow);
+                arrow->updatePosition();
+            }
+        }
+    }
 }
 
 /*!

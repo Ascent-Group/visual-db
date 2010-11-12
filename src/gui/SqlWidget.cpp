@@ -64,9 +64,8 @@ SqlWidget::~SqlWidget()
  *
  * @param[in] ipQueryText - Default query text
  */
-// FIXME: parameter should be const reference
 void
-SqlWidget::setDefaultQuery(QString ipQueryText)
+SqlWidget::setDefaultQuery(const QString &ipQueryText)
 {
     ui.mQueryEdit->setText(ipQueryText);
 }

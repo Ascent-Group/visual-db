@@ -50,10 +50,12 @@ const qreal Pi = 3.14;
  */
 ArrowItem::ArrowItem(TableItem *ipStartItem,
              TableItem *ipEndItem,
+             QString ipTitle,
              QGraphicsItem *ipParent,
              QGraphicsScene *ipScene)
-    : QGraphicsLineItem(ipParent, ipScene),
-      mStartItem(ipStartItem), mEndItem(ipEndItem)
+    : QGraphicsLineItem(ipParent, ipScene)
+    , mStartItem(ipStartItem), mEndItem(ipEndItem)
+    , mTitle(ipTitle)
 {
 
     // make arrow selectable
@@ -120,8 +122,8 @@ ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget 
     }
 
     // set arrow's preoperties
-    ipPainter->setPen(mColor);
-    ipPainter->setBrush(mColor);
+    ipPainter->setPen(pen());
+    ipPainter->setBrush(QColor("white"));
 
     setLine(makeLine());
     mArrowItemHead = makeHead(line());
@@ -129,6 +131,10 @@ ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget 
     // draw the arrow with the head
     ipPainter->drawLine(line());
     ipPainter->drawPolygon(mArrowItemHead);
+
+    // FIXME: just for table items
+    // draw the foreign key name
+    ipPainter->drawText(line().p1(), mTitle);
 
     // handle the selection of the arrow
     if (isSelected()) {

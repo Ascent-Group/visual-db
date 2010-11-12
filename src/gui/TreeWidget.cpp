@@ -47,6 +47,7 @@ TreeWidget::TreeWidget(/*QMenu *ipMenu, */QWidget *ipParent)
 {
     setHeaderLabel(QString(""));
     setAnimated(true);
+    setFont(QFont("Arial", 8));
 }
 
 /*!

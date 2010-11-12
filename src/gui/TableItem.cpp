@@ -171,7 +171,7 @@ TableItem::paintFieldImage(QPainter *ipPainter, int ipIdx)
         image = mForeignKeyImage;
     }
     if (image) {
-        QRectF target((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (ipIdx + 1) + INTERVAL,
+        QRectF target((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (ipIdx + 1) + INTERVAL * 2,
                 IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL);
         QRectF source(0.0, 0.0, image->width(), image->height());
         ipPainter->drawImage(target, *image, source);
@@ -272,7 +272,7 @@ TableItem::columnsCount() const
 QString
 TableItem::name() const
 {
-    return mModel->name();
+    return mModel.name();
 }
 
 /*
@@ -281,7 +281,7 @@ TableItem::name() const
 QString
 TableItem::schemaName() const
 {
-    return mModel->schema()->name();
+    return mModel.schemaName();
 }
 
 /*!

@@ -74,6 +74,11 @@ ViewItem::ViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu
     // create title item
     setTitleItem(new QGraphicsTextItem(ipSchemaName.toUpper() + "." + ipViewName.toUpper()));
 
+    // create field items
+//    for (int i = 0; i < mModel->columnsCount(); ++i) {
+//        addFieldItem(new QGraphicsTextItem(mModel->columnName(i) + ": " + mModel->columnType(i)));
+//    }
+
     // set left top point coordinates
     if (ipPos.x() == 0 && ipPos.y() == 0) {
         setX(ipPos.x() + seek());
@@ -129,7 +134,7 @@ ViewItem::type() const
 QString
 ViewItem::name() const
 {
-    return mModel->name();
+    return mModel.name();
 }
 
 /*!
@@ -140,7 +145,7 @@ ViewItem::name() const
 QString
 ViewItem::schemaName() const
 {
-    return "";
+    return mModel.schemaName();
 }
 
 /*!

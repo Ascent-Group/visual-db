@@ -44,7 +44,7 @@ class SqlWidget : public QWidget
         SqlWidget(QWidget *ipParent = 0);
         ~SqlWidget();
 
-        void setDefaultQuery(QString ipQueryText);
+        void setDefaultQuery(const QString &ipQueryText);
 
     private:
         Ui::SqlWidget ui;

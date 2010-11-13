@@ -312,7 +312,7 @@ DbSchema::findView(const QString &ipViewName) const
 /*!
  * Find procedure by its name
  *
- * \param[in] ipProcName - Name of the procedure we are looking for
+ * \param[in] ipProcedureName - Name of the procedure we are looking for
  *
  * \return Handle to the found procedure or NULL is not found.
  */
@@ -330,7 +330,7 @@ DbSchema::findProcedure(const QString &ipProcedureName) const
 /*!
  * Find trigger by its name
  *
- * \param[in] ipTrigName - Name of the trigger we are looking for
+ * \param[in] ipTriggerName - Name of the trigger we are looking for
  *
  * \return Handle to the found trigger or NULL is not found.
  */
@@ -562,89 +562,6 @@ DbSchema::type() const
 {
     return DbObject::SchemaObject;
 }
-
-/*!
- * Searches for an object by its name
- *
- * \param[in] ipObjectName - Object's name
- * \param[in] ipObjectType - Object's type \see DbObject::Type
- *
- * \return Handle to the found object or NULL if not found.
- */
-//DbObject*
-//DbSchema::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
-//{
-//    quint64 count;
-//    QStringList list;
-//
-//    //
-//    switch (ipObjectType) {
-//        case DbObject::TableObject:
-//                count = mTables.count();
-//                tablesList(&list);
-//                break;
-//
-//        case DbObject::ViewObject:
-//                count = mViews.count();
-//                viewsList(&list);
-//                break;
-//
-//        case DbObject::ProcedureObject:
-//                count = mProcedures.count();
-//                proceduresList(&list);
-//                break;
-//
-//        case DbObject::TriggerObject:
-//                count = mTriggers.count();
-//                triggersList(&list);
-//                break;
-//
-//        case DbObject::UnkObject:
-//        default:
-//                qDebug() << "DbSchema::findObject> Unknown object type";
-//                return 0;
-//    }
-//
-//    // declare empty ptrs
-//    DbObject *object = 0;
-//
-//    // if we don't have any objects of the given type
-//    if (0 == count) {
-//        // return nothing
-//        return 0;
-//    }
-//
-//    quint64 i = 0;
-//    // look through objects' names
-//    while ( i < count && ipObjectName != list.at(i) ) {
-//        i++;
-//    }
-//
-//    // if lang was found
-//    if ( !(i == count - 1 && ipObjectName != list.at(i)) ) {
-//        switch (ipObjectType) {
-//            case DbObject::TableObject:
-//                    object = mTables.at(i);
-//                    break;
-//            case DbObject::ViewObject:
-//                    object = mViews.at(i);
-//                    break;
-//            case DbObject::ProcedureObject:
-//                    object = mProcedures.at(i);
-//                    break;
-//            case DbObject::TriggerObject:
-//                    object = mTriggers.at(i);
-//                    break;
-//
-//            // useless - done just to remove warning
-//            case DbObject::UnkObject:
-//            default:
-//                    break;
-//        }
-//    }
-//
-//    return object;
-//}
 
 /*!
  * \return Handle to owner object

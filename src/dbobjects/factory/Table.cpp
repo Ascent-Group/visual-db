@@ -42,7 +42,7 @@ namespace Factory
 
 /*!
  * \param[in] ipName - Name of the table to construct
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Database table object
  */
@@ -78,7 +78,7 @@ Table::createTable(const QString &ipName, const QString &ipSchemaName)
 
 /*!
  * \param[in] ipName - Name of table to construct
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to PostgreSQL table object
  */
@@ -90,7 +90,7 @@ Table::createPsqlTable(const QString &ipName, const QString &ipSchemaName)
 
 /*!
  * \param[in] ipName - Name of table to construct
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to MySQL table object
  */

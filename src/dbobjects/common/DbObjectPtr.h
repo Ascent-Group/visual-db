@@ -89,6 +89,7 @@ class DbObjectPtr
 
         /*!
          * Copying constructor
+         * \param[in] ipInst - Another instance of proxy
          */
         DbObjectPtr(const DbObjectPtr<T> &ipInst)
             : mName(ipInst.mName),
@@ -123,7 +124,9 @@ class DbObjectPtr
         }
 
         /*!
+         * Get the real pointer to the real object.
          *
+         * \return Pointer to the object
          */
         const T* get() const
         {
@@ -131,7 +134,9 @@ class DbObjectPtr
         }
 
         /*!
+         * \brief Overloaded -> operator.
          *
+         * \return Pointer to the object
          */
         T* operator->()
         {
@@ -144,7 +149,9 @@ class DbObjectPtr
         }
 
         /*!
+         * \brief Const overloaded -> operator
          *
+         * \return Pointer to the object
          */
         T* operator->() const
         {
@@ -165,7 +172,10 @@ class DbObjectPtr
 //        }
 
         /*!
+         * \param[in] ipRhs Instance of proxy we are comparing our proxy to.
          *
+         * \return true If proxies are identical
+         * \return false Otherwise
          */
         bool operator==(const DbObjectPtr<T> &ipRhs) const
         {
@@ -175,8 +185,10 @@ class DbObjectPtr
         }
 
         /*!
-         *
          * \note Used in operator=
+         *
+         * \param[in] ipRhs - Another instance of proxy we are comparing to.
+         *
          */
         bool operator!=(const DbObjectPtr<T> &ipRhs) const
         {
@@ -184,7 +196,11 @@ class DbObjectPtr
         }
 
         /*!
+         * \brief Assignment operator
          *
+         * \param[in] ipRhs - Instance of a proxy we are assigning to the given proxy
+         *
+         * \return Reference to the given proxy
          */
         DbObjectPtr<T>& operator=(const DbObjectPtr<T> &ipRhs)
         {
@@ -223,12 +239,14 @@ class DbObjectPtr
         QString mSchemaName;
         /*! Handle to a real object */
         /*mutable*/ T *mPointee;
-
+        /*! Pointee-to-refcount registry */
         static QMap<T*, quint32> mRefs;
+
     private:
 
         /*!
-         *
+         * Real object initialization function
+         * \note By default does nothing, because it doesn't know which factory to call.
          */
         inline T* initialize()
         {
@@ -236,6 +254,7 @@ class DbObjectPtr
         }
 
         /*!
+         * \brief Decrements the reference count for a real object
          * \return The reference count after decrementing
          */
         int decrementRefCount()
@@ -270,6 +289,7 @@ class DbObjectPtr
         }
 
         /*!
+         * \brief Increments the reference count for a real object
          * \return The reference count after incrementing
          */
         int incrementRefCount()

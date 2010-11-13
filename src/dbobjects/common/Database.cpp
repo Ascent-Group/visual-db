@@ -160,7 +160,7 @@ Database::instance()
 /*!
  * \brief Add schema to DB schema list
  *
- * \param[in] ipSchema Schema object to add to schemas vector
+ * \param[in] ipSchema - Schema object to add to schemas vector
  *
  * \return true - If the schema object has been added
  * \return false - If the schema object has already existed in the vector
@@ -692,94 +692,6 @@ Database::resetData()
 //    mModifiedObjects.clear();
 //    mDeletedObjects.clear();
 }
-
-/*!
- * \brief Searches for an object by its name
- *
- * An auxilliary function used by findSchema, findRole, findIndex and
- * findLanguage functions
- *
- * \param[in] ipObjectName - Object name to look for
- * \param[in] ipObjectType - Type of object we are looking for
- *
- * \return A pointer to a found object or NULL if search failed
- *
- * \todo Try to make the search algorithm more "cute", that will not
- *       have a look of huge switches and ifs
- */
-//DbObject*
-//Database::findObject(const QString &ipObjectName, DbObject::Type ipObjectType) const
-//{
-//    quint64 count;
-//    QStringList list;
-//
-//    // detect object type and read all objects of that type
-//    switch (ipObjectType) {
-//        case DbObject::SchemaObject:
-//                count = mSchemas.count();
-//                schemasList(&list);
-//                break;
-//
-//        case DbObject::RoleObject:
-//                count = mRoles.count();
-//                rolesList(&list);
-//                break;
-//
-//        case DbObject::IndexObject:
-//                count = mIndices.count();
-//                indicesList(&list);
-//                break;
-//
-//        case DbObject::LanguageObject:
-//                count = mLanguages.count();
-//                languagesList(&list);
-//                break;
-//
-//        case DbObject::UnkObject:
-//        default:
-//                qDebug() << __PRETTY_FUNCTION__ << "> Unknown object type";
-//                return 0;
-//    }
-//
-//    // declare empty ptrs
-//    DbObject *object = 0;
-//
-//    // if we don't have any objects of the given type
-//    if (0 == count) {
-//        // return nothing
-//        return 0;
-//    }
-//
-//    quint64 i = 0;
-//    // look through objects' names
-//    while (i < count && ipObjectName != list.at(i)) {
-//        i++;
-//    }
-//
-//    // if object was found
-//    if (!(i == count - 1 && ipObjectName != list.at(i))) {
-//        switch (ipObjectType) {
-//            case DbObject::SchemaObject:
-//                    object = mSchemas.at(i);
-//                    break;
-//            case DbObject::RoleObject:
-//                    object = mRoles.at(i);
-//                    break;
-//            case DbObject::IndexObject:
-//                    object = mIndices.at(i);
-//                    break;
-//            case DbObject::LanguageObject:
-//                    object = mLanguages.at(i);
-//                    break;
-//            // actually useless - done just to remove warning
-//            case DbObject::UnkObject:
-//            default:
-//                    break;
-//        }
-//    }
-//
-//    return object;
-//}
 
 /*!
  * \brief Deletes an instance of the Database class

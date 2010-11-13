@@ -39,7 +39,25 @@ class PsqlToolsTest : public QObject
     private slots:
         void initTestCase();
         void cleanupTestCase();
-        /*! \todo Implement */
+
+        void schemasListTest();
+        void indicesListTest();
+        void languagesListTest();
+        void proceduresListTest();
+        void rolesListTest();
+        void tablesListTest();
+        void triggersListTest();
+        void viewsListTest();
+
+    private:
+        QStringList mIndicesNamesList;
+        QStringList mLanguagesNamesList;
+        QStringList mProceduresNamesList;
+        QStringList mRolesNamesList;
+        QStringList mSchemasNamesList;
+        QStringList mTablesNamesList;
+        QStringList mTriggersNamesList;
+        QStringList mViewsNamesList;
 };
 
 #endif // DBOBJECTS_PSQL_TOOLS_TEST_H

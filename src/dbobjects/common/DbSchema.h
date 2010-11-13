@@ -71,7 +71,6 @@ class DbSchema : public DbObject
         bool addProcedure(const DbProcedurePtr &ipProc);
         bool addTrigger(const DbTriggerPtr &ipTrigger);
 
-        /*! \todo pass list by reference */
         void tablesList(QStringList &) const;
         quint64 tablesCount() const;
 
@@ -112,9 +111,6 @@ class DbSchema : public DbObject
         QVector<DbViewPtr> mViews;
         QVector<DbProcedurePtr> mProcedures;
         QVector<DbTriggerPtr> mTriggers;
-
-    private:
-//        DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
 };
 
 } // namespace Common

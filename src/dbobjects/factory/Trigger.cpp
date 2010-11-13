@@ -41,7 +41,7 @@ namespace Factory
 
 /*!
  * \param[in] ipName - Name of the trigger to construct
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Database trigger object
  */
@@ -77,7 +77,7 @@ Trigger::createTrigger(const QString &ipName, const QString &ipSchemaName)
 
 /*!
  * \param[in] ipName - Name of trigger to construct
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to PostgreSQL trigger object
  */
@@ -89,7 +89,7 @@ Trigger::createPsqlTrigger(const QString &ipName, const QString &ipSchemaName)
 
 /*!
  * \param[in] ipName - Name of trigger to construct
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to MySQL trigger object
  */

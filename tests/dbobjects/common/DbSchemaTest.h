@@ -63,9 +63,16 @@ class DbSchemaTest : public QObject
         void tablesListTest();
         void viewsCountTest();
         void viewsListTest();
+        void triggersCountTest();
+        void triggersListTest();
 
     private:
         DbObjects::Common::Database *mDbInst;
+
+        QStringList mTablesNamesList;
+        QStringList mTriggersNamesList;
+        QStringList mProceduresNamesList;
+        QStringList mViewsNamesList;
 
 };
 

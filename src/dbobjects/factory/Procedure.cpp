@@ -41,7 +41,7 @@ namespace Factory
 
 /*!
  * \param[in] ipName - Name of the procedure to construct
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Database procedure object
  */
@@ -77,7 +77,7 @@ Procedure::createProcedure(const QString &ipName, const QString &ipSchemaName)
 
 /*!
  * \param[in] ipName - Name of procedure to construct
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to PostgreSQL procedure object
  */
@@ -91,8 +91,8 @@ Procedure::createPsqlProcedure(const QString &ipName, const QString &ipSchemaNam
 }
 
 /*!
- * \param[in] ipSchemaName - Name of schema containing the procedure
  * \param[in] ipName - Name of procedure to construct
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to MySQL procedure object
  */

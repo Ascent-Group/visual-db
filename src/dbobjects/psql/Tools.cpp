@@ -112,7 +112,11 @@ indicesList(QStringList &opList)
 }
 
 /*!
- * \todo Comments
+ * Read names of all languages in the given schema
+ *
+ * \param[out] opList - List that will contain names of languages
+ *
+ * \return The number of languages' names read from db
  */
 quint32
 languagesList(QStringList &opList)
@@ -126,7 +130,12 @@ languagesList(QStringList &opList)
 }
 
 /*!
- * \todo Comments
+ * Read names of all procedures in the given schema
+ *
+ * \param[in] ipSchemaName - The name of schema
+ * \param[out] opList - List that will contain names of procedures
+ *
+ * \return The number of procedures' names read from db
  */
 quint32
 proceduresList(const QString &ipSchemaName, QStringList &opList)

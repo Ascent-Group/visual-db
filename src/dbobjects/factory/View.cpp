@@ -41,7 +41,7 @@ namespace Factory
 
 /*!
  * \param[in] ipName - Name of the view to construct
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Database view object
  */
@@ -77,7 +77,7 @@ View::createView(const QString &ipName, const QString &ipSchemaName)
 
 /*!
  * \param[in] ipName - Name of view to construct
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to PostgreSQL view object
  */
@@ -89,7 +89,7 @@ View::createPsqlView(const QString &ipName, const QString &ipSchemaName)
 
 /*!
  * \param[in] ipName - Name of view to construct
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] ipSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to MySQL view object
  */

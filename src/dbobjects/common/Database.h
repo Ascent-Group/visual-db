@@ -147,7 +147,6 @@ class Database
     private:
         Q_DISABLE_COPY(Database);
 
-//        DbObject* findObject(const QString &ipObjName, DbObject::Type) const;
 };
 
 /*!

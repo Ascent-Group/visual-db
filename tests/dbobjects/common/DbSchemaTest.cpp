@@ -44,6 +44,25 @@ DbSchemaTest::initTestCase()
 {
     mDbInst = DatabaseCreator::createDatabase();
     QVERIFY(0 != mDbInst);
+
+    mTablesNamesList << "artists"
+                     << "genres"
+                     << "albums"
+                     << "tracks"
+                     << "locations"
+                     << "users"
+                     << "playlists"
+                     << "extended_playlists";
+
+    mTriggersNamesList << "albums_biu"
+                       << "locations_biu";
+
+    mProceduresNamesList << "insert_album"
+                         << "insert_track";
+
+    mViewsNamesList << "users_playlists"
+                    << "artists_tracks";
+
 }
 
 void
@@ -216,13 +235,8 @@ DbSchemaTest::findProcedureTest()
     DbSchemaPtr schema = mDbInst->findSchema("vtunes");
     QVERIFY(0 != schema.get());
 
-    QStringList proceduresNames;
-    proceduresNames
-        << "insert_album"
-        << "insert_track";
-
     DbProcedurePtr procedure;
-    foreach (const QString &name, proceduresNames) {
+    foreach (const QString &name, mProceduresNamesList) {
         procedure = schema->findProcedure(name);
         QVERIFY(0 != procedure.get());
         QCOMPARE(procedure.name(), name);
@@ -236,19 +250,8 @@ DbSchemaTest::findTableTest()
     DbSchemaPtr schema = mDbInst->findSchema("vtunes");
     QVERIFY(0 != schema.get());
 
-    QStringList tablesNames;
-    tablesNames
-        << "artists"
-        << "genres"
-        << "albums"
-        << "tracks"
-        << "locations"
-        << "users"
-        << "playlists"
-        << "extended_playlists";
-
     DbTablePtr table;
-    foreach (const QString &name, tablesNames) {
+    foreach (const QString &name, mTablesNamesList) {
         table = schema->findTable(name);
         QVERIFY(0 != table.get());
         QCOMPARE(table.name(), name);
@@ -262,13 +265,8 @@ DbSchemaTest::findTriggerTest()
     DbSchemaPtr schema = mDbInst->findSchema("vtunes");
     QVERIFY(0 != schema.get());
 
-    QStringList triggersNames;
-    triggersNames
-        << "albums_biu"
-        << "locations_biu";
-
     DbTriggerPtr trigger;
-    foreach (const QString &name, triggersNames) {
+    foreach (const QString &name, mTriggersNamesList) {
         trigger = schema->findTrigger(name);
         QVERIFY(0 != trigger.get());
         QCOMPARE(trigger.name(), name);
@@ -282,13 +280,8 @@ DbSchemaTest::findViewTest()
     DbSchemaPtr schema = mDbInst->findSchema("vtunes");
     QVERIFY(0 != schema.get());
 
-    QStringList viewsNames;
-    viewsNames
-        << "users_playlists"
-        << "artists_tracks";
-
     DbViewPtr view;
-    foreach (const QString &name, viewsNames) {
+    foreach (const QString &name, mViewsNamesList) {
         view = schema->findView(name);
         QVERIFY(0 != view.get());
         QCOMPARE(view.name(), name);
@@ -308,60 +301,147 @@ DbSchemaTest::typeTest()
 void
 DbSchemaTest::proceduresCountTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mDbInst->findSchema("vtunes");
+    QVERIFY(0 != schema.get());
+    QVERIFY((quint32)mProceduresNamesList.size() <= schema->proceduresCount());
 }
 
 void
 DbSchemaTest::proceduresListTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mDbInst->findSchema("vtunes");
+    QVERIFY(0 != schema.get());
+
+    QStringList actualProceduresNames;
+    schema->proceduresList(actualProceduresNames);
+
+    foreach (const QString &name, mProceduresNamesList) {
+        QVERIFY(actualProceduresNames.contains(name));
+    }
 }
 
 void
 DbSchemaTest::readProceduresTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schemaPtr = mDbInst->findSchema("vtunes");
+
+    Common::DbSchema *schema = const_cast<Common::DbSchema*>(schemaPtr.get());
+    QVERIFY(0 != schema);
+
+    schema->resetData();
+    QCOMPARE(schema->proceduresCount(), (quint64)0);
+
+    schema->readProcedures();
+    QVERIFY(0 < schema->proceduresCount());
 }
 
 void
 DbSchemaTest::readTablesTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schemaPtr = mDbInst->findSchema("vtunes");
+
+    Common::DbSchema *schema = const_cast<Common::DbSchema*>(schemaPtr.get());
+    QVERIFY(0 != schema);
+
+    schema->resetData();
+    QCOMPARE(schema->tablesCount(), (quint64)0);
+
+    schema->readTables();
+    QVERIFY(0 < schema->tablesCount());
 }
 
 void
 DbSchemaTest::readTriggersTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schemaPtr = mDbInst->findSchema("vtunes");
+
+    Common::DbSchema *schema = const_cast<Common::DbSchema*>(schemaPtr.get());
+    QVERIFY(0 != schema);
+
+    schema->resetData();
+    QCOMPARE(schema->triggersCount(), (quint16)0);
+
+    schema->readTriggers();
+    QVERIFY(0 < schema->triggersCount());
 }
 
 void
 DbSchemaTest::readViewsTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schemaPtr = mDbInst->findSchema("vtunes");
+
+    Common::DbSchema *schema = const_cast<Common::DbSchema*>(schemaPtr.get());
+    QVERIFY(0 != schema);
+
+    schema->resetData();
+    QCOMPARE(schema->viewsCount(), (quint64)0);
+
+    schema->readViews();
+    QVERIFY(0 < schema->viewsCount());
 }
 
 void
 DbSchemaTest::tablesCountTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mDbInst->findSchema("vtunes");
+    QVERIFY(0 != schema.get());
+    QVERIFY((quint32)mTablesNamesList.size() <= schema->tablesCount());
 }
 
 void
 DbSchemaTest::tablesListTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mDbInst->findSchema("vtunes");
+    QVERIFY(0 != schema.get());
+
+    QStringList actualTablesNames;
+    schema->tablesList(actualTablesNames);
+
+    foreach (const QString &name, mTablesNamesList) {
+        QVERIFY(actualTablesNames.contains(name));
+    }
 }
 
 void
 DbSchemaTest::viewsCountTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mDbInst->findSchema("vtunes");
+    QVERIFY(0 != schema.get());
+    QVERIFY((quint32)mViewsNamesList.size() <= schema->viewsCount());
 }
 
 void
 DbSchemaTest::viewsListTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mDbInst->findSchema("vtunes");
+    QVERIFY(0 != schema.get());
+
+    QStringList actualViewsNames;
+    schema->viewsList(actualViewsNames);
+
+    foreach (const QString &name, mViewsNamesList) {
+        QVERIFY(actualViewsNames.contains(name));
+    }
 }
 
+void
+DbSchemaTest::triggersCountTest()
+{
+    DbSchemaPtr schema = mDbInst->findSchema("vtunes");
+    QVERIFY(0 != schema.get());
+    QVERIFY((quint32)mTriggersNamesList.size() <= schema->triggersCount());
+}
+
+void
+DbSchemaTest::triggersListTest()
+{
+    DbSchemaPtr schema = mDbInst->findSchema("vtunes");
+    QVERIFY(0 != schema.get());
+
+    QStringList actualTriggersNames;
+    schema->triggersList(actualTriggersNames);
+
+    foreach (const QString &name, mTriggersNamesList) {
+        QVERIFY(actualTriggersNames.contains(name));
+    }
+}

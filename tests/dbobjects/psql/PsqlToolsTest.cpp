@@ -27,18 +27,148 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <dbobjects/psql/Tools.h>
 #include <dbobjects/psql/PsqlToolsTest.h>
 
-/*! \todo Implement */
+using namespace DbObjects::Psql;
+
 void
 PsqlToolsTest::initTestCase()
 {
-    QVERIFY(0);
+    mIndicesNamesList << "ind_artists"
+                      << "ind_albums"
+                      << "ind_tracks"
+                      << "ind_users"
+                      << "ind_locations";
+
+    mLanguagesNamesList << "plpgsql"
+                        << "c";
+
+    mProceduresNamesList << "insert_album"
+                         << "insert_track";
+
+    mRolesNamesList << "postgres"
+                    << "music_user";
+
+    mSchemasNamesList << "vtunes"
+                      << "pg_catalog"
+                      << "information_schema";
+
+    mTablesNamesList << "artists"
+                     << "genres"
+                     << "albums"
+                     << "tracks"
+                     << "locations"
+                     << "users"
+                     << "playlists"
+                     << "extended_playlists";
+
+    mTriggersNamesList << "albums_biu"
+                       << "locations_biu";
+
+    mViewsNamesList << "users_playlists"
+                    << "artists_tracks";
 }
 
 void
 PsqlToolsTest::cleanupTestCase()
 {
-    QVERIFY(0);
 }
+
+void
+PsqlToolsTest::schemasListTest()
+{
+    QStringList actualSchemasNames;
+    Tools::schemasList(actualSchemasNames);
+
+    foreach (const QString &name, mSchemasNamesList) {
+        QVERIFY(actualSchemasNames.contains(name));
+    }
+}
+
+
+void
+PsqlToolsTest::indicesListTest()
+{
+    QStringList actualIndicesNames;
+    Tools::indicesList(actualIndicesNames);
+
+    foreach (const QString &name, mIndicesNamesList) {
+        QVERIFY(actualIndicesNames.contains(name));
+    }
+}
+
+
+void
+PsqlToolsTest::languagesListTest()
+{
+    QStringList actualLanguagesNames;
+    Tools::languagesList(actualLanguagesNames);
+
+    foreach (const QString &name, mLanguagesNamesList) {
+        QVERIFY(actualLanguagesNames.contains(name));
+    }
+}
+
+
+void
+PsqlToolsTest::proceduresListTest()
+{
+    QStringList actualProceduresNames;
+    Tools::proceduresList("vtunes", actualProceduresNames);
+
+    foreach (const QString &name, mProceduresNamesList) {
+        QVERIFY(actualProceduresNames.contains(name));
+    }
+}
+
+
+void
+PsqlToolsTest::rolesListTest()
+{
+    QStringList actualRolesNames;
+    Tools::rolesList(actualRolesNames);
+
+    foreach (const QString &name, mRolesNamesList) {
+        QVERIFY(actualRolesNames.contains(name));
+    }
+}
+
+
+void
+PsqlToolsTest::tablesListTest()
+{
+    QStringList actualTablesNames;
+    Tools::tablesList("vtunes", actualTablesNames);
+
+    foreach (const QString &name, mTablesNamesList) {
+        QVERIFY(actualTablesNames.contains(name));
+    }
+}
+
+
+void
+PsqlToolsTest::triggersListTest()
+{
+    QStringList actualTriggersNames;
+    Tools::triggersList("vtunes", actualTriggersNames);
+
+    foreach (const QString &name, mTriggersNamesList) {
+        qDebug() << name;
+        QVERIFY(actualTriggersNames.contains(name));
+    }
+}
+
+
+void
+PsqlToolsTest::viewsListTest()
+{
+    QStringList actualViewsNames;
+    Tools::viewsList("vtunes", actualViewsNames);
+
+    foreach (const QString &name, mViewsNamesList) {
+        QVERIFY(actualViewsNames.contains(name));
+    }
+}
+
 

@@ -63,7 +63,6 @@ class DatabaseTest : public QObject
         void resetDataTest();
         void findIndexTest();
         void findLanguageTest();
-        void findObjectTest();
         void findRoleTest();
         void findSchemaTest();
         void findTableIndicesTest();

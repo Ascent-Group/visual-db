@@ -47,7 +47,8 @@ DbIndexTest::initTestCase()
 void
 DbIndexTest::cleanupTestCase()
 {
-
+    Common::DatabaseManager dbMgr;
+    dbMgr.flush();
 }
 
 /*!
@@ -56,7 +57,6 @@ DbIndexTest::cleanupTestCase()
 void
 DbIndexTest::init()
 {
-    mDbInst = DatabaseCreator::createDatabase();
 }
 
 /*!
@@ -66,14 +66,12 @@ void
 DbIndexTest::cleanup()
 {
     mDbInst->resetData();
-
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
 }
 
 void
 DbIndexTest::addColumnNumberTest()
 {
+    QVERIFY(0);
     mDbInst->readIndices();
 
     DbIndexPtr indexPtr = mDbInst->findIndex("ind_artists");
@@ -89,12 +87,12 @@ DbIndexTest::addColumnNumberTest()
     short min = std::numeric_limits<short>::min();
     short max = std::numeric_limits<short>::max();
 
-    const int limitsCount = 3;
-    int upperLimit[limitsCount] = { min, 0, max };
+    const short limitsCount = 3;
+    short upperLimit[limitsCount] = { min, 0, max };
 
     for (short i = 0; i < limitsCount; ++i) {
 
-//        qDebug() << "DbIndexTest::addColumnNumberTest> using upper limit of " << i;
+        qDebug() << "DbIndexTest::addColumnNumberTest> using upper limit of " << upperLimit[i];
 
         for (short j = min; j <= upperLimit[i]; ++j) {
             index->addColumnNumber(j);

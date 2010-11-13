@@ -550,6 +550,8 @@ DbSchema::resetData()
     mViews.clear();
     mProcedures.clear();
     mTriggers.clear();
+
+    DbObject::resetData();
 }
 
 /*!

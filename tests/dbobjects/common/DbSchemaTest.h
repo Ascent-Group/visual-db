@@ -30,6 +30,7 @@
 #ifndef DBSCHEMATEST_H
 #define DBSCHEMATEST_H
 
+#include <dbobjects/common/Database.h>
 #include <QtTest/QtTest>
 
 class DbSchemaTest : public QObject
@@ -39,13 +40,14 @@ class DbSchemaTest : public QObject
     private slots:
         void initTestCase();
         void cleanupTestCase();
+        void init();
+        void cleanup();
 
         void addProcedureTest();
         void addTableTest();
         void addTriggerTest();
         void addViewTest();
-        void cleanupTest();
-        void findObjectTest();
+        void resetDataTest();
         void findProcedureTest();
         void findTableTest();
         void findTriggerTest();
@@ -61,6 +63,10 @@ class DbSchemaTest : public QObject
         void tablesListTest();
         void viewsCountTest();
         void viewsListTest();
+
+    private:
+        DbObjects::Common::Database *mDbInst;
+
 };
 
 #endif // DBSCHEMATEST_H

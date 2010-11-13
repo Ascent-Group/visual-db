@@ -281,16 +281,6 @@ DatabaseTest::findLanguageTest()
 }
 
 void
-DatabaseTest::findObjectTest()
-{
-    QVERIFY(0 != mDbInst);
-    // keeping in mind the fact that findObject function is an auxilliary,
-    // its test case can be considered PASSED if all other find*Test tests
-    // pass
-    QVERIFY(1);
-}
-
-void
 DatabaseTest::findRoleTest()
 {
     QVERIFY(0 != mDbInst);

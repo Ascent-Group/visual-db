@@ -17,7 +17,7 @@ psqlSetup()
     DBNAME=music_db
     DBPASS=qwe
     LANG=plpgsql
-    PSQL_DIR=/opt/lampstack-1.2-2/postgresql
+    PSQL_DIR=/usr/local/pgsql-8.3.7
     PSQL_SUPERUSER=postgres
 
     # drop db and user if they exist

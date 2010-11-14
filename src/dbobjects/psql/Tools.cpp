@@ -184,6 +184,10 @@ rolesList(QStringList &opList)
 quint32
 objectNamesList(const QString &ipQstr, QStringList &opList)
 {
+#if DEBUG_QUERY
+    qDebug() << "DbObjects::Psql::Tools::objectNamesList> " << ipQstr;
+#endif
+
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
 

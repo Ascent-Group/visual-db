@@ -152,6 +152,7 @@ PsqlToolsTest::triggersListTest()
 {
     QStringList actualTriggersNames;
     Tools::triggersList("vtunes", actualTriggersNames);
+    Tools::triggersList("public", actualTriggersNames);
 
     foreach (const QString &name, mTriggersNamesList) {
         qDebug() << name;

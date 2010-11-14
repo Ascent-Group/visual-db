@@ -175,7 +175,8 @@ GraphicsView::dropEvent(QDropEvent *ipEvent)
         if (graphicsScene && itemTree) {
             int i = 0;
             foreach (QTreeWidgetItem *treeItem, itemTree->selectedItems()) {
-                QList<QGraphicsItem *> itemList = graphicsScene->showOnScene(treeItem, TreeWidget::NameCol, ipEvent->pos() + QPoint(i * SEEK_STEP, i * SEEK_STEP));
+                QList<QGraphicsItem *> itemList = graphicsScene->showOnScene(treeItem, TreeWidget::NameCol, 
+                        mapToScene(ipEvent->pos() + QPoint(i * SEEK_STEP, i * SEEK_STEP)).toPoint());
                 emit itemActionDone(new AddItemCommand(graphicsScene, itemList));
                 ++i;
             }

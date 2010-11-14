@@ -96,7 +96,7 @@ class SceneWidget : public QWidget
         void showControlWidget(bool);
         void showGrid(bool);
         void showLegend(bool);
-        void showOnScene(QTreeWidgetItem *, int);
+        void showOnScene(QTreeWidgetItem *, int, bool ipCenterOn = false);
         void ungroupItems();
         void disableAnchorItems();
         void cleanSchemeScene();

@@ -233,6 +233,17 @@ TreeWidget::startDrag(Qt::DropActions)
     drag->exec(Qt::MoveAction);
 }
 
+/*!
+ * \brief Show the item on the scene when we double click on it
+ *
+ * \param[in] ipItem - Item we clicked on
+ * \param[in] ipColumn - Column of the item
+ */
+//void 
+//TreeWidget::itemDoubleClicked(QTreeWidgetItem * /*ipItem*/, int /*ipColumn*/)
+//{
+//    emit itemDoubleClicked();
+//}
 
 /*!
  * \brief Create the database caption

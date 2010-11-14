@@ -116,6 +116,7 @@ class MainWindow : public QMainWindow
         void describeObject();
         void drawFullDbScheme();
         void addItem();
+        void addItem(QTreeWidgetItem *, int);
         void showDatabaseTree(bool);
         void closeDatabaseTree();
         void showDatabaseTree();

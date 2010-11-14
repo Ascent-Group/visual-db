@@ -132,9 +132,9 @@ SceneWidget::setTableMenu(QMenu *ipMenu)
  * \param[in] ipCol - Tree item column identifier
  */
 void
-SceneWidget::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
+SceneWidget::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, bool ipCenterOn)
 {
-    QList<QGraphicsItem *> itemLIst = mScene->showOnScene(ipTreeItem, ipCol, QPoint(0, 0));
+    QList<QGraphicsItem *> itemLIst = mScene->showOnScene(ipTreeItem, ipCol, QPoint(0, 0), ipCenterOn);
     emit itemActionDone(new AddItemCommand(mScene, itemLIst));
 }
 

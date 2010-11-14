@@ -94,7 +94,7 @@ class GraphicsScene : public QGraphicsScene {
         void itemColorChanged(GraphicsItem *, const QColor &, const QColor &);
 
     public slots:
-        QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int, const QPoint &);
+        QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int, const QPoint &, bool ipCenterOn = false);
         void setFieldsTypesVisible();
         void setFieldsTypesInvisible();
         void setIndicesVisible(bool);

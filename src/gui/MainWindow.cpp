@@ -191,7 +191,7 @@ MainWindow::setEnableForActions(bool ipFlag)
 
     ui.mSelectAllTablesAction->setEnabled(ipFlag);
     ui.mRemoveAllTablesAction->setEnabled(ipFlag);
-    ui.mShowLegendAction->setEnabled(ipFlag);
+//    ui.mShowLegendAction->setEnabled(ipFlag);
     ui.mColorizeAccordingSchemasAction->setEnabled(ipFlag);
 
     ui.mDeleteTableAction->setEnabled(ipFlag);
@@ -428,15 +428,29 @@ MainWindow::addItem()
 {
     QTreeWidgetItemIterator treeIter(ui.mTree);
 
+    qDebug() << "asdf";
     while (*treeIter) {
         if ((*treeIter)->isSelected()) {
-            ui.mSceneWidget->showOnScene((*treeIter), TreeWidget::NameCol);
+            ui.mSceneWidget->showOnScene((*treeIter), TreeWidget::NameCol, true);
         }
         ++treeIter;
     }
 
     ui.mSceneWidget->updateLegend();
 }
+
+/*!
+ * \brief Show the item on the scene when we double click on it
+ *
+ * \param[in] ipItem - Item we clicked on
+ * \param[in] ipColumn - Column of the item
+ */
+void 
+MainWindow::addItem(QTreeWidgetItem *ipItem, int ipColumn)
+{
+    ui.mSceneWidget->showOnScene(ipItem, ipColumn, true);
+}
+
 
 /*!
  * \brief Draw full db scheme

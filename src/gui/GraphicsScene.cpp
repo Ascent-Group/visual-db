@@ -107,7 +107,7 @@ GraphicsScene::setTableMenu(QMenu *ipTableMenu)
  * \return List of added items
  */
 QList<QGraphicsItem *>
-GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint &ipPos)
+GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint &ipPos, bool ipCenterOn)
 {
     QList<QGraphicsItem *> objectList;
 
@@ -130,7 +130,7 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
                         TreeWidget::ViewNode == ipTreeItem->child(i)->text(TreeWidget::IdCol).toInt()) {
                     for (int j = 0; j < ipTreeItem->child(i)->childCount(); ++j) {
                         QPoint pos(ipPos.x() + j * SEEK_STEP, ipPos.y() + j * SEEK_STEP);
-                        objectList << showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol, pos);
+                        objectList << showOnScene(ipTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/ipCol, pos, ipCenterOn);
                     }
                 }
             }
@@ -171,6 +171,10 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
 //            showOnScene(ipTreeItem->child(i), ipCol, ipPos);
 //        }
 //    }
+
+    if (!objectList.isEmpty() && ipCenterOn) {
+        views().first()->centerOn(objectList.first());
+    }
 
     return objectList;
 }

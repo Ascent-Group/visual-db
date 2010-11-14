@@ -87,9 +87,13 @@ class TreeWidget : public QTreeWidget
             IdCol
         };
 
+//    signals:
+//        void itemDoubleClicked();
+
     protected:
         void contextMenuEvent(QContextMenuEvent *);
         void startDrag(Qt::DropActions);
+        void itemDoubleClicked(QTreeWidgetItem *, int);
 
     private:
         QMenu *mContextMenu;

@@ -27,54 +27,57 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SELECTCOLORWIDGET_H
-#define SELECTCOLORWIDGET_H
-
-#include <gui/ui/ui_SelectColorWidget.h>
-#include <QDynamicPropertyChangeEvent>
-#include <QSettings>
-#include <QWidget>
-
-class QColor;
+#include <QDebug>
+#include <gui/GraphicsItem.h>
+#include <gui/behaviour/ResizeItemCommand.h>
 
 /*!
- * \class SelectColorWidget
- * \headerfile gui/SelectColorWidget.h
- * \brief Widget to provide the color selection.
+ * Ctor
  */
-class SelectColorWidget : public QWidget
+ResizeItemCommand::ResizeItemCommand(GraphicsItem * ipItem,
+        const QRectF ipNewRect, const QRectF ipOldRect, QUndoCommand *ipParent)
+    : QUndoCommand(ipParent), mItem(ipItem), mNewRect(ipNewRect), mOldRect(ipOldRect) 
 {
-    Q_OBJECT
-    Q_PROPERTY(QString labelText READ labelText WRITE setLabelText)
-    Q_PROPERTY(QColor defaultColor READ defaultColor WRITE setDefaultColor)
+    setText(QObject::tr("Resize item"));
+}
 
-    public:
-        SelectColorWidget(QWidget *ipParent = 0);
-        ~SelectColorWidget();
+/*!
+ * Dtor
+ */
+ResizeItemCommand::~ResizeItemCommand()
+{
+}
 
-        QColor color() const;
+/*!
+ * \brief Undo move command
+ */
+void
+ResizeItemCommand::undo()
+{
+    setRect(mItem, mOldRect);
+}
 
-        QString labelText() const;
-        void setLabelText(const QString &ipText);
+/*!
+ * \brief Redo move command
+ */
+void
+ResizeItemCommand::redo()
+{
+    setRect(mItem, mNewRect);
+}
 
-        QColor defaultColor() const;
-        void setDefaultColor(const QColor &ipColor);
-
-    private:
-        Ui::SelectColorWidget ui;
-        QSettings mSettings;
-
-        QColor mColor;
-        QColor mDefaultColor;
-
-    private:
-        void init();
-        void getColorFromDialog();
-
-    private slots:
-        void colorSelect(int);
-        void buttonClick();
-};
-
-#endif // SELECTCOLORWIDGET_H
-
+/*!
+ * \brief Set new rectangle for graphics item
+ *
+ * \param[in] ipItem - Item we will apply new rectangle to
+ * \param[in] ipRect - New rectangle
+ */
+void
+setRect(GraphicsItem *ipItem, const QRectF &ipRect)
+{
+    ipItem->setX(ipRect.x());
+    ipItem->setY(ipRect.y());
+    ipItem->setWidth(ipRect.width());
+    ipItem->setHeight(ipRect.height());
+    ipItem->updatePolygon();
+}

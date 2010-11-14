@@ -38,7 +38,7 @@ class ProxyParameters;
 
 /*!
  * \class SqlConnectionDialog
- * \headerfile SqlConnectionDialog.h
+ * \headerfile gui/SqlConnectionDialog.h
  * \brief Dialog for connection to the database
  */
 class SqlConnectionDialog : public QDialog

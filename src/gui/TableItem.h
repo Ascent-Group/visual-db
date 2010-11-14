@@ -51,8 +51,10 @@ typedef DbObjectPtr<DbTable> DbTablePtr;
 }
 }
 
-/*
- * Graphics item, implements the database table. Support moving, resizing, changing of the color etc.
+/*!
+ * \class TableItem
+ * \headerfile TableItem.h
+ * \brief Graphics item, implements the database table. Support moving, resizing, changing of the color etc.
  */
 class TableItem : public DbObjectItem 
 {

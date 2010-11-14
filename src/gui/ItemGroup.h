@@ -41,7 +41,7 @@ class QMenu;
 
 /*!
  * \class ItemGroup
- * \headerfile ItemGroup.h
+ * \headerfile gui/ItemGroup.h
  * \brief Graphics item, iplements group of tables.
  */
 class ItemGroup : public QGraphicsItemGroup

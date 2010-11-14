@@ -56,7 +56,7 @@
  * Constructor
  */
 GraphicsScene::GraphicsScene()
-: QGraphicsScene(), mSelectionPath(), mMoveMode(false), mOldPos(), mDiffX(0), mDiffY(0), mStartMovingTimer()
+: QGraphicsScene(), mSelectionPath(), mMoveMode(false), mOldPos(), mOldRect(), mDiffX(0), mDiffY(0), mStartMovingTimer()
 {
     setBackgroundBrush(QBrush(mSettings.value(Consts::COLOR_GRP + "/" + Consts::BACKGROUND_SETTING, Qt::white).value<QColor>()));
     setSceneRect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
@@ -74,9 +74,9 @@ GraphicsScene::~GraphicsScene()
 }
 
 /*!
- * @brief Set scene context menu
+ * \brief Set scene context menu
  *
- * @param[in] ipSchemeMenu - Context menu for schema
+ * \param[in] ipSchemeMenu - Context menu for schema
  */
 void
 GraphicsScene::setSchemeMenu(QMenu *ipSchemeMenu)
@@ -85,9 +85,9 @@ GraphicsScene::setSchemeMenu(QMenu *ipSchemeMenu)
 }
 
 /*!
- * @brief Set table context menu
+ * \brief Set table context menu
  *
- * @param[in] ipTableMenu - Context menu for table
+ * \param[in] ipTableMenu - Context menu for table
  */
 void
 GraphicsScene::setTableMenu(QMenu *ipTableMenu)
@@ -98,13 +98,13 @@ GraphicsScene::setTableMenu(QMenu *ipTableMenu)
 //#include <QGraphicsItemAnimation>
 //#include <QTimeLine>
 /*!
- * @brief Add table from tree event to the scene
+ * \brief Add table from tree event to the scene
  *
- * @param[in] ipTreeItem - Tree item we need to show on the scene
- * @param[in] ipCol - Tree item column
- * @param[in] ipPos - Position where we should place new item
+ * \param[in] ipTreeItem - Tree item we need to show on the scene
+ * \param[in] ipCol - Tree item column
+ * \param[in] ipPos - Position where we should place new item
  *
- * @return List of added items
+ * \return List of added items
  */
 QList<QGraphicsItem *>
 GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint &ipPos)
@@ -176,14 +176,14 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
 }
 
 /*!
- * @brief Create new table item if it doesn't exist or existent one
+ * \brief Create new table item if it doesn't exist or existent one
  *
- * @param[in] ipSchemaName - Schema name
- * @param[in] ipTableName - Table name
- * @param[in] ipMenu - Context menu for new item
- * @param[in] ipPos - Position of new item
+ * \param[in] ipSchemaName - Schema name
+ * \param[in] ipTableName - Table name
+ * \param[in] ipMenu - Context menu for new item
+ * \param[in] ipPos - Position of new item
  *
- * @return Existent or new table item
+ * \return Existent or new table item
  */
 TableItem *
 GraphicsScene::newTableItem(const QString &ipSchemaName, const QString &ipTableName, QMenu *ipMenu, const QPoint &ipPos)
@@ -199,14 +199,14 @@ GraphicsScene::newTableItem(const QString &ipSchemaName, const QString &ipTableN
 }
 
 /*!
- * @brief Create new view item if it doesn't exist or existent one
+ * \brief Create new view item if it doesn't exist or existent one
  *
- * @param[in] ipSchemaName - Schema name
- * @param[in] ipViewName - View name
- * @param[in] ipMenu - Context menu for new item
- * @param[in] ipPos - Position of new item
+ * \param[in] ipSchemaName - Schema name
+ * \param[in] ipViewName - View name
+ * \param[in] ipMenu - Context menu for new item
+ * \param[in] ipPos - Position of new item
  *
- * @return Existent or new view item
+ * \return Existent or new view item
  */
 ViewItem *
 GraphicsScene::newViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu *ipMenu, const QPoint &ipPos)
@@ -222,9 +222,9 @@ GraphicsScene::newViewItem(const QString &ipSchemaName, const QString &ipViewNam
 }
 
 /*!
- * @brief Add given items to the scene
+ * \brief Add given items to the scene
  *
- * @param[in] ipItems - List of items we need to add on the scene
+ * \param[in] ipItems - List of items we need to add on the scene
  */
 void
 GraphicsScene::addItems(const QList<QGraphicsItem *> &ipItems)
@@ -243,7 +243,7 @@ GraphicsScene::addItems(const QList<QGraphicsItem *> &ipItems)
 }
 
 /*!
- * @brief Draw relations for all tables on the scene
+ * \brief Draw relations for all tables on the scene
  */
 void
 GraphicsScene::drawRelations()
@@ -257,9 +257,9 @@ GraphicsScene::drawRelations()
 }
 
 /*!
- * @brief Create relations between given table item and anothers ones already painted
+ * \brief Create relations between given table item and anothers ones already painted
  *
- * @param[in] ipSourceItem - Source item
+ * \param[in] ipSourceItem - Source item
  */
 void
 GraphicsScene::createRelations(TableItem *ipSourceItem)
@@ -284,12 +284,12 @@ GraphicsScene::createRelations(TableItem *ipSourceItem)
 }
 
 /*!
- * @brief Find item by his name on the scene
+ * \brief Find item by his name on the scene
  *
- * @param[in] ipSchemaName - Schema name
- * @param[in] ipItemName - Item name
+ * \param[in] ipSchemaName - Schema name
+ * \param[in] ipItemName - Item name
  *
- * @return Founded item if it presents in the DB, 0 otherwise
+ * \return Founded item if it presents in the DB, 0 otherwise
  */
 DbObjectItem *
 GraphicsScene::findItem(const QString &ipSchemaName, const QString &ipItemName)
@@ -308,9 +308,9 @@ GraphicsScene::findItem(const QString &ipSchemaName, const QString &ipItemName)
 }
 
 /*!
- * @brief Handler for right mouse button click
+ * \brief Handler for right mouse button click
  *
- * @param[in] ipEvent - Context menu event
+ * \param[in] ipEvent - Context menu event
  */
 void
 GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *ipEvent)
@@ -324,9 +324,9 @@ GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *ipEvent)
 }
 
 /*!
- * @brief Handler for mouse press event
+ * \brief Handler for mouse press event
  *
- * @param[in] ipEvent - Mouse press event
+ * \param[in] ipEvent - Mouse press event
  */
 void
 GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
@@ -335,6 +335,10 @@ GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
         // if we pressed under item - do default actions and return
         QGraphicsItem *item = itemAt(ipEvent->scenePos());
         if (toDbObject(item) || toGroup(item)) {
+            // it would be a resizing - remember current item geometry 
+            if (toDbObject(item)) {
+                mOldRect = toDbObject(item)->boundingRect();
+            }
             mOldPos = item->scenePos();
         } else {
             clearSelection();
@@ -345,16 +349,22 @@ GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
 }
 
 /*!
- * @brief Handler for mouse release event
+ * \brief Handler for mouse release event
  *
- * @param[in] ipEvent - Mouse release event
+ * \param[in] ipEvent - Mouse release event
  */
 void
 GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     QGraphicsItem *item = itemAt(ipEvent->scenePos());
-    if ((toDbObject(item) || toGroup(item)) && item->scenePos() != mOldPos) {
-        emit itemMoved(selectedItems(), (int)(item->scenePos().x() - mOldPos.x()), (int)(item->scenePos().y() - mOldPos.y()));
+    if ((toDbObject(item) || toGroup(item))) {
+        // if it was resizing - emit resizing signal
+        if (toDbObject(item) && toDbObject(item)->mouseMode() != DbObjectItem::MOVE) {
+            emit itemResized(toDbObject(item), toDbObject(item)->boundingRect(), mOldRect);
+        // else it is movement
+        } else if (item->scenePos() != mOldPos) {
+            emit itemMoved(selectedItems(), (int)(item->scenePos().x() - mOldPos.x()), (int)(item->scenePos().y() - mOldPos.y()));
+        }
     }
 
     if (!mMoveMode) {
@@ -367,9 +377,9 @@ GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 }
 
 /*!
- * @brief Handler for mouse move event
+ * \brief Handler for mouse move event
  *
- * @param[in] ipEvent - Mouse move event
+ * \param[in] ipEvent - Mouse move event
  */
 void
 GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
@@ -378,6 +388,7 @@ GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
         QGraphicsScene::mouseMoveEvent(ipEvent);
         return;
     } else {
+
         // if we grabbered an item - do default actions and return
         if (mouseGrabberItem()) {
             QGraphicsScene::mouseMoveEvent(ipEvent);
@@ -419,12 +430,12 @@ GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
 }
 
 /*!
- * @brief Handler for key press ipEvent
+ * \brief Handler for key press ipEvent
  * 	  + - maximize the scheme view
  * 	  - - minimize the scheme view
  * 	  arrow keys - move items to the appropriate sides
  *
- * @param[in] ipEvent - Key press event
+ * \param[in] ipEvent - Key press event
  */
 void
 GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
@@ -480,7 +491,7 @@ GraphicsScene::keyPressEvent(QKeyEvent *ipEvent)
 }
 
 /*!
- * @brief Emit signal when moving timer expired
+ * \brief Emit signal when moving timer expired
  */
 void
 GraphicsScene::movingTimerExpired()
@@ -493,11 +504,11 @@ GraphicsScene::movingTimerExpired()
 }
 
 /*!
- * @brief Create item group from the given items
+ * \brief Create item group from the given items
  *
- * @param[in] items - Items we will add to new group
+ * \param[in] items - Items we will add to new group
  *
- * @return New items group
+ * \return New items group
  */
 ItemGroup *
 GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
@@ -551,9 +562,9 @@ GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
 }
 
 /*!
- * @brief Draw background
+ * \brief Draw background
  *
- * @param[in] ipPainter - Painter
+ * \param[in] ipPainter - Painter
  */
 void
 GraphicsScene::drawBackground(QPainter *ipPainter, const QRectF &)
@@ -571,9 +582,9 @@ GraphicsScene::drawBackground(QPainter *ipPainter, const QRectF &)
 }
 
 /*!
- * @brief Draw the grid
+ * \brief Draw the grid
  *
- * @param[in] ipPainter - Painter
+ * \param[in] ipPainter - Painter
  */
 void
 GraphicsScene::drawGrid(QPainter *ipPainter)
@@ -619,9 +630,9 @@ GraphicsScene::drawGrid(QPainter *ipPainter)
 }
 
 /*!
- * @brief Draw the page's bounds
+ * \brief Draw the page's bounds
  *
- * @param[in] ipPainter - Painter
+ * \param[in] ipPainter - Painter
  */
 void
 GraphicsScene::divideIntoPages(QPainter *ipPainter)
@@ -649,7 +660,7 @@ GraphicsScene::divideIntoPages(QPainter *ipPainter)
 }
 
 /*!
- * @brief Refresh legend
+ * \brief Refresh legend
  */
 void
 GraphicsScene::refreshLegend()
@@ -659,9 +670,9 @@ GraphicsScene::refreshLegend()
 }
 
 /*!
- * @brief Show/hide legend
+ * \brief Show/hide legend
  *
- * @param[in] ipFlag - True if we want to show legend, false otherwise
+ * \param[in] ipFlag - True if we want to show legend, false otherwise
  */
 void
 GraphicsScene::showLegend(bool ipFlag)
@@ -676,7 +687,7 @@ GraphicsScene::showLegend(bool ipFlag)
 }
 
 /*!
- * @brief Update legend
+ * \brief Update legend
  */
 void
 GraphicsScene::updateLegend()
@@ -685,9 +696,9 @@ GraphicsScene::updateLegend()
 }
 
 /*!
- * @brief Delete given items (recursivelly for groups)
+ * \brief Delete given items (recursivelly for groups)
  *
- * @param[in] ipItems - List of items we want to remove from scene
+ * \param[in] ipItems - List of items we want to remove from scene
  */
 void
 GraphicsScene::deleteItems(QList<QGraphicsItem *> &ipItems)
@@ -711,7 +722,7 @@ GraphicsScene::deleteItems(QList<QGraphicsItem *> &ipItems)
 }
 
 /*!
- * @brief Show field types for selected items
+ * \brief Show field types for selected items
  */
 void
 GraphicsScene::setFieldsTypesVisible()
@@ -720,7 +731,7 @@ GraphicsScene::setFieldsTypesVisible()
 }
 
 /*!
- * @brief Hide field types for selected items
+ * \brief Hide field types for selected items
  */
 void
 GraphicsScene::setFieldsTypesInvisible()
@@ -730,10 +741,10 @@ GraphicsScene::setFieldsTypesInvisible()
 
 
 /*!
- * @brief Show/hide field types for given items (recursivelly for groups)
+ * \brief Show/hide field types for given items (recursivelly for groups)
  *
- * @param[in] ipItems - List of items we want to show field types for
- * @param[in] ipFlag - True if we want to show field types, false otherwise
+ * \param[in] ipItems - List of items we want to show field types for
+ * \param[in] ipFlag - True if we want to show field types, false otherwise
  */
 void
 GraphicsScene::setFieldsTypesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag)
@@ -748,9 +759,9 @@ GraphicsScene::setFieldsTypesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag
 }
 
 /*!
- * @brief Show/hide indices for selected tables
+ * \brief Show/hide indices for selected tables
  *
- * @param[in] ipFlag - True if we want to show indeces, false otherwise
+ * \param[in] ipFlag - True if we want to show indeces, false otherwise
  */
 void
 GraphicsScene::setIndicesVisible(bool ipFlag)
@@ -759,10 +770,10 @@ GraphicsScene::setIndicesVisible(bool ipFlag)
 }
 
 /*!
- * @brief Show/hide indices for selected tables
+ * \brief Show/hide indices for selected tables
  *
- * @param[in] ipItems - List of items we will show indeces for
- * @param[in] ipFlag - True if we want to show indeces, false otherwise
+ * \param[in] ipItems - List of items we will show indeces for
+ * \param[in] ipFlag - True if we want to show indeces, false otherwise
  */
 void
 GraphicsScene::setIndicesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag)
@@ -777,7 +788,7 @@ GraphicsScene::setIndicesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag)
 }
 
 /*!
- * @brief Set all selected items' color to user choosed color
+ * \brief Set all selected items' color to user choosed color
  */
 void
 GraphicsScene::setItemColor()
@@ -794,10 +805,10 @@ GraphicsScene::setItemColor()
 }
 
 /*!
- * @brief Colorize all items in the list (recursivelly for groups)
+ * \brief Colorize all items in the list (recursivelly for groups)
  *
- * @param[in] ipItems - List of items we will change color for
- * @param[in] ipColor - Items color
+ * \param[in] ipItems - List of items we will change color for
+ * \param[in] ipColor - Items color
  */
 void
 GraphicsScene::setItemColor(QList<QGraphicsItem *> ipItems, QColor ipColor)
@@ -815,19 +826,20 @@ GraphicsScene::setItemColor(QList<QGraphicsItem *> ipItems, QColor ipColor)
 }
 
 /*!
- * @brief Set item color
+ * \brief Set item color
  *
- * @param[in] ipItem - Graphics item
- * @param[in] ipColor - Item color
+ * \param[in] ipItem - Graphics item
+ * \param[in] ipColor - Item color
  */
 void
-GraphicsScene::setItemColor(DbObjectItem *ipItem, QColor ipColor)
+GraphicsScene::setItemColor(GraphicsItem *ipItem, QColor ipColor)
 {
-    ipItem->setItemColor(ipColor);
+//    ipItem->setItemColor(ipColor);
+    emit itemColorChanged(ipItem, ipColor, ipItem->itemColor());
 }
 
 /*!
- * @brief Select all items if ctrl-a is pressed
+ * \brief Select all items if ctrl-a is pressed
  */
 void
 GraphicsScene::selectAllItems()
@@ -841,7 +853,7 @@ GraphicsScene::selectAllItems()
 }
 
 /*!
- * @brief Auto resize selected items' sizes to adjusted
+ * \brief Auto resize selected items' sizes to adjusted
  */
 void
 GraphicsScene::adjustItems()
@@ -850,16 +862,18 @@ GraphicsScene::adjustItems()
 }
 
 /*!
- * @brief Auto resize items (recursivelly for groups)
+ * \brief Auto resize items (recursivelly for groups)
  *
- * @param[in] ipItems - List of items we will adjust size for
+ * \param[in] ipItems - List of items we will adjust size for
  */
 void
 GraphicsScene::adjustItems(QList<QGraphicsItem *> ipItems)
 {
     foreach (QGraphicsItem *item, ipItems) {
         if (toDbObject(item)) {
+            mOldRect = toDbObject(item)->boundingRect();
             toDbObject(item)->adjustSize();
+            emit itemResized(toDbObject(item), toDbObject(item)->boundingRect(), mOldRect);
         } else if (toGroup(item)) {
             adjustItems(toGroup(item)->children());
         }
@@ -867,9 +881,9 @@ GraphicsScene::adjustItems(QList<QGraphicsItem *> ipItems)
 }
 
 /*!
- * @brief Group items
+ * \brief Group items
  *
- * @param[in] ipList - List of items we will group
+ * \param[in] ipList - List of items we will group
  */
 void
 GraphicsScene::groupItems(QList<QGraphicsItem *> ipItems)
@@ -884,7 +898,7 @@ GraphicsScene::groupItems(QList<QGraphicsItem *> ipItems)
 }
 
 /*!
- * @brief Group items
+ * \brief Group items
  */
 void
 GraphicsScene::groupItems()
@@ -893,9 +907,9 @@ GraphicsScene::groupItems()
 }
 
 /*!
- * @brief Ungroup items
+ * \brief Ungroup items
  *
- * @param[in] ipList - List of items we will ungroup
+ * \param[in] ipList - List of items we will ungroup
  */
 void
 GraphicsScene::ungroupItems(QList<QGraphicsItem *> ipItems)
@@ -908,7 +922,7 @@ GraphicsScene::ungroupItems(QList<QGraphicsItem *> ipItems)
 }
 
 /*!
- * @brief Ungroup items
+ * \brief Ungroup items
  */
 void
 GraphicsScene::ungroupItems()
@@ -917,7 +931,7 @@ GraphicsScene::ungroupItems()
 }
 
 /*!
- * @brief Colorize items according schemas
+ * \brief Colorize items according schemas
  */
 void
 GraphicsScene::colorizeAccordingSchemas()
@@ -946,9 +960,9 @@ GraphicsScene::colorizeAccordingSchemas()
 }
 
 /*!
- * @brief Set the anchor for selected items
+ * \brief Set the anchor for selected items
  *
- * @param[in] ipFlag - True if we want to enable anchor for items, false if disable
+ * \param[in] ipFlag - True if we want to enable anchor for items, false if disable
  */
 void
 GraphicsScene::setAnchor(bool ipFlag)
@@ -957,10 +971,10 @@ GraphicsScene::setAnchor(bool ipFlag)
 }
 
 /*!
- * @brief Set the anchor for selected items
+ * \brief Set the anchor for selected items
  *
- * @param[in] ipItems - List of items we will enable or disable anchors for
- * @param[in] ipFlag - True if we want to enable anchor for items, false if disable
+ * \param[in] ipItems - List of items we will enable or disable anchors for
+ * \param[in] ipFlag - True if we want to enable anchor for items, false if disable
  */
 void
 GraphicsScene::setAnchor(QList<QGraphicsItem *> ipItems, bool ipFlag)
@@ -976,9 +990,9 @@ GraphicsScene::setAnchor(QList<QGraphicsItem *> ipItems, bool ipFlag)
 }
 
 /*!
- * @brief Show/hide grid
+ * \brief Show/hide grid
  *
- * @param[in] ipFlag - True if we want to want to show grid, false otherwise
+ * \param[in] ipFlag - True if we want to want to show grid, false otherwise
  */
 void
 GraphicsScene::showGrid(bool ipFlag)
@@ -989,9 +1003,9 @@ GraphicsScene::showGrid(bool ipFlag)
 }
 
 /*!
- * @brief (Un)Align items to the grid
+ * \brief (Un)Align items to the grid
  *
- * @param[in] ipFlag - True if we want to align items according grid, false it we doesn't
+ * \param[in] ipFlag - True if we want to align items according grid, false it we doesn't
  */
 void
 GraphicsScene::alignToGrid(bool ipFlag)
@@ -1000,9 +1014,9 @@ GraphicsScene::alignToGrid(bool ipFlag)
 }
 
 /*!
- * @brief Show/hide grid
+ * \brief Show/hide grid
  *
- * @param[in] ipFlag - True if we want to divide scene into pages, false otherwise
+ * \param[in] ipFlag - True if we want to divide scene into pages, false otherwise
  */
 void
 GraphicsScene::divideIntoPages(bool ipFlag)
@@ -1013,7 +1027,7 @@ GraphicsScene::divideIntoPages(bool ipFlag)
 }
 
 /*!
- * @brief Select all items in schema
+ * \brief Select all items in schema
  */
 void
 GraphicsScene::selectAllItemsInSchema()
@@ -1032,15 +1046,15 @@ GraphicsScene::selectAllItemsInSchema()
 
 
 /*!
- * @brief Save scene to xml
+ * \brief Save scene to xml
  *
- * @param[in] ipDoc - Xml dom document
- * @param[in] ipShowGrid - True if we need to show grid, false otherwise
- * @param[in] ipDivideIntoPages - True if we need to divide scene into pages, false otherwise
- * @param[in] ipShowLegend - True if we need to show legend, false otherwise
- * @param[in] ipShowControlWidget - True if we need to show control widget, false otherwise
+ * \param[in] ipDoc - Xml dom document
+ * \param[in] ipShowGrid - True if we need to show grid, false otherwise
+ * \param[in] ipDivideIntoPages - True if we need to divide scene into pages, false otherwise
+ * \param[in] ipShowLegend - True if we need to show legend, false otherwise
+ * \param[in] ipShowControlWidget - True if we need to show control widget, false otherwise
  *
- * @return Filled with scene info xml dom element
+ * \return Filled with scene info xml dom element
  */
 QDomElement
 GraphicsScene::toXml(QDomDocument &ipDoc, bool ipShowGrid, bool ipDivideIntoPages, bool ipShowLegend, bool ipShowControlWidget) const
@@ -1063,11 +1077,11 @@ GraphicsScene::toXml(QDomDocument &ipDoc, bool ipShowGrid, bool ipDivideIntoPage
 }
 
 /*!
- * @brief Restore scene from xml
+ * \brief Restore scene from xml
  *
- * @param[in] ipNode - Dom node we will restore scene parameters from
+ * \param[in] ipNode - Dom node we will restore scene parameters from
  *
- * @return List of graphic items restored from xml
+ * \return List of graphic items restored from xml
  */
 QList<QGraphicsItem *>
 GraphicsScene::fromXml(const QDomNode &ipNode)
@@ -1097,10 +1111,10 @@ GraphicsScene::fromXml(const QDomNode &ipNode)
 }
 
 /*!
- * @brief Move the legend
+ * \brief Move the legend
  *
- * @param[in] ipDx - Gorizontal distance
- * @param[in] ipDy - Vertical distance
+ * \param[in] ipDx - Gorizontal distance
+ * \param[in] ipDy - Vertical distance
  */
 void
 GraphicsScene::moveLegend(int ipDx, int ipDy)
@@ -1109,9 +1123,9 @@ GraphicsScene::moveLegend(int ipDx, int ipDy)
 }
 
 /*!
- * @brief Resize the scene
+ * \brief Resize the scene
  *
- * @param ipFactor - Scale factor
+ * \param ipFactor - Scale factor
  */
 void
 GraphicsScene::resize(int ipFactor)
@@ -1123,9 +1137,9 @@ GraphicsScene::resize(int ipFactor)
 }
 
 /*!
- * @brief Set move mode
+ * \brief Set move mode
  *
- * @param[in] ipFlag - True if we want to set move mode, false otherwise
+ * \param[in] ipFlag - True if we want to set move mode, false otherwise
  */
 void
 GraphicsScene::setMoveMode(bool ipFlag)
@@ -1134,9 +1148,9 @@ GraphicsScene::setMoveMode(bool ipFlag)
 }
 
 /*!
- * @brief Get move mode
+ * \brief Get move mode
  *
- * @return True if move mode is enabled, false otherwise
+ * \return True if move mode is enabled, false otherwise
  */
 bool
 GraphicsScene::moveMode() const

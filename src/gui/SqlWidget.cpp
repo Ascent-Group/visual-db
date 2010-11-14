@@ -60,9 +60,9 @@ SqlWidget::~SqlWidget()
 }
 
 /*!
- * @brief Sets default query for db object
+ * \brief Sets default query for db object
  *
- * @param[in] ipQueryText - Default query text
+ * \param[in] ipQueryText - Default query text
  */
 void
 SqlWidget::setDefaultQuery(const QString &ipQueryText)
@@ -71,7 +71,7 @@ SqlWidget::setDefaultQuery(const QString &ipQueryText)
 }
 
 /*!
- * @brief Run button click slot
+ * \brief Run button click slot
  */
 void
 SqlWidget::runQuery()
@@ -101,7 +101,7 @@ SqlWidget::runQuery()
 }
 
 /*!
- * @brief Reads the previous portion of results
+ * \brief Reads the previous portion of results
  */
 void
 SqlWidget::readPrevPortion()
@@ -110,7 +110,7 @@ SqlWidget::readPrevPortion()
 }
 
 /*!
- * @brief Reads the next portion of results
+ * \brief Reads the next portion of results
  */
 void
 SqlWidget::readNextPortion()
@@ -119,7 +119,7 @@ SqlWidget::readNextPortion()
 }
 
 /*!
- * @brief Reads full result
+ * \brief Reads full result
  */
 void
 SqlWidget::readFullResult()
@@ -144,12 +144,12 @@ SqlWidget::readFullResult()
 }
 
 /*!
- * @brief Checks the query for safety
+ * \brief Checks the query for safety
  * lyuts: later will allow users to define and use their own rules
  *
- * @param[in] ipQueryText - Query text we will check for safety
+ * \param[in] ipQueryText - Query text we will check for safety
  *
- * @return True if query is safe, false otherwise
+ * \return True if query is safe, false otherwise
  */
 bool
 isQuerySafe(const QString &ipQueryText)
@@ -167,9 +167,9 @@ isQuerySafe(const QString &ipQueryText)
 }
 
 /*!
- * @brief Reads a portion of records
+ * \brief Reads a portion of records
  *
- * @param[in] ipDirection - Direction we will read in (next or previous)
+ * \param[in] ipDirection - Direction we will read in (next or previous)
  */
 void
 SqlWidget::readPortion(Portions ipDirection)

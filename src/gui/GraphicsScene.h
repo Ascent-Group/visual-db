@@ -48,13 +48,16 @@ class QTreeWidgetItem;
 
 class ControlWidget;
 class DbObjectItem;
+class GraphicsItem;
+class ItemGroup;
 class Legend;
 class TableItem;
-class ItemGroup;
 class ViewItem;
 
-/*
- * Scene for db items. Allow browsing db items, relations between them and move them.
+/*!
+ * \class GraphicsScene
+ * \headerfile gui/GraphicsScene.h
+ * \brief Scene for db items. Allow browsing db items, relations between them and move them.
  */
 class GraphicsScene : public QGraphicsScene {
 
@@ -82,11 +85,13 @@ class GraphicsScene : public QGraphicsScene {
         void createRelations(TableItem *);
         TableItem *newTableItem(const QString &, const QString &, QMenu *, const QPoint &);
         ViewItem *newViewItem(const QString &, const QString &, QMenu *, const QPoint &);
-        void setItemColor(DbObjectItem*, QColor);
+        void setItemColor(QList<QGraphicsItem *>, QColor);
         bool moveMode() const;
 
     signals:
         void itemMoved(QList <QGraphicsItem *>, int, int);
+        void itemResized(GraphicsItem *, const QRectF &, const QRectF &);
+        void itemColorChanged(GraphicsItem *, const QColor &, const QColor &);
 
     public slots:
         QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int, const QPoint &);
@@ -94,6 +99,7 @@ class GraphicsScene : public QGraphicsScene {
         void setFieldsTypesInvisible();
         void setIndicesVisible(bool);
         void setItemColor();
+        void setItemColor(GraphicsItem*, QColor);
         void selectAllItems();
         void adjustItems();
         void groupItems();
@@ -123,7 +129,6 @@ class GraphicsScene : public QGraphicsScene {
         DbObjectItem *findItem(const QString &, const QString &);
         void setFieldsTypesVisible(QList<QGraphicsItem *>, bool);
         void setIndicesVisible(QList<QGraphicsItem *>, bool);
-        void setItemColor(QList<QGraphicsItem *>, QColor);
         void adjustItems(QList<QGraphicsItem *>);
         void setAnchor(QList<QGraphicsItem *>, bool);
         void groupItems(QList<QGraphicsItem *>);
@@ -150,6 +155,7 @@ class GraphicsScene : public QGraphicsScene {
         QVector<DbObjectItem *> mDbItems;
 
         QPointF mOldPos;
+        QRectF mOldRect;
 
         int mDiffX;
         int mDiffY;

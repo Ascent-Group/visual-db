@@ -43,6 +43,8 @@
 #include <gui/behaviour/AddItemCommand.h>
 #include <gui/behaviour/DeleteItemCommand.h>
 #include <gui/behaviour/MoveItemCommand.h>
+#include <gui/behaviour/SetColorItemCommand.h>
+#include <gui/behaviour/ResizeItemCommand.h>
 
 #include <QDebug>
 
@@ -71,6 +73,10 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
 
     connect(mScene, SIGNAL(itemMoved(QList <QGraphicsItem *>, int, int)),
             this, SLOT(sendItemMoved(QList <QGraphicsItem *>, int, int)));
+    connect(mScene, SIGNAL(itemColorChanged(GraphicsItem *, const QColor &, const QColor &)),
+            this, SLOT(sendItemColorChanged(GraphicsItem *, const QColor &, const QColor &)));
+    connect(mScene, SIGNAL(itemResized(GraphicsItem *, const QRectF &, const QRectF &)),
+            this, SLOT(sendItemResized(GraphicsItem *, const QRectF &, const QRectF &)));
 
     connect(mView, SIGNAL(valueIncreased()), mControlWidget, SLOT(increaseValue()));
     connect(mView, SIGNAL(valueDecreased()), mControlWidget, SLOT(decreaseValue()));
@@ -96,9 +102,9 @@ SceneWidget::~SceneWidget()
 }
 
 /*!
- * @brief Set the scene menu
+ * \brief Set the scene menu
  *
- * @param[in] ipMenu - Schema context menu
+ * \param[in] ipMenu - Schema context menu
  */
 void
 SceneWidget::setSchemeMenu(QMenu *ipMenu)
@@ -108,9 +114,9 @@ SceneWidget::setSchemeMenu(QMenu *ipMenu)
 }
 
 /*!
- * @brief Set the table menu
+ * \brief Set the table menu
  *
- * @param[in] ipMenu - Table context menu
+ * \param[in] ipMenu - Table context menu
  */
 void
 SceneWidget::setTableMenu(QMenu *ipMenu)
@@ -120,10 +126,10 @@ SceneWidget::setTableMenu(QMenu *ipMenu)
 }
 
 /*!
- * @brief Add item from tree event to the scene
+ * \brief Add item from tree event to the scene
  *
- * @param[in] ipTreeItem - Tree item we should show on the scene
- * @param[in] ipCol - Tree item column identifier
+ * \param[in] ipTreeItem - Tree item we should show on the scene
+ * \param[in] ipCol - Tree item column identifier
  */
 void
 SceneWidget::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
@@ -133,9 +139,9 @@ SceneWidget::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol)
 }
 
 /*!
- * @brief Show/hide legend
+ * \brief Show/hide legend
  *
- * @param[in] ipFlag - True if we want to show legend, false otherwise
+ * \param[in] ipFlag - True if we want to show legend, false otherwise
  */
 void
 SceneWidget::showLegend(bool ipFlag)
@@ -144,7 +150,7 @@ SceneWidget::showLegend(bool ipFlag)
 }
 
 /*!
- * @brief Delete selected items from scheme
+ * \brief Delete selected items from scheme
  */
 void
 SceneWidget::deleteItem()
@@ -155,7 +161,7 @@ SceneWidget::deleteItem()
 }
 
 /*!
- * @brief Clean scheme scene
+ * \brief Clean scheme scene
  */
 void
 SceneWidget::cleanSchemeScene()
@@ -168,7 +174,7 @@ SceneWidget::cleanSchemeScene()
 }
 
 /*!
- * @brief Show field types for selected items
+ * \brief Show field types for selected items
  */
 void
 SceneWidget::setFieldsTypesVisible()
@@ -177,7 +183,7 @@ SceneWidget::setFieldsTypesVisible()
 }
 
 /*!
- * @brief Hide field types for selected items
+ * \brief Hide field types for selected items
  */
 void
 SceneWidget::setFieldsTypesInvisible()
@@ -186,7 +192,7 @@ SceneWidget::setFieldsTypesInvisible()
 }
 
 /*!
- * @brief Show indices for selected items
+ * \brief Show indices for selected items
  */
 void
 SceneWidget::setIndicesVisible()
@@ -195,7 +201,7 @@ SceneWidget::setIndicesVisible()
 }
 
 /*!
- * @brief Hide indices for selected items
+ * \brief Hide indices for selected items
  */
 void
 SceneWidget::setIndicesInvisible()
@@ -204,7 +210,7 @@ SceneWidget::setIndicesInvisible()
 }
 
 /*!
- * @brief Set all selected items' color to user choosed color
+ * \brief Set all selected items' color to user choosed color
  */
 void
 SceneWidget::setItemColor()
@@ -213,7 +219,7 @@ SceneWidget::setItemColor()
 }
 
 /*!
- * @brief Select all items if ctrl-a is pressed
+ * \brief Select all items if ctrl-a is pressed
  */
 void
 SceneWidget::selectAllItems()
@@ -222,7 +228,7 @@ SceneWidget::selectAllItems()
 }
 
 /*!
- * @brief Auto resize selected items' sizes to adjusted
+ * \brief Auto resize selected items' sizes to adjusted
  */
 void
 SceneWidget::adjustItems()
@@ -231,7 +237,7 @@ SceneWidget::adjustItems()
 }
 
 /*!
- * @brief Group items
+ * \brief Group items
  */
 void
 SceneWidget::groupItems()
@@ -240,7 +246,7 @@ SceneWidget::groupItems()
 }
 
 /*!
- * @brief Ungroup items
+ * \brief Ungroup items
  */
 void
 SceneWidget::ungroupItems()
@@ -249,7 +255,7 @@ SceneWidget::ungroupItems()
 }
 
 /*!
- * @brief Anchor selected items
+ * \brief Anchor selected items
  */
 void
 SceneWidget::anchorItems()
@@ -258,7 +264,7 @@ SceneWidget::anchorItems()
 }
 
 /*!
- * @brief Disable anchor selected items
+ * \brief Disable anchor selected items
  */
 void
 SceneWidget::disableAnchorItems()
@@ -267,7 +273,7 @@ SceneWidget::disableAnchorItems()
 }
 
 /*!
- * @brief Colorize items according schemas
+ * \brief Colorize items according schemas
  */
 void
 SceneWidget::colorizeAccordingSchemas()
@@ -276,9 +282,9 @@ SceneWidget::colorizeAccordingSchemas()
 }
 
 /*!
- * @brief Show/hide grid
+ * \brief Show/hide grid
  *
- * @param[in] ipFlag - True if we want to show grid, false otherwise
+ * \param[in] ipFlag - True if we want to show grid, false otherwise
  */
 void
 SceneWidget::showGrid(bool ipFlag)
@@ -287,9 +293,9 @@ SceneWidget::showGrid(bool ipFlag)
 }
 
 /*!
- * @brief (Un)Align items to the grid
+ * \brief (Un)Align items to the grid
  *
- * @param[in] ipFlag - True if we want to align items according grid, false otherwise
+ * \param[in] ipFlag - True if we want to align items according grid, false otherwise
  */
 void
 SceneWidget::alignToGrid(bool ipFlag)
@@ -298,9 +304,9 @@ SceneWidget::alignToGrid(bool ipFlag)
 }
 
 /*!
- * @brief Show/hide grid
+ * \brief Show/hide grid
  *
- * @param[in] ipFlag - True if we want to show pages, false otherwise
+ * \param[in] ipFlag - True if we want to show pages, false otherwise
  */
 void
 SceneWidget::divideIntoPages(bool ipFlag)
@@ -309,7 +315,7 @@ SceneWidget::divideIntoPages(bool ipFlag)
 }
 
 /*!
- * @brief Select all items in schema
+ * \brief Select all items in schema
  */
 void
 SceneWidget::selectAllItemsInSchema()
@@ -318,7 +324,7 @@ SceneWidget::selectAllItemsInSchema()
 }
 
 /*!
- * @brief Refresh the legend rect
+ * \brief Refresh the legend rect
  */
 void
 SceneWidget::refreshLegend()
@@ -327,7 +333,7 @@ SceneWidget::refreshLegend()
 }
 
 /*!
- * @brief Update the legend's records
+ * \brief Update the legend's records
  */
 void
 SceneWidget::updateLegend()
@@ -336,11 +342,11 @@ SceneWidget::updateLegend()
 }
 
 /*!
- * @brief Create item group from the given items
+ * \brief Create item group from the given items
  *
- * @param[in] ipItems - List of items we will add to new group
+ * \param[in] ipItems - List of items we will add to new group
  *
- * @return New item group
+ * \return New item group
  */
 ItemGroup *
 SceneWidget::createItemGroup(const QList<QGraphicsItem *> &ipItems)
@@ -349,9 +355,9 @@ SceneWidget::createItemGroup(const QList<QGraphicsItem *> &ipItems)
 }
 
 /*!
- * @brief Return all items for the scene
+ * \brief Return all items for the scene
  *
- * @return List of all items on the scene
+ * \return List of all items on the scene
  */
 QList<QGraphicsItem *>
 SceneWidget::items() const
@@ -360,7 +366,7 @@ SceneWidget::items() const
 }
 
 /*!
- * @brief Save scheme to image
+ * \brief Save scheme to image
  */
 void
 SceneWidget::saveToImage()
@@ -386,9 +392,9 @@ SceneWidget::saveToImage()
 }
 
 /*!
- * @brief Show/hide control widget
+ * \brief Show/hide control widget
  *
- * @param[in] ipFlag - True if we want to show control widget, false otherwise
+ * \param[in] ipFlag - True if we want to show control widget, false otherwise
  */
 void
 SceneWidget::showControlWidget(bool ipFlag)
@@ -397,15 +403,15 @@ SceneWidget::showControlWidget(bool ipFlag)
 }
 
 /*!
- * @brief Get xml structure of scene
+ * \brief Get xml structure of scene
  *
- * @param[in] ipDoc - Xml dom document
- * @param[in] ipShowGrid - Is grid shown or not
- * @param[in] ipDivideIntoPages - Is scene divided into pages or not
- * @param[in] ipShowLegend - Is legend shown or not
- * @param[in] ipShowControlWidget - Is control widget shown or not
+ * \param[in] ipDoc - Xml dom document
+ * \param[in] ipShowGrid - Is grid shown or not
+ * \param[in] ipDivideIntoPages - Is scene divided into pages or not
+ * \param[in] ipShowLegend - Is legend shown or not
+ * \param[in] ipShowControlWidget - Is control widget shown or not
  *
- * @return Filled with scene info xml dom element
+ * \return Filled with scene info xml dom element
  */
 QDomElement
 SceneWidget::toXml(QDomDocument &ipDoc, bool ipShowGrid, bool ipDivideIntoPages, bool ipShowLegend, bool ipShowControlWidget)
@@ -414,9 +420,9 @@ SceneWidget::toXml(QDomDocument &ipDoc, bool ipShowGrid, bool ipDivideIntoPages,
 }
 
 /*!
- * @brief Load scene from the xml file
+ * \brief Load scene from the xml file
  *
- * @param[in] ipElement - Xml dom element
+ * \param[in] ipElement - Xml dom element
  */
 void
 SceneWidget::fromXml(QDomElement &ipElement)
@@ -437,9 +443,9 @@ SceneWidget::fromXml(QDomElement &ipElement)
 }
 
 /*!
- * @brief Print the graphic widget
+ * \brief Print the graphic widget
  *
- * @param[in] ipPrinter - Printer
+ * \param[in] ipPrinter - Printer
  */
 void
 SceneWidget::print(QPrinter *ipPrinter)
@@ -465,11 +471,11 @@ SceneWidget::print(QPrinter *ipPrinter)
 }
 
 /*!
- * @brief Send 'item moved' signal
+ * \brief Send 'item moved' signal
  *
- * @param[in] ipItemList - Item list were moved
- * @param[in] ipDiffX - Gorizontal shift
- * @param[in] ipDiffY - Vertical shift
+ * \param[in] ipItemList - Item list were moved
+ * \param[in] ipDiffX - Gorizontal shift
+ * \param[in] ipDiffY - Vertical shift
  */
 void
 SceneWidget::sendItemMoved(QList <QGraphicsItem *> ipItemList, int ipDiffX, int ipDiffY)
@@ -477,10 +483,22 @@ SceneWidget::sendItemMoved(QList <QGraphicsItem *> ipItemList, int ipDiffX, int 
     emit itemActionDone(new MoveItemCommand(ipItemList, ipDiffX, ipDiffY));
 }
 
+void
+SceneWidget::sendItemColorChanged(GraphicsItem *ipItem, const QColor &ipNewColor, const QColor &ipOldColor)
+{
+    emit itemActionDone(new SetColorItemCommand(ipItem, ipNewColor, ipOldColor));
+}
+
+void
+SceneWidget::sendItemResized(GraphicsItem *ipItem, const QRectF &ipNewRect, const QRectF &ipOldRect)
+{
+    emit itemActionDone(new ResizeItemCommand(ipItem, ipNewRect, ipOldRect));
+}
+
 /*!
- * @brief Send 'action was performed' signal
+ * \brief Send 'action was performed' signal
  *
- * @param[in] ipCommand - Command which describes action
+ * \param[in] ipCommand - Command which describes action
  */
 void
 SceneWidget::sendItemActionDone(QUndoCommand *ipCommand)

@@ -34,7 +34,7 @@
 
 /*!
  * \class Legend
- * \headerfile Legend.h
+ * \headerfile gui/Legend.h
  * \brief Class for legend. Legend describes each schama and it's color.
  */
 class Legend : public GraphicsItem

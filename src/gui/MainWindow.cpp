@@ -105,7 +105,7 @@ MainWindow::MainWindow()
 }
 
 /*!
- * @brief Create actions
+ * \brief Create actions
  */
 void MainWindow::createActions()
 {
@@ -130,7 +130,7 @@ void MainWindow::createActions()
 }
 
 /*!
- * @brief Create menus
+ * \brief Create menus
  */
 void
 MainWindow::createMenus()
@@ -152,7 +152,7 @@ MainWindow::createMenus()
 }
 
 /*!
- * @brief Update session menu
+ * \brief Update session menu
  */
 void
 MainWindow::updateSessionMenu()
@@ -179,9 +179,9 @@ MainWindow::updateSessionMenu()
 }
 
 /*!
- * @brief Enable or disable some menu actions
+ * \brief Enable or disable some menu actions
  *
- * @param[in] ipFlag - True if we want to enable actions, false otherwise
+ * \param[in] ipFlag - True if we want to enable actions, false otherwise
  */
 void
 MainWindow::setEnableForActions(bool ipFlag)
@@ -213,11 +213,11 @@ MainWindow::setEnableForActions(bool ipFlag)
 }
 
 /*!
- * @brief Import database
+ * \brief Import database
  *
- * @param[in] ui - UI of main window
+ * \param[in] ui - UI of main window
  *
- * @return Result of dialog processing
+ * \return Result of dialog processing
  */
 int
 importDatabase(const Ui::MainWindow &ui)
@@ -233,11 +233,11 @@ importDatabase(const Ui::MainWindow &ui)
 }
 
 /*!
- * @brief Show connection dialog
+ * \brief Show connection dialog
  *
- * @param[in] ipLoadSession - True if we want to load session parameters, false otherwise
+ * \param[in] ipLoadSession - True if we want to load session parameters, false otherwise
  *
- * @return Result of dialog processing
+ * \return Result of dialog processing
  */
 int
 MainWindow::showConnectionDialog(bool ipLoadSession)
@@ -278,7 +278,7 @@ MainWindow::showConnectionDialog(bool ipLoadSession)
 }
 
 /*!
- * @brief Show options dialog
+ * \brief Show options dialog
  */
 void
 MainWindow::showOptionsDialog()
@@ -293,7 +293,7 @@ MainWindow::showOptionsDialog()
 }
 
 /*!
- * @brief Show print preview dialog
+ * \brief Show print preview dialog
  */
 void
 MainWindow::showPrintPreviewDialog()
@@ -306,7 +306,7 @@ MainWindow::showPrintPreviewDialog()
 }
 
 /*!
- * @brief Show print dialog
+ * \brief Show print dialog
  */
 void
 MainWindow::showPrintDialog()
@@ -321,9 +321,9 @@ MainWindow::showPrintDialog()
 }
 
 /*!
- * @brief Print the preview page
+ * \brief Print the preview page
  *
- * @param[in] ipPrinter - Printer
+ * \param[in] ipPrinter - Printer
  */
 void
 MainWindow::printPreview(QPrinter *ipPrinter)
@@ -336,7 +336,7 @@ MainWindow::printPreview(QPrinter *ipPrinter)
 }
 
 /*!
- * @brief Create status bar
+ * \brief Create status bar
  */
 void
 MainWindow::createStatusBar()
@@ -355,9 +355,9 @@ MainWindow::createStatusBar()
 }
 
 /*!
- * @brief Make docked table list (in)visible
+ * \brief Make docked table list (in)visible
  *
- * @param[in] ipFlag - True if we want to show tree, false otherwise
+ * \param[in] ipFlag - True if we want to show tree, false otherwise
  */
 void
 MainWindow::showDatabaseTree(bool ipFlag)
@@ -370,7 +370,7 @@ MainWindow::showDatabaseTree(bool ipFlag)
 }
 
 /*!
- * @brief Close database tree window
+ * \brief Close database tree window
  */
 void
 MainWindow::closeDatabaseTree()
@@ -379,7 +379,7 @@ MainWindow::closeDatabaseTree()
 }
 
 /*!
- * @brief Show database tree view
+ * \brief Show database tree view
  */
 void 
 MainWindow::showDatabaseTree()
@@ -388,9 +388,9 @@ MainWindow::showDatabaseTree()
 }
 
 /*!
- * @brief Make docked log panel (in)visible
+ * \brief Make docked log panel (in)visible
  *
- * @param[in] ipFlag - True if we want to show log panel, false otherwise
+ * \param[in] ipFlag - True if we want to show log panel, false otherwise
  */
 void
 MainWindow::showLogPanel(bool ipFlag)
@@ -403,7 +403,7 @@ MainWindow::showLogPanel(bool ipFlag)
 }
 
 /*!
- * @brief Close log panel
+ * \brief Close log panel
  */
 void 
 MainWindow::closeLogPanel()
@@ -412,7 +412,7 @@ MainWindow::closeLogPanel()
 }
 
 /*!
- * @brief Show log panel
+ * \brief Show log panel
  */
 void
 MainWindow::showLogPanel()
@@ -421,7 +421,7 @@ MainWindow::showLogPanel()
 }
 
 /*!
- * @brief Add table to scene
+ * \brief Add table to scene
  */
 void
 MainWindow::addItem()
@@ -439,7 +439,7 @@ MainWindow::addItem()
 }
 
 /*!
- * @brief Draw full db scheme
+ * \brief Draw full db scheme
  */
 void
 MainWindow::drawFullDbScheme()
@@ -472,9 +472,9 @@ MainWindow::drawFullDbScheme()
 }
 
 /*!
- * @brief Do smth before mainwindows is closed
+ * \brief Do smth before mainwindows is closed
  *
- * @param[in] ipEvent - Close event
+ * \param[in] ipEvent - Close event
  */
 void
 MainWindow::closeEvent(QCloseEvent *ipEvent)
@@ -530,7 +530,7 @@ MainWindow::closeEvent(QCloseEvent *ipEvent)
 }
 
 /*!
- * @brief Describe selected database object
+ * \brief Describe selected database object
  */
 void
 MainWindow::describeObject()
@@ -653,7 +653,7 @@ MainWindow::describeObject()
 }
 
 /*!
- * @brief Show query dialog tab
+ * \brief Show query dialog tab
  */
 void
 MainWindow::queryData()
@@ -724,9 +724,9 @@ MainWindow::queryData()
 }
 
 /*!
- * @brief Save all parameters to xml file
+ * \brief Save all parameters to xml file
  *
- * @param[in] ipFileName - Xml file name were we will store parameters to
+ * \param[in] ipFileName - Xml file name were we will store parameters to
  */
 void
 MainWindow::saveToXml(const QString &ipFileName)
@@ -753,9 +753,9 @@ MainWindow::saveToXml(const QString &ipFileName)
 }
 
 /*!
- * @brief Load parameters from xml file
+ * \brief Load parameters from xml file
  *
- * @param[in] ipFileName - Xml file name were load parameter from
+ * \param[in] ipFileName - Xml file name were load parameter from
  */
 void
 MainWindow::loadFromXml(QString ipFileName)
@@ -809,9 +809,9 @@ MainWindow::loadFromXml(QString ipFileName)
 }
 
 /*!
- * @brief Save session
+ * \brief Save session
  *
- * @return True if we save was successfull, false otherwise
+ * \return True if we save was successfull, false otherwise
  */
 bool
 MainWindow::saveSession()
@@ -844,7 +844,7 @@ MainWindow::saveSession()
 }
 
 /*!
- * @brief Load session
+ * \brief Load session
  */
 void
 MainWindow::loadSession()
@@ -864,7 +864,7 @@ MainWindow::loadSession()
 }
 
 /*!
- * @brief Load last session
+ * \brief Load last session
  */
 void
 MainWindow::loadLastSession()
@@ -874,9 +874,9 @@ MainWindow::loadLastSession()
 }
 
 /*!
- * @brief Show window with full screen or not
+ * \brief Show window with full screen or not
  *
- * @param[in] ipFlag - True if we want to show in fullscreen, false otherwise
+ * \param[in] ipFlag - True if we want to show in fullscreen, false otherwise
  */
 void
 MainWindow::setFullScreen(bool ipFlag)
@@ -889,7 +889,7 @@ MainWindow::setFullScreen(bool ipFlag)
 }
 
 /*!
- * @brief Reload data from DB
+ * \brief Reload data from DB
  */
 void
 MainWindow::reloadData()
@@ -900,7 +900,7 @@ MainWindow::reloadData()
 }
 
 /*!
- * @brief Initialize session
+ * \brief Initialize session
  */
 void
 MainWindow::initSession()
@@ -917,7 +917,7 @@ MainWindow::initSession()
 }
 
 /*!
- * @brief Add command to the stack
+ * \brief Add command to the stack
  */
 void
 MainWindow::addCommand(QUndoCommand *ipCommand)
@@ -926,9 +926,9 @@ MainWindow::addCommand(QUndoCommand *ipCommand)
 }
 
 /*!
- * @brief Prints the message to the log panel
+ * \brief Prints the message to the log panel
  *
- * @param[in] ipText - Message text
+ * \param[in] ipText - Message text
  */
 void
 MainWindow::printMsg(const QString &ipText) const

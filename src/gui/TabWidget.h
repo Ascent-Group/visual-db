@@ -36,7 +36,7 @@ class QToolButton;
 
 /*!
  * \class TabWidget
- * \headerfile TabWidget.h
+ * \headerfile gui/TabWidget.h
  * \brief Tab widget
  */
 class TabWidget : public QTabWidget

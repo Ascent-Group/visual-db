@@ -133,9 +133,9 @@ TableItem::~TableItem()
 }
 
 /*!
- * @brief Return the type
+ * \brief Return the type
  *
- * @return Type identifier
+ * \return Type identifier
  */
 int
 TableItem::type() const
@@ -144,9 +144,9 @@ TableItem::type() const
 }
 
 /*!
- * @brief Adds input index item to the list of indeces for this table
+ * \brief Adds input index item to the list of indeces for this table
  *
- * @param[in] ipIndexItem - Index item we will add
+ * \param[in] ipIndexItem - Index item we will add
  */
 void
 TableItem::addIndexItem(QGraphicsTextItem *ipIndexItem)
@@ -155,10 +155,10 @@ TableItem::addIndexItem(QGraphicsTextItem *ipIndexItem)
 }
 
 /*!
- * @brief Paints field image
+ * \brief Paints field image
  *
- * @param[in] ipPainter - Painter
- * @param[in] ipIdx - Index of field we will draw image for
+ * \param[in] ipPainter - Painter
+ * \param[in] ipIdx - Index of field we will draw image for
  */
 void
 TableItem::paintFieldImage(QPainter *ipPainter, int ipIdx)
@@ -179,9 +179,9 @@ TableItem::paintFieldImage(QPainter *ipPainter, int ipIdx)
 }
 
 /*!
- * @brief Paints indeces
+ * \brief Paints indeces
  *
- * @param[in] ipPainter - Painter
+ * \param[in] ipPainter - Painter
  */
 void
 TableItem::paintIndeces(QPainter *ipPainter)
@@ -203,9 +203,9 @@ TableItem::paintIndeces(QPainter *ipPainter)
 }
 
 /*!
- * @brief Show or hide indices
+ * \brief Show or hide indices
  *
- * @param[in] ipFlag - True if we need to show indeces, false if we don't
+ * \param[in] ipFlag - True if we need to show indeces, false if we don't
  */
 void
 TableItem::setIndicesVisible(bool ipFlag)
@@ -215,11 +215,11 @@ TableItem::setIndicesVisible(bool ipFlag)
 }
 
 /*!
- * @brief Get the foreign schema name for field
+ * \brief Get the foreign schema name for field
  *
- * @param[in] ipIdx - Field index for which we want to get info
+ * \param[in] ipIdx - Field index for which we want to get info
  *
- * @return Foreign schema name
+ * \return Foreign schema name
  */
 QString
 TableItem::foreignSchemaName(int ipIdx) const
@@ -228,11 +228,11 @@ TableItem::foreignSchemaName(int ipIdx) const
 }
 
 /*!
- * @brief Get the foreign table name
+ * \brief Get the foreign table name
  *
- * @param[in] ipIdx - Field index for which we want to get info
+ * \param[in] ipIdx - Field index for which we want to get info
  *
- * @return Foreign table name
+ * \return Foreign table name
  */
 QString
 TableItem::foreignTableName(int ipIdx) const
@@ -241,11 +241,11 @@ TableItem::foreignTableName(int ipIdx) const
 }
 
 /*!
- * @brief Get the flag for field - is it foreign key or not
+ * \brief Get the flag for field - is it foreign key or not
  *
- * @param[in] ipIdx - Field index for which we want to get info
+ * \param[in] ipIdx - Field index for which we want to get info
  *
- * @return True if the column is foreign key, false if it isn't
+ * \return True if the column is foreign key, false if it isn't
  */
 bool
 TableItem::isColumnForeignKey(int ipIdx) const
@@ -254,9 +254,9 @@ TableItem::isColumnForeignKey(int ipIdx) const
 }
 
 /*!
- * @brief Get columns count
+ * \brief Get columns count
  *
- * @return Columns count
+ * \return Columns count
  */
 int
 TableItem::columnsCount() const
@@ -265,9 +265,9 @@ TableItem::columnsCount() const
 }
 
 /*!
- * @brief Get the name of the table item
+ * \brief Get the name of the table item
  *
- * @return Table item name
+ * \return Table item name
  */
 QString
 TableItem::name() const
@@ -285,11 +285,11 @@ TableItem::schemaName() const
 }
 
 /*!
- * @brief Create the xml represantation for the table
+ * \brief Create the xml represantation for the table
  *
- * @param[in] ipDoc - Xml dom document
+ * \param[in] ipDoc - Xml dom document
  *
- * @return Filled with table info xml dom element
+ * \return Filled with table info xml dom element
  */
 QDomElement
 TableItem::toXml(QDomDocument &ipDoc) const
@@ -298,13 +298,13 @@ TableItem::toXml(QDomDocument &ipDoc) const
 }
 
 /*!
- * @brief Load table from the xml file
+ * \brief Load table from the xml file
  *
- * @param[in] ipElement - Xml dom element we will read the table info from
- * @param[in] ipScene - Scene where we will create new table item for
- * @param[in] ipMenu - Context menu for new table item
+ * \param[in] ipElement - Xml dom element we will read the table info from
+ * \param[in] ipScene - Scene where we will create new table item for
+ * \param[in] ipMenu - Context menu for new table item
  *
- * @return Created table item
+ * \return Created table item
  */
 TableItem *
 TableItem::fromXml(const QDomElement &ipElement, GraphicsScene *ipScene, QMenu *ipMenu)
@@ -329,11 +329,11 @@ TableItem::fromXml(const QDomElement &ipElement, GraphicsScene *ipScene, QMenu *
 }
 
 /*!
- * @brief Check if input graphics item is table item
+ * \brief Check if input graphics item is table item
  *
- * @param[in] ipItem - Any graphics item
+ * \param[in] ipItem - Any graphics item
  *
- * @return Converted to TableItem item or 0
+ * \return Converted to TableItem item or 0
  */
 TableItem *
 toTable(QGraphicsItem *ipItem)

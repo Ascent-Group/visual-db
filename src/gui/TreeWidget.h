@@ -38,8 +38,10 @@ class QMenu;
 
 using namespace DbObjects::Common;
 
-/*
- * Tree widget. Show all database objects on this tree.
+/*!
+ * \class TreeWidget
+ * \headerfile gui/TreeWidget.h
+ * \brief Tree widget. Show all database objects on this tree.
  */
 class TreeWidget : public QTreeWidget
 {

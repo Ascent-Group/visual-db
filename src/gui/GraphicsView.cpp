@@ -71,9 +71,9 @@ GraphicsView::~GraphicsView()
 }
 
 /*!
- * @brief Handler for scrolling event
+ * \brief Handler for scrolling event
  *
- * @param[in] ipEvent - Wheel event
+ * \param[in] ipEvent - Wheel event
  */
 void
 GraphicsView::wheelEvent(QWheelEvent *ipEvent)
@@ -93,9 +93,9 @@ GraphicsView::wheelEvent(QWheelEvent *ipEvent)
 }
 
 /*!
- * @brief Scaling the scheme
+ * \brief Scaling the scheme
  *
- * @param[in] ipScaleFactor - Scale factor
+ * \param[in] ipScaleFactor - Scale factor
  */
 void
 GraphicsView::scaleView(int ipScaleFactor)
@@ -125,9 +125,9 @@ GraphicsView::scaleView(int ipScaleFactor)
 }
 
 /*!
- * @brief Drag enter event
+ * \brief Drag enter event
  *
- * @param[in] ipEvent - Drag enter event
+ * \param[in] ipEvent - Drag enter event
  */
 void 
 GraphicsView::dragEnterEvent(QDragEnterEvent *ipEvent)
@@ -138,9 +138,9 @@ GraphicsView::dragEnterEvent(QDragEnterEvent *ipEvent)
 }
 
 /*!
- * @brief Drag move event
+ * \brief Drag move event
  *
- * @param[in] ipEvent - Drag move event
+ * \param[in] ipEvent - Drag move event
  */
 void 
 GraphicsView::dragMoveEvent(QDragMoveEvent *ipEvent)
@@ -157,9 +157,9 @@ GraphicsView::dragMoveEvent(QDragMoveEvent *ipEvent)
 }
 
 /*!
- * @brief Drop event
+ * \brief Drop event
  *
- * @param[in] ipEvent - Drop event
+ * \param[in] ipEvent - Drop event
  */
 void
 GraphicsView::dropEvent(QDropEvent *ipEvent)
@@ -192,10 +192,10 @@ GraphicsView::dropEvent(QDropEvent *ipEvent)
 }
 
 /*!
- * @brief Handle scrolling event
+ * \brief Handle scrolling event
  *
- * @param[in] ipDx - Gorizontal distance
- * @param[in] ipDy - Vertical distance
+ * \param[in] ipDx - Gorizontal distance
+ * \param[in] ipDy - Vertical distance
  */
 void
 GraphicsView::scrollContentsBy(int ipDx, int ipDy)
@@ -211,7 +211,7 @@ GraphicsView::scrollContentsBy(int ipDx, int ipDy)
 }
 
 /*!
- * @brief Move the widget up
+ * \brief Move the widget up
  */
 void
 GraphicsView::moveUp()
@@ -220,7 +220,7 @@ GraphicsView::moveUp()
 }
 
 /*!
- * @brief Move the widget down
+ * \brief Move the widget down
  */
 void
 GraphicsView::moveDown()
@@ -229,7 +229,7 @@ GraphicsView::moveDown()
 }
 
 /*!
- * @brief Move the widget left
+ * \brief Move the widget left
  */
 void
 GraphicsView::moveLeft()
@@ -238,7 +238,7 @@ GraphicsView::moveLeft()
 }
 
 /*!
- * @brief Move the widget right
+ * \brief Move the widget right
  */
 void
 GraphicsView::moveRight()
@@ -247,9 +247,9 @@ GraphicsView::moveRight()
 }
 
 /*!
- * @brief Set move mode for the scene (when you drag and drop scene itself with mouse)
+ * \brief Set move mode for the scene (when you drag and drop scene itself with mouse)
  *
- * @param[in] ipFlag - True if move mode is enabled, false otherwise
+ * \param[in] ipFlag - True if move mode is enabled, false otherwise
  */
 void
 GraphicsView::setMoveMode(bool ipFlag)

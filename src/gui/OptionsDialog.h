@@ -35,7 +35,7 @@
 
 /*!
  * \class OptionsDialog
- * \headerfile OptionsDialog.h
+ * \headerfile gui/OptionsDialog.h
  * \brief Dialog to define different options (such as color schema etc.)
  */
 class OptionsDialog : public QDialog

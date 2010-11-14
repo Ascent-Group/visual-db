@@ -151,9 +151,7 @@ DbObjectItem::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
     } else {
         mMode = DbObjectItem::MOVE;
     }
-
-    //    setZValue(1);
-
+    
     QGraphicsItem::mousePressEvent(ipEvent);
 }
 
@@ -163,8 +161,6 @@ DbObjectItem::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
 void
 DbObjectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
-    //    setZValue(0);
-
     QGraphicsItem::mouseReleaseEvent(ipEvent);
     if (mSettings.value(Consts::VIEW_GRP + "/" + Consts::ALIGN_TO_GRID_SETTING, false).toBool()) {
         moveBy(-(int)pos().x() % GraphicsScene::LOW_GRID_DX, -(int)pos().y() % GraphicsScene::LOW_GRID_DY);
@@ -255,6 +251,7 @@ DbObjectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
     } else {
         QGraphicsItem::mouseMoveEvent(ipEvent);
     }
+//    QGraphicsItem::mouseMoveEvent(ipEvent);
 }
 
 /*
@@ -317,6 +314,15 @@ int
 DbObjectItem::seek()
 {
     return mSeek;
+}
+
+/*
+ *
+ */
+DbObjectItem::Mode
+DbObjectItem::mouseMode() const
+{
+    return mMode;
 }
 
 DbObjectItem *

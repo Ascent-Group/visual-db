@@ -35,7 +35,7 @@
 
 /*!
  * \class LogPanel
- * \headerfile LogPanel.h
+ * \headerfile gui/LogPanel.h
  * \brief The panel for application's output, will be docked to the bottom
  */
 class LogPanel : public QWidget

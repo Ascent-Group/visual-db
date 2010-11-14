@@ -27,54 +27,38 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SELECTCOLORWIDGET_H
-#define SELECTCOLORWIDGET_H
+#ifndef RESIZEITEMCOMMAND_H
+#define RESIZEITEMCOMMAND_H
 
-#include <gui/ui/ui_SelectColorWidget.h>
-#include <QDynamicPropertyChangeEvent>
-#include <QSettings>
-#include <QWidget>
+#include <QPointF>
+#include <QUndoCommand>
 
-class QColor;
+class GraphicsItem;
 
 /*!
- * \class SelectColorWidget
- * \headerfile gui/SelectColorWidget.h
- * \brief Widget to provide the color selection.
+ * \class ResizeItemCommand
+ * \headerfile gui/behaviour/ResizeItemCommand.h
+ * \brief Incapsulate move table command
  */
-class SelectColorWidget : public QWidget
+class ResizeItemCommand : public QUndoCommand
 {
-    Q_OBJECT
-    Q_PROPERTY(QString labelText READ labelText WRITE setLabelText)
-    Q_PROPERTY(QColor defaultColor READ defaultColor WRITE setDefaultColor)
-
     public:
-        SelectColorWidget(QWidget *ipParent = 0);
-        ~SelectColorWidget();
+        ResizeItemCommand(GraphicsItem *, const QRectF, const QRectF, QUndoCommand *parent = 0);
+        ~ResizeItemCommand();
 
-        QColor color() const;
+        enum { Id = 1234 };
 
-        QString labelText() const;
-        void setLabelText(const QString &ipText);
-
-        QColor defaultColor() const;
-        void setDefaultColor(const QColor &ipColor);
+        void undo();
+        void redo();
+        int id() const { return Id; }
 
     private:
-        Ui::SelectColorWidget ui;
-        QSettings mSettings;
-
-        QColor mColor;
-        QColor mDefaultColor;
-
-    private:
-        void init();
-        void getColorFromDialog();
-
-    private slots:
-        void colorSelect(int);
-        void buttonClick();
+        GraphicsItem *mItem;
+        QRectF mNewRect;
+        QRectF mOldRect;
 };
 
-#endif // SELECTCOLORWIDGET_H
+void setRect(GraphicsItem *, const QRectF &);
+
+#endif // RESIZEITEMCOMMAND_H
 

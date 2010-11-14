@@ -27,54 +27,43 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SELECTCOLORWIDGET_H
-#define SELECTCOLORWIDGET_H
-
-#include <gui/ui/ui_SelectColorWidget.h>
-#include <QDynamicPropertyChangeEvent>
-#include <QSettings>
-#include <QWidget>
-
-class QColor;
+#include <QDebug>
+#include <QUndoCommand>
+#include <gui/GraphicsItem.h>
+#include <gui/behaviour/SetColorItemCommand.h>
 
 /*!
- * \class SelectColorWidget
- * \headerfile gui/SelectColorWidget.h
- * \brief Widget to provide the color selection.
+ * Ctor
  */
-class SelectColorWidget : public QWidget
+SetColorItemCommand::SetColorItemCommand(GraphicsItem *ipItem, 
+        QColor ipNewColor, QColor ipOldColor, QUndoCommand *ipParent)
+    : QUndoCommand(ipParent), mItem(ipItem)
+    , mNewColor(ipNewColor), mOldColor(ipOldColor)
 {
-    Q_OBJECT
-    Q_PROPERTY(QString labelText READ labelText WRITE setLabelText)
-    Q_PROPERTY(QColor defaultColor READ defaultColor WRITE setDefaultColor)
+    setText(QObject::tr("Set color"));
+}
 
-    public:
-        SelectColorWidget(QWidget *ipParent = 0);
-        ~SelectColorWidget();
+/*!
+ * Dtor
+ */
+SetColorItemCommand::~SetColorItemCommand()
+{
+}
 
-        QColor color() const;
+/*!
+ * \breif Undo add node
+ */
+void
+SetColorItemCommand::undo()
+{
+    mItem->setItemColor(mOldColor);
+}
 
-        QString labelText() const;
-        void setLabelText(const QString &ipText);
-
-        QColor defaultColor() const;
-        void setDefaultColor(const QColor &ipColor);
-
-    private:
-        Ui::SelectColorWidget ui;
-        QSettings mSettings;
-
-        QColor mColor;
-        QColor mDefaultColor;
-
-    private:
-        void init();
-        void getColorFromDialog();
-
-    private slots:
-        void colorSelect(int);
-        void buttonClick();
-};
-
-#endif // SELECTCOLORWIDGET_H
-
+/*!
+ * \brief Redo add node
+ */
+void
+SetColorItemCommand::redo()
+{
+    mItem->setItemColor(mNewColor);
+}

@@ -36,8 +36,10 @@ class QAction;
 class QPointF;
 class QUndoCommand;
 
-/*
- * View of the scene.
+/*!
+ * \class GraphicsView
+ * \headerfile gui/GraphicsView.h
+ * \brief View of the scene.
  */
 class GraphicsView : public QGraphicsView
 {

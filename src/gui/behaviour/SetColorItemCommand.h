@@ -27,54 +27,34 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef SELECTCOLORWIDGET_H
-#define SELECTCOLORWIDGET_H
+#ifndef SETCOLORITEMCOMAND_H
+#define SETCOLORITEMCOMAND_H
 
-#include <gui/ui/ui_SelectColorWidget.h>
-#include <QDynamicPropertyChangeEvent>
-#include <QSettings>
-#include <QWidget>
+#include <QColor>
+#include <QUndoCommand>
 
-class QColor;
+class GraphicsScene;
+class GraphicsItem;
 
 /*!
- * \class SelectColorWidget
- * \headerfile gui/SelectColorWidget.h
- * \brief Widget to provide the color selection.
+ * \class SetColorItemCommand
+ * \headerfile gui/behaviour/SetColorItemCommand.h
+ * \brief Implement add table command
  */
-class SelectColorWidget : public QWidget
+class SetColorItemCommand : public QUndoCommand
 {
-    Q_OBJECT
-    Q_PROPERTY(QString labelText READ labelText WRITE setLabelText)
-    Q_PROPERTY(QColor defaultColor READ defaultColor WRITE setDefaultColor)
-
     public:
-        SelectColorWidget(QWidget *ipParent = 0);
-        ~SelectColorWidget();
+        SetColorItemCommand(GraphicsItem *, QColor, QColor, QUndoCommand *parent = 0);
+        ~SetColorItemCommand();
 
-        QColor color() const;
-
-        QString labelText() const;
-        void setLabelText(const QString &ipText);
-
-        QColor defaultColor() const;
-        void setDefaultColor(const QColor &ipColor);
+        void undo();
+        void redo();
 
     private:
-        Ui::SelectColorWidget ui;
-        QSettings mSettings;
-
-        QColor mColor;
-        QColor mDefaultColor;
-
-    private:
-        void init();
-        void getColorFromDialog();
-
-    private slots:
-        void colorSelect(int);
-        void buttonClick();
+        GraphicsItem *mItem;
+        QColor mNewColor;
+        QColor mOldColor;
 };
 
-#endif // SELECTCOLORWIDGET_H
+#endif // SETCOLORITEMCOMAND_H
 

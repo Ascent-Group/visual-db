@@ -33,8 +33,10 @@
 #include <gui/ui/ui_SqlWidget.h>
 #include <QWidget>
 
-/*
- * Provide the execution of different types of queries in this widget.
+/*!
+ * \class SqlWidget
+ * \headerfile gui/SqlWidget.h
+ * \brief Provide the execution of different types of queries in this widget.
  */
 class SqlWidget : public QWidget
 {

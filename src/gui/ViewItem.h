@@ -50,8 +50,10 @@ typedef DbObjectPtr<DbView> DbViewPtr;
 }
 }
 
-/*
- * Graphics item, implements the database view. Support moving, resizing, changing of the color etc.
+/*!
+ * \class ViewItem
+ * \headerfile gui/ViewItem.h
+ * \brief Graphics item, implements the database view. Support moving, resizing, changing of the color etc.
  */
 class ViewItem : public DbObjectItem
 {

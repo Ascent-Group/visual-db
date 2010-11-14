@@ -116,9 +116,9 @@ ViewItem::~ViewItem()
 }
 
 /*!
- * @brief Return the type identifier
+ * \brief Return the type identifier
  *
- * @return Type identifier
+ * \return Type identifier
  */
 int
 ViewItem::type() const
@@ -127,9 +127,9 @@ ViewItem::type() const
 }
 
 /*!
- * @brief Get the name of the view
+ * \brief Get the name of the view
  *
- * @return Name of the view
+ * \return Name of the view
  */
 QString
 ViewItem::name() const
@@ -138,9 +138,9 @@ ViewItem::name() const
 }
 
 /*!
- * @brief Get the schema name
+ * \brief Get the schema name
  *
- * @return Schema name
+ * \return Schema name
  */
 QString
 ViewItem::schemaName() const
@@ -149,11 +149,11 @@ ViewItem::schemaName() const
 }
 
 /*!
- * @brief Create the xml represantation for the view
+ * \brief Create the xml represantation for the view
  *
- * @param[in] ipDoc - Parent xml dom document
+ * \param[in] ipDoc - Parent xml dom document
  *
- * @return Filled with schema info xml dom element connected to input document
+ * \return Filled with schema info xml dom element connected to input document
  */
 QDomElement
 ViewItem::toXml(QDomDocument &ipDoc) const
@@ -162,11 +162,11 @@ ViewItem::toXml(QDomDocument &ipDoc) const
 }
 
 /*!
- * @brief Check if input graphics item is view item
+ * \brief Check if input graphics item is view item
  *
- * @param[in] ipItem - any graphics item
+ * \param[in] ipItem - any graphics item
  *
- * @return Converted to ViewItem element or 0 otherwise
+ * \return Converted to ViewItem element or 0 otherwise
  */
 ViewItem *
 toView(QGraphicsItem *ipItem)

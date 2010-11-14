@@ -41,7 +41,7 @@ class QSpinBox;
 
 /*!
  * \class PreferencesPage
- * \headerfile PreferencesPage.h
+ * \headerfile gui/PreferencesPage.h
  * \brief Preferences page on the options dialog
  */
 class PreferencesPage : public QWidget

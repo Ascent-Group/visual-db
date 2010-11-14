@@ -64,6 +64,21 @@ class DbObjectItem : public GraphicsItem
     public:
         enum { Type = UserType + 10 };
 
+        // mode for table (you can resize table from different positions or move it)
+        enum Mode {
+            RIGHT_BOTTOM_CORNER_RESIZE,
+            LEFT_BOTTOM_CORNER_RESIZE,
+            LEFT_TOP_CORNER_RESIZE,
+            RIGHT_TOP_CORNER_RESIZE,
+
+            LEFT_VERTICAL_RESIZE,
+            RIGHT_VERTICAL_RESIZE,
+            TOP_HORIZONTAL_RESIZE,
+            BOTTOM_HORIZONTAL_RESIZE,
+
+            MOVE
+        };
+
     public:
         explicit DbObjectItem(QMenu *ipMenu = 0);
         virtual ~DbObjectItem();
@@ -82,6 +97,8 @@ class DbObjectItem : public GraphicsItem
 
         static void setSeek(int);
         static int seek();
+
+        virtual Mode mouseMode() const;
 
     protected:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
@@ -110,20 +127,6 @@ class DbObjectItem : public GraphicsItem
 
         QMenu *mContextMenu;
 
-        // mode for table (you can resize table from different positions or move it)
-        enum Mode {
-            RIGHT_BOTTOM_CORNER_RESIZE,
-            LEFT_BOTTOM_CORNER_RESIZE,
-            LEFT_TOP_CORNER_RESIZE,
-            RIGHT_TOP_CORNER_RESIZE,
-
-            LEFT_VERTICAL_RESIZE,
-            RIGHT_VERTICAL_RESIZE,
-            TOP_HORIZONTAL_RESIZE,
-            BOTTOM_HORIZONTAL_RESIZE,
-
-            MOVE
-        };
         Mode mMode;
 };
 

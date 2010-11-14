@@ -45,10 +45,13 @@ class QTreeWidgetItem;
 class QUndoCommand;
 class TableItem;
 class ItemGroup;
+class GraphicsItem;
 
-/*
- * This is widget to provide the visualization.
- * It contains graphics scene, graphics view, control widget and menus.
+/*!
+ * \class SceneWidget
+ * \headerfile gui/SceneWidget.h
+ * \brief This is widget to provide the visualization.
+ *        It contains graphics scene, graphics view, control widget and menus.
  */
 class SceneWidget : public QWidget
 {
@@ -105,6 +108,8 @@ class SceneWidget : public QWidget
 
     private slots:
         void sendItemMoved(QList <QGraphicsItem *>, int, int);
+        void sendItemColorChanged(GraphicsItem *, const QColor &, const QColor &);
+        void sendItemResized(GraphicsItem *, const QRectF &, const QRectF &);
 
     private:
         GraphicsScene *mScene;

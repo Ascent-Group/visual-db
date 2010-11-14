@@ -49,8 +49,10 @@ class QTreeWidgetItem;
 class QUndoCommand;
 class QUndoStack;
 
-/*
- * Main window. Container for all widgets of the application.
+/*!
+ * \class MainWindow
+ * \headerfile gui/MainWindow.h
+ * \brief Main window. Container for all widgets of the application.
  */
 class MainWindow : public QMainWindow
 {

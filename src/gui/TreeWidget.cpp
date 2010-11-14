@@ -58,9 +58,9 @@ TreeWidget::~TreeWidget()
 }
 
 /*!
- * @brief Set context menu
+ * \brief Set context menu
  *
- * @param[in] ipMenu - Context menu
+ * \param[in] ipMenu - Context menu
  */
 void
 TreeWidget::setContextMenu(QMenu *ipMenu)
@@ -69,7 +69,7 @@ TreeWidget::setContextMenu(QMenu *ipMenu)
 }
 
 /*!
- * @brief Read database and fill the tree
+ * \brief Read database and fill the tree
  */
 void
 TreeWidget::refresh()
@@ -200,9 +200,9 @@ TreeWidget::refresh()
 }
 
 /*!
- * @brief Handler for context menu event
+ * \brief Handler for context menu event
  *
- * @param[in] ipEvent - Context menu event
+ * \param[in] ipEvent - Context menu event
  */
 void
 TreeWidget::contextMenuEvent(QContextMenuEvent *ipEvent)
@@ -235,11 +235,11 @@ TreeWidget::startDrag(Qt::DropActions)
 
 
 /*!
- * @brief Create the database caption
+ * \brief Create the database caption
  *
- * @param[in] ipDb - Database connection
+ * \param[in] ipDb - Database connection
  *
- * @return Database caption
+ * \return Database caption
  */
 static QString
 qDBCaption(const QSqlDatabase &ipDb)
@@ -257,10 +257,10 @@ qDBCaption(const QSqlDatabase &ipDb)
 }
 
 /*!
- * @brief Set font to bold
+ * \brief Set font to bold
  *
- * @param[in] ipItem - Tree item we need to change the boldness
- * @param[in] ipBold - True for bold font or false for normal one
+ * \param[in] ipItem - Tree item we need to change the boldness
+ * \param[in] ipBold - True for bold font or false for normal one
  */
 static void
 setBold(QTreeWidgetItem *ipItem, bool ipBold)
@@ -271,11 +271,11 @@ setBold(QTreeWidgetItem *ipItem, bool ipBold)
 }
 
 /*!
- * @brief Populate tree under parent-item with triggers
+ * \brief Populate tree under parent-item with triggers
  *
- * @param[in] ipParentItem - Parent item we will populate
- * @param[in] ipList - The list of captions we need to fill with the parent item
- * @param[in] ipType - Item type
+ * \param[in] ipParentItem - Parent item we will populate
+ * \param[in] ipList - The list of captions we need to fill with the parent item
+ * \param[in] ipType - Item type
  */
 void
 TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, TreeWidget::Item ipType, bool /*ipDragEnabled*/)

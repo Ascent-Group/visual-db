@@ -125,7 +125,7 @@ void
 DbParameters::setDbPassword(QString ipDbPassword)
 {
     mDbPassword = ipDbPassword;
-    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::DB_PASS_SETTING, mDbPassword);
+//    mSettings.setValue(Consts::LAST_SESSION_GRP + "/" + Consts::DB_PASS_SETTING, mDbPassword);
 }
 
 void

@@ -46,7 +46,7 @@ namespace Psql
 {
 
 typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
-
+typedef Common::DbObjectPtr<Common::DbTable> DbTablePtr;
 /*!
  * \class Table
  * \headerfile psql/Table.h

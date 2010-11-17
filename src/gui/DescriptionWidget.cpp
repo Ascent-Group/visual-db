@@ -243,9 +243,9 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
                         .arg(foreignFieldsNames));
         }
 
-    if (i != columnsCount - 1) {
-        body.append(",");
-    }
+        if (i != columnsCount - 1) {
+            body.append(",");
+        }
     }
 
     // auto resize cells
@@ -253,9 +253,27 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
     ui.mTable->resizeRowsToContents();
 
     // show generated body
-    body.append("\n);");
-    ui.mBodyEdit->setText(body);
+    body.append("\n) ");
+    QVector<DbTablePtr> parentsList;
+    ipTable->parentTables(parentsList);
 
+    if (parentsList.size()) {
+        body.append("INHERITS ( ");
+        foreach (const DbTablePtr &parent, parentsList) {
+            body.append(QString("%1.%2, ")
+                    .arg(parent.schemaName())
+                    .arg(parent.name()));
+        }
+
+        // remove last comma
+        body.remove(body.lastIndexOf(", "), 2);
+        body.append(" )");
+    }
+
+    body.append(";");
+
+
+    ui.mBodyEdit->setText(body);
 }
 
 /*!

@@ -116,7 +116,7 @@ Table::loadData()
     qDebug() << "Psql::Table::loadData> " << qstr;
 #endif
 
-    // if query exectuion failed
+    // if query execution failed
     if (!query.exec(qstr)) {
         qDebug() << query.lastError().text();
         return false;
@@ -160,6 +160,60 @@ Table::loadData()
         // add column definition
         mColumnDefs.push_back(cDef);
     } while (query.next());
+
+    // clear result from previous query
+    query.clear();
+
+    // try to find parents if they exist
+    qstr = QString("SELECT "
+//                       "childns.nspname AS child_schema, "
+//                       "child.relname AS child_name, "
+                       "parentns.nspname AS parent_schema, "
+                       "parent.relname AS parent_name "
+                   "FROM "
+                       "pg_catalog.pg_inherits i, "
+                       "pg_catalog.pg_class child, "
+                       "pg_catalog.pg_class parent, "
+                       "pg_catalog.pg_namespace childns, "
+                       "pg_catalog.pg_namespace parentns "
+                   "WHERE "
+                       "i.inhrelid = child.oid AND "
+                       "i.inhparent = parent.oid AND "
+                       "childns.oid = child.relnamespace AND "
+                       "parentns.oid = parent.relnamespace AND "
+                       "childns.nspname = '%1' AND "
+                       "child.relname = '%2';")
+        .arg(mSchema.name())
+        .arg(mName);
+
+#ifdef DEBUG_QUERY
+    qDebug() << "Psql::Table::loadData> " << qstr;
+#endif
+
+    // if query execution failed
+    if (!query.exec(qstr)) {
+        qDebug() << query.lastError().text();
+        return false;
+    }
+
+    // if query result is empty
+    if (query.first()) {
+
+        do {
+            DbSchemaPtr schema = Common::Database::instance()->findSchema(query.value(0).toString());
+            // devtime assert
+            Q_ASSERT(0 != schema.get());
+
+            DbTablePtr table = schema->findTable(query.value(1).toString());
+            // devtime assert
+            Q_ASSERT(0 != table.get());
+
+            // store handle to parent table
+            mParentTables.push_back(table);
+
+            qDebug() << "Psql::Table::loadData> Parent table: " << table.name();
+        } while (query.next());
+    }
 
     return DbTable::loadData();
 }

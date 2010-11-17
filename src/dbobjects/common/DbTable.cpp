@@ -337,6 +337,7 @@ DbTable::resetData()
 {
     /*! \todo Implement */
     mColumnDefs.clear();
+    mParentTables.clear();
 
     DbObject::resetData();
 }
@@ -361,6 +362,26 @@ DbObject::Type
 DbTable::type() const
 {
     return DbObject::TableObject;
+}
+
+/*!
+ * \param[out] opList - List of proxies to the given table's parents
+ *
+ * \return The number of parents
+ */
+quint32
+DbTable::parentTables(QVector<DbTablePtr> &opList) const
+{
+    // we define count instead of returning list.size() because the non-empty list might
+    // come here
+    quint32 count = 0;
+
+    foreach (const DbTablePtr &parent, mParentTables) {
+        opList.push_back(parent);
+        ++count;
+    }
+
+    return count;
 }
 
 } // namespace Common

@@ -96,6 +96,9 @@ class DbTable : public Common::DbObject
 
         virtual DbObject::Type type() const;
 
+        // \todo Write unit-test
+        quint32 parentTables(QVector<DbTablePtr> &opList) const;
+
     protected:
         /*!
          * \struct ColumnDefinition
@@ -127,6 +130,8 @@ class DbTable : public Common::DbObject
         DbSchemaPtr mSchema;
         /*! Column definitions */
         QVector<ColumnDefinition> mColumnDefs;
+        /*! Parent tables */
+        QVector<DbTablePtr> mParentTables;
 
     protected:
         DbTable(QString ipName, const DbSchemaPtr &ipSchema);

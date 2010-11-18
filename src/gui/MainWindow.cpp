@@ -76,7 +76,12 @@ using namespace QtConcurrent;
  * Constructor
  */
 MainWindow::MainWindow()
-    : QMainWindow()
+    : QMainWindow(),
+      mTreeItemMenu(0),
+      mProgressBar(0),
+      mDbParameters(0),
+      mProxyParameters(0),
+      mUndoStack(0)
 {
     ui.setupUi(this);
 
@@ -102,6 +107,18 @@ MainWindow::MainWindow()
     connect(ui.mDatabaseTreeWidget, SIGNAL(closed()), this, SLOT(closeDatabaseTree()));
     connect(ui.mLogPanelWidget, SIGNAL(shown()), this, SLOT(showLogPanel()));
     connect(ui.mDatabaseTreeWidget, SIGNAL(shown()), this, SLOT(showDatabaseTree()));
+}
+
+/*!
+ * Destructor
+ */
+MainWindow::~MainWindow()
+{
+    delete mTreeItemMenu;
+    delete mDbParameters;
+    delete mProxyParameters;
+    delete mProgressBar;
+    delete mUndoStack;
 }
 
 /*!
@@ -260,7 +277,7 @@ MainWindow::showConnectionDialog(bool ipLoadSession)
     progress.exec();
 
     futureWatcher.waitForFinished();
-    
+
     if (futureWatcher.isCanceled()) {
         ui.mTree->clear();
         ui.mTree->setHeaderLabel(QString(""));

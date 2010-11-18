@@ -52,7 +52,13 @@
  * Constructor
  */
 SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
-: QWidget(ipParent, ipFlags)
+    : QWidget(ipParent, ipFlags),
+      mScene(0),
+      mView(0),
+      mControlWidget(0),
+      mainLayout(0),
+      mTableMenu(0),
+      mSchemeMenu(0)
 {
     mScene = new GraphicsScene();
 
@@ -99,6 +105,7 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
  */
 SceneWidget::~SceneWidget()
 {
+    delete mScene;
 }
 
 /*!

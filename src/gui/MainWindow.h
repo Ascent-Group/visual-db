@@ -60,6 +60,7 @@ class MainWindow : public QMainWindow
 
     public:
         MainWindow();
+        ~MainWindow();
 
         void printMsg(const QString &) const;
 
@@ -75,7 +76,7 @@ class MainWindow : public QMainWindow
         // These menus initially are not attached
         // to any gui element
         QMenu *mTreeItemMenu;
-        QMenu *mGroupMenu;
+//        QMenu *mGroupMenu;
 
         QProgressBar *mProgressBar;
 

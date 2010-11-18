@@ -32,6 +32,14 @@
 
 #include <QtTest/QtTest>
 
+namespace DbObjects
+{
+namespace Common
+{
+class Database;
+}
+}
+
 class DbTableTest : public QObject
 {
     Q_OBJECT
@@ -39,6 +47,9 @@ class DbTableTest : public QObject
     private slots:
         void initTestCase();
         void cleanupTestCase();
+
+        void init();
+        void cleanup();
 
         void checkForeignKeyTest();
         void checkPrimaryKeyTest();
@@ -59,6 +70,11 @@ class DbTableTest : public QObject
         void typeTest();
         void schemaTest();
         void setSchemaTest();
+        void parentTablesTest();
+
+    private:
+        DbObjects::Common::Database *mDbInst;
+
 };
 
 #endif // DBTABLETEST_H

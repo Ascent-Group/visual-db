@@ -96,7 +96,6 @@ class DbTable : public Common::DbObject
 
         virtual DbObject::Type type() const;
 
-        // \todo Write unit-test
         quint32 parentTables(QVector<DbTablePtr> &opList) const;
 
     protected:

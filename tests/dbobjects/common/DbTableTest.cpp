@@ -27,20 +27,42 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbTableTest.h>
+
+using namespace DbObjects;
+
+typedef Common::DbObjectPtr<Common::DbTable> DbTablePtr;
 
 void
 DbTableTest::initTestCase()
 {
-
+    mDbInst = DatabaseCreator::createDatabase();
 }
 
 void
 DbTableTest::cleanupTestCase()
 {
-
+    Common::DatabaseManager dbMgr;
+    dbMgr.flush();
 }
 
+/*!
+ * Called before each test function
+ */
+void
+DbTableTest::init()
+{
+}
+
+/*!
+ * Called after each test function
+ */
+void
+DbTableTest::cleanup()
+{
+    mDbInst->resetData();
+}
 
 void
 DbTableTest::checkForeignKeyTest()
@@ -154,5 +176,29 @@ void
 DbTableTest::setSchemaTest()
 {
     QVERIFY(0);
+}
+
+void
+DbTableTest::parentTablesTest()
+{
+    mDbInst->readSchemas();
+
+    DbTablePtr tablePtr = mDbInst->findSchema("vtunes")->findTable("extended_playlists");
+
+    QVERIFY(0 != tablePtr.get());
+
+    QVector<DbTablePtr> parentsList;
+    quint32 parentsCount = tablePtr->parentTables(parentsList);
+
+    QCOMPARE(parentsCount, (quint32)1);
+
+    DbTablePtr parent = parentsList.at(0);
+
+    QVERIFY(0 != parent.get());
+
+    QVERIFY("vtunes" == parent.schemaName());
+    QVERIFY("vtunes" == parent->schema()->name());
+    QVERIFY("playlists" == parent.name());
+    QVERIFY("playlists" == parent->name());
 }
 

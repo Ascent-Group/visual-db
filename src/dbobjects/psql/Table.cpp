@@ -182,7 +182,8 @@ Table::loadData()
                        "childns.oid = child.relnamespace AND "
                        "parentns.oid = parent.relnamespace AND "
                        "childns.nspname = '%1' AND "
-                       "child.relname = '%2';")
+                       "child.relname = '%2' "
+                   "ORDER BY i.inhseqno;")
         .arg(mSchema.name())
         .arg(mName);
 

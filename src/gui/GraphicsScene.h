@@ -71,7 +71,7 @@ class GraphicsScene : public QGraphicsScene {
         static const int DEFAULT_HEIGHT = 1500;
 
     public:
-        GraphicsScene();
+        GraphicsScene(QObject *ipParent = 0);
         ~GraphicsScene();
 
         void addItems(const QList<QGraphicsItem *> &);

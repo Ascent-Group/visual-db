@@ -56,11 +56,20 @@
 /*!
  * Constructor
  */
-GraphicsScene::GraphicsScene()
-: QGraphicsScene(), mSelectionPath(), mMoveMode(false), mOldPos(), mOldRect(), mDiffX(0), mDiffY(0), mStartMovingTimer()
+GraphicsScene::GraphicsScene(QObject *ipParent)
+    : QGraphicsScene(ipParent),
+      mSelectionPath(),
+      mMoveMode(false),
+      mOldPos(),
+      mOldRect(),
+      mDiffX(0),
+      mDiffY(0),
+      mStartMovingTimer()
 {
     setBackgroundBrush(QBrush(mSettings.value(Consts::COLOR_GRP + "/" + Consts::BACKGROUND_SETTING, Qt::white).value<QColor>()));
     setSceneRect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    // \todo We probably should pass this to Legend's constructor, so that graphics scene
+    // takes parentship of it.
     mLegend = new Legend();
     mLegend->setZValue(1000);
 
@@ -72,6 +81,7 @@ GraphicsScene::GraphicsScene()
  */
 GraphicsScene::~GraphicsScene()
 {
+    delete mLegend;
 }
 
 /*!

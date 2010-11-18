@@ -119,6 +119,10 @@ MainWindow::~MainWindow()
     delete mProxyParameters;
     delete mProgressBar;
     delete mUndoStack;
+    // \note We have to delete it here because somehow the parent is not set for scene
+    // widget in setupUi. If don't do this then graphics scene that is inside scene widget
+    // won't get deleted.
+    delete ui.mSceneWidget;
 }
 
 /*!

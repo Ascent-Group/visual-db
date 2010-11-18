@@ -60,7 +60,7 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
       mTableMenu(0),
       mSchemeMenu(0)
 {
-    mScene = new GraphicsScene();
+    mScene = new GraphicsScene(this);
 
     mView = new GraphicsView(mScene, this);
     mView->centerOn(0, 0);
@@ -105,7 +105,6 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
  */
 SceneWidget::~SceneWidget()
 {
-    delete mScene;
 }
 
 /*!

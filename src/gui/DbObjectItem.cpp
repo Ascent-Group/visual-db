@@ -239,6 +239,7 @@ DbObjectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
         updatePolygon();
     } else {
         QGraphicsItem::mouseMoveEvent(ipEvent);
+//        qDebug() << rect() << scenePos();
         foreach (ArrowItem *arrow, mArrowItems) {
             arrow->updatePosition();
         }

@@ -30,6 +30,7 @@
 #include <consts.h>
 #include <gui/ArrowItem.h>
 #include <QDebug>
+#include <QPainterPath>
 #include <QGraphicsLineItem>
 #include <QGraphicsPolygonItem>
 #include <QGraphicsScene>
@@ -110,13 +111,24 @@ ArrowItem::updatePosition()
 }
 
 /*!
+ * \brief Paint the line
+ */
+void
+ArrowItem::paintLine(QPainter *ipPainter)
+{
+    // draw the line
+    setLine(makeLine());
+    ipPainter->drawLine(line());
+}
+
+/*!
  * \override
  */
 void
 ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     // return if start and end tables collides
-    if (mStartItem->collidesWithItem(mEndItem)) {
+    if (mStartItem != mEndItem && mStartItem->collidesWithItem(mEndItem)) {
         return;
     }
 
@@ -124,14 +136,12 @@ ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget 
     ipPainter->setPen(pen());
 
     // draw the line
-    setLine(makeLine());
-    ipPainter->drawLine(line());
+    paintLine(ipPainter);
 
     // draw the head
     paintHead(ipPainter);
 
-    // FIXME: just for table items
-    // draw the foreign key name
+    // draw the arrow title
     ipPainter->drawText(line().p1(), mTitle);
 
     // handle the selection of the arrow
@@ -218,12 +228,7 @@ makeHead(const QLineF &ipLine, const QPointF &ipStartPoint)
     QPointF arrowP2 = ipStartPoint + QPointF(sin(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE,
                     cos(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE);
 
-//    QPointF arrowP1 = ipLine.p1() + QPointF(sin(angle + Pi / 3) * ArrowItem::ARROW_SIZE,
-//                    cos(angle + Pi / 3) * ArrowItem::ARROW_SIZE);
-//    QPointF arrowP2 = ipLine.p1() + QPointF(sin(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE,
-//                    cos(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE);
-
-    head << /*ipLine.p1()*/ipStartPoint << arrowP1 << arrowP2;
+    head << ipStartPoint << arrowP1 << arrowP2;
 
     return head;
 }

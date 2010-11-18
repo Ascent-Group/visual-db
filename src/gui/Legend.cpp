@@ -54,6 +54,7 @@ Legend::Legend()
  */
 Legend::~Legend()
 {
+    clearFields();
 }
 
 /*!

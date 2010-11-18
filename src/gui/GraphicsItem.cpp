@@ -49,6 +49,7 @@ int GraphicsItem::mSeek = 80;
  */
 GraphicsItem::GraphicsItem(QMenu *ipMenu)
     : QGraphicsPolygonItem(),
+      mFieldItems(),
       mLeftTopPoint(0, 0),
       mRightBottomPoint(0, 0),
       mFont("Arial", 8), 
@@ -56,7 +57,6 @@ GraphicsItem::GraphicsItem(QMenu *ipMenu)
       mFieldsTypesVisible(true),
       mContextMenu(ipMenu)
 {
-    mFieldItems = QList<QGraphicsTextItem *>();
     // get selected color
     mItemColor = mSettings.value(Consts::COLOR_GRP + "/" + Consts::TABLE_SETTING, Qt::white).value<QColor>();
     mBorderColor = mSettings.value(Consts::COLOR_GRP + "/" + Consts::BORDER_SETTING, Qt::black).value<QColor>();
@@ -488,6 +488,7 @@ GraphicsItem::setFieldText(int ipI, QString ipText)
 void
 GraphicsItem::clearFields()
 {
+    qDeleteAll(mFieldItems);
     mFieldItems.clear();
 }
 
@@ -561,7 +562,7 @@ GraphicsItem::paintBorder(QPainter *ipPainter, const QStyleOptionGraphicsItem *i
 {
     // draw the board of the table
     QGraphicsPolygonItem::paint(ipPainter, ipItem, ipWidget);
-    ipPainter->fillRect((int)x() + SHADOW_SIZE, (int)y() + (int)height() + 1, width() + 1, SHADOW_SIZE, mShadowColor);
+    ipPainter->fillRect((int)x() + SHADOW_SIZE, (int)y() + (int)height() + 1, (int)width() + 1, SHADOW_SIZE, mShadowColor);
     ipPainter->fillRect((int)x() + (int)width() + 1, (int)y() + SHADOW_SIZE, SHADOW_SIZE, (int)height() - SHADOW_SIZE + 1, mShadowColor);
 }
 

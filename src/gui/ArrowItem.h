@@ -67,7 +67,9 @@ class ArrowItem : public QGraphicsLineItem
 
     protected:
         virtual void paintHead(QPainter *) = 0;
+        virtual void paintLine(QPainter *);
         virtual void setHead(const QPolygonF &);
+        virtual QLineF makeLine() const;
         virtual QPolygonF head() const;
 
     private:
@@ -83,7 +85,6 @@ class ArrowItem : public QGraphicsLineItem
         QString mTitle;
 
     private:
-        QLineF makeLine() const;
         void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *ipWidget = 0);
 };
 

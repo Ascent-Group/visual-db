@@ -41,6 +41,7 @@
 #include <consts.h>
 #include <gui/ForeignArrow.h>
 #include <gui/InheritanceArrow.h>
+#include <gui/LoopArrow.h>
 #include <gui/ControlWidget.h>
 #include <gui/DbObjectItem.h>
 #include <gui/GraphicsScene.h>
@@ -285,9 +286,13 @@ GraphicsScene::createRelations(TableItem *ipSourceItem)
         if (ipSourceItem->isColumnForeignKey(i)) {
             TableItem *destItem = toTable(findItem(ipSourceItem->foreignSchemaName(i), ipSourceItem->foreignTableName(i)));
 
+            // self referenced arrow
+            if (ipSourceItem == destItem) {
+                qDebug() << "self";
+                createRelation(ipSourceItem, destItem, new LoopArrow(ipSourceItem, destItem, QString("")));
             // if founded, create arrow
-            if (destItem) {
-                  createRelation(ipSourceItem, destItem, new ForeignArrow(ipSourceItem, destItem, QString("")));
+            } else if (destItem) {
+                createRelation(ipSourceItem, destItem, new ForeignArrow(ipSourceItem, destItem, QString("")));
             }
         }
     }

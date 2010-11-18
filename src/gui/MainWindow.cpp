@@ -223,9 +223,6 @@ int
 importDatabase(const Ui::MainWindow &ui)
 {
     if (QSqlDatabase::database("mainConnect").open()) {
-        ui.mSceneWidget->cleanSchemeScene();
-        ui.mTree->refresh();
-        ui.mSceneWidget->refreshLegend();
         return QDialog::Accepted;
     }
 
@@ -271,6 +268,10 @@ MainWindow::showConnectionDialog(bool ipLoadSession)
     }
 
     if (futureWatcher.result() == QDialog::Accepted) {
+        ui.mSceneWidget->cleanSchemeScene();
+        Database::instance()->resetData();
+        ui.mTree->refresh();
+        ui.mSceneWidget->refreshLegend();
         setEnableForActions(true);
     }
 

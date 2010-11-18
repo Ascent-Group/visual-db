@@ -41,7 +41,6 @@
 
 
 static QPointF findIntersection(const TableItem *, const QLineF &);
-static QPolygonF makeHead(const QLineF &);
 
 const qreal Pi = 3.14;
 
@@ -89,7 +88,7 @@ ArrowItem::boundingRect() const
 }
 
 /*!
- * \breif Get the arrow head path
+ * \brief Get the arrow head path
  *
  * \return Arrow head path
  */
@@ -102,7 +101,7 @@ ArrowItem::shape() const
 }
 
 /*!
- * \breif Update the arrow's position
+ * \brief Update the arrow's position
  */
 void
 ArrowItem::updatePosition()
@@ -123,14 +122,13 @@ ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget 
 
     // set arrow's preoperties
     ipPainter->setPen(pen());
-    ipPainter->setBrush(QColor("white"));
 
+    // draw the line
     setLine(makeLine());
-    mArrowItemHead = makeHead(line());
-
-    // draw the arrow with the head
     ipPainter->drawLine(line());
-    ipPainter->drawPolygon(mArrowItemHead);
+
+    // draw the head
+    paintHead(ipPainter);
 
     // FIXME: just for table items
     // draw the foreign key name
@@ -145,6 +143,28 @@ ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget 
         selectedLine.translate(0, -8.0);
         ipPainter->drawLine(selectedLine);
     }
+}
+
+/*!
+ * \brief Set the head
+ *
+ * \param[in] ipHead - Line head
+ */
+void
+ArrowItem::setHead(const QPolygonF &ipHead)
+{
+    mArrowItemHead = ipHead;
+}
+
+/*!
+ * \brief Get the head
+ *
+ * \return Line head
+ */
+QPolygonF
+ArrowItem::head() const
+{
+    return mArrowItemHead;
 }
 
 /*!
@@ -182,8 +202,8 @@ findIntersection(const TableItem *ipItem, const QLineF &ipLine)
  *
  * \return Polygon that describes the arrow head
  */
-static QPolygonF
-makeHead(const QLineF &ipLine)
+QPolygonF
+makeHead(const QLineF &ipLine, const QPointF &ipStartPoint)
 {
     QPolygonF head;
 
@@ -193,12 +213,17 @@ makeHead(const QLineF &ipLine)
         angle = (Pi * 2) - angle;
     }
 
-    QPointF arrowP1 = ipLine.p1() + QPointF(sin(angle + Pi / 3) * ArrowItem::ARROW_SIZE,
+    QPointF arrowP1 = ipStartPoint + QPointF(sin(angle + Pi / 3) * ArrowItem::ARROW_SIZE,
                     cos(angle + Pi / 3) * ArrowItem::ARROW_SIZE);
-    QPointF arrowP2 = ipLine.p1() + QPointF(sin(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE,
+    QPointF arrowP2 = ipStartPoint + QPointF(sin(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE,
                     cos(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE);
 
-    head << ipLine.p1() << arrowP1 << arrowP2;
+//    QPointF arrowP1 = ipLine.p1() + QPointF(sin(angle + Pi / 3) * ArrowItem::ARROW_SIZE,
+//                    cos(angle + Pi / 3) * ArrowItem::ARROW_SIZE);
+//    QPointF arrowP2 = ipLine.p1() + QPointF(sin(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE,
+//                    cos(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE);
+
+    head << /*ipLine.p1()*/ipStartPoint << arrowP1 << arrowP2;
 
     return head;
 }

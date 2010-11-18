@@ -61,6 +61,14 @@ class TableItem : public DbObjectItem
     public:
         enum { Type = UserType + 5 };
 
+        struct FullName
+        {
+            FullName(const QString &, const QString &);
+
+            QString mSchemaName;
+            QString mTableName;
+        };
+
     public:
         TableItem(const QString &, const QString &, QMenu *, const QPoint &);
         ~TableItem();
@@ -76,6 +84,8 @@ class TableItem : public DbObjectItem
 
         QString name() const;
         QString schemaName() const;
+
+        QList<TableItem::FullName> parents() const;
 
         QDomElement toXml(QDomDocument &) const;
         static TableItem *fromXml(const QDomElement &, GraphicsScene *, QMenu *);

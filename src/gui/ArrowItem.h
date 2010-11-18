@@ -54,16 +54,21 @@ class ArrowItem : public QGraphicsLineItem
 
     public:
         ArrowItem(TableItem *, TableItem *, QString, QGraphicsItem *ipParent = 0, QGraphicsScene *ipScene = 0);
-        ~ArrowItem();
+        virtual ~ArrowItem();
 
         virtual int type() const;
-        QRectF boundingRect() const;
-        QPainterPath shape() const;
+        virtual QRectF boundingRect() const;
+        virtual QPainterPath shape() const;
 
-        TableItem *startItem() const;
-        TableItem *endItem() const;
+        virtual TableItem *startItem() const;
+        virtual TableItem *endItem() const;
 
-        void updatePosition();
+        virtual void updatePosition();
+
+    protected:
+        virtual void paintHead(QPainter *) = 0;
+        virtual void setHead(const QPolygonF &);
+        virtual QPolygonF head() const;
 
     private:
 
@@ -81,6 +86,8 @@ class ArrowItem : public QGraphicsLineItem
         QLineF makeLine() const;
         void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *ipWidget = 0);
 };
+
+QPolygonF makeHead(const QLineF &, const QPointF &);
 
 #endif // ARROW_H
 

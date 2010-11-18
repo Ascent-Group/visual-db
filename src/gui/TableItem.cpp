@@ -126,6 +126,14 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
 }
 
 /*!
+ * Constructor
+ */
+TableItem::FullName::FullName(const QString &ipSchemaName, const QString &ipTableName)
+    : mSchemaName(ipSchemaName), mTableName(ipTableName)
+{
+}
+
+/*!
  * Destructor
  */
 TableItem::~TableItem()
@@ -275,13 +283,34 @@ TableItem::name() const
     return mModel.name();
 }
 
-/*
- * Get the name of the schema
+/*!
+ * \brief Get the name of the schema
+ *
+ * \return Schema name
  */
 QString
 TableItem::schemaName() const
 {
     return mModel.schemaName();
+}
+
+/*!
+ * \brief Return list of full names of parents
+ *
+ * \return List of full names of parents
+ */
+QList<TableItem::FullName>
+TableItem::parents() const
+{
+    QVector<DbObjects::Common::DbTablePtr> parentsPtr;
+    QList<TableItem::FullName> parentsFullNames;
+
+    mModel->parentTables(parentsPtr);
+    foreach (DbObjects::Common::DbTablePtr parent, parentsPtr) {
+        parentsFullNames.push_back(TableItem::FullName(parent.schemaName(), parent.name()));
+    }
+
+    return parentsFullNames;
 }
 
 /*!

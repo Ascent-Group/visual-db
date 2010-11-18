@@ -39,7 +39,8 @@
 #include <common/Database.h>
 #include <common/DbTable.h>
 #include <consts.h>
-#include <gui/ArrowItem.h>
+#include <gui/ForeignArrow.h>
+#include <gui/InheritanceArrow.h>
 #include <gui/ControlWidget.h>
 #include <gui/DbObjectItem.h>
 #include <gui/GraphicsScene.h>
@@ -272,19 +273,39 @@ GraphicsScene::createRelations(TableItem *ipSourceItem)
     // find foreign keys and tables related to this keys
     for (int i = 0; i < ipSourceItem->columnsCount(); ++i) {
         if (ipSourceItem->isColumnForeignKey(i)) {
-            TableItem *destItem = 0;
+            TableItem *destItem = toTable(findItem(ipSourceItem->foreignSchemaName(i), ipSourceItem->foreignTableName(i)));
 
             // if founded, create arrow
-            if ((destItem = toTable(findItem(ipSourceItem->foreignSchemaName(i), ipSourceItem->foreignTableName(i)))) != 0) {
-                ArrowItem *arrow = new ArrowItem(ipSourceItem, destItem, QString(""));
-                ipSourceItem->addArrowItem(arrow);
-                destItem->addArrowItem(arrow);
-                arrow->setZValue(-1000.0);
-                addItem(arrow);
-                arrow->updatePosition();
+            if (destItem) {
+                  createRelation(ipSourceItem, destItem, new ForeignArrow(ipSourceItem, destItem, QString("")));
             }
         }
     }
+
+    // if table inherits from another table - paint inheritance arrow
+    foreach (const TableItem::FullName &parentFullName, ipSourceItem->parents()) {
+        TableItem *destItem = toTable(findItem(parentFullName.mSchemaName, parentFullName.mTableName));
+        if (destItem) {
+            createRelation(ipSourceItem, destItem, new InheritanceArrow(ipSourceItem, destItem, QString("")));
+        }
+    }
+}
+
+/*!
+ * \brief Create an arrow between source and destination tables
+ *
+ * \param[in] ipSource - Source table
+ * \param[in] ipDestination - Destination table
+ * \param[in] ipArrow - Arrow between source and destination tables
+ */
+void
+GraphicsScene::createRelation(TableItem *ipSource, TableItem *ipDestination, ArrowItem *ipArrow)
+{
+    ipSource->addArrowItem(ipArrow);
+    ipDestination->addArrowItem(ipArrow);
+    ipArrow->setZValue(-1000.0);
+    addItem(ipArrow);
+    ipArrow->updatePosition();
 }
 
 /*!

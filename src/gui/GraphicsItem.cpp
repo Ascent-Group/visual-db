@@ -521,8 +521,8 @@ GraphicsItem::adjustSize()
     updatePolygon();
 }
 
-/*
- *
+/*!
+ * \overload
  */
 QRectF
 GraphicsItem::boundingRect() const
@@ -530,8 +530,8 @@ GraphicsItem::boundingRect() const
     return QRectF(x(), y(), width() + SHADOW_SIZE, height() + SHADOW_SIZE);
 }
 
-/*
- * Paint the table. Height is adjusting, but width is setted to default.
+/*!
+ * \overload
  */
 void
 GraphicsItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidget *ipWidget)
@@ -549,6 +549,13 @@ GraphicsItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem,
     paintAnchor(ipPainter);
 }
 
+/*!
+ * \brief Paints border for item
+ *
+ * \param[in] ipPainter - Painter
+ * \param[in] ipItem - Style option item
+ * \param[in] ipWidget - Widget
+ */
 void
 GraphicsItem::paintBorder(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidget *ipWidget)
 {
@@ -558,6 +565,11 @@ GraphicsItem::paintBorder(QPainter *ipPainter, const QStyleOptionGraphicsItem *i
     ipPainter->fillRect((int)x() + (int)width() + 1, (int)y() + SHADOW_SIZE, SHADOW_SIZE, (int)height() - SHADOW_SIZE + 1, mShadowColor);
 }
 
+/*!
+ * \brief Paints title for item
+ *
+ * \param[in] ipPainter - Painter
+ */
 void
 GraphicsItem::paintTitle(QPainter *ipPainter)
 {
@@ -571,6 +583,11 @@ GraphicsItem::paintTitle(QPainter *ipPainter)
             (int)(x() + width()), (int)y() + FIELD_HEIGHT + INTERVAL * 2);
 }
 
+/*!
+ * \brief Paints title image
+ *
+ * \param[in] ipPainter - Painter
+ */
 void
 GraphicsItem::paintTitleImage(QPainter *ipPainter)
 {
@@ -581,6 +598,11 @@ GraphicsItem::paintTitleImage(QPainter *ipPainter)
     ipPainter->drawImage(target, *mTableImage, source);
 }
 
+/*!
+ * \brief Paints title text
+ *
+ * \param[in] ipPainter - Painter
+ */
 void
 GraphicsItem::paintTitleText(QPainter *ipPainter)
 {
@@ -591,6 +613,11 @@ GraphicsItem::paintTitleText(QPainter *ipPainter)
             titleText());
 }
 
+/*!
+ * \brief Paints anchor for item
+ *
+ * \param[in] ipPainter - Painter
+ */
 void
 GraphicsItem::paintAnchor(QPainter *ipPainter)
 {
@@ -602,6 +629,11 @@ GraphicsItem::paintAnchor(QPainter *ipPainter)
     }
 }
 
+/*!
+ * \brief Paints all fields for item
+ *
+ * \param[in] ipPainter - Painter
+ */
 void
 GraphicsItem::paintFields(QPainter *ipPainter)
 {
@@ -618,6 +650,12 @@ GraphicsItem::paintFields(QPainter *ipPainter)
     }
 }
 
+/*!
+ * \brief Paints field text
+ *
+ * \param[in] ipPainter - Painter
+ * \param[in] ipIdx - Field index
+ */
 void
 GraphicsItem::paintFieldText(QPainter *ipPainter, int ipIdx)
 {

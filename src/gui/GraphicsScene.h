@@ -46,6 +46,7 @@ class QPoint;
 class QSlider;
 class QTreeWidgetItem;
 
+class ArrowItem;
 class ControlWidget;
 class DbObjectItem;
 class GraphicsItem;
@@ -131,6 +132,7 @@ class GraphicsScene : public QGraphicsScene {
         void setIndicesVisible(QList<QGraphicsItem *>, bool);
         void adjustItems(QList<QGraphicsItem *>);
         void setAnchor(QList<QGraphicsItem *>, bool);
+        void createRelation(TableItem *, TableItem *, ArrowItem *);
         void groupItems(QList<QGraphicsItem *>);
         void ungroupItems(QList<QGraphicsItem *>);
         void drawGrid(QPainter *);

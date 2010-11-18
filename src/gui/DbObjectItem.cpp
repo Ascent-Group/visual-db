@@ -59,8 +59,8 @@ DbObjectItem::~DbObjectItem()
 {
 }
 
-/*
- * Handler of the right mouse button click
+/*!
+ * \overload
  */
 void
 DbObjectItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *ipEvent)
@@ -72,8 +72,10 @@ DbObjectItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *ipEvent)
     }
 }
 
-/*
- * Add given arrow to the list of arrows related with this item 
+/*!
+ * \brief Add given arrow to the list of arrows related with this item
+ *
+ * \param[in] arrow - Arrow we will add
  */
 void
 DbObjectItem::addArrowItem(ArrowItem *arrow)
@@ -81,8 +83,10 @@ DbObjectItem::addArrowItem(ArrowItem *arrow)
     mArrowItems.append(arrow);
 }
 
-/*
- * Remove given arrow from the list of arrows related with this item 
+/*!
+ * \brief Remove given arrow from the list of arrows related with this item
+ *
+ * \param[in] ipArrowItem - Arrow we will remove
  */
 void
 DbObjectItem::removeArrowItem(ArrowItem *ipArrowItem)
@@ -93,8 +97,8 @@ DbObjectItem::removeArrowItem(ArrowItem *ipArrowItem)
     }
 }
 
-/*
- * Remove all arrows from the list of arrows related with this item 
+/*!
+ * \brief Remove all arrows from the list of arrows related with this item
  */
 void
 DbObjectItem::removeArrowItems()
@@ -110,24 +114,8 @@ DbObjectItem::removeArrowItems()
     }
 }
 
-/*
- * Handler for item change event
- */
-QVariant
-DbObjectItem::itemChange(GraphicsItemChange ipChange, const QVariant &ipValue)
-{
-    // if we change the position of the item - redraw all related arrows
-    if (ipChange == QGraphicsItem::ItemPositionChange) {
-        foreach (ArrowItem *arrow, mArrowItems) {
-            arrow->updatePosition();
-        }
-    }
-
-    return ipValue;
-}
-
-/*
- * Handler for a mouse press event. Analyze a position of an event and change a mode according to it
+/*!
+ * \overload
  */
 void
 DbObjectItem::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
@@ -155,8 +143,8 @@ DbObjectItem::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
     QGraphicsItem::mousePressEvent(ipEvent);
 }
 
-/*
- * Handler for mouse realease event
+/*!
+ * \overload
  */
 void
 DbObjectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
@@ -167,8 +155,8 @@ DbObjectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
     }
 }
 
-/*
- * Handler for mouse hover event. Analyze a position of an event and change a cursor
+/*!
+ * \overload
  */
 void
 DbObjectItem::hoverMoveEvent(QGraphicsSceneHoverEvent *ipEvent)
@@ -196,8 +184,8 @@ DbObjectItem::hoverMoveEvent(QGraphicsSceneHoverEvent *ipEvent)
     QGraphicsItem::hoverMoveEvent(ipEvent);
 }
 
-/*
- * Handle for mouse hover leave event
+/*!
+ * \overload
  */
 void
 DbObjectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
@@ -205,9 +193,10 @@ DbObjectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
     setCursor(Qt::ArrowCursor);
 }
 
-/*
- * Handler for mouse move event. Analyze a mode of an event and 
- * change the position of the item if mode = move or resize it if mode = resize
+/*!
+ * \overload
+ * \brief Handler for mouse move event. Analyze a mode of an event and
+ *        change the position of the item if mode = move or resize it if mode = resize
  */
 void
 DbObjectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
@@ -250,12 +239,17 @@ DbObjectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
         updatePolygon();
     } else {
         QGraphicsItem::mouseMoveEvent(ipEvent);
+        foreach (ArrowItem *arrow, mArrowItems) {
+            arrow->updatePosition();
+        }
     }
 //    QGraphicsItem::mouseMoveEvent(ipEvent);
 }
 
-/*
- * According to the given flag show or hide fields' types
+/*!
+ * \brief According to the given flag show or hide fields' types
+ *
+ * \param[in] ipFlag - True if we want to show field types, false otherwise
  */
 void
 DbObjectItem::setFieldsTypesVisible(bool ipFlag)
@@ -272,8 +266,10 @@ DbObjectItem::setFieldsTypesVisible(bool ipFlag)
 //    update(x(), y(), width(), height());
 }
 
-/*
- * Get all arrows related to this item 
+/*!
+ * \brief Get all arrows related to this item
+ *
+ * \return List of arrows connected to or connected with this item
  */
 QList<ArrowItem *>
 DbObjectItem::arrows() const
@@ -281,6 +277,14 @@ DbObjectItem::arrows() const
     return mArrowItems;
 }
 
+/*!
+ * \brief Convert item to the xml format
+ *
+ * \param[in] ipDoc - Xml document
+ * \param[in] elementName - Element name in the xml
+ *
+ * \return Xml dom element with item information into it
+ */
 QDomElement 
 DbObjectItem::toXml(QDomDocument &ipDoc, const QString &elementName) const
 {
@@ -298,8 +302,10 @@ DbObjectItem::toXml(QDomDocument &ipDoc, const QString &elementName) const
     return element;
 }
 
-/*
- * Set the seek
+/*!
+ * \brief Set the seek
+ *
+ * \param[in] ipSeek - Item seek
  */
 void
 DbObjectItem::setSeek(int ipSeek)
@@ -307,8 +313,10 @@ DbObjectItem::setSeek(int ipSeek)
     mSeek = ipSeek;
 }
 
-/*
- * Get the seek
+/*!
+ * \brief Get the seek
+ *
+ * \return Item seek
  */
 int
 DbObjectItem::seek()
@@ -316,8 +324,10 @@ DbObjectItem::seek()
     return mSeek;
 }
 
-/*
+/*!
+ * \brief Get mouse mode (resizing or movement)
  *
+ * \return Mouse mode
  */
 DbObjectItem::Mode
 DbObjectItem::mouseMode() const
@@ -325,6 +335,13 @@ DbObjectItem::mouseMode() const
     return mMode;
 }
 
+/*!
+ * \brief Convert input item to DbObject
+ *
+ * \param[in] ipItem - Item we will convert
+ *
+ * \return Converted to DbObject item of 0
+ */
 DbObjectItem *
 toDbObject(QGraphicsItem *ipItem)
 {

@@ -102,7 +102,6 @@ class DbObjectItem : public GraphicsItem
 
     protected:
         void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
-        QVariant itemChange(GraphicsItemChange, const QVariant &);
         void mouseMoveEvent(QGraphicsSceneMouseEvent *);
         void mousePressEvent(QGraphicsSceneMouseEvent *);
         void mouseReleaseEvent(QGraphicsSceneMouseEvent *);

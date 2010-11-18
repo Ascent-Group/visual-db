@@ -31,7 +31,6 @@
 #include <gui/AppearancePage.h>
 #include <QLocale>
 
-
 /*!
  * Constructor
  */

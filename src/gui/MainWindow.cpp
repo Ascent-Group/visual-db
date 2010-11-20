@@ -403,7 +403,7 @@ MainWindow::closeDatabaseTree()
 /*!
  * \brief Show database tree view
  */
-void 
+void
 MainWindow::showDatabaseTree()
 {
     ui.mShowTableListAction->setChecked(true);
@@ -427,7 +427,7 @@ MainWindow::showLogPanel(bool ipFlag)
 /*!
  * \brief Close log panel
  */
-void 
+void
 MainWindow::closeLogPanel()
 {
     ui.mShowLogPanelAction->setChecked(false);
@@ -450,7 +450,6 @@ MainWindow::addItem()
 {
     QTreeWidgetItemIterator treeIter(ui.mTree);
 
-    qDebug() << "asdf";
     while (*treeIter) {
         if ((*treeIter)->isSelected()) {
             ui.mSceneWidget->showOnScene((*treeIter), TreeWidget::NameCol, true);
@@ -467,7 +466,7 @@ MainWindow::addItem()
  * \param[in] ipItem - Item we clicked on
  * \param[in] ipColumn - Column of the item
  */
-void 
+void
 MainWindow::addItem(QTreeWidgetItem *ipItem, int ipColumn)
 {
     ui.mSceneWidget->showOnScene(ipItem, ipColumn, true);

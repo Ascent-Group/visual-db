@@ -75,6 +75,12 @@ ViewItem::ViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu
     setTitleItem(new QGraphicsTextItem(ipSchemaName.toUpper() + "." + ipViewName.toUpper()));
 
     // create field items
+    qDebug() << "View";
+    foreach (QString fieldName, mModel->columnsNames()) {
+        qDebug() << fieldName;
+        addFieldItem(new QGraphicsTextItem(fieldName));
+    }
+    
 //    for (int i = 0; i < mModel->columnsCount(); ++i) {
 //        addFieldItem(new QGraphicsTextItem(mModel->columnName(i) + ": " + mModel->columnType(i)));
 //    }
@@ -92,7 +98,7 @@ ViewItem::ViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu
 
     // set width and height
     setWidth(DEFAULT_WIDTH);
-    setHeight((FIELD_HEIGHT + INTERVAL) + INTERVAL * 2);
+    setHeight((mModel->columnsNames().size() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
 
     updatePolygon();
 

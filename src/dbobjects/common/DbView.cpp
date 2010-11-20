@@ -128,6 +128,18 @@ DbView::setDefinition(QString ipDef)
 }
 
 /*!
+ * \brief Get columns names of the given view.
+ * \note No need to pass stringlist by reference because this will give no benefit.
+ *
+ * \return List of columns names.
+ */
+QStringList
+DbView::columnsNames() const
+{
+    return mColumnsNames;
+}
+
+/*!
  * \brief Resets view description read from database
  */
 void
@@ -137,6 +149,7 @@ DbView::resetData()
 //    mSchema = 0; // \todo How to reset Proxy???
 //    mOwner = 0;
     mDefinition = "";
+    mColumnsNames.clear();
 
     DbObject::resetData();
 }

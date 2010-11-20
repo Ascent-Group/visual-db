@@ -69,6 +69,8 @@ class DbView : public DbObject
         QString definition() const;
         void setDefinition(QString ipDef);
 
+        QStringList columnsNames() const;
+
         virtual void resetData();
 
         virtual DbObject::Type type() const;
@@ -80,6 +82,9 @@ class DbView : public DbObject
         DbRolePtr mOwner;
         /*! View's definition */
         QString mDefinition;
+
+        /*! Names of columns */
+        QStringList mColumnsNames;
 
     protected:
         DbView(QString ipName, const DbSchemaPtr &ipSchema);

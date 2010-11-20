@@ -27,20 +27,41 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbViewTest.h>
+
+using namespace DbObjects;
 
 void
 DbViewTest::initTestCase()
 {
-
+    mDbInst = DatabaseCreator::createDatabase();
 }
 
 void
 DbViewTest::cleanupTestCase()
 {
-
+    Common::DatabaseManager dbMgr;
+    dbMgr.flush();
 }
 
+/*!
+ * Called before each test function
+ */
+void
+DbViewTest::init()
+{
+    mDbInst->readSchemas();
+}
+
+/*!
+ * Called after each test function
+ */
+void
+DbViewTest::cleanup()
+{
+    mDbInst->resetData();
+}
 
 void
 DbViewTest::definitionTest()
@@ -94,5 +115,16 @@ void
 DbViewTest::setSchemaTest()
 {
     QVERIFY(0);
+}
+
+void
+DbViewTest::columnsNamesTest()
+{
+    QStringList list;
+    list = mDbInst->findSchema("vtunes")->findView("users_playlists")->columnsNames();
+
+    QCOMPARE(list.size(), 2);
+    QVERIFY(list.contains("name"));
+    QVERIFY(list.contains("track"));
 }
 

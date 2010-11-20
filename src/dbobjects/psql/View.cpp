@@ -135,6 +135,38 @@ View::loadData()
     qDebug() << "Psql::View::loadData> def = " << mDefinition;
 #endif
 
+    query.clear();
+
+    // load column names
+    // create query
+    qstr = QString("SELECT "
+                        "pga.attname "
+                    "FROM "
+                        "pg_catalog.pg_attribute pga "
+                    "WHERE "
+                        "pga.attnum > 0 "
+                        "AND NOT pga.attisdropped "
+                        "AND pga.attrelid = ("
+                        "SELECT pgc.oid FROM pg_catalog.pg_class pgc "
+                        "LEFT JOIN pg_catalog.pg_namespace pgn ON pgn.oid = pgc.relnamespace "
+                        "WHERE pgc.relname = '%1' and pgn.nspname = '%2'); ")
+            .arg(mName)
+            .arg(mSchema->name());
+
+    // if query execution failed
+    if (!query.exec(qstr)) {
+        qDebug() << query.lastError().text();
+        return false;
+    }
+
+    // if columns wer found
+    if (query.first()) {
+        do {
+            mColumnsNames.push_back(query.value(0).toString());
+            qDebug() << "Psql::View: column name = " << query.value(0).toString();
+        } while (query.next());
+    }
+
     return DbView::loadData();
 }
 

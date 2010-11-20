@@ -41,6 +41,7 @@ namespace Common
 {
 
 class DbIndex;
+class DbProcedure;
 class DbRole;
 class DbSchema;
 class DbTable;
@@ -48,6 +49,7 @@ class DbTrigger;
 class DbView;
 
 typedef DbObjectPtr<DbIndex> DbIndexPtr;
+typedef DbObjectPtr<DbProcedure> DbProcedurePtr;
 typedef DbObjectPtr<DbRole> DbRolePtr;
 typedef DbObjectPtr<DbSchema> DbSchemaPtr;
 typedef DbObjectPtr<DbTable> DbTablePtr;
@@ -136,16 +138,25 @@ class DescriptionWidget : public QWidget
             DbSchemaColumnsCount
         };
 
+        enum DbProcedureCols {
+            ProcedureNameCol = 0,
+            ProcedureSchemaCol,
+            ProcedureOwnerCol,
+            ProcedureLanguageCol,
+            DbProcedureColumnsCount
+        };
+
     public:
         DescriptionWidget(QWidget *ipParent = 0);
         ~DescriptionWidget();
 
+        void describe(const DbObjects::Common::DbIndexPtr &ipIndex);
+        void describe(const DbObjects::Common::DbProcedurePtr &ipProcedure);
+        void describe(const DbObjects::Common::DbRolePtr &ipRole);
         void describe(const DbObjects::Common::DbSchemaPtr &ipSchema);
         void describe(const DbObjects::Common::DbTablePtr &ipTable);
-        void describe(const DbObjects::Common::DbRolePtr &ipRole);
-        void describe(const DbObjects::Common::DbViewPtr &ipView);
-        void describe(const DbObjects::Common::DbIndexPtr &ipIndex);
         void describe(const DbObjects::Common::DbTriggerPtr &ipTrigger);
+        void describe(const DbObjects::Common::DbViewPtr &ipView);
 
     private:
         Ui::DescriptionWidget ui;

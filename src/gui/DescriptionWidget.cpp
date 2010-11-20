@@ -634,6 +634,64 @@ DescriptionWidget::describe(const DbIndexPtr &ipIndex)
 }
 
 /*!
+ * \brief Generates and represents procedure's description
+ *
+ * \param[in] ipProcedure - Proxy of a procedure
+ */
+void
+DescriptionWidget::describe(const DbObjects::Common::DbProcedurePtr &ipProcedure)
+{
+    ui.mTable->setRowCount(1);
+    ui.mTable->setColumnCount(DescriptionWidget::DbProcedureColumnsCount);
+
+    // set column labels
+    QStringList labels;
+
+    labels << tr("Name")
+            << tr("Schema")
+            << tr("Owner")
+            << tr("Language");
+
+
+    ui.mTable->setHorizontalHeaderLabels(labels);
+
+    // read attributes
+    QString name = ipProcedure->name();
+    QString schemaName = ipProcedure->schema()->name();
+    QString ownerName = ipProcedure->owner()->name();
+    QString languageName = ipProcedure->language()->name();
+    QString sourceCode = ipProcedure->sourceCode();
+
+    // fill procedure name
+    QTableWidgetItem *nameItem = new QTableWidgetItem();
+    nameItem->setText(name);
+    ui.mTable->setItem(0, DescriptionWidget::ProcedureNameCol, nameItem);
+
+    // fill schema name
+    QTableWidgetItem *schemaNameItem = new QTableWidgetItem();
+    schemaNameItem->setText(schemaName);
+    ui.mTable->setItem(0, DescriptionWidget::ProcedureSchemaCol, schemaNameItem);
+
+    // fill owner name
+    QTableWidgetItem *ownerNameItem = new QTableWidgetItem();
+    ownerNameItem->setText(ownerName);
+    ui.mTable->setItem(0, DescriptionWidget::ProcedureOwnerCol, ownerNameItem);
+
+    // fill langauge name
+    QTableWidgetItem *languageNameItem = new QTableWidgetItem();
+    languageNameItem->setText(languageName);
+    ui.mTable->setItem(0, DescriptionWidget::ProcedureLanguageCol, languageNameItem);
+
+    // auto resize cells
+    ui.mTable->resizeColumnsToContents();
+    ui.mTable->resizeRowsToContents();
+
+    // format source code
+    ui.mBodyEdit->setText(sourceCode.trimmed());
+
+}
+
+/*!
  * \brief Generates and represents trig's description
  *
  * \param[in] ipTrigger - Pointer to the db trigger
@@ -747,3 +805,4 @@ DescriptionWidget::describe(const DbTriggerPtr &ipTrigger)
     ui.mTable->resizeRowsToContents();
 
 }
+

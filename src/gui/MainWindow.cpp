@@ -603,6 +603,7 @@ MainWindow::describeObject()
     DbViewPtr view;
     DbIndexPtr index;
     DbTriggerPtr trig;
+    DbProcedurePtr proc;
 
     // find the correct object and describe
     switch ( objId ) {
@@ -668,6 +669,18 @@ MainWindow::describeObject()
                 tabTitle = tr("Trigger: ");
             }
             break;
+
+        case TreeWidget::ProcedureItem:
+            schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
+            schema = dbInst->findSchema(schemaName);
+            if (schema.get()) {
+                proc = schema->findProcedure(objName);
+
+                descWidget->describe(proc);
+                tabTitle = tr("Procedure: ");
+            }
+            break;
+
         default:
             qDebug() << "MainWindow::describeObject> Unknown object!";
             return;

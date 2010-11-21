@@ -65,7 +65,7 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
     mView = new GraphicsView(mScene, this);
     mView->centerOn(0, 0);
 
-    mControlWidget = new ControlWidget(/*GraphicsView::MINIMUM_FACTOR, GraphicsView::MAXIMUM_FACTOR*/);
+    mControlWidget = new ControlWidget(this/*GraphicsView::MINIMUM_FACTOR, GraphicsView::MAXIMUM_FACTOR*/);
     mControlWidget->setMinZoom(GraphicsView::MINIMUM_FACTOR);
     mControlWidget->setMaxZoom(GraphicsView::MAXIMUM_FACTOR);
     mControlWidget->setZoom((GraphicsView::MAXIMUM_FACTOR + GraphicsView::MINIMUM_FACTOR) / 2);

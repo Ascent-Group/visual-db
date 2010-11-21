@@ -69,10 +69,14 @@ class GraphicsView : public QGraphicsView
         virtual void dragMoveEvent(QDragMoveEvent *);
         virtual void dropEvent(QDropEvent *);
         virtual void scrollContentsBy(int, int);
+        virtual void mousePressEvent(QMouseEvent *);
+        virtual void mouseMoveEvent(QMouseEvent *);
 
     private:
         QAction *mDeleteTableAction;
         int mPrevFactor;
+        bool mMoveMode;
+        QPoint mStartPos;
 
         static const int MOVE_STEP = 10;
         static const int SEEK_STEP = 20;

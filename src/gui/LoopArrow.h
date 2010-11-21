@@ -47,7 +47,7 @@ class LoopArrow : public ForeignArrow
 
     protected:
         virtual void paintLine(QPainter *);
-        virtual void paintHead(QPainter *);
+//        virtual void paintHead(QPainter *);
 };
 
 #endif // LOOPARROW_H

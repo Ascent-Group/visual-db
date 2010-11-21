@@ -48,7 +48,7 @@
  * Constructor
  */
 GraphicsView::GraphicsView()
-    : QGraphicsView()
+    : QGraphicsView(), mMoveMode(false)
 {
     mPrevFactor = (MAXIMUM_FACTOR - MINIMUM_FACTOR) / 2;
     setAcceptDrops(true);
@@ -57,8 +57,8 @@ GraphicsView::GraphicsView()
 /*!
  * Constructor
  */
-    GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent = 0)
-: QGraphicsView(scene, parent)
+GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent = 0)
+    : QGraphicsView(scene, parent), mMoveMode(false)
 {
     centerOn(GraphicsScene::DEFAULT_WIDTH / 2, GraphicsScene::DEFAULT_HEIGHT / 2);
 }
@@ -212,6 +212,34 @@ GraphicsView::scrollContentsBy(int ipDx, int ipDy)
 }
 
 /*!
+ * \brief Handle mouse press event
+ */
+void
+GraphicsView::mousePressEvent(QMouseEvent *ipEvent)
+{
+    if (mMoveMode) {
+        mStartPos = ipEvent->pos();
+    } else {
+        QGraphicsView::mousePressEvent(ipEvent);
+    }
+}
+
+/*!
+ * \brief Handle mouse move event
+ */
+void
+GraphicsView::mouseMoveEvent(QMouseEvent *ipEvent)
+{
+    if (mMoveMode && (ipEvent->buttons() & Qt::LeftButton)) {
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - (ipEvent->pos().y() - mStartPos.y()));
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (ipEvent->pos().x() - mStartPos.x()));
+        mStartPos = ipEvent->pos();
+    } else {
+        QGraphicsView::mouseMoveEvent(ipEvent);
+    }
+}
+
+/*!
  * \brief Move the widget up
  */
 void
@@ -255,6 +283,7 @@ GraphicsView::moveRight()
 void
 GraphicsView::setMoveMode(bool ipFlag)
 {
+    mMoveMode = ipFlag;
     dynamic_cast<GraphicsScene *>(scene())->setMoveMode(ipFlag);
     if (ipFlag) {
         setCursor(Qt::OpenHandCursor);

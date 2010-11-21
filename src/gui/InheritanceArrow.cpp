@@ -40,6 +40,7 @@ InheritanceArrow::InheritanceArrow(TableItem *ipStartItem,
                                    QGraphicsScene *ipScene)
     : ArrowItem(ipStartItem, ipEndItem, ipTitle, ipParent, ipScene)
 {
+    setBrushColor("white");
 }
 
 /*!

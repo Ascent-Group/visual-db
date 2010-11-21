@@ -75,9 +75,7 @@ ViewItem::ViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu
     setTitleItem(new QGraphicsTextItem(ipSchemaName.toUpper() + "." + ipViewName.toUpper()));
 
     // create field items
-    qDebug() << "View";
     foreach (QString fieldName, mModel->columnsNames()) {
-        qDebug() << fieldName;
         addFieldItem(new QGraphicsTextItem(fieldName));
     }
     

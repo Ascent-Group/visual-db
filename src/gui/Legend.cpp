@@ -42,7 +42,7 @@
 Legend::Legend()
     : GraphicsItem()
 {
-    setTitleItem(new QGraphicsTextItem("Legend", this));
+    setTitleItem(new QGraphicsTextItem("Legend"));
 
     setX(DEFAULT_X);
     setY(DEFAULT_Y);

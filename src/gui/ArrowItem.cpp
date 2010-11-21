@@ -62,6 +62,7 @@ ArrowItem::ArrowItem(TableItem *ipStartItem,
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     // set the style of the arrow
     mColor = mSettings.value(Consts::COLOR_GRP + "/" + Consts::ARROW_SETTING, Qt::black).value<QColor>();
+    mBrushColor = mColor;
     setPen(QPen(mColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 }
 
@@ -108,6 +109,28 @@ void
 ArrowItem::updatePosition()
 {
     setLine(makeLine());
+}
+
+/*!
+ * \brief Set brush color
+ *
+ * \param[in] ipColor - Brush color
+ */
+void
+ArrowItem::setBrushColor(const QColor &ipColor)
+{
+    mBrushColor = ipColor;
+}
+
+/*!
+ * \brief Get brush color
+ *
+ * \return Brush color
+ */
+QColor
+ArrowItem::brushColor() const
+{
+    return mBrushColor;
 }
 
 /*!

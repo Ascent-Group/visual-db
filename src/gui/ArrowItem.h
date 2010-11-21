@@ -66,6 +66,8 @@ class ArrowItem : public QGraphicsLineItem
         virtual void updatePosition();
 
     protected:
+        virtual QColor brushColor() const;
+        virtual void setBrushColor(const QColor &);
         virtual void paintHead(QPainter *) = 0;
         virtual void paintLine(QPainter *);
         virtual void setHead(const QPolygonF &);
@@ -80,6 +82,7 @@ class ArrowItem : public QGraphicsLineItem
         TableItem *mEndItem;
 
         QColor mColor;
+        QColor mBrushColor;
         QPolygonF mArrowItemHead;
 
         QString mTitle;

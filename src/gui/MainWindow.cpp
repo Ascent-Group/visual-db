@@ -212,7 +212,8 @@ MainWindow::setEnableForActions(bool ipFlag)
 
     ui.mSelectAllTablesAction->setEnabled(ipFlag);
     ui.mRemoveAllTablesAction->setEnabled(ipFlag);
-//    ui.mShowLegendAction->setEnabled(ipFlag);
+    ui.mShowLegendAction->setEnabled(ipFlag);
+    ui.mAlignToGridAction->setEnabled(ipFlag);
     ui.mColorizeAccordingSchemasAction->setEnabled(ipFlag);
 
     ui.mDeleteTableAction->setEnabled(ipFlag);

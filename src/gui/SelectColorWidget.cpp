@@ -49,9 +49,8 @@ SelectColorWidget::SelectColorWidget(QWidget *ipParent)
     // these connects, should be at the end !!!
     // we are connecting them manually, because if setupUi does this
     // the previous code will end up with slots execution
-    connect(ui.mCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(colorSelect(int)));
+    connect(ui.mCombo, SIGNAL(activated(int)), this, SLOT(colorSelect(int)));
     connect(ui.mColorButton, SIGNAL(clicked()), this, SLOT(buttonClick()));
-
 }
 
 /*!
@@ -102,8 +101,8 @@ SelectColorWidget::buttonClick()
 {
     // if 'another color' is selected - make button clickable
     if (ui.mCombo->currentIndex() == 1) {
-    getColorFromDialog();
-    ui.mColorButton->setPalette(QPalette(mColor));
+        getColorFromDialog();
+        ui.mColorButton->setPalette(QPalette(mColor));
     }
 }
 
@@ -115,7 +114,7 @@ SelectColorWidget::getColorFromDialog()
 {
     QColor color = QColorDialog::getColor(mColor, this);
     if (color.isValid()) {
-    mColor = color;
+        mColor = color;
     }
 }
 
@@ -178,10 +177,13 @@ void
 SelectColorWidget::init()
 {
     // get the default colors from the settings
-    mColor = mSettings.value(Consts::COLOR_GRP + "/" + ui.mLabel->text(), Qt::white).value<QColor>();
+    mColor = mSettings.value(Consts::COLOR_GRP + "/" + ui.mLabel->text(), mDefaultColor).value<QColor>();
 
+    qDebug() << mDefaultColor << ":" << mColor;
     // select default color
-    if (mDefaultColor != mColor) {
+    if (mDefaultColor == mColor) {
+        ui.mCombo->setCurrentIndex(0);
+    } else {
         ui.mCombo->setCurrentIndex(1);
     }
 

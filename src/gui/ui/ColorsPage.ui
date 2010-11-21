@@ -65,6 +65,13 @@
      <property name="labelText">
       <string>Arrow</string>
      </property>
+     <property name="defaultColor">
+      <color>
+       <red>0</red>
+       <green>0</green>
+       <blue>0</blue>
+      </color>
+     </property>
     </widget>
    </item>
    <item>
@@ -77,6 +84,13 @@
      </property>
      <property name="labelText">
       <string>Border</string>
+     </property>
+     <property name="defaultColor">
+      <color>
+       <red>0</red>
+       <green>0</green>
+       <blue>0</blue>
+      </color>
      </property>
     </widget>
    </item>

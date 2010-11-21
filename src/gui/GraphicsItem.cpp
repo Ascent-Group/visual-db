@@ -49,6 +49,7 @@ int GraphicsItem::mSeek = 80;
  */
 GraphicsItem::GraphicsItem(QMenu *ipMenu)
     : QGraphicsPolygonItem(),
+      mTitleItem(0),
       mFieldItems(),
       mLeftTopPoint(0, 0),
       mRightBottomPoint(0, 0),
@@ -74,6 +75,7 @@ GraphicsItem::GraphicsItem(QMenu *ipMenu)
  */
 GraphicsItem::~GraphicsItem()
 {
+    delete mTitleItem;
 }
 
 /*!

@@ -188,9 +188,11 @@ DbObjectItem::hoverMoveEvent(QGraphicsSceneHoverEvent *ipEvent)
  * \overload
  */
 void
-DbObjectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
+DbObjectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *ipEvent)
 {
-    setCursor(Qt::ArrowCursor);
+//    setCursor(Qt::OpenHandCursor);
+//    setCursor(Qt::ArrowCursor);
+    QGraphicsItem::hoverLeaveEvent(ipEvent);
 }
 
 /*!

@@ -79,8 +79,8 @@ LoopArrow::paintLine(QPainter *ipPainter)
     QPointF headPoint = QPointF(center + QPointF(0, 30));
     setLine(QLineF(headPoint, headPoint + QPointF(10, 0)));
 
-    ipPainter->setBrush(QColor("black"));
-    ipPainter->drawPolygon(makeHead(line(), headPoint));
+//    ipPainter->setBrush(QColor("black"));
+//    ipPainter->drawPolygon(makeHead(line(), headPoint));
 }
 
 /*!
@@ -88,10 +88,10 @@ LoopArrow::paintLine(QPainter *ipPainter)
  *
  * \param[in] ipPainter - Painter
  */
-void
-LoopArrow::paintHead(QPainter *ipPainter)
-{
-    ipPainter->setBrush(QColor("black"));
-    setHead(makeHead(line(), line().p1()));
-    ipPainter->drawPolygon(head());
-}
+//void
+//LoopArrow::paintHead(QPainter *ipPainter)
+//{
+//    ipPainter->setBrush(QColor("black"));
+//    setHead(makeHead(line(), line().p1()));
+//    ipPainter->drawPolygon(head());
+//}

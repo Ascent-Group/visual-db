@@ -426,9 +426,7 @@ GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     if (mMoveMode) {
         QGraphicsScene::mouseMoveEvent(ipEvent);
-        return;
     } else {
-
         // if we grabbered an item - do default actions and return
         if (mouseGrabberItem()) {
             QGraphicsScene::mouseMoveEvent(ipEvent);

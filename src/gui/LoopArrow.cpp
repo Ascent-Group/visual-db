@@ -55,43 +55,39 @@ LoopArrow::~LoopArrow()
 QRectF
 LoopArrow::boundingRect() const
 {
-    QPointF center = startItem()->pos() + QPointF(startItem()->x() + startItem()->width(), startItem()->y());
-    return QRectF(center - QPointF(20, 20), QSizeF(50, 55));
+    return QRectF(centerPoint() - QPointF(25, 25), QSizeF(60, 65));
 }
 
 /*!
- * \brief Draws line
- *
- * \param[in] ipPainter - Painter
+ * \brief Update the arrow's position
  */
-void
-LoopArrow::paintLine(QPainter *ipPainter)
+QPainterPath
+LoopArrow::line()
 {
-    QPointF center = startItem()->pos() + QPointF(startItem()->x() + startItem()->width(), startItem()->y());
-
     QPainterPath path;
-    path.moveTo(center);
-    path.arcTo(QRectF(center - QPointF(20, 20), QSizeF(50, 50)), -120, 360);
-
-    ipPainter->setBrush(QColor(0, 0, 0, 0));
-    ipPainter->drawPath(path);
-
-    QPointF headPoint = QPointF(center + QPointF(0, 30));
-    setLine(QLineF(headPoint, headPoint + QPointF(10, 0)));
-
-//    ipPainter->setBrush(QColor("black"));
-//    ipPainter->drawPolygon(makeHead(line(), headPoint));
+    path.moveTo(centerPoint());
+    path.arcTo(QRectF(centerPoint() - QPointF(20, 20), QSizeF(50, 50)), -120, 360);
+    return path;
 }
 
 /*!
- * \brief Draws line head
- *
- * \param[in] ipPainter - Painter
+ * \brief Update the arrow's position
  */
-//void
-//LoopArrow::paintHead(QPainter *ipPainter)
-//{
-//    ipPainter->setBrush(QColor("black"));
-//    setHead(makeHead(line(), line().p1()));
-//    ipPainter->drawPolygon(head());
-//}
+QPolygonF
+LoopArrow::head()
+{
+    QPointF headPoint = QPointF(centerPoint() + QPointF(0, 30));
+    QLineF line(headPoint, headPoint + QPointF(10, 0));
+    return makeHead(line, headPoint);
+}
+
+/*!
+ * \brief Returns center point of the start item
+ *
+ * \return Center point
+ */
+QPointF
+LoopArrow::centerPoint() const
+{
+    return startItem()->pos() + QPointF(startItem()->x() + startItem()->width(), startItem()->y());
+}

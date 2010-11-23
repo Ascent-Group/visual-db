@@ -50,13 +50,11 @@ ForeignArrow::~ForeignArrow()
 }
 
 /*!
- * \brief Draws line head
- *
- * \param[in] ipPainter - Painter
+ * \brief Update the arrow's position
  */
 QPolygonF
 ForeignArrow::head()
 {
     QLineF line(startPoint(), endPoint());
-    return makeHead(line, line.p1());
+    return makeHead(line, startPoint());
 }

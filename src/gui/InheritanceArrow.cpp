@@ -50,16 +50,14 @@ InheritanceArrow::~InheritanceArrow()
 {
 }
 
+
 /*!
- * \brief Draws line head
- *
- * \param[in] ipPainter - Painter
+ * \brief Update the arrow's position
  */
-void
-InheritanceArrow::paintHead(QPainter *ipPainter)
+QPolygonF
+InheritanceArrow::head()
 {
-    ipPainter->setBrush(QColor("white"));
-    QPointF lineCenter(line().p1().x() + (line().p2().x() - line().p1().x()) / 2, line().p1().y() + (line().p2().y() - line().p1().y()) / 2);
-    setHead(makeHead(line(), lineCenter));
-    ipPainter->drawPolygon(head());
+    QPointF lineCenter(startPoint().x() + (endPoint().x() - startPoint().x()) / 2, startPoint().y() + (endPoint().y() - startPoint().y()) / 2);
+    QLineF line(startPoint(), endPoint());
+    return makeHead(line, lineCenter);
 }

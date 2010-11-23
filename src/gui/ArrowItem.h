@@ -45,7 +45,7 @@ class QRectF;
  * \headerfile gui/ArrowItem.h
  * \brief Implement the visual relations between tables
  */
-class ArrowItem : public QGraphicsLineItem
+class ArrowItem : public QGraphicsPathItem
 {
     public:
         enum { Type = UserType + 4 };
@@ -58,7 +58,6 @@ class ArrowItem : public QGraphicsLineItem
 
         virtual int type() const;
         virtual QRectF boundingRect() const;
-        virtual QPainterPath shape() const;
 
         virtual TableItem *startItem() const;
         virtual TableItem *endItem() const;
@@ -68,11 +67,12 @@ class ArrowItem : public QGraphicsLineItem
     protected:
         virtual QColor brushColor() const;
         virtual void setBrushColor(const QColor &);
-        virtual void paintHead(QPainter *) = 0;
-        virtual void paintLine(QPainter *);
-        virtual void setHead(const QPolygonF &);
-        virtual QLineF makeLine() const;
-        virtual QPolygonF head() const;
+
+        virtual QPainterPath line();
+        virtual QPolygonF head() = 0;
+
+        virtual QPointF startPoint() const;
+        virtual QPointF endPoint() const;
 
     private:
 
@@ -81,6 +81,10 @@ class ArrowItem : public QGraphicsLineItem
         TableItem *mStartItem;
         TableItem *mEndItem;
 
+        QPointF mStartPoint;
+        QPointF mEndPoint;
+        QPainterPath mPath;
+
         QColor mColor;
         QColor mBrushColor;
         QPolygonF mArrowItemHead;
@@ -88,6 +92,7 @@ class ArrowItem : public QGraphicsLineItem
         QString mTitle;
 
     private:
+        virtual QLineF makeLine();
         void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *ipWidget = 0);
 };
 

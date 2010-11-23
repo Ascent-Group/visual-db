@@ -44,7 +44,7 @@ class InheritanceArrow : public ArrowItem
         virtual ~InheritanceArrow();
 
     protected:
-        virtual void paintHead(QPainter *);
+        virtual QPolygonF head();
 };
 
 #endif // INHERITANCEARROW_H

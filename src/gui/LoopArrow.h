@@ -46,8 +46,11 @@ class LoopArrow : public ForeignArrow
         virtual QRectF boundingRect() const;
 
     protected:
-        virtual void paintLine(QPainter *);
-//        virtual void paintHead(QPainter *);
+        virtual QPainterPath line();
+        virtual QPolygonF head();
+
+    private:
+        QPointF centerPoint() const;
 };
 
 #endif // LOOPARROW_H

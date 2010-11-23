@@ -305,4 +305,3 @@ ArrowItem::type() const
 {
     return Type;
 }
-

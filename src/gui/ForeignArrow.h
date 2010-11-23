@@ -44,7 +44,7 @@ class ForeignArrow : public ArrowItem
         virtual ~ForeignArrow();
 
     protected:
-        virtual void paintHead(QPainter *);
+        virtual QPolygonF head();
 };
 
 #endif // FOREIGNARROW_H

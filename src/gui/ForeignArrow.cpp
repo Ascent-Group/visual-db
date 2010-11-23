@@ -54,10 +54,9 @@ ForeignArrow::~ForeignArrow()
  *
  * \param[in] ipPainter - Painter
  */
-void
-ForeignArrow::paintHead(QPainter *ipPainter)
+QPolygonF
+ForeignArrow::head()
 {
-    ipPainter->setBrush(brushColor());
-    setHead(makeHead(line(), line().p1()));
-    ipPainter->drawPolygon(head());
+    QLineF line(startPoint(), endPoint());
+    return makeHead(line, line.p1());
 }

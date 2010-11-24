@@ -118,6 +118,7 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     // preload images
     mKeyImage = new QImage(":/img/key.png");
     mForeignKeyImage = new QImage(":/img/foreignkey.png");
+    mPrimaryAndForeignKeyImage = new QImage(":/img/primary_and_foreign.png");
     
     // allow selecting and moving of the table
     setAcceptsHoverEvents(true);
@@ -174,7 +175,11 @@ TableItem::paintFieldImage(QPainter *ipPainter, int ipIdx)
     QImage *image = 0;
     // draw image for primary key field with margins = INTERVAL for top, bottom, left and right sizes
     if (mModel->isColumnPrimaryKey(ipIdx)) {
-        image = mKeyImage;
+        if (mModel->isColumnForeignKey(ipIdx)) {
+            image = mPrimaryAndForeignKeyImage;
+        } else {
+            image = mKeyImage;
+        }
     } else if (mModel->isColumnForeignKey(ipIdx)) {
         image = mForeignKeyImage;
     }

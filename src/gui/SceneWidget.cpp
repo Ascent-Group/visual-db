@@ -90,10 +90,12 @@ SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
 
     mainLayout = new QGridLayout(this);
     mainLayout->setAlignment(Qt::AlignCenter);
+    mainLayout->setContentsMargins(0, 0, 0, 0);
 
     QGridLayout *controlLayout = new QGridLayout();
     controlLayout->addWidget(mControlWidget, 0, 0, Qt::AlignTop | Qt::AlignRight);
     controlLayout->setColumnMinimumWidth(1, 20);
+    controlLayout->setContentsMargins(0, 0, 0, 0);
     mainLayout->addLayout(controlLayout, 0, 0, Qt::AlignTop | Qt::AlignRight);
     mainLayout->addWidget(mView, 0, 0);
 

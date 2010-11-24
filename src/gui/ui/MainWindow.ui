@@ -49,6 +49,9 @@
         <string>DB scheme</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_4">
+        <property name="margin">
+         <number>0</number>
+        </property>
         <item row="0" column="0">
          <widget class="SceneWidget" name="mSceneWidget" native="true">
           <property name="enabled">
@@ -748,22 +751,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>mSceneWidget</sender>
-   <signal>itemActionDone(QUndoCommand*)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>addCommand(QUndoCommand*)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>385</x>
-     <y>192</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>363</x>
-     <y>-1</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>mShowOptionsDialogAction</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
@@ -892,246 +879,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>mDeleteTableAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>deleteItem()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mShowFieldsTypesAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>setFieldsTypesVisible()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mHideFieldsTypesAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>setFieldsTypesInvisible()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mShowIndicesAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>setIndicesVisible()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mHideIndicesAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>setIndicesInvisible()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mSetTableColorAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>setItemColor()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mSelectAllTablesAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>selectAllItems()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mRemoveAllTablesAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>cleanSchemeScene()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mAdjustTableSizeAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>adjustItems()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mSaveToImgAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>saveToImage()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mGroupItemsAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>groupItems()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mUngroupItemsAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>ungroupItems()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mAnchorAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>anchorItems()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mDisableAnchorAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>disableAnchorItems()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mSelectAllTablesInSchemaAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>selectAllItemsInSchema()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>mDescribeObjectAction</sender>
    <signal>triggered()</signal>
    <receiver>MainWindow</receiver>
@@ -1160,102 +907,6 @@
     <hint type="destinationlabel">
      <x>399</x>
      <y>299</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mColorizeAccordingSchemasAction</sender>
-   <signal>triggered()</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>colorizeAccordingSchemas()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mShowGridAction</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>showGrid(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mAlignToGridAction</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>alignToGrid(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mDivideIntoPagesAction</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>divideIntoPages(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mShowControlWidgetAction</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>showControlWidget(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>mShowLegendAction</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>mSceneWidget</receiver>
-   <slot>showLegend(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>-1</x>
-     <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>533</x>
-     <y>221</y>
     </hint>
    </hints>
   </connection>
@@ -1320,6 +971,358 @@
     <hint type="destinationlabel">
      <x>399</x>
      <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowLegendAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>showLegend(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowControlWidgetAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>showControlWidget(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mDivideIntoPagesAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>divideIntoPages(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mAlignToGridAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>alignToGrid(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mColorizeAccordingSchemasAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>colorizeAccordingSchemas()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSelectAllTablesInSchemaAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>selectAllItemsInSchema()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mDisableAnchorAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>disableAnchorItems()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mAnchorAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>anchorItems()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mUngroupItemsAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>ungroupItems()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mGroupItemsAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>groupItems()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSaveToImgAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>saveToImage()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mAdjustTableSizeAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>adjustItems()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mRemoveAllTablesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>cleanSchemeScene()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSelectAllTablesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>selectAllItems()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSetTableColorAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>setItemColor()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mHideIndicesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>setIndicesInvisible()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowIndicesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>setIndicesVisible()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mHideFieldsTypesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>setFieldsTypesInvisible()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowGridAction</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>showGrid(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mShowFieldsTypesAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>setFieldsTypesVisible()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mDeleteTableAction</sender>
+   <signal>triggered()</signal>
+   <receiver>mSceneWidget</receiver>
+   <slot>deleteItem()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>533</x>
+     <y>221</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>mSceneWidget</sender>
+   <signal>itemActionDone(QUndoCommand*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>addCommand(QUndoCommand*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>385</x>
+     <y>192</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>363</x>
+     <y>-1</y>
     </hint>
    </hints>
   </connection>

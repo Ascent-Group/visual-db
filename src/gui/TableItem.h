@@ -104,6 +104,7 @@ class TableItem : public DbObjectItem
         
         QImage *mKeyImage;
         QImage *mForeignKeyImage;
+        QImage *mPrimaryAndForeignKeyImage;
 
         DbObjects::Common::DbTablePtr mModel;
 };

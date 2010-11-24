@@ -692,7 +692,7 @@ MainWindow::describeObject()
     // add description widget to tab widget
     ui.mTabWidget->addTab(descWidget, tabTitle);
 
-    bool switchToNewTab = mSettings.value(Consts::PREFS_GRP + "/" + Consts::NEW_TAB_AUTO_SWITCH_SETTING).toBool();
+    bool switchToNewTab = mSettings.value(Consts::PREFS_GRP + "/" + Consts::NEW_TAB_AUTO_SWITCH_SETTING, true).toBool();
 
     // if auto switch enabled
     if (switchToNewTab) {

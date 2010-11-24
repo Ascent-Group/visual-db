@@ -161,6 +161,7 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
                    .arg(ipTable->schema()->name())
                    .arg(ipTable->name());
 
+    QStringList primaryKeyNames;
     // for each db table's column fill the rows and generate body text
     for (quint16 i = 0; i < columnsCount; ++i) {
         // read attributes
@@ -221,7 +222,7 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
         ui.mTable->setItem(i, DescriptionWidget::TableForeignTableCol, foreignTableItem);
 
         // generate body text
-        body.append(QString(" \n\t%1\t%2").arg(name).arg(type));
+        body.append(QString(" \n\t\"%1\"\t%2").arg(name).arg(type));
 
         if (!nullable) {
             body.append(" NOT NULL");
@@ -232,7 +233,7 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
         }
 
         if (primary) {
-            body.append(" PRIMARY KEY");
+            primaryKeyNames.push_back(name);
         }
 
         if (foreign) {
@@ -242,14 +243,21 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
                         .arg(foreignFieldsNames));
         }
 
-        if (i != columnsCount - 1) {
-            body.append(",");
-        }
+        body.append(",");
     }
 
     // auto resize cells
     ui.mTable->resizeColumnsToContents();
     ui.mTable->resizeRowsToContents();
+
+    // add PRIMARY KEY clause
+    body.append("\n\tPRIMARY KEY ( ");
+    foreach(const QString &name, primaryKeyNames) {
+        body.append(QString("\"%1\", ").arg(name));
+    }
+    // remove last comma
+    body.remove(body.lastIndexOf(", "), 2);
+    body.append(" )");
 
     // show generated body
     body.append("\n) ");

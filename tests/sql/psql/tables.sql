@@ -14,8 +14,8 @@ CREATE TABLE vtunes.genres (
 CREATE TABLE vtunes.albums (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(100) NOT NULL,
-    genre	    INTEGER REFERENCES vtunes.genres(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-    artist	    INTEGER REFERENCES vtunes.artists(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+    genre       INTEGER REFERENCES vtunes.genres(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+    artist      INTEGER REFERENCES vtunes.artists(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
     release_date    DATE
 );
 
@@ -23,10 +23,10 @@ CREATE TABLE vtunes.albums (
 CREATE TABLE vtunes.tracks (
     id              SERIAL PRIMARY KEY,
     name            VARCHAR(100) NOT NULL,
-    artist	    INTEGER REFERENCES vtunes.artists(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-    album	    INTEGER REFERENCES vtunes.albums(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+    artist      INTEGER REFERENCES vtunes.artists(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+    album       INTEGER REFERENCES vtunes.albums(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
     -- number of track in an album
-    no		    INTEGER
+    no          INTEGER
 );
 
 -- LOCATIONS
@@ -46,11 +46,20 @@ CREATE TABLE vtunes.users (
 -- PLAYLISTS
 CREATE TABLE vtunes.playlists (
     id              INTEGER,
-    track	    INTEGER REFERENCES vtunes.tracks(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
-    "user"	    INTEGER REFERENCES vtunes.users(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
+    track       INTEGER REFERENCES vtunes.tracks(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+    "user"      INTEGER REFERENCES vtunes.users(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL
 );
 
 -- table inheritance
 CREATE TABLE vtunes.extended_playlists (
-    expires	    DATE
+    expires     DATE
 ) INHERITS (vtunes.playlists);
+
+-- composite PK
+CREATE TABLE vtunes.user_alias (
+    id      SERIAL,
+    "user"  INTEGER REFERENCES vtunes.users(id) ON UPDATE CASCADE ON DELETE CASCADE NOT NULL,
+    alias   VARCHAR(20) UNIQUE NOT NULL,
+    PRIMARY KEY ( id, "user" )
+);
+

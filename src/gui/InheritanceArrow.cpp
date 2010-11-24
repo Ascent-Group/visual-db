@@ -58,6 +58,6 @@ QPolygonF
 InheritanceArrow::head()
 {
     QPointF lineCenter(startPoint().x() + (endPoint().x() - startPoint().x()) / 2, startPoint().y() + (endPoint().y() - startPoint().y()) / 2);
-    QLineF line(startPoint(), endPoint());
+    QLineF line(endPoint(), startPoint());
     return makeHead(line, lineCenter);
 }

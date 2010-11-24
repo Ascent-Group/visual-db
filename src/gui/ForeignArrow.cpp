@@ -55,6 +55,6 @@ ForeignArrow::~ForeignArrow()
 QPolygonF
 ForeignArrow::head()
 {
-    QLineF line(startPoint(), endPoint());
-    return makeHead(line, startPoint());
+    QLineF line(endPoint(), startPoint());
+    return makeHead(line, endPoint());
 }

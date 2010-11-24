@@ -13,21 +13,22 @@ fi
 ######################
 psqlSetup()
 {
+    HOST=localhost
     DBUSER=music_user
     DBNAME=music_db
     DBPASS=qwe
     LANG=plpgsql
-    PSQL_DIR=/usr/local/pgsql-8.3.7
+    PSQL_DIR=/opt/rubystack-2.1-0/postgresql
     PSQL_SUPERUSER=postgres
 
     # drop db and user if they exist
-    $PSQL_DIR/bin/dropdb -U $PSQL_SUPERUSER $DBNAME
-    $PSQL_DIR/bin/dropuser -U $PSQL_SUPERUSER $DBUSER
+    $PSQL_DIR/bin/dropdb --host=$HOST -U $PSQL_SUPERUSER $DBNAME
+    $PSQL_DIR/bin/dropuser --host=$HOST -U $PSQL_SUPERUSER $DBUSER
 
     # create user if it doesn't exist already
-    $PSQL_DIR/bin/psql template1 -U $PSQL_SUPERUSER -c "\du" | grep $DBUSER > /dev/null
+    $PSQL_DIR/bin/psql template1 --host=$HOST -U $PSQL_SUPERUSER -c "\du" | grep $DBUSER > /dev/null
     if [ $? != 0 ]; then
-        $PSQL_DIR/bin/createuser -P -W -U $PSQL_SUPERUSER --createdb --no-superuser --no-createrole $DBUSER
+        $PSQL_DIR/bin/createuser --host=$HOST -P -W -U $PSQL_SUPERUSER --createdb --no-superuser --no-createrole $DBUSER
 
         if [ $? != 0 ]; then
             echo "Unable to create db user!";
@@ -36,9 +37,9 @@ psqlSetup()
     fi
 
     # create db if it doesn't exist already
-    $PSQL_DIR/bin/psql template1 $PSQL_SUPERUSER -c "\l" | grep $DBNAME > /dev/null
+    $PSQL_DIR/bin/psql --host=$HOST template1 $PSQL_SUPERUSER -c "\l" | grep $DBNAME > /dev/null
     if [ $? != 0 ]; then
-        $PSQL_DIR/bin/createdb --host=localhost --owner=$DBUSER --username=$PSQL_SUPERUSER --template=template1 $DBNAME
+        $PSQL_DIR/bin/createdb --host=$HOST --owner=$DBUSER --username=$PSQL_SUPERUSER --template=template1 $DBNAME
 
         if [ $? != 0 ]; then
             echo "Unable to create db!";
@@ -47,9 +48,9 @@ psqlSetup()
     fi
 
     # create lang if it doesn't exist already
-    $PSQL_DIR/bin/createlang --host=localhost --username=$PSQL_SUPERUSER --dbname=$DBNAME -l | grep $LANG > /dev/null
+    $PSQL_DIR/bin/createlang --host=$HOST --username=$PSQL_SUPERUSER --dbname=$DBNAME -l | grep $LANG > /dev/null
     if [ $? != 0 ]; then
-        $PSQL_DIR/bin/createlang --host=localhost --username=$PSQL_SUPERUSER --dbname=$DBNAME $LANG
+        $PSQL_DIR/bin/createlang --host=$HOST --username=$PSQL_SUPERUSER --dbname=$DBNAME $LANG
 
         if [ $? != 0 ]; then
             echo "Unable to create lang!";
@@ -68,7 +69,7 @@ psqlSetup()
 
     for i in $SQLS; do
         echo "Applying $i on behalf of $DBUSER";
-        $PSQL_DIR/bin/psql -f $i --username=$DBUSER $DBNAME > /dev/null
+        $PSQL_DIR/bin/psql --host=$HOST -f $i --username=$DBUSER $DBNAME > /dev/null
 
         # no way check the last cmd for failure, somehow psql returns 0 on error
 

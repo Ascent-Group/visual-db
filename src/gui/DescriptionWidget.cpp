@@ -243,21 +243,26 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
                         .arg(foreignFieldsNames));
         }
 
-        body.append(",");
+        if (i != columnsCount - 1) {
+            body.append(",");
+        }
     }
 
     // auto resize cells
     ui.mTable->resizeColumnsToContents();
     ui.mTable->resizeRowsToContents();
 
-    // add PRIMARY KEY clause
-    body.append("\n\tPRIMARY KEY ( ");
-    foreach(const QString &name, primaryKeyNames) {
-        body.append(QString("\"%1\", ").arg(name));
+    if (0 != primaryKeyNames.size()) {
+        // add PRIMARY KEY clause
+        body.append(",\n\tPRIMARY KEY ( ");
+        foreach(const QString &name, primaryKeyNames) {
+            body.append(QString("\"%1\", ").arg(name));
+        }
+
+        // remove last comma
+        body.remove(body.lastIndexOf(", "), 2);
+        body.append(" )");
     }
-    // remove last comma
-    body.remove(body.lastIndexOf(", "), 2);
-    body.append(" )");
 
     // show generated body
     body.append("\n) ");

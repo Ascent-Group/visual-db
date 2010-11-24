@@ -83,7 +83,6 @@ DbLanguage::setTrusted(bool ipFlag)
 void
 DbLanguage::resetData()
 {
-    /*! \todo Implement */
     mIsTrusted = false;
 
     DbObject::resetData();

@@ -145,9 +145,8 @@ DbView::columnsNames() const
 void
 DbView::resetData()
 {
-    /*! \todo Implement */
-//    mSchema = 0; // \todo How to reset Proxy???
-//    mOwner = 0;
+    mSchema = DbSchemaPtr();
+    mOwner = DbRolePtr();
     mDefinition = "";
     mColumnsNames.clear();
 

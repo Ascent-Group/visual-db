@@ -273,14 +273,13 @@ DbIndex::setReady(bool ipFlag)
 }
 
 /*!
- * \todo Reset index description read from database
+ * \brief Reset index description read from database
  */
 void
 DbIndex::resetData()
 {
-    /*! \todo Implement */
-//    mTable = 0; // \todo how to reset proxy ?
-//    mSchema = 0;
+    mTable = DbTablePtr();
+    mSchema = DbSchemaPtr();
     mColumnsCount = 0;
     mColumnsNumbers.clear();
     mIsUnique = false;

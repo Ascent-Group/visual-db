@@ -46,10 +46,6 @@
 
 #include <QtDebug>
 
-/* \todo Database should not have any SQL queries in it. Instead, it should
- *       delegate SQL routines to DbTable's subclasses
- */
-
 namespace DbObjects
 {
 

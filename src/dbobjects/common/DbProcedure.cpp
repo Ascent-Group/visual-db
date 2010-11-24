@@ -167,10 +167,9 @@ DbProcedure::setSourceCode(const QString &ipText)
 void
 DbProcedure::resetData()
 {
-    /*! \todo Implement */
-//    mSchema = 0; // \todo How to reset proxy ???
-//    mOwner = 0;
-//    mLanguage = 0;
+    mSchema = DbSchemaPtr();
+    mOwner = DbRolePtr();
+    mLanguage = DbLanguagePtr();
     mSourceCode = "";
 
     DbObject::resetData();

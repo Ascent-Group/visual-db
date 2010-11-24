@@ -335,7 +335,7 @@ DbTable::isColumnUnique(qint16 ipColId) const
 void
 DbTable::resetData()
 {
-    /*! \todo Implement */
+    mSchema = DbSchemaPtr();
     mColumnDefs.clear();
     mParentTables.clear();
 

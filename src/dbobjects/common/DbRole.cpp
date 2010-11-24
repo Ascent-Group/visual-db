@@ -254,7 +254,6 @@ DbRole::setId(quint64 ipId)
 void
 DbRole::resetData()
 {
-    /*! \todo Implement */
     mIsSuperUser = false;
     mInheritsPrivileges = false;
     mCanCreateRole = false;

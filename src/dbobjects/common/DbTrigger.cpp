@@ -294,14 +294,13 @@ DbTrigger::type() const
 void
 DbTrigger::resetData()
 {
-    /*! \todo Implement */
-//    mTable = 0; // \todo How to reset proxy
-//    mSchema = 0;
-//    mProcedure = 0;
+    mTable = DbTablePtr();
+    mSchema = DbSchemaPtr();
+    mProcedure = DbProcedurePtr();
     mEnabled = 0;
     mIsConstraint = false;
     mConstraintName = "";
-//    mReferencedTable = 0;
+    mReferencedTable = DbTablePtr();
     mIsDeferrable = false;
     mIsInitiallyDeferred = false;
     mNumArgs = 0;

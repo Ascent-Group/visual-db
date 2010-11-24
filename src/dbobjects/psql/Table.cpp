@@ -235,25 +235,25 @@ Table::checkPrimaryKey(const QString &ipColumnName) const
 
     // create query
     QString qstr = QString("SELECT "
-                        "pgc.relname, "
-                        "pga.attname "
-                    "FROM "
-                        "pg_class pgc, "
-                        "pg_attribute pga, "
-                        "pg_index pgi, "
-                        "pg_namespace pgn "
-                    "WHERE "
-                        "pgc.oid = pga.attrelid "
-                        "AND pgc.oid = pgi.indrelid "
-                        "AND pgi.indkey[0] = pga.attnum "
-                        "AND pgi.indisprimary = 't' "
-                        "AND pgn.oid = pgc.relnamespace "
-                        "AND pgn.nspname = '%1' "
-                        "AND pgc.relname = '%2' "
-                        "AND pga.attname = '%3';")
-                .arg(mSchema->name())
-                .arg(mName)
-                .arg(ipColumnName);
+                               "pgc.relname, "
+                               "pga.attname "
+                           "FROM "
+                               "pg_class pgc, "
+                               "pg_attribute pga, "
+                               "pg_constraint constr, "
+                               "pg_namespace pgn "
+                           "WHERE "
+                               "pgc.oid = pga.attrelid "
+                               "AND constr.conrelid = pgc.oid "
+                               "AND constr.contype = 'p' "
+                               "AND pga.attnum = ANY (constr.conkey) "
+                               "AND pgn.oid = pgc.relnamespace "
+                               "AND pgn.nspname = '%1' "
+                               "AND pgc.relname = '%2' "
+                               "AND pga.attname = '%3';")
+        .arg(mSchema->name())
+        .arg(mName)
+        .arg(ipColumnName);
 
 #ifdef DEBUG_QUERY
     qDebug() << "Psql::Table::checkPrimaryKey> " << qstr;

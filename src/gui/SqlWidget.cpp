@@ -46,7 +46,7 @@ SqlWidget::SqlWidget(QWidget *ipParent)
 {
     ui.setupUi(this);
 
-    // we are using QFrame instead of QToolBar
+    // \note: we are using QFrame instead of QToolBar
     // reason: QtDesigner doesn't support it for non-MainWindow gui
 
 }

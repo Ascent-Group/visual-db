@@ -29,6 +29,7 @@
 
 /*!
  * \mainpage VisualDB v1.0
+ * \image html MainWindow.png "Application's main window"
  */
 
 /* namespace descriptions go here */

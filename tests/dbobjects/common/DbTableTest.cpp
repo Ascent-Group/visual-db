@@ -32,12 +32,22 @@
 
 using namespace DbObjects;
 
-typedef Common::DbObjectPtr<Common::DbTable> DbTablePtr;
 
 void
 DbTableTest::initTestCase()
 {
+    mSchemaName = "vtunes";
+    mTableName = "extended_playlists";
+
+    //           0      1        2       3    4     5      6      7       8
+    //          name | type | nullable | PK | FK | Fsch | Ftbl | Ffld | Unique
+    mColumns << "id|integer|false|true|false|true||||true"
+             << "track|integer|false|false|true|false|vtunes|tracks|id|false"
+             << "user|integer|false|false|true|false|vtunes|users|id|false"
+             << "expires|date|true|false|false|false||||false";
+
     mDbInst = DatabaseCreator::createDatabase();
+    QVERIFY(0 != mDbInst);
 }
 
 void
@@ -53,6 +63,16 @@ DbTableTest::cleanupTestCase()
 void
 DbTableTest::init()
 {
+    mDbInst->loadData();
+
+    DbSchemaPtr schema = mDbInst->findSchema(mSchemaName);
+    QVERIFY(schema.valid());
+
+    mTable = schema->findTable(mTableName);
+    QVERIFY(mTable.valid());
+
+    QCOMPARE(mTable.name(), mTableName);
+    QCOMPARE(mTable->name(), mTableName);
 }
 
 /*!
@@ -61,67 +81,61 @@ DbTableTest::init()
 void
 DbTableTest::cleanup()
 {
+    mTable = DbTablePtr();
     mDbInst->resetData();
-}
-
-void
-DbTableTest::checkForeignKeyTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbTableTest::checkPrimaryKeyTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbTableTest::checkUniqueTest()
-{
-    QVERIFY(0);
 }
 
 void
 DbTableTest::columnNameTest()
 {
-    QVERIFY(0);
+    for (int i = 0; i < mColumns.size(); ++i) {
+        QCOMPARE(mTable->columnName(i), mColumns.at(i).split("|").at(0));
+    }
 }
 
 void
 DbTableTest::columnTypeTest()
 {
-    QVERIFY(0);
+    for (int i = 0; i < mColumns.size(); ++i) {
+        QCOMPARE(mTable->columnType(i), mColumns.at(i).split("|").at(1));
+    }
 }
 
 void
 DbTableTest::columnsCountTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mTable->columnsCount(), (quint16)mColumns.count());
 }
 
 void
 DbTableTest::foreignFieldsTest()
 {
-    QVERIFY(0);
+    for (int i = 0; i < mColumns.size(); ++i) {
+        // Since foreignFields returns a stringlist we will compare them joined with comma
+        QCOMPARE(mTable->foreignFields(i).join(","), mColumns.at(i).split("|").at(7));
+    }
 }
 
 void
 DbTableTest::foreignSchemaNameTest()
 {
-    QVERIFY(0);
+    for (int i = 0; i < mColumns.size(); ++i) {
+        QCOMPARE(mTable->foreignSchemaName(i), mColumns.at(i).split("|").at(5));
+    }
 }
 
 void
 DbTableTest::foreignTableNameTest()
 {
-    QVERIFY(0);
+    for (int i = 0; i < mColumns.size(); ++i) {
+        QCOMPARE(mTable->foreignTableName(i), mColumns.at(i).split("|").at(6));
+    }
 }
 
 void
 DbTableTest::fullNameTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mTable->fullName(), QString("%1.%2").arg(mSchemaName).arg(mTableName));
 }
 
 void
@@ -133,25 +147,33 @@ DbTableTest::getIndicesTest()
 void
 DbTableTest::isColumnForeignKeyTest()
 {
-    QVERIFY(0);
+    for (int i = 0; i < mColumns.size(); ++i) {
+        QCOMPARE(mTable->isColumnForeignKey(i), QVariant(mColumns.at(i).split("|").at(4)).toBool());
+    }
 }
 
 void
 DbTableTest::isColumnNullableTest()
 {
-    QVERIFY(0);
+    for (int i = 0; i < mColumns.size(); ++i) {
+        QCOMPARE(mTable->isColumnNullable(i), QVariant(mColumns.at(i).split("|").at(2)).toBool());
+    }
 }
 
 void
 DbTableTest::isColumnPrimaryKeyTest()
 {
-    QVERIFY(0);
+    for (int i = 0; i < mColumns.size(); ++i) {
+        QCOMPARE(mTable->isColumnPrimaryKey(i), QVariant(mColumns.at(i).split("|").at(3)).toBool());
+    }
 }
 
 void
 DbTableTest::isColumnUniqueTest()
 {
-    QVERIFY(0);
+    for (int i = 0; i < mColumns.size(); ++i) {
+        QCOMPARE(mTable->isColumnUnique(i), QVariant(mColumns.at(i).split("|").at(8)).toBool());
+    }
 }
 
 void
@@ -163,32 +185,42 @@ DbTableTest::loadDataTest()
 void
 DbTableTest::typeTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mTable->type(), Common::DbObject::TableObject);
 }
 
 void
 DbTableTest::schemaTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mTable->schema();
+    QVERIFY(schema.valid());
+
+    QCOMPARE(schema.name(), mSchemaName);
+    QCOMPARE(schema->name(), mSchemaName);
 }
 
 void
 DbTableTest::setSchemaTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mTable->schema();
+    QVERIFY(schema.valid());
+
+    QCOMPARE(schema.name(), mSchemaName);
+    QCOMPARE(schema->name(), mSchemaName);
+
+    DbSchemaPtr newSchema;
+
+    mTable->setSchema(newSchema);
+    QVERIFY(schema.name() != mTable->schema().name());
+    QVERIFY(schema->name() != mTable->schema().name());
 }
 
 void
 DbTableTest::parentTablesTest()
 {
-    mDbInst->readSchemas();
-
-    DbTablePtr tablePtr = mDbInst->findSchema("vtunes")->findTable("extended_playlists");
-
-    QVERIFY(0 != tablePtr.get());
+    QVERIFY(0 != mTable.get());
 
     QVector<DbTablePtr> parentsList;
-    quint32 parentsCount = tablePtr->parentTables(parentsList);
+    quint32 parentsCount = mTable->parentTables(parentsList);
 
     QCOMPARE(parentsCount, (quint32)1);
 

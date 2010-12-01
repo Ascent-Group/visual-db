@@ -99,7 +99,7 @@ DbRole::inheritsPrivileges() const
  * \param[in] ipFlag
  */
 void
-DbRole::setInheritsPriviligese(bool ipFlag)
+DbRole::setInheritsPrivileges(bool ipFlag)
 {
     mInheritsPrivileges = ipFlag;
 }

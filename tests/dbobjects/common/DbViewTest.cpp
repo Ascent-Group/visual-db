@@ -35,7 +35,11 @@ using namespace DbObjects;
 void
 DbViewTest::initTestCase()
 {
+    mSchemaName = "vtunes";
+    mViewName = "users_playlists";
+    mRoleName = "music_user";
     mDbInst = DatabaseCreator::createDatabase();
+    QVERIFY(0 != mDbInst);
 }
 
 void
@@ -51,7 +55,16 @@ DbViewTest::cleanupTestCase()
 void
 DbViewTest::init()
 {
-    mDbInst->readSchemas();
+    mDbInst->loadData();
+
+    DbSchemaPtr schema = mDbInst->findSchema(mSchemaName);
+    QVERIFY(schema.valid());
+
+    mView = schema->findView(mViewName);
+    QVERIFY(mView.valid());
+
+    QCOMPARE(mView.name(), mViewName);
+    QCOMPARE(mView->name(), mViewName);
 }
 
 /*!
@@ -60,19 +73,29 @@ DbViewTest::init()
 void
 DbViewTest::cleanup()
 {
+    mView = DbViewPtr();
     mDbInst->resetData();
 }
 
 void
 DbViewTest::definitionTest()
 {
-    QVERIFY(0);
+    QString def = mView->definition();
+    QVERIFY(0 < def.length());
+
+    int selectPos = def.indexOf("SELECT");
+    int fromPos = def.indexOf("FROM");
+    int wherePos = def.indexOf("WHERE");
+
+    QVERIFY(0 <= selectPos);
+    QVERIFY(selectPos <= fromPos);
+    QVERIFY(fromPos <= wherePos);
 }
 
 void
 DbViewTest::fullNameTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mView->fullName(), QString("%1.%2").arg(mSchemaName).arg(mViewName));
 }
 
 void
@@ -84,44 +107,79 @@ DbViewTest::loadDataTest()
 void
 DbViewTest::typeTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mView->type(), Common::DbObject::ViewObject);
 }
 
 void
 DbViewTest::ownerTest()
 {
-    QVERIFY(0);
+    DbRolePtr role = mView->owner();
+    QVERIFY(role.valid());
+
+    QCOMPARE(role.name(), mRoleName);
+    QCOMPARE(role->name(), mRoleName);
 }
 
 void
 DbViewTest::schemaTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mView->schema();
+    QVERIFY(schema.valid());
+
+    QCOMPARE(schema.name(), mSchemaName);
+    QCOMPARE(schema->name(), mSchemaName);
 }
 
 void
 DbViewTest::setDefinitionTest()
 {
-    QVERIFY(0);
+    QString def = mView->definition();
+
+    QString newDef = def;
+    newDef.replace(" ", "_");
+
+    mView->setDefinition(newDef);
+
+    QCOMPARE(mView->definition(), newDef);
 }
 
 void
 DbViewTest::setOwnerTest()
 {
-    QVERIFY(0);
+    DbRolePtr role = mView->owner();
+    QVERIFY(role.valid());
+
+    QCOMPARE(role.name(), mRoleName);
+    QCOMPARE(role->name(), mRoleName);
+
+    DbRolePtr newOwner;
+
+    mView->setOwner(newOwner);
+    QVERIFY(role.name() != mView->owner().name());
+    QVERIFY(role->name() != mView->owner().name());
 }
 
 void
 DbViewTest::setSchemaTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mView->schema();
+    QVERIFY(schema.valid());
+
+    QCOMPARE(schema.name(), mSchemaName);
+    QCOMPARE(schema->name(), mSchemaName);
+
+    DbSchemaPtr newSchema;
+
+    mView->setSchema(newSchema);
+    QVERIFY(schema.name() != mView->schema().name());
+    QVERIFY(schema->name() != mView->schema().name());
 }
 
 void
 DbViewTest::columnsNamesTest()
 {
     QStringList list;
-    list = mDbInst->findSchema("vtunes")->findView("users_playlists")->columnsNames();
+    list = mView->columnsNames();
 
     QCOMPARE(list.size(), 2);
     QVERIFY(list.contains("name"));

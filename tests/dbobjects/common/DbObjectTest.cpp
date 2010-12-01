@@ -47,13 +47,14 @@ using namespace DbObjects::Common;
 void
 DbObjectTest::initTestCase()
 {
-    Database *dbInst = DatabaseCreator::createDatabase();
+    mDbInst = DatabaseCreator::createDatabase();
 }
 
 void
 DbObjectTest::cleanupTestCase()
 {
-
+    DatabaseManager dbMgr;
+    dbMgr.flush();
 }
 
 

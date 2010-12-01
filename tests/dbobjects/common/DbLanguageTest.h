@@ -31,6 +31,9 @@
 #define DBLANGUAGETEST_H
 
 #include <QtTest/QtTest>
+#include <dbobjects/common/Database.h>
+
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbLanguage> DbLanguagePtr;
 
 class DbLanguageTest : public QObject
 {
@@ -40,10 +43,19 @@ class DbLanguageTest : public QObject
         void initTestCase();
         void cleanupTestCase();
 
+        void init();
+        void cleanup();
+
         void isTrustedTest();
         void loadDataTest();
         void typeTest();
         void setTrustedTest();
+
+    private:
+        QString mLanguageName;
+        DbLanguagePtr mLanguage;
+
+        DbObjects::Common::Database *mDbInst;
 };
 
 #endif // DBLANGUAGETEST_H

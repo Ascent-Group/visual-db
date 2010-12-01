@@ -27,43 +27,78 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbTriggerTest.h>
+
+using namespace DbObjects;
 
 void
 DbTriggerTest::initTestCase()
 {
+    mSchemaName = "vtunes";
+    mTriggerName = "albums_biu";
+    mProcedureName = "check_release_date";
+    mTableName = "albums";
+    // \note albums_biu is not a constraint trigger => constr name is empty and ther is no
+    // referenced table.
+    mConstraintName = "";
+    mRefTableName = "";
 
+    mDbInst = DatabaseCreator::createDatabase();
+    QVERIFY(0 != mDbInst);
 }
 
 void
 DbTriggerTest::cleanupTestCase()
 {
-
+    Common::DatabaseManager dbMgr;
+    dbMgr.flush();
 }
 
+void
+DbTriggerTest::init()
+{
+    mDbInst->loadData();
+
+    DbSchemaPtr schema = mDbInst->findSchema(mSchemaName);
+    QVERIFY(schema.valid());
+
+    mTrigger = schema->findTrigger(mTriggerName);
+    QVERIFY(mTrigger.valid());
+
+    QCOMPARE(mTrigger.name(), mTriggerName);
+    QCOMPARE(mTrigger->name(), mTriggerName);
+}
+
+void
+DbTriggerTest::cleanup()
+{
+    mTrigger = DbTriggerPtr();
+    mDbInst->resetData();
+}
 
 void
 DbTriggerTest::enabledTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mTrigger->enabled(), QChar('O'));
 }
 
 void
 DbTriggerTest::isConstraintTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mTrigger->isConstraint(), false);
 }
 
 void
 DbTriggerTest::isDeferrableTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mTrigger->isDeferrable(), false);
 }
 
 void
 DbTriggerTest::isInitiallyDeferredTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mTrigger->isInitiallyDeferred(), false);
 }
 
 void
@@ -75,90 +110,179 @@ DbTriggerTest::loadDataTest()
 void
 DbTriggerTest::numArgsTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mTrigger->numArgs(), (quint16)0);
 }
 
 void
 DbTriggerTest::typeTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mTrigger->type(), Common::DbObject::TriggerObject);
 }
 
 void
 DbTriggerTest::procedureTest()
 {
-    QVERIFY(0);
+    DbProcedurePtr procedure = mTrigger->procedure();
+    QVERIFY(procedure.valid());
+
+    QCOMPARE(procedure.name(), mProcedureName);
+    QCOMPARE(procedure->name(), mProcedureName);
 }
 
 void
-DbTriggerTest::raintNameTest()
+DbTriggerTest::constraintNameTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mTrigger->constraintName(), mConstraintName);
 }
 
 void
 DbTriggerTest::referencedTableTest()
 {
-    QVERIFY(0);
+    DbTablePtr table = mTrigger->referencedTable();
+    QVERIFY(!table.valid()); // \note this trigger doesn't reference any table
+
+//    QCOMPARE(table.name(), mRefTableName);
+//    QCOMPARE(table->name(), mRefTableName);
+}
+
+void
+DbTriggerTest::schemaTest()
+{
+    DbSchemaPtr schema = mTrigger->schema();
+    QVERIFY(schema.valid());
+
+    QCOMPARE(schema.name(), mSchemaName);
+    QCOMPARE(schema->name(), mSchemaName);
 }
 
 void
 DbTriggerTest::setConstraintNameTest()
 {
-    QVERIFY(0);
+    QString name = mTrigger->constraintName();
+    QString newName = name + "_" + name;
+    mTrigger->setConstraintName(newName);
+    QCOMPARE(mTrigger->constraintName(), newName);
 }
 
 void
 DbTriggerTest::setConstraintTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mTrigger->isConstraint();
+    mTrigger->setConstraint(!oldFlag);
+    QCOMPARE(mTrigger->isConstraint(), !oldFlag);
 }
 
 void
 DbTriggerTest::setDeferrableTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mTrigger->isDeferrable();
+    mTrigger->setDeferrable(!oldFlag);
+    QCOMPARE(mTrigger->isDeferrable(), !oldFlag);
 }
 
 void
 DbTriggerTest::setEnabledTest()
 {
-    QVERIFY(0);
+    QChar newEnabled(0xa0);
+    mTrigger->setEnabled(newEnabled);
+    QCOMPARE(mTrigger->enabled(), newEnabled);
 }
 
 void
 DbTriggerTest::setInitiallyDeferredTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mTrigger->isInitiallyDeferred();
+    mTrigger->setInitiallyDeferred(!oldFlag);
+    QCOMPARE(mTrigger->isInitiallyDeferred(), !oldFlag);
 }
 
 void
 DbTriggerTest::setNumArgsTest()
 {
-    QVERIFY(0);
+    quint16 numArgs = mTrigger->numArgs();
+    quint16 newNumArgs = 2 * (numArgs + 1);
+    mTrigger->setNumArgs(newNumArgs);
+    QCOMPARE(mTrigger->numArgs(), newNumArgs);
 }
 
 void
 DbTriggerTest::setProcedureTest()
 {
-    QVERIFY(0);
+    DbProcedurePtr procedure = mTrigger->procedure();
+    QVERIFY(procedure.valid());
+
+    QCOMPARE(procedure.name(), mProcedureName);
+    QCOMPARE(procedure->name(), mProcedureName);
+
+    DbProcedurePtr newProcedure;
+
+    mTrigger->setProcedure(newProcedure);
+    QVERIFY(procedure.name() != mTrigger->procedure().name());
+    QVERIFY(procedure->name() != mTrigger->procedure().name());
 }
 
 void
 DbTriggerTest::setReferencedTableTest()
 {
-    QVERIFY(0);
+    DbTablePtr table = mTrigger->referencedTable();
+    QVERIFY(!table.valid());
+
+    QCOMPARE(table.name(), mRefTableName);
+    //\ note skip this check, because the trigger doesn't reference any table, so the
+    // proxy is not valid to 
+//    QCOMPARE(table->name(), mRefTableName);
+
+    // just for test set table as referrenced table
+    DbSchemaPtr schema = mDbInst->findSchema(mSchemaName);
+    QVERIFY(schema.valid());
+
+    DbTablePtr newTable = schema->findTable(mTableName);
+    QVERIFY(newTable.valid());
+
+    mTrigger->setReferencedTable(newTable);
+    QVERIFY(table.name() != mTrigger->table().name());
+//    QVERIFY(table->name() != mTrigger->table().name());
+}
+
+void
+DbTriggerTest::setSchemaTest()
+{
+    DbSchemaPtr schema = mTrigger->schema();
+    QVERIFY(schema.valid());
+
+    QCOMPARE(schema.name(), mSchemaName);
+    QCOMPARE(schema->name(), mSchemaName);
+
+    DbSchemaPtr newSchema;
+
+    mTrigger->setSchema(newSchema);
+    QVERIFY(schema.name() != mTrigger->schema().name());
+    QVERIFY(schema->name() != mTrigger->schema().name());
 }
 
 void
 DbTriggerTest::setTableTest()
 {
-    QVERIFY(0);
+    DbTablePtr table = mTrigger->table();
+    QVERIFY(table.valid());
+
+    QCOMPARE(table.name(), mTableName);
+    QCOMPARE(table->name(), mTableName);
+
+    DbTablePtr newTable;
+
+    mTrigger->setTable(newTable);
+    QVERIFY(table.name() != mTrigger->table().name());
+    QVERIFY(table->name() != mTrigger->table().name());
 }
 
 void
 DbTriggerTest::tableTest()
 {
-    QVERIFY(0);
+    DbTablePtr table = mTrigger->table();
+    QVERIFY(table.valid());
+
+    QCOMPARE(table.name(), mTableName);
+    QCOMPARE(table->name(), mTableName);
 }
 

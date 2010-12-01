@@ -132,7 +132,7 @@ class DbTable : public Common::DbObject
         /*! Parent tables */
         QVector<DbTablePtr> mParentTables;
         /*! Comment on table */
-        // \todo add comment
+        // \todo add member comment
 
     protected:
         DbTable(QString ipName, const DbSchemaPtr &ipSchema);

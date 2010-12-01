@@ -31,14 +31,10 @@
 #define DBTABLETEST_H
 
 #include <QtTest/QtTest>
+#include <dbobjects/common/Database.h>
 
-namespace DbObjects
-{
-namespace Common
-{
-class Database;
-}
-}
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbSchema> DbSchemaPtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbTable> DbTablePtr;
 
 class DbTableTest : public QObject
 {
@@ -51,9 +47,6 @@ class DbTableTest : public QObject
         void init();
         void cleanup();
 
-        void checkForeignKeyTest();
-        void checkPrimaryKeyTest();
-        void checkUniqueTest();
         void columnNameTest();
         void columnTypeTest();
         void columnsCountTest();
@@ -73,6 +66,11 @@ class DbTableTest : public QObject
         void parentTablesTest();
 
     private:
+        QString mSchemaName;
+        QString mTableName;
+        QStringList mColumns;
+        DbTablePtr mTable;
+
         DbObjects::Common::Database *mDbInst;
 
 };

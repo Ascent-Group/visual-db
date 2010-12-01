@@ -31,14 +31,11 @@
 #define DBINDEXTEST_H
 
 #include <QtTest/QtTest>
+#include <dbobjects/common/Database.h>
 
-namespace DbObjects
-{
-namespace Common
-{
-class Database;
-}
-}
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbIndex> DbIndexPtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbSchema> DbSchemaPtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbTable> DbTablePtr;
 
 class DbIndexTest : public QObject
 {
@@ -62,23 +59,24 @@ class DbIndexTest : public QObject
         void isValidTest();
         void loadDataTest();
         void typeTest();
-        void schemaNameTest();
         void schemaTest();
         void setChecksXMinTest();
         void setClusteredTest();
         void setColumnsCountTest();
         void setPrimaryTest();
         void setReadyTest();
-        void setSchemaNameTest();
         void setSchemaTest();
-        void setTableNameTest();
         void setTableTest();
         void setUniqueTest();
         void setValidTest();
-        void tableNameTest();
         void tableTest();
 
     private:
+        QString mSchemaName;
+        QString mIndexName;
+        QString mTableName;
+        DbIndexPtr mIndex;
+
         DbObjects::Common::Database *mDbInst;
 };
 

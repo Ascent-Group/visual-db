@@ -71,6 +71,8 @@ DatabaseTest::initTestCase()
 void
 DatabaseTest::cleanupTestCase()
 {
+    Common::DatabaseManager dbMgr;
+    dbMgr.flush();
 }
 
 /*!
@@ -80,6 +82,7 @@ void
 DatabaseTest::init()
 {
     mDbInst = DatabaseCreator::createDatabase();
+    QVERIFY(0 != mDbInst);
 //    mDbInst->setSqlDriver("QPSQL");
 }
 

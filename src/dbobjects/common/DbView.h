@@ -67,7 +67,7 @@ class DbView : public DbObject
         void setOwner(const DbRolePtr &ipOwner);
 
         QString definition() const;
-        void setDefinition(QString ipDef);
+        void setDefinition(const QString &ipDef);
 
         QStringList columnsNames() const;
 

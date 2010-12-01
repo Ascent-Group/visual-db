@@ -31,6 +31,7 @@
 #define DBOBJECTTEST_H
 
 #include <QtTest/QtTest>
+#include <dbobjects/common/Database.h>
 
 class DbObjectTest : public QObject
 {
@@ -43,6 +44,9 @@ class DbObjectTest : public QObject
         void nameTest();
         void typeTest();
         void setNameTest();
+
+    private:
+        DbObjects::Common::Database *mDbInst;
 };
 
 #endif // DBOBJECTTEST_H

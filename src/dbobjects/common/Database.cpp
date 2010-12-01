@@ -423,16 +423,17 @@ Database::findTableIndices(DbTablePtr &ipTable, QVector<DbIndexPtr> &opList) con
     quint64 count = mIndices.count();
 
     // if we don't have any indices
-    if (0 == count || 0 == ipTable.get()) {
+    if (0 == count || 0 == ipTable.valid()) {
         return 0;
     }
 
-    QString schemaName = ipTable->schema()->name();
-    QString tableName = ipTable->name();
+    QString schemaName = ipTable.schemaName();
+    QString tableName = ipTable.name();
 
     // look through index's table names
     for (quint64 i = 0; i < count; ++i) {
         // if index is for our table -- add it
+        qDebug() << "Database::findTableIndices> table.name() = [" << mIndices.at(i)->table().name() << "]";
         if (tableName == mIndices.at(i)->table().name()
             && schemaName == mIndices.at(i)->schema().name()) {
             opList.push_back(mIndices.at(i));

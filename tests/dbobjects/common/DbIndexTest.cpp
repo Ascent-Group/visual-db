@@ -36,11 +36,12 @@
 
 using namespace DbObjects;
 
-typedef Common::DbObjectPtr<Common::DbIndex> DbIndexPtr;
-
 void
 DbIndexTest::initTestCase()
 {
+    mSchemaName = "vtunes";
+    mIndexName = "ind_artists";
+    mTableName = "artists";
     mDbInst = DatabaseCreator::createDatabase();
 }
 
@@ -57,6 +58,14 @@ DbIndexTest::cleanupTestCase()
 void
 DbIndexTest::init()
 {
+    mDbInst->loadData();
+
+    mIndex = mDbInst->findIndex(mIndexName);
+    QVERIFY(0 != mIndex.get());
+
+    QCOMPARE(mIndex.name(), mIndexName);
+    QCOMPARE(mIndex->name(), mIndexName);
+
 }
 
 /*!
@@ -65,6 +74,7 @@ DbIndexTest::init()
 void
 DbIndexTest::cleanup()
 {
+    mIndex = DbIndexPtr();
     mDbInst->resetData();
 }
 
@@ -72,12 +82,9 @@ void
 DbIndexTest::addColumnNumberTest()
 {
     QVERIFY(0);
-    mDbInst->readIndices();
-
-    DbIndexPtr indexPtr = mDbInst->findIndex("ind_artists");
 
     // here we can operate on index directly
-    Common::DbIndex *index = const_cast<Common::DbIndex*>(indexPtr.get());
+    Common::DbIndex *index = const_cast<Common::DbIndex*>(mIndex.get());
 
     QVERIFY(0 != index);
 
@@ -110,49 +117,50 @@ DbIndexTest::addColumnNumberTest()
 void
 DbIndexTest::checksXMinTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mIndex->checksXMin(), false);
 }
 
 void
 DbIndexTest::columnsCountTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mIndex->columnsCount(), (quint16)1);
 }
 
 void
 DbIndexTest::columnsNumbersTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mIndex->columnsNumbers().size(), 1);
+    QCOMPARE(mIndex->columnsNumbers().at(0), (qint16)2);
 }
 
 void
 DbIndexTest::isClusteredTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mIndex->isClustered(), false);
 }
 
 void
 DbIndexTest::isPrimaryTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mIndex->isPrimary(), false);
 }
 
 void
 DbIndexTest::isReadyTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mIndex->isReady(), true);
 }
 
 void
 DbIndexTest::isUniqueTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mIndex->isUnique(), true);
 }
 
 void
 DbIndexTest::isValidTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mIndex->isValid(), true);
 }
 
 void
@@ -164,104 +172,134 @@ DbIndexTest::loadDataTest()
 void
 DbIndexTest::typeTest()
 {
-    QVERIFY(0);
-}
-
-void
-DbIndexTest::schemaNameTest()
-{
-    QVERIFY(0);
+    QCOMPARE(mIndex->type(), Common::DbObject::IndexObject);
 }
 
 void
 DbIndexTest::schemaTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mIndex->schema();
+    QVERIFY(0 != schema.get());
+
+    QCOMPARE(schema.name(), mSchemaName);
+    QCOMPARE(schema->name(), mSchemaName);
 }
 
 void
 DbIndexTest::setChecksXMinTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mIndex->checksXMin();
+
+    mIndex->setChecksXMin(!oldFlag);
+
+    QCOMPARE(mIndex->checksXMin(), !oldFlag);
 }
 
 void
 DbIndexTest::setClusteredTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mIndex->isClustered();
+
+    mIndex->setClustered(!oldFlag);
+
+    QCOMPARE(mIndex->isClustered(), !oldFlag);
 }
 
 void
 DbIndexTest::setColumnsCountTest()
 {
-    QVERIFY(0);
+    quint16 oldFlag = mIndex->columnsCount();
+
+    oldFlag *= 2;
+
+    mIndex->setColumnsCount(oldFlag);
+
+    QCOMPARE(mIndex->columnsCount(), oldFlag);
 }
 
 void
 DbIndexTest::setPrimaryTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mIndex->isPrimary();
+
+    mIndex->setPrimary(!oldFlag);
+
+    QCOMPARE(mIndex->isPrimary(), !oldFlag);
 }
 
 void
 DbIndexTest::setReadyTest()
 {
-    QVERIFY(0);
-}
+    bool oldFlag = mIndex->isReady();
 
-void
-DbIndexTest::setSchemaNameTest()
-{
-    QVERIFY(0);
+    mIndex->setReady(!oldFlag);
+
+    QCOMPARE(mIndex->isReady(), !oldFlag);
 }
 
 void
 DbIndexTest::setSchemaTest()
 {
-    QVERIFY(0);
-}
+    DbSchemaPtr schema = mIndex->schema();
+    QVERIFY(0 != schema.get());
 
-void
-DbIndexTest::setTableNameTest()
-{
-    QVERIFY(0);
+    QCOMPARE(schema.name(), mSchemaName);
+    QCOMPARE(schema->name(), mSchemaName);
+
+    DbSchemaPtr newSchema;
+
+    mIndex->setSchema(newSchema);
+    QVERIFY(schema.name() != mIndex->schema().name());
+    QVERIFY(schema->name() != mIndex->schema().name());
 }
 
 void
 DbIndexTest::setTableTest()
 {
-    QVERIFY(0);
+    DbTablePtr table = mIndex->table();
+    QVERIFY(0 != table.get());
+
+    QCOMPARE(table.name(), mTableName);
+    QCOMPARE(table->name(), mTableName);
+
+    DbTablePtr newTable;
+
+    mIndex->setTable(newTable);
+    QVERIFY(table.name() != mIndex->table().name());
+    QVERIFY(table->name() != mIndex->table().name());
 }
 
 void
 DbIndexTest::setUniqueTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mIndex->isUnique();
+
+    mIndex->setUnique(!oldFlag);
+
+    QCOMPARE(mIndex->isUnique(), !oldFlag);
 }
 
 void
 DbIndexTest::setValidTest()
 {
-    QVERIFY(0);
-}
+    bool oldFlag = mIndex->isValid();
 
-void
-DbIndexTest::tableNameTest()
-{
-    mDbInst->readIndices();
+    mIndex->setValid(!oldFlag);
 
-    DbIndexPtr indexPtr = mDbInst->findIndex("ind_artists");
-
-    QVERIFY(indexPtr.name() == indexPtr->name());
-
-    QString newName("dummy");
-    indexPtr->setName(newName);
-    QVERIFY(newName == indexPtr->name());
+    QCOMPARE(mIndex->isValid(), !oldFlag);
 }
 
 void
 DbIndexTest::tableTest()
 {
-    QVERIFY(0);
+    DbTablePtr table = mIndex->table();
+
+    QVERIFY(table.valid());
+    QCOMPARE(table.name(), mTableName);
+    QCOMPARE(table->name(), mTableName);
+
+    // \todo How to handle the situation when we use proxy->setName(newName) ??
+    // Here we face a little problem, the real object's name is changed, but the proxy
+    // name remains old.
 }
 

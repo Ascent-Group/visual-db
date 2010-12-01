@@ -31,6 +31,12 @@
 #define DBTRIGGERTEST_H
 
 #include <QtTest/QtTest>
+#include <dbobjects/common/Database.h>
+
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbProcedure> DbProcedurePtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbSchema> DbSchemaPtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbTable> DbTablePtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbTrigger> DbTriggerPtr;
 
 class DbTriggerTest : public QObject
 {
@@ -40,6 +46,9 @@ class DbTriggerTest : public QObject
         void initTestCase();
         void cleanupTestCase();
 
+        void init();
+        void cleanup();
+
         void enabledTest();
         void isConstraintTest();
         void isDeferrableTest();
@@ -48,8 +57,9 @@ class DbTriggerTest : public QObject
         void numArgsTest();
         void typeTest();
         void procedureTest();
-        void raintNameTest();
+        void constraintNameTest();
         void referencedTableTest();
+        void schemaTest();
         void setConstraintNameTest();
         void setConstraintTest();
         void setDeferrableTest();
@@ -58,8 +68,20 @@ class DbTriggerTest : public QObject
         void setNumArgsTest();
         void setProcedureTest();
         void setReferencedTableTest();
+        void setSchemaTest();
         void setTableTest();
         void tableTest();
+
+    private:
+        QString mSchemaName;
+        QString mTriggerName;
+        QString mProcedureName;
+        QString mTableName;
+        QString mConstraintName;
+        QString mRefTableName;
+        DbTriggerPtr mTrigger;
+
+        DbObjects::Common::Database *mDbInst;
 };
 
 #endif // DBTRIGGERTEST_H

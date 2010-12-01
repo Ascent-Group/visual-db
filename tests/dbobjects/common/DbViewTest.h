@@ -31,14 +31,11 @@
 #define DBVIEWTEST_H
 
 #include <QtTest/QtTest>
+#include <dbobjects/common/Database.h>
 
-namespace DbObjects
-{
-namespace Common
-{
-class Database;
-}
-}
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbRole> DbRolePtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbSchema> DbSchemaPtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbView> DbViewPtr;
 
 class DbViewTest : public QObject
 {
@@ -63,8 +60,12 @@ class DbViewTest : public QObject
         void columnsNamesTest();
 
     private:
-        DbObjects::Common::Database *mDbInst;
+        QString mSchemaName;
+        QString mViewName;
+        QString mRoleName;
+        DbViewPtr mView;
 
+        DbObjects::Common::Database *mDbInst;
 };
 
 #endif // DBVIEWTEST_H

@@ -130,7 +130,6 @@ View::loadData()
 
 #if DEBUG_TRACE
     qDebug() << "Psql::View::loadData> name = " << mName;
-    qDebug() << "Psql::View::loadData> schema = " << mSchemaName;
     qDebug() << "Psql::View::loadData> owner = " << mOwner->name();
     qDebug() << "Psql::View::loadData> def = " << mDefinition;
 #endif

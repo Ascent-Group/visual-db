@@ -59,6 +59,7 @@ RoleFactoryTest::createRoleTest()
     dbInst->setSqlDriver("QPSQL");
     QVERIFY(0 != dynamic_cast<Psql::Role*>(Factory::Role::createRole(roleName)));
 
+    // \todo update this check as for psql when more RDBMS are supported
     dbInst->setSqlDriver("QMYSQL");
     QVERIFY(0 == Factory::Role::createRole(roleName));
 

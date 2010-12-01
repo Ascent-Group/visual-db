@@ -130,11 +130,33 @@ class DbObjectPtr
          */
         const T* get() const
         {
+            // if name is empty then we have an empty proxy and mPointee is not a valid
+            // object.
+            // \note Empty proxies will be used when creating new database objects.
+//            if (mName.isEmpty()) {
+//                return 0;
+//            }
+
             return mPointee;
         }
 
         /*!
+         * \return true If the proxy points to a valid and NOT anonimous object.
+         * \return false Otherwise.
+         */
+        bool valid() const
+        {
+            if (mPointee && !mName.isEmpty()) {
+                return true;
+            }
+
+            return false;
+        }
+
+        /*!
          * \brief Overloaded -> operator.
+         *
+         * \note If you call ->setName() you have to manually set proxy's name too.
          *
          * \return Pointer to the object
          */
@@ -232,6 +254,7 @@ class DbObjectPtr
                 qDebug() << iter.key() << " | " << iter.value() << "\n";
             }
         }
+
     protected:
         /*! Name of a real object */
         QString mName;
@@ -247,6 +270,8 @@ class DbObjectPtr
         /*!
          * Real object initialization function
          * \note By default does nothing, because it doesn't know which factory to call.
+         *       The default implementation implies that this proxy is applicable only to
+         *       db objects.
          */
         inline T* initialize()
         {

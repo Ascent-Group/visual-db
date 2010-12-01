@@ -31,6 +31,12 @@
 #define DBPROCEDURETEST_H
 
 #include <QtTest/QtTest>
+#include <dbobjects/common/Database.h>
+
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbLanguage> DbLanguagePtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbProcedure> DbProcedurePtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbRole> DbRolePtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbSchema> DbSchemaPtr;
 
 class DbProcedureTest : public QObject
 {
@@ -39,6 +45,8 @@ class DbProcedureTest : public QObject
     private slots:
         void initTestCase();
         void cleanupTestCase();
+        void init();
+        void cleanup();
 
         void fullNameTest();
         void languageTest();
@@ -51,6 +59,15 @@ class DbProcedureTest : public QObject
         void setSchemaTest();
         void setSourceCodeTest();
         void sourceCodeTest();
+
+    private:
+        QString mSchemaName;
+        QString mProcedureName;
+        QString mRoleName;
+        QString mLanguageName;
+        DbProcedurePtr mProcedure;
+
+        DbObjects::Common::Database *mDbInst;
 };
 
 #endif // DBPROCEDURETEST_H

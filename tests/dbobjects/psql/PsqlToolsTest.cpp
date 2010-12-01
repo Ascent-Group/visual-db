@@ -45,7 +45,9 @@ PsqlToolsTest::initTestCase()
                         << "c";
 
     mProceduresNamesList << "insert_album"
-                         << "insert_track";
+                         << "insert_track"
+                         << "check_location"
+                         << "check_release_date";
 
     mRolesNamesList << "postgres"
                     << "music_user";
@@ -152,10 +154,8 @@ PsqlToolsTest::triggersListTest()
 {
     QStringList actualTriggersNames;
     Tools::triggersList("vtunes", actualTriggersNames);
-    Tools::triggersList("public", actualTriggersNames);
 
     foreach (const QString &name, mTriggersNamesList) {
-        qDebug() << name;
         QVERIFY(actualTriggersNames.contains(name));
     }
 }

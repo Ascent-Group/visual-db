@@ -62,6 +62,7 @@ TriggerFactoryTest::createTriggerTest()
     dbInst->setSqlDriver("QPSQL");
     QVERIFY(0 != dynamic_cast<Psql::Trigger*>(Factory::Trigger::createTrigger(triggerName, schemaName)));
 
+    // \todo update this check as for psql when more RDBMS are supported
     dbInst->setSqlDriver("QMYSQL");
     QVERIFY(0 == Factory::Trigger::createTrigger(triggerName, schemaName));
 

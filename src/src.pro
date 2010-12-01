@@ -47,7 +47,8 @@ OBJECTS_DIR = .obj
 UI_DIR = .uic
 UI_HEADERS_DIR = $$OUT_PWD/gui/ui
 
-QMAKE_CXXFLAGS += -O2 -g2 -Wextra
+QMAKE_CXXFLAGS += -Wextra
+#QMAKE_CXXFLAGS += -O2 -g2
 
 FORMS = $$files($$PWD/gui/ui/*.ui)
 

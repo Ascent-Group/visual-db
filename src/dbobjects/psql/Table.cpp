@@ -75,8 +75,6 @@ Table::~Table()
 bool
 Table::loadData()
 {
-//    int *p = 0;
-//    *p = 7;
     if (mIsLoaded) {
         return true;
     }

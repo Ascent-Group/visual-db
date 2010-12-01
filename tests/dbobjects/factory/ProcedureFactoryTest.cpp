@@ -63,6 +63,7 @@ ProcedureFactoryTest::createProcedureTest()
     dbInst->setSqlDriver("QPSQL");
     QVERIFY(0 != dynamic_cast<Psql::Procedure*>(Factory::Procedure::createProcedure(procName, schemaName)));
 
+    // \todo update this check as for psql when more RDBMS are supported
     dbInst->setSqlDriver("QMYSQL");
     QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
 

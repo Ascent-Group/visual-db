@@ -120,7 +120,7 @@ DbRole* DbObjectPtr<DbRole>::initialize()
 template<> inline
 DbSchema* DbObjectPtr<DbSchema>::initialize()
 {
-    qDebug () << mName;
+//    qDebug () << mName;
     mPointee = Factory::Schema::createSchema(mName);
     return mPointee;
 }
@@ -142,6 +142,7 @@ template<> inline
 DbTrigger* DbObjectPtr<DbTrigger>::initialize()
 {
     mPointee = Factory::Trigger::createTrigger(mName, mSchemaName);
+//    qDebug() << "DbObjectPtr<DbTrigger>::initialize> " << mPointee << " " << mName;
     return mPointee;
 }
 

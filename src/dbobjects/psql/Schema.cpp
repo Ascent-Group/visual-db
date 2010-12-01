@@ -70,7 +70,6 @@ Schema::loadData()
         return true;
     }
 
-    qDebug() << "Psql::Schema::loadData> ";
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;

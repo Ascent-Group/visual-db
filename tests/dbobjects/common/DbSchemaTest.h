@@ -33,6 +33,12 @@
 #include <dbobjects/common/Database.h>
 #include <QtTest/QtTest>
 
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbProcedure> DbProcedurePtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbSchema> DbSchemaPtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbTable> DbTablePtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbTrigger> DbTriggerPtr;
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbView> DbViewPtr;
+
 class DbSchemaTest : public QObject
 {
     Q_OBJECT
@@ -67,6 +73,8 @@ class DbSchemaTest : public QObject
         void triggersListTest();
 
     private:
+        QString mSchemaName;
+        DbSchemaPtr mSchema;
         DbObjects::Common::Database *mDbInst;
 
         QStringList mTablesNamesList;

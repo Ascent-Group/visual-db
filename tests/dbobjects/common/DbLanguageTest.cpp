@@ -27,25 +27,49 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbLanguageTest.h>
+
+using namespace DbObjects;
 
 void
 DbLanguageTest::initTestCase()
 {
-
+    mLanguageName = "plpgsql";
+    mDbInst = DatabaseCreator::createDatabase();
+    QVERIFY(0 != mDbInst);
 }
 
 void
 DbLanguageTest::cleanupTestCase()
 {
-
+    Common::DatabaseManager dbMgr;
+    dbMgr.flush();
 }
 
+void
+DbLanguageTest::init()
+{
+    mDbInst->readLanguages();
+
+    mLanguage = mDbInst->findLanguage(mLanguageName);
+    QVERIFY(0 != mLanguage.get());
+
+    QCOMPARE(mLanguage.name(), mLanguageName);
+    QCOMPARE(mLanguage->name(), mLanguageName);
+}
+
+void
+DbLanguageTest::cleanup()
+{
+    mLanguage = DbLanguagePtr();
+    mDbInst->resetData();
+}
 
 void
 DbLanguageTest::isTrustedTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mLanguage->isTrusted(), true);
 }
 
 void
@@ -57,12 +81,16 @@ DbLanguageTest::loadDataTest()
 void
 DbLanguageTest::typeTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mLanguage->type(), Common::DbObject::LanguageObject);
 }
 
 void
 DbLanguageTest::setTrustedTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mLanguage->isTrusted();
+
+    mLanguage->setTrusted(!oldFlag);
+
+    QCOMPARE(mLanguage->isTrusted(), !oldFlag);
 }
 

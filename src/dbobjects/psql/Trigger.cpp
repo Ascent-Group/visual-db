@@ -28,6 +28,7 @@
  */
 
 #include <psql/Schema.h>
+#include <psql/Tools.h>
 #include <psql/Trigger.h>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -53,7 +54,6 @@ namespace Psql
 Trigger::Trigger(QString ipName, const DbSchemaPtr &ipSchema)
     : DbTrigger(ipName, ipSchema)
 {
-
 }
 
 /*
@@ -70,51 +70,107 @@ Trigger::~Trigger()
 bool
 Trigger::loadData()
 {
+//    qDebug() << "Psql::Trigger::loadData> " << this;
     if (mIsLoaded) {
-        return true;
+        return DbTrigger::loadData();
     }
 
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;
 
-    // prepare query
-    qstr = QString("SELECT "
-                        "tbl_nsp.nspname AS schema, "
-                        "tbl.relname AS table, "
-                        "t.tgname AS name, "
-                        "proc_nsp.nspname AS proc_schema, "
-                        "proc.proname AS proc, "
-                        "t.tgenabled AS enabled, "
-                        "t.tgisconstraint AS isconstraint, "
-                        "t.tgconstrname AS constrname, "
-                        "ref_tbl_nsp.nspname AS ref_schema, "
-                        "ref_tbl.relname AS ref_table, "
-                        "t.tgdeferrable AS deferrable, "
-                        "t.tginitdeferred AS initdeferred, "
-                        "t.tgnargs AS nargs "
-                    "FROM "
-                        "pg_catalog.pg_trigger t, "
-                        "pg_catalog.pg_class tbl, "
-                        "pg_catalog.pg_class ref_tbl, "
-                        "pg_catalog.pg_namespace tbl_nsp, "
-                        "pg_catalog.pg_namespace ref_tbl_nsp, "
-                        "pg_catalog.pg_proc proc, "
-                        "pg_catalog.pg_namespace proc_nsp "
-                    "WHERE "
-                        "tbl.oid = t.tgrelid "
-                        "AND tbl.relnamespace = tbl_nsp.oid "
-                        "AND t.tgfoid = proc.oid "
-                        "AND proc.pronamespace = proc_nsp.oid "
-                        "AND ref_tbl.oid = t.tgconstrrelid "
-                        "AND ref_tbl.relnamespace = ref_tbl_nsp.oid "
-                        "AND tbl_nsp.nspname = '%2' "
-                        //"AND tbl_nsp.nspname NOT LIKE 'pg_%' "
-                        //"AND ref_tbl_nsp.nspname NOT LIKE 'pg_%' "
-                        //"AND proc_nsp.nspname NOT LIKE 'pg_%' "
-                        "AND t.tgname = '%1';")
-            .arg(mName)
-            .arg(mSchema->name());
+    Tools::Version version = Tools::version();
+
+    switch (version) {
+        case Tools::PostgreSQL_8:
+                // prepare query
+                qstr = QString("SELECT "
+                                   "tbl_nsp.nspname AS schema, "
+                                   "tbl.relname AS table, "
+                                   "t.tgname AS name, "
+                                   "proc_nsp.nspname AS proc_schema, "
+                                   "proc.proname AS proc, "
+                                   "t.tgenabled AS enabled, "
+                                   "t.tgisconstraint AS isconstraint, "
+                                   "t.tgconstrname AS constrname, "
+                                   "ref.ref_schema AS ref_schema, "
+                                   "ref.ref_table AS ref_table, "
+                                   "t.tgdeferrable AS deferrable, "
+                                   "t.tginitdeferred AS initdeferred, "
+                                   "t.tgnargs AS nargs "
+                               "FROM "
+                                   "pg_catalog.pg_trigger t LEFT OUTER JOIN ( "
+                                       "SELECT "
+                                           "ref_tbl.oid as ref_table_oid, "
+                                           "ref_tbl_nsp.nspname AS ref_schema, "
+                                           "ref_tbl.relname AS ref_table "
+                                       "FROM "
+                                           "pg_catalog.pg_namespace ref_tbl_nsp, "
+                                           "pg_catalog.pg_class ref_tbl "
+                                       "WHERE "
+                                           "ref_tbl.relnamespace = ref_tbl_nsp.oid) AS ref "
+                                       "ON t.tgrelid = ref.ref_table_oid, "
+                                   "pg_catalog.pg_class tbl, "
+                                   "pg_catalog.pg_namespace tbl_nsp, "
+                                   "pg_catalog.pg_proc proc, "
+                                   "pg_catalog.pg_namespace proc_nsp "
+                               "WHERE "
+                                   "tbl.oid = t.tgrelid "
+                                   "AND tbl.relnamespace = tbl_nsp.oid "
+                                   "AND t.tgfoid = proc.oid "
+                                   "AND proc.pronamespace = proc_nsp.oid "
+                                   "AND tbl_nsp.nspname = '%2' "
+                                   "AND t.tgname = '%1';")
+                                   .arg(mName)
+                                   .arg(mSchema->name());
+                break;
+        case Tools::PostgreSQL_9:
+                qstr = QString("SELECT "
+                                   "tbl_nsp.nspname AS schema, "
+                                   "tbl.relname AS table, "
+                                   "t.tgname AS name, "
+                                   "proc_nsp.nspname AS proc_schema, "
+                                   "proc.proname AS proc, "
+                                   "t.tgenabled AS enabled, "
+                                   "CASE WHEN t.tgconstrrelid = 0 THEN false "
+                                   "     ELSE true "
+                                   "END AS isconstraint, "
+                                   "constr.conname AS constrname, "
+                                   "ref.ref_schema AS ref_schema, "
+                                   "ref.ref_table  AS ref_table, "
+                                   "t.tgdeferrable AS deferrable, "
+                                   "t.tginitdeferred AS initdeferred, "
+                                   "t.tgnargs AS nargs "
+                               "FROM "
+                                   "pg_catalog.pg_trigger t LEFT OUTER JOIN ( "
+                                       "SELECT "
+                                           "ref_tbl.oid as ref_table_oid, "
+                                           "ref_tbl_nsp.nspname AS ref_schema, "
+                                           "ref_tbl.relname AS ref_table "
+                                       "FROM "
+                                           "pg_catalog.pg_namespace ref_tbl_nsp, "
+                                           "pg_catalog.pg_class ref_tbl "
+                                       "WHERE "
+                                           "ref_tbl.relnamespace = ref_tbl_nsp.oid) AS ref "
+                                       "ON t.tgconstrrelid = ref.ref_table_oid "
+                                       "LEFT OUTER JOIN pg_catalog.pg_constraint constr ON t.tgconstraint = constr.oid, "
+                                   "pg_catalog.pg_class tbl, "
+                                   "pg_catalog.pg_namespace tbl_nsp, "
+                                   "pg_catalog.pg_proc proc, "
+                                   "pg_catalog.pg_namespace proc_nsp "
+                               "WHERE "
+                                   "tbl.oid = t.tgrelid "
+                                   "AND tbl.relnamespace = tbl_nsp.oid "
+                                   "AND t.tgfoid = proc.oid "
+                                   "AND proc.pronamespace = proc_nsp.oid "
+                                   "AND tbl_nsp.nspname = '%2' "
+                                   "AND t.tgname = '%1';")
+                                   .arg(mName)
+                                   .arg(mSchema->name());
+                break;
+        default:
+                return false;
+    }
 
 #ifdef DEBUG_QUERY
     qDebug() << "Trigger::loadData> " << qstr;
@@ -131,59 +187,83 @@ Trigger::loadData()
         return false;
     }
 
+    // schema proxy for intermediate storing of parent schemas
+    DbSchemaPtr schema;
+
     // table
     qint32 colId = query.record().indexOf("schema");
     Q_ASSERT(colId > 0);
     QString schemaName = query.value(colId).toString();
 
-    colId = query.record().indexOf("table");
-    Q_ASSERT(colId > 0);
-    QString tableName = query.value(colId).toString();
+    schema = Common::Database::instance()->findSchema(schemaName);
 
-    DbTablePtr table = Common::Database::instance()->findSchema(schemaName)->findTable(tableName);
+    if (schema.valid()) {
+        colId = query.record().indexOf("table");
+        Q_ASSERT(colId > 0);
+        QString tableName = query.value(colId).toString();
 
-    setTable(table);
+//        qDebug() << "Psql::Trigger::loadData> detecting table... " << tableName;
+
+        DbTablePtr table = schema->findTable(tableName);
+
+//        qDebug() << "Psql::Trigger::loadData> table = " << table.get();
+        setTable(table);
+    }
 
     // proc
     colId = query.record().indexOf("proc_schema");
     Q_ASSERT(colId > 0);
     QString procSchemaName = query.value(colId).toString();
 
-    colId = query.record().indexOf("proc");
-    Q_ASSERT(colId > 0);
-    QString procName = query.value(colId).toString();
+    schema = Common::Database::instance()->findSchema(procSchemaName);
 
-    DbProcedurePtr proc = Common::Database::instance()->findSchema(procSchemaName)->findProcedure(procName);
+    if (schema.valid()) {
+        colId = query.record().indexOf("proc");
+        Q_ASSERT(colId > 0);
+        QString procName = query.value(colId).toString();
 
-    setProcedure(proc);
+        DbProcedurePtr proc = schema->findProcedure(procName);
+
+        setProcedure(proc);
+    }
 
     // enabled
     colId = query.record().indexOf("enabled");
     Q_ASSERT(colId > 0);
-    mEnabled = query.value(colId).toChar();
+    // \fixme toChar doesn't get 'O' properly. Junk is stored in mEnabled. =>
+    // toString().at(0) workaround is used.
+//    mEnabled = query.value(colId).toChar();
+    mEnabled = query.value(colId).toString().at(0);
 
     // isconstraint
     colId = query.record().indexOf("isconstraint");
     Q_ASSERT(colId > 0);
     mIsConstraint = query.value(colId).toBool();
 
-    // constrname
-    colId = query.record().indexOf("constrname");
-    Q_ASSERT(colId > 0);
-    mConstraintName = query.value(colId).toString();
+    if (mIsConstraint) {
+        // constrname
+        colId = query.record().indexOf("constrname");
+        Q_ASSERT(colId > 0);
+        mConstraintName = query.value(colId).toString();
+    }
 
     // ref table
     colId = query.record().indexOf("ref_schema");
     Q_ASSERT(colId > 0);
     QString refSchemaName = query.value(colId).toString();
 
-    colId = query.record().indexOf("ref_table");
-    Q_ASSERT(colId > 0);
-    QString refTableName = query.value(colId).toString();
+    schema = Common::Database::instance()->findSchema(refSchemaName);
 
-    DbTablePtr refTable = Common::Database::instance()->findSchema(refSchemaName)->findTable(refTableName);
+    if (schema.valid()) {
+        colId = query.record().indexOf("ref_table");
+        Q_ASSERT(colId > 0);
+        QString refTableName = query.value(colId).toString();
 
-    setReferencedTable(refTable);
+        Q_ASSERT(!refTableName.isEmpty());
+
+        DbTablePtr refTable = schema->findTable(refTableName);
+        setReferencedTable(refTable);
+    }
 
     // deferrable
     colId = query.record().indexOf("deferrable");
@@ -204,7 +284,7 @@ Trigger::loadData()
     qDebug() << "Psql::Trigger::loadData> name = " << mName;
     qDebug() << "Psql::Trigger::loadData> table = " << mTable->name();
     qDebug() << "Psql::Trigger::loadData> proc = " << mProcedure->name();
-    qDebug() << "Psql::Trigger::loadData> enabled = " << mEnabled;
+    qDebug() << "Psql::Trigger::loadData> enabled = " << mEnabled.digitValue();
     qDebug() << "Psql::Trigger::loadData> isConstraint = " << mIsConstraint;
     qDebug() << "Psql::Trigger::loadData> constraintName = " << mConstraintName;
     qDebug() << "Psql::Trigger::loadData> ref_table = " << mReferencedTable->name();

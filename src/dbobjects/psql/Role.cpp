@@ -71,7 +71,6 @@ Role::loadData()
         return true;
     }
 
-    qDebug() << "Psql::Role::loadData> ";
     // lyuts: maybe it should be done in Database in one sweep
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);

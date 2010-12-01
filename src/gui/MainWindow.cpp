@@ -618,7 +618,7 @@ MainWindow::describeObject()
 
             schema = dbInst->findSchema(schemaName);
 
-            if (schema.get()) {
+            if (schema.valid()) {
                 table = schema->findTable(objName);
                 // no check for null pointer, describe will handle it
                 descWidget->describe(table);
@@ -632,7 +632,7 @@ MainWindow::describeObject()
 
             schema = dbInst->findSchema(schemaName);
 
-            if (schema.get()) {
+            if (schema.valid()) {
                 view = schema->findView(objName);
                 // no check for null pointer, describe will handle it
                 descWidget->describe(view);
@@ -661,10 +661,10 @@ MainWindow::describeObject()
 
             schema = dbInst->findSchema(schemaName);
 
-            if (schema.get()) {
+            if (schema.valid()) {
                 trig = schema->findTrigger(objName);
-                // no check for null pointer, describe will handle it
 
+                // no check for null pointer, describe will handle it
                 descWidget->describe(trig);
                 tabTitle = tr("Trigger: ");
             }
@@ -673,7 +673,7 @@ MainWindow::describeObject()
         case TreeWidget::ProcedureItem:
             schemaName = item->parent()->parent()->text(TreeWidget::NameCol);
             schema = dbInst->findSchema(schemaName);
-            if (schema.get()) {
+            if (schema.valid()) {
                 proc = schema->findProcedure(objName);
 
                 descWidget->describe(proc);

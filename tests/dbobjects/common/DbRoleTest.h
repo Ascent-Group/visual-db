@@ -31,6 +31,9 @@
 #define DBROLETEST_H
 
 #include <QtTest/QtTest>
+#include <dbobjects/common/Database.h>
+
+typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbRole> DbRolePtr;
 
 class DbRoleTest : public QObject
 {
@@ -39,6 +42,9 @@ class DbRoleTest : public QObject
     private slots:
         void initTestCase();
         void cleanupTestCase();
+
+        void init();
+        void cleanup();
 
         void canCreateDbTest();
         void canCreateRoleTest();
@@ -58,8 +64,14 @@ class DbRoleTest : public QObject
         void setConnectionLimitTest();
         void setExpiryDateTest();
         void setIdTest();
-        void setInheritsPriviligeseTest();
+        void setInheritsPrivilegesTest();
         void setSuperUserTest();
+
+    private:
+        QString mRoleName;
+        DbRolePtr mRole;
+
+        DbObjects::Common::Database *mDbInst;
 };
 
 #endif // DBROLETEST_H

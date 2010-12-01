@@ -59,6 +59,7 @@ LanguageFactoryTest::createLanguageTest()
     dbInst->setSqlDriver("QPSQL");
     QVERIFY(0 != dynamic_cast<Psql::Language*>(Factory::Language::createLanguage(langName)));
 
+    // \todo update this check as for psql when more RDBMS are supported
     dbInst->setSqlDriver("QMYSQL");
     QVERIFY(0 == Factory::Language::createLanguage(langName));
 

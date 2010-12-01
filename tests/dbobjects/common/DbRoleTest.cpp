@@ -27,73 +27,97 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbRoleTest.h>
+
+using namespace DbObjects;
 
 void
 DbRoleTest::initTestCase()
 {
-
+    mRoleName = "music_user";
+    mDbInst = DatabaseCreator::createDatabase();
+    QVERIFY(0 != mDbInst);
 }
 
 void
 DbRoleTest::cleanupTestCase()
 {
-
+    Common::DatabaseManager dbMgr;
+    dbMgr.flush();
 }
 
+void
+DbRoleTest::init()
+{
+    mDbInst->readRoles();
+
+    mRole = mDbInst->findRole(mRoleName);
+    QVERIFY(0 != mRole.get());
+
+    QCOMPARE(mRole.name(), mRoleName);
+    QCOMPARE(mRole->name(), mRoleName);
+}
+
+void
+DbRoleTest::cleanup()
+{
+    mRole = DbRolePtr();
+    mDbInst->resetData();
+}
 
 void
 DbRoleTest::canCreateDbTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mRole->canCreateDb(), true);
 }
 
 void
 DbRoleTest::canCreateRoleTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mRole->canCreateRole(), false);
 }
 
 void
 DbRoleTest::canLoginTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mRole->canLogin(), true);
 }
 
 void
 DbRoleTest::canUpdateSysCatTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mRole->canUpdateSysCat(), false);
 }
 
 void
 DbRoleTest::connectionLimitTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mRole->connectionLimit(), (quint32)-1);
 }
 
 void
 DbRoleTest::expiryDateTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mRole->expiryDate(), QDate());
 }
 
 void
 DbRoleTest::idTest()
 {
-    QVERIFY(0);
+    QVERIFY(0 < mRole->id());
 }
 
 void
 DbRoleTest::inheritsPrivilegesTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mRole->inheritsPrivileges(), true);
 }
 
 void
 DbRoleTest::isSuperUserTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mRole->isSuperUser(), false);
 }
 
 void
@@ -105,60 +129,114 @@ DbRoleTest::loadDataTest()
 void
 DbRoleTest::typeTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mRole->type(), Common::DbObject::RoleObject);
 }
 
 void
 DbRoleTest::setCanCreateDbTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mRole->canCreateDb();
+
+    QCOMPARE(oldFlag, true);
+
+    mRole->setCanCreateDb(!oldFlag);
+
+    QCOMPARE(mRole->canCreateDb(), !oldFlag);
 }
 
 void
 DbRoleTest::setCanCreateRoleTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mRole->canCreateRole();
+
+    QCOMPARE(oldFlag, false);
+
+    mRole->setCanCreateRole(!oldFlag);
+
+    QCOMPARE(mRole->canCreateRole(), !oldFlag);
 }
 
 void
 DbRoleTest::setCanLoginTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mRole->canLogin();
+
+    QCOMPARE(oldFlag, true);
+
+    mRole->setCanLogin(!oldFlag);
+
+    QCOMPARE(mRole->canLogin(), !oldFlag);
 }
 
 void
 DbRoleTest::setCanUpdateSysCatTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mRole->canUpdateSysCat();
+
+    QCOMPARE(oldFlag, false);
+
+    mRole->setCanUpdateSysCat(!oldFlag);
+
+    QCOMPARE(mRole->canUpdateSysCat(), !oldFlag);
 }
 
 void
 DbRoleTest::setConnectionLimitTest()
 {
-    QVERIFY(0);
+    quint32 oldFlag = mRole->connectionLimit();
+
+    QCOMPARE(oldFlag, (quint32)-1);
+
+    mRole->setConnectionLimit(oldFlag / 2);
+
+    QCOMPARE(mRole->connectionLimit(), oldFlag / 2);
 }
 
 void
 DbRoleTest::setExpiryDateTest()
 {
-    QVERIFY(0);
+    QDate oldFlag = mRole->expiryDate();
+
+    QCOMPARE(oldFlag, QDate());
+
+    mRole->setExpiryDate(oldFlag.addDays(7));
+
+    QCOMPARE(mRole->expiryDate(), QDate().addDays(7));
 }
 
 void
 DbRoleTest::setIdTest()
 {
-    QVERIFY(0);
+    quint64 oldFlag = mRole->id();
+
+    QVERIFY(0 < oldFlag);
+
+    mRole->setId(oldFlag / 2);
+
+    QCOMPARE(mRole->id(), oldFlag / 2);
 }
 
 void
-DbRoleTest::setInheritsPriviligeseTest()
+DbRoleTest::setInheritsPrivilegesTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mRole->inheritsPrivileges();
+
+    QCOMPARE(oldFlag, true);
+
+    mRole->setInheritsPrivileges(!oldFlag);
+
+    QCOMPARE(mRole->inheritsPrivileges(), !oldFlag);
 }
 
 void
 DbRoleTest::setSuperUserTest()
 {
-    QVERIFY(0);
+    bool oldFlag = mRole->isSuperUser();
+
+    QCOMPARE(oldFlag, false);
+
+    mRole->setSuperUser(!oldFlag);
+
+    QCOMPARE(mRole->isSuperUser(), !oldFlag);
 }
 

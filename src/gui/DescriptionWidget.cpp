@@ -69,14 +69,14 @@ DescriptionWidget::~DescriptionWidget()
 void
 DescriptionWidget::describe(const DbSchemaPtr &ipSchema)
 {
-//    if (0 == ipSchema) {
-//        QMessageBox::critical(
-//                this,
-//                tr("Missing object"),
-//                tr("No such schema! \n\n Note: Try to reload data from DB."),
-//                tr("Ok"));
-//        return;
-//    }
+    if (0 == ipSchema.valid()) {
+        QMessageBox::critical(
+                this,
+                tr("Missing object"),
+                tr("No such schema! \n\n Note: Try to reload data from DB."),
+                tr("Ok"));
+        return;
+    }
 
     // get the Schema data
     QString name = ipSchema->name();
@@ -128,14 +128,14 @@ DescriptionWidget::describe(const DbSchemaPtr &ipSchema)
 void
 DescriptionWidget::describe(const DbTablePtr &ipTable)
 {
-//    if (!ipTable.get()) {
-//        QMessageBox::critical(
-//                this,
-//                tr("Missing object"),
-//                tr("No such table! \n\n Note: Try to reload data from DB."),
-//                tr("Ok"));
-//        return;
-//    }
+    if (0 == ipTable.valid()) {
+        QMessageBox::critical(
+                this,
+                tr("Missing object"),
+                tr("No such table! \n\n Note: Try to reload data from DB."),
+                tr("Ok"));
+        return;
+    }
 
     // get columns count
     quint16 columnsCount = ipTable->columnsCount();
@@ -296,14 +296,14 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
 void
 DescriptionWidget::describe(const DbRolePtr &ipRole)
 {
-//    if ( 0 == ipRole ) {
-//        QMessageBox::critical(
-//                this,
-//                tr("Missing object"),
-//                tr("No such role! \n\n Note: Try to reload data from DB."),
-//                tr("Ok"));
-//        return;
-//    }
+    if (0 == ipRole.valid()) {
+        QMessageBox::critical(
+                this,
+                tr("Missing object"),
+                tr("No such role! \n\n Note: Try to reload data from DB."),
+                tr("Ok"));
+        return;
+    }
 
     ui.mTable->setRowCount(1);
     ui.mTable->setColumnCount(DescriptionWidget::DbRoleColumnsCount);
@@ -430,14 +430,14 @@ DescriptionWidget::describe(const DbRolePtr &ipRole)
 void
 DescriptionWidget::describe(const DbViewPtr &ipView)
 {
-//    if ( 0 == ipView ) {
-//        QMessageBox::critical(
-//                this,
-//                tr("Missing object"),
-//                tr("No such view! \n\n Note: Try to reload data from DB."),
-//                tr("Ok"));
-//        return;
-//    }
+    if (0 == ipView.valid()) {
+        QMessageBox::critical(
+                this,
+                tr("Missing object"),
+                tr("No such view! \n\n Note: Try to reload data from DB."),
+                tr("Ok"));
+        return;
+    }
 
     ui.mTable->setRowCount(1);
     ui.mTable->setColumnCount(DescriptionWidget::DbViewColumnsCount);
@@ -494,14 +494,14 @@ DescriptionWidget::describe(const DbViewPtr &ipView)
 void
 DescriptionWidget::describe(const DbIndexPtr &ipIndex)
 {
-//    if ( 0 == ipIndex ) {
-//        QMessageBox::critical(
-//                this,
-//                tr("Missing object"),
-//                tr("No such index! \n\n Note: Try to reload data from DB."),
-//                tr("Ok"));
-//        return;
-//    }
+    if (0 == ipIndex.valid()) {
+        QMessageBox::critical(
+                this,
+                tr("Missing object"),
+                tr("No such index! \n\n Note: Try to reload data from DB."),
+                tr("Ok"));
+        return;
+    }
 
     ui.mTable->setRowCount(1);
     ui.mTable->setColumnCount(DescriptionWidget::DbIndexColumnsCount);
@@ -540,7 +540,7 @@ DescriptionWidget::describe(const DbIndexPtr &ipIndex)
     DbSchemaPtr schema = Database::instance()->findSchema(schemaName);
     DbTablePtr table;
 
-    if (schema.get()) {
+    if (schema.valid()) {
         table = schema->findTable(tableName);
     }
 
@@ -651,8 +651,17 @@ DescriptionWidget::describe(const DbIndexPtr &ipIndex)
  * \param[in] ipProcedure - Proxy of a procedure
  */
 void
-DescriptionWidget::describe(const DbObjects::Common::DbProcedurePtr &ipProcedure)
+DescriptionWidget::describe(const DbProcedurePtr &ipProcedure)
 {
+    if (0 == ipProcedure.valid()) {
+        QMessageBox::critical(
+                this,
+                tr("Missing object"),
+                tr("No such trigger! \n\n Note: Try to reload data from DB."),
+                tr("Ok"));
+        return;
+    }
+
     ui.mTable->setRowCount(1);
     ui.mTable->setColumnCount(DescriptionWidget::DbProcedureColumnsCount);
 
@@ -711,14 +720,14 @@ DescriptionWidget::describe(const DbObjects::Common::DbProcedurePtr &ipProcedure
 void
 DescriptionWidget::describe(const DbTriggerPtr &ipTrigger)
 {
-//    if ( 0 == ipTrigger ) {
-//        QMessageBox::critical(
-//                this,
-//                tr("Missing object"),
-//                tr("No such trigger! \n\n Note: Try to reload data from DB."),
-//                tr("Ok"));
-//        return;
-//    }
+    if (0 == ipTrigger.valid()) {
+        QMessageBox::critical(
+                this,
+                tr("Missing object"),
+                tr("No such trigger! \n\n Note: Try to reload data from DB."),
+                tr("Ok"));
+        return;
+    }
 
     ui.mTable->setRowCount(1);
     ui.mTable->setColumnCount(DescriptionWidget::DbTriggerColumnsCount);
@@ -741,12 +750,22 @@ DescriptionWidget::describe(const DbTriggerPtr &ipTrigger)
 
     // read attributes
     QString name = ipTrigger->name();
-    QString tableName = ipTrigger->table()->fullName();
+
+    QString tableName;
+    if (ipTrigger->table().valid()) {
+        tableName = ipTrigger->table()->fullName();
+    }
+
     QString procName = ipTrigger->procedure()->fullName();
     QChar enabled = ipTrigger->enabled();
     bool isConstraint = ipTrigger->isConstraint();
     QString constraintName = ipTrigger->constraintName();
-    QString refTableName = ipTrigger->referencedTable()->fullName();
+
+    QString refTableName;
+    if (ipTrigger->referencedTable().valid()) {
+        refTableName = ipTrigger->referencedTable()->fullName();
+    }
+
     bool isDeferrable = ipTrigger->isDeferrable();
     bool isInitiallyDeferred = ipTrigger->isInitiallyDeferred();
     quint16 numArgs = ipTrigger->numArgs();

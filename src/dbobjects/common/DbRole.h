@@ -54,7 +54,7 @@ class DbRole : public DbObject
         void setSuperUser(bool ipFlag);
 
         bool inheritsPrivileges() const;
-        void setInheritsPriviligese(bool ipFlag);
+        void setInheritsPrivileges(bool ipFlag);
 
         bool canCreateRole() const;
         void setCanCreateRole(bool ipFlag);

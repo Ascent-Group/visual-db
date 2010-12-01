@@ -27,31 +27,62 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbProcedureTest.h>
+
+using namespace DbObjects;
 
 void
 DbProcedureTest::initTestCase()
 {
-
+    mSchemaName = "vtunes";
+    mProcedureName = "insert_album";
+    mRoleName = "music_user";
+    mLanguageName = "plpgsql";
+    mDbInst = DatabaseCreator::createDatabase();
+    QVERIFY(0 != mDbInst);
 }
 
 void
 DbProcedureTest::cleanupTestCase()
 {
-
+    Common::DatabaseManager dbMgr;
+    dbMgr.flush();
 }
 
+void
+DbProcedureTest::init()
+{
+    mDbInst->loadData();
+
+    mProcedure = mDbInst->findSchema(mSchemaName)->findProcedure(mProcedureName);
+    QVERIFY(0 != mProcedure.get());
+
+    QCOMPARE(mProcedure.name(), mProcedureName);
+    QCOMPARE(mProcedure->name(), mProcedureName);
+}
+
+void
+DbProcedureTest::cleanup()
+{
+    mProcedure = DbProcedurePtr();
+    mDbInst->resetData();
+}
 
 void
 DbProcedureTest::fullNameTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mProcedure->fullName(), QString("%1.%2").arg(mSchemaName).arg(mProcedureName));
 }
 
 void
 DbProcedureTest::languageTest()
 {
-    QVERIFY(0);
+    DbLanguagePtr language = mProcedure->language();
+    QVERIFY(language.valid());
+
+    QCOMPARE(language.name(), mLanguageName);
+    QCOMPARE(language->name(), mLanguageName);
 }
 
 void
@@ -63,48 +94,104 @@ DbProcedureTest::loadDataTest()
 void
 DbProcedureTest::typeTest()
 {
-    QVERIFY(0);
+    QCOMPARE(mProcedure->type(), Common::DbObject::ProcedureObject);
 }
 
 void
 DbProcedureTest::ownerTest()
 {
-    QVERIFY(0);
+    mDbInst->readRoles();
+
+    DbRolePtr role = mProcedure->owner();
+    QVERIFY(role.valid());
+
+    QCOMPARE(role.name(), mRoleName);
+    QCOMPARE(role->name(), mRoleName);
 }
 
 void
 DbProcedureTest::schemaTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mProcedure->schema();
+    QVERIFY(schema.valid());
+
+    QCOMPARE(schema.name(), mSchemaName);
+    QCOMPARE(schema->name(), mSchemaName);
 }
 
 void
 DbProcedureTest::setLanguageTest()
 {
-    QVERIFY(0);
+    DbLanguagePtr language = mProcedure->language();
+    QVERIFY(language.valid());
+
+    QCOMPARE(language.name(), mLanguageName);
+    QCOMPARE(language->name(), mLanguageName);
+
+    DbLanguagePtr newLanguage;
+
+    mProcedure->setLanguage(newLanguage);
+    QVERIFY(language.name() != mProcedure->language().name());
+//    QVERIFY(language->name() != mProcedure->language()->name());
 }
 
 void
 DbProcedureTest::setOwnerTest()
 {
-    QVERIFY(0);
+    DbRolePtr role = mProcedure->owner();
+    QVERIFY(role.valid());
+
+    QCOMPARE(role.name(), mRoleName);
+    QCOMPARE(role->name(), mRoleName);
+
+    DbRolePtr newRole;
+
+    mProcedure->setOwner(newRole);
+    QVERIFY(role.name() != mProcedure->owner().name());
+//    QVERIFY(role->name() != mProcedure->owner()->name());
 }
 
 void
 DbProcedureTest::setSchemaTest()
 {
-    QVERIFY(0);
+    DbSchemaPtr schema = mProcedure->schema();
+    QVERIFY(schema.valid());
+
+    QCOMPARE(schema.name(), mSchemaName);
+    QCOMPARE(schema->name(), mSchemaName);
+
+    DbSchemaPtr newSchema;
+
+    mProcedure->setSchema(newSchema);
+    QVERIFY(schema.name() != mProcedure->schema().name());
+//    QVERIFY(schema->name() != mProcedure->schema().name());
 }
 
 void
 DbProcedureTest::setSourceCodeTest()
 {
-    QVERIFY(0);
+    QString sourceCode = mProcedure->sourceCode();
+
+    QString newSourceCode = sourceCode;
+    newSourceCode.replace(" ", "_");
+
+    mProcedure->setSourceCode(newSourceCode);
+
+    QCOMPARE(mProcedure->sourceCode(), newSourceCode);
 }
 
 void
 DbProcedureTest::sourceCodeTest()
 {
-    QVERIFY(0);
+    QString sourceCode = mProcedure->sourceCode();
+    QVERIFY(0 < sourceCode.length());
+    QVERIFY(0 < sourceCode.indexOf("CREATE"));
+    QVERIFY(0 < sourceCode.indexOf("IF"));
+    QVERIFY(0 < sourceCode.indexOf("END"));
+    QVERIFY(0 < sourceCode.indexOf("SELECT"));
+    QVERIFY(0 < sourceCode.indexOf("ALIAS"));
+    QVERIFY(0 < sourceCode.indexOf("DECLARE"));
+    QVERIFY(0 < sourceCode.indexOf("BEGIN"));
+    QVERIFY(0 < sourceCode.indexOf("RETURNS"));
 }
 

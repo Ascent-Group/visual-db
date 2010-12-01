@@ -62,6 +62,7 @@ TableFactoryTest::createTableTest()
     dbInst->setSqlDriver("QPSQL");
     QVERIFY(0 != dynamic_cast<Psql::Table*>(Factory::Table::createTable(tableName, schemaName)));
 
+    // \todo update this check as for psql when more RDBMS are supported
     dbInst->setSqlDriver("QMYSQL");
     QVERIFY(0 == Factory::Table::createTable(tableName, schemaName));
 

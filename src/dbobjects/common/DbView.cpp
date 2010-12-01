@@ -122,7 +122,7 @@ DbView::definition() const
  * \param[in] ipDef - View's definition
  */
 void
-DbView::setDefinition(QString ipDef)
+DbView::setDefinition(const QString &ipDef)
 {
     mDefinition = ipDef;
 }

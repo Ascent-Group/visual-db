@@ -158,11 +158,13 @@ Index::loadData()
 
     DbSchemaPtr schema = Common::Database::instance()->findSchema(schemaName);
 
-    if (schema.get()) {
+    if (schema.valid()) {
         DbTablePtr table = schema->findTable(tableName);
 
-        setSchema(schema);
-        setTable(table);
+        if (table.valid()) {
+            setSchema(schema);
+            setTable(table);
+        }
     }
 
     colId = query.record().indexOf("colcount");

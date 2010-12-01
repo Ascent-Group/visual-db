@@ -16,7 +16,7 @@ TOP_SRC_DIR = $$PWD/../src
 DEPENDPATH = . dbobjects $$TOP_SRC_DIR $$TOP_SRC_DIR/dbobjects
 INCLUDEPATH = $$PWD $$PWD/dbobjects $$TOP_SRC_DIR $$TOP_SRC_DIR/dbobjects
 
-QMAKE_CXXFLAGS = -g -Wextra
+QMAKE_CXXFLAGS = -Wextra
 
 LIBS += -L$$OUT_PWD/../src/dbobjects/common \
         -L$$OUT_PWD/../src/dbobjects/factory \

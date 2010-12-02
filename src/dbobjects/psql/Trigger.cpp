@@ -192,7 +192,7 @@ Trigger::loadData()
 
     // table
     qint32 colId = query.record().indexOf("schema");
-    Q_ASSERT(colId > 0);
+    Q_ASSERT(colId >= 0);
     QString schemaName = query.value(colId).toString();
 
     schema = Common::Database::instance()->findSchema(schemaName);

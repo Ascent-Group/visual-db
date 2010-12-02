@@ -6,18 +6,22 @@ SUBDIRS +=  $$PWD/src/dbobjects \
 
 CONFIG += ordered warn_on
 
-QMAKE_EXTRA_TARGETS += build_tests run_tests docs
+QMAKE_EXTRA_TARGETS += build_tests run_tests report docs
 
-### Target for building tests
-#build_tests.CONFIG = <nothing_here_yet>
+##########################################################
+### Extra targets for eaiser test building and running ###
+##########################################################
 build_tests.commands = @echo "Building tests" \
+                       && mkdir -p tests \
+                       && cd $$OUT_PWD/tests \
                        && $(QMAKE) $$PWD/tests/tests.pro \
-                       && make -f $$OUT_PWD/tests/Makefile
+                       && $(MAKE) $@
 
-### Target for running tests
 run_tests.depends = build_tests
-run_tests.commands = @echo "Running tests" \
-                     && env VDB_DB_DRV=QPSQL ./tests/tests
+run_tests.commands = $(MAKE) -C tests $@
+
+report.commands = $(MAKE) -C tests $@
+##########################################################
 
 # $$QMAKE_LIBDIR_QT = /path/to/qt/installation/lib
 QTDIR = $$QMAKE_LIBDIR_QT/..

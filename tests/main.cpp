@@ -54,7 +54,7 @@
 #include <connect/DbParameters.h>
 #include <common/DatabaseCreator.h>
 
-const QString DBHOST = "106.125.5.55";
+const QString DBHOST = "localhost";
 const QString DBNAME = "music_db";
 const QString DBUSER = "music_user";
 const QString DBPASS = "qwe";

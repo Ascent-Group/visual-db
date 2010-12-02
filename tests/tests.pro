@@ -1,4 +1,4 @@
-message("We advice you run 'make -j3'")
+#message("We advice you run 'make -j3'")
 
 QT += testlib sql network xml
 #CONFIG += object_with_source
@@ -7,6 +7,36 @@ QT += testlib sql network xml
 # We need to override old TARGET and DESTDIR
 TARGET = tests
 DESTDIR = .
+
+###############################
+### Extra targets for tests ###
+###############################
+QMAKE_EXTRA_TARGETS += build_tests run_tests report
+### Target for building tests
+#build_tests.CONFIG = <nothing_here_yet>
+build_tests.commands = $(RM) $$DESTDIR/$$TARGET && $(MAKE) -j3
+
+### Target for running tests
+run_tests.depends = build_tests
+run_tests.commands = @echo "Running tests" \
+                     && env VDB_DB_DRV=$$(VDB_DB_DRV) ./tests | tee test.report
+
+report.commands = @cat test.report | grep Totals | awk \
+    "'{ \
+          passed += \$$2; \
+          failed += \$$4; \
+          skipped += \$$6; \
+     } END { \
+          total = passed + failed + skipped; \
+          print \"Passed:\", passed; \
+          print \"Failed:\", failed; \
+          print \"Skipped:\", skipped; \
+          print \"======\"; \
+          print \"Total:\", total; \
+          print \"Pass rate:\", passed * 100 / total; \
+     }'"
+
+###############################
 
 MOC_DIR = .moc
 OBJECTS_DIR = .obj

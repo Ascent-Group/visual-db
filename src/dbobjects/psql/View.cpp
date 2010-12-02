@@ -111,7 +111,7 @@ View::loadData()
     }
 
     qint32 colId = query.record().indexOf("schema");
-    Q_ASSERT(colId > 0);
+    Q_ASSERT(colId >= 0);
 //    mSchemaName = query.value(colId).toString();
 //    mSchema->setName(mSchemaName);
 

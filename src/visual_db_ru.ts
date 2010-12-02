@@ -71,11 +71,11 @@
     </message>
     <message>
         <source>+</source>
-        <translation type="unfinished"></translation>
+        <translation>+</translation>
     </message>
     <message>
         <source>-</source>
-        <translation type="unfinished"></translation>
+        <translation>-</translation>
     </message>
     <message>
         <source>Up</source>
@@ -87,7 +87,7 @@
     </message>
     <message>
         <source>Browse</source>
-        <translation type="unfinished"></translation>
+        <translation>Обзор</translation>
     </message>
     <message>
         <source>Right</source>
@@ -277,7 +277,8 @@ date</source>
     <message>
         <source>Columns
 count</source>
-        <translation type="unfinished"></translation>
+        <translation>Кол-во
+столбцов</translation>
     </message>
     <message>
         <source>Primary</source>
@@ -315,7 +316,7 @@ count</source>
     </message>
     <message>
         <source>Constraint name</source>
-        <translation type="unfinished"></translation>
+        <translation>Имя ограничения</translation>
     </message>
     <message>
         <source>Referenced table</source>
@@ -335,21 +336,26 @@ count</source>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation>Описание</translation>
     </message>
     <message>
         <source>Columns</source>
-        <translation type="unfinished"></translation>
+        <translation>Столбцы</translation>
     </message>
     <message>
         <source>Procedure</source>
-        <translation type="unfinished"></translation>
+        <translation>Процедура</translation>
     </message>
     <message>
         <source>Number
 of
 arguments</source>
-        <translation type="unfinished"></translation>
+        <translation>Кол-во
+аргументов</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Язык</translation>
     </message>
 </context>
 <context>
@@ -363,7 +369,7 @@ arguments</source>
     <name>LogPanel</name>
     <message>
         <source>Log</source>
-        <translation type="unfinished"></translation>
+        <translation>Журнал</translation>
     </message>
     <message>
         <source>Error</source>
@@ -371,7 +377,7 @@ arguments</source>
     </message>
     <message>
         <source>Unable to open file!</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удается открыть файл!</translation>
     </message>
     <message>
         <source>Ok</source>
@@ -379,11 +385,11 @@ arguments</source>
     </message>
     <message>
         <source>Save to file...</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить...</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>Очистить</translation>
     </message>
 </context>
 <context>
@@ -430,7 +436,7 @@ arguments</source>
     </message>
     <message>
         <source>Show tables list</source>
-        <translation>Показывать список таблиц</translation>
+        <translation type="obsolete">Показывать список таблиц</translation>
     </message>
     <message>
         <source>Draw full DB</source>
@@ -466,7 +472,7 @@ arguments</source>
     </message>
     <message>
         <source>Set table color</source>
-        <translation>Установить цвет таблицы</translation>
+        <translation type="obsolete">Установить цвет таблицы</translation>
     </message>
     <message>
         <source>Save to image...</source>
@@ -478,7 +484,7 @@ arguments</source>
     </message>
     <message>
         <source>Select all tables in schema</source>
-        <translation>Выбрать все таблицы в схеме</translation>
+        <translation type="obsolete">Выбрать все таблицы в схеме</translation>
     </message>
     <message>
         <source>Describe</source>
@@ -566,15 +572,15 @@ arguments</source>
     </message>
     <message>
         <source>Select all tables</source>
-        <translation>Выбрать все таблицы</translation>
+        <translation type="obsolete">Выбрать все таблицы</translation>
     </message>
     <message>
         <source>Remove all tables</source>
-        <translation>Убрать все таблицы</translation>
+        <translation type="obsolete">Убрать все таблицы</translation>
     </message>
     <message>
         <source>Remove all tables from scheme</source>
-        <translation>Удалить все таблицы со схемы</translation>
+        <translation type="obsolete">Удалить все таблицы со схемы</translation>
     </message>
     <message>
         <source>Adjust</source>
@@ -705,12 +711,8 @@ arguments</source>
         <translation>Правка</translation>
     </message>
     <message>
-        <source>toolBar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Log panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Журнал сообщений</translation>
     </message>
     <message>
         <source>The log panel widget is used for displaying apps output.</source>
@@ -718,7 +720,7 @@ arguments</source>
     </message>
     <message>
         <source>Objects list</source>
-        <translation>Список объектов</translation>
+        <translation type="obsolete">Список объектов</translation>
     </message>
     <message>
         <source>Tree widget</source>
@@ -749,10 +751,6 @@ arguments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show log panel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ctrl+A</source>
         <translation type="unfinished"></translation>
     </message>
@@ -761,19 +759,11 @@ arguments</source>
         <translation>Выравнивать по сетке</translation>
     </message>
     <message>
-        <source>Align tables to the grid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Divide into pages</source>
         <translation>Разбивать на страницы</translation>
     </message>
     <message>
         <source>Del</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Adjust tables sizes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -790,19 +780,11 @@ arguments</source>
     </message>
     <message>
         <source>Anchor</source>
-        <translation type="unfinished">Прикрепить</translation>
-    </message>
-    <message>
-        <source>Set anchor for selected tables</source>
-        <translation type="unfinished"></translation>
+        <translation>Активировать якорь</translation>
     </message>
     <message>
         <source>Disable anchor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disable anchor for selected tables</source>
-        <translation type="unfinished"></translation>
+        <translation>Отключить якорь</translation>
     </message>
     <message>
         <source>Ctrl+R</source>
@@ -814,11 +796,11 @@ arguments</source>
     </message>
     <message>
         <source>Undo</source>
-        <translation type="unfinished"></translation>
+        <translation>Отменить</translation>
     </message>
     <message>
         <source>Redo</source>
-        <translation type="unfinished"></translation>
+        <translation>Повторить</translation>
     </message>
     <message>
         <source>Xml files (*.vdb)</source>
@@ -827,6 +809,54 @@ arguments</source>
     <message>
         <source>Refresh</source>
         <translation>Обновить</translation>
+    </message>
+    <message>
+        <source>Toolbar</source>
+        <translation>Панель инструментов</translation>
+    </message>
+    <message>
+        <source>Database window</source>
+        <translation>Дерево объектов</translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation>Выбрать все</translation>
+    </message>
+    <message>
+        <source>Remove all</source>
+        <translation>Удалить все</translation>
+    </message>
+    <message>
+        <source>Remove all from scheme</source>
+        <translation>Очистить сцену</translation>
+    </message>
+    <message>
+        <source>Align to the grid</source>
+        <translation>Выравнять по сетке</translation>
+    </message>
+    <message>
+        <source>Set color</source>
+        <translation>Выбрать цвет</translation>
+    </message>
+    <message>
+        <source>Adjust size</source>
+        <translation>Подбор размера</translation>
+    </message>
+    <message>
+        <source>Set anchor for selected</source>
+        <translation>Якорь для выделенных</translation>
+    </message>
+    <message>
+        <source>Disable anchor for selected</source>
+        <translation>Откючить якорь для выделенных</translation>
+    </message>
+    <message>
+        <source>Select all in schema</source>
+        <translation>Выбрать все объекты схемы</translation>
+    </message>
+    <message>
+        <source>Procedure: </source>
+        <translation>Процедура:</translation>
     </message>
 </context>
 <context>
@@ -857,7 +887,7 @@ arguments</source>
     </message>
     <message>
         <source>Appearance page</source>
-        <translation type="unfinished"></translation>
+        <translation>Внешний вид</translation>
     </message>
     <message>
         <source>The widget is used in the options dialog for apperance features.</source>
@@ -865,7 +895,7 @@ arguments</source>
     </message>
     <message>
         <source>Preferences page</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <source>The widget is used in the options dialog for preferred features.</source>
@@ -873,7 +903,7 @@ arguments</source>
     </message>
     <message>
         <source>Colors page</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвета</translation>
     </message>
     <message>
         <source>The widget is used in the options dialog for color features.</source>
@@ -912,26 +942,34 @@ arguments</source>
     </message>
     <message>
         <source>Sessions limit:</source>
-        <translation type="unfinished"></translation>
+        <translation>Лимит сессий:</translation>
     </message>
     <message>
         <source>Automatically load last session on start</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматически загружать последнюю сессию</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Add table</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить таблицу</translation>
     </message>
     <message>
         <source>Delete table</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить таблицу</translation>
     </message>
     <message>
         <source>Move table</source>
-        <translation type="unfinished"></translation>
+        <translation>Переместить таблицу</translation>
+    </message>
+    <message>
+        <source>Resize item</source>
+        <translation>Изменить размер таблицы</translation>
+    </message>
+    <message>
+        <source>Set color</source>
+        <translation>Выбрать цвет</translation>
     </message>
 </context>
 <context>

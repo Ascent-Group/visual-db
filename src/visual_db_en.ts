@@ -291,6 +291,10 @@ of
 arguments</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Language</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>LogPanel</name>
@@ -326,10 +330,6 @@ arguments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show tables list</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Draw full DB</source>
         <translation type="unfinished"></translation>
     </message>
@@ -346,19 +346,11 @@ arguments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Select all tables</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Adjust</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Group items</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Select all tables in schema</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -447,18 +439,6 @@ arguments</source>
     </message>
     <message>
         <source>Table color...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Set table color</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove all tables</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Remove all tables from scheme</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -562,19 +542,11 @@ arguments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>toolBar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Log panel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The log panel widget is used for displaying apps output.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Objects list</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -614,10 +586,6 @@ arguments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Show log panel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Ctrl+A</source>
         <translation type="unfinished"></translation>
     </message>
@@ -626,19 +594,11 @@ arguments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Align tables to the grid</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Divide into pages</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Del</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Adjust tables sizes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -658,15 +618,7 @@ arguments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Set anchor for selected tables</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Disable anchor</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Disable anchor for selected tables</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -691,6 +643,54 @@ arguments</source>
     </message>
     <message>
         <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Database window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove all from scheme</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Align to the grid</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Adjust size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set anchor for selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Disable anchor for selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Select all in schema</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Procedure: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -784,6 +784,14 @@ arguments</source>
     </message>
     <message>
         <source>Move table</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resize item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Set color</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

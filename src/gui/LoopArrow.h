@@ -43,8 +43,6 @@ class LoopArrow : public ForeignArrow
         LoopArrow(TableItem *, TableItem *, QString, QGraphicsItem *ipParent = 0, QGraphicsScene *ipScene = 0);
         virtual ~LoopArrow();
 
-        virtual QRectF boundingRect() const;
-
     protected:
         virtual QPainterPath line();
         virtual QPolygonF head();

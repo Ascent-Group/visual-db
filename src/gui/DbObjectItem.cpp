@@ -104,8 +104,17 @@ void
 DbObjectItem::removeArrowItems()
 {
     for (QList<ArrowItem *>::const_iterator iter = mArrowItems.constBegin(); iter != mArrowItems.constEnd(); ++iter) {
-        (*iter)->startItem()->removeArrowItem(*iter);
-        (*iter)->endItem()->removeArrowItem(*iter);
+        DbObjectItem *startItem = (*iter)->startItem();
+        DbObjectItem *endItem = (*iter)->endItem();
+
+        if (startItem) {
+            startItem->removeArrowItem(*iter);
+        }
+
+        if (endItem && endItem != startItem) {
+            endItem->removeArrowItem(*iter);
+        }
+
         if (scene()) {
             scene()->removeItem(*iter);
         }

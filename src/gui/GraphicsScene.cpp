@@ -722,6 +722,12 @@ GraphicsScene::showLegend(bool ipFlag)
             removeItem(mLegend);
         }
     }
+
+//    if (views().size() > 0) {
+//        qDebug() << views().at(0)->width() << ":::" << views().at(0)->height();
+//        mLegend->setX(views().at(0)->rect().width() - mLegend->width() - 20);
+//        mLegend->setY(views().at(0)->rect().height() - mLegend->height() - 20);
+//    }
 }
 
 /*!

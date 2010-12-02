@@ -50,15 +50,6 @@ LoopArrow::~LoopArrow()
 }
 
 /*!
- * \overload
- */
-QRectF
-LoopArrow::boundingRect() const
-{
-    return QRectF(centerPoint() - QPointF(25, 25), QSizeF(60, 65));
-}
-
-/*!
  * \brief Update the arrow's position
  */
 QPainterPath

@@ -22,6 +22,9 @@ done
 sed -e 's/CONFIG.*= debug/CONFIG \+= release/g' $TMP_DIR/src/src.pro > $TMP_DIR/src/src.pro.new
 mv $TMP_DIR/src/src.pro.new $TMP_DIR/src/src.pro
 
+# remove Manual.odt
+rm -rf $TMP_DIR/doc/Manual.odt
+
 tar cfvz ${TMP_DIR}_snapshot_`date "+%Y%m%d"`.tar.gz $TMP_DIR
 
 rm -fr $TMP_DIR

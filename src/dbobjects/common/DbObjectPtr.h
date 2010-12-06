@@ -223,6 +223,7 @@ class DbObjectPtr
          * \param[in] ipRhs - Instance of a proxy we are assigning to the given proxy
          *
          * \return Reference to the given proxy
+         * \todo Implement assignment operator using copy constructor
          */
         DbObjectPtr<T>& operator=(const DbObjectPtr<T> &ipRhs)
         {

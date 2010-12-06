@@ -351,6 +351,7 @@ DbTable::resetData()
 quint64
 DbTable::getIndices(QVector<DbIndexPtr> &opIndicesList)
 {
+    // \todo Used DbTablePtr table(Database:: ...) initialization
     DbTablePtr table = Database::instance()->findSchema(mSchema->name())->findTable(mName);
     return Database::instance()->findTableIndices(table, opIndicesList);
 }

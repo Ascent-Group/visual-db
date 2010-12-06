@@ -123,7 +123,7 @@ DatabaseTest::addIndexTest()
     QString indexName("ind_artists");
     DbIndexPtr index = mDbInst->findIndex(indexName);
 
-    QVERIFY(0 != index.get());
+    QVERIFY(index.valid());
 
     QCOMPARE(mDbInst->addIndex(index), false);
 }
@@ -156,7 +156,7 @@ DatabaseTest::addLanguageTest()
     QString langName("plpgsql");
     DbLanguagePtr lang = mDbInst->findLanguage(langName);
 
-    QVERIFY(0 != lang.get());
+    QVERIFY(lang.valid());
 
     // check for the language count to be the same
     QCOMPARE(mDbInst->addLanguage(lang), false);
@@ -190,7 +190,7 @@ DatabaseTest::addRoleTest()
     QString roleName("music_user");
     DbRolePtr role = mDbInst->findRole(roleName);
 
-    QVERIFY(0 != role.get());
+    QVERIFY(role.valid());
 
     // check for the role count to be the same
     QCOMPARE(mDbInst->addRole(role), false);
@@ -227,7 +227,7 @@ DatabaseTest::addSchemaTest()
     QString schemaName("vtunes");
     DbSchemaPtr schema = mDbInst->findSchema(schemaName);
 
-    QVERIFY(0 != schema.get());
+    QVERIFY(schema.valid());
 
     // check for the schema count to be the same
     QCOMPARE(mDbInst->addSchema(schema), false);
@@ -266,11 +266,11 @@ DatabaseTest::findIndexTest()
 
     mDbInst->readIndices();
 
-    QVERIFY(0 != mDbInst->findIndex("ind_artists").get());
-    QVERIFY(0 != mDbInst->findIndex("ind_albums").get());
-    QVERIFY(0 != mDbInst->findIndex("ind_tracks").get());
-    QVERIFY(0 != mDbInst->findIndex("ind_users").get());
-    QVERIFY(0 != mDbInst->findIndex("ind_locations").get());
+    QVERIFY(mDbInst->findIndex("ind_artists").valid());
+    QVERIFY(mDbInst->findIndex("ind_albums").valid());
+    QVERIFY(mDbInst->findIndex("ind_tracks").valid());
+    QVERIFY(mDbInst->findIndex("ind_users").valid());
+    QVERIFY(mDbInst->findIndex("ind_locations").valid());
 }
 
 void
@@ -280,7 +280,7 @@ DatabaseTest::findLanguageTest()
 
     mDbInst->readLanguages();
 
-    QVERIFY(0 != mDbInst->findLanguage("plpgsql").get());
+    QVERIFY(mDbInst->findLanguage("plpgsql").valid());
 }
 
 void
@@ -290,7 +290,7 @@ DatabaseTest::findRoleTest()
 
     mDbInst->readRoles();
 
-    QVERIFY(0 != mDbInst->findRole("music_user").get());
+    QVERIFY(mDbInst->findRole("music_user").valid());
 }
 
 void
@@ -301,9 +301,9 @@ DatabaseTest::findSchemaTest()
     mDbInst->readRoles();
     mDbInst->readSchemas();
 
-    QVERIFY(0 != mDbInst->findSchema("public").get());
-    QVERIFY(0 != mDbInst->findSchema("vtunes").get());
-    QVERIFY(0 != mDbInst->findSchema("pg_catalog").get());
+    QVERIFY(mDbInst->findSchema("public").valid());
+    QVERIFY(mDbInst->findSchema("vtunes").valid());
+    QVERIFY(mDbInst->findSchema("pg_catalog").valid());
 }
 
 void
@@ -317,15 +317,16 @@ DatabaseTest::findTableIndicesTest()
 
     DbSchemaPtr schema = mDbInst->findSchema("vtunes");
 
-    QVERIFY(0 != schema.get());
+    QVERIFY(schema.valid());
 
     DbTablePtr table = schema->findTable("artists");
 
-    QVERIFY(0 != table.get());
+    QVERIFY(table.valid());
 
     mDbInst->findTableIndices(table, indicesList);
 
     QVERIFY(0 < indicesList.size());
+    QVERIFY(indicesList.contains(mDbInst->findIndex("ind_artists")));
 }
 
 void
@@ -484,7 +485,7 @@ DatabaseTest::readLanguagesTest()
 
     DbLanguagePtr lang = mDbInst->findLanguage(name);
 
-    QVERIFY(0 != lang.get());
+    QVERIFY(lang.valid());
 
     QCOMPARE(lang->name(), name);
 }
@@ -501,7 +502,7 @@ DatabaseTest::readRolesTest()
     QString name("music_user");
 
     DbRolePtr role = mDbInst->findRole(name);
-    QVERIFY(0 != role.get());
+    QVERIFY(role.valid());
 
     QCOMPARE(role->name(), name);
 }
@@ -517,17 +518,17 @@ DatabaseTest::readSchemasTest()
     // validate their names
     QString name = QString("public");
     schema = mDbInst->findSchema(name);
-    QVERIFY(0 != schema.get());
+    QVERIFY(schema.valid());
     QCOMPARE(schema->name(), name);
 
     name = QString("information_schema");
     schema = mDbInst->findSchema(name);
-    QVERIFY(0 != schema.get());
+    QVERIFY(schema.valid());
     QCOMPARE(schema->name(), name);
 
     name = QString("vtunes");
     schema = mDbInst->findSchema(name);
-    QVERIFY(0 != schema.get());
+    QVERIFY(schema.valid());
     QCOMPARE(schema->name(), name);
 }
 

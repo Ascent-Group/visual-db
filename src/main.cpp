@@ -94,7 +94,7 @@ int main(int argc, char **argv)
     // set additional plugins path
     app.addLibraryPath("./lib/");
 
-    QSettings settings;
+    const QSettings settings;
     QTranslator translator;
 
     // load qm translation

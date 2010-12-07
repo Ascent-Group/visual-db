@@ -50,7 +50,9 @@ SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
         ProxyParameters *ipProxyParameters,
         bool ipLoadSession,
         QWidget *ipParent)
-: QDialog(ipParent), mDbParameters(ipDbParameters), mProxyParameters(ipProxyParameters)
+    : QDialog(ipParent),
+      mDbParameters(ipDbParameters),
+      mProxyParameters(ipProxyParameters)
 {
     ui.setupUi(this);
 
@@ -69,6 +71,9 @@ SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
  */
 SqlConnectionDialog::~SqlConnectionDialog()
 {
+    // \note no need to delete db parameters and proxy parameters here, because here we
+    // use the ones that are owned by main window and main window will handle their
+    // destruction.
 }
 
 /*!

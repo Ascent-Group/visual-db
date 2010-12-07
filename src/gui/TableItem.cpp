@@ -139,6 +139,9 @@ TableItem::FullName::FullName(const QString &ipSchemaName, const QString &ipTabl
  */
 TableItem::~TableItem()
 {
+    delete mKeyImage;
+    delete mForeignKeyImage;
+    delete mPrimaryAndForeignKeyImage;
 }
 
 /*!

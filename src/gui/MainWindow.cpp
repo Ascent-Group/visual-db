@@ -683,6 +683,7 @@ MainWindow::describeObject()
 
         default:
             qDebug() << "MainWindow::describeObject> Unknown object!";
+            delete descWidget;
             return;
             break;
     }
@@ -754,6 +755,7 @@ MainWindow::queryData()
 
         default:
             qDebug() << "MainWindow::queryData> Unknown object!";
+            delete sqlWidget;
             return;
             break;
     }

@@ -76,6 +76,11 @@ GraphicsItem::GraphicsItem(QMenu *ipMenu)
 GraphicsItem::~GraphicsItem()
 {
     delete mTitleItem;
+    qDeleteAll(mFieldItems);
+    qDeleteAll(mArrowItems);
+    delete mTableImage;
+    delete mFieldImage;
+    delete mAnchorImage;
 }
 
 /*!

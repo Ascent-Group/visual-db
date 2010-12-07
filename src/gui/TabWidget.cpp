@@ -42,7 +42,7 @@ TabWidget::TabWidget(QWidget *ipParent)
 #endif
 
     // create button for closing tabs
-    mCloseTabButton = new QToolButton();
+    mCloseTabButton = new QToolButton(this);
     mCloseTabButton->setIcon(QIcon(":/img/closetab.png"));
     mCloseTabButton->setShortcut(QString("Ctrl+W"));
     mCloseTabButton->setToolTip(QString("Close tab"));

@@ -211,6 +211,7 @@ GraphicsScene::newTableItem(const QString &ipSchemaName, const QString &ipTableN
     }
 
     // create new table
+    // \todo or maybe take parentship here?
     return new TableItem(ipSchemaName, ipTableName, ipMenu, ipPos);
 }
 
@@ -234,6 +235,7 @@ GraphicsScene::newViewItem(const QString &ipSchemaName, const QString &ipViewNam
     }
 
     // create new view
+    // \todo take parentship of view item
     return new ViewItem(ipSchemaName, ipViewName, ipMenu, ipPos);
 }
 
@@ -245,6 +247,7 @@ GraphicsScene::newViewItem(const QString &ipSchemaName, const QString &ipViewNam
 void
 GraphicsScene::addItems(const QList<QGraphicsItem *> &ipItems)
 {
+    // \todo take parentship over added items. If we do this, they won't leak
     foreach (QGraphicsItem *item, ipItems) {
         if (toGroup(item)) {
             addItems(toGroup(item)->children());
@@ -318,6 +321,7 @@ GraphicsScene::createRelation(TableItem *ipSource, TableItem *ipDestination, Arr
 {
     ipSource->addArrowItem(ipArrow);
     ipDestination->addArrowItem(ipArrow);
+    // \todo Give an explanation of why -1000 is used
     ipArrow->setZValue(-1000.0);
     addItem(ipArrow);
     ipArrow->updatePosition();

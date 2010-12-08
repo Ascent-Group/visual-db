@@ -48,7 +48,7 @@ int DbObjectItem::mSeek = 80;
  * Constructor
  */
 DbObjectItem::DbObjectItem(QMenu *ipMenu)
-    : GraphicsItem(), mFieldsTypesVisible(true), mContextMenu(ipMenu), mMode(MOVE)
+    : GraphicsItem(), mContextMenu(ipMenu), mMode(MOVE)
 {
 }
 
@@ -256,26 +256,6 @@ DbObjectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
         }
     }
 //    QGraphicsItem::mouseMoveEvent(ipEvent);
-}
-
-/*!
- * \brief According to the given flag show or hide fields' types
- *
- * \param[in] ipFlag - True if we want to show field types, false otherwise
- */
-void
-DbObjectItem::setFieldsTypesVisible(bool ipFlag)
-{
-    // TODO: implement it according new class structure
-//    for (int i = 0; i < countFields(); ++i) {
-//        if (ipFlag) {
-//            setFieldText(i, mModel->columnName(i) + ": " + mModel->columnType(i));
-//        } else {
-//            setFieldText(i, mModel->columnName(i));
-//        }
-//    }
-//    mFieldsTypesVisible = ipFlag;
-//    update(x(), y(), width(), height());
 }
 
 /*!

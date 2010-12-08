@@ -798,8 +798,8 @@ void
 GraphicsScene::setFieldsTypesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (toDbObject(item)) {
-            toDbObject(item)->setFieldsTypesVisible(ipFlag);
+        if (toTable(item)) {
+            toTable(item)->setFieldsTypesVisible(ipFlag);
         } else if (toGroup(item)) {
             setFieldsTypesVisible(toGroup(item)->children(), ipFlag);
         }

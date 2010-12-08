@@ -46,7 +46,7 @@
  * Constructor
  */
 TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QMenu *ipMenu, const QPoint &ipPos)
-    : DbObjectItem(ipMenu), mIndicesVisible(true)
+    : DbObjectItem(ipMenu), mFieldsTypesVisible(true), mIndicesVisible(true)
 {
     using namespace DbObjects::Common;
     Database *dbInst = Database::instance();
@@ -81,7 +81,8 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
         addFieldItem(new QGraphicsTextItem(mModel->columnName(i) + ": " + mModel->columnType(i)));
     }
 
-    dbInst->findTableIndices(mModel, mIndices);
+    qDebug() << dbInst->findTableIndices(mModel, mIndices);
+    qDebug() << "asdf: " << mIndices.count();
     foreach (const DbIndexPtr &index, mIndices) {
         addIndexItem(new QGraphicsTextItem(index.name()));
     }
@@ -200,7 +201,7 @@ TableItem::paintFieldImage(QPainter *ipPainter, int ipIdx)
  * \param[in] ipPainter - Painter
  */
 void
-TableItem::paintIndeces(QPainter *ipPainter)
+TableItem::paintAdditionalInfo(QPainter *ipPainter)
 {
     // if we need to show indeces
     if (mIndicesVisible) {
@@ -216,6 +217,26 @@ TableItem::paintIndeces(QPainter *ipPainter)
                     mIndexItems.at(i)->toPlainText());
         }
     }
+}
+
+/*!
+ * \brief According to the given flag show or hide fields' types
+ *
+ * \param[in] ipFlag - True if we want to show field types, false otherwise
+ */
+void
+TableItem::setFieldsTypesVisible(bool ipFlag)
+{
+    // TODO: implement it according new class structure
+    for (int i = 0; i < countFields(); ++i) {
+        if (ipFlag) {
+            setFieldText(i, mModel->columnName(i) + ": " + mModel->columnType(i));
+        } else {
+            setFieldText(i, mModel->columnName(i));
+        }
+    }
+    mFieldsTypesVisible = ipFlag;
+    update(x(), y(), width(), height());
 }
 
 /*!

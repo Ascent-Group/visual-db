@@ -82,8 +82,6 @@ class DbObjectItem : public GraphicsItem
     public:
         explicit DbObjectItem(QMenu *ipMenu = 0);
         virtual ~DbObjectItem();
-
-        virtual void setFieldsTypesVisible(bool);
         
         virtual void addArrowItem(ArrowItem *);
         virtual void removeArrowItem(ArrowItem *);
@@ -119,8 +117,6 @@ class DbObjectItem : public GraphicsItem
         QSettings mSettings;
         
         static int mSeek;
-
-        bool mFieldsTypesVisible;
 
         QList<ArrowItem *> mArrowItems;
 

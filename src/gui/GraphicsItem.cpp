@@ -55,7 +55,6 @@ GraphicsItem::GraphicsItem(QMenu *ipMenu)
       mRightBottomPoint(0, 0),
       mFont("Arial", 8), 
       mMode(GraphicsItem::MOVE),
-      mFieldsTypesVisible(true),
       mContextMenu(ipMenu)
 {
     // get selected color

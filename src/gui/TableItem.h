@@ -75,6 +75,8 @@ class TableItem : public DbObjectItem
         virtual int type() const;
 
         void addIndexItem(QGraphicsTextItem *);
+
+        void setFieldsTypesVisible(bool);
         void setIndicesVisible(bool);
 
         QString foreignSchemaName(int) const;
@@ -92,7 +94,7 @@ class TableItem : public DbObjectItem
 
     protected:
         void paintFieldImage(QPainter *, int);
-        void paintIndeces(QPainter *);
+        void paintAdditionalInfo(QPainter *);
 
     private:
         QSettings mSettings;
@@ -100,6 +102,7 @@ class TableItem : public DbObjectItem
         QVector<DbObjects::Common::DbIndexPtr> mIndices;
         QList<QGraphicsTextItem *> mIndexItems;
 
+        bool mFieldsTypesVisible;
         bool mIndicesVisible;
         
         QImage *mKeyImage;

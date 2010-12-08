@@ -185,7 +185,6 @@ class GraphicsItem : public QGraphicsPolygonItem
 
         static int mSeek;
         Mode mMode;
-        bool mFieldsTypesVisible;
 
         QList<ArrowItem *> mArrowItems;
 

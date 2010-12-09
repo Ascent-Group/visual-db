@@ -68,7 +68,7 @@ PreferencesPage::~PreferencesPage()
 /*!
  * \brief Get flag - show or not indices
  * 
- * \return True if we need to show indeces, false otherwise
+ * \return True if we need to show indices, false otherwise
  */
 bool
 PreferencesPage::showIndices() const

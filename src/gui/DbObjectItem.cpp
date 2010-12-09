@@ -30,26 +30,28 @@
 #include <QBrush>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsTextItem>
-#include <QGraphicsTextItem>
 #include <QMenu>
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
-#include <QTextDocument>
-#include <QTextDocument>
+#include <QSettings>
 #include <consts.h>
 #include <gui/ArrowItem.h>
 #include <gui/DbObjectItem.h>
 #include <gui/GraphicsScene.h>
 
-int DbObjectItem::mSeek = 80;
-
 /*!
  * Constructor
  */
 DbObjectItem::DbObjectItem(QMenu *ipMenu)
-    : GraphicsItem(), mContextMenu(ipMenu), mMode(MOVE)
+    : GraphicsItem(),
+      mFieldsTypesVisible(true),
+      mContextMenu(ipMenu)
+//      mMode(MOVE)
 {
+    // preload of images
+    mFieldImage = new QImage(":/img/field.png");
+    mAnchorImage = new QImage(":/img/anchor.png");
 }
 
 /*!
@@ -57,6 +59,16 @@ DbObjectItem::DbObjectItem(QMenu *ipMenu)
  */
 DbObjectItem::~DbObjectItem()
 {
+    // we cannot delete arrows here because both source and destination tables hold the
+    // pointer to the given arrow in its own arrow items list. In this case we cannot
+    // handle a proper destruction of an arrow, because delete on the same arrows will be
+    // called twice, and this may result in crash
+//    qDeleteAll(mArrowItems);
+    mArrowItems.clear();
+
+    delete mFieldImage;
+    delete mAnchorImage;
+
 }
 
 /*!
@@ -103,7 +115,7 @@ DbObjectItem::removeArrowItem(ArrowItem *ipArrowItem)
 void
 DbObjectItem::removeArrowItems()
 {
-    for (QList<ArrowItem *>::const_iterator iter = mArrowItems.constBegin(); iter != mArrowItems.constEnd(); ++iter) {
+    for (QList<ArrowItem *>::iterator iter = mArrowItems.begin(); iter != mArrowItems.end(); ++iter) {
         DbObjectItem *startItem = (*iter)->startItem();
         DbObjectItem *endItem = (*iter)->endItem();
 
@@ -119,7 +131,9 @@ DbObjectItem::removeArrowItems()
             scene()->removeItem(*iter);
         }
         // FIXME we must delete this item but program chashed in this case...
-//        delete (*iter);
+//        delete const_cast<ArrowItem*>(*iter);
+//        mArrowItems.erase(iter);
+        mArrowItems.removeOne(*iter);
     }
 }
 
@@ -159,7 +173,8 @@ void
 DbObjectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
     QGraphicsItem::mouseReleaseEvent(ipEvent);
-    if (mSettings.value(Consts::VIEW_GRP + "/" + Consts::ALIGN_TO_GRID_SETTING, false).toBool()) {
+    QSettings settings;
+    if (settings.value(Consts::VIEW_GRP + "/" + Consts::ALIGN_TO_GRID_SETTING, false).toBool()) {
         moveBy(-(int)pos().x() % GraphicsScene::LOW_GRID_DX, -(int)pos().y() % GraphicsScene::LOW_GRID_DY);
     }
 }
@@ -259,6 +274,18 @@ DbObjectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
 }
 
 /*!
+ * \brief According to the given flag show or hide fields' types
+ *
+ * \param[in] ipFlag - True if we want to show field types, false otherwise
+ */
+void
+DbObjectItem::setFieldsTypesVisible(bool ipFlag)
+{
+    mFieldsTypesVisible = ipFlag;
+    update(x(), y(), width(), height());
+}
+
+/*!
  * \brief Get all arrows related to this item
  *
  * \return List of arrows connected to or connected with this item
@@ -267,6 +294,20 @@ QList<ArrowItem *>
 DbObjectItem::arrows() const
 {
     return mArrowItems;
+}
+
+/*!
+ *
+ */
+void
+DbObjectItem::paintAnchor(QPainter *ipPainter)
+{
+    // if anchor was setted for this table - draw the anchor
+    if (!(flags() & QGraphicsItem::ItemIsMovable)) {
+        QRectF target(x() + width() - IMG_WIDTH - INTERVAL, y() + height() - IMG_HEIGHT - INTERVAL, IMG_WIDTH, IMG_HEIGHT);
+        QRectF source(0.0, 0.0, mAnchorImage->width(), mAnchorImage->height());
+        ipPainter->drawImage(target, *mAnchorImage, source);
+    }
 }
 
 /*!

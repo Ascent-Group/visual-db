@@ -34,6 +34,7 @@
 #include <QDomElement>
 #include <QDomNode>
 #include <QGraphicsScene>
+#include <QSet>
 #include <QSettings>
 #include <QTimer>
 
@@ -88,6 +89,8 @@ class GraphicsScene : public QGraphicsScene {
         ViewItem *newViewItem(const QString &, const QString &, QMenu *, const QPoint &);
         void setItemColor(QList<QGraphicsItem *>, QColor);
         bool moveMode() const;
+
+        void flushCache();
 
     signals:
         void itemMoved(QList <QGraphicsItem *>, int, int);
@@ -154,7 +157,8 @@ class GraphicsScene : public QGraphicsScene {
 
         QMenu *mSchemeMenu;
         QMenu *mTableMenu;
-        QVector<DbObjectItem *> mDbItems;
+        QSet<DbObjectItem *> mDbItems;
+        QSet<ArrowItem *> mArrows;
 
         QPointF mOldPos;
         QRectF mOldRect;

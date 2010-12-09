@@ -31,7 +31,6 @@
 #define VIEWEITEM_H
 
 #include <gui/DbObjectItem.h>
-#include <QSettings>
 
 class QAction;
 class QDomDocument;
@@ -66,13 +65,15 @@ class ViewItem : public DbObjectItem
         QString schemaName() const;
         
         QDomElement toXml(QDomDocument &) const;
+        // \todo add fromXml(...)
+
+        void setFieldsTypesVisible(bool);
+        void setIndicesVisible(bool);
 
     public:
         enum { Type = UserType + 8 };
 
     private:
-
-        QSettings mSettings;
         DbObjects::Common::DbViewPtr mModel;
 };
 

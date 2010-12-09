@@ -32,7 +32,6 @@
 
 #include <gui/TableItem.h>
 #include <QGraphicsLineItem>
-#include <QSettings>
 
 class QGraphicsPolygonItem;
 class QGraphicsScene;
@@ -75,9 +74,6 @@ class ArrowItem : public QGraphicsPathItem
         virtual QPointF endPoint() const;
 
     private:
-
-        QSettings mSettings;
-
         TableItem *mStartItem;
         TableItem *mEndItem;
 

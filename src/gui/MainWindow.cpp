@@ -41,23 +41,17 @@
 #include <QPrinter>
 #include <QProgressBar>
 #include <QProgressDialog>
-#include <QSettings>
 #include <QSqlDatabase>
 #include <QStatusBar>
 #include <QtConcurrentRun>
 #include <QTime>
-#include <QTreeWidgetItem>
 #include <QUndoCommand>
 #include <QUndoStack>
 #include <common/Database.h>
-#include <common/DbSchema.h>
 #include <connect/DbParameters.h>
 #include <connect/ProxyParameters.h>
 #include <consts.h>
-#include <gui/ArrowItem.h>
 #include <gui/DescriptionWidget.h>
-#include <gui/GraphicsScene.h>
-#include <gui/GraphicsView.h>
 #include <gui/Legend.h>
 #include <gui/MainWindow.h>
 #include <gui/OptionsDialog.h>
@@ -65,7 +59,6 @@
 #include <gui/SqlConnectionDialog.h>
 #include <gui/SqlWidget.h>
 #include <gui/TabWidget.h>
-#include <gui/TableItem.h>
 #include <gui/TreeWidget.h>
 
 #include <QtDebug>
@@ -503,7 +496,7 @@ MainWindow::drawFullDbScheme()
         }
 
         //mProgressBar->reset();
-        statusBar()->showMessage(tr("Processing tales complete"), 3);
+        statusBar()->showMessage(tr("Processing tables complete"), 3);
     }
 }
 
@@ -948,6 +941,10 @@ MainWindow::reloadData()
     ui.mSceneWidget->cleanSchemeScene();
     Database::instance()->resetData();
     ui.mTree->refresh();
+
+    // flush scene cache
+    mUndoStack->clear();
+    ui.mSceneWidget->flushCache();
 }
 
 /*!

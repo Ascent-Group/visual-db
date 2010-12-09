@@ -33,7 +33,6 @@
 #include <QDomElement>
 #include <QFont>
 #include <QGraphicsPolygonItem>
-#include <QSettings>
 
 class ArrowItem;
 class QColor;
@@ -42,17 +41,6 @@ class QGraphicsTextItem;
 class QGraphicsTextItem;
 class QImage;
 
-namespace DbObjects
-{
-
-namespace Common
-{
-
-class DbTable;
-
-} // namespace Common
-
-} // namespace DbObjects
 
 /*!
  * \class GraphicsItem
@@ -69,6 +57,21 @@ class GraphicsItem : public QGraphicsPolygonItem
         static const int DEFAULT_WIDTH = 150;
         static const int IMG_WIDTH = FIELD_HEIGHT;
         static const int IMG_HEIGHT = IMG_WIDTH;
+
+        // mode for table (you can resize table from different positions or move it)
+        enum Mode {
+            RIGHT_BOTTOM_CORNER_RESIZE,
+            LEFT_BOTTOM_CORNER_RESIZE,
+            LEFT_TOP_CORNER_RESIZE,
+            RIGHT_TOP_CORNER_RESIZE,
+
+            LEFT_VERTICAL_RESIZE,
+            RIGHT_VERTICAL_RESIZE,
+            TOP_HORIZONTAL_RESIZE,
+            BOTTOM_HORIZONTAL_RESIZE,
+
+            MOVE
+        };
 
     public:
         explicit GraphicsItem(QMenu *ipMenu = 0);
@@ -136,16 +139,15 @@ class GraphicsItem : public QGraphicsPolygonItem
         virtual void paintTitleImage(QPainter *);
         virtual void paintTitleText(QPainter *);
         virtual void paintFields(QPainter *);
-        virtual void paintFieldImage(QPainter *, int) { };
+        virtual void paintFieldImage(QPainter *, int) = 0;
         virtual void paintFieldText(QPainter *, int);
-        virtual void paintAdditionalInfo(QPainter *) { };
-        virtual void paintAnchor(QPainter *);
+        virtual void paintAdditionalInfo(QPainter *) = 0;
+        virtual void paintAnchor(QPainter *) = 0;
 
         static const int SEEK_STEP = 20;
 
-    private:
-        QSettings mSettings;
 
+    protected:
         QGraphicsTextItem *mTitleItem;
         QList<QGraphicsTextItem *> mFieldItems;
 
@@ -153,40 +155,20 @@ class GraphicsItem : public QGraphicsPolygonItem
         QPointF mRightBottomPoint;
 
         QPolygonF mPolygon;
-        
+
         QColor mItemColor;
         QColor mFontColor;
         QColor mBorderColor;
 
         QFont mFont;
 
-        QImage *mTableImage;
-        QImage *mFieldImage;
-        QImage *mAnchorImage;
-
         static const int BORDER_WIDTH = 5;
         static const int SHADOW_SIZE = 3;
         QColor mShadowColor;
 
-        // mode for table (you can resize table from different positions or move it)
-        enum Mode {
-            RIGHT_BOTTOM_CORNER_RESIZE,
-            LEFT_BOTTOM_CORNER_RESIZE,
-            LEFT_TOP_CORNER_RESIZE,
-            RIGHT_TOP_CORNER_RESIZE,
-
-            LEFT_VERTICAL_RESIZE,
-            RIGHT_VERTICAL_RESIZE,
-            TOP_HORIZONTAL_RESIZE,
-            BOTTOM_HORIZONTAL_RESIZE,
-
-            MOVE
-        };
 
         static int mSeek;
         Mode mMode;
-
-        QList<ArrowItem *> mArrowItems;
 
         QMenu *mContextMenu;
 };

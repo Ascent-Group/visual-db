@@ -32,7 +32,6 @@
 
 #include <common/DbObjectPtr.h>
 #include <gui/DbObjectItem.h>
-#include <QSettings>
 
 class GraphicsScene;
 class QAction;
@@ -75,8 +74,6 @@ class TableItem : public DbObjectItem
         virtual int type() const;
 
         void addIndexItem(QGraphicsTextItem *);
-
-        void setFieldsTypesVisible(bool);
         void setIndicesVisible(bool);
 
         QString foreignSchemaName(int) const;
@@ -92,19 +89,21 @@ class TableItem : public DbObjectItem
         QDomElement toXml(QDomDocument &) const;
         static TableItem *fromXml(const QDomElement &, GraphicsScene *, QMenu *);
 
+        virtual void setFieldsTypesVisible(bool);
+
     protected:
-        void paintFieldImage(QPainter *, int);
+        virtual void paintTitleImage(QPainter *);
+        virtual void paintFieldImage(QPainter *, int);
         void paintAdditionalInfo(QPainter *);
 
     private:
-        QSettings mSettings;
-
         QVector<DbObjects::Common::DbIndexPtr> mIndices;
         QList<QGraphicsTextItem *> mIndexItems;
 
-        bool mFieldsTypesVisible;
         bool mIndicesVisible;
-        
+
+        QImage *mTableImage;
+
         QImage *mKeyImage;
         QImage *mForeignKeyImage;
         QImage *mPrimaryAndForeignKeyImage;

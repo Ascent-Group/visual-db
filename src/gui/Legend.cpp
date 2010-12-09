@@ -99,7 +99,7 @@ Legend::refresh()
 // *
 // */
 //void
-//Legend::paintIndeces(QPainter * /*ipPainter*/)
+//Legend::paintIndices(QPainter * /*ipPainter*/)
 //{
 //}
 
@@ -134,6 +134,15 @@ Legend::paintFieldImage(QPainter *ipPainter, int ipIdx)
         ipPainter->drawText((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (ipIdx + 1) + INTERVAL * 2,
                 IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL - 1, Qt::AlignCenter, QString("N"));
     }
+}
+
+/*!
+ *
+ */
+void
+Legend::paintAnchor(QPainter *)
+{
+
 }
 
 /*

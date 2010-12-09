@@ -33,12 +33,8 @@
 #include <QMenu>
 #include <QtDebug>
 #include <common/Database.h>
-#include <common/DbIndex.h>
-#include <common/DbSchema.h>
-#include <common/DbView.h>
 #include <consts.h>
 #include <gui/ViewItem.h>
-#include <math.h>
 
 /*!
  * Constructor
@@ -163,6 +159,18 @@ QDomElement
 ViewItem::toXml(QDomDocument &ipDoc) const
 {
     return DbObjectItem::toXml(ipDoc, "view");
+}
+
+/*!
+ * \brief According to the given flag show or hide fields' types
+ *
+ * \param[in] ipFlag - True if we want to show field types, false otherwise
+ */
+void
+ViewItem::setFieldsTypesVisible(bool ipFlag)
+{
+    // \todo Here will be view specific code when we will read view column definitions
+    DbObjectItem::setFieldsTypesVisible(ipFlag);
 }
 
 /*!

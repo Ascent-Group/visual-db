@@ -230,7 +230,7 @@ Trigger::loadData()
     // enabled
     colId = query.record().indexOf("enabled");
     Q_ASSERT(colId > 0);
-    // \fixme toChar doesn't get 'O' properly. Junk is stored in mEnabled. =>
+    // \note toChar doesn't get 'O' properly. Junk is stored in mEnabled. =>
     // toString().at(0) workaround is used.
 //    mEnabled = query.value(colId).toChar();
     mEnabled = query.value(colId).toString().at(0);

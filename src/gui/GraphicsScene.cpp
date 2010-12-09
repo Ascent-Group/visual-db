@@ -35,19 +35,16 @@
 #include <QPainter>
 #include <QPen>
 #include <QPrinter>
-#include <QTreeWidgetItem>
 #include <common/Database.h>
-#include <common/DbTable.h>
 #include <consts.h>
-#include <gui/ForeignArrow.h>
-#include <gui/InheritanceArrow.h>
-#include <gui/LoopArrow.h>
 #include <gui/ControlWidget.h>
-#include <gui/DbObjectItem.h>
+#include <gui/ForeignArrow.h>
 #include <gui/GraphicsScene.h>
-#include <gui/Legend.h>
-#include <gui/TableItem.h>
+#include <gui/InheritanceArrow.h>
 #include <gui/ItemGroup.h>
+#include <gui/Legend.h>
+#include <gui/LoopArrow.h>
+#include <gui/TableItem.h>
 #include <gui/TreeWidget.h>
 #include <gui/ViewItem.h>
 #include <math.h>
@@ -82,6 +79,15 @@ GraphicsScene::GraphicsScene(QObject *ipParent)
  */
 GraphicsScene::~GraphicsScene()
 {
+    // remove items from scene, so that scene is not theri parent anymore
+    QList<QGraphicsItem*> itemsList = items();
+    deleteItems(itemsList);
+
+    // we will handle items' destruction on our own
+    qDeleteAll(mDbItems);
+    qDeleteAll(mArrows);
+    mDbItems.clear();
+    mArrows.clear();
     delete mLegend;
 }
 
@@ -205,14 +211,31 @@ TableItem *
 GraphicsScene::newTableItem(const QString &ipSchemaName, const QString &ipTableName, QMenu *ipMenu, const QPoint &ipPos)
 {
     DbObjectItem *newItem = findItem(ipSchemaName, ipTableName);
-    // check if such item is already on the scene
-    if (toTable(newItem)) {
-        return toTable(newItem);
+
+    // if item is currently not on scene
+    if (!toTable(newItem)) {
+        newItem = 0;
+
+        // try to find it in registered items
+        QSet<DbObjectItem*>::const_iterator iter = mDbItems.constBegin();
+
+        while (0 == newItem && iter != mDbItems.constEnd()) {
+            if (ipTableName == (*iter)->name() && ipSchemaName == (*iter)->schemaName()) {
+                newItem = *iter;
+            }
+            ++iter;
+        }
+
+        // if not found
+        if (!newItem) {
+            // create new table
+            newItem = new TableItem(ipSchemaName, ipTableName, ipMenu, ipPos);
+            // register this item
+            mDbItems.insert(newItem);
+        }
     }
 
-    // create new table
-    // \todo or maybe take parentship here?
-    return new TableItem(ipSchemaName, ipTableName, ipMenu, ipPos);
+    return toTable(newItem);
 }
 
 /*!
@@ -229,14 +252,30 @@ ViewItem *
 GraphicsScene::newViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu *ipMenu, const QPoint &ipPos)
 {
     DbObjectItem *newItem = findItem(ipSchemaName, ipViewName);
-    // check if such item is already on the scene
-    if (toView(newItem)) {
-        return toView(newItem);
+
+    // if item is currently not on scene
+    if (!toView(newItem)) {
+        newItem = 0;
+        // try to find it in registered items
+        QSet<DbObjectItem*>::const_iterator iter = mDbItems.constBegin();
+
+        while (0 == newItem && iter != mDbItems.constEnd()) {
+            if (ipViewName == (*iter)->name() && ipSchemaName == (*iter)->schemaName()) {
+                newItem = *iter;
+            }
+            ++iter;
+        }
+
+        // if not found
+        if (!newItem) {
+            // create new view
+            newItem = new ViewItem(ipSchemaName, ipViewName, ipMenu, ipPos);
+            // register this item
+            mDbItems.insert(newItem);
+        }
     }
 
-    // create new view
-    // \todo take parentship of view item
-    return new ViewItem(ipSchemaName, ipViewName, ipMenu, ipPos);
+    return toView(newItem);
 }
 
 /*!
@@ -247,7 +286,6 @@ GraphicsScene::newViewItem(const QString &ipSchemaName, const QString &ipViewNam
 void
 GraphicsScene::addItems(const QList<QGraphicsItem *> &ipItems)
 {
-    // \todo take parentship over added items. If we do this, they won't leak
     foreach (QGraphicsItem *item, ipItems) {
         if (toGroup(item)) {
             addItems(toGroup(item)->children());
@@ -283,28 +321,59 @@ GraphicsScene::drawRelations()
 void
 GraphicsScene::createRelations(TableItem *ipSourceItem)
 {
+    ArrowItem *arrow = 0;
     // FIXME: this code is applicable only for tables
     // find foreign keys and tables related to this keys
     for (int i = 0; i < ipSourceItem->columnsCount(); ++i) {
+        arrow = 0;
         if (ipSourceItem->isColumnForeignKey(i)) {
             TableItem *destItem = toTable(findItem(ipSourceItem->foreignSchemaName(i), ipSourceItem->foreignTableName(i)));
 
-            // self referenced arrow
-            if (ipSourceItem == destItem) {
-                qDebug() << "self";
-                createRelation(ipSourceItem, destItem, new LoopArrow(ipSourceItem, destItem, QString("")));
-            // if founded, create arrow
-            } else if (destItem) {
-                createRelation(ipSourceItem, destItem, new ForeignArrow(ipSourceItem, destItem, QString("")));
+            // find the arrow if it exists already
+            QSet<ArrowItem*>::const_iterator iter = mArrows.constBegin();
+
+            while (0 == arrow && iter != mArrows.constEnd()) {
+                if (ipSourceItem == (*iter)->startItem() && destItem == (*iter)->endItem()) {
+                    arrow = (*iter);
+
+                }
+                ++iter;
             }
+
+            // if arrow was not found
+            if (!arrow) {
+                // create an arrow
+                // self referenced arrow
+                if (ipSourceItem == destItem) {
+                    qDebug() << "self";
+                    arrow = new LoopArrow(ipSourceItem, destItem, QString(""));
+                    // if founded, create arrow
+                } else if (destItem) {
+                    arrow = new ForeignArrow(ipSourceItem, destItem, QString(""));
+                }
+            }
+            createRelation(ipSourceItem, destItem, arrow);
         }
     }
 
     // if table inherits from another table - paint inheritance arrow
     foreach (const TableItem::FullName &parentFullName, ipSourceItem->parents()) {
         TableItem *destItem = toTable(findItem(parentFullName.mSchemaName, parentFullName.mTableName));
-        if (destItem) {
-            createRelation(ipSourceItem, destItem, new InheritanceArrow(ipSourceItem, destItem, QString("")));
+
+        arrow = 0;
+        // find the arrow if it exists already
+        QSet<ArrowItem*>::const_iterator iter = mArrows.constBegin();
+        while (0 == arrow && iter != mArrows.constEnd()) {
+            if (ipSourceItem == (*iter)->startItem() && destItem == (*iter)->endItem()) {
+                arrow = (*iter);
+            }
+            ++iter;
+        }
+
+        // if was not found
+        if (!arrow && destItem) {
+            arrow = new InheritanceArrow(ipSourceItem, destItem, QString(""));
+            createRelation(ipSourceItem, destItem, arrow);
         }
     }
 }
@@ -319,6 +388,8 @@ GraphicsScene::createRelations(TableItem *ipSourceItem)
 void
 GraphicsScene::createRelation(TableItem *ipSource, TableItem *ipDestination, ArrowItem *ipArrow)
 {
+    // register the arrow
+    mArrows.insert(ipArrow);
     ipSource->addArrowItem(ipArrow);
     ipDestination->addArrowItem(ipArrow);
     // \todo Give an explanation of why -1000 is used
@@ -428,15 +499,8 @@ GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
 void
 GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
 {
-    if (mMoveMode) {
-        QGraphicsScene::mouseMoveEvent(ipEvent);
-    } else {
-        // if we grabbered an item - do default actions and return
-        if (mouseGrabberItem()) {
-            QGraphicsScene::mouseMoveEvent(ipEvent);
-            return;
-        }
-
+    // if we grabbered an item - do default actions and return
+    if (!mMoveMode && !mouseGrabberItem()) {
         // if left button was pressed - draw selection rectangle and set selection for all items under this rectangle
         if (ipEvent->buttons() == Qt::LeftButton) {
             mEndSelect = ipEvent->scenePos();
@@ -466,9 +530,9 @@ GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
             // select all items under rectangle
             setSelectionArea(path);
         }
-
-        QGraphicsScene::mouseMoveEvent(ipEvent);
     }
+
+    QGraphicsScene::mouseMoveEvent(ipEvent);
 }
 
 /*!
@@ -798,8 +862,8 @@ void
 GraphicsScene::setFieldsTypesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag)
 {
     foreach (QGraphicsItem *item, ipItems) {
-        if (toTable(item)) {
-            toTable(item)->setFieldsTypesVisible(ipFlag);
+        if (toDbObject(item)) {
+            toDbObject(item)->setFieldsTypesVisible(ipFlag);
         } else if (toGroup(item)) {
             setFieldsTypesVisible(toGroup(item)->children(), ipFlag);
         }
@@ -809,7 +873,7 @@ GraphicsScene::setFieldsTypesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag
 /*!
  * \brief Show/hide indices for selected tables
  *
- * \param[in] ipFlag - True if we want to show indeces, false otherwise
+ * \param[in] ipFlag - True if we want to show indices, false otherwise
  */
 void
 GraphicsScene::setIndicesVisible(bool ipFlag)
@@ -820,8 +884,8 @@ GraphicsScene::setIndicesVisible(bool ipFlag)
 /*!
  * \brief Show/hide indices for selected tables
  *
- * \param[in] ipItems - List of items we will show indeces for
- * \param[in] ipFlag - True if we want to show indeces, false otherwise
+ * \param[in] ipItems - List of items we will show indices for
+ * \param[in] ipFlag - True if we want to show indices, false otherwise
  */
 void
 GraphicsScene::setIndicesVisible(QList<QGraphicsItem *> ipItems, bool ipFlag)
@@ -1204,4 +1268,20 @@ bool
 GraphicsScene::moveMode() const
 {
     return mMoveMode;
+}
+
+/*!
+ * \brief Deletes all cached items that were created since last flush
+ * \note The function is to be used for destroying the cached objects on such events as
+ *       disconnecting, reconnecting, reloading data from db, etc.
+ */
+void
+GraphicsScene::flushCache()
+{
+    QList<QGraphicsItem*> itemsList = items();
+    deleteItems(itemsList);
+    qDeleteAll(mDbItems);
+    mDbItems.clear();
+    qDeleteAll(mArrows);
+    mArrows.clear();
 }

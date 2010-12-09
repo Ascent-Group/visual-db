@@ -1,4 +1,4 @@
-    /*-
+/*-
  * Copyright (c) 2009, Ascent Group.
  * All rights reserved.
  *

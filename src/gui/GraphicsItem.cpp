@@ -30,12 +30,11 @@
 #include <QBrush>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QGraphicsTextItem>
-#include <QGraphicsTextItem>
 #include <QMenu>
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
-#include <QTextDocument>
+#include <QSettings>
 #include <QTextDocument>
 #include <consts.h>
 #include <gui/ArrowItem.h>
@@ -58,13 +57,10 @@ GraphicsItem::GraphicsItem(QMenu *ipMenu)
       mContextMenu(ipMenu)
 {
     // get selected color
-    mItemColor = mSettings.value(Consts::COLOR_GRP + "/" + Consts::TABLE_SETTING, Qt::white).value<QColor>();
-    mBorderColor = mSettings.value(Consts::COLOR_GRP + "/" + Consts::BORDER_SETTING, Qt::black).value<QColor>();
+    QSettings settings;
+    mItemColor = settings.value(Consts::COLOR_GRP + "/" + Consts::TABLE_SETTING, Qt::white).value<QColor>();
+    mBorderColor = settings.value(Consts::COLOR_GRP + "/" + Consts::BORDER_SETTING, Qt::black).value<QColor>();
 
-    // preload of images
-    mTableImage = new QImage(":/img/table.png");
-    mFieldImage = new QImage(":/img/field.png");
-    mAnchorImage = new QImage(":/img/anchor.png");
 
     mShadowColor = QColor(60, 60, 60, 175);
 }
@@ -76,10 +72,6 @@ GraphicsItem::~GraphicsItem()
 {
     delete mTitleItem;
     qDeleteAll(mFieldItems);
-    qDeleteAll(mArrowItems);
-    delete mTableImage;
-    delete mFieldImage;
-    delete mAnchorImage;
 }
 
 /*!
@@ -598,11 +590,6 @@ GraphicsItem::paintTitle(QPainter *ipPainter)
 void
 GraphicsItem::paintTitleImage(QPainter *ipPainter)
 {
-    // draw image for table
-    QRectF target((int)x() + INTERVAL, (int)y() + INTERVAL,
-            IMG_HEIGHT + INTERVAL, IMG_HEIGHT + INTERVAL);
-    QRectF source(0.0, 0.0, mTableImage->width(), mTableImage->height());
-    ipPainter->drawImage(target, *mTableImage, source);
 }
 
 /*!
@@ -617,22 +604,6 @@ GraphicsItem::paintTitleText(QPainter *ipPainter)
     ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + INTERVAL,
             (int)width() - IMG_WIDTH - INTERVAL * 4, FIELD_HEIGHT + INTERVAL,
             Qt::AlignCenter, titleText());
-}
-
-/*!
- * \brief Paints anchor for item
- *
- * \param[in] ipPainter - Painter
- */
-void
-GraphicsItem::paintAnchor(QPainter *ipPainter)
-{
-    // if anchor was setted for this table - draw the anchor
-    if (!(flags() & QGraphicsItem::ItemIsMovable)) {
-        QRectF target(x() + width() - IMG_WIDTH - INTERVAL, y() + height() - IMG_HEIGHT - INTERVAL, IMG_WIDTH, IMG_HEIGHT);
-        QRectF source(0.0, 0.0, mAnchorImage->width(), mAnchorImage->height());
-        ipPainter->drawImage(target, *mAnchorImage, source);
-    }
 }
 
 /*!

@@ -33,20 +33,21 @@
 #include <QGraphicsTextItem>
 #include <QMenu>
 #include <QPainter>
-#include <QtDebug>
+#include <QSettings>
 #include <common/Database.h>
-#include <common/DbIndex.h>
-#include <common/DbSchema.h>
-#include <common/DbTable.h>
 #include <consts.h>
 #include <gui/GraphicsScene.h>
 #include <gui/TableItem.h>
+
+#include <QtDebug>
 
 /*!
  * Constructor
  */
 TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QMenu *ipMenu, const QPoint &ipPos)
-    : DbObjectItem(ipMenu), mFieldsTypesVisible(true), mIndicesVisible(true)
+    : DbObjectItem(ipMenu),
+      mIndexItems(),
+      mIndicesVisible(true)
 {
     using namespace DbObjects::Common;
     Database *dbInst = Database::instance();
@@ -81,8 +82,7 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
         addFieldItem(new QGraphicsTextItem(mModel->columnName(i) + ": " + mModel->columnType(i)));
     }
 
-    qDebug() << dbInst->findTableIndices(mModel, mIndices);
-    qDebug() << "asdf: " << mIndices.count();
+    dbInst->findTableIndices(mModel, mIndices);
     foreach (const DbIndexPtr &index, mIndices) {
         addIndexItem(new QGraphicsTextItem(index.name()));
     }
@@ -101,7 +101,8 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     // set width and height
     setWidth(DEFAULT_WIDTH);
 
-    mIndicesVisible = mSettings.value(Consts::PREFS_GRP + "/" + Consts::SHOW_INDICES_SETTING, false).toBool();
+    QSettings settings;
+    mIndicesVisible = settings.value(Consts::PREFS_GRP + "/" + Consts::SHOW_INDICES_SETTING, false).toBool();
     if (mIndicesVisible) {
         setHeight((mModel->columnsCount() + mIndices.count() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
     } else {
@@ -117,10 +118,11 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     setZValue(0);
 
     // preload images
+    mTableImage = new QImage(":/img/table.png");
     mKeyImage = new QImage(":/img/key.png");
     mForeignKeyImage = new QImage(":/img/foreignkey.png");
     mPrimaryAndForeignKeyImage = new QImage(":/img/primary_and_foreign.png");
-    
+
     // allow selecting and moving of the table
     setAcceptsHoverEvents(true);
     setFlag(QGraphicsItem::ItemIsMovable, true);
@@ -140,6 +142,8 @@ TableItem::FullName::FullName(const QString &ipSchemaName, const QString &ipTabl
  */
 TableItem::~TableItem()
 {
+    qDeleteAll(mIndexItems);
+    delete mTableImage;
     delete mKeyImage;
     delete mForeignKeyImage;
     delete mPrimaryAndForeignKeyImage;
@@ -157,7 +161,7 @@ TableItem::type() const
 }
 
 /*!
- * \brief Adds input index item to the list of indeces for this table
+ * \brief Adds input index item to the list of indices for this table
  *
  * \param[in] ipIndexItem - Index item we will add
  */
@@ -165,6 +169,21 @@ void
 TableItem::addIndexItem(QGraphicsTextItem *ipIndexItem)
 {
     mIndexItems << ipIndexItem;
+}
+
+/*!
+ * \brief Draws an image in the title bar of the item
+ *
+ * \param[in] ipPainter - Painter
+ */
+void
+TableItem::paintTitleImage(QPainter *ipPainter)
+{
+    // draw image for table
+    QRectF target((int)x() + INTERVAL, (int)y() + INTERVAL,
+            IMG_HEIGHT + INTERVAL, IMG_HEIGHT + INTERVAL);
+    QRectF source(0.0, 0.0, mTableImage->width(), mTableImage->height());
+    ipPainter->drawImage(target, *mTableImage, source);
 }
 
 /*!
@@ -196,14 +215,14 @@ TableItem::paintFieldImage(QPainter *ipPainter, int ipIdx)
 }
 
 /*!
- * \brief Paints indeces
+ * \brief Paints indices
  *
  * \param[in] ipPainter - Painter
  */
 void
 TableItem::paintAdditionalInfo(QPainter *ipPainter)
 {
-    // if we need to show indeces
+    // if we need to show indices
     if (mIndicesVisible) {
         for (int i = 0; i < mIndexItems.size(); ++i) {
             // break drawing if we have reached the board
@@ -220,29 +239,9 @@ TableItem::paintAdditionalInfo(QPainter *ipPainter)
 }
 
 /*!
- * \brief According to the given flag show or hide fields' types
- *
- * \param[in] ipFlag - True if we want to show field types, false otherwise
- */
-void
-TableItem::setFieldsTypesVisible(bool ipFlag)
-{
-    // TODO: implement it according new class structure
-    for (int i = 0; i < countFields(); ++i) {
-        if (ipFlag) {
-            setFieldText(i, mModel->columnName(i) + ": " + mModel->columnType(i));
-        } else {
-            setFieldText(i, mModel->columnName(i));
-        }
-    }
-    mFieldsTypesVisible = ipFlag;
-    update(x(), y(), width(), height());
-}
-
-/*!
  * \brief Show or hide indices
  *
- * \param[in] ipFlag - True if we need to show indeces, false if we don't
+ * \param[in] ipFlag - True if we need to show indices, false if we don't
  */
 void
 TableItem::setIndicesVisible(bool ipFlag)
@@ -384,6 +383,26 @@ TableItem::fromXml(const QDomElement &ipElement, GraphicsScene *ipScene, QMenu *
                 ipElement.attribute("green").toInt(), ipElement.attribute("blue").toInt()));
 
     return newTable;
+}
+
+/*!
+ * \brief According to the given flag show or hide fields' types
+ *
+ * \param[in] ipFlag - True if we want to show field types, false otherwise
+ */
+void
+TableItem::setFieldsTypesVisible(bool ipFlag)
+{
+    // TODO: implement it according new class structure
+    for (int i = 0; i < countFields(); ++i) {
+        if (ipFlag) {
+            setFieldText(i, mModel->columnName(i) + ": " + mModel->columnType(i));
+        } else {
+            setFieldText(i, mModel->columnName(i));
+        }
+    }
+
+    DbObjectItem::setFieldsTypesVisible(ipFlag);
 }
 
 /*!

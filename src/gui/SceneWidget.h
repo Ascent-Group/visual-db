@@ -70,6 +70,7 @@ class SceneWidget : public QWidget
         void setSchemeMenu(QMenu *);
         void setTableMenu(QMenu *);
         void updateLegend();
+        void flushCache();
 
     signals:
         void movedUp();

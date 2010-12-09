@@ -32,27 +32,13 @@
 
 #include <gui/GraphicsItem.h>
 #include <QDomElement>
-#include <QFont>
-#include <QSettings>
 
 class ArrowItem;
 class QColor;
 class QGraphicsSceneContextMenuEvent;
 class QGraphicsTextItem;
-class QGraphicsTextItem;
 class QImage;
 
-namespace DbObjects
-{
-
-namespace Common
-{
-
-class DbTable;
-
-} // namespace Common
-
-} // namespace DbObjects
 
 /*!
  * \class DbObjectItem
@@ -64,30 +50,17 @@ class DbObjectItem : public GraphicsItem
     public:
         enum { Type = UserType + 10 };
 
-        // mode for table (you can resize table from different positions or move it)
-        enum Mode {
-            RIGHT_BOTTOM_CORNER_RESIZE,
-            LEFT_BOTTOM_CORNER_RESIZE,
-            LEFT_TOP_CORNER_RESIZE,
-            RIGHT_TOP_CORNER_RESIZE,
-
-            LEFT_VERTICAL_RESIZE,
-            RIGHT_VERTICAL_RESIZE,
-            TOP_HORIZONTAL_RESIZE,
-            BOTTOM_HORIZONTAL_RESIZE,
-
-            MOVE
-        };
-
     public:
         explicit DbObjectItem(QMenu *ipMenu = 0);
         virtual ~DbObjectItem();
-        
+
+        virtual void setFieldsTypesVisible(bool);
+
         virtual void addArrowItem(ArrowItem *);
         virtual void removeArrowItem(ArrowItem *);
         virtual void removeArrowItems();
         virtual QList<ArrowItem *> arrows() const;
-        
+
         virtual QString name() const = 0;
         virtual QString schemaName() const = 0;
 
@@ -106,23 +79,21 @@ class DbObjectItem : public GraphicsItem
         void hoverMoveEvent(QGraphicsSceneHoverEvent *);
         void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
 
+        virtual void paintAnchor(QPainter *);
         virtual void paintFieldImage(QPainter *, int) { };
         virtual void paintAdditionalInfo(QPainter *) { };
 
         virtual QDomElement toXml(QDomDocument &, const QString &) const;
 
-        static const int SEEK_STEP = 20;
-
-    private:
-        QSettings mSettings;
-        
-        static int mSeek;
+    protected:
+        bool mFieldsTypesVisible;
 
         QList<ArrowItem *> mArrowItems;
 
         QMenu *mContextMenu;
+        QImage *mFieldImage;
+        QImage *mAnchorImage;
 
-        Mode mMode;
 };
 
 DbObjectItem * toDbObject(QGraphicsItem *);

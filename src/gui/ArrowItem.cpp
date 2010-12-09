@@ -38,6 +38,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QRectF>
+#include <QSettings>
 #include <math.h>
 
 
@@ -61,7 +62,8 @@ ArrowItem::ArrowItem(TableItem *ipStartItem,
     // make arrow selectable
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     // set the style of the arrow
-    mColor = mSettings.value(Consts::COLOR_GRP + "/" + Consts::ARROW_SETTING, Qt::black).value<QColor>();
+    QSettings settings;
+    mColor = settings.value(Consts::COLOR_GRP + "/" + Consts::ARROW_SETTING, Qt::black).value<QColor>();
     mBrushColor = mColor;
     setPen(QPen(mColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 }

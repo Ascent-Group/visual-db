@@ -44,9 +44,6 @@ class Legend : public GraphicsItem
         ~Legend();
         virtual int type() const;
 
-        QString name() const { return ""; };
-        QString schemaName() const { return ""; };
-
         void refresh();
 //        void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
@@ -54,9 +51,9 @@ class Legend : public GraphicsItem
         enum { Type = UserType + 7 };
 
     protected:
-        virtual void paintTitleImage(QPainter *) {};
-        virtual void paintAnchor(QPainter *) {};
         virtual void paintFieldImage(QPainter *, int);
+        virtual void paintAnchor(QPainter *);
+        virtual void paintAdditionalInfo(QPainter*) {};
 
     private:
         static const int DEFAULT_X = 335;

@@ -37,14 +37,14 @@
 #include <gui/ControlWidget.h>
 #include <gui/GraphicsScene.h>
 #include <gui/GraphicsView.h>
+#include <gui/ItemGroup.h>
 #include <gui/SceneWidget.h>
 #include <gui/TableItem.h>
-#include <gui/ItemGroup.h>
 #include <gui/behaviour/AddItemCommand.h>
 #include <gui/behaviour/DeleteItemCommand.h>
 #include <gui/behaviour/MoveItemCommand.h>
-#include <gui/behaviour/SetColorItemCommand.h>
 #include <gui/behaviour/ResizeItemCommand.h>
+#include <gui/behaviour/SetColorItemCommand.h>
 
 #include <QDebug>
 
@@ -347,6 +347,15 @@ void
 SceneWidget::updateLegend()
 {
     mScene->updateLegend();
+}
+
+/*!
+ * \note Just delegate flush request to scene.
+ */
+void
+SceneWidget::flushCache()
+{
+    mScene->flushCache();
 }
 
 /*!

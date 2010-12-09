@@ -321,7 +321,7 @@ GraphicsItem::centerPoint() const
  * \param[in] ipColor - Item color
  */
 void
-GraphicsItem::setItemColor(QColor ipColor)
+GraphicsItem::setItemColor(const QColor &ipColor)
 {
     mItemColor = ipColor;
     setBrush(QBrush(mItemColor));
@@ -351,7 +351,7 @@ GraphicsItem::borderColor() const
  * \param[in] ipColor - Border color
  */
 void
-GraphicsItem::setBorderColor(QColor ipColor)
+GraphicsItem::setBorderColor(const QColor &ipColor)
 {
     mBorderColor = ipColor;
 }
@@ -373,7 +373,7 @@ GraphicsItem::fontColor() const
  * \param[in] ipColor - Font color
  */
 void
-GraphicsItem::setFontColor(QColor ipColor)
+GraphicsItem::setFontColor(const QColor &ipColor)
 {
     mFontColor = ipColor;
 }
@@ -417,7 +417,7 @@ GraphicsItem::titleText() const
  * \param[in] ipTexx - Title text
  */
 void
-GraphicsItem::setTitleText(QString ipText)
+GraphicsItem::setTitleText(const QString &ipText)
 {
     mTitleItem->setPlainText(ipText);
 }
@@ -475,7 +475,7 @@ GraphicsItem::titleItem() const
  * \param[in] ipText - Field text
  */
 void
-GraphicsItem::setFieldText(int ipI, QString ipText)
+GraphicsItem::setFieldText(int ipI, const QString &ipText)
 {
     mFieldItems.at(ipI)->setPlainText(ipText);
 }

@@ -87,7 +87,7 @@ class GraphicsScene : public QGraphicsScene {
         void createRelations(TableItem *);
         TableItem *newTableItem(const QString &, const QString &, QMenu *, const QPoint &);
         ViewItem *newViewItem(const QString &, const QString &, QMenu *, const QPoint &);
-        void setItemColor(QList<QGraphicsItem *>, QColor);
+        void setItemColor(QList<QGraphicsItem *>, const QColor &);
         bool moveMode() const;
 
         void flushCache();
@@ -103,7 +103,7 @@ class GraphicsScene : public QGraphicsScene {
         void setFieldsTypesInvisible();
         void setIndicesVisible(bool);
         void setItemColor();
-        void setItemColor(GraphicsItem*, QColor);
+        void setItemColor(GraphicsItem*, const QColor &);
         void selectAllItems();
         void adjustItems();
         void groupItems();

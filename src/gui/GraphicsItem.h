@@ -89,19 +89,19 @@ class GraphicsItem : public QGraphicsPolygonItem
         virtual void setHeight(qreal);
         virtual qreal height() const;
 
-        virtual void setItemColor(QColor);
+        virtual void setItemColor(const QColor &);
         virtual QColor itemColor() const;
 
-        virtual void setBorderColor(QColor);
+        virtual void setBorderColor(const QColor &);
         virtual QColor borderColor() const;
 
-        virtual void setFontColor(QColor);
+        virtual void setFontColor(const QColor &);
         virtual QColor fontColor() const;
 
-        virtual void setTitleText(QString);
+        virtual void setTitleText(const QString &);
         virtual QString titleText() const;
 
-        virtual void setFieldText(int, QString);
+        virtual void setFieldText(int, const QString &);
         virtual QString fieldText(int) const;
 
         virtual void setTitleItem(QGraphicsTextItem *);

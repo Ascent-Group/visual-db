@@ -923,7 +923,7 @@ GraphicsScene::setItemColor()
  * \param[in] ipColor - Items color
  */
 void
-GraphicsScene::setItemColor(QList<QGraphicsItem *> ipItems, QColor ipColor)
+GraphicsScene::setItemColor(QList<QGraphicsItem *> ipItems, const QColor &ipColor)
 {
     // colorize each item that is on the scene
     foreach (QGraphicsItem *item, ipItems) {
@@ -944,7 +944,7 @@ GraphicsScene::setItemColor(QList<QGraphicsItem *> ipItems, QColor ipColor)
  * \param[in] ipColor - Item color
  */
 void
-GraphicsScene::setItemColor(GraphicsItem *ipItem, QColor ipColor)
+GraphicsScene::setItemColor(GraphicsItem *ipItem, const QColor &ipColor)
 {
 //    ipItem->setItemColor(ipColor);
     emit itemColorChanged(ipItem, ipColor, ipItem->itemColor());

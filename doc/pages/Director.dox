@@ -1,0 +1,15 @@
+/*!
+ * \page Director Director
+ *
+ * Director is the enitity which coordinates the operations done within the application.
+ * All the requests that require database object information are delegated to \ref
+ * Mediator.
+ *
+ * <h3>Key points:</h3>
+ * <ol>
+ *     <li>Singleton</li>
+ *     <li>...</li>
+ * </ol>
+ *
+ * \see Control::Director
+ */

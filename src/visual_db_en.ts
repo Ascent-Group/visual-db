@@ -366,14 +366,6 @@ arguments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Save session</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Load session</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Full screen</source>
         <translation type="unfinished"></translation>
     </message>
@@ -390,10 +382,6 @@ arguments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&amp;Table</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Trigger: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -407,10 +395,6 @@ arguments</source>
     </message>
     <message>
         <source>Sessions</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Processing tales complete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -435,10 +419,6 @@ arguments</source>
     </message>
     <message>
         <source>Hide fields&apos; types</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Table color...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -555,10 +535,6 @@ arguments</source>
     </message>
     <message>
         <source>The tree widget is used for displaying db objects.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -691,6 +667,26 @@ arguments</source>
     </message>
     <message>
         <source>Procedure: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>New connection...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Load session...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Item color...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processing tables complete</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -408,7 +408,7 @@ arguments</source>
     </message>
     <message>
         <source>New connection...</source>
-        <translation type="obsolete">Новое подключение...</translation>
+        <translation>Новое подключение...</translation>
     </message>
     <message>
         <source>Ctrl+N</source>
@@ -468,7 +468,7 @@ arguments</source>
     </message>
     <message>
         <source>Table color...</source>
-        <translation>Цвет таблицы...</translation>
+        <translation type="obsolete">Цвет таблицы...</translation>
     </message>
     <message>
         <source>Set table color</source>
@@ -520,11 +520,11 @@ arguments</source>
     </message>
     <message>
         <source>Save session</source>
-        <translation>Сохранить сессию</translation>
+        <translation type="obsolete">Сохранить сессию</translation>
     </message>
     <message>
         <source>Load session</source>
-        <translation>Загрузить сессию</translation>
+        <translation type="obsolete">Загрузить сессию</translation>
     </message>
     <message>
         <source>Full screen</source>
@@ -616,11 +616,11 @@ arguments</source>
     </message>
     <message>
         <source>&amp;Table</source>
-        <translation>Таблица</translation>
+        <translation type="obsolete">Таблица</translation>
     </message>
     <message>
         <source>Processing tales complete</source>
-        <translation>Вычитывание таблиц завершено</translation>
+        <translation type="obsolete">Вычитывание таблиц завершено</translation>
     </message>
     <message>
         <source>Confirm exit</source>
@@ -636,7 +636,7 @@ arguments</source>
     </message>
     <message>
         <source>&amp;Item</source>
-        <translation type="obsolete">Элемент</translation>
+        <translation>&amp;Элемент</translation>
     </message>
     <message>
         <source>Establish connection...</source>
@@ -732,7 +732,7 @@ arguments</source>
     </message>
     <message>
         <source>New connection</source>
-        <translation>Новое подключение</translation>
+        <translation type="obsolete">Новое подключение</translation>
     </message>
     <message>
         <source>Ctrl+S</source>
@@ -857,6 +857,18 @@ arguments</source>
     <message>
         <source>Procedure: </source>
         <translation>Процедура:</translation>
+    </message>
+    <message>
+        <source>Load session...</source>
+        <translation>Загрузить сессию...</translation>
+    </message>
+    <message>
+        <source>Item color...</source>
+        <translation>Цвет объекта...</translation>
+    </message>
+    <message>
+        <source>Processing tables complete</source>
+        <translation>Обработка таблиц завершена</translation>
     </message>
 </context>
 <context>

@@ -48,7 +48,7 @@
  * Constructor
  */
 GraphicsView::GraphicsView()
-    : QGraphicsView(), mMoveMode(false)
+    : QGraphicsView(), mMoveMode(false), mScaleFactor(1.0)
 {
     mPrevFactor = (MAXIMUM_FACTOR - MINIMUM_FACTOR) / 2;
     setAcceptDrops(true);
@@ -58,7 +58,7 @@ GraphicsView::GraphicsView()
  * Constructor
  */
 GraphicsView::GraphicsView(QGraphicsScene *scene, QWidget *parent = 0)
-    : QGraphicsView(scene, parent), mMoveMode(false)
+    : QGraphicsView(scene, parent), mMoveMode(false), mScaleFactor(1.0)
 {
     centerOn(GraphicsScene::DEFAULT_WIDTH / 2, GraphicsScene::DEFAULT_HEIGHT / 2);
 }
@@ -103,24 +103,23 @@ GraphicsView::scaleView(int ipScaleFactor)
     static int prevFactor = (MAXIMUM_FACTOR - MINIMUM_FACTOR) / 2;
 
     // by default we that scale factor increases
-    qreal scaleFactor = pow(1.2, fabs(ipScaleFactor - prevFactor));
+    qreal factor = pow(1.2, fabs(ipScaleFactor - prevFactor));
     // but here we check if it decreases
     if (prevFactor > ipScaleFactor) {
-        scaleFactor = 1 / pow(1.2, fabs(ipScaleFactor - prevFactor))/* 1 / scaleFactor */;
+        factor = 1 / pow(1.2, fabs(ipScaleFactor - prevFactor))/* 1 / factor */;
     }
 
-    qreal factor = matrix().scale(scaleFactor, scaleFactor).mapRect(QRectF(0, 0, 1, 1)).width();
-    if (factor < MINIMUM_FACTOR || factor > MAXIMUM_FACTOR) {
+    mScaleFactor = matrix().scale(factor, factor).mapRect(QRectF(0, 0, 1, 1)).width();
+    if (mScaleFactor < MINIMUM_FACTOR || mScaleFactor > MAXIMUM_FACTOR) {
         return;
     }
 
     // remember previous factor
     prevFactor = ipScaleFactor;
 
-    qDebug() << scaleFactor;
-    scale(scaleFactor, scaleFactor);
-    if (factor < 1) {
-        scene()->setSceneRect(0, 0, GraphicsScene::DEFAULT_WIDTH / factor, GraphicsScene::DEFAULT_HEIGHT / factor);
+    scale(factor, factor);
+    if (mScaleFactor < 1) {
+        scene()->setSceneRect(0, 0, GraphicsScene::DEFAULT_WIDTH / mScaleFactor, GraphicsScene::DEFAULT_HEIGHT / mScaleFactor);
     }
 }
 
@@ -203,7 +202,7 @@ GraphicsView::scrollContentsBy(int ipDx, int ipDy)
 {
     GraphicsScene *graphicsScene = dynamic_cast<GraphicsScene *>(scene());
     if (graphicsScene) {
-        graphicsScene->moveLegend(-ipDx, -ipDy);
+        graphicsScene->moveLegend(-ipDx / mScaleFactor, -ipDy / mScaleFactor);
         QGraphicsView::scrollContentsBy(ipDx, ipDy);
     } else {
         qDebug() << "[E][" << __func__ << "][" << __LINE__ << 

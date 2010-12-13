@@ -77,6 +77,7 @@ class GraphicsView : public QGraphicsView
         int mPrevFactor;
         bool mMoveMode;
         QPoint mStartPos;
+        qreal mScaleFactor;
 
         static const int MOVE_STEP = 10;
         static const int SEEK_STEP = 20;

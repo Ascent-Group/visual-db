@@ -103,11 +103,12 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
 
     QSettings settings;
     mIndicesVisible = settings.value(Consts::PREFS_GRP + "/" + Consts::SHOW_INDICES_SETTING, false).toBool();
-    if (mIndicesVisible) {
-        setHeight((mModel->columnsCount() + mIndices.count() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
-    } else {
-        setHeight((mModel->columnsCount() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
-    }
+    setIndicesVisible(mIndicesVisible);
+//    if (mIndicesVisible) {
+//        setHeight((mModel->columnsCount() + mIndices.count() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
+//    } else {
+//        setHeight((mModel->columnsCount() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
+//    }
 
     updatePolygon();
 
@@ -122,6 +123,7 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     mKeyImage = new QImage(":/img/key.png");
     mForeignKeyImage = new QImage(":/img/foreignkey.png");
     mPrimaryAndForeignKeyImage = new QImage(":/img/primary_and_foreign.png");
+    mIndexImage = new QImage(":/img/index.png");
 
     // allow selecting and moving of the table
     setAcceptsHoverEvents(true);
@@ -229,9 +231,17 @@ TableItem::paintAdditionalInfo(QPainter *ipPainter)
             if (height() < (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 2) + INTERVAL) {
                 break;
             }
-            ipPainter->drawText((int)x() + IMG_WIDTH + 2 * INTERVAL,
-                    (int)y() + (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 1) + INTERVAL,
-                    (int)width() - IMG_WIDTH - INTERVAL * 3,
+            
+            QRectF target((int)x() + INTERVAL, 
+                    (int)y() + (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 1) + INTERVAL * 2,
+                    IMG_WIDTH + INTERVAL, 
+                    IMG_HEIGHT + INTERVAL);
+            QRectF source(0.0, 0.0, mIndexImage->width(), mIndexImage->height());
+            ipPainter->drawImage(target, *mIndexImage, source);
+           
+            ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL,
+                    (int)y() + (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 1) + INTERVAL * 2,
+                    (int)width() - IMG_WIDTH - INTERVAL * 4,
                     FIELD_HEIGHT + INTERVAL * 2, Qt::AlignLeft,
                     mIndexItems.at(i)->toPlainText());
         }
@@ -247,7 +257,13 @@ void
 TableItem::setIndicesVisible(bool ipFlag)
 {
     mIndicesVisible = ipFlag;
-    update(x(), y(), width(), height());
+    if (ipFlag) {
+        setHeight((mModel->columnsCount() + mIndices.count() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 4);
+    } else {
+        setHeight((mModel->columnsCount() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
+    }
+
+    updatePolygon();
 }
 
 /*!

@@ -70,4 +70,6 @@
  *          \see DbObjects::Common::DbView
  *      </li>
  * </ol>
+ *
+ * \image html sequence_diagram_start.png "Application start"
  */

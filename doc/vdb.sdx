@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram>
+<source><![CDATA[### declare participants ###
+main:External[r]
+/window:MainWindow
+/director:Director
+/mediator:Mediator
+/dbMgr:DatabaseManager
+/db:Database
+/tree:TreeWidget
+/scene:SceneWidget
+############################
+
+
+
+main:director.new()
+
+director:director.initialize()
+director: mediator=mediator.new()
+
+*2 director
+This will initialize the map of
+<QWidget*, Context*>
+*2
+
+(2)mediator[0]:mediator.initializeRegistry()
+
+mediator[1]:dbMgr=dbMgr.new()
+
+*1 mediator
+This will initialize the map of
+<Context*, Database*>
+*1
+
+(1)dbMgr[0]:dbMgr.initializeRegistry()
+
+*3 mediator
+This will initialize the map of
+<DriverType, <ObjectType, Factory*>>
+*3
+
+(3)dbMgr[1]:dbMgr.initializeFactoryRegistry()
+
+
+director:window.new()
+director:window.exec()
+
+director[1]:director.enterState(Waiting)
+
+
+
+main:director.newConnectionRequest(connInfo)
+director:director.enterState(ProcessingRequest)
+director:mediator.newConnectionRequest(connInfo)
+mediator:ctx=dbMgr.newConnectionRequest(connInfo)
+dbMgr:db=dbMgr.createQSqlDatabaseDescriptor()
+
+[c:alt db != 0]
+    [c:loop foreach object type]
+        dbMgr[1]:factory=dbMgr.createFactory(db->drv, type)
+        dbMgr[1]:dbMgr.registerFactory(factory)
+    [/c]
+[/c]
+
+dbMgr:ctx=dbMgr.createContext(connInfo, QSqlDatabase*)
+dbMgr[1]:db.new()
+dbMgr[1]:dbMgr.registrInRegistry(ctx, db)
+
+
+
+*5 director
+    Who should create error msg dialogs and display them?
+*5
+[c:alt ctx == 0]
+    (5)mediator:emit error("Cannot establish a connection")
+[/c]
+mediator:tree=tree.new()
+mediator:connect(tree, dbObjectInfoRequest, this, dbObjectInfoRequested)
+mediator:mediator.register(tree,ctx)
+mediator[1]:director.treeWidgetCreated(tree)
+director:director.connect(tree,...)
+director[1]:window.addTree(tree)
+(4)window:window.addTab(tree)
+
+*4 main
+These are for different tab widets
+*4
+
+mediator:scene=scene.new()
+mediator:connect(scene, dbObjectInfoRequest, this, dbObjectInfoRequested)
+mediator:mediator.register(scene,ctx)
+mediator[1]:director.sceneWidgetCreated(scene)
+director:director.connect(scene,...)
+director[1]:window.addScene(scene)
+(4)window:window.addTab(scene)
+
+mediator:dbMgr.loadData(ctx)
+dbMgr:db=dbMgr.findDatabaseByCtx(ctx)
+dbMgr[1]:factories=dbMgr.findFactories(db->drv)
+dbMgr[1]:result=db.loadData(QMap<Factory*>)
+
+mediator:mediator.dataLoaded(ctx)
+mediator[1]:mediator.findWidgetsByCtx(ctx)
+[c:loop foreach widget]
+    director:emit dataLoaded()
+[/c]
+
+director[1]:director.enterState(Waiting)
+
+*6 director
+    This signal will go straight to mediator
+    because we connected it at creation... Or maybe it
+    should go through director too? Probably yes
+*6
+(6)main:director.dbObjectInfoRequest(sender)
+director:ctx=director.findContextForWidget(sender)
+director:info=mediator.dbObjectInfoRequest(ctx)
+mediator:db=mediator.findDatabaseByCtx(ctx)
+mediator[1]:info=dbMgr.dbObjectInfoRequest(db)
+director[1]:sender->displaydbObjectInfo()
+
+(8)main:director.dbObjectItemDisplayRequest(sender, objName)
+director:ctx=director.findContextByWidget(sender)
+director[1]:mediator.createItem(ctx, objName)
+mediator:db=mediator.findDatabaseByCtx(ctx)
+mediator[1]:info=dbMgr.dbObjectInfoRequest(db, name)
+mediator:item=mediator.createGraphicsItem(info)
+
+
+*7 director
+    After this call the scene will request relations between
+    oldItems and recently added item. Note newItem should be
+    in oldItems too, so that we can detect self referenced
+tables
+*7
+
+(7)director:sender->displayItem(item)
+
+main:mediator.dbObjectRelationsInfoRequest(oldItems, newItem)
+[c:loop foreach item in oldItems]
+    mediator:relation=dbMgr.detectRelation(item, newItem);
+    [c:alt if relation is valid]
+        mediator:arrow=mediator.createArrow()
+        mediator[1]:sender->drawArrow(arrow)
+    [/c]
+[/c]
+
+*8 director
+    This request will go through director, because:
+    1. There is no direct sender
+    2. This action is activated via context menu and
+       director handles context menus
+*8
+
+(8)main:director.describeObjectRequest()
+director:descWidget=mediator.createDescriptionWidget()
+director:window.addTab(descWidget)
+
+
+main:tree.activate()
+tree:director.signalActivated()
+director:ctx=director.findCtx(tree);
+director[1]:scene=director.findSceneByCtx(ctx)
+director[1]:scene.activate()
+
+main:scene.activate()
+scene:director.signalActivated()
+director:ctx=director.findCtx(scene);
+director[1]:tree=director.findTreeByCtx(ctx)
+director[1]:tree.activate()]]></source>
+<configuration>
+<property name="actorWidth" value="25"/>
+<property name="allowMessageProperties" value="false"/>
+<property name="arrowSize" value="6"/>
+<property name="colorizeThreads" value="true"/>
+<property name="destructorWidth" value="30"/>
+<property family="Dialog" name="font" size="12" style="0"/>
+<property name="fragmentMargin" value="8"/>
+<property name="fragmentPadding" value="10"/>
+<property name="fragmentTextPadding" value="3"/>
+<property name="glue" value="10"/>
+<property name="headHeight" value="35"/>
+<property name="headLabelPadding" value="5"/>
+<property name="headWidth" value="100"/>
+<property name="initialSpace" value="10"/>
+<property name="leftMargin" value="5"/>
+<property name="lineWrap" value="false"/>
+<property name="lowerMargin" value="5"/>
+<property name="mainLifelineWidth" value="8"/>
+<property name="messageLabelSpace" value="3"/>
+<property name="messagePadding" value="6"/>
+<property name="noteMargin" value="6"/>
+<property name="notePadding" value="6"/>
+<property name="opaqueMessageText" value="false"/>
+<property name="returnArrowVisible" value="true"/>
+<property name="rightMargin" value="5"/>
+<property name="selfMessageHorizontalSpace" value="15"/>
+<property name="separatorBottomMargin" value="8"/>
+<property name="separatorTopMargin" value="15"/>
+<property name="shouldShadowParticipants" value="true"/>
+<property name="spaceBeforeActivation" value="2"/>
+<property name="spaceBeforeAnswerToSelf" value="10"/>
+<property name="spaceBeforeConstruction" value="6"/>
+<property name="spaceBeforeSelfMessage" value="7"/>
+<property name="subLifelineWidth" value="6"/>
+<property name="tc0" value="-1118482"/>
+<property name="tc1" value="-256"/>
+<property name="tc2" value="-65536"/>
+<property name="tc3" value="-16776961"/>
+<property name="tc4" value="-16711936"/>
+<property name="tc5" value="-4144960"/>
+<property name="tc6" value="-65281"/>
+<property name="tc7" value="-14336"/>
+<property name="tc8" value="-20561"/>
+<property name="tc9" value="-12566464"/>
+<property name="threadNumbersVisible" value="false"/>
+<property name="threaded" value="true"/>
+<property name="upperMargin" value="5"/>
+<property name="verticallySplit" value="false"/>
+</configuration>
+</diagram>

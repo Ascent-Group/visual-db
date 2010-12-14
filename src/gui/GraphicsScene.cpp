@@ -300,6 +300,8 @@ GraphicsScene::addItems(const QList<QGraphicsItem *> &ipItems)
             createItemGroup(toGroup(item)->children());
         } else if (toDbObject(item)) {
             addItem(item);
+            // HACK: we have our own inner x:y coordinates, so we should compensate Qt shifting
+            item->moveBy(-item->x(), -item->y());
         }
     }
     drawRelations();

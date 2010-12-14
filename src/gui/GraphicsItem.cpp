@@ -514,9 +514,8 @@ GraphicsItem::adjustSize()
     qreal optimalHeight = (mFieldItems.size() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 2;
 
     // resize the item's size with optimal width and height
-    QPointF optimalRightBottomCorner(optimalWidth, optimalHeight);
-    setWidth(optimalRightBottomCorner.x());
-    setHeight(optimalRightBottomCorner.y());
+    setWidth(optimalWidth);
+    setHeight(optimalHeight);
     updatePolygon();
 }
 

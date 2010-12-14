@@ -222,12 +222,20 @@ GraphicsScene::newTableItem(const QString &ipSchemaName, const QString &ipTableN
         while (0 == newItem && iter != mDbItems.constEnd()) {
             if (ipTableName == (*iter)->name() && ipSchemaName == (*iter)->schemaName()) {
                 newItem = *iter;
+                break;
             }
             ++iter;
         }
 
+        // if found - just move to the given position (if position is correct)
+        if (newItem) {
+            if (ipPos.x() > 0 && ipPos.y() > 0) {
+                newItem->setX(ipPos.x());
+                newItem->setY(ipPos.y());
+                newItem->adjustSize();
+            }
         // if not found
-        if (!newItem) {
+        } else {
             // create new table
             newItem = new TableItem(ipSchemaName, ipTableName, ipMenu, ipPos);
             // register this item
@@ -321,6 +329,10 @@ GraphicsScene::drawRelations()
 void
 GraphicsScene::createRelations(TableItem *ipSourceItem)
 {
+    if (!ipSourceItem) {
+        return;
+    }
+
     ArrowItem *arrow = 0;
     // FIXME: this code is applicable only for tables
     // find foreign keys and tables related to this keys
@@ -329,13 +341,16 @@ GraphicsScene::createRelations(TableItem *ipSourceItem)
         if (ipSourceItem->isColumnForeignKey(i)) {
             TableItem *destItem = toTable(findItem(ipSourceItem->foreignSchemaName(i), ipSourceItem->foreignTableName(i)));
 
+            if (!destItem) {
+                continue;
+            }
+
             // find the arrow if it exists already
             QSet<ArrowItem*>::const_iterator iter = mArrows.constBegin();
 
             while (0 == arrow && iter != mArrows.constEnd()) {
                 if (ipSourceItem == (*iter)->startItem() && destItem == (*iter)->endItem()) {
                     arrow = (*iter);
-
                 }
                 ++iter;
             }

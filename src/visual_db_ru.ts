@@ -803,10 +803,6 @@ arguments</source>
         <translation>Повторить</translation>
     </message>
     <message>
-        <source>Xml files (*.vdb)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Refresh</source>
         <translation>Обновить</translation>
     </message>
@@ -869,6 +865,14 @@ arguments</source>
     <message>
         <source>Processing tables complete</source>
         <translation>Обработка таблиц завершена</translation>
+    </message>
+    <message>
+        <source>Session files (*.vdb)</source>
+        <translation>Файлы сессий (*.vdb)</translation>
+    </message>
+    <message>
+        <source>File doesn&apos;t exists</source>
+        <translation>Файл не найден</translation>
     </message>
 </context>
 <context>

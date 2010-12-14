@@ -614,10 +614,6 @@ arguments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Xml files (*.vdb)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Refresh</source>
         <translation type="unfinished"></translation>
     </message>
@@ -687,6 +683,14 @@ arguments</source>
     </message>
     <message>
         <source>Processing tables complete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Session files (*.vdb)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>File doesn&apos;t exists</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

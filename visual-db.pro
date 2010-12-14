@@ -33,7 +33,7 @@ QHP_VIRTUAL_FOLDER = "visual-db_0.1"
 QCH_FILE = "visual-db.qch"
 
 ### Target for generating docs and registering them with Qt Assistant
-docs.commands = env SRC_DIR=$$PWD QTDIR=$$QTDIR QHP_NAMESPACE=$$QHP_NAMESPACE QHP_VIRTUAL_FOLDER=$$QHP_VIRTUAL_FOLDER QCH_FILE=$$QCH_FILE /usr/local/bin/doxygen $$PWD/Doxyfile \
+docs.commands = env SRC_DIR=$$PWD QTDIR=$$QTDIR QHP_NAMESPACE=$$QHP_NAMESPACE QHP_VIRTUAL_FOLDER=$$QHP_VIRTUAL_FOLDER QCH_FILE=$$QCH_FILE doxygen $$PWD/Doxyfile \
                 && $$ASSISTANT -unregister $$OUT_PWD/html/*.qch \
                 && $$ASSISTANT -register $$OUT_PWD/html/*.qch
 

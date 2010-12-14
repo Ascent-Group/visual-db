@@ -49,11 +49,15 @@ class SqlConnectionDialog : public QDialog
         SqlConnectionDialog(DbParameters *, ProxyParameters *, bool, QWidget *ipParent = 0);
         ~SqlConnectionDialog();
 
+        bool connectionFailed() const;
+
     private:
         Ui::SqlConnectionDialog ui;
 
         DbParameters *mDbParameters;
         ProxyParameters *mProxyParameters;
+
+        bool mConnectionFailed;
 
     private:
         void createDialog(bool);

@@ -256,10 +256,11 @@ MainWindow::showConnectionDialog(bool ipLoadSession)
 {
     SqlConnectionDialog connDialog(mDbParameters, mProxyParameters, ipLoadSession);
 
-    // nothing to do if canceled
-    int code = connDialog.exec();
-    if (code != QDialog::Accepted) {
-        return code;
+    while (connDialog.connectionFailed()) {
+        // nothing to do if canceled
+        if (QDialog::Rejected == connDialog.exec()) {
+            return QDialog::Rejected;
+        }
     }
 
     QProgressDialog progress("Importing database...", 0, 0, 0, this, Qt::CustomizeWindowHint | Qt::WindowTitleHint);
@@ -804,7 +805,6 @@ MainWindow::saveToXml(const QString &ipFileName)
 void
 MainWindow::loadFromXml(QString ipFileName)
 {
-    QDomDocument doc("VisualDB");
     QFile file(ipFileName);
     if (!file.open(QIODevice::ReadOnly)) {
         QMessageBox messageBox;
@@ -812,6 +812,8 @@ MainWindow::loadFromXml(QString ipFileName)
         messageBox.exec();
         return;
     }
+
+    QDomDocument doc("VisualDB");
     if (!doc.setContent(&file)) {
         file.close();
         return;
@@ -833,7 +835,7 @@ MainWindow::loadFromXml(QString ipFileName)
     }
 
     // show connection dialog and check if we haven't pressed 'Cancel' button
-    if (showConnectionDialog(true) == QDialog::Accepted) {
+    if (showConnectionDialog(true/*ipLoadSession*/) == QDialog::Accepted) {
         // second loop to fill in schema from the xml (we need to connect to database first)
         docElem = doc.documentElement();
         child = docElem.firstChild();
@@ -865,7 +867,7 @@ MainWindow::saveSession()
 //        mSettings.value(LAST_SESSION_GRP + "/" + DB_NAME_SETTING, "undefined").toString() + "_" +
 //        mSettings.value(LAST_SESSION_GRP + "/" + DB_USER_SETTING, "undefined").toString() + "_" +
 //        QDate::currentDate().toString(Qt::DefaultLocaleShortDate) + "_" + QTime::currentTime().toString() + ".vdb";
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save session..."), mSettings.value(PREFS_GRP + "/" + SESSION_DIR_SETTING, "./").toString(), tr("Xml files (*.vdb)"));
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save session..."), mSettings.value(PREFS_GRP + "/" + SESSION_DIR_SETTING, "./").toString(), tr("Session files (*.vdb)"));
 //    QString fileName = QFileDialog::getSaveFileName(this, tr("Save session..."),
 //            mSettings.value(PREFS_GRP + "/" + SESSION_DIR_SETTING, "./").toString() + defaultFileName,
 //            tr("Xml files (*.vdb)"));
@@ -888,17 +890,19 @@ MainWindow::saveSession()
 }
 
 /*!
- * \brief Load session
+ * \brief Load session.
+ *
+ * This function is called when we decide to load a session from a File... menu.
  */
 void
 MainWindow::loadSession()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open session..."),
             mSettings.value(Consts::PREFS_GRP + "/" + Consts::SESSION_DIR_SETTING, "./").toString(),
-            tr("Xml files (*.vdb)"));
+            tr("Session files (*.vdb)"));
     if (!QFile::exists(fileName)) {
         QMessageBox messageBox;
-        messageBox.setText("File doesn't exists");
+        messageBox.setText(tr("File doesn't exists"));
         messageBox.exec();
         //  qDebug() << "File doesn't exists";
         return;
@@ -909,6 +913,9 @@ MainWindow::loadSession()
 
 /*!
  * \brief Load last session
+ *
+ * Called when we are loading recent session. The number of recent sessions is limited by
+ * the parameter "Session limit:" in the options dialog.
  */
 void
 MainWindow::loadLastSession()
@@ -953,9 +960,9 @@ MainWindow::reloadData()
 void
 MainWindow::initSession()
 {
-    QString firstSavedSession = Consts::LAST_SESSION_GRP + "/" + Consts::SAVED_SESSION_SETTING + "0";
     // if checked flag in appearance page - load last session
     if (mSettings.value(Consts::PREFS_GRP + "/" + Consts::LOAD_LAST_SESSION_SETTING, false).toBool()) {
+        QString firstSavedSession = Consts::LAST_SESSION_GRP + "/" + Consts::SAVED_SESSION_SETTING + "0";
         if (mSettings.contains(firstSavedSession)) {
             loadFromXml(mSettings.value(firstSavedSession).toString());
         } else {

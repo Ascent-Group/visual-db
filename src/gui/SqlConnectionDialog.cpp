@@ -52,7 +52,8 @@ SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
         QWidget *ipParent)
     : QDialog(ipParent),
       mDbParameters(ipDbParameters),
-      mProxyParameters(ipProxyParameters)
+      mProxyParameters(ipProxyParameters),
+      mConnectionFailed(true)
 {
     ui.setupUi(this);
 
@@ -77,10 +78,33 @@ SqlConnectionDialog::~SqlConnectionDialog()
 }
 
 /*!
+ * The 'connection failed' failed flag has been added because of the following reasons:
+ * the dialog has only 2 result codes which are not enough to handle 3 possible cases for
+ * our connection dialog:
+ * <ol>
+ *     <li>Pressed cancel. <b>Note:</b>Nothing to be done in this case</li>
+ *     <li>Pressed Ok. The provided connection parameres are VALID for successfulll
+ *     connection.</li>
+ *     <li>Pressed Ok. The provided connection parameters are INVALID and it is impossible
+ *     to establish a new connection.</li>
+ * </ol>
+ *
+ * \return true If the accept button was clicked but the given parameters caused error
+ * during connection.
+ * \return false If the accept button was clicked and the connection has been successfully
+ * established.
+ */
+bool
+SqlConnectionDialog::connectionFailed() const
+{
+    return mConnectionFailed;
+}
+
+/*!
  * \brief Create dialog
  */
 void
-SqlConnectionDialog::createDialog(bool/* ipLoadSession*/)
+SqlConnectionDialog::createDialog(bool ipLoadSession)
 {
     QStringList drivers = QSqlDatabase::drivers();
     ui.mDbDriverCombo->addItems(drivers);
@@ -115,16 +139,23 @@ SqlConnectionDialog::createDialog(bool/* ipLoadSession*/)
     // proxy password
     ui.mProxyPasswordEdit->setEchoMode(QLineEdit::Password);
 
-    ui.mDbDriverCombo->setEnabled(true);
-    ui.mDbHostEdit->setEnabled(true);
-    ui.mDbPortEdit->setEnabled(true);
-    ui.mDbNameEdit->setEnabled(true);
-    ui.mDbUserEdit->setEnabled(true);
-    ui.mProxyTypeBox->setEnabled(false);
-    ui.mProxyHostNameEdit->setEnabled(false);
-    ui.mProxyPortEdit->setEnabled(false);
-    ui.mProxyUserEdit->setEnabled(false);
-    ui.mProxyPasswordEdit->setEnabled(false);
+    ui.mDbDriverCombo->setEnabled(!ipLoadSession);
+    ui.mDbHostEdit->setEnabled(!ipLoadSession);
+    ui.mDbPortEdit->setEnabled(!ipLoadSession);
+    ui.mDbNameEdit->setEnabled(!ipLoadSession);
+    ui.mDbUserEdit->setEnabled(!ipLoadSession);
+    // password edit should be always enabled
+    ui.mDbPasswordEdit->setEnabled(true);
+
+    ui.mUseProxyBox->setEnabled(!ipLoadSession);
+    ui.mProxyTypeBox->setEnabled(ui.mUseProxyBox->isChecked());
+    ui.mProxyHostNameEdit->setEnabled(ui.mUseProxyBox->isChecked());
+    ui.mProxyPortEdit->setEnabled(ui.mUseProxyBox->isChecked());
+    ui.mProxyUserEdit->setEnabled(ui.mUseProxyBox->isChecked());
+    ui.mProxyPasswordEdit->setEnabled(ui.mUseProxyBox->isChecked());
+
+    // initially we set connection failed flag to true
+    mConnectionFailed = true;
 }
 
 /*!
@@ -180,21 +211,25 @@ SqlConnectionDialog::addConnection()
     mDbParameters->setDbPassword(ui.mDbPasswordEdit->text());
 
     // create connection to database
-    if (createConnection((*mDbParameters))) {
-        accept();
-    } else {
+    mConnectionFailed = !createConnection((*mDbParameters));
+
+    /*!
+     * If we are in addConnection dialog, then we definitely pressed Ok and NOT Cancel
+     * button.
+     */
+    if (mConnectionFailed) {
         QMessageBox::warning(
                 this,
                 tr("Error"),
                 tr("Connection refused: ") + QSqlDatabase::database("mainConnect").lastError().text());
-        reject();
     }
+    accept();
 }
 
 /*!
  * \brief Switch on/off proxy connection parameters
  *
- * \param[in] ipToggle - True if proxy is enabled, false if proxy is disabled 
+ * \param[in] ipToggle - True if proxy is enabled, false if proxy is disabled
  */
 void
 SqlConnectionDialog::switchProxy(bool ipToggle)

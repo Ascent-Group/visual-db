@@ -1,6 +1,9 @@
 /*!
  * \page Context Context
  *
+ * Context, evidently, describes the semantic environment of specific actions. In terms of
+ * Visual-DB the context can be described by means of \ref Connect::ConnectionInfo.
+ *
  * \see Control::Context
  */
 

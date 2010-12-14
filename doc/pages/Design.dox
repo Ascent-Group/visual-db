@@ -1,3 +1,73 @@
 /*!
  * \page Design Design overview
+ *
+ * The new design of the application will be relevant with upcoming 1.2 release. It
+ * attempts to organize the cooperation of entities by their duties and make a certain
+ * object acomplish only those tasks that it is responsible for.
+ *
+ * \image html inter_entity_cooperation.png "Entity cooperation"
+ *
+ * The image above demonstrates the key guidelines of this cooperation which can be
+ * summarized as following:
+ *
+ * <h1>Key points:</h1>
+ * <ol>
+ *     <li>
+ *         <h2>GUI widgets.</h2><br/>
+ *         <b>Resposible for:</b> displaying the information provided by director.<br/>
+ *         <b>Knows about:</b> other widgets and the director who coordinates widget's
+ *         actions.
+ *      </li>
+ *
+ *      <li>
+ *          <h2>Director.</h2> This is the key entity in coordinating the whole work.<br/>
+ *          <b>Responsible for:</b> Handling requests from widgets and making the
+ *          responsible entities process/generate/convert the information. This isolates
+ *          the controlling logic within one entity.<br/>
+ *          <b>Knows about:</b> Widgets and mediator.
+ *          \see Control::Director
+ *      </li>
+ *
+ *      <li>
+ *          <h2>Mediator.</h2> This entity behaves like a connector between 2 subsystems,
+ *          which are GUI and DbObjects.<br/>
+ *          <b>Responsible for:</b> Creating data structures based on database object
+ *          information which are understood by widgets. This prevents DbObjects' types
+ *          wonder around the application, which makes GUI widgets independent of a big
+ *          number of database object types. <br/>
+ *          <b>Knows about:</b> Database manager
+ *          \see Control::Mediator
+ *      </li>
+ *
+ *      <li>
+ *          <h2>DatabaseManager.</h2> Database manager keeps track of currently browsed
+ *          databases as well as the factories that are needed for object creation.<br/>
+ *          <b>Responsible for:</b> Request delegation to a specific database.<br/>
+ *          <b>Knows about:</b> Database and factories.
+ *          \see DbObjects::Common::DatabaseManager
+ *      </li>
+ *
+ *      <li>
+ *          <h2>Database.</h2> Represents the database we are connecting to.<br/>
+ *          <b>Responsible for:</b> For storing and managing the database objects.<br/>
+ *          <b>Knows about:</b> Database objects
+ *          \see DbObjects::Common::Database
+ *      </li>
+ *
+ *      <li>
+ *          <h2>Database objects.</h2><br/>
+ *          <b>Responsible for:</b> For keeping the information about the specific object
+ *          which is read from database system catalogs.<br/>
+ *          <b>Knows about:</b> Parent and related datbase objects and the database who stores
+ *          this object.<br/>
+ *          \see DbObjects::Common::DbIndex
+ *          \see DbObjects::Common::DbLanguage
+ *          \see DbObjects::Common::DbProcedure
+ *          \see DbObjects::Common::DbRole
+ *          \see DbObjects::Common::DbSchema
+ *          \see DbObjects::Common::DbTable
+ *          \see DbObjects::Common::DbTrigger
+ *          \see DbObjects::Common::DbView
+ *      </li>
+ * </ol>
  */

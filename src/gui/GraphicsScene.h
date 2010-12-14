@@ -76,6 +76,7 @@ class GraphicsScene : public QGraphicsScene {
         ~GraphicsScene();
 
         void addItems(const QList<QGraphicsItem *> &);
+        DbObjectItem *findItem(const QString &, const QString &);
         void setSchemeMenu(QMenu *);
         void setTableMenu(QMenu *);
         ItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
@@ -130,7 +131,6 @@ class GraphicsScene : public QGraphicsScene {
         virtual void drawBackground(QPainter *, const QRectF &);
 
     private:
-        DbObjectItem *findItem(const QString &, const QString &);
         void setFieldsTypesVisible(QList<QGraphicsItem *>, bool);
         void setIndicesVisible(QList<QGraphicsItem *>, bool);
         void adjustItems(QList<QGraphicsItem *>);

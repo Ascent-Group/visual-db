@@ -143,7 +143,15 @@ void
 SceneWidget::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, bool ipCenterOn)
 {
     QList<QGraphicsItem *> itemList = mScene->showOnScene(ipTreeItem, ipCol, QPoint(0, 0), ipCenterOn);
-    emit itemActionDone(new AddItemCommand(mScene, itemList));
+    foreach (QGraphicsItem *item, itemList) {
+        // add new item only if it isn't exist on the scene
+        if (toDbObject(item) && !mScene->findItem(toDbObject(item)->schemaName(), toDbObject(item)->name())) {
+            emit itemActionDone(new AddItemCommand(mScene, itemList));
+            break;
+        } else {
+            mView->centerOn(item);
+        }
+    }
 }
 
 /*!

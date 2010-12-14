@@ -159,21 +159,6 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
         if (TreeWidget::TableItem == objId) {
             TableItem *table = newTableItem(ipTreeItem->parent()->parent()->text(TreeWidget::NameCol),
                     ipTreeItem->text(TreeWidget::NameCol), mTableMenu, ipPos);
-
-//            QTimeLine *timer = new QTimeLine(1000);
-//            timer->setFrameRange(0, 100);
-
-//            QGraphicsItemAnimation *animation = new QGraphicsItemAnimation;
-//            animation->setItem(table);
-//            animation->setTimeLine(timer);
-
-//            for (int i = 0; i < 10; ++i) {
-//                int dy = (i % 2) == 0 ? 10 / (-i + 1) : 0;
-//                animation->setPosAt(i / 10.0, QPointF(0, dy));
-//            }
-
-//            timer->start();
-
             objectList.append(table);
         }
 
@@ -183,15 +168,6 @@ GraphicsScene::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, const QPoint 
             objectList.append(view);
         }
 
-    }
-//    else if (TreeWidget::TableNode == objId) {
-//        for (int i = 0; i < ipTreeItem->childCount(); ++i) {
-//            showOnScene(ipTreeItem->child(i), ipCol, ipPos);
-//        }
-//    }
-
-    if (!objectList.isEmpty() && ipCenterOn) {
-        views().first()->centerOn(objectList.first());
     }
 
     return objectList;
@@ -307,8 +283,6 @@ GraphicsScene::addItems(const QList<QGraphicsItem *> &ipItems)
             createItemGroup(toGroup(item)->children());
         } else if (toDbObject(item)) {
             addItem(item);
-            // HACK: we have our own inner x:y coordinates, so we should compensate Qt shifting
-            item->moveBy(-item->x(), -item->y());
         }
     }
     drawRelations();
@@ -369,7 +343,6 @@ GraphicsScene::createRelations(TableItem *ipSourceItem)
                 // create an arrow
                 // self referenced arrow
                 if (ipSourceItem == destItem) {
-                    qDebug() << "self";
                     arrow = new LoopArrow(ipSourceItem, destItem, QString(""));
                     // if founded, create arrow
                 } else if (destItem) {

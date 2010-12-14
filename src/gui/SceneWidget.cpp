@@ -142,8 +142,8 @@ SceneWidget::setTableMenu(QMenu *ipMenu)
 void
 SceneWidget::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, bool ipCenterOn)
 {
-    QList<QGraphicsItem *> itemLIst = mScene->showOnScene(ipTreeItem, ipCol, QPoint(0, 0), ipCenterOn);
-    emit itemActionDone(new AddItemCommand(mScene, itemLIst));
+    QList<QGraphicsItem *> itemList = mScene->showOnScene(ipTreeItem, ipCol, QPoint(0, 0), ipCenterOn);
+    emit itemActionDone(new AddItemCommand(mScene, itemList));
 }
 
 /*!

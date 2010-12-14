@@ -274,8 +274,15 @@ GraphicsScene::newViewItem(const QString &ipSchemaName, const QString &ipViewNam
             ++iter;
         }
 
+        // if found - just move to the given position (if position is correct)
+        if (newItem) {
+            if (ipPos.x() > 0 && ipPos.y() > 0) {
+                newItem->setX(ipPos.x());
+                newItem->setY(ipPos.y());
+                newItem->adjustSize();
+            }
         // if not found
-        if (!newItem) {
+        } else {
             // create new view
             newItem = new ViewItem(ipSchemaName, ipViewName, ipMenu, ipPos);
             // register this item

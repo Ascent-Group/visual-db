@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram>
 <source><![CDATA[### declare participants ###
-main:External[r]
-/window:MainWindow
+/main:External[r]
+user:Actorf "User"
+/window:MainWindow "GUI"
 /director:Director
 /mediator:Mediator
 /dbMgr:DatabaseManager
@@ -11,12 +12,14 @@ main:External[r]
 /scene:SceneWidget
 ############################
 
-
+user:starts application
+user:main.new()
 
 main:director.new()
 
-director:director.initialize()
-director: mediator=mediator.new()
+director:director.showSplashScreen()
+director[1]:director.initialize()
+director:mediator=mediator.new()
 
 *2 director
 This will initialize the map of
@@ -45,13 +48,14 @@ This will initialize the map of
 director:window.new()
 director:window.exec()
 
+director[1]:director.removeSplashScreen()
 director[1]:director.enterState(Waiting)
 
-
-
-main:director.newConnectionRequest(connInfo)
+user:window.clicks "New Connection" button
+window:director.newConnectionRequest(connInfo)
 director:director.enterState(ProcessingRequest)
-director:mediator.newConnectionRequest(connInfo)
+director[1]:director.showProgressDialog()
+director[1]:mediator.newConnectionRequest(connInfo)
 mediator:ctx=dbMgr.newConnectionRequest(connInfo)
 dbMgr:db=dbMgr.createQSqlDatabaseDescriptor()
 
@@ -82,8 +86,8 @@ director:director.connect(tree,...)
 director[1]:window.addTree(tree)
 (4)window:window.addTab(tree)
 
-*4 main
-These are for different tab widets
+*4 user
+These calls are for different tab widets
 *4
 
 mediator:scene=scene.new()
@@ -105,21 +109,122 @@ mediator[1]:mediator.findWidgetsByCtx(ctx)
     director:emit dataLoaded()
 [/c]
 
+director:director.hideProgressDialog()
 director[1]:director.enterState(Waiting)
 
-*6 director
+*6 user
     This signal will go straight to mediator
-    because we connected it at creation... Or maybe it
-    should go through director too? Probably yes
+    because we connected it at creation...
+    Or maybe it should go through director
+    too? Probably yes
 *6
-(6)main:director.dbObjectInfoRequest(sender)
+
+(6)window:director.dbObjectInfoRequest(sender)
 director:ctx=director.findContextForWidget(sender)
-director:info=mediator.dbObjectInfoRequest(ctx)
+director[1]:info=mediator.dbObjectInfoRequest(ctx)
 mediator:db=mediator.findDatabaseByCtx(ctx)
 mediator[1]:info=dbMgr.dbObjectInfoRequest(db)
-director[1]:sender->displaydbObjectInfo()
+director:sender->displaydbObjectInfo()
 
-(8)main:director.dbObjectItemDisplayRequest(sender, objName)
+user:window.clicks "Disconnect" button
+window:director.disconnectRequest()
+director:ctx=director.findContextByWidget(sender)
+director:result=mediator.areThereModifiedObjects(ctx)
+mediator:db=mediator.findDatabaseByCtx(ctx)
+mediator[1]:result=dbMgr.areThereModifiedObjects(db)
+dbMgr:result=db.areThereModifiedObjects()
+[c:alt mModifiedObjsVector.isEmpty()]
+    db:result=false
+    --
+    db:result=true
+[/c]
+
+[c:alt result == TRUE]
+    (9)director:commit=window.showConfirmationDialog()
+
+*9 user
+  You have modified objects.
+  Do you want to commit these changes?
+*9
+    [c:alt commit == TRUE]
+        director:mediator.commitChanges(ctx)
+        mediator:db=mediator.findDatabaseByCtx(ctx)
+        mediator[1]:dbMgr.commitChanges(db)
+        dbMgr:db.commitChanges()
+        [c:loop foreach obj in modified vector]
+            db:db.save(obj)
+        [/c]
+    [/c]
+[/c]
+director[1]:mediator.disconnect(ctx)
+mediator:db=mediator.findDatabaseByCtx(ctx)
+mediator[1]:dbMgr.disconnect(db)
+dbMgr:db.resetData()
+dbMgr:db.delete()
+
+user:window.clicks "Reload" button
+window:director.reloadDataRequest()
+director:ctx=director.findContextByWidget(sender)
+director[1]:result=mediator.areThereModifiedObjects(ctx)
+mediator:db=mediator.findDatabaseByCtx(ctx)
+mediator[1]:result=dbMgr.areThereModifiedObjects(db)
+dbMgr:result=db.areThereModifiedObjects()
+[c:alt mModifiedObjsVector.isEmpty()]
+    db:result=false
+    --
+    db:result=true
+[/c]
+
+[c:alt result == TRUE]
+    (11)director:commit=window.showConfirmationDialog()
+
+*11 director
+  You have modified objects.
+  Do you want to commit these changes?
+*11
+    [c:alt commit == TRUE]
+        director:mediator.commitChanges(ctx)
+        mediator:db=mediator.findDatabaseByCtx(ctx)
+        mediator[1]:dbMgr.commitChanges(db)
+        dbMgr:db.commitChanges()
+        [c:loop foreach obj in modified vector]
+            db:db.save(obj)
+        [/c]
+    [/c]
+[/c]
+
+director:mediator.reloadDataRequest(ctx)
+mediator:db=mediator.findDatabaseByCtx(ctx)
+mediator[1]:dbMgr.reloadData(db)
+dbMgr:db.resetData()
+dbMgr:db.loadChildren()
+
+
+
+
+user:window.Describe object request
+window:director.describeObjectRequest()
+director:ctx=director.findContextByWidget(sender)
+director[1]:descWidget=mediator.createDescriptionWidget(ctx)
+mediator:descWidget=mediator.createDescWidget()
+mediator:db=mediator.findDatabaseByCtx(ctx)
+mediator[1]:objPtr=dbMgr.getDbObjectInfo(db, objName, objType)
+dbMgr:objPtr=db.getDbObjectInfo(objName, objType)
+db:objPtr=db.findSchema(...).findObject(objName)
+director:window.addTab(descWidget)
+
+
+
+
+
+
+
+
+
+
+
+user:window.adds an item to a scene
+window:director.dbObjectItemDisplayRequest(sender, objName)
 director:ctx=director.findContextByWidget(sender)
 director[1]:mediator.createItem(ctx, objName)
 mediator:db=mediator.findDatabaseByCtx(ctx)
@@ -136,7 +241,8 @@ tables
 
 (7)director:sender->displayItem(item)
 
-main:mediator.dbObjectRelationsInfoRequest(oldItems, newItem)
+
+window:mediator.dbObjectRelationsInfoRequest(oldItems, newItem)
 [c:loop foreach item in oldItems]
     mediator:relation=dbMgr.detectRelation(item, newItem);
     [c:alt if relation is valid]
@@ -145,29 +251,88 @@ main:mediator.dbObjectRelationsInfoRequest(oldItems, newItem)
     [/c]
 [/c]
 
-*8 director
-    This request will go through director, because:
-    1. There is no direct sender
-    2. This action is activated via context menu and
-       director handles context menus
-*8
-
-(8)main:director.describeObjectRequest()
-director:descWidget=mediator.createDescriptionWidget()
-director:window.addTab(descWidget)
 
 
-main:tree.activate()
+
+
+
+
+user:Delete item from scene[PENDING]
+user:Query data requests*[PENDING]
+user:Save session request[PENDING]
+user:Load session request[PENDING]
+user:Auto load session request at application start[PENDING]
+user:Load data by proxy[PENDING]
+
+user:window.activates a tree
+window:tree.activate()
 tree:director.signalActivated()
 director:ctx=director.findCtx(tree);
 director[1]:scene=director.findSceneByCtx(ctx)
 director[1]:scene.activate()
 
-main:scene.activate()
+user:window.activates a scene
+window:scene.activate()
 scene:director.signalActivated()
 director:ctx=director.findCtx(scene);
 director[1]:tree=director.findTreeByCtx(ctx)
-director[1]:tree.activate()]]></source>
+director[1]:tree.activate()
+
+
+
+
+(8)user:window.double clicks item on scene
+
+*8 user
+Or maybe something else but double click?
+*8
+
+window:director.itemDoubleClicked()
+director:ctx=director.findContextByWidget(sender)
+director[1]:tree=director.findTreeByCtx(ctx)
+director[1]:tree.findItem(sender->name)
+
+
+
+user:Browse active transactions[PENDING]
+user:Connection list[PENDING]
+
+
+
+
+
+
+
+
+user:window.requests context menu somewhere
+window:director.contextMenuRequest()
+director:ctx=director.findContextByWidget(sender)
+(10)director[1]:menu=director.findContextMenu()
+
+*10 user
+    how to find out which menu to show????????
+    ??????????????
+*10
+director[1]:window.showContextMenu(menu)
+
+
+
+
+
+user:Arranging items on scene[PENDING]
+user:Assigning table relations[PENDING]
+user:Saving results to file[PENDING]
+user:Create database[PENDING]
+user:Drop database[PENDING]
+user:Create an object[PENDING]
+user:Edit an object[PENDING]
+user:Save a modified object[PENDING]
+user:Drop an object[PENDING]
+
+user:Create script[PENDING]
+user:Save script[PENDING]
+user:Load script[PENDING]
+user:Run script[PENDING]]]></source>
 <configuration>
 <property name="actorWidth" value="25"/>
 <property name="allowMessageProperties" value="false"/>

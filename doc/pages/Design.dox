@@ -71,5 +71,42 @@
  *      </li>
  * </ol>
  *
- * \image html sequence_diagram_start.png "Application start"
+ * <br/><br/>
+ * <h1>Sequence diagrams</h1>
+ *
+ * \image html sequence_diagram_start.png "Diagram 1. Application start"
+ * \image html sequence_diagram_new_connection.png "Diagram 2. New connection request"
+ * \image html sequence_diagram_disconnect.png "Diagram 3. Disconnect request"
+ * \image html sequence_diagram_reload_data.png "Diagram 4. Reload data"
+ * \image html sequence_diagram_describe_object.png "Diagram 5. Describe object request"
+ * \image html sequence_diagram_draw_on_scene.png "Diagram 6. Draw item on scene request"
+ * \image html sequence_diagram_delete_from_scene.png "Diagram 7. Delete item from scene"
+ * \image html sequence_diagram_query_data.png "Diagram 8. Query data requests*"
+ * \image html sequence_diagram_save_session.png "Diagram 9. Save session request"
+ * \image html sequence_diagram_load_session.png "Diagram 10. Load session request"
+ * \image html sequence_diagram_auto_load_session_at_start.png "Diagram 11. Auto load session request at application start"
+ * \image html sequence_diagram_load_data_call_by_proxy.png "Diagram 12. Load data by proxy"
+ * \image html sequence_diagram_tree_activated.png "Diagram 13. Handling tree activation"
+ * \image html sequence_diagram_scene_activated.png "Diagram 14. Handling scene activation"
+ * \image html sequence_diagram_item_double_clicked.png "Diagram 15. Item double clicked"
+ * Diagram 16 means, we should find the item in its parent tree when it is double clicked.
+ * \image html sequence_diagram_browse_active_transactions.png "Diagram 16. Browse active transactions"
+ * \image html sequence_diagram_connection_list_operations.png "Diagram 17. Connection list"
+ * \image html sequence_diagram_context_menu_request.png "Diagram 18. Handling context menu request"
+ * \image html sequence_diagram_arranging_items_on_scene.png "Diagram 19. Arranging items on scene"
+ * \image html sequence_diagram_assigning_table_relations.png "Diagram 20. Assigning table relations"
+ * \image html sequence_diagram_save_result_to_file.png "Diagram 21. Saving results to file"
+ *
+ * \image html sequence_diagram_create_database.png "Diagram 22. Create database"
+ * \image html sequence_diagram_drop_database.png "Diagram 23. Drop database"
+ *
+ * \image html sequence_diagram_create_object.png "Diagram 24. Create an object"
+ * \image html sequence_diagram_edit_object.png "Diagram 25. Edit an object"
+ * \image html sequence_diagram_drop_object.png "Diagram 26. Drop an object"
+ * \image html sequence_diagram_save_object.png "Diagram 27. Save a modified object"
+ *
+ * \image html sequence_diagram_create_script.png "Diagram 28. Create script"
+ * \image html sequence_diagram_save_script.png "Diagram 29. Save script"
+ * \image html sequence_diagram_load_script.png "Diagram 30. Load script"
+ * \image html sequence_diagram_run_script.png "Diagram 31. Run script"
  */

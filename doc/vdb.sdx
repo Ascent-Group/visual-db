@@ -10,6 +10,7 @@ user:Actorf "User"
 /db:Database
 /tree:TreeWidget
 /scene:SceneWidget
+/ArrangeStrategy:ArrangeStrategy
 ############################
 
 user:starts application
@@ -318,9 +319,32 @@ director[1]:window.showContextMenu(menu)
 
 
 
+user:window.request items' arranging
+window:director.arrangeItems()
+director:arrangeStrategy=ArrangeStrategy.new()
+director:itemList=scene.items()
+director:newItemList=ArrangeStrategy.arrange(itemList)
+director:scene.arrange(newItemList)
 
-user:Arranging items on scene[PENDING]
-user:Assigning table relations[PENDING]
+
+user:Assigning table relations
+user:window.request assigning table relations
+window:director.emit Scene::assignRelationsRequest(item1, item2, type)
+director:ctx=director.findContextByWidget(scene)
+director[1]:arrow=mediator.createRelation(ctx, item1Name, item2Name, type)
+
+mediator:db=mediator.findDatabaseByCtx(ctx)
+mediator[1]:result=dbMgr.createRelation(db, item1Name, item2Name, type)
+dbMgr:result=db.db->createRelation(item1Name, item2Name, type)
+[c:alt if result == OK]
+    mediator:arrow=mediator.createArrow(item1Name, item2Name, type)
+[/c]
+[c:alt if arrow != NULL]
+    director:sender->drawArrow(arrow)
+[/c]
+
+
+
 user:Saving results to file[PENDING]
 user:Create database[PENDING]
 user:Drop database[PENDING]

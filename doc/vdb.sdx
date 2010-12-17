@@ -19,31 +19,39 @@ user:main.new()
 main:director.new()
 
 director:director.showSplashScreen()
+(2)director[1]:director.initializeRegistry()
 director[1]:director.initialize()
 director:mediator=mediator.new()
 
-*2 director
+*2 window
 This will initialize the map of
 <QWidget*, Context*>
 *2
 
-(2)mediator[0]:mediator.initializeRegistry()
+(1)mediator[0]:mediator.initializeRegistry()
 
 mediator[1]:dbMgr=dbMgr.new()
 
-*1 mediator
+*1 director
 This will initialize the map of
 <Context*, Database*>
 *1
 
-(1)dbMgr[0]:dbMgr.initializeRegistry()
+(12)dbMgr:dbMgr.initializeRegistry()
+
+*12 mediator
+This will initialize the registry of
+databases
+*12
+
+(3)dbMgr[1]:dbMgr.initializeFactoryRegistry()
 
 *3 mediator
 This will initialize the map of
 <DriverType, <ObjectType, Factory*>>
 *3
 
-(3)dbMgr[1]:dbMgr.initializeFactoryRegistry()
+
 
 
 director:window.new()

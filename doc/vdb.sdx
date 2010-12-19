@@ -8,6 +8,8 @@ user:Actorf "User"
 /mediator:Mediator
 /dbMgr:DatabaseManager
 /db:Database
+/ctx:Context
+/widget:Widget
 /tree:TreeWidget
 /scene:SceneWidget
 /ArrangeStrategy:ArrangeStrategy
@@ -267,9 +269,69 @@ window:mediator.dbObjectRelationsInfoRequest(oldItems, newItem)
 
 
 user:Delete item from scene[PENDING]
+
+
 user:Query data requests*[PENDING]
-user:Save session request[PENDING]
-user:Load session request[PENDING]
+
+
+user:Save session request[DISCUSSING]
+user:window.Save session request
+window:director.emit saveSessionRequest()
+(14)director:mediator.performChangesCheck()
+*14 director
+    Should we commit all changes? Should we reload
+    data? Maybee ask user which action should be done?
+*14
+director:file=showSaveSessionDialog()
+[c:alt if file is OK]
+    [c:loop foreach ctx in ctxList]
+        director:ctx.new()
+        director:ctxData=ctx.data()
+        director:director.saveCtx(file, ctxData)
+        [c:loop foreach widget in widgetList for ctx]
+            director[1]:widget.new()
+            director:widgetData=widget.data()
+	  director:director.save(file, widgetData)
+        [/c]
+    [/c]
+[/c]
+
+
+user:Load session request[DISCUSSING]
+user:window.Load session request
+window:director.emit loadSessionRequest()
+director:result=director.showSaveCurrentSessionDialog()
+[c:alt if result == YES]
+    director[1]:director.performSaveSession()
+    *17 director
+        Is described above
+    *17
+[/c]
+[c:loop foreach ctx in ctxList]
+    director[1]:director.performDisconnect(ctx)
+    *15 director
+        Is described above
+    *15
+[/c]
+director[1]:file=director.showLoadSessionDialog()
+[c:alt if file is OK]
+    [c:loop foreach ctx in file]
+        director[1]:ctx=director.loadFrom(file)
+        director[1]:result=director.performConnecting(ctx)
+        *16 director
+            Is described above
+        *16
+        [c:alt if result==OK]
+            [c:loop foreach widget in file for ctx]
+	      director[1]:widget=director.loadFrom(file)          
+                director[1]:director.register(ctx, widget)
+                director[1]:window.add(widget)
+            [/c]
+        [/c]
+    [/c]
+[/c]
+
+
 user:Auto load session request at application start[PENDING]
 user:Load data by proxy[PENDING]
 
@@ -353,13 +415,107 @@ dbMgr:result=db.db->createRelation(item1Name, item2Name, type)
 
 
 
-user:Saving results to file[PENDING]
-user:Create database[PENDING]
-user:Drop database[PENDING]
+user:Saving results to file[DISCUSSING]
+user:window.Request save results to file
+window:director.emit saveResultRequest()
+director:file=director.showSelectFileDialog()
+[c alt if file is correct]
+    director[1]:dataToSave=sender->data()
+    director:save(dataToSave)  
+[/c]
+
+
+user:Create database[DISCUSSING]
+user:window.Request create database
+window:director.emit createDatabaseRequest()
+director:params=director.showNewDbParamsDialog()
+director[1]:result=mediator.createDatabase(params)
+mediator:db=dbMgr.createDatabase(params)
+dbMgr:db=db.createDatabase(params)
+[c:alt if result == OK]
+    director:director.Perform 'New connection' procedure with 'params'
+[/c]
+
+
+user:Drop database[DISCUSSING]
+user:window.Request drop database
+window:director.emit dropDatabaseRequest()
+director:ctx=director.findCtxByWidget(sender)
+director[1]:result=mediator.dropDatabase(ctx)
+mediator:db=mediator.findDbByCtx(ctx)
+mediator[1]:result=dbMgr.dropDatabase(db)
+
+
 user:Create an object[PENDING]
-user:Edit an object[PENDING]
-user:Save a modified object[PENDING]
-user:Drop an object[PENDING]
+user:window.Request create an object
+window:director.emit createObjectRequest()
+director:params=director.showNewObjParamsDialog()
+director[1]:ctx=director.findCtxByWidget(sender)
+director[1]:newObj=mediator.createNewObj(ctx, params)
+mediator:db=mediator.findDbByCtx(ctx)
+mediator[1]:newObj=dbMgr.createObject(db, params)
+dbMgr:newObj=db.createObject(params)
+db:db.registerAsModified(newObj, 'create')
+[c:alt if newObj != NULL]
+    director:tree=director.findTreeByCtx(ctx)
+    director[1]:tree.reload()
+[/c]
+
+
+user:Edit an object[DISCUSSING]
+user:window.Request edit object
+window:director.emit editObjectRequest(name)
+director:ctx=director.findCtxByWidget(sender)
+director[1]:params=director.showEditObjectParamsDialog()
+(13)director[1]:newObj=mediator.editObject(ctx, name, params)
+mediator:db=mediator.findDbByCtx(ctx)
+mediator[1]:newObj=dbMgr.editObj(db, name, params)
+dbMgr:newObj=db.editObj(obj, params)
+db:db.registerAsModified(newObj, 'edit')
+*13 director
+    Which type a newObj has?
+*13
+[c:alt if newObj != NULL]
+    director:scene=director.findSceneByCtx(ctx)
+    director[1]:tree=director.findTreeByctx(ctx)
+    director[1]:scene.updateObj(newObj)
+    director:tree.updateObj(newObj)
+[/c]
+
+
+
+user:Save a modified object[DISCUSSING]
+user:window.Request save a modified object
+window:director.emit saveObjRequest(name)
+director:ctx=director.findCtxByWidget(sender)
+director[1]:result=mediator.saveObj(ctx, name)
+mediator:db=mediator.findDbByCtx(ctx)
+mediator[1]:result=dbMgr.saveObj(db, name)
+dbMgr:result=db.saveObj(name)
+[c:alt if obj with name exists in modified vector]
+    db:result=db.save(name)
+[/c]
+director:director.showResult(result)
+
+
+
+
+user:Drop an object[DISCUSSING]
+user:window.Request drop an object
+window:director.emit dropObjRequest(name)
+director:ctx=director.findCtxByWidget(sender)
+director[1]:obj=mediator.dropObj(ctx, name)
+mediator:db=mediator.findDbByCtx(ctx)
+mediator[1]:obj=dbMgr.dropObj(db, name)
+dbMgr:obj=db.dropObj(name)
+db:db.registerAsModified(obj, 'drop')
+[c:alt if obj != NULL]
+    director:scene=director.findSceneByCtx(ctx)
+    director[1]:tree=director.findTreeByctx(ctx)
+    director[1]:scene.removeObj(name)
+    director:tree.removeObj(name)
+[/c]
+
 
 user:Create script[PENDING]
 user:Save script[PENDING]

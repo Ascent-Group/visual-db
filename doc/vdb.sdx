@@ -65,35 +65,51 @@ director[1]:director.enterState(Waiting)
 user:window.clicks "New Connection" button
 window:director.newConnectionRequest(connInfo)
 director:director.enterState(ProcessingRequest)
-director[1]:director.showProgressDialog()
-director[1]:mediator.newConnectionRequest(connInfo)
-mediator:ctx=dbMgr.newConnectionRequest(connInfo)
-dbMgr:db=dbMgr.createQSqlDatabaseDescriptor()
+director:director.showProgressDialog()
+director[2]:mediator.newConnectionRequest(connInfo)
+mediator:QSqlDatabase*=dbMgr.newConnectionRequest(connInfo)
 
-[c:alt db != 0]
-    [c:loop foreach object type]
-        dbMgr[1]:factory=dbMgr.createFactory(db->drv, type)
+dbMgr:QSqlDatabase*=dbMgr.createQSqlDatabaseDescriptor()
+
+mediator:ctx=mediator.createContext(connInfo, QSqlDatabase)
+mediator[1]:db=dbMgr.newDatabaseRequest(ctx)
+
+[c:alt if factories were not created before]
+[c:loop foreach object type]
+        dbMgr:factory=dbMgr.createFactory(connInfo->drv, type)
         dbMgr[1]:dbMgr.registerFactory(factory)
-    [/c]
+[/c]
 [/c]
 
-dbMgr:ctx=dbMgr.createContext(connInfo, QSqlDatabase*)
-dbMgr[1]:db.new()
-dbMgr[1]:dbMgr.registrInRegistry(ctx, db)
+dbMgr[1]:db=db.new()
+
+[c:alt db != NULL]
+    dbMgr:dbMgr.register(db)
+[/c]
 
 
 
-*5 director
-    Who should create error msg dialogs and display them?
-*5
-[c:alt ctx == 0]
+
+
+[c:alt db == NULL]
     (5)mediator:emit error("Cannot establish a connection")
+    mediator:return
 [/c]
-mediator:tree=tree.new()
+
+*5 dbMgr
+  Who should create error
+msg dialogs and display them?
+*5
+
+
+mediator:mediator.registrInRegistry(ctx, db)
+
+mediator[1]:tree=tree.new()
 mediator:connect(tree, dbObjectInfoRequest, this, dbObjectInfoRequested)
-mediator:mediator.register(tree,ctx)
-mediator[1]:director.treeWidgetCreated(tree)
+
+mediator:director.treeWidgetCreated(tree)
 director:director.connect(tree,...)
+director[1]:director.register(tree,ctx)
 director[1]:window.addTree(tree)
 (4)window:window.addTab(tree)
 
@@ -103,9 +119,10 @@ These calls are for different tab widets
 
 mediator:scene=scene.new()
 mediator:connect(scene, dbObjectInfoRequest, this, dbObjectInfoRequested)
-mediator:mediator.register(scene,ctx)
-mediator[1]:director.sceneWidgetCreated(scene)
+
+mediator:director.sceneWidgetCreated(scene)
 director:director.connect(scene,...)
+director[1]:director.register(scene,ctx)
 director[1]:window.addScene(scene)
 (4)window:window.addTab(scene)
 
@@ -120,8 +137,9 @@ mediator[1]:mediator.findWidgetsByCtx(ctx)
     director:emit dataLoaded()
 [/c]
 
+
+director:director.enterState(Waiting)
 director:director.hideProgressDialog()
-director[1]:director.enterState(Waiting)
 
 *6 user
     This signal will go straight to mediator
@@ -243,25 +261,26 @@ mediator[1]:info=dbMgr.dbObjectInfoRequest(db, name)
 mediator:item=mediator.createGraphicsItem(info)
 
 
-*7 director
+*7 window
     After this call the scene will request relations between
     oldItems and recently added item. Note newItem should be
     in oldItems too, so that we can detect self referenced
 tables
 *7
 
-(7)director:sender->displayItem(item)
+(7)director:scene.displayItem(item)
 
 
-window:mediator.dbObjectRelationsInfoRequest(oldItems, newItem)
+director:arrows=mediator.dbObjectRelationsInfoRequest(oldItems, newItem)
 [c:loop foreach item in oldItems]
     mediator:relation=dbMgr.detectRelation(item, newItem);
     [c:alt if relation is valid]
         mediator:arrow=mediator.createArrow()
-        mediator[1]:sender->drawArrow(arrow)
+        mediator:mediator.arrows.push_back(arrow);
     [/c]
 [/c]
 
+director:scene.drawArrows(arrows)
 
 
 
@@ -278,7 +297,7 @@ user:Save session request[DISCUSSING]
 user:window.Save session request
 window:director.emit saveSessionRequest()
 (14)director:mediator.performChangesCheck()
-*14 director
+*14 mediator
     Should we commit all changes? Should we reload
     data? Maybee ask user which action should be done?
 *14

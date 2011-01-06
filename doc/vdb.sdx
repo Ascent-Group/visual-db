@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram>
-<source><![CDATA[### declare participants ###
+<source><![CDATA[#![VDB]
+
+#!>>
+#! !!!!!!!!!!! CAUTION: !!!!!!!!!!!!!!!!!!
+#! Most checks for valid values are missing
+#! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#!<<
+
+### declare participants ###
 /main:External[r]
 user:Actorf "User"
 /window:MainWindow "GUI"
@@ -30,16 +38,17 @@ This will initialize the map of
 <QWidget*, Context*>
 *2
 
-(1)mediator[0]:mediator.initializeRegistry()
+director:dbMgr=dbMgr.new()
 
-mediator[1]:dbMgr=dbMgr.new()
+(1)dbMgr:dbMgr.initializeRegistry()
 
-*1 director
+
+*1 mediator
 This will initialize the map of
 <Context*, Database*>
 *1
 
-(12)dbMgr:dbMgr.initializeRegistry()
+(12)dbMgr[1]:dbMgr.initializeDbRegistry()
 
 *12 mediator
 This will initialize the registry of
@@ -66,13 +75,19 @@ user:window.clicks "New Connection" button
 window:director.newConnectionRequest(connInfo)
 director:director.enterState(ProcessingRequest)
 director:director.showProgressDialog()
-director[2]:mediator.newConnectionRequest(connInfo)
-mediator:QSqlDatabase*=dbMgr.newConnectionRequest(connInfo)
+
+*20 window
+The director will pass ConnectionInfo to dbMgr
+in order for that latter to establish a connection.
+DatabaseManager will return a valid context on
+successfull connection.
+*20
+
+(20)director[2]:ctx=dbMgr.newConnectionRequest(connInfo)
 
 dbMgr:QSqlDatabase*=dbMgr.createQSqlDatabaseDescriptor()
 
-mediator:ctx=mediator.createContext(connInfo, QSqlDatabase)
-mediator[1]:db=dbMgr.newDatabaseRequest(ctx)
+dbMgr[1]:ctx=dbMgr.createContext(connInfo, QSqlDatabase)
 
 [c:alt if factories were not created before]
 [c:loop foreach object type]
@@ -84,31 +99,24 @@ mediator[1]:db=dbMgr.newDatabaseRequest(ctx)
 dbMgr[1]:db=db.new()
 
 [c:alt db != NULL]
-    dbMgr:dbMgr.register(db)
+    dbMgr:dbMgr.register(ctx, db)
 [/c]
 
 
 
 
-
-[c:alt db == NULL]
-    (5)mediator:emit error("Cannot establish a connection")
-    mediator:return
+[c:alt ctx == NULL]
+    (5)director:emit error("Cannot establish a connection")
+    director:return
 [/c]
 
-*5 dbMgr
+*5 director
   Who should create error
 msg dialogs and display them?
 *5
 
-
-mediator:mediator.registrInRegistry(ctx, db)
-
-mediator[1]:tree=tree.new()
-mediator:connect(tree, dbObjectInfoRequest, this, dbObjectInfoRequested)
-
-mediator:director.treeWidgetCreated(tree)
-director:director.connect(tree,...)
+director:tree=tree.new()
+director:director.connect(tree, dbObjectInfoRequest, this, dbObjectInfoRequested)
 director[1]:director.register(tree,ctx)
 director[1]:window.addTree(tree)
 (4)window:window.addTab(tree)
@@ -117,51 +125,40 @@ director[1]:window.addTree(tree)
 These calls are for different tab widets
 *4
 
-mediator:scene=scene.new()
-mediator:connect(scene, dbObjectInfoRequest, this, dbObjectInfoRequested)
-
-mediator:director.sceneWidgetCreated(scene)
-director:director.connect(scene,...)
+director:scene=scene.new()
+director:director.connect(scene, dbObjectInfoRequest, this, dbObjectInfoRequested)
 director[1]:director.register(scene,ctx)
 director[1]:window.addScene(scene)
 (4)window:window.addTab(scene)
 
-mediator:dbMgr.loadData(ctx)
-dbMgr:db=dbMgr.findDatabaseByCtx(ctx)
+director:dbMgr.loadData(ctx)
+dbMgr:db=dbMgr.findDatabase(ctx)
 dbMgr[1]:factories=dbMgr.findFactories(db->drv)
 dbMgr[1]:result=db.loadData(QMap<Factory*>)
 
-mediator:mediator.dataLoaded(ctx)
-mediator[1]:mediator.findWidgetsByCtx(ctx)
+director:director.findWidgets(ctx)
 [c:loop foreach widget]
-    director:emit dataLoaded()
+    director[1]:emit dataLoaded()
 [/c]
 
 
 director:director.enterState(Waiting)
 director:director.hideProgressDialog()
 
-*6 user
-    This signal will go straight to mediator
-    because we connected it at creation...
-    Or maybe it should go through director
-    too? Probably yes
-*6
-
-(6)window:director.dbObjectInfoRequest(sender)
-director:ctx=director.findContextForWidget(sender)
-director[1]:info=mediator.dbObjectInfoRequest(ctx)
-mediator:db=mediator.findDatabaseByCtx(ctx)
-mediator[1]:info=dbMgr.dbObjectInfoRequest(db)
-director:sender->displaydbObjectInfo()
+window:director.emit dbObjectInfoRequest(sender)
+director:ctx=director.findContext(sender)
+director[1]:info=dbMgr.dbObjectInfoRequest(ctx)
+dbMgr:db=dbMgr.mediator.findDatabase(ctx)
+dbMgr[1]:info=db.dbObjectInfoRequest()
+director:convertedInfo=mediator.convert(info)
+director:window.displaydbObjectInfo(convertedInfo)
 
 user:window.clicks "Disconnect" button
 window:director.disconnectRequest()
-director:ctx=director.findContextByWidget(sender)
-director:result=mediator.areThereModifiedObjects(ctx)
-mediator:db=mediator.findDatabaseByCtx(ctx)
-mediator[1]:result=dbMgr.areThereModifiedObjects(db)
-dbMgr:result=db.areThereModifiedObjects()
+director:ctx=director.findContext(sender)
+director[1]:result=dbMgr.areThereModifiedObjects(ctx)
+dbMgr:db=dbMgr.findDatabase(ctx)
+dbMgr[1]:result=db.areThereModifiedObjects()
 [c:alt mModifiedObjsVector.isEmpty()]
     db:result=false
     --
@@ -176,28 +173,28 @@ dbMgr:result=db.areThereModifiedObjects()
   Do you want to commit these changes?
 *9
     [c:alt commit == TRUE]
-        director:mediator.commitChanges(ctx)
-        mediator:db=mediator.findDatabaseByCtx(ctx)
-        mediator[1]:dbMgr.commitChanges(db)
-        dbMgr:db.commitChanges()
+        director:count=dbMgr.commitChanges(ctx)
+        dbMgr:db=dbMgr.findDatabase(ctx)
+        dbMgr[1]:count=db.commitChanges()
         [c:loop foreach obj in modified vector]
             db:db.save(obj)
         [/c]
+        director:window.emit logMessage(count)
     [/c]
 [/c]
-director[1]:mediator.disconnect(ctx)
-mediator:db=mediator.findDatabaseByCtx(ctx)
-mediator[1]:dbMgr.disconnect(db)
-dbMgr:db.resetData()
+director:dbMgr.disconnect(ctx)
+dbMgr:db=dbMgr.findDatabase(ctx)
+dbMgr[1]:db.resetData()
 dbMgr:db.delete()
+dbMgr:dbMgr.unregister(ctx, db)
+
 
 user:window.clicks "Reload" button
 window:director.reloadDataRequest()
-director:ctx=director.findContextByWidget(sender)
-director[1]:result=mediator.areThereModifiedObjects(ctx)
-mediator:db=mediator.findDatabaseByCtx(ctx)
-mediator[1]:result=dbMgr.areThereModifiedObjects(db)
-dbMgr:result=db.areThereModifiedObjects()
+director:ctx=director.findContext(sender)
+director[1]:result=dbMgr.areThereModifiedObjects(ctx)
+dbMgr:db=dbMgr.findDatabase(ctx)
+dbMgr[1]:result=db.areThereModifiedObjects()
 [c:alt mModifiedObjsVector.isEmpty()]
     db:result=false
     --
@@ -212,41 +209,35 @@ dbMgr:result=db.areThereModifiedObjects()
   Do you want to commit these changes?
 *11
     [c:alt commit == TRUE]
-        director:mediator.commitChanges(ctx)
-        mediator:db=mediator.findDatabaseByCtx(ctx)
-        mediator[1]:dbMgr.commitChanges(db)
-        dbMgr:db.commitChanges()
+        director:count=dbMgr.commitChanges(ctx)
+        dbMgr:db=dbMgr.findDatabase(ctx)
+        dbMgr[1]:count=db.commitChanges()
         [c:loop foreach obj in modified vector]
             db:db.save(obj)
         [/c]
+        director:window.emit logMessage(count objs saved)
     [/c]
 [/c]
 
-director:mediator.reloadDataRequest(ctx)
-mediator:db=mediator.findDatabaseByCtx(ctx)
-mediator[1]:dbMgr.reloadData(db)
-dbMgr:db.resetData()
+director:dbMgr.reloadDataRequest(ctx)
+dbMgr:db=dbMgr.findDatabase(ctx)
+dbMgr[1]:db.resetData()
 dbMgr:db.loadChildren()
 
 
 
 
 user:window.Describe object request
-window:director.describeObjectRequest()
-director:ctx=director.findContextByWidget(sender)
-director[1]:descWidget=mediator.createDescriptionWidget(ctx)
-mediator:descWidget=mediator.createDescWidget()
-mediator:db=mediator.findDatabaseByCtx(ctx)
-mediator[1]:objPtr=dbMgr.getDbObjectInfo(db, objName, objType)
-dbMgr:objPtr=db.getDbObjectInfo(objName, objType)
-db:objPtr=db.findSchema(...).findObject(objName)
-director:window.addTab(descWidget)
+window:director.describeObjectRequest(objName, objType)
+director:ctx=director.findContext(sender)
+director[1]:info=dbMgr.dbObjectInfo(ctx, objName)
+dbMgr:db=dbMgr.findDatabase(ctx)
+dbMgr[1]:objPtr=db.getDbObjectInfo(objName, objType)
 
-
-
-
-
-
+director:convertedInfo=director.convert(info)
+director[1]:descWidget=director.createDescriptionWidget(ctx)
+director[1]:director.descWidget->setInfo(convertedInfo)
+director[1]:window.addTab(descWidget)
 
 
 
@@ -254,18 +245,19 @@ director:window.addTab(descWidget)
 
 user:window.adds an item to a scene
 window:director.dbObjectItemDisplayRequest(sender, objName)
-director:ctx=director.findContextByWidget(sender)
+director:ctx=director.findContext(sender)
 director[1]:mediator.createItem(ctx, objName)
-mediator:db=mediator.findDatabaseByCtx(ctx)
+mediator:db=mediator.findDatabase(ctx)
 mediator[1]:info=dbMgr.dbObjectInfoRequest(db, name)
 mediator:item=mediator.createGraphicsItem(info)
 
 
 *7 window
-    After this call the scene will request relations between
-    oldItems and recently added item. Note newItem should be
-    in oldItems too, so that we can detect self referenced
-tables
+    After this call the scene will request
+    relations between oldItems and recently
+    added item. Note newItem should be in
+    oldItems too, so that we can detect self
+    referenced tables
 *7
 
 (7)director:scene.displayItem(item)
@@ -287,10 +279,32 @@ director:scene.drawArrows(arrows)
 
 
 
-user:Delete item from scene[PENDING]
+
+user:window.clicks "Delete items from scene" button
+window:director.emit deleteItemsFromScene(QGraphicsScene *scene)
+director:scene.removeSelectedItems()
 
 
 user:Query data requests*[PENDING]
+user:window.clicks "Execute query" button
+*18 user
+SqlWidget will emit this signal.
+*18
+(18)window:director.emit queryExecutionRequest(qstr)
+director:ctx=director.findContext(sender)
+director[1]:result=dbMgr.queryExecutionRequest(ctx, qstr, portionSize, portionNumber)
+dbMgr:db=dbMgr.findDb(ctx)
+dbMgr[1]:result=db.executeQuery(qstr, portionSize, portionNumber)
+director:tableRows=mediator.convert(result)
+
+*19 window
+This will tell SqlWidget to display rows selected
+by the query.
+*19
+
+(19)director:window.displayResult(tableRows)
+
+
 
 
 user:Save session request[DISCUSSING]

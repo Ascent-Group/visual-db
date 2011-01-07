@@ -244,13 +244,13 @@ director[1]:window.addTab(descWidget)
 
 
 user:window.adds an item to a scene
-window:director.dbObjectItemDisplayRequest(sender, objName)
+window:director.dbObjectItemDisplayRequest(sender, objNameList)
 director:ctx=director.findContext(sender)
-director[1]:mediator.createItem(ctx, objName)
-mediator:db=mediator.findDatabase(ctx)
-mediator[1]:info=dbMgr.dbObjectInfoRequest(db, name)
-mediator:item=mediator.createGraphicsItem(info)
-
+[c:loop foreach objName]
+    director[1]:info=dbMgr.dbObjectInfo(ctx, objName)
+    director:item=mediator.createGraphicsItem(info)
+    director:items->push_back(item)
+[/c]
 
 *7 window
     After this call the scene will request
@@ -260,15 +260,15 @@ mediator:item=mediator.createGraphicsItem(info)
     referenced tables
 *7
 
-(7)director:scene.displayItem(item)
+(7)director:scene.displayItems(items)
 
 
-director:arrows=mediator.dbObjectRelationsInfoRequest(oldItems, newItem)
-[c:loop foreach item in oldItems]
-    mediator:relation=dbMgr.detectRelation(item, newItem);
+director:relationsInfo=dbMgr.dbObjectRelationsInfoRequest(oldItems, newItem)
+[c:loop foreach record in relationsInfo]
+    director:relation=dbMgr.readRelation(record)
     [c:alt if relation is valid]
-        mediator:arrow=mediator.createArrow()
-        mediator:mediator.arrows.push_back(arrow);
+        director:arrow=mediator.createArrow(relation)
+        director:arrows->push_back(arrow);
     [/c]
 [/c]
 
@@ -392,8 +392,8 @@ Or maybe something else but double click?
 *8
 
 window:director.itemDoubleClicked()
-director:ctx=director.findContextByWidget(sender)
-director[1]:tree=director.findTreeByCtx(ctx)
+director:ctx=director.findContext(sender)
+director[1]:tree=director.findTree(ctx)
 director[1]:tree.findItem(sender->name)
 
 
@@ -410,7 +410,7 @@ user:Connection list[PENDING]
 
 user:window.requests context menu somewhere
 window:director.contextMenuRequest()
-director:ctx=director.findContextByWidget(sender)
+director:ctx=director.findContext(sender)
 (10)director[1]:menu=director.findContextMenu()
 
 *10 user
@@ -433,27 +433,38 @@ director:scene.arrange(newItemList)
 user:Assigning table relations
 user:window.request assigning table relations
 window:director.emit Scene::assignRelationsRequest(item1, item2, type)
-director:ctx=director.findContextByWidget(scene)
-director[1]:arrow=mediator.createRelation(ctx, item1Name, item2Name, type)
+director:ctx=director.findContext(scene)
+director[1]:result=dbMgr.createRelation(ctx, relationType, objName1, objType1, objName2, objType2)
+dbMgr:db=dbMgr.findDatabase(ctx)
+dbMgr[1]:result=db.createRelation(item1Name, item2Name, type)
 
-mediator:db=mediator.findDatabaseByCtx(ctx)
-mediator[1]:result=dbMgr.createRelation(db, item1Name, item2Name, type)
-dbMgr:result=db.db->createRelation(item1Name, item2Name, type)
-[c:alt if result == OK]
-    mediator:arrow=mediator.createArrow(item1Name, item2Name, type)
-[/c]
-[c:alt if arrow != NULL]
-    director:sender->drawArrow(arrow)
-[/c]
+*22 dbMgr
+    Determine what should be done here
+*22
 
+(22)db:db.doMagic(????)
+[c:alt result == OK]
+    director:arrow=mediator.createRelation(ctx, item1Name, item2Name, type)
+
+    [c:alt if arrow != NULL]
+        director:sender->drawArrow(arrow)
+    [/c]
+[/c]
 
 
 user:Saving results to file[DISCUSSING]
 user:window.Request save results to file
 window:director.emit saveResultRequest()
 director:file=director.showSelectFileDialog()
-[c alt if file is correct]
-    director[1]:dataToSave=sender->data()
+
+*21 window
+  data() will be a virtual function, declared
+  in DataHolder class and all who has to save smth
+  into file will have to inherit it.
+*21
+
+[c:alt if file is correct]
+    (21)director[1]:dataToSave=sender->data()
     director:save(dataToSave)  
 [/c]
 
@@ -462,8 +473,7 @@ user:Create database[DISCUSSING]
 user:window.Request create database
 window:director.emit createDatabaseRequest()
 director:params=director.showNewDbParamsDialog()
-director[1]:result=mediator.createDatabase(params)
-mediator:db=dbMgr.createDatabase(params)
+director[1]:result=dbMgr.createDatabase(params)
 dbMgr:db=db.createDatabase(params)
 [c:alt if result == OK]
     director:director.Perform 'New connection' procedure with 'params'
@@ -473,24 +483,23 @@ dbMgr:db=db.createDatabase(params)
 user:Drop database[DISCUSSING]
 user:window.Request drop database
 window:director.emit dropDatabaseRequest()
-director:ctx=director.findCtxByWidget(sender)
-director[1]:result=mediator.dropDatabase(ctx)
-mediator:db=mediator.findDbByCtx(ctx)
-mediator[1]:result=dbMgr.dropDatabase(db)
+director:ctx=director.findContext(sender)
+director[1]:result=dbMgr.dropDatabase(ctx)
+dbMgr:db=dbMgr.findDatabase(ctx)
+dbMgr[1]:result=dbMgr.dropDatabase(db)
 
 
 user:Create an object[PENDING]
 user:window.Request create an object
 window:director.emit createObjectRequest()
 director:params=director.showNewObjParamsDialog()
-director[1]:ctx=director.findCtxByWidget(sender)
-director[1]:newObj=mediator.createNewObj(ctx, params)
-mediator:db=mediator.findDbByCtx(ctx)
-mediator[1]:newObj=dbMgr.createObject(db, params)
-dbMgr:newObj=db.createObject(params)
+director[1]:ctx=director.findContext(sender)
+director[1]:newObj=dbMgr.createNewObj(ctx, params)
+dbMgr:db=dbMgr.findDatabase(ctx)
+dbMgr[1]:newObj=db.createObject(params)
 db:db.registerAsModified(newObj, 'create')
 [c:alt if newObj != NULL]
-    director:tree=director.findTreeByCtx(ctx)
+    director:tree=director.findTree(ctx)
     director[1]:tree.reload()
 [/c]
 
@@ -498,19 +507,19 @@ db:db.registerAsModified(newObj, 'create')
 user:Edit an object[DISCUSSING]
 user:window.Request edit object
 window:director.emit editObjectRequest(name)
-director:ctx=director.findCtxByWidget(sender)
+director:ctx=director.findContext(sender)
 director[1]:params=director.showEditObjectParamsDialog()
-(13)director[1]:newObj=mediator.editObject(ctx, name, params)
-mediator:db=mediator.findDbByCtx(ctx)
-mediator[1]:newObj=dbMgr.editObj(db, name, params)
-dbMgr:newObj=db.editObj(obj, params)
+director[1]:convertedParams=mediator.convert(params)
+(13)director:newObj=dbMgr.editObject(ctx, name, convertedParams)
+dbMgr:db=dbMgr.findDatabase(ctx)
+dbMgr[1]:newObj=db.editObj(obj, params)
 db:db.registerAsModified(newObj, 'edit')
 *13 director
     Which type a newObj has?
 *13
 [c:alt if newObj != NULL]
-    director:scene=director.findSceneByCtx(ctx)
-    director[1]:tree=director.findTreeByctx(ctx)
+    director:scene=director.findScene(ctx)
+    director[1]:tree=director.findTree(ctx)
     director[1]:scene.updateObj(newObj)
     director:tree.updateObj(newObj)
 [/c]
@@ -520,11 +529,10 @@ db:db.registerAsModified(newObj, 'edit')
 user:Save a modified object[DISCUSSING]
 user:window.Request save a modified object
 window:director.emit saveObjRequest(name)
-director:ctx=director.findCtxByWidget(sender)
-director[1]:result=mediator.saveObj(ctx, name)
-mediator:db=mediator.findDbByCtx(ctx)
-mediator[1]:result=dbMgr.saveObj(db, name)
-dbMgr:result=db.saveObj(name)
+director:ctx=director.findContext(sender)
+director[1]:result=dbMgr.saveObj(ctx, name)
+dbMgr:db=dbMgr.findDatabase(ctx)
+dbMgr[1]:result=db.saveObj(name)
 [c:alt if obj with name exists in modified vector]
     db:result=db.save(name)
 [/c]
@@ -536,15 +544,14 @@ director:director.showResult(result)
 user:Drop an object[DISCUSSING]
 user:window.Request drop an object
 window:director.emit dropObjRequest(name)
-director:ctx=director.findCtxByWidget(sender)
-director[1]:obj=mediator.dropObj(ctx, name)
-mediator:db=mediator.findDbByCtx(ctx)
-mediator[1]:obj=dbMgr.dropObj(db, name)
-dbMgr:obj=db.dropObj(name)
-db:db.registerAsModified(obj, 'drop')
+director:ctx=director.findContext(sender)
+director[1]:obj=dbMgr.dropObj(ctx, name)
+dbMgr:db=dbMgr.findDatabase(ctx)
+dbMgr[1]:obj=db.dropObj(name)
+db:db.registerAsDeleted(obj)
 [c:alt if obj != NULL]
-    director:scene=director.findSceneByCtx(ctx)
-    director[1]:tree=director.findTreeByctx(ctx)
+    director:scene=director.findScene(ctx)
+    director[1]:tree=director.findTree(ctx)
     director[1]:scene.removeObj(name)
     director:tree.removeObj(name)
 [/c]

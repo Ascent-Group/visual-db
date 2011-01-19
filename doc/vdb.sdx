@@ -13,7 +13,7 @@
 user:Actorf "User"
 /window:MainWindow "GUI"
 /director:Director
-/mediator:Mediator
+/converter:Converter
 /dbMgr:DatabaseManager
 /db:Database
 /ctx:Context
@@ -31,7 +31,7 @@ main:director.new()
 director:director.showSplashScreen()
 (2)director[1]:director.initializeRegistry()
 director[1]:director.initialize()
-director:mediator=mediator.new()
+director:converter=converter.new()
 
 *2 window
 This will initialize the map of
@@ -43,21 +43,21 @@ director:dbMgr=dbMgr.new()
 (1)dbMgr:dbMgr.initializeRegistry()
 
 
-*1 mediator
+*1 converter
 This will initialize the map of
 <Context*, Database*>
 *1
 
 (12)dbMgr[1]:dbMgr.initializeDbRegistry()
 
-*12 mediator
+*12 converter
 This will initialize the registry of
 databases
 *12
 
 (3)dbMgr[1]:dbMgr.initializeFactoryRegistry()
 
-*3 mediator
+*3 converter
 This will initialize the map of
 <DriverType, <ObjectType, Factory*>>
 *3
@@ -143,15 +143,15 @@ director:director.findWidgets(ctx)
 
 
 director:director.enterState(Waiting)
-director:director.hideProgressDialog()
+director[1]:director.hideProgressDialog()
 
 window:director.emit dbObjectInfoRequest(sender)
 director:ctx=director.findContext(sender)
-director[1]:info=dbMgr.dbObjectInfoRequest(ctx)
-dbMgr:db=dbMgr.mediator.findDatabase(ctx)
-dbMgr[1]:info=db.dbObjectInfoRequest()
-director:convertedInfo=mediator.convert(info)
-director:window.displaydbObjectInfo(convertedInfo)
+director[1]:info=dbMgr.dbObjectInfoRequest(ctx, objType)
+dbMgr:db=dbMgr.converter.findDatabase(ctx)
+dbMgr[1]:info=db.dbObjectInfoRequest(objType)
+director:convertedInfo=converter.convert(info)
+director:window.displaydbObjectInfo(convertedInfo, objType)
 
 user:window.clicks "Disconnect" button
 window:director.disconnectRequest()
@@ -187,6 +187,8 @@ dbMgr:db=dbMgr.findDatabase(ctx)
 dbMgr[1]:db.resetData()
 dbMgr:db.delete()
 dbMgr:dbMgr.unregister(ctx, db)
+director:director.unregisterAllWidgets(ctx);
+director[1]:director.closeAllWidgets(ctx);
 
 
 user:window.clicks "Reload" button
@@ -230,12 +232,12 @@ dbMgr:db.loadChildren()
 user:window.Describe object request
 window:director.describeObjectRequest(objName, objType)
 director:ctx=director.findContext(sender)
-director[1]:info=dbMgr.dbObjectInfo(ctx, objName)
+director[1]:info=dbMgr.dbObjectInfo(ctx, objName, objType)
 dbMgr:db=dbMgr.findDatabase(ctx)
 dbMgr[1]:objPtr=db.getDbObjectInfo(objName, objType)
 
-director:convertedInfo=director.convert(info)
-director[1]:descWidget=director.createDescriptionWidget(ctx)
+director:convertedInfo=converter.convert(info)
+director:descWidget=director.createDescriptionWidget(ctx, objType)
 director[1]:director.descWidget->setInfo(convertedInfo)
 director[1]:window.addTab(descWidget)
 
@@ -248,7 +250,7 @@ window:director.dbObjectItemDisplayRequest(sender, objNameList)
 director:ctx=director.findContext(sender)
 [c:loop foreach objName]
     director[1]:info=dbMgr.dbObjectInfo(ctx, objName)
-    director:item=mediator.createGraphicsItem(info)
+    director:item=converter.createGraphicsItem(info)
     director:items->push_back(item)
 [/c]
 
@@ -267,7 +269,7 @@ director:relationsInfo=dbMgr.dbObjectRelationsInfoRequest(oldItems, newItem)
 [c:loop foreach record in relationsInfo]
     director:relation=dbMgr.readRelation(record)
     [c:alt if relation is valid]
-        director:arrow=mediator.createArrow(relation)
+        director:arrow=converter.createArrow(relation)
         director:arrows->push_back(arrow);
     [/c]
 [/c]
@@ -295,7 +297,7 @@ director:ctx=director.findContext(sender)
 director[1]:result=dbMgr.queryExecutionRequest(ctx, qstr, portionSize, portionNumber)
 dbMgr:db=dbMgr.findDb(ctx)
 dbMgr[1]:result=db.executeQuery(qstr, portionSize, portionNumber)
-director:tableRows=mediator.convert(result)
+director:tableRows=converter.convert(result)
 
 *19 window
 This will tell SqlWidget to display rows selected
@@ -310,8 +312,8 @@ by the query.
 user:Save session request[DISCUSSING]
 user:window.Save session request
 window:director.emit saveSessionRequest()
-(14)director:mediator.performChangesCheck()
-*14 mediator
+(14)director:converter.performChangesCheck()
+*14 converter
     Should we commit all changes? Should we reload
     data? Maybee ask user which action should be done?
 *14
@@ -359,6 +361,9 @@ director[1]:file=director.showLoadSessionDialog()
 	      director[1]:widget=director.loadFrom(file)          
                 director[1]:director.register(ctx, widget)
                 director[1]:window.add(widget)
+	      *23 director
+		TODO: This step should be detailed.
+                *23
             [/c]
         [/c]
     [/c]
@@ -444,7 +449,7 @@ dbMgr[1]:result=db.createRelation(item1Name, item2Name, type)
 
 (22)db:db.doMagic(????)
 [c:alt result == OK]
-    director:arrow=mediator.createRelation(ctx, item1Name, item2Name, type)
+    director:arrow=converter.createRelation(ctx, item1Name, item2Name, type)
 
     [c:alt if arrow != NULL]
         director:sender->drawArrow(arrow)
@@ -509,7 +514,7 @@ user:window.Request edit object
 window:director.emit editObjectRequest(name)
 director:ctx=director.findContext(sender)
 director[1]:params=director.showEditObjectParamsDialog()
-director[1]:convertedParams=mediator.convert(params)
+director[1]:convertedParams=converter.convert(params)
 (13)director:newObj=dbMgr.editObject(ctx, name, convertedParams)
 dbMgr:db=dbMgr.findDatabase(ctx)
 dbMgr[1]:newObj=db.editObj(obj, params)

@@ -22,6 +22,27 @@ done
 sed -e 's/CONFIG.*= debug/CONFIG \+= release/g' $TMP_DIR/src/src.pro > $TMP_DIR/src/src.pro.new
 mv $TMP_DIR/src/src.pro.new $TMP_DIR/src/src.pro
 
+# force release build of dbobjects
+mv $TMP_DIR/src/dbobjects/common/common.pro $TMP_DIR/src/dbobjects/common/common.pro.new
+echo "CONFIG += release" > $TMP_DIR/src/dbobjects/common/common.pro
+cat $TMP_DIR/src/dbobjects/common/common.pro.new >> $TMP_DIR/src/dbobjects/common/common.pro
+rm $TMP_DIR/src/dbobjects/common/common.pro.new
+
+mv $TMP_DIR/src/dbobjects/factory/factory.pro $TMP_DIR/src/dbobjects/factory/factory.pro.new
+echo "CONFIG += release" > $TMP_DIR/src/dbobjects/factory/factory.pro
+cat $TMP_DIR/src/dbobjects/factory/factory.pro.new >> $TMP_DIR/src/dbobjects/factory/factory.pro
+rm $TMP_DIR/src/dbobjects/factory/factory.pro.new
+
+mv $TMP_DIR/src/dbobjects/psql/psql.pro $TMP_DIR/src/dbobjects/psql/psql.pro.new
+echo "CONFIG += release" > $TMP_DIR/src/dbobjects/psql/psql.pro
+cat $TMP_DIR/src/dbobjects/psql/psql.pro.new >> $TMP_DIR/src/dbobjects/psql/psql.pro
+rm $TMP_DIR/src/dbobjects/psql/psql.pro.new
+
+mv $TMP_DIR/src/dbobjects/mysql/mysql.pro $TMP_DIR/src/dbobjects/mysql/mysql.pro.new
+echo "CONFIG += release" > $TMP_DIR/src/dbobjects/mysql/mysql.pro
+cat $TMP_DIR/src/dbobjects/mysql/mysql.pro.new >> $TMP_DIR/src/dbobjects/mysql/mysql.pro
+rm $TMP_DIR/src/dbobjects/mysql/mysql.pro.new
+
 # clean docs
 rm -rf $TMP_DIR/doc/Manual.odt
 rm -rf $TMP_DIR/doc/pages

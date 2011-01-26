@@ -109,4 +109,37 @@
  * \image html sequence_diagram_save_script.png "Diagram 29. Save script"
  * \image html sequence_diagram_load_script.png "Diagram 30. Load script"
  * \image html sequence_diagram_run_script.png "Diagram 31. Run script"
+ *
+ *
+ * <pre>
+ * visual-db/
+ *     |_...
+ *     |_src/
+ *        |_main.cpp
+ *        |_consts.{cpp,h}
+ *        |_control/
+ *             |_Context.{cpp,h}
+ *             |_Director.{cpp,h}
+ *             |_Converter.{cpp,h}
+ *        |_connect/
+ *             |_HostInfo.{cpp,h}
+ *             |_DbHostInfo.{cpp,h}
+ *             |_ProxyHostInfo.{cpp,h}
+ *             |_ConnectionInfo.{cpp,h}
+ *        |_gui/
+ *             |_behaviour/
+ *                |_...
+ *             |_ui/
+ *                |_*.ui
+ *             |_graphicsitems
+ *                |_arrows/legend/dbobjectitems
+ *             |_strategy
+ *                |_...
+ *             |_...
+ *             |_DataHolder.{cpp,h}
+ *        |_dbobjects/
+ *             |_DatabaseManager.{cpp,h}
+ * </pre>
+ *
+ *
  */

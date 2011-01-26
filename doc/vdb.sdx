@@ -565,7 +565,16 @@ db:db.registerAsDeleted(obj)
 user:Create script[PENDING]
 user:Save script[PENDING]
 user:Load script[PENDING]
-user:Run script[PENDING]]]></source>
+user:Run script[PENDING]
+
+user:director.updateTimer fires
+[c:loop foreach ctx]
+    director:updatedObjs=dbMgr.findUpdates(ctx)
+    [c:loop foreach obj in updatedObjs]
+        director:widget=director.findWidget(ctx, objName)
+        director[1]:converter.convert(widget, obj)
+    [/c]
+[/c]]]></source>
 <configuration>
 <property name="actorWidth" value="25"/>
 <property name="allowMessageProperties" value="false"/>

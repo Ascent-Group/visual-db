@@ -54,12 +54,18 @@ FORMS = $$files($$PWD/gui/ui/*.ui)
 
 HEADERS += $$files($$PWD/*.h) \
            $$files($$PWD/connect/*.h) \
+           $$files($$PWD/control/*.h) \
            $$files($$PWD/gui/behaviour/*.h) \
+           $$files($$PWD/gui/graphicsitems/*.h) \
+           $$files($$PWD/gui/strategy/*.h) \
            $$files($$PWD/gui/*.h)
 
 SOURCES += $$files($$PWD/*.cpp) \
            $$files($$PWD/connect/*.cpp) \
+           $$files($$PWD/control/*.cpp) \
            $$files($$PWD/gui/behaviour/*.cpp) \
+           $$files($$PWD/gui/graphicsitems/*.cpp) \
+           $$files($$PWD/gui/strategy/*.cpp) \
            $$files($$PWD/gui/*.cpp)
 
 RESOURCES += $$PWD/visual_db.qrc

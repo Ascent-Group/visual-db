@@ -30,11 +30,9 @@
 #ifndef SQLCONNECTIONDIALOG_H
 #define SQLCONNECTIONDIALOG_H
 
+#include <connect/ConnectionInfo.h>
 #include <gui/ui/ui_SqlConnectionDialog.h>
 #include <QDialog>
-
-class DbParameters;
-class ProxyParameters;
 
 /*!
  * \class SqlConnectionDialog
@@ -46,7 +44,7 @@ class SqlConnectionDialog : public QDialog
     Q_OBJECT
 
     public:
-        SqlConnectionDialog(DbParameters *, ProxyParameters *, bool, QWidget *ipParent = 0);
+    SqlConnectionDialog(const Connect::ConnectionInfo &, bool, QWidget *ipParent = 0);
         ~SqlConnectionDialog();
 
         bool connectionFailed() const;
@@ -54,8 +52,7 @@ class SqlConnectionDialog : public QDialog
     private:
         Ui::SqlConnectionDialog ui;
 
-        DbParameters *mDbParameters;
-        ProxyParameters *mProxyParameters;
+        Connect::ConnectionInfo mConnectionInfo;
 
         bool mConnectionFailed;
 

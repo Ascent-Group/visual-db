@@ -62,7 +62,7 @@ class HostInfo
 
     private:
 //        HostInfo(const HostInfo &);
-        HostInfo &operator=(const HostInfo &iHostInfo);
+//        HostInfo &operator=(const HostInfo &iHostInfo);
 
     private:
         QString mAddress;

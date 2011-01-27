@@ -27,8 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <connect/DbParameters.h>
-#include <connect/ProxyParameters.h>
+#include <connect/ConnectionInfo.h>
 #include <gui/SqlConnectionDialog.h>
 #include <QComboBox>
 #include <QGroupBox>
@@ -46,24 +45,16 @@
 /*!
  * Constructor
  */
-SqlConnectionDialog::SqlConnectionDialog(DbParameters *ipDbParameters,
-        ProxyParameters *ipProxyParameters,
+SqlConnectionDialog::SqlConnectionDialog(const Connect::ConnectionInfo &iConnectionInfo,
         bool ipLoadSession,
         QWidget *ipParent)
-    : QDialog(ipParent),
-      mDbParameters(ipDbParameters),
-      mProxyParameters(ipProxyParameters),
-      mConnectionFailed(true)
+    : QDialog(ipParent)
+    , mConnectionInfo(iConnectionInfo)
+    , mConnectionFailed(true)
 {
     ui.setupUi(this);
 
     createDialog(ipLoadSession);
-    if (!ipDbParameters) {
-        mDbParameters = new DbParameters();
-    }
-    if (!ipProxyParameters) {
-        mProxyParameters = new ProxyParameters();
-    }
     initConnectionFields();
 }
 
@@ -164,21 +155,17 @@ SqlConnectionDialog::createDialog(bool ipLoadSession)
 void
 SqlConnectionDialog::initConnectionFields()
 {
-    if (!mDbParameters || !mProxyParameters) {
-        return;
-    }
+    ui.mDbDriverCombo->setCurrentIndex(ui.mDbDriverCombo->findText(mConnectionInfo.dbHostInfo().dbDriver()));
+    ui.mDbHostEdit->setText(mConnectionInfo.dbHostInfo().address());
+    ui.mDbPortEdit->setText(QString::number(mConnectionInfo.dbHostInfo().port()));
+    ui.mDbNameEdit->setText(mConnectionInfo.dbHostInfo().dbName());
+    ui.mDbUserEdit->setText(mConnectionInfo.dbHostInfo().user());
 
-    ui.mDbDriverCombo->setCurrentIndex(ui.mDbDriverCombo->findText(mDbParameters->dbDriver()));
-    ui.mDbHostEdit->setText(mDbParameters->dbHost());
-    ui.mDbPortEdit->setText(QString::number(mDbParameters->dbPort()));
-    ui.mDbNameEdit->setText(mDbParameters->dbName());
-    ui.mDbUserEdit->setText(mDbParameters->dbUser());
-
-    ui.mUseProxyBox->setChecked(mProxyParameters->useProxy());
-    ui.mProxyTypeBox->setCurrentIndex(ui.mProxyTypeBox->findData(mProxyParameters->proxyType()));
-    ui.mProxyHostNameEdit->setText(mProxyParameters->proxyHost());
-    ui.mProxyPortEdit->setText(QString::number(mProxyParameters->proxyPort()));
-    ui.mProxyUserEdit->setText(mProxyParameters->proxyUser());
+    ui.mUseProxyBox->setChecked(mConnectionInfo.useProxy());
+    ui.mProxyTypeBox->setCurrentIndex(ui.mProxyTypeBox->findData(mConnectionInfo.proxyHostInfo().type()));
+    ui.mProxyHostNameEdit->setText(mConnectionInfo.proxyHostInfo().address());
+    ui.mProxyPortEdit->setText(QString::number(mConnectionInfo.proxyHostInfo().port()));
+    ui.mProxyUserEdit->setText(mConnectionInfo.proxyHostInfo().user());
 }
 
 /*!
@@ -187,31 +174,26 @@ SqlConnectionDialog::initConnectionFields()
 void
 SqlConnectionDialog::addConnection()
 {
+    using namespace Connect;
+
     // proxy section
     if (ui.mUseProxyBox->isChecked()) {
         // remember connection paramters
-        mProxyParameters->setUseProxy(true);
-        mProxyParameters->setProxyType((QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toUInt());
-        mProxyParameters->setProxyHost(ui.mProxyHostNameEdit->text());
-        mProxyParameters->setProxyPort(ui.mProxyPortEdit->text().toUInt());
-        mProxyParameters->setProxyUser(ui.mProxyUserEdit->text());
-
-        setProxy(*mProxyParameters);
+        mConnectionInfo.setUseProxy(true);
+        ProxyHostInfo proxyHostInfo(ui.mProxyHostNameEdit->text(), ui.mProxyPortEdit->text().toUInt(), ui.mProxyUserEdit->text(), "",
+                (QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toUInt());
+        mConnectionInfo.setProxyHostInfo(proxyHostInfo);
+//        setProxy(ProxyHostInfo);
     } else {
-        mProxyParameters->setUseProxy(false);
+        mConnectionInfo.setUseProxy(false);
     }
-    // proxy section end
 
     // remember database settings
-    mDbParameters->setDbDriver(ui.mDbDriverCombo->currentText());
-    mDbParameters->setDbHost(ui.mDbHostEdit->text());
-    mDbParameters->setDbPort(ui.mDbPortEdit->text().toUInt());
-    mDbParameters->setDbName(ui.mDbNameEdit->text());
-    mDbParameters->setDbUser(ui.mDbUserEdit->text());
-    mDbParameters->setDbPassword(ui.mDbPasswordEdit->text());
+    DbHostInfo dbHostInfo(ui.mDbHostEdit->text(), ui.mDbPortEdit->text().toUInt(), ui.mDbUserEdit->text(), ui.mDbPasswordEdit->text(), ui.mDbDriverCombo->currentText());
+    mConnectionInfo.setDbHostInfo(dbHostInfo);
 
     // create connection to database
-    mConnectionFailed = !createConnection((*mDbParameters));
+//    mConnectionFailed = !createConnection(dbHostInfo);
 
     /*!
      * If we are in addConnection dialog, then we definitely pressed Ok and NOT Cancel

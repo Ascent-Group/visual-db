@@ -30,15 +30,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <connect/ConnectionInfo.h>
 #include <gui/ui/ui_MainWindow.h>
 #include <QMainWindow>
 #include <QSettings>
 #include <QPointF>
 
-class DbParameters;
 class GraphicsScene;
 class GraphicsView;
-class ProxyParameters;
 class QColorDialog;
 class QFileDialog;
 class QGraphicsItem;
@@ -81,8 +80,7 @@ class MainWindow : public QMainWindow
         QProgressBar *mProgressBar;
 
         QSettings mSettings;
-        DbParameters *mDbParameters;
-        ProxyParameters *mProxyParameters;
+        Connect::ConnectionInfo *mConnectionInfo;
 
         QUndoStack *mUndoStack;
 

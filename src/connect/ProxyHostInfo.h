@@ -33,6 +33,9 @@
 #include <QNetworkProxy>
 #include <connect/HostInfo.h>
 
+class QDomDocument;
+class QDomElement;
+
 namespace Connect {
 
 /*!
@@ -49,12 +52,15 @@ class ProxyHostInfo : public HostInfo
         QNetworkProxy::ProxyType type() const;
         void setType(const QNetworkProxy::ProxyType &iType);
 
+        void fromXml(QDomElement &) {};
+        QDomElement toXml(QDomDocument &) const { };
+
         bool operator==(const ProxyHostInfo &iProxyHostInfo);
         bool operator!=(const ProxyHostInfo &iProxyHostInfo);
 
     private:
 //        ProxyHostInfo(const ProxyHostInfo &);
-        ProxyHostInfo &operator=(const ProxyHostInfo &iProxyHostInfo);
+//        ProxyHostInfo &operator=(const ProxyHostInfo &iProxyHostInfo);
 
     private:
         QNetworkProxy::ProxyType mType;

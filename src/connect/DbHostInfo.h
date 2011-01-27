@@ -32,6 +32,9 @@
 
 #include <connect/HostInfo.h>
 
+#include <QDomDocument>
+#include <QDomElement>
+
 namespace Connect {
 
 /*!
@@ -51,12 +54,15 @@ class DbHostInfo : public HostInfo
         QString dbDriver() const;
         void setDbDriver(const QString &iDbDriver);
 
+        void fromXml(QDomElement &) {};
+        QDomElement toXml(QDomDocument &) const {};
+
         bool operator==(const DbHostInfo &iDbHostInfo);
         bool operator!=(const DbHostInfo &iDbHostInfo);
 
     private:
 //        DbHostInfo(const DbHostInfo &);
-        DbHostInfo &operator=(const DbHostInfo &iDbHostInfo);
+//        DbHostInfo &operator=(const DbHostInfo &iDbHostInfo);
 
     private:
         QString mDbName;

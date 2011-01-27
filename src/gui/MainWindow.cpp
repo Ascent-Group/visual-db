@@ -48,8 +48,7 @@
 #include <QUndoCommand>
 #include <QUndoStack>
 #include <common/Database.h>
-#include <connect/DbParameters.h>
-#include <connect/ProxyParameters.h>
+#include <connect/ConnectionInfo.h>
 #include <consts.h>
 #include <gui/DescriptionWidget.h>
 #include <gui/Legend.h>
@@ -72,8 +71,7 @@ MainWindow::MainWindow()
     : QMainWindow(),
       mTreeItemMenu(0),
       mProgressBar(0),
-      mDbParameters(0),
-      mProxyParameters(0),
+      mConnectionInfo(0),
       mUndoStack(0)
 {
     ui.setupUi(this);
@@ -86,8 +84,10 @@ MainWindow::MainWindow()
 
     createStatusBar();
 
-    mDbParameters = new DbParameters();
-    mProxyParameters = new ProxyParameters();
+    using namespace Connect;
+    DbHostInfo dbHostInfo;
+    ProxyHostInfo proxyHostInfo;
+    mConnectionInfo = new ConnectionInfo(dbHostInfo, proxyHostInfo);
 
     // set attributes
     setAttribute(Qt::WA_DeleteOnClose);
@@ -108,8 +108,7 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
     delete mTreeItemMenu;
-    delete mDbParameters;
-    delete mProxyParameters;
+    delete mConnectionInfo;
     delete mProgressBar;
     delete mUndoStack;
     // \note We have to delete it here because somehow the parent is not set for scene
@@ -254,7 +253,7 @@ importDatabase(const Ui::MainWindow &ui)
 int
 MainWindow::showConnectionDialog(bool ipLoadSession)
 {
-    SqlConnectionDialog connDialog(mDbParameters, mProxyParameters, ipLoadSession);
+    SqlConnectionDialog connDialog(*mConnectionInfo, ipLoadSession);
 
     while (connDialog.connectionFailed()) {
         // nothing to do if canceled
@@ -779,8 +778,7 @@ MainWindow::saveToXml(const QString &ipFileName)
     QDomDocument doc("VisualDB");
     QDomElement root = doc.createElement("visual-db");
     doc.appendChild(root);
-    root.appendChild(mDbParameters->toXml(doc));
-    root.appendChild(mProxyParameters->toXml(doc));
+    root.appendChild(mConnectionInfo->toXml(doc));
     root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(),
                 ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
 
@@ -825,10 +823,8 @@ MainWindow::loadFromXml(QString ipFileName)
     while (!child.isNull()) {
         QDomElement element = child.toElement(); // try to convert the node to an element.
         if (!element.isNull()) {
-            if (element.tagName() == "database") {
-                mDbParameters->fromXml(element);
-            } else if (element.tagName() == "proxy") {
-                mProxyParameters->fromXml(element);
+            if (element.tagName() == "connection") {
+                mConnectionInfo->fromXml(element);
             }
         }
         child = child.nextSibling();

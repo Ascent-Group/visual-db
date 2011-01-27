@@ -40,6 +40,36 @@ ConnectionInfo::~ConnectionInfo()
 {
 }
 
+const DbHostInfo &ConnectionInfo::dbHostInfo() const
+{
+    return mDbHostInfo;
+}
+
+void ConnectionInfo::setDbHostInfo(const DbHostInfo &iDbHostInfo)
+{
+    mDbHostInfo = iDbHostInfo;
+}
+
+const ProxyHostInfo &ConnectionInfo::proxyHostInfo() const
+{
+    return mProxyHostInfo;
+}
+
+void ConnectionInfo::setProxyHostInfo(const ProxyHostInfo &iProxyHostInfo)
+{
+    mProxyHostInfo = iProxyHostInfo;
+}
+
+bool ConnectionInfo::useProxy() const
+{
+    return mUseProxy;
+}
+
+void ConnectionInfo::setUseProxy(bool iUseProxy)
+{
+    mUseProxy = iUseProxy;
+}
+
 bool ConnectionInfo::operator==(const ConnectionInfo &iConnectionInfo)
 {
     return mDbHostInfo == iConnectionInfo.mDbHostInfo && mProxyHostInfo == iConnectionInfo.mProxyHostInfo;

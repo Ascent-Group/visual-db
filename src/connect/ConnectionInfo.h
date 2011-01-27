@@ -33,6 +33,9 @@
 #include <connect/DbHostInfo.h>
 #include <connect/ProxyHostInfo.h>
 
+class QDomDocument;
+class QDomElement;
+
 namespace Connect {
 
 /*!
@@ -46,16 +49,29 @@ class ConnectionInfo
         explicit ConnectionInfo(const DbHostInfo &iDbHostInfo, const ProxyHostInfo &iProxyHostInfo);
         ~ConnectionInfo();
 
+        const DbHostInfo &dbHostInfo() const;
+        void setDbHostInfo(const DbHostInfo &iDbHostInfo);
+
+        const ProxyHostInfo &proxyHostInfo() const;
+        void setProxyHostInfo(const ProxyHostInfo &iProxyHostInfo);
+
+        bool useProxy() const;
+        void setUseProxy(bool use);
+
+        void fromXml(QDomElement &) {};
+        QDomElement toXml(QDomDocument &) const { };
+
         bool operator==(const ConnectionInfo &iConnectionInfo);
         bool operator!=(const ConnectionInfo &iConnectionInfo);
 
     private:
-        ConnectionInfo(const ConnectionInfo &);
+//        ConnectionInfo(const ConnectionInfo &);
         ConnectionInfo &operator=(const ConnectionInfo &iConnectionInfo);
 
     private:
         DbHostInfo mDbHostInfo;
         ProxyHostInfo mProxyHostInfo;
+        bool mUseProxy;
 };
 
 }

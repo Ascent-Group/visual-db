@@ -30,11 +30,10 @@
 #ifndef CONNECT_PROXYHOSTINFO_H
 #define CONNECT_PROXYHOSTINFO_H
 
+#include <QDomDocument>
+#include <QDomElement>
 #include <QNetworkProxy>
 #include <connect/HostInfo.h>
-
-class QDomDocument;
-class QDomElement;
 
 namespace Connect {
 

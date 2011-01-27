@@ -27,7 +27,10 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <DbHostInfo.h>
+#include <connect/DbHostInfo.h>
+#include <common/Database.h>
+#include <QSqlDatabase>
+#include <QFile>
 
 namespace Connect {
 
@@ -69,6 +72,41 @@ bool DbHostInfo::operator==(const DbHostInfo &iDbHostInfo)
 bool DbHostInfo::operator!=(const DbHostInfo &iDbHostInfo)
 {
     return !(operator==(iDbHostInfo));
+}
+
+/*
+ * Create connection to the database
+ */
+bool
+createConnection(const DbHostInfo &iDbHostInfo)
+{
+    bool success = false;
+    QSqlDatabase db = QSqlDatabase::addDatabase(iDbHostInfo.dbDriver(), "mainConnect");
+    db.setDatabaseName(iDbHostInfo.dbName());
+
+    // if SQLite db
+    if (QString("QSQLITE") == iDbHostInfo.dbDriver()) {
+        // check only if fie exists
+        if ((success = QFile::exists(iDbHostInfo.dbName()))) {
+            db.open();
+        }
+    // of other DBMS
+    } else {
+        // check credentials and host
+        db.setHostName(iDbHostInfo.address());
+        db.setUserName(iDbHostInfo.user());
+        db.setPassword(iDbHostInfo.password());
+        db.setPort(iDbHostInfo.port());
+
+        if ((success = db.open())) {
+            // initialize Database for further use and get schemas
+            using namespace DbObjects::Common;
+            Database *dbInst = Database::instance();
+            dbInst->setSqlDriver(iDbHostInfo.dbDriver());
+        }
+    }
+
+    return success;
 }
 
 } // namespace Connect

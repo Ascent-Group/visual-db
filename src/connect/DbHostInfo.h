@@ -69,6 +69,8 @@ class DbHostInfo : public HostInfo
         QString mDbDriver;
 };
 
+bool createConnection(const DbHostInfo &iDbHostInfo);
+
 }
 
 #endif // CONNECT_DBHOSTINFO_H

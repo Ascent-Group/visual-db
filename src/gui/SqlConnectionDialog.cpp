@@ -189,11 +189,12 @@ SqlConnectionDialog::addConnection()
     }
 
     // remember database settings
-    DbHostInfo dbHostInfo(ui.mDbHostEdit->text(), ui.mDbPortEdit->text().toUInt(), ui.mDbUserEdit->text(), ui.mDbPasswordEdit->text(), ui.mDbDriverCombo->currentText());
+    DbHostInfo dbHostInfo(ui.mDbHostEdit->text(), ui.mDbPortEdit->text().toUInt(), 
+            ui.mDbUserEdit->text(), ui.mDbPasswordEdit->text(), ui.mDbNameEdit->text(), ui.mDbDriverCombo->currentText());
     mConnectionInfo.setDbHostInfo(dbHostInfo);
 
     // create connection to database
-//    mConnectionFailed = !createConnection(dbHostInfo);
+    mConnectionFailed = !createConnection(dbHostInfo);
 
     /*!
      * If we are in addConnection dialog, then we definitely pressed Ok and NOT Cancel

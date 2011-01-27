@@ -30,5 +30,36 @@
 #ifndef CONNECT_PROXYHOSTINFO_H
 #define CONNECT_PROXYHOSTINFO_H
 
+#include <QNetworkProxy>
+#include <HostInfo.h>
+
+namespace Connect {
+
+/*!
+ * \class DbHostInfo
+ * \headfile connect/DbHostInfo.h
+ * \brief Incapsulation of database connection parameters
+ */
+class ProxyHostInfo : public HostInfo
+{
+    public:
+        explicit ProxyHostInfo(const QString &iAddress = "", quint16 iPort = 0, const QString &iUser = "", const QString &iPassword = "", const QNetworkProxy::ProxyType &iType = QNetworkProxy::NoProxy);
+        ~ProxyHostInfo();
+
+        QNetworkProxy::ProxyType type() const;
+        void setType(const QNetworkProxy::ProxyType &iType);
+
+        bool operator==(const ProxyHostInfo &iProxyHostInfo);
+        bool operator!=(const ProxyHostInfo &iProxyHostInfo);
+
+    private:
+        ProxyHostInfo(const ProxyHostInfo &);
+        ProxyHostInfo &operator=(const ProxyHostInfo &iProxyHostInfo) {};
+
+    private:
+        QNetworkProxy::ProxyType mType;
+};
+
+}
 #endif // CONNECT_PROXYHOSTINFO_H
 

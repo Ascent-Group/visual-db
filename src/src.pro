@@ -13,7 +13,7 @@ DEPENDPATH += . \
               dbobject/psql \
               dbobject/mysql
 
-INCLUDEPATH += $$PWD $$PWD/dbobjects
+INCLUDEPATH += $$PWD $$PWD/dbobjects $$PWD/connect $$PWD/control $$PWD/gui/behaviour $$PWD/gui/strategy $$PWD/gui
 
 ### Windows specific paths
 win32 {

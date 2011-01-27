@@ -29,3 +29,35 @@
 
 #include <ProxyHostInfo.h>
 
+namespace Connect {
+
+ProxyHostInfo::ProxyHostInfo(const QString &iAddress, quint16 iPort, const QString &iUser, const QString &iPassword, const QNetworkProxy::ProxyType &iType)
+    : HostInfo(iAddress, iPort, iUser, iPassword), mType(iType)
+{
+}
+
+ProxyHostInfo::~ProxyHostInfo()
+{
+}
+
+QNetworkProxy::ProxyType ProxyHostInfo::type() const
+{
+    return mType;
+}
+
+void ProxyHostInfo::setType(const QNetworkProxy::ProxyType &iType)
+{
+    mType = iType;
+}
+
+bool ProxyHostInfo::operator==(const ProxyHostInfo &iProxyHostInfo)
+{
+    return HostInfo::operator==(iProxyHostInfo) && mType == iProxyHostInfo.mType; 
+}
+
+bool ProxyHostInfo::operator!=(const ProxyHostInfo &iProxyHostInfo)
+{
+    return !(operator==(iProxyHostInfo));
+}
+
+} // namespace Connect

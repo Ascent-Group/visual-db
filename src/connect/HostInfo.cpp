@@ -29,3 +29,69 @@
 
 #include <HostInfo.h>
 
+namespace Connect {
+
+HostInfo::HostInfo(const QString &iAddress, quint16 iPort, 
+        const QString &iUser, const QString &iPassword)
+    : mAddress(iAddress), mPort(iPort)
+    , mUser(iUser), mPassword(iPassword)
+{
+}
+
+HostInfo::~HostInfo()
+{
+}
+
+QString HostInfo::address() const
+{
+    return mAddress;
+}
+
+void HostInfo::setAddress(const QString &iAddress)
+{
+    mAddress = iAddress;
+}
+
+
+quint16 HostInfo::port() const
+{
+    return mPort;
+}
+
+void HostInfo::setPort(quint16 iPort)
+{
+    mPort = iPort;
+}
+
+QString HostInfo::user() const
+{
+    return mUser;
+}
+
+void HostInfo::setUser(const QString &iUser)
+{
+    mUser = iUser;
+}
+
+QString HostInfo::password() const
+{
+    return mPassword;
+}
+
+void HostInfo::setPassword(const QString &iPassword)
+{
+    mPassword = iPassword;
+}
+
+bool HostInfo::operator==(const HostInfo &iHostInfo)
+{
+    return mAddress == iHostInfo.mAddress && mPort == iHostInfo.mPort && 
+        mUser == iHostInfo.mUser && mPassword == iHostInfo.mPassword;
+}
+
+bool HostInfo::operator!=(const HostInfo &iHostInfo)
+{
+    return !(operator==(iHostInfo));
+}
+
+} // namespace Connect

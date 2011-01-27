@@ -30,5 +30,48 @@
 #ifndef CONNECT_HOSTINFO_H
 #define CONNECT_HOSTINFO_H
 
+#include <QString>
+
+namespace Connect {
+
+/*!
+ * \class HostInfo
+ * \headfile connect/HostInfo.h
+ * \brief Incapsulation of host info parameters
+ */
+class HostInfo
+{
+    public:
+        explicit HostInfo(const QString &iAddress = "", quint16 iPort = 0, const QString &iUser = "", const QString &iPassword = "");
+        ~HostInfo();
+
+        QString address() const;
+        void setAddress(const QString &);
+        
+        quint16 port() const;
+        void setPort(quint16);
+        
+        QString user() const;
+        void setUser(const QString &);
+        
+        QString password() const;
+        void setPassword(const QString &);
+
+        bool operator==(const HostInfo &iHostInfo);
+        bool operator!=(const HostInfo &iHostInfo);
+
+    private:
+        HostInfo(const HostInfo &);
+        HostInfo &operator=(const HostInfo &/*iHostInfo*/) {};
+
+    private:
+        QString mAddress;
+        quint16 mPort;
+        QString mUser;
+        QString mPassword;
+};
+
+}
+
 #endif // CONNECT_HOSTINFO_H
 

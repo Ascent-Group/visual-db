@@ -30,5 +30,40 @@
 #ifndef CONNECT_DBHOSTINFO_H
 #define CONNECT_DBHOSTINFO_H
 
+#include <HostInfo.h>
+
+namespace Connect {
+
+/*!
+ * \class DbHostInfo
+ * \headfile connect/DbHostInfo.h
+ * \brief Incapsulation of database connection parameters
+ */
+class DbHostInfo : public HostInfo
+{
+    public:
+        explicit DbHostInfo(const QString &iAddress = "", quint16 iPort = 0, const QString &iUser = "", const QString &iPassword = "", const QString &iDbName = "", const QString &iDbDriver = "");
+        ~DbHostInfo();
+
+        QString dbName() const;
+        void setDbName(const QString &iDbName);
+
+        QString dbDriver() const;
+        void setDbDriver(const QString &iDbDriver);
+
+        bool operator==(const DbHostInfo &iDbHostInfo);
+        bool operator!=(const DbHostInfo &iDbHostInfo);
+
+    private:
+        DbHostInfo(const DbHostInfo &) {};
+        DbHostInfo &operator=(const DbHostInfo &/*iDbHostInfo*/) {};
+
+    private:
+        QString mDbName;
+        QString mDbDriver;
+};
+
+}
+
 #endif // CONNECT_DBHOSTINFO_H
 

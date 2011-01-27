@@ -28,3 +28,47 @@
  */
 
 #include <DbHostInfo.h>
+
+namespace Connect {
+
+DbHostInfo::DbHostInfo(const QString &iAddress, quint16 iPort, const QString &iUser, const QString &iPassword, const QString &iDbName, const QString &iDbDriver)
+    : HostInfo(iAddress, iPort, iUser, iPassword), mDbName(iDbName), mDbDriver(iDbDriver)
+{
+}
+
+DbHostInfo::~DbHostInfo()
+{
+}
+
+QString DbHostInfo::dbName() const
+{
+    return mDbName;
+}
+
+void DbHostInfo::setDbName(const QString &iDbName)
+{
+    mDbName = iDbName;
+}
+
+QString DbHostInfo::dbDriver() const
+{
+    return mDbDriver;
+}
+
+void DbHostInfo::setDbDriver(const QString &iDbDriver)
+{
+    mDbDriver = iDbDriver;
+}
+
+bool DbHostInfo::operator==(const DbHostInfo &iDbHostInfo)
+{
+    return HostInfo::operator==(iDbHostInfo) && 
+        mDbName == iDbHostInfo.mDbName && mDbDriver == iDbHostInfo.mDbDriver;
+}
+
+bool DbHostInfo::operator!=(const DbHostInfo &iDbHostInfo)
+{
+    return !(operator==(iDbHostInfo));
+}
+
+} // namespace Connect

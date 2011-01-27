@@ -27,4 +27,27 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <ConnectionInfo.h>
+#include <connect/ConnectionInfo.h>
+
+namespace Connect {
+
+ConnectionInfo::ConnectionInfo(const DbHostInfo &iDbHostInfo, const ProxyHostInfo &iProxyHostInfo)
+    : mDbHostInfo(iDbHostInfo), mProxyHostInfo(iProxyHostInfo)
+{
+}
+
+ConnectionInfo::~ConnectionInfo()
+{
+}
+
+bool ConnectionInfo::operator==(const ConnectionInfo &iConnectionInfo)
+{
+    return mDbHostInfo == iConnectionInfo.mDbHostInfo && mProxyHostInfo == iConnectionInfo.mProxyHostInfo;
+}
+
+bool ConnectionInfo::operator!=(const ConnectionInfo &iConnectionInfo)
+{
+    return !(operator==(iConnectionInfo));
+}
+
+}

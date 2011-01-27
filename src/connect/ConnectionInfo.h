@@ -30,5 +30,35 @@
 #ifndef CONNECT_CONNECTIONINFO_H
 #define CONNECT_CONNECTIONINFO_H
 
+#include <connect/DbHostInfo.h>
+#include <connect/ProxyHostInfo.h>
+
+namespace Connect {
+
+/*!
+ * \class DbHostInfo
+ * \headfile connect/DbHostInfo.h
+ * \brief Incapsulation of whole connection parameters
+ */
+class ConnectionInfo
+{
+    public:
+        explicit ConnectionInfo(const DbHostInfo &iDbHostInfo, const ProxyHostInfo &iProxyHostInfo);
+        ~ConnectionInfo();
+
+        bool operator==(const ConnectionInfo &iConnectionInfo);
+        bool operator!=(const ConnectionInfo &iConnectionInfo);
+
+    private:
+        ConnectionInfo(const ConnectionInfo &);
+        ConnectionInfo &operator=(const ConnectionInfo &iConnectionInfo);
+
+    private:
+        DbHostInfo mDbHostInfo;
+        ProxyHostInfo mProxyHostInfo;
+};
+
+}
+
 #endif // CONNECT_CONNECTIONINFO_H
 

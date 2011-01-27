@@ -30,7 +30,7 @@
 #ifndef CONNECT_DBHOSTINFO_H
 #define CONNECT_DBHOSTINFO_H
 
-#include <HostInfo.h>
+#include <connect/HostInfo.h>
 
 namespace Connect {
 
@@ -55,8 +55,8 @@ class DbHostInfo : public HostInfo
         bool operator!=(const DbHostInfo &iDbHostInfo);
 
     private:
-        DbHostInfo(const DbHostInfo &) {};
-        DbHostInfo &operator=(const DbHostInfo &/*iDbHostInfo*/) {};
+//        DbHostInfo(const DbHostInfo &);
+        DbHostInfo &operator=(const DbHostInfo &iDbHostInfo);
 
     private:
         QString mDbName;

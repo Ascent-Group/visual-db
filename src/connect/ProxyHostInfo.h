@@ -31,14 +31,14 @@
 #define CONNECT_PROXYHOSTINFO_H
 
 #include <QNetworkProxy>
-#include <HostInfo.h>
+#include <connect/HostInfo.h>
 
 namespace Connect {
 
 /*!
  * \class DbHostInfo
  * \headfile connect/DbHostInfo.h
- * \brief Incapsulation of database connection parameters
+ * \brief Incapsulation of proxy connection parameters
  */
 class ProxyHostInfo : public HostInfo
 {
@@ -53,8 +53,8 @@ class ProxyHostInfo : public HostInfo
         bool operator!=(const ProxyHostInfo &iProxyHostInfo);
 
     private:
-        ProxyHostInfo(const ProxyHostInfo &);
-        ProxyHostInfo &operator=(const ProxyHostInfo &iProxyHostInfo) {};
+//        ProxyHostInfo(const ProxyHostInfo &);
+        ProxyHostInfo &operator=(const ProxyHostInfo &iProxyHostInfo);
 
     private:
         QNetworkProxy::ProxyType mType;

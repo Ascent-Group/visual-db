@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <HostInfo.h>
+#include <connect/HostInfo.h>
 
 namespace Connect {
 

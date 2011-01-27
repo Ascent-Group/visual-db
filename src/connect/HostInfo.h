@@ -61,8 +61,8 @@ class HostInfo
         bool operator!=(const HostInfo &iHostInfo);
 
     private:
-        HostInfo(const HostInfo &);
-        HostInfo &operator=(const HostInfo &/*iHostInfo*/) {};
+//        HostInfo(const HostInfo &);
+        HostInfo &operator=(const HostInfo &iHostInfo);
 
     private:
         QString mAddress;

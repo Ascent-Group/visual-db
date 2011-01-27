@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <ProxyHostInfo.h>
+#include <connect/ProxyHostInfo.h>
 
 namespace Connect {
 

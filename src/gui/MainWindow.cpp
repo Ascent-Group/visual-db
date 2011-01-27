@@ -778,7 +778,7 @@ MainWindow::saveToXml(const QString &ipFileName)
     QDomDocument doc("VisualDB");
     QDomElement root = doc.createElement("visual-db");
     doc.appendChild(root);
-    root.appendChild(mConnectionInfo->toXml(doc));
+    mConnectionInfo->toXml(doc, root);
     root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(),
                 ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
 

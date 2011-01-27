@@ -55,11 +55,8 @@ class ConnectionInfo
         const ProxyHostInfo &proxyHostInfo() const;
         void setProxyHostInfo(const ProxyHostInfo &iProxyHostInfo);
 
-        bool useProxy() const;
-        void setUseProxy(bool use);
-
-        void fromXml(QDomElement &) {};
-        QDomElement toXml(QDomDocument &) const { };
+        void fromXml(QDomElement &);
+        void toXml(QDomDocument &, QDomElement &) const;
 
         bool operator==(const ConnectionInfo &iConnectionInfo);
         bool operator!=(const ConnectionInfo &iConnectionInfo);
@@ -71,7 +68,6 @@ class ConnectionInfo
     private:
         DbHostInfo mDbHostInfo;
         ProxyHostInfo mProxyHostInfo;
-        bool mUseProxy;
 };
 
 }

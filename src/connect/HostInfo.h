@@ -31,6 +31,8 @@
 #define CONNECT_HOSTINFO_H
 
 #include <QString>
+#include <QDomDocument>
+#include <QDomElement>
 
 namespace Connect {
 
@@ -56,6 +58,9 @@ class HostInfo
         
         QString password() const;
         void setPassword(const QString &);
+
+        QDomElement toXml(QDomElement &) const;
+        void fromXml(QDomElement &);
 
         bool operator==(const HostInfo &iHostInfo);
         bool operator!=(const HostInfo &iHostInfo);

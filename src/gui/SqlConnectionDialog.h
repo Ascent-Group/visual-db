@@ -44,7 +44,7 @@ class SqlConnectionDialog : public QDialog
     Q_OBJECT
 
     public:
-    SqlConnectionDialog(const Connect::ConnectionInfo &, bool, QWidget *ipParent = 0);
+        SqlConnectionDialog(Connect::ConnectionInfo &, bool, QWidget *ipParent = 0);
         ~SqlConnectionDialog();
 
         bool connectionFailed() const;
@@ -52,7 +52,7 @@ class SqlConnectionDialog : public QDialog
     private:
         Ui::SqlConnectionDialog ui;
 
-        Connect::ConnectionInfo mConnectionInfo;
+        Connect::ConnectionInfo &mConnectionInfo;
 
         bool mConnectionFailed;
 

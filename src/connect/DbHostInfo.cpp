@@ -63,6 +63,30 @@ void DbHostInfo::setDbDriver(const QString &iDbDriver)
     mDbDriver = iDbDriver;
 }
 
+/*
+ * Load database parameters from the xml file
+ */
+void
+DbHostInfo::fromXml(QDomElement &iElement)
+{
+    HostInfo::fromXml(iElement);
+    setDbDriver(iElement.attribute("driver"));
+    setDbName(iElement.attribute("name"));
+}
+
+/*
+ * Get xml structure of database settings
+ */
+QDomElement
+DbHostInfo::toXml(QDomElement &iElement) const
+{
+    HostInfo::toXml(iElement);
+    iElement.setAttribute("driver", dbDriver());
+    iElement.setAttribute("name", dbName());
+
+    return iElement;
+}
+
 bool DbHostInfo::operator==(const DbHostInfo &iDbHostInfo)
 {
     return HostInfo::operator==(iDbHostInfo) && 

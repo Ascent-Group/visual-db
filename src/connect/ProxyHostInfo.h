@@ -45,14 +45,19 @@ namespace Connect {
 class ProxyHostInfo : public HostInfo
 {
     public:
-        explicit ProxyHostInfo(const QString &iAddress = "", quint16 iPort = 0, const QString &iUser = "", const QString &iPassword = "", const QNetworkProxy::ProxyType &iType = QNetworkProxy::NoProxy);
+        explicit ProxyHostInfo(bool iUseProxy = false, const QString &iAddress = "", 
+                quint16 iPort = 0, const QString &iUser = "", const QString &iPassword = "", 
+                const QNetworkProxy::ProxyType &iType = QNetworkProxy::NoProxy);
         ~ProxyHostInfo();
+
+        bool useProxy() const;
+        void setUseProxy(bool use);
 
         QNetworkProxy::ProxyType type() const;
         void setType(const QNetworkProxy::ProxyType &iType);
 
-        void fromXml(QDomElement &) {};
-        QDomElement toXml(QDomDocument &) const { };
+        QDomElement toXml(QDomElement &) const;
+        void fromXml(QDomElement &);
 
         bool operator==(const ProxyHostInfo &iProxyHostInfo);
         bool operator!=(const ProxyHostInfo &iProxyHostInfo);
@@ -62,6 +67,7 @@ class ProxyHostInfo : public HostInfo
 //        ProxyHostInfo &operator=(const ProxyHostInfo &iProxyHostInfo);
 
     private:
+        bool mUseProxy;
         QNetworkProxy::ProxyType mType;
 };
 

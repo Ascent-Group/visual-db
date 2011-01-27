@@ -31,7 +31,6 @@
 #define CONNECT_DBHOSTINFO_H
 
 #include <connect/HostInfo.h>
-
 #include <QDomDocument>
 #include <QDomElement>
 
@@ -45,7 +44,9 @@ namespace Connect {
 class DbHostInfo : public HostInfo
 {
     public:
-        explicit DbHostInfo(const QString &iAddress = "", quint16 iPort = 0, const QString &iUser = "", const QString &iPassword = "", const QString &iDbName = "", const QString &iDbDriver = "");
+        explicit DbHostInfo(const QString &iAddress = "localhost", quint16 iPort = 5432, 
+                const QString &iUser = "", const QString &iPassword = "", 
+                const QString &iDbName = "", const QString &iDbDriver = "QPSQL");
         ~DbHostInfo();
 
         QString dbName() const;
@@ -54,8 +55,8 @@ class DbHostInfo : public HostInfo
         QString dbDriver() const;
         void setDbDriver(const QString &iDbDriver);
 
-        void fromXml(QDomElement &) {};
-        QDomElement toXml(QDomDocument &) const {};
+        QDomElement toXml(QDomElement &) const;
+        void fromXml(QDomElement &);
 
         bool operator==(const DbHostInfo &iDbHostInfo);
         bool operator!=(const DbHostInfo &iDbHostInfo);

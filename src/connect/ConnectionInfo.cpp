@@ -40,42 +40,74 @@ ConnectionInfo::~ConnectionInfo()
 {
 }
 
-const DbHostInfo &ConnectionInfo::dbHostInfo() const
+const 
+DbHostInfo &ConnectionInfo::dbHostInfo() const
 {
     return mDbHostInfo;
 }
 
-void ConnectionInfo::setDbHostInfo(const DbHostInfo &iDbHostInfo)
+void 
+ConnectionInfo::setDbHostInfo(const DbHostInfo &iDbHostInfo)
 {
     mDbHostInfo = iDbHostInfo;
 }
 
-const ProxyHostInfo &ConnectionInfo::proxyHostInfo() const
+const 
+ProxyHostInfo &ConnectionInfo::proxyHostInfo() const
 {
     return mProxyHostInfo;
 }
 
-void ConnectionInfo::setProxyHostInfo(const ProxyHostInfo &iProxyHostInfo)
+void 
+ConnectionInfo::setProxyHostInfo(const ProxyHostInfo &iProxyHostInfo)
 {
     mProxyHostInfo = iProxyHostInfo;
 }
 
-bool ConnectionInfo::useProxy() const
+/*
+ * Load proxy settings from the xml file
+ */
+void
+ConnectionInfo::fromXml(QDomElement &iElement)
 {
-    return mUseProxy;
+    QDomNode child = iElement.firstChild();
+    while (!child.isNull()) {
+        QDomElement element = child.toElement(); // try to convert the node to an element.
+        if (!element.isNull()) {
+            if (element.tagName() == "database") {
+                mDbHostInfo.fromXml(element);
+            } else if (element.tagName() == "proxy") {
+                mProxyHostInfo.fromXml(element);
+            }
+        }
+        child = child.nextSibling();
+    }
 }
 
-void ConnectionInfo::setUseProxy(bool iUseProxy)
+/*
+ * Get xml structure of proxy settings
+ */
+void
+ConnectionInfo::toXml(QDomDocument &iDoc, QDomElement &iElement) const
 {
-    mUseProxy = iUseProxy;
+    QDomElement connElement = iDoc.createElement("connection");
+    iElement.appendChild(connElement);
+
+    QDomElement dbElement = iDoc.createElement("database");
+    connElement.appendChild(mDbHostInfo.toXml(dbElement));
+
+    QDomElement proxyElement = iDoc.createElement("proxy");
+    connElement.appendChild(mProxyHostInfo.toXml(proxyElement));
 }
 
-bool ConnectionInfo::operator==(const ConnectionInfo &iConnectionInfo)
+bool 
+ConnectionInfo::operator==(const ConnectionInfo &iConnectionInfo)
 {
     return mDbHostInfo == iConnectionInfo.mDbHostInfo && mProxyHostInfo == iConnectionInfo.mProxyHostInfo;
 }
 
-bool ConnectionInfo::operator!=(const ConnectionInfo &iConnectionInfo)
+bool 
+ConnectionInfo::operator!=(const ConnectionInfo &iConnectionInfo)
 {
     return !(operator==(iConnectionInfo));
 }

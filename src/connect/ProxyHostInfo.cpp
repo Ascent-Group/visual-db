@@ -31,8 +31,10 @@
 
 namespace Connect {
 
-ProxyHostInfo::ProxyHostInfo(const QString &iAddress, quint16 iPort, const QString &iUser, const QString &iPassword, const QNetworkProxy::ProxyType &iType)
-    : HostInfo(iAddress, iPort, iUser, iPassword), mType(iType)
+ProxyHostInfo::ProxyHostInfo(bool iUseProxy, const QString &iAddress, 
+        quint16 iPort, const QString &iUser, const QString &iPassword, 
+        const QNetworkProxy::ProxyType &iType)
+    : HostInfo(iAddress, iPort, iUser, iPassword), mUseProxy(iUseProxy), mType(iType)
 {
 }
 
@@ -40,14 +42,52 @@ ProxyHostInfo::~ProxyHostInfo()
 {
 }
 
-QNetworkProxy::ProxyType ProxyHostInfo::type() const
+bool 
+ProxyHostInfo::useProxy() const
+{
+    return mUseProxy;
+}
+
+void 
+ProxyHostInfo::setUseProxy(bool iUseProxy)
+{
+    mUseProxy = iUseProxy;
+}
+
+QNetworkProxy::ProxyType 
+ProxyHostInfo::type() const
 {
     return mType;
 }
 
-void ProxyHostInfo::setType(const QNetworkProxy::ProxyType &iType)
+void 
+ProxyHostInfo::setType(const QNetworkProxy::ProxyType &iType)
 {
     mType = iType;
+}
+
+/*
+ * Load proxy settings from the xml file
+ */
+void
+ProxyHostInfo::fromXml(QDomElement &iElement)
+{
+    HostInfo::fromXml(iElement);
+    setUseProxy((int)iElement.attribute("use").toInt());
+    setType((QNetworkProxy::ProxyType)iElement.attribute("type").toInt());
+}
+
+/*
+ * Get xml structure of proxy settings
+ */
+QDomElement
+ProxyHostInfo::toXml(QDomElement &iElement) const
+{
+    HostInfo::toXml(iElement);
+    iElement.setAttribute("use", useProxy());
+    iElement.setAttribute("type", type());
+
+    return iElement;
 }
 
 bool ProxyHostInfo::operator==(const ProxyHostInfo &iProxyHostInfo)

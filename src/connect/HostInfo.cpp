@@ -42,54 +42,88 @@ HostInfo::~HostInfo()
 {
 }
 
-QString HostInfo::address() const
+QString 
+HostInfo::address() const
 {
     return mAddress;
 }
 
-void HostInfo::setAddress(const QString &iAddress)
+void 
+HostInfo::setAddress(const QString &iAddress)
 {
     mAddress = iAddress;
 }
 
 
-quint16 HostInfo::port() const
+quint16 
+HostInfo::port() const
 {
     return mPort;
 }
 
-void HostInfo::setPort(quint16 iPort)
+void 
+HostInfo::setPort(quint16 iPort)
 {
     mPort = iPort;
 }
 
-QString HostInfo::user() const
+QString 
+HostInfo::user() const
 {
     return mUser;
 }
 
-void HostInfo::setUser(const QString &iUser)
+void 
+HostInfo::setUser(const QString &iUser)
 {
     mUser = iUser;
 }
 
-QString HostInfo::password() const
+QString 
+HostInfo::password() const
 {
     return mPassword;
 }
 
-void HostInfo::setPassword(const QString &iPassword)
+void 
+HostInfo::setPassword(const QString &iPassword)
 {
     mPassword = iPassword;
 }
 
-bool HostInfo::operator==(const HostInfo &iHostInfo)
+/*
+ * Load host parameters from the xml file
+ */
+void
+HostInfo::fromXml(QDomElement &iElement)
+{
+    setAddress(iElement.attribute("host"));
+    setPort(iElement.attribute("port").toInt());
+    setUser(iElement.attribute("user"));
+}
+
+/*
+ * Get xml structure of host settings
+ */
+QDomElement
+HostInfo::toXml(QDomElement &iElement) const
+{
+    iElement.setAttribute("host", address());
+    iElement.setAttribute("port", port());
+    iElement.setAttribute("user", user());
+
+    return iElement;
+}
+
+bool 
+HostInfo::operator==(const HostInfo &iHostInfo)
 {
     return mAddress == iHostInfo.mAddress && mPort == iHostInfo.mPort && 
         mUser == iHostInfo.mUser && mPassword == iHostInfo.mPassword;
 }
 
-bool HostInfo::operator!=(const HostInfo &iHostInfo)
+bool 
+HostInfo::operator!=(const HostInfo &iHostInfo)
 {
     return !(operator==(iHostInfo));
 }

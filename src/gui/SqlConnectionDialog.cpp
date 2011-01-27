@@ -45,7 +45,7 @@
 /*!
  * Constructor
  */
-SqlConnectionDialog::SqlConnectionDialog(const Connect::ConnectionInfo &iConnectionInfo,
+SqlConnectionDialog::SqlConnectionDialog(Connect::ConnectionInfo &iConnectionInfo,
         bool ipLoadSession,
         QWidget *ipParent)
     : QDialog(ipParent)
@@ -126,7 +126,6 @@ SqlConnectionDialog::createDialog(bool ipLoadSession)
     // proxy port
     ui.mProxyPortEdit->setValidator(new QIntValidator(1, 65535, this));
 
-
     // proxy password
     ui.mProxyPasswordEdit->setEchoMode(QLineEdit::Password);
 
@@ -143,7 +142,7 @@ SqlConnectionDialog::createDialog(bool ipLoadSession)
     ui.mProxyHostNameEdit->setEnabled(ui.mUseProxyBox->isChecked());
     ui.mProxyPortEdit->setEnabled(ui.mUseProxyBox->isChecked());
     ui.mProxyUserEdit->setEnabled(ui.mUseProxyBox->isChecked());
-    ui.mProxyPasswordEdit->setEnabled(ui.mUseProxyBox->isChecked());
+    ui.mProxyPasswordEdit->setEnabled(true);
 
     // initially we set connection failed flag to true
     mConnectionFailed = true;
@@ -161,7 +160,7 @@ SqlConnectionDialog::initConnectionFields()
     ui.mDbNameEdit->setText(mConnectionInfo.dbHostInfo().dbName());
     ui.mDbUserEdit->setText(mConnectionInfo.dbHostInfo().user());
 
-    ui.mUseProxyBox->setChecked(mConnectionInfo.useProxy());
+    ui.mUseProxyBox->setChecked(mConnectionInfo.proxyHostInfo().useProxy());
     ui.mProxyTypeBox->setCurrentIndex(ui.mProxyTypeBox->findData(mConnectionInfo.proxyHostInfo().type()));
     ui.mProxyHostNameEdit->setText(mConnectionInfo.proxyHostInfo().address());
     ui.mProxyPortEdit->setText(QString::number(mConnectionInfo.proxyHostInfo().port()));
@@ -177,16 +176,16 @@ SqlConnectionDialog::addConnection()
     using namespace Connect;
 
     // proxy section
-    if (ui.mUseProxyBox->isChecked()) {
+//    if (ui.mUseProxyBox->isChecked()) {
         // remember connection paramters
-        mConnectionInfo.setUseProxy(true);
-        ProxyHostInfo proxyHostInfo(ui.mProxyHostNameEdit->text(), ui.mProxyPortEdit->text().toUInt(), ui.mProxyUserEdit->text(), "",
+        ProxyHostInfo proxyHostInfo(ui.mUseProxyBox->isChecked(), ui.mProxyHostNameEdit->text(), 
+                ui.mProxyPortEdit->text().toUInt(), ui.mProxyUserEdit->text(), "",
                 (QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toUInt());
         mConnectionInfo.setProxyHostInfo(proxyHostInfo);
 //        setProxy(ProxyHostInfo);
-    } else {
-        mConnectionInfo.setUseProxy(false);
-    }
+//    } else {
+//        mConnectionInfo.setUseProxy(false);
+//    }
 
     // remember database settings
     DbHostInfo dbHostInfo(ui.mDbHostEdit->text(), ui.mDbPortEdit->text().toUInt(), 

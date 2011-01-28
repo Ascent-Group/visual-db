@@ -27,61 +27,78 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef NAMESPACES_H
+#define NAMESPACES_H
+
 /*!
- * \mainpage VisualDB v1.1
- * \image html MainWindow.png "Application's main window"
+ * \namespace Gui
+ * \brief Holds visual elements and entities that control their displaying.
  */
-
-#include <QApplication>
-#include <QLocale>
-#include <QSettings>
-#include <QTranslator>
-#include <QIcon>
-
-#include <consts.h>
-#include <gui/MainWindow.h>
-
-int main(int argc, char **argv)
+namespace Gui
 {
-    /*
-    QTextCodec *codec = QTextCodec::codecForName("cp1251");
-    QTextCodec::setCodecForTr(codec);
-    QTextCodec::setCodecForCStrings(codec);
-    QTextCodec::setCodecForLocale(codec);
-    */
 
-    QApplication app(argc, argv);
+    /*!
+     * \namespace Behaviour
+     * \brief Holds all commands of the undo stack
+     */
+    namespace Behaviour { }
 
-    // settings intialization
-    app.setOrganizationName("Ascent Group");
-    app.setOrganizationDomain("sourceforge.net");
-    app.setApplicationName("VisualDB");
-    app.setWindowIcon(QIcon(":/img/logo.png"));
+    /*!
+     * \namespace GraphicsItems
+     * \brief Holds items that are displayed by the scene
+     */
+    namespace GraphicsItems { }
 
-    // set additional plugins path
-    app.addLibraryPath("./lib/");
-
-    const QSettings settings;
-    QTranslator translator;
-
-    // load qm translation
-    switch (settings.value(Consts::APPEARANCE_GRP + "/" + Consts::LANG_SETTING).toInt()) {
-        case QLocale::Russian:
-            translator.load(":/visual_db_ru");
-            break;
-        case QLocale::English:
-        default:
-            translator.load(":/visual_db_en");
-    }
-
-    //
-    app.installTranslator(&translator);
-
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
-
-    app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-
-    return app.exec();
+    /*!
+     * \namespace Strategy
+     * \brief Holds strategies that implement pretty items arrangement on the scene.
+     */
+    namespace Startegy { }
 }
+
+/*!
+ * \namespace Connect
+ * \brief Holds entities responsible for connection
+ */
+namespace Connect { }
+
+/*!
+ * \namespace Control
+ * \brief Holds entities that coordinate the cooperation of modules
+ */
+namespace Control { }
+
+/*!
+ * \namespace DbObjects
+ * \brief Top level namespace for all database objects
+ */
+namespace DbObjects
+{
+    /*!
+     * \namespace Common
+     * \brief Holds abstract database objects
+     */
+    namespace Common { }
+
+    /*!
+     * \namespace Factory
+     * \brief Holds factories of database objects
+     */
+    namespace Factory { }
+
+    /*!
+     * \namespace Psql
+     * \brief Holds PostgreSQL specific implementations
+     */
+    namespace Psql { }
+
+    /*!
+     * \namespace Mysql
+     * \brief Holds MySQL specific implementations
+     */
+    namespace Mysql { }
+
+} // namespace DbObjects
+
+#endif // NAMESPACES_H
 

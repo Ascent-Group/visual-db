@@ -46,7 +46,8 @@ namespace Connect {
 class ConnectionInfo
 {
     public:
-        explicit ConnectionInfo(const DbHostInfo &iDbHostInfo, const ProxyHostInfo &iProxyHostInfo);
+        ConnectionInfo();
+        ConnectionInfo(const DbHostInfo &iDbHostInfo, const ProxyHostInfo &iProxyHostInfo);
         ~ConnectionInfo();
 
         const DbHostInfo &dbHostInfo() const;

@@ -80,7 +80,7 @@ class MainWindow : public QMainWindow
         QProgressBar *mProgressBar;
 
         QSettings mSettings;
-        Connect::ConnectionInfo *mConnectionInfo;
+        Connect::ConnectionInfo mConnectionInfo;
 
         QUndoStack *mUndoStack;
 

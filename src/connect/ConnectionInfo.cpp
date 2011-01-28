@@ -31,6 +31,10 @@
 
 namespace Connect {
 
+ConnectionInfo::ConnectionInfo()
+{
+}
+
 ConnectionInfo::ConnectionInfo(const DbHostInfo &iDbHostInfo, const ProxyHostInfo &iProxyHostInfo)
     : mDbHostInfo(iDbHostInfo), mProxyHostInfo(iProxyHostInfo)
 {

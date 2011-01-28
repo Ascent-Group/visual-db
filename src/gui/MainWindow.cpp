@@ -71,7 +71,6 @@ MainWindow::MainWindow()
     : QMainWindow(),
       mTreeItemMenu(0),
       mProgressBar(0),
-      mConnectionInfo(0),
       mUndoStack(0)
 {
     ui.setupUi(this);
@@ -87,7 +86,6 @@ MainWindow::MainWindow()
     using namespace Connect;
     DbHostInfo dbHostInfo;
     ProxyHostInfo proxyHostInfo;
-    mConnectionInfo = new ConnectionInfo(dbHostInfo, proxyHostInfo);
 
     // set attributes
     setAttribute(Qt::WA_DeleteOnClose);
@@ -108,7 +106,6 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
     delete mTreeItemMenu;
-    delete mConnectionInfo;
     delete mProgressBar;
     delete mUndoStack;
     // \note We have to delete it here because somehow the parent is not set for scene
@@ -253,7 +250,7 @@ importDatabase(const Ui::MainWindow &ui)
 int
 MainWindow::showConnectionDialog(bool ipLoadSession)
 {
-    SqlConnectionDialog connDialog(*mConnectionInfo, ipLoadSession);
+    SqlConnectionDialog connDialog(mConnectionInfo, ipLoadSession);
 
     while (connDialog.connectionFailed()) {
         // nothing to do if canceled
@@ -778,7 +775,7 @@ MainWindow::saveToXml(const QString &ipFileName)
     QDomDocument doc("VisualDB");
     QDomElement root = doc.createElement("visual-db");
     doc.appendChild(root);
-    mConnectionInfo->toXml(doc, root);
+    mConnectionInfo.toXml(doc, root);
     root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(),
                 ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
 
@@ -824,7 +821,7 @@ MainWindow::loadFromXml(QString ipFileName)
         QDomElement element = child.toElement(); // try to convert the node to an element.
         if (!element.isNull()) {
             if (element.tagName() == "connection") {
-                mConnectionInfo->fromXml(element);
+                mConnectionInfo.fromXml(element);
             }
         }
         child = child.nextSibling();

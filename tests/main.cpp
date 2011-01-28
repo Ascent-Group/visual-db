@@ -2,6 +2,9 @@
 #include <connect/DbParametersTest.h>
 #include <connect/ProxyParametersTest.h>
 
+/* control */
+#include <control/ContextTest.h>
+
 /* gui/behaviour */
 #include <gui/behaviour/AddTableCommandTest.h>
 #include <gui/behaviour/MoveTableCommandTest.h>
@@ -130,6 +133,12 @@ int main(int argc, char *argv[])
     ProxyParametersTest proxyParametersTest;
     QTest::qExec(&proxyParametersTest, argc, argv);
 #endif // TEST_CONNECT
+
+#if TEST_CONTROL
+    /* control*/
+    ContextTest contextTest;
+    QTest::qExec(&contextTest, argc, argv);
+#endif
 
 #if TEST_GUI
     /* gui */

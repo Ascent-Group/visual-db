@@ -44,7 +44,12 @@ OBJECTS_DIR = .obj
 TOP_SRC_DIR = $$PWD/../src
 
 DEPENDPATH = . dbobjects $$TOP_SRC_DIR $$TOP_SRC_DIR/dbobjects
-INCLUDEPATH = $$PWD $$PWD/dbobjects $$TOP_SRC_DIR $$TOP_SRC_DIR/dbobjects
+INCLUDEPATH = $$PWD \
+              $$PWD/connect \
+              $$PWD/control \
+              $$PWD/dbobjects \
+              $$TOP_SRC_DIR \
+              $$TOP_SRC_DIR/dbobjects
 
 QMAKE_CXXFLAGS = -Wextra
 
@@ -63,6 +68,7 @@ DEFINES -= QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 #DEFINES += TEST_BEHAVIOUR
 #DEFINES += TEST_GUI
 DEFINES += TEST_CONNECT
+DEFINES += TEST_CONTROL
 DEFINES += TEST_DBOBJECTS
 
 SOURCES = $$PWD/main.cpp \
@@ -92,6 +98,14 @@ contains(DEFINES, TEST_CONNECT) {
 
     SOURCES += $$files($$PWD/connect/*.cpp) \
                $$files($$TOP_SRC_DIR/connect/*.cpp)
+}
+
+contains(DEFINES, TEST_CONTROL) {
+    HEADERS += $$files($$PWD/control/*.h) \
+               $$files($$TOP_SRC_DIR/control/*.h)
+
+    SOURCES += $$files($$PWD/control/*.cpp) \
+               $$files($$TOP_SRC_DIR/control/*.cpp)
 }
 
 contains(DEFINES, TEST_DBOBJECTS) {

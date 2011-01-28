@@ -27,53 +27,25 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CONTROL_CONTEXT_H
-#define CONTROL_CONTEXT_H
+#ifndef CONTEXTTEST_H
+#define CONTEXTTEST_H
 
-#include <connect/ConnectionInfo.h>
+#include <QtTest/QtTest>
 
-#include <QSqlDatabase>
-
-
-namespace Control
+class ContextTest : public QObject
 {
+    Q_OBJECT
 
-/*!
- * \class Context
- * \headerfile control/Context.h
- * \brief Class that represents the environment of current execution.
- */
-class Context
-{
-    public:
-        Context();
-        Context(const Connect::ConnectionInfo &, const QSqlDatabase &);
-        ~Context();
+    private slots:
+        void initTestCase();
+        void cleanupTestCase();
 
-        const Connect::ConnectionInfo& connectionInfo() const;
-        void setConnectionInfo(const Connect::ConnectionInfo &);
-
-        const QSqlDatabase& dbHandle() const;
-        void setDbHandle(const QSqlDatabase &);
-
-        bool operator!=(const Context &);
-        bool operator==(const Context &);
-
-    private:
-        /*! Connection parameters */
-        Connect::ConnectionInfo mConnectionInfo;
-        /*! Db connection descriptor */
-        QSqlDatabase mDbHandle;
-
-        /*!
-         * \note Having 2 identical contexts violates the idea of having unique execution
-         * environments
-         */
-        Context(const Context &);
-        const Context& operator=(const Context &);
+        void connectionInfoTest1();
+        void connectionInfoTest2();
+        void dbHandleTest1();
+        void dbHandleTest2();
+        void comparisonTest();
 };
 
-} // namespace Control
-
-#endif // CONTROL_CONTEXT_H
+#endif // CONTEXTTEST_H
 

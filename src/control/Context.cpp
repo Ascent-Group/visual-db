@@ -27,3 +27,124 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <control/Context.h>
+
+namespace Control
+{
+
+/*!
+ * Constructor
+ */
+Context::Context()
+    : mConnectionInfo(),
+      mDbHandle()
+{
+
+}
+
+/*!
+ *
+ */
+Context::Context(const Connect::ConnectionInfo &iConnectionInfo, const QSqlDatabase &iDbHandle)
+    : mConnectionInfo(iConnectionInfo),
+      mDbHandle(iDbHandle)
+{
+}
+
+/*!
+ *
+ */
+Context::~Context()
+{
+}
+
+/*!
+ * Copy constructor
+ * \note FORBIDDEN
+ */
+Context::Context(const Context &iContext)
+{
+    Q_UNUSED(iContext);
+}
+
+/*!
+ * Assignment operator
+ * \note FORBIDDEN
+ */
+const Context&
+Context::operator=(const Context &iRhs)
+{
+    Q_UNUSED(iRhs);
+    return *this;
+}
+
+/*!
+ * \return Connection info
+ */
+const Connect::ConnectionInfo&
+Context::connectionInfo() const
+{
+    return mConnectionInfo;
+}
+
+/*!
+ * Set the connection info for the given context.
+ *
+ * \param[in] iInfo - Connection info
+ */
+void
+Context::setConnectionInfo(const Connect::ConnectionInfo &iInfo)
+{
+    // \todo uncomment this
+//    mConnectionInfo = iInfo;
+}
+
+/*!
+ * \return Database connection handle
+ */
+const QSqlDatabase&
+Context::dbHandle() const
+{
+    return mDbHandle;
+}
+
+/*!
+ * \param[in] iDbHandle - Database connection handle
+ */
+void
+Context::setDbHandle(const QSqlDatabase &iDbHandle)
+{
+    mDbHandle = iDbHandle;
+}
+
+/*!
+ * \param[in] iInst - Another instance of context that we are comparing our context to
+ *
+ * \return true - If contexts are different
+ * \return false - Otherwise
+ */
+bool
+Context::operator!=(const Context &iInst)
+{
+    return !(*this == iInst);
+}
+
+/*!
+ * \param[in] iInst - Another instance of context that we are comparing our context to
+ * \return true - If contexts are equal
+ * \return false - Otherwise
+ */
+bool
+Context::operator==(const Context &iInst)
+{
+    // \note QSqlDatabase has no public == operator defined
+    return (mConnectionInfo == iInst.mConnectionInfo
+            && mDbHandle.databaseName() == iInst.mDbHandle.databaseName()
+            && mDbHandle.driverName() == iInst.mDbHandle.driverName()
+            && mDbHandle.hostName() == iInst.mDbHandle.hostName()
+            && mDbHandle.port() == iInst.mDbHandle.port()
+            && mDbHandle.userName() == iInst.mDbHandle.userName());
+}
+
+} // namespace Control
+

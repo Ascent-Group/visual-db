@@ -40,7 +40,7 @@ namespace Connect {
 
 /*!
  * \class DbHostInfo
- * \headfile connect/DbHostInfo.h
+ * \headerfile connect/DbHostInfo.h
  * \brief Incapsulation of whole connection parameters
  */
 class ConnectionInfo

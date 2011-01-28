@@ -39,7 +39,7 @@ namespace Connect {
 
 /*!
  * \class DbHostInfo
- * \headfile connect/DbHostInfo.h
+ * \headerfile connect/DbHostInfo.h
  * \brief Incapsulation of proxy connection parameters
  */
 class ProxyHostInfo : public HostInfo

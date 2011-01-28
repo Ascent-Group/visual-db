@@ -38,7 +38,7 @@ namespace Connect {
 
 /*!
  * \class DbHostInfo
- * \headfile connect/DbHostInfo.h
+ * \headerfile connect/DbHostInfo.h
  * \brief Incapsulation of database connection parameters
  */
 class DbHostInfo : public HostInfo

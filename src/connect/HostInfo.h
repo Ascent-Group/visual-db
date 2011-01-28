@@ -38,7 +38,7 @@ namespace Connect {
 
 /*!
  * \class HostInfo
- * \headfile connect/HostInfo.h
+ * \headerfile connect/HostInfo.h
  * \brief Incapsulation of host info parameters
  */
 class HostInfo

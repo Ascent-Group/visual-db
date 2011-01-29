@@ -50,10 +50,10 @@ class Context
         Context(const Connect::ConnectionInfo &, const QSqlDatabase &);
         ~Context();
 
-        const Connect::ConnectionInfo& connectionInfo() const;
+        Connect::ConnectionInfo connectionInfo() const;
         void setConnectionInfo(const Connect::ConnectionInfo &);
 
-        const QSqlDatabase& dbHandle() const;
+        QSqlDatabase dbHandle() const;
         void setDbHandle(const QSqlDatabase &);
 
         bool operator!=(const Context &);

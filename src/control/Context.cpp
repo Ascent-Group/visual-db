@@ -81,7 +81,7 @@ Context::operator=(const Context &iRhs)
 /*!
  * \return Connection info
  */
-const Connect::ConnectionInfo&
+Connect::ConnectionInfo
 Context::connectionInfo() const
 {
     return mConnectionInfo;
@@ -102,7 +102,7 @@ Context::setConnectionInfo(const Connect::ConnectionInfo &iInfo)
 /*!
  * \return Database connection handle
  */
-const QSqlDatabase&
+QSqlDatabase
 Context::dbHandle() const
 {
     return mDbHandle;

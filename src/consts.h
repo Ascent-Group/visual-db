@@ -32,10 +32,6 @@
 
 #include <QString>
 
-/*!
- * \namespace Consts
- * \brief Namespace for holding various constants
- */
 namespace Consts
 {
     // begin Appearance group

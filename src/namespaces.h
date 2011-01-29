@@ -31,6 +31,12 @@
 #define NAMESPACES_H
 
 /*!
+ * \namespace Consts
+ * \brief Holds various constants
+ */
+namespace Consts { }
+
+/*!
  * \namespace Gui
  * \brief Holds visual elements and entities that control their displaying.
  */

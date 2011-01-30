@@ -41,12 +41,12 @@ namespace Common
 /*!
  * Ctor
  *
- * On creation finds the parent schema by its name ipSchemaName and sets it as
+ * On creation finds the parent schema by its name iSchemaName and sets it as
  * parent schema object with setSchema() function.
  */
-DbProcedure::DbProcedure(QString ipName, const DbSchemaPtr &ipSchema)
-    : DbObject(ipName),
-      mSchema(ipSchema),
+DbProcedure::DbProcedure(QString iName, const DbSchemaPtr &iSchema)
+    : DbObject(iName),
+      mSchema(iSchema),
       mOwner(),
       mLanguage(),
       mSourceCode("")
@@ -93,12 +93,12 @@ DbProcedure::schema() const
 /*!
  * \brief Sets parent schema
  *
- * \param[in] ipSchema - Parent schema object
+ * \param[in] iSchema - Parent schema object
  */
 void
-DbProcedure::setSchema(const DbSchemaPtr &ipSchema)
+DbProcedure::setSchema(const DbSchemaPtr &iSchema)
 {
-    mSchema = ipSchema;
+    mSchema = iSchema;
 }
 
 /*!
@@ -113,12 +113,12 @@ DbProcedure::owner() const
 /*!
  * \brief Sets the owner
  *
- * \param[in] ipRole - Owner of the procedure
+ * \param[in] iRole - Owner of the procedure
  */
 void
-DbProcedure::setOwner(const DbRolePtr &ipRole)
+DbProcedure::setOwner(const DbRolePtr &iRole)
 {
-    mOwner = ipRole;
+    mOwner = iRole;
 }
 
 /*!
@@ -133,12 +133,12 @@ DbProcedure::language() const
 /*!
  * \brief Sets the language
  *
- * \param[in] ipLang
+ * \param[in] iLang
  */
 void
-DbProcedure::setLanguage(const DbLanguagePtr &ipLang)
+DbProcedure::setLanguage(const DbLanguagePtr &iLang)
 {
-    mLanguage = ipLang;
+    mLanguage = iLang;
 }
 
 /*!
@@ -153,12 +153,12 @@ DbProcedure::sourceCode() const
 /*!
  * \brief Sets the proc's source code
  *
- * \param[in] ipText - Source code text
+ * \param[in] iText - Source code text
  */
 void
-DbProcedure::setSourceCode(const QString &ipText)
+DbProcedure::setSourceCode(const QString &iText)
 {
-    mSourceCode = ipText;
+    mSourceCode = iText;
 }
 
 /*!

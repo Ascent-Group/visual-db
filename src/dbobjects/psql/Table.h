@@ -55,7 +55,7 @@ typedef Common::DbObjectPtr<Common::DbTable> DbTablePtr;
 class Table : public Common::DbTable
 {
     public:
-        Table(QString ipName, const DbSchemaPtr &ipSchema);
+        Table(QString iName, const DbSchemaPtr &iSchema);
         ~Table();
 
         bool checkPrimaryKey(const QString &) const;

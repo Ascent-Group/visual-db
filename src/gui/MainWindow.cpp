@@ -191,36 +191,36 @@ MainWindow::updateSessionMenu()
 /*!
  * \brief Enable or disable some menu actions
  *
- * \param[in] ipFlag - True if we want to enable actions, false otherwise
+ * \param[in] iFlag - True if we want to enable actions, false otherwise
  */
 void
-MainWindow::setEnableForActions(bool ipFlag)
+MainWindow::setEnableForActions(bool iFlag)
 {
-    ui.mSaveToImgAction->setEnabled(ipFlag);
-    ui.mDrawFullDBAction->setEnabled(ipFlag);
+    ui.mSaveToImgAction->setEnabled(iFlag);
+    ui.mDrawFullDBAction->setEnabled(iFlag);
 
-    ui.mSelectAllTablesAction->setEnabled(ipFlag);
-    ui.mRemoveAllTablesAction->setEnabled(ipFlag);
-    ui.mShowLegendAction->setEnabled(ipFlag);
-    ui.mAlignToGridAction->setEnabled(ipFlag);
-    ui.mColorizeAccordingSchemasAction->setEnabled(ipFlag);
+    ui.mSelectAllTablesAction->setEnabled(iFlag);
+    ui.mRemoveAllTablesAction->setEnabled(iFlag);
+    ui.mShowLegendAction->setEnabled(iFlag);
+    ui.mAlignToGridAction->setEnabled(iFlag);
+    ui.mColorizeAccordingSchemasAction->setEnabled(iFlag);
 
-    ui.mDeleteTableAction->setEnabled(ipFlag);
-    ui.mShowFieldsTypesAction->setEnabled(ipFlag);
-    ui.mHideFieldsTypesAction->setEnabled(ipFlag);
-    ui.mSetTableColorAction->setEnabled(ipFlag);
-    ui.mAdjustTableSizeAction->setEnabled(ipFlag);
-    ui.mGroupItemsAction->setEnabled(ipFlag);
-    ui.mUngroupItemsAction->setEnabled(ipFlag);
-    ui.mDescribeObjectAction->setEnabled(ipFlag);
-    ui.mQueryDataAction->setEnabled(ipFlag);
-    ui.mShowIndicesAction->setEnabled(ipFlag);
-    ui.mHideIndicesAction->setEnabled(ipFlag);
-    ui.mSelectAllTablesInSchemaAction->setEnabled(ipFlag);
+    ui.mDeleteTableAction->setEnabled(iFlag);
+    ui.mShowFieldsTypesAction->setEnabled(iFlag);
+    ui.mHideFieldsTypesAction->setEnabled(iFlag);
+    ui.mSetTableColorAction->setEnabled(iFlag);
+    ui.mAdjustTableSizeAction->setEnabled(iFlag);
+    ui.mGroupItemsAction->setEnabled(iFlag);
+    ui.mUngroupItemsAction->setEnabled(iFlag);
+    ui.mDescribeObjectAction->setEnabled(iFlag);
+    ui.mQueryDataAction->setEnabled(iFlag);
+    ui.mShowIndicesAction->setEnabled(iFlag);
+    ui.mHideIndicesAction->setEnabled(iFlag);
+    ui.mSelectAllTablesInSchemaAction->setEnabled(iFlag);
 
-    ui.mSaveSessionAction->setEnabled(ipFlag);
+    ui.mSaveSessionAction->setEnabled(iFlag);
 
-    ui.mReloadDataAction->setEnabled(ipFlag);
+    ui.mReloadDataAction->setEnabled(iFlag);
 }
 
 /*!
@@ -243,14 +243,14 @@ importDatabase(const Ui::MainWindow &ui)
 /*!
  * \brief Show connection dialog
  *
- * \param[in] ipLoadSession - True if we want to load session parameters, false otherwise
+ * \param[in] iLoadSession - True if we want to load session parameters, false otherwise
  *
  * \return Result of dialog processing
  */
 int
-MainWindow::showConnectionDialog(bool ipLoadSession)
+MainWindow::showConnectionDialog(bool iLoadSession)
 {
-    SqlConnectionDialog connDialog(mConnectionInfo, ipLoadSession);
+    SqlConnectionDialog connDialog(mConnectionInfo, iLoadSession);
 
     while (connDialog.connectionFailed()) {
         // nothing to do if canceled
@@ -336,15 +336,15 @@ MainWindow::showPrintDialog()
 /*!
  * \brief Print the preview page
  *
- * \param[in] ipPrinter - Printer
+ * \param[in] iPrinter - Printer
  */
 void
-MainWindow::printPreview(QPrinter *ipPrinter)
+MainWindow::printPreview(QPrinter *iPrinter)
 {
 #ifdef QT_NO_PRINTER
-    Q_UNUSED(ipPrinter);
+    Q_UNUSED(iPrinter);
 #else
-    ui.mSceneWidget->print(ipPrinter);
+    ui.mSceneWidget->print(iPrinter);
 #endif
 }
 
@@ -370,12 +370,12 @@ MainWindow::createStatusBar()
 /*!
  * \brief Make docked table list (in)visible
  *
- * \param[in] ipFlag - True if we want to show tree, false otherwise
+ * \param[in] iFlag - True if we want to show tree, false otherwise
  */
 void
-MainWindow::showDatabaseTree(bool ipFlag)
+MainWindow::showDatabaseTree(bool iFlag)
 {
-    if (ipFlag) {
+    if (iFlag) {
         ui.mDatabaseTreeWidget->show();
     } else {
         ui.mDatabaseTreeWidget->hide();
@@ -403,12 +403,12 @@ MainWindow::showDatabaseTree()
 /*!
  * \brief Make docked log panel (in)visible
  *
- * \param[in] ipFlag - True if we want to show log panel, false otherwise
+ * \param[in] iFlag - True if we want to show log panel, false otherwise
  */
 void
-MainWindow::showLogPanel(bool ipFlag)
+MainWindow::showLogPanel(bool iFlag)
 {
-    if (ipFlag) {
+    if (iFlag) {
         ui.mLogPanelWidget->show();
     } else {
         ui.mLogPanelWidget->hide();
@@ -454,13 +454,13 @@ MainWindow::addItem()
 /*!
  * \brief Show the item on the scene when we double click on it
  *
- * \param[in] ipItem - Item we clicked on
- * \param[in] ipColumn - Column of the item
+ * \param[in] iItem - Item we clicked on
+ * \param[in] iColumn - Column of the item
  */
 void
-MainWindow::addItem(QTreeWidgetItem *ipItem, int ipColumn)
+MainWindow::addItem(QTreeWidgetItem *iItem, int iColumn)
 {
-    ui.mSceneWidget->showOnScene(ipItem, ipColumn, true);
+    ui.mSceneWidget->showOnScene(iItem, iColumn, true);
 }
 
 
@@ -500,10 +500,10 @@ MainWindow::drawFullDbScheme()
 /*!
  * \brief Do smth before mainwindows is closed
  *
- * \param[in] ipEvent - Close event
+ * \param[in] iEvent - Close event
  */
 void
-MainWindow::closeEvent(QCloseEvent *ipEvent)
+MainWindow::closeEvent(QCloseEvent *iEvent)
 {
     /*! \todo If the connoection is not alive, then do not ask the confirmation
      *        For saving the session
@@ -546,9 +546,9 @@ MainWindow::closeEvent(QCloseEvent *ipEvent)
             DatabaseManager dbMngr;
             dbMngr.flush();
 
-            ipEvent->accept();
+            iEvent->accept();
         } else {
-            ipEvent->ignore();
+            iEvent->ignore();
         }
         break;
     }
@@ -767,10 +767,10 @@ MainWindow::queryData()
 /*!
  * \brief Save all parameters to xml file
  *
- * \param[in] ipFileName - Xml file name were we will store parameters to
+ * \param[in] iFileName - Xml file name were we will store parameters to
  */
 void
-MainWindow::saveToXml(const QString &ipFileName)
+MainWindow::saveToXml(const QString &iFileName)
 {
     QDomDocument doc("VisualDB");
     QDomElement root = doc.createElement("visual-db");
@@ -779,7 +779,7 @@ MainWindow::saveToXml(const QString &ipFileName)
     root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(),
                 ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
 
-    QFile file(ipFileName);
+    QFile file(iFileName);
     if (!file.open(QIODevice::WriteOnly)) {
         QMessageBox messageBox;
         messageBox.setText("Can't open file");
@@ -795,12 +795,12 @@ MainWindow::saveToXml(const QString &ipFileName)
 /*!
  * \brief Load parameters from xml file
  *
- * \param[in] ipFileName - Xml file name were load parameter from
+ * \param[in] iFileName - Xml file name were load parameter from
  */
 void
-MainWindow::loadFromXml(QString ipFileName)
+MainWindow::loadFromXml(QString iFileName)
 {
-    QFile file(ipFileName);
+    QFile file(iFileName);
     if (!file.open(QIODevice::ReadOnly)) {
         QMessageBox messageBox;
         messageBox.setText("Can't open file");
@@ -828,7 +828,7 @@ MainWindow::loadFromXml(QString ipFileName)
     }
 
     // show connection dialog and check if we haven't pressed 'Cancel' button
-    if (showConnectionDialog(true/*ipLoadSession*/) == QDialog::Accepted) {
+    if (showConnectionDialog(true/*iLoadSession*/) == QDialog::Accepted) {
         // second loop to fill in schema from the xml (we need to connect to database first)
         docElem = doc.documentElement();
         child = docElem.firstChild();
@@ -920,12 +920,12 @@ MainWindow::loadLastSession()
 /*!
  * \brief Show window with full screen or not
  *
- * \param[in] ipFlag - True if we want to show in fullscreen, false otherwise
+ * \param[in] iFlag - True if we want to show in fullscreen, false otherwise
  */
 void
-MainWindow::setFullScreen(bool ipFlag)
+MainWindow::setFullScreen(bool iFlag)
 {
-    if (ipFlag) {
+    if (iFlag) {
         setWindowState(Qt::WindowFullScreen);
     } else {
         setWindowState(Qt::WindowMaximized);
@@ -968,20 +968,20 @@ MainWindow::initSession()
  * \brief Add command to the stack
  */
 void
-MainWindow::addCommand(QUndoCommand *ipCommand)
+MainWindow::addCommand(QUndoCommand *iCommand)
 {
-    mUndoStack->push(ipCommand);
+    mUndoStack->push(iCommand);
 }
 
 /*!
  * \brief Prints the message to the log panel
  *
- * \param[in] ipText - Message text
+ * \param[in] iText - Message text
  */
 void
-MainWindow::printMsg(const QString &ipText) const
+MainWindow::printMsg(const QString &iText) const
 {
     qDebug() << ui.mLogPanel;
-    ui.mLogPanel->print(ipText);
+    ui.mLogPanel->print(iText);
 }
 

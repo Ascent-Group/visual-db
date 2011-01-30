@@ -33,8 +33,8 @@
 /*!
  * Ctor
  */
-TabWidget::TabWidget(QWidget *ipParent)
-    : QTabWidget(ipParent)
+TabWidget::TabWidget(QWidget *iParent)
+    : QTabWidget(iParent)
 {
 #if QT_VERSION >= 0x040500
     // at this point forbid moving tabs
@@ -63,12 +63,12 @@ TabWidget::~TabWidget()
 /*!
  * \brief Makes the tab with the given id active
  *
- * \param[in] ipTabId - tab id
+ * \param[in] iTabId - tab id
  */
 void
-TabWidget::setActiveTab(int ipTabId)
+TabWidget::setActiveTab(int iTabId)
 {
-    setCurrentIndex(ipTabId);
+    setCurrentIndex(iTabId);
 }
 
 /*!

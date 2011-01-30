@@ -42,8 +42,8 @@ namespace Common
 /*!
  * Ctor
  */
-DbIndex::DbIndex(QString ipName)
-    : DbObject(ipName),
+DbIndex::DbIndex(QString iName)
+    : DbObject(iName),
       mTable(),
       mSchema(),
       mColumnsCount(0),
@@ -78,12 +78,12 @@ DbIndex::table() const
 /*!
  * \brief Sets the table
  *
- * \param[in] ipTable
+ * \param[in] iTable
  */
 void
-DbIndex::setTable(const DbTablePtr &ipTable)
+DbIndex::setTable(const DbTablePtr &iTable)
 {
-    mTable = ipTable;
+    mTable = iTable;
 }
 
 /*!
@@ -98,12 +98,12 @@ DbIndex::schema() const
 /*!
  * \brief Sets the schema
  *
- * \param[in] ipSchema - Parent schema of the given index
+ * \param[in] iSchema - Parent schema of the given index
  */
 void
-DbIndex::setSchema(const DbSchemaPtr &ipSchema)
+DbIndex::setSchema(const DbSchemaPtr &iSchema)
 {
-    mSchema = ipSchema;
+    mSchema = iSchema;
 }
 
 /*!
@@ -118,12 +118,12 @@ DbIndex::columnsCount() const
 /*!
  * \brief Sets the number of columns in the given index
  *
- * \param[in] ipCount - Number of columns covered by the given index
+ * \param[in] iCount - Number of columns covered by the given index
  */
 void
-DbIndex::setColumnsCount(quint16 ipCount)
+DbIndex::setColumnsCount(quint16 iCount)
 {
-    mColumnsCount = ipCount;
+    mColumnsCount = iCount;
 }
 
 /*!
@@ -138,12 +138,12 @@ DbIndex::columnsNumbers() const
 /*!
  * \brief Adds a table's column number
  *
- * \param[in] ipNum - Column number the given index is assigned to
+ * \param[in] iNum - Column number the given index is assigned to
  */
 void
-DbIndex::addColumnNumber(qint16 ipNum)
+DbIndex::addColumnNumber(qint16 iNum)
 {
-    mColumnsNumbers.push_back(ipNum);
+    mColumnsNumbers.push_back(iNum);
 }
 
 /*!
@@ -159,12 +159,12 @@ DbIndex::isUnique() const
 /*!
  * \brief Sets the unique flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbIndex::setUnique(bool ipFlag)
+DbIndex::setUnique(bool iFlag)
 {
-    mIsUnique = ipFlag;
+    mIsUnique = iFlag;
 }
 
 /*!
@@ -180,12 +180,12 @@ DbIndex::isPrimary() const
 /*!
  * \brief Sets the primary flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbIndex::setPrimary(bool ipFlag)
+DbIndex::setPrimary(bool iFlag)
 {
-    mIsPrimary = ipFlag;
+    mIsPrimary = iFlag;
 }
 
 /*!
@@ -201,12 +201,12 @@ DbIndex::isClustered() const
 /*!
  * \brief Sets the clustered flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbIndex::setClustered(bool ipFlag)
+DbIndex::setClustered(bool iFlag)
 {
-    mIsClustered = ipFlag;
+    mIsClustered = iFlag;
 }
 
 /*!
@@ -222,12 +222,12 @@ DbIndex::isValid() const
 /*!
  * \brief Sets the valid flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbIndex::setValid(bool ipFlag)
+DbIndex::setValid(bool iFlag)
 {
-    mIsValid = ipFlag;
+    mIsValid = iFlag;
 }
 
 /*!
@@ -243,12 +243,12 @@ DbIndex::checksXMin() const
 /*!
  * \brief Sets the checksXmin flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbIndex::setChecksXMin(bool ipFlag)
+DbIndex::setChecksXMin(bool iFlag)
 {
-    mChecksXMin = ipFlag;
+    mChecksXMin = iFlag;
 }
 
 /*!
@@ -264,12 +264,12 @@ DbIndex::isReady() const
 /*!
  * \brief Sets the ready flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbIndex::setReady(bool ipFlag)
+DbIndex::setReady(bool iFlag)
 {
-    mIsReady = ipFlag;
+    mIsReady = iFlag;
 }
 
 /*!

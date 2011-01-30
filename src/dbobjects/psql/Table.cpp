@@ -48,11 +48,11 @@ namespace Psql
 /*!
  * Constructor
  *
- * \param[in] ipName - Name of the given table
- * \param[in] ipSchema - Handle to schema containing this view
+ * \param[in] iName - Name of the given table
+ * \param[in] iSchema - Handle to schema containing this view
  */
-Table::Table(QString ipName, const DbSchemaPtr &ipSchema)
-    :DbTable(ipName, ipSchema)
+Table::Table(QString iName, const DbSchemaPtr &iSchema)
+    :DbTable(iName, iSchema)
 {
     // load column definitions
 //    loadData();
@@ -220,13 +220,13 @@ Table::loadData()
 /*!
  * Checks if column is a primary key for the given table
  *
- * \param[in] ipColumnName - Name of the column
+ * \param[in] iColumnName - Name of the column
  *
  * \return true If the column is primary key
  * \return false Otherwise
  */
 bool
-Table::checkPrimaryKey(const QString &ipColumnName) const
+Table::checkPrimaryKey(const QString &iColumnName) const
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -251,7 +251,7 @@ Table::checkPrimaryKey(const QString &ipColumnName) const
                                "AND pga.attname = '%3';")
         .arg(mSchema->name())
         .arg(mName)
-        .arg(ipColumnName);
+        .arg(iColumnName);
 
 #ifdef DEBUG_QUERY
     qDebug() << "Psql::Table::checkPrimaryKey> " << qstr;
@@ -269,21 +269,21 @@ Table::checkPrimaryKey(const QString &ipColumnName) const
 }
 
 /*!
- * Checks if ipColumnName is a foreign key for ipTableName
+ * Checks if iColumnName is a foreign key for iTableName
  *
- * \param[in] ipColumnName - Name of the column
- * \param[out] opForeignSchemaName - Name of the schema that contains the reference table
- * \param[out] opForeignTableName - Name of the table references by this column
- * \param[out] opForeignFieldsNames - Names of fields references by this column
+ * \param[in] iColumnName - Name of the column
+ * \param[out] oForeignSchemaName - Name of the schema that contains the reference table
+ * \param[out] oForeignTableName - Name of the table references by this column
+ * \param[out] oForeignFieldsNames - Names of fields references by this column
  *
  * \return true If the column is a foreign key
  * \return false Otherwise
  */
 bool
-Table::checkForeignKey(const QString &ipColumnName,
-               QString &opForeignSchemaName,
-               QString &opForeignTableName,
-               QStringList &opForeignFieldsNames) const
+Table::checkForeignKey(const QString &iColumnName,
+               QString &oForeignSchemaName,
+               QString &oForeignTableName,
+               QStringList &oForeignFieldsNames) const
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -319,7 +319,7 @@ Table::checkForeignKey(const QString &ipColumnName,
                                 "AND a1.attname = '%3';")
         .arg(mSchema->name())
         .arg(mName)
-        .arg(ipColumnName);
+        .arg(iColumnName);
 
 #ifdef DEBUG_QUERY
     qDebug() << "Psql::Table::checkForeignKey> " << qstr;
@@ -345,15 +345,15 @@ Table::checkForeignKey(const QString &ipColumnName,
 
     // this needs to be don only once for all fields
     colId = query.record().indexOf("reltable");
-    opForeignTableName = query.value(colId).toString();
+    oForeignTableName = query.value(colId).toString();
 
     colId = query.record().indexOf("foreign_schema");
-    opForeignSchemaName = query.value(colId).toString();
+    oForeignSchemaName = query.value(colId).toString();
 
     // fields themselves
     do {
         colId = query.record().indexOf("ref_field");
-        opForeignFieldsNames.push_back(query.value(colId).toString());
+        oForeignFieldsNames.push_back(query.value(colId).toString());
     } while (query.next());
 
     // foreign key constraint definition found
@@ -361,15 +361,15 @@ Table::checkForeignKey(const QString &ipColumnName,
 }
 
 /*!
- * Checks if ipColumnName is unique for ipTableName
+ * Checks if iColumnName is unique for iTableName
  *
- * \param[in] ipColumnName - Name of the column
+ * \param[in] iColumnName - Name of the column
  *
  * \return true If the column has unique constraint
  * \return false Otherwise
  */
 bool
-Table::checkUnique(const QString &ipColumnName) const
+Table::checkUnique(const QString &iColumnName) const
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -395,7 +395,7 @@ Table::checkUnique(const QString &ipColumnName) const
                                 "AND pga.attname = '%3';")
         .arg(mSchema->name())
         .arg(mName)
-        .arg(ipColumnName);
+        .arg(iColumnName);
 
 #if DEBUG_QUERY
     qDebug() << "Psql::Table::checkUnique> " << qstr;

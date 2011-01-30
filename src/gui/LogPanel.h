@@ -43,10 +43,10 @@ class LogPanel : public QWidget
     Q_OBJECT
 
     public:
-        LogPanel(QWidget *ipParent = 0);
+        LogPanel(QWidget *iParent = 0);
         ~LogPanel();
 
-        void print(const QString &ipText);
+        void print(const QString &iText);
 
     private:
         Ui::LogPanel ui;

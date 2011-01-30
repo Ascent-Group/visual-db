@@ -49,16 +49,16 @@ class SelectColorWidget : public QWidget
     Q_PROPERTY(QColor defaultColor READ defaultColor WRITE setDefaultColor)
 
     public:
-        SelectColorWidget(QWidget *ipParent = 0);
+        SelectColorWidget(QWidget *iParent = 0);
         ~SelectColorWidget();
 
         QColor color() const;
 
         QString labelText() const;
-        void setLabelText(const QString &ipText);
+        void setLabelText(const QString &iText);
 
         QColor defaultColor() const;
-        void setDefaultColor(const QColor &ipColor);
+        void setDefaultColor(const QColor &iColor);
 
     private:
         Ui::SelectColorWidget ui;

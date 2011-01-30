@@ -34,8 +34,8 @@
 /*!
  * Constructor
  */
-ControlWidget::ControlWidget(QWidget *ipParent)
-    : QWidget(ipParent)
+ControlWidget::ControlWidget(QWidget *iParent)
+    : QWidget(iParent)
 {
     ui.setupUi(this);
 
@@ -53,13 +53,13 @@ ControlWidget::~ControlWidget()
 
 /*!
  * \brief Process value changed signal (just emit the signal)
- * 
- * \param[in] ipFactor - 
+ *
+ * \param[in] iFactor -
  */
 void
-ControlWidget::changeValue(int ipFactor)
+ControlWidget::changeValue(int iFactor)
 {
-    emit valueChanged(ipFactor);
+    emit valueChanged(iFactor);
 }
 
 /*!
@@ -139,12 +139,12 @@ ControlWidget::minZoom() const
 /*!
  * \brief Set the minimum scaling factor
  *
- * \param[in] ipVal - Minimum scaling factor
+ * \param[in] iVal - Minimum scaling factor
  */
 void
-ControlWidget::setMinZoom(int ipVal)
+ControlWidget::setMinZoom(int iVal)
 {
-    ui.mScaleSlider->setMinimum(ipVal);
+    ui.mScaleSlider->setMinimum(iVal);
 }
 
 /*!
@@ -161,12 +161,12 @@ ControlWidget::maxZoom() const
 /*!
  * \brief Set the maximum scaling factor
  *
- * \param[in] ipVal - Maximum scaling factor
+ * \param[in] iVal - Maximum scaling factor
  */
 void
-ControlWidget::setMaxZoom(int ipVal)
+ControlWidget::setMaxZoom(int iVal)
 {
-    ui.mScaleSlider->setMaximum(ipVal);
+    ui.mScaleSlider->setMaximum(iVal);
 }
 
 /*!
@@ -183,10 +183,10 @@ ControlWidget::zoom() const
 /*!
  * \brief Set current scaling factor
  *
- * \param[in] ipVal - Current scaling factor
+ * \param[in] iVal - Current scaling factor
  */
 void
-ControlWidget::setZoom(int ipVal)
+ControlWidget::setZoom(int iVal)
 {
-    ui.mScaleSlider->setValue(ipVal);
+    ui.mScaleSlider->setValue(iVal);
 }

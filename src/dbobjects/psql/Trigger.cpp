@@ -47,12 +47,12 @@ namespace Psql
 /*!
  * Constructor
  *
- * \param[in] ipName - Name of the given view
- * \param[in] ipSchema - Handle to schema containing this view
+ * \param[in] iName - Name of the given view
+ * \param[in] iSchema - Handle to schema containing this view
 
  */
-Trigger::Trigger(QString ipName, const DbSchemaPtr &ipSchema)
-    : DbTrigger(ipName, ipSchema)
+Trigger::Trigger(QString iName, const DbSchemaPtr &iSchema)
+    : DbTrigger(iName, iSchema)
 {
 }
 

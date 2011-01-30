@@ -40,11 +40,11 @@ namespace Factory
 {
 
 /*!
- * \param[in] ipName - Name of the role to be constructed
+ * \param[in] iName - Name of the role to be constructed
  * \return Pointer to abstract database role object
  */
 DbObjects::Common::DbRole*
-Role::createRole(const QString &ipName)
+Role::createRole(const QString &iName)
 {
     using namespace DbObjects::Common;
     Database::SqlDriverType drv = Database::instance()->sqlDriver();
@@ -56,7 +56,7 @@ Role::createRole(const QString &ipName)
                         qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                         break;
         case Database::PostgreSQL:
-                        role =  createPsqlRole(ipName);
+                        role =  createPsqlRole(iName);
                         break;
         case Database::MySQL:
 //                        role = createMysqlRole();
@@ -78,13 +78,13 @@ Role::createRole(const QString &ipName)
 }
 
 /*!
- * \param[in] ipName - Name of the rle to construct
- * \return Pointer to PostgreSQL role object whose name is ipName
+ * \param[in] iName - Name of the rle to construct
+ * \return Pointer to PostgreSQL role object whose name is iName
  */
 DbObjects::Psql::Role*
-Role::createPsqlRole(const QString &ipName)
+Role::createPsqlRole(const QString &iName)
 {
-    return new(std::nothrow) Psql::Role(ipName);
+    return new(std::nothrow) Psql::Role(iName);
 }
 
 } // namespace Factory

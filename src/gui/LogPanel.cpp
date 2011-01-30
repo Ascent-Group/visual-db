@@ -36,8 +36,8 @@
 /*!
  * Ctor
  */
-LogPanel::LogPanel(QWidget *ipParent)
-    : QWidget(ipParent)
+LogPanel::LogPanel(QWidget *iParent)
+    : QWidget(iParent)
 {
     ui.setupUi(this);
 }
@@ -80,11 +80,11 @@ LogPanel::saveToFile()
 /*!
  * \brief Print given string in the log
  *
- * \param[in] ipText - Log message
+ * \param[in] iText - Log message
  */
 void
-LogPanel::print(const QString &ipText)
+LogPanel::print(const QString &iText)
 {
-    ui.mOutputEdit->append(ipText);
+    ui.mOutputEdit->append(iText);
 }
 

@@ -40,7 +40,7 @@
 class ForeignArrow : public ArrowItem
 {
     public:
-        ForeignArrow(TableItem *, TableItem *, QString, QGraphicsItem *ipParent = 0, QGraphicsScene *ipScene = 0);
+        ForeignArrow(TableItem *, TableItem *, QString, QGraphicsItem *iParent = 0, QGraphicsScene *iScene = 0);
         virtual ~ForeignArrow();
 
     protected:

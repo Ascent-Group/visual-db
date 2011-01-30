@@ -48,7 +48,7 @@ class ControlWidget : public QWidget
         Q_PROPERTY(int zoom READ zoom WRITE setZoom)
 
     public:
-        ControlWidget(QWidget *ipParent = 0);
+        ControlWidget(QWidget *iParent = 0);
         ~ControlWidget();
 
         int minZoom() const;
@@ -61,7 +61,7 @@ class ControlWidget : public QWidget
         void setZoom(int);
 
     signals:
-        void valueChanged(int ipFactor);
+        void valueChanged(int iFactor);
         void movedUp();
         void movedDown();
         void movedRight();

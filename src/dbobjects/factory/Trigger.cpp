@@ -40,13 +40,13 @@ namespace Factory
 {
 
 /*!
- * \param[in] ipName - Name of the trigger to construct
- * \param[in] ipSchemaName - Name of schema containing the procedure
+ * \param[in] iName - Name of the trigger to construct
+ * \param[in] iSchemaName - Name of schema containing the procedure
  *
  * \return Database trigger object
  */
 DbObjects::Common::DbTrigger*
-Trigger::createTrigger(const QString &ipName, const QString &ipSchemaName)
+Trigger::createTrigger(const QString &iName, const QString &iSchemaName)
 {
     using namespace DbObjects::Common;
 
@@ -54,10 +54,10 @@ Trigger::createTrigger(const QString &ipName, const QString &ipSchemaName)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                trigger = createPsqlTrigger(ipName, ipSchemaName);
+                trigger = createPsqlTrigger(iName, iSchemaName);
                 break;
         case Database::MySQL:
-//                trigger = createMysqlTrigger(ipName, ipSchemaName);
+//                trigger = createMysqlTrigger(iName, iSchemaName);
                 break;
         case Database::Oracle:
         case Database::SQLite:
@@ -76,27 +76,27 @@ Trigger::createTrigger(const QString &ipName, const QString &ipSchemaName)
 }
 
 /*!
- * \param[in] ipName - Name of trigger to construct
- * \param[in] ipSchemaName - Name of schema containing the procedure
+ * \param[in] iName - Name of trigger to construct
+ * \param[in] iSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to PostgreSQL trigger object
  */
 Psql::Trigger*
-Trigger::createPsqlTrigger(const QString &ipName, const QString &ipSchemaName)
+Trigger::createPsqlTrigger(const QString &iName, const QString &iSchemaName)
 {
-    return new(std::nothrow) Psql::Trigger(ipName, Database::instance()->findSchema(ipSchemaName));
+    return new(std::nothrow) Psql::Trigger(iName, Database::instance()->findSchema(iSchemaName));
 }
 
 /*!
- * \param[in] ipName - Name of trigger to construct
- * \param[in] ipSchemaName - Name of schema containing the procedure
+ * \param[in] iName - Name of trigger to construct
+ * \param[in] iSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to MySQL trigger object
  */
 //Mysql::Trigger*
-//Trigger::createMysqlTrigger(const QString &ipName, const QString &ipSchemaName)
+//Trigger::createMysqlTrigger(const QString &iName, const QString &iSchemaName)
 //{
-//    return new Mysql::Trigger(ipName, Database::instance()->findSchema(ipSchemaName));
+//    return new Mysql::Trigger(iName, Database::instance()->findSchema(iSchemaName));
 //}
 
 } // namespace Factory

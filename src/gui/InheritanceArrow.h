@@ -40,7 +40,7 @@
 class InheritanceArrow : public ArrowItem
 {
     public:
-        InheritanceArrow(TableItem *, TableItem *, QString, QGraphicsItem *ipParent = 0, QGraphicsScene *ipScene = 0);
+        InheritanceArrow(TableItem *, TableItem *, QString, QGraphicsItem *iParent = 0, QGraphicsScene *iScene = 0);
         virtual ~InheritanceArrow();
 
     protected:

@@ -33,12 +33,12 @@
 /*!
  * Constructor
  */
-LoopArrow::LoopArrow(TableItem *ipStartItem,
-                                   TableItem *ipEndItem,
-                                   QString ipTitle,
-                                   QGraphicsItem *ipParent,
-                                   QGraphicsScene *ipScene)
-    : ForeignArrow(ipStartItem, ipEndItem, ipTitle, ipParent, ipScene)
+LoopArrow::LoopArrow(TableItem *iStartItem,
+                                   TableItem *iEndItem,
+                                   QString iTitle,
+                                   QGraphicsItem *iParent,
+                                   QGraphicsScene *iScene)
+    : ForeignArrow(iStartItem, iEndItem, iTitle, iParent, iScene)
 {
 }
 

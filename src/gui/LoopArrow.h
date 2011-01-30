@@ -40,7 +40,7 @@
 class LoopArrow : public ForeignArrow
 {
     public:
-        LoopArrow(TableItem *, TableItem *, QString, QGraphicsItem *ipParent = 0, QGraphicsScene *ipScene = 0);
+        LoopArrow(TableItem *, TableItem *, QString, QGraphicsItem *iParent = 0, QGraphicsScene *iScene = 0);
         virtual ~LoopArrow();
 
     protected:

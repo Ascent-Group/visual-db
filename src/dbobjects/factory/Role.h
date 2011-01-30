@@ -56,10 +56,10 @@ namespace Factory
 class Role
 {
     public:
-        static DbObjects::Common::DbRole* createRole(const QString &ipName);
+        static DbObjects::Common::DbRole* createRole(const QString &iName);
 
     protected:
-        static DbObjects::Psql::Role* createPsqlRole(const QString &ipName);
+        static DbObjects::Psql::Role* createPsqlRole(const QString &iName);
 
     private:
         Q_DISABLE_COPY(Role);

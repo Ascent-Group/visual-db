@@ -56,11 +56,11 @@ namespace Factory
 class Index
 {
     public:
-        static Common::DbIndex* createIndex(const QString &ipName);
+        static Common::DbIndex* createIndex(const QString &iName);
 
     protected:
-        static Psql::Index* createPsqlIndex(const QString &ipName);
-//        static Mysql::Index* createMysqlIndex(const QString &ipName);
+        static Psql::Index* createPsqlIndex(const QString &iName);
+//        static Mysql::Index* createMysqlIndex(const QString &iName);
 
     private:
         Q_DISABLE_COPY(Index);

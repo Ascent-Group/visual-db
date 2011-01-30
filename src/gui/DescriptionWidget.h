@@ -147,16 +147,16 @@ class DescriptionWidget : public QWidget
         };
 
     public:
-        DescriptionWidget(QWidget *ipParent = 0);
+        DescriptionWidget(QWidget *iParent = 0);
         ~DescriptionWidget();
 
-        void describe(const DbObjects::Common::DbIndexPtr &ipIndex);
-        void describe(const DbObjects::Common::DbProcedurePtr &ipProcedure);
-        void describe(const DbObjects::Common::DbRolePtr &ipRole);
-        void describe(const DbObjects::Common::DbSchemaPtr &ipSchema);
-        void describe(const DbObjects::Common::DbTablePtr &ipTable);
-        void describe(const DbObjects::Common::DbTriggerPtr &ipTrigger);
-        void describe(const DbObjects::Common::DbViewPtr &ipView);
+        void describe(const DbObjects::Common::DbIndexPtr &iIndex);
+        void describe(const DbObjects::Common::DbProcedurePtr &iProcedure);
+        void describe(const DbObjects::Common::DbRolePtr &iRole);
+        void describe(const DbObjects::Common::DbSchemaPtr &iSchema);
+        void describe(const DbObjects::Common::DbTablePtr &iTable);
+        void describe(const DbObjects::Common::DbTriggerPtr &iTrigger);
+        void describe(const DbObjects::Common::DbViewPtr &iView);
 
     private:
         Ui::DescriptionWidget ui;

@@ -91,7 +91,7 @@ Legend::refresh()
 // *
 // */
 //void
-//Legend::paintFieldImage(QPainter * /*ipPainter*/, int /*ipIdx*/)
+//Legend::paintFieldImage(QPainter * /*iPainter*/, int /*iIdx*/)
 //{
 //}
 //
@@ -99,7 +99,7 @@ Legend::refresh()
 // *
 // */
 //void
-//Legend::paintIndices(QPainter * /*ipPainter*/)
+//Legend::paintIndices(QPainter * /*iPainter*/)
 //{
 //}
 
@@ -107,7 +107,7 @@ Legend::refresh()
  * \override
  */
 void
-Legend::paintFieldImage(QPainter *ipPainter, int ipIdx)
+Legend::paintFieldImage(QPainter *iPainter, int iIdx)
 {
     QColor color = QColor();
     bool initializedColor = false;
@@ -115,7 +115,7 @@ Legend::paintFieldImage(QPainter *ipPainter, int ipIdx)
     foreach (QGraphicsItem *item, scene()->items()) {
         // if it's a table
         TableItem *tableItem = toTable(item);
-        if (tableItem && tableItem->schemaName() == fieldText(ipIdx)) {
+        if (tableItem && tableItem->schemaName() == fieldText(iIdx)) {
             if (!initializedColor) {
                 initializedColor = true;
                 color = tableItem->itemColor();
@@ -128,10 +128,10 @@ Legend::paintFieldImage(QPainter *ipPainter, int ipIdx)
     }
 
     if (hasAllSameColor) {
-        ipPainter->fillRect((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (ipIdx + 1) + INTERVAL * 2,
+        iPainter->fillRect((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (iIdx + 1) + INTERVAL * 2,
                 IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL - 1, color);
     } else {
-        ipPainter->drawText((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (ipIdx + 1) + INTERVAL * 2,
+        iPainter->drawText((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (iIdx + 1) + INTERVAL * 2,
                 IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL - 1, Qt::AlignCenter, QString("N"));
     }
 }
@@ -149,7 +149,7 @@ Legend::paintAnchor(QPainter *)
  *
  */
 Legend *
-toLegend(QGraphicsItem *ipItem)
+toLegend(QGraphicsItem *iItem)
 {
-    return qgraphicsitem_cast<Legend *>(ipItem);
+    return qgraphicsitem_cast<Legend *>(iItem);
 }

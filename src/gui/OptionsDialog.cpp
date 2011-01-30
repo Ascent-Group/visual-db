@@ -39,8 +39,8 @@
 /*!
  * Constructor
  */
-OptionsDialog::OptionsDialog(QWidget *ipParent)
-    : QDialog(ipParent)
+OptionsDialog::OptionsDialog(QWidget *iParent)
+    : QDialog(iParent)
 {
     ui.setupUi(this);
 }
@@ -85,17 +85,17 @@ OptionsDialog::accept()
 /*!
  * \brief Handle page change
  *
- * \param[in] ipCurrent - Pointer to the current item
- * \param[in] ipPrevious - Pointer to the previous item
+ * \param[in] iCurrent - Pointer to the current item
+ * \param[in] iPrevious - Pointer to the previous item
  */
 void
-OptionsDialog::changePage(QListWidgetItem *ipCurrent, QListWidgetItem *ipPrevious)
+OptionsDialog::changePage(QListWidgetItem *iCurrent, QListWidgetItem *iPrevious)
 {
-    if (!ipCurrent) {
-        ipCurrent = ipPrevious;
+    if (!iCurrent) {
+        iCurrent = iPrevious;
     }
 
     // show appropriate page
-    ui.mOptionsPages->setCurrentIndex(ui.mOptionsList->row(ipCurrent));
+    ui.mOptionsPages->setCurrentIndex(ui.mOptionsList->row(iCurrent));
 }
 

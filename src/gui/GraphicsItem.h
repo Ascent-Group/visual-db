@@ -74,7 +74,7 @@ class GraphicsItem : public QGraphicsPolygonItem
         };
 
     public:
-        explicit GraphicsItem(QMenu *ipMenu = 0);
+        explicit GraphicsItem(QMenu *iMenu = 0);
         virtual ~GraphicsItem();
 
         virtual void setX(qreal);
@@ -124,15 +124,15 @@ class GraphicsItem : public QGraphicsPolygonItem
         virtual void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
     protected:
-        virtual bool isRightBottomCorner(const QPointF &ipPos) const;
-        virtual bool isLeftBottomCorner(const QPointF &ipPos) const;
-        virtual bool isLeftTopCorner(const QPointF &ipPos) const;
-        virtual bool isRightTopCorner(const QPointF &ipPos) const;
+        virtual bool isRightBottomCorner(const QPointF &iPos) const;
+        virtual bool isLeftBottomCorner(const QPointF &iPos) const;
+        virtual bool isLeftTopCorner(const QPointF &iPos) const;
+        virtual bool isRightTopCorner(const QPointF &iPos) const;
 
-        virtual bool isLeftVerticalBorder(const QPointF &ipPos) const;
-        virtual bool isRightVerticalBorder(const QPointF &ipPos) const;
-        virtual bool isTopHorizontalBorder(const QPointF &ipPos) const;
-        virtual bool isBottomHorizontalBorder(const QPointF &ipPos) const;
+        virtual bool isLeftVerticalBorder(const QPointF &iPos) const;
+        virtual bool isRightVerticalBorder(const QPointF &iPos) const;
+        virtual bool isTopHorizontalBorder(const QPointF &iPos) const;
+        virtual bool isBottomHorizontalBorder(const QPointF &iPos) const;
 
         virtual void paintBorder(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
         virtual void paintTitle(QPainter *);

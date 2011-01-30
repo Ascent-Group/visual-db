@@ -48,11 +48,11 @@ namespace Psql
 /*!
  * Constructor
  *
- * \param[in] ipName - Name of the given procedure
- * \param[in] ipSchema - Handle to schema containing the procedure
+ * \param[in] iName - Name of the given procedure
+ * \param[in] iSchema - Handle to schema containing the procedure
  */
-Procedure::Procedure(QString ipName, const DbSchemaPtr &ipSchema)
-    : DbProcedure(ipName, ipSchema)
+Procedure::Procedure(QString iName, const DbSchemaPtr &iSchema)
+    : DbProcedure(iName, iSchema)
 {
 
 }

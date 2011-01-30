@@ -71,50 +71,50 @@ version()
 /*!
  * \brief Read schemas that are available in the database
  *
- * \param[out] opList - The list that will containt schemas' names
+ * \param[out] oList - The list that will containt schemas' names
  *
  * \return The number of schemas read.
  */
 quint32
-schemasList(QStringList &opList)
+schemasList(QStringList &oList)
 {
     QString qstr = QString("SELECT schema_name AS name FROM information_schema.schemata;");
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 /*!
  * \todo Implement
  * \brief Read indices that are in available in the database
  *
- * \param[out] opList - The list that will contain indices' names
+ * \param[out] oList - The list that will contain indices' names
  *
  * \return The number of indices read by the query
  */
 quint32
-indicesList(QStringList &opList)
+indicesList(QStringList &oList)
 {
     QString qstr = QString("");
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-languagesList(QStringList &opList)
+languagesList(QStringList &oList)
 {
     QString qstr("");
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-proceduresList(QStringList &opList)
+proceduresList(QStringList &oList)
 {
 
 }
@@ -123,29 +123,29 @@ proceduresList(QStringList &opList)
  * \todo Implement
  * \brief Read roles that are in available in the database
  *
- * \param[out] opList - The list that will contain roles' names
+ * \param[out] oList - The list that will contain roles' names
  *
  * \return The number of roles read by the query
  */
 quint32
-rolesList(QStringList &opList)
+rolesList(QStringList &oList)
 {
     QString qstr = QString("");
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-objectNamesList(const QString &ipQstr, QStringList &opList)
+objectNamesList(const QString &iQstr, QStringList &oList)
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
 
     // if query failed
-    if (!query.exec(ipQstr)) {
+    if (!query.exec(iQstr)) {
         qDebug() << query.lastError().text();
         return 0;
     }
@@ -159,7 +159,7 @@ objectNamesList(const QString &ipQstr, QStringList &opList)
     qint32 colId = query.record().indexOf("name");
 
     do {
-        opList.append(query.value(colId).toString());
+        oList.append(query.value(colId).toString());
         ++count;
     } while (query.next());
 
@@ -170,7 +170,7 @@ objectNamesList(const QString &ipQstr, QStringList &opList)
  * \todo Implement
  */
 quint32
-tablesList(QStringList &opList)
+tablesList(QStringList &oList)
 {
 
 }
@@ -179,7 +179,7 @@ tablesList(QStringList &opList)
  * \todo Implement
  */
 quint32
-triggersList(QStringList &opList)
+triggersList(QStringList &oList)
 {
 
 }
@@ -188,7 +188,7 @@ triggersList(QStringList &opList)
  * \todo Implement
  */
 quint32
-viewsList(QStringList &opList)
+viewsList(QStringList &oList)
 {
 
 }

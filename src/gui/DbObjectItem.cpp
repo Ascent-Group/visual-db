@@ -43,10 +43,10 @@
 /*!
  * Constructor
  */
-DbObjectItem::DbObjectItem(QMenu *ipMenu)
+DbObjectItem::DbObjectItem(QMenu *iMenu)
     : GraphicsItem(),
       mFieldsTypesVisible(true),
-      mContextMenu(ipMenu)
+      mContextMenu(iMenu)
 //      mMode(MOVE)
 {
     // preload of images
@@ -75,12 +75,12 @@ DbObjectItem::~DbObjectItem()
  * \overload
  */
 void
-DbObjectItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *ipEvent)
+DbObjectItem::contextMenuEvent(QGraphicsSceneContextMenuEvent *iEvent)
 {
     if (mContextMenu) {
         setSelected(true);
         // show context menu
-        mContextMenu->exec(ipEvent->screenPos());
+        mContextMenu->exec(iEvent->screenPos());
     }
 }
 
@@ -98,12 +98,12 @@ DbObjectItem::addArrowItem(ArrowItem *arrow)
 /*!
  * \brief Remove given arrow from the list of arrows related with this item
  *
- * \param[in] ipArrowItem - Arrow we will remove
+ * \param[in] iArrowItem - Arrow we will remove
  */
 void
-DbObjectItem::removeArrowItem(ArrowItem *ipArrowItem)
+DbObjectItem::removeArrowItem(ArrowItem *iArrowItem)
 {
-    int index = mArrowItems.indexOf(ipArrowItem);
+    int index = mArrowItems.indexOf(iArrowItem);
     if (index != -1) {
         mArrowItems.removeAt(index);
     }
@@ -141,38 +141,38 @@ DbObjectItem::removeArrowItems()
  * \overload
  */
 void
-DbObjectItem::mousePressEvent(QGraphicsSceneMouseEvent *ipEvent)
+DbObjectItem::mousePressEvent(QGraphicsSceneMouseEvent *iEvent)
 {
-    if (isRightBottomCorner(ipEvent->pos())) {
+    if (isRightBottomCorner(iEvent->pos())) {
         mMode = DbObjectItem::RIGHT_BOTTOM_CORNER_RESIZE;
-    } else if (isLeftBottomCorner(ipEvent->pos())) {
+    } else if (isLeftBottomCorner(iEvent->pos())) {
         mMode = DbObjectItem::LEFT_BOTTOM_CORNER_RESIZE;
-    } else if (isLeftTopCorner(ipEvent->pos())) {
+    } else if (isLeftTopCorner(iEvent->pos())) {
         mMode = DbObjectItem::LEFT_TOP_CORNER_RESIZE;
-    } else if (isRightTopCorner(ipEvent->pos())) {
+    } else if (isRightTopCorner(iEvent->pos())) {
         mMode = DbObjectItem::RIGHT_TOP_CORNER_RESIZE;
-    } else if (isLeftVerticalBorder(ipEvent->pos())) {
+    } else if (isLeftVerticalBorder(iEvent->pos())) {
         mMode = DbObjectItem::LEFT_VERTICAL_RESIZE;
-    } else if (isRightVerticalBorder(ipEvent->pos())) {
+    } else if (isRightVerticalBorder(iEvent->pos())) {
         mMode = DbObjectItem::RIGHT_VERTICAL_RESIZE;
-    } else if (isBottomHorizontalBorder(ipEvent->pos())) {
+    } else if (isBottomHorizontalBorder(iEvent->pos())) {
         mMode = DbObjectItem::BOTTOM_HORIZONTAL_RESIZE;
-    } else if (isTopHorizontalBorder(ipEvent->pos())) {
+    } else if (isTopHorizontalBorder(iEvent->pos())) {
         mMode = DbObjectItem::TOP_HORIZONTAL_RESIZE;
     } else {
         mMode = DbObjectItem::MOVE;
     }
-    
-    QGraphicsItem::mousePressEvent(ipEvent);
+
+    QGraphicsItem::mousePressEvent(iEvent);
 }
 
 /*!
  * \overload
  */
 void
-DbObjectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
+DbObjectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *iEvent)
 {
-    QGraphicsItem::mouseReleaseEvent(ipEvent);
+    QGraphicsItem::mouseReleaseEvent(iEvent);
     QSettings settings;
     if (settings.value(Consts::VIEW_GRP + "/" + Consts::ALIGN_TO_GRID_SETTING, false).toBool()) {
         moveBy(-(int)pos().x() % GraphicsScene::LOW_GRID_DX, -(int)pos().y() % GraphicsScene::LOW_GRID_DY);
@@ -183,40 +183,40 @@ DbObjectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *ipEvent)
  * \overload
  */
 void
-DbObjectItem::hoverMoveEvent(QGraphicsSceneHoverEvent *ipEvent)
+DbObjectItem::hoverMoveEvent(QGraphicsSceneHoverEvent *iEvent)
 {
-    if (isRightBottomCorner(ipEvent->pos())) {
+    if (isRightBottomCorner(iEvent->pos())) {
         setCursor(Qt::SizeFDiagCursor);
-    } else if (isLeftBottomCorner(ipEvent->pos())) {
+    } else if (isLeftBottomCorner(iEvent->pos())) {
         setCursor(Qt::SizeBDiagCursor);
-    } else if (isLeftTopCorner(ipEvent->pos())) {
+    } else if (isLeftTopCorner(iEvent->pos())) {
         setCursor(Qt::SizeFDiagCursor);
-    } else if (isRightTopCorner(ipEvent->pos())) {
+    } else if (isRightTopCorner(iEvent->pos())) {
         setCursor(Qt::SizeBDiagCursor);
-    } else if (isLeftVerticalBorder(ipEvent->pos())) {
+    } else if (isLeftVerticalBorder(iEvent->pos())) {
         setCursor(Qt::SizeHorCursor);
-    } else if (isRightVerticalBorder(ipEvent->pos())) {
+    } else if (isRightVerticalBorder(iEvent->pos())) {
         setCursor(Qt::SizeHorCursor);
-    } else if (isBottomHorizontalBorder(ipEvent->pos())) {
+    } else if (isBottomHorizontalBorder(iEvent->pos())) {
         setCursor(Qt::SizeVerCursor);
-    } else if (isTopHorizontalBorder(ipEvent->pos())) {
+    } else if (isTopHorizontalBorder(iEvent->pos())) {
         setCursor(Qt::SizeVerCursor);
     } else {
         setCursor(Qt::SizeAllCursor);
     }
 
-    QGraphicsItem::hoverMoveEvent(ipEvent);
+    QGraphicsItem::hoverMoveEvent(iEvent);
 }
 
 /*!
  * \overload
  */
 void
-DbObjectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *ipEvent)
+DbObjectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *iEvent)
 {
 //    setCursor(Qt::OpenHandCursor);
 //    setCursor(Qt::ArrowCursor);
-    QGraphicsItem::hoverLeaveEvent(ipEvent);
+    QGraphicsItem::hoverLeaveEvent(iEvent);
 }
 
 /*!
@@ -225,63 +225,63 @@ DbObjectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *ipEvent)
  *        change the position of the item if mode = move or resize it if mode = resize
  */
 void
-DbObjectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *ipEvent)
+DbObjectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *iEvent)
 {
     if (mMode == DbObjectItem::RIGHT_BOTTOM_CORNER_RESIZE) {
-        if (ipEvent->pos().x() - x() < MIN_WIDTH || ipEvent->pos().y() - y() < MIN_HEIGHT) return;
-        setWidth((int)ipEvent->pos().x() - x());
-        setHeight((int)ipEvent->pos().y() - y());
+        if (iEvent->pos().x() - x() < MIN_WIDTH || iEvent->pos().y() - y() < MIN_HEIGHT) return;
+        setWidth((int)iEvent->pos().x() - x());
+        setHeight((int)iEvent->pos().y() - y());
         updatePolygon();
     } else if (mMode == DbObjectItem::LEFT_BOTTOM_CORNER_RESIZE) {
-        if (ipEvent->pos().x() - x() < MIN_WIDTH || height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
-        setWidth((int)ipEvent->pos().x() - x());
-        setY((int)ipEvent->pos().y());
+        if (iEvent->pos().x() - x() < MIN_WIDTH || height() + y() - iEvent->pos().y() < MIN_HEIGHT) return;
+        setWidth((int)iEvent->pos().x() - x());
+        setY((int)iEvent->pos().y());
         updatePolygon();
     } else if (mMode == DbObjectItem::LEFT_TOP_CORNER_RESIZE) {
-        if (width() + x() - ipEvent->pos().x() < MIN_WIDTH || height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
-        setX((int)ipEvent->pos().x());
-        setY((int)ipEvent->pos().y());
+        if (width() + x() - iEvent->pos().x() < MIN_WIDTH || height() + y() - iEvent->pos().y() < MIN_HEIGHT) return;
+        setX((int)iEvent->pos().x());
+        setY((int)iEvent->pos().y());
         updatePolygon();
     } else if (mMode == DbObjectItem::RIGHT_TOP_CORNER_RESIZE) {
-        if (width() + x() - ipEvent->pos().x() < MIN_WIDTH || ipEvent->pos().y() - y() < MIN_HEIGHT) return;
-        setX((int)ipEvent->pos().x());
-        setHeight((int)ipEvent->pos().y() - y());
+        if (width() + x() - iEvent->pos().x() < MIN_WIDTH || iEvent->pos().y() - y() < MIN_HEIGHT) return;
+        setX((int)iEvent->pos().x());
+        setHeight((int)iEvent->pos().y() - y());
         updatePolygon();
     } else if (mMode == DbObjectItem::LEFT_VERTICAL_RESIZE) {
-        if (width() + x() - ipEvent->pos().x() < MIN_WIDTH) return;
-        setX((int)ipEvent->pos().x());
+        if (width() + x() - iEvent->pos().x() < MIN_WIDTH) return;
+        setX((int)iEvent->pos().x());
         updatePolygon();
     } else if (mMode == DbObjectItem::RIGHT_VERTICAL_RESIZE) {
-        if (ipEvent->pos().x() - x() < MIN_WIDTH) return;
-        setWidth((int)ipEvent->pos().x() - x());
+        if (iEvent->pos().x() - x() < MIN_WIDTH) return;
+        setWidth((int)iEvent->pos().x() - x());
         updatePolygon();
     } else if (mMode == DbObjectItem::BOTTOM_HORIZONTAL_RESIZE) {
-        if (ipEvent->pos().y() - y() < MIN_HEIGHT) return;
-        setHeight((int)ipEvent->pos().y() - y());
+        if (iEvent->pos().y() - y() < MIN_HEIGHT) return;
+        setHeight((int)iEvent->pos().y() - y());
         updatePolygon();
     } else if (mMode == DbObjectItem::TOP_HORIZONTAL_RESIZE) {
-        if (height() + y() - ipEvent->pos().y() < MIN_HEIGHT) return;
-        setY((int)ipEvent->pos().y());
+        if (height() + y() - iEvent->pos().y() < MIN_HEIGHT) return;
+        setY((int)iEvent->pos().y());
         updatePolygon();
     } else {
-        QGraphicsItem::mouseMoveEvent(ipEvent);
+        QGraphicsItem::mouseMoveEvent(iEvent);
 //        qDebug() << rect() << scenePos();
         foreach (ArrowItem *arrow, mArrowItems) {
             arrow->updatePosition();
         }
     }
-//    QGraphicsItem::mouseMoveEvent(ipEvent);
+//    QGraphicsItem::mouseMoveEvent(iEvent);
 }
 
 /*!
  * \brief According to the given flag show or hide fields' types
  *
- * \param[in] ipFlag - True if we want to show field types, false otherwise
+ * \param[in] iFlag - True if we want to show field types, false otherwise
  */
 void
-DbObjectItem::setFieldsTypesVisible(bool ipFlag)
+DbObjectItem::setFieldsTypesVisible(bool iFlag)
 {
-    mFieldsTypesVisible = ipFlag;
+    mFieldsTypesVisible = iFlag;
     update(x(), y(), width(), height());
 }
 
@@ -300,28 +300,28 @@ DbObjectItem::arrows() const
  *
  */
 void
-DbObjectItem::paintAnchor(QPainter *ipPainter)
+DbObjectItem::paintAnchor(QPainter *iPainter)
 {
     // if anchor was setted for this table - draw the anchor
     if (!(flags() & QGraphicsItem::ItemIsMovable)) {
         QRectF target(x() + width() - IMG_WIDTH - INTERVAL, y() + height() - IMG_HEIGHT - INTERVAL, IMG_WIDTH, IMG_HEIGHT);
         QRectF source(0.0, 0.0, mAnchorImage->width(), mAnchorImage->height());
-        ipPainter->drawImage(target, *mAnchorImage, source);
+        iPainter->drawImage(target, *mAnchorImage, source);
     }
 }
 
 /*!
  * \brief Convert item to the xml format
  *
- * \param[in] ipDoc - Xml document
+ * \param[in] iDoc - Xml document
  * \param[in] elementName - Element name in the xml
  *
  * \return Xml dom element with item information into it
  */
-QDomElement 
-DbObjectItem::toXml(QDomDocument &ipDoc, const QString &elementName) const
+QDomElement
+DbObjectItem::toXml(QDomDocument &iDoc, const QString &elementName) const
 {
-    QDomElement element = ipDoc.createElement(elementName);
+    QDomElement element = iDoc.createElement(elementName);
     element.setAttribute("schema", schemaName());
     element.setAttribute("name", name());
     QPointF point = mapToScene(QPointF(x(), y()));
@@ -338,12 +338,12 @@ DbObjectItem::toXml(QDomDocument &ipDoc, const QString &elementName) const
 /*!
  * \brief Set the seek
  *
- * \param[in] ipSeek - Item seek
+ * \param[in] iSeek - Item seek
  */
 void
-DbObjectItem::setSeek(int ipSeek)
+DbObjectItem::setSeek(int iSeek)
 {
-    mSeek = ipSeek;
+    mSeek = iSeek;
 }
 
 /*!
@@ -371,13 +371,13 @@ DbObjectItem::mouseMode() const
 /*!
  * \brief Convert input item to DbObject
  *
- * \param[in] ipItem - Item we will convert
+ * \param[in] iItem - Item we will convert
  *
  * \return Converted to DbObject item of 0
  */
 DbObjectItem *
-toDbObject(QGraphicsItem *ipItem)
+toDbObject(QGraphicsItem *iItem)
 {
-//    return qgraphicsitem_cast<DbObjectItem *>(ipItem);
-    return dynamic_cast<DbObjectItem *>(ipItem);
+//    return qgraphicsitem_cast<DbObjectItem *>(iItem);
+    return dynamic_cast<DbObjectItem *>(iItem);
 }

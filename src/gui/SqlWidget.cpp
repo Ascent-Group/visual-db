@@ -41,8 +41,8 @@
 /*!
  * Ctor
  */
-SqlWidget::SqlWidget(QWidget *ipParent)
-    : QWidget(ipParent), mPortionSize(30), mOffset(-1), mPos(SqlWidget::InterimPage)
+SqlWidget::SqlWidget(QWidget *iParent)
+    : QWidget(iParent), mPortionSize(30), mOffset(-1), mPos(SqlWidget::InterimPage)
 {
     ui.setupUi(this);
 
@@ -62,12 +62,12 @@ SqlWidget::~SqlWidget()
 /*!
  * \brief Sets default query for db object
  *
- * \param[in] ipQueryText - Default query text
+ * \param[in] iQueryText - Default query text
  */
 void
-SqlWidget::setDefaultQuery(const QString &ipQueryText)
+SqlWidget::setDefaultQuery(const QString &iQueryText)
 {
-    ui.mQueryEdit->setText(ipQueryText);
+    ui.mQueryEdit->setText(iQueryText);
 }
 
 /*!
@@ -147,17 +147,17 @@ SqlWidget::readFullResult()
  * \brief Checks the query for safety
  * lyuts: later will allow users to define and use their own rules
  *
- * \param[in] ipQueryText - Query text we will check for safety
+ * \param[in] iQueryText - Query text we will check for safety
  *
  * \return True if query is safe, false otherwise
  */
 bool
-isQuerySafe(const QString &ipQueryText)
+isQuerySafe(const QString &iQueryText)
 {
-    if (ipQueryText.contains("DELETE", Qt::CaseInsensitive)
-        || ipQueryText.contains("DROP", Qt::CaseInsensitive)
-        || ipQueryText.contains("INSERT", Qt::CaseInsensitive)
-        || ipQueryText.contains("UPDATE", Qt::CaseInsensitive)
+    if (iQueryText.contains("DELETE", Qt::CaseInsensitive)
+        || iQueryText.contains("DROP", Qt::CaseInsensitive)
+        || iQueryText.contains("INSERT", Qt::CaseInsensitive)
+        || iQueryText.contains("UPDATE", Qt::CaseInsensitive)
         ) {
 
         return false;
@@ -169,16 +169,16 @@ isQuerySafe(const QString &ipQueryText)
 /*!
  * \brief Reads a portion of records
  *
- * \param[in] ipDirection - Direction we will read in (next or previous)
+ * \param[in] iDirection - Direction we will read in (next or previous)
  */
 void
-SqlWidget::readPortion(Portions ipDirection)
+SqlWidget::readPortion(Portions iDirection)
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr = ui.mQueryEdit->toPlainText().trimmed();
 
-    switch (ipDirection) {
+    switch (iDirection) {
         case SqlWidget::PreviousPortion:
                             if (0 < mOffset && (SqlWidget::EndPage != mPos)) {
                                 --mOffset;
@@ -264,7 +264,7 @@ SqlWidget::readPortion(Portions ipDirection)
     } else {
 
         // nothing found, restore the offset
-        if (0 < mOffset/* && NextPortion == ipDirection*/) {
+        if (0 < mOffset/* && NextPortion == iDirection*/) {
             --mOffset;
             mPos = SqlWidget::EndPage;
         }

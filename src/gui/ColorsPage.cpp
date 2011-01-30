@@ -36,8 +36,8 @@
 /*!
  * Constructor
  */
-ColorsPage::ColorsPage(QWidget *ipParent)
-    : QWidget(ipParent)
+ColorsPage::ColorsPage(QWidget *iParent)
+    : QWidget(iParent)
 {
     ui.setupUi(this);
 

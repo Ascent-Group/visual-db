@@ -47,7 +47,7 @@ namespace Psql
 class Role : public Common::DbRole
 {
     public:
-        Role(QString ipName = 0);
+        Role(QString iName = 0);
         ~Role();
 
     private:

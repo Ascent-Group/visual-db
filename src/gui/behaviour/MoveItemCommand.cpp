@@ -35,13 +35,13 @@
 /*!
  * Ctor
  */
-MoveItemCommand::MoveItemCommand(QList<QGraphicsItem *> ipTableList,
-        int ipDiffX,
-        int ipDiffY,
-        QUndoCommand *ipParent)
-: QUndoCommand(ipParent), mDiffX(ipDiffX), mDiffY(ipDiffY), mNeedMove(false)
+MoveItemCommand::MoveItemCommand(QList<QGraphicsItem *> iTableList,
+        int iDiffX,
+        int iDiffY,
+        QUndoCommand *iParent)
+: QUndoCommand(iParent), mDiffX(iDiffX), mDiffY(iDiffY), mNeedMove(false)
 {
-    mTableList = ipTableList;
+    mTableList = iTableList;
     setText(QObject::tr("Move table"));
 }
 

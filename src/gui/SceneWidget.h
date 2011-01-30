@@ -58,7 +58,7 @@ class SceneWidget : public QWidget
     Q_OBJECT
 
     public:
-        SceneWidget(QWidget *ipParent = 0, Qt::WindowFlags ipFlags = 0);
+        SceneWidget(QWidget *iParent = 0, Qt::WindowFlags iFlags = 0);
         ~SceneWidget();
 
         QDomElement toXml(QDomDocument &, bool, bool, bool, bool);
@@ -97,7 +97,7 @@ class SceneWidget : public QWidget
         void showControlWidget(bool);
         void showGrid(bool);
         void showLegend(bool);
-        void showOnScene(QTreeWidgetItem *, int, bool ipCenterOn = false);
+        void showOnScene(QTreeWidgetItem *, int, bool iCenterOn = false);
         void ungroupItems();
         void disableAnchorItems();
         void cleanSchemeScene();

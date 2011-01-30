@@ -80,30 +80,30 @@ version()
 /*!
  * \brief Read schemas that are available in the database
  *
- * \param[out] opList - The list that will containt schemas' names
+ * \param[out] oList - The list that will containt schemas' names
  *
  * \return The number of schemas read.
  */
 quint32
-schemasList(QStringList &opList)
+schemasList(QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                "nspname AS name "
                            "FROM "
                                "pg_catalog.pg_namespace pgn;");
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 /*!
  * \brief Read indices that are in available in the database
  *
- * \param[out] opList - The list that will contain indices' names
+ * \param[out] oList - The list that will contain indices' names
  *
  * \return The number of indices read by the query
  */
 quint32
-indicesList(QStringList &opList)
+indicesList(QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                 "pgi.indexname as name "
@@ -112,37 +112,37 @@ indicesList(QStringList &opList)
 //                            "WHERE "
 //                                "pgi.schemaname = '%1' "
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 /*!
  * Read names of all languages in the given schema
  *
- * \param[out] opList - List that will contain names of languages
+ * \param[out] oList - List that will contain names of languages
  *
  * \return The number of languages' names read from db
  */
 quint32
-languagesList(QStringList &opList)
+languagesList(QStringList &oList)
 {
     QString qstr("SELECT "
                     "l.lanname AS name "
                 "FROM "
                     "pg_catalog.pg_language l;");
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 /*!
  * Read names of all procedures in the given schema
  *
- * \param[in] ipSchemaName - The name of schema
- * \param[out] opList - List that will contain names of procedures
+ * \param[in] iSchemaName - The name of schema
+ * \param[out] oList - List that will contain names of procedures
  *
  * \return The number of procedures' names read from db
  */
 quint32
-proceduresList(const QString &ipSchemaName, QStringList &opList)
+proceduresList(const QString &iSchemaName, QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                 "p.proname AS name "
@@ -152,27 +152,27 @@ proceduresList(const QString &ipSchemaName, QStringList &opList)
                            "WHERE "
                                 "p.pronamespace = n.oid "
                                 "AND n.nspname = '%1';")
-        .arg(ipSchemaName);
+        .arg(iSchemaName);
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 /*!
  * \brief Read roles that are in available in the database
  *
- * \param[out] opList - The list that will contain roles' names
+ * \param[out] oList - The list that will contain roles' names
  *
  * \return The number of roles read by the query
  */
 quint32
-rolesList(QStringList &opList)
+rolesList(QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                "r.rolname as name "
                            "FROM "
                                "pg_catalog.pg_roles r;");
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 /*!
@@ -180,23 +180,23 @@ rolesList(QStringList &opList)
  *
  * \note The functions looks for a field by name 'name' !!!
  *
- * \param[in] ipQstr - The query used to select names of objects
- * \param[out] opList - List that will hold objects' names
+ * \param[in] iQstr - The query used to select names of objects
+ * \param[out] oList - List that will hold objects' names
  *
  * \return The number of names in the list
  */
 quint32
-objectNamesList(const QString &ipQstr, QStringList &opList)
+objectNamesList(const QString &iQstr, QStringList &oList)
 {
 #if DEBUG_QUERY
-    qDebug() << "DbObjects::Psql::Tools::objectNamesList> " << ipQstr;
+    qDebug() << "DbObjects::Psql::Tools::objectNamesList> " << iQstr;
 #endif
 
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
 
     // if query failed
-    if (!query.exec(ipQstr)) {
+    if (!query.exec(iQstr)) {
         qDebug() << query.lastError().text();
         return 0;
     }
@@ -210,11 +210,11 @@ objectNamesList(const QString &ipQstr, QStringList &opList)
     qint32 colId = query.record().indexOf("name");
 
     do {
-        opList.append(query.value(colId).toString());
+        oList.append(query.value(colId).toString());
         ++count;
     } while (query.next());
 
-    // we return count instead of opList.count() because opList might come not empty to
+    // we return count instead of oList.count() because oList might come not empty to
     // this function (since it is passed by reference
     return count;
 }
@@ -222,32 +222,32 @@ objectNamesList(const QString &ipQstr, QStringList &opList)
 /*!
  * Read names of all tables in the given schema
  *
- * \param[in] ipSchemaName - The name of schema
- * \param[out] opList - List that will contain names of tables
+ * \param[in] iSchemaName - The name of schema
+ * \param[out] oList - List that will contain names of tables
  *
  * \return The number of tables' names read from db
  */
 quint32
-tablesList(const QString &ipSchemaName, QStringList &opList)
+tablesList(const QString &iSchemaName, QStringList &oList)
 {
     QString qstr = QString("SELECT tablename AS name "
                            "FROM pg_catalog.pg_tables pgt "
                            "WHERE schemaname='%1';")
-        .arg(ipSchemaName);
+        .arg(iSchemaName);
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 /*!
  * Read names of all triggers in the given schema
  *
- * \param[in] ipSchemaName - The name of schema
- * \param[out] opList - List that will contain names of triggers
+ * \param[in] iSchemaName - The name of schema
+ * \param[out] oList - List that will contain names of triggers
  *
  * \return The number of triggers' names read from db
  */
 quint32
-triggersList(const QString &ipSchemaName, QStringList &opList)
+triggersList(const QString &iSchemaName, QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                "t.tgname AS name "
@@ -259,21 +259,21 @@ triggersList(const QString &ipSchemaName, QStringList &opList)
                                "tbl.oid = t.tgrelid "
                                "AND tbl.relnamespace = tbl_nsp.oid "
                                "AND tbl_nsp.nspname = '%1';")
-                .arg(ipSchemaName);
+                .arg(iSchemaName);
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 /*!
  * Read names of all views in the given schema
  *
- * \param[in] ipSchemaName - The name of schema
- * \param[out] opList - List that will contain names of views
+ * \param[in] iSchemaName - The name of schema
+ * \param[out] oList - List that will contain names of views
  *
  * \return The number of views' names read from db
  */
 quint32
-viewsList(const QString &ipSchemaName, QStringList &opList)
+viewsList(const QString &iSchemaName, QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                 "v.viewname as name "
@@ -281,9 +281,9 @@ viewsList(const QString &ipSchemaName, QStringList &opList)
                                 "pg_catalog.pg_views v "
                            "WHERE "
                                 "schemaname = '%1';")
-        .arg(ipSchemaName);
+        .arg(iSchemaName);
 
-    return objectNamesList(qstr, opList);
+    return objectNamesList(qstr, oList);
 }
 
 } // namespace Tools

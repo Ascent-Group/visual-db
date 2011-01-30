@@ -53,7 +53,7 @@ typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
 class View : public Common::DbView
 {
     public:
-        View(QString ipName, const DbSchemaPtr &ipSchema);
+        View(QString iName, const DbSchemaPtr &iSchema);
         ~View();
 
     protected:

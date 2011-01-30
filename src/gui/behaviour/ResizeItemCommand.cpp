@@ -34,9 +34,9 @@
 /*!
  * Ctor
  */
-ResizeItemCommand::ResizeItemCommand(GraphicsItem * ipItem,
-        const QRectF ipNewRect, const QRectF ipOldRect, QUndoCommand *ipParent)
-    : QUndoCommand(ipParent), mItem(ipItem), mNewRect(ipNewRect), mOldRect(ipOldRect) 
+ResizeItemCommand::ResizeItemCommand(GraphicsItem * iItem,
+        const QRectF iNewRect, const QRectF iOldRect, QUndoCommand *iParent)
+    : QUndoCommand(iParent), mItem(iItem), mNewRect(iNewRect), mOldRect(iOldRect)
 {
     setText(QObject::tr("Resize item"));
 }
@@ -69,15 +69,15 @@ ResizeItemCommand::redo()
 /*!
  * \brief Set new rectangle for graphics item
  *
- * \param[in] ipItem - Item we will apply new rectangle to
- * \param[in] ipRect - New rectangle
+ * \param[in] iItem - Item we will apply new rectangle to
+ * \param[in] iRect - New rectangle
  */
 void
-setRect(GraphicsItem *ipItem, const QRectF &ipRect)
+setRect(GraphicsItem *iItem, const QRectF &iRect)
 {
-    ipItem->setX(ipRect.x());
-    ipItem->setY(ipRect.y());
-    ipItem->setWidth(ipRect.width());
-    ipItem->setHeight(ipRect.height());
-    ipItem->updatePolygon();
+    iItem->setX(iRect.x());
+    iItem->setY(iRect.y());
+    iItem->setWidth(iRect.width());
+    iItem->setHeight(iRect.height());
+    iItem->updatePolygon();
 }

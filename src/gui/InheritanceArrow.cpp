@@ -33,12 +33,12 @@
 /*!
  * Constructor
  */
-InheritanceArrow::InheritanceArrow(TableItem *ipStartItem,
-                                   TableItem *ipEndItem,
-                                   QString ipTitle,
-                                   QGraphicsItem *ipParent,
-                                   QGraphicsScene *ipScene)
-    : ArrowItem(ipStartItem, ipEndItem, ipTitle, ipParent, ipScene)
+InheritanceArrow::InheritanceArrow(TableItem *iStartItem,
+                                   TableItem *iEndItem,
+                                   QString iTitle,
+                                   QGraphicsItem *iParent,
+                                   QGraphicsScene *iScene)
+    : ArrowItem(iStartItem, iEndItem, iTitle, iParent, iScene)
 {
     setBrushColor("white");
 }

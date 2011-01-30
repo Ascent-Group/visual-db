@@ -47,11 +47,11 @@ namespace Psql
 /*!
  * Constructor
  *
- * \param[in] ipName - Name of the given view
- * \param[in] ipSchema - Handle to schema containing this view
+ * \param[in] iName - Name of the given view
+ * \param[in] iSchema - Handle to schema containing this view
  */
-View::View(QString ipName, const DbSchemaPtr &ipSchema)
-    : DbView(ipName, ipSchema)
+View::View(QString iName, const DbSchemaPtr &iSchema)
+    : DbView(iName, iSchema)
 {
 
 }

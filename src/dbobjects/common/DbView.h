@@ -61,13 +61,13 @@ class DbView : public DbObject
         QString fullName() const;
 
         DbSchemaPtr schema() const;
-        void setSchema(const DbSchemaPtr &ipSchema);
+        void setSchema(const DbSchemaPtr &iSchema);
 
         DbRolePtr owner() const;
-        void setOwner(const DbRolePtr &ipOwner);
+        void setOwner(const DbRolePtr &iOwner);
 
         QString definition() const;
-        void setDefinition(const QString &ipDef);
+        void setDefinition(const QString &iDef);
 
         QStringList columnsNames() const;
 
@@ -87,7 +87,7 @@ class DbView : public DbObject
         QStringList mColumnsNames;
 
     protected:
-        DbView(QString ipName, const DbSchemaPtr &ipSchema);
+        DbView(QString iName, const DbSchemaPtr &iSchema);
 };
 
 } // namespace Common

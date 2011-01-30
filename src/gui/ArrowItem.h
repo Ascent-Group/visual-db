@@ -52,7 +52,7 @@ class ArrowItem : public QGraphicsPathItem
         static const int ARROW_SIZE = 12;
 
     public:
-        ArrowItem(TableItem *, TableItem *, QString, QGraphicsItem *ipParent = 0, QGraphicsScene *ipScene = 0);
+        ArrowItem(TableItem *, TableItem *, QString, QGraphicsItem *iParent = 0, QGraphicsScene *iScene = 0);
         virtual ~ArrowItem();
 
         virtual int type() const;
@@ -89,7 +89,7 @@ class ArrowItem : public QGraphicsPathItem
 
     private:
         virtual QLineF makeLine();
-        void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *ipWidget = 0);
+        void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *iWidget = 0);
 };
 
 QPolygonF makeHead(const QLineF &, const QPointF &);

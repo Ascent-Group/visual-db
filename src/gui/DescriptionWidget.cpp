@@ -48,8 +48,8 @@ const QString DescriptionWidget::sAddSchemaDecriptionScript = "\nCOMMENT ON SCHE
 /*!
  * Ctor
  */
-DescriptionWidget::DescriptionWidget(QWidget *ipParent)
-    : QWidget(ipParent)
+DescriptionWidget::DescriptionWidget(QWidget *iParent)
+    : QWidget(iParent)
 {
     ui.setupUi(this);
 }
@@ -64,12 +64,12 @@ DescriptionWidget::~DescriptionWidget()
 /*!
  * \brief Generates and represents schema's description
  *
- * \param[in] ipSchema - Pointer to the db schema
+ * \param[in] iSchema - Pointer to the db schema
  */
 void
-DescriptionWidget::describe(const DbSchemaPtr &ipSchema)
+DescriptionWidget::describe(const DbSchemaPtr &iSchema)
 {
-    if (0 == ipSchema.valid()) {
+    if (0 == iSchema.valid()) {
         QMessageBox::critical(
                 this,
                 tr("Missing object"),
@@ -79,9 +79,9 @@ DescriptionWidget::describe(const DbSchemaPtr &ipSchema)
     }
 
     // get the Schema data
-    QString name = ipSchema->name();
-    QString ownerName = ipSchema->owner()->name();
-    QString description = ipSchema->description();
+    QString name = iSchema->name();
+    QString ownerName = iSchema->owner()->name();
+    QString description = iSchema->description();
 
     ui.mTable->setRowCount(1);
     ui.mTable->setColumnCount(DescriptionWidget::DbSchemaColumnsCount);
@@ -123,12 +123,12 @@ DescriptionWidget::describe(const DbSchemaPtr &ipSchema)
 /*!
  * \breif Generates and represents table's description
  *
- * \param[in] ipTable - Pointer to the db table
+ * \param[in] iTable - Pointer to the db table
  */
 void
-DescriptionWidget::describe(const DbTablePtr &ipTable)
+DescriptionWidget::describe(const DbTablePtr &iTable)
 {
-    if (0 == ipTable.valid()) {
+    if (0 == iTable.valid()) {
         QMessageBox::critical(
                 this,
                 tr("Missing object"),
@@ -138,7 +138,7 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
     }
 
     // get columns count
-    quint16 columnsCount = ipTable->columnsCount();
+    quint16 columnsCount = iTable->columnsCount();
 
     ui.mTable->setRowCount(columnsCount);
     ui.mTable->setColumnCount(DescriptionWidget::DbTableColumnsCount);
@@ -158,22 +158,22 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
 
     // generate body text
     QString body = QString("CREATE TABLE %1.%2 (")
-                   .arg(ipTable->schema()->name())
-                   .arg(ipTable->name());
+                   .arg(iTable->schema()->name())
+                   .arg(iTable->name());
 
     QStringList primaryKeyNames;
     // for each db table's column fill the rows and generate body text
     for (quint16 i = 0; i < columnsCount; ++i) {
         // read attributes
-        QString name = ipTable->columnName(i);
-        QString type = ipTable->columnType(i);
-        bool nullable = ipTable->isColumnNullable(i);
-        bool unique = ipTable->isColumnUnique(i);
-        bool primary = ipTable->isColumnPrimaryKey(i);
-        bool foreign = ipTable->isColumnForeignKey(i);
-        QString foreignSchemaName = ipTable->foreignSchemaName(i);
-        QString foreignTableName = ipTable->foreignTableName(i);
-        QString foreignFieldsNames = ipTable->foreignFields(i).join(", ");
+        QString name = iTable->columnName(i);
+        QString type = iTable->columnType(i);
+        bool nullable = iTable->isColumnNullable(i);
+        bool unique = iTable->isColumnUnique(i);
+        bool primary = iTable->isColumnPrimaryKey(i);
+        bool foreign = iTable->isColumnForeignKey(i);
+        QString foreignSchemaName = iTable->foreignSchemaName(i);
+        QString foreignTableName = iTable->foreignTableName(i);
+        QString foreignFieldsNames = iTable->foreignFields(i).join(", ");
 
         // fill column name
         QTableWidgetItem *nameItem = new QTableWidgetItem();
@@ -267,7 +267,7 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
     // show generated body
     body.append("\n) ");
     QVector<DbTablePtr> parentsList;
-    ipTable->parentTables(parentsList);
+    iTable->parentTables(parentsList);
 
     if (parentsList.size()) {
         body.append("INHERITS ( ");
@@ -291,12 +291,12 @@ DescriptionWidget::describe(const DbTablePtr &ipTable)
 /*!
  * \breif Generates and represents role's description
  *
- * \param[in] ipRole - Pointer to the db role
+ * \param[in] iRole - Pointer to the db role
  */
 void
-DescriptionWidget::describe(const DbRolePtr &ipRole)
+DescriptionWidget::describe(const DbRolePtr &iRole)
 {
-    if (0 == ipRole.valid()) {
+    if (0 == iRole.valid()) {
         QMessageBox::critical(
                 this,
                 tr("Missing object"),
@@ -326,16 +326,16 @@ DescriptionWidget::describe(const DbRolePtr &ipRole)
     ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
-    QString name = ipRole->name();
-    quint64 id = ipRole->id();
-    bool superUser = ipRole->isSuperUser();
-    bool inherits = ipRole->inheritsPrivileges();
-    bool createRole = ipRole->canCreateRole();
-    bool createDb = ipRole->canCreateDb();
-    bool updateSysCat = ipRole->canUpdateSysCat();
-    bool login = ipRole->canLogin();
-    quint32 connLimit = ipRole->connectionLimit();
-    QDate expiryDate = ipRole->expiryDate();
+    QString name = iRole->name();
+    quint64 id = iRole->id();
+    bool superUser = iRole->isSuperUser();
+    bool inherits = iRole->inheritsPrivileges();
+    bool createRole = iRole->canCreateRole();
+    bool createDb = iRole->canCreateDb();
+    bool updateSysCat = iRole->canUpdateSysCat();
+    bool login = iRole->canLogin();
+    quint32 connLimit = iRole->connectionLimit();
+    QDate expiryDate = iRole->expiryDate();
 
 
     // fill role name
@@ -425,12 +425,12 @@ DescriptionWidget::describe(const DbRolePtr &ipRole)
 /*!
  * \breif Generates and represents view's description
  *
- * \param[in] ipView - Pointer to the db view
+ * \param[in] iView - Pointer to the db view
  */
 void
-DescriptionWidget::describe(const DbViewPtr &ipView)
+DescriptionWidget::describe(const DbViewPtr &iView)
 {
-    if (0 == ipView.valid()) {
+    if (0 == iView.valid()) {
         QMessageBox::critical(
                 this,
                 tr("Missing object"),
@@ -453,10 +453,10 @@ DescriptionWidget::describe(const DbViewPtr &ipView)
     ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
-    QString name = ipView->name();
-    QString schemaName = ipView->schema()->name();
-    QString ownerName = ipView->owner()->name();
-    QString def = ipView->definition();
+    QString name = iView->name();
+    QString schemaName = iView->schema()->name();
+    QString ownerName = iView->owner()->name();
+    QString def = iView->definition();
 
     // fill view name
     QTableWidgetItem *nameItem = new QTableWidgetItem();
@@ -489,12 +489,12 @@ DescriptionWidget::describe(const DbViewPtr &ipView)
 /*!
  * \brief Generates and represents index's description
  *
- * \param[in] ipIndex - Pointer to the db index
+ * \param[in] iIndex - Pointer to the db index
  */
 void
-DescriptionWidget::describe(const DbIndexPtr &ipIndex)
+DescriptionWidget::describe(const DbIndexPtr &iIndex)
 {
-    if (0 == ipIndex.valid()) {
+    if (0 == iIndex.valid()) {
         QMessageBox::critical(
                 this,
                 tr("Missing object"),
@@ -523,17 +523,17 @@ DescriptionWidget::describe(const DbIndexPtr &ipIndex)
     ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
-    QString name = ipIndex->name();
-    QString tableName = ipIndex->table()->name();
-    QString schemaName = ipIndex->schema()->name();
-    quint16 colsCount = ipIndex->columnsCount();
-    QVector<qint16> colNums = ipIndex->columnsNumbers();
-    bool unique = ipIndex->isUnique();
-    bool primary = ipIndex->isPrimary();
-    bool clustered = ipIndex->isClustered();
-    bool valid = ipIndex->isValid();
-    bool checkXMin = ipIndex->checksXMin();
-    bool ready = ipIndex->isReady();
+    QString name = iIndex->name();
+    QString tableName = iIndex->table()->name();
+    QString schemaName = iIndex->schema()->name();
+    quint16 colsCount = iIndex->columnsCount();
+    QVector<qint16> colNums = iIndex->columnsNumbers();
+    bool unique = iIndex->isUnique();
+    bool primary = iIndex->isPrimary();
+    bool clustered = iIndex->isClustered();
+    bool valid = iIndex->isValid();
+    bool checkXMin = iIndex->checksXMin();
+    bool ready = iIndex->isReady();
 
     // find table object
     using namespace DbObjects::Common;
@@ -648,12 +648,12 @@ DescriptionWidget::describe(const DbIndexPtr &ipIndex)
 /*!
  * \brief Generates and represents procedure's description
  *
- * \param[in] ipProcedure - Proxy of a procedure
+ * \param[in] iProcedure - Proxy of a procedure
  */
 void
-DescriptionWidget::describe(const DbProcedurePtr &ipProcedure)
+DescriptionWidget::describe(const DbProcedurePtr &iProcedure)
 {
-    if (0 == ipProcedure.valid()) {
+    if (0 == iProcedure.valid()) {
         QMessageBox::critical(
                 this,
                 tr("Missing object"),
@@ -677,11 +677,11 @@ DescriptionWidget::describe(const DbProcedurePtr &ipProcedure)
     ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
-    QString name = ipProcedure->name();
-    QString schemaName = ipProcedure->schema()->name();
-    QString ownerName = ipProcedure->owner()->name();
-    QString languageName = ipProcedure->language()->name();
-    QString sourceCode = ipProcedure->sourceCode();
+    QString name = iProcedure->name();
+    QString schemaName = iProcedure->schema()->name();
+    QString ownerName = iProcedure->owner()->name();
+    QString languageName = iProcedure->language()->name();
+    QString sourceCode = iProcedure->sourceCode();
 
     // fill procedure name
     QTableWidgetItem *nameItem = new QTableWidgetItem();
@@ -715,12 +715,12 @@ DescriptionWidget::describe(const DbProcedurePtr &ipProcedure)
 /*!
  * \brief Generates and represents trig's description
  *
- * \param[in] ipTrigger - Pointer to the db trigger
+ * \param[in] iTrigger - Pointer to the db trigger
  */
 void
-DescriptionWidget::describe(const DbTriggerPtr &ipTrigger)
+DescriptionWidget::describe(const DbTriggerPtr &iTrigger)
 {
-    if (0 == ipTrigger.valid()) {
+    if (0 == iTrigger.valid()) {
         QMessageBox::critical(
                 this,
                 tr("Missing object"),
@@ -749,26 +749,26 @@ DescriptionWidget::describe(const DbTriggerPtr &ipTrigger)
     ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
-    QString name = ipTrigger->name();
+    QString name = iTrigger->name();
 
     QString tableName;
-    if (ipTrigger->table().valid()) {
-        tableName = ipTrigger->table()->fullName();
+    if (iTrigger->table().valid()) {
+        tableName = iTrigger->table()->fullName();
     }
 
-    QString procName = ipTrigger->procedure()->fullName();
-    QChar enabled = ipTrigger->enabled();
-    bool isConstraint = ipTrigger->isConstraint();
-    QString constraintName = ipTrigger->constraintName();
+    QString procName = iTrigger->procedure()->fullName();
+    QChar enabled = iTrigger->enabled();
+    bool isConstraint = iTrigger->isConstraint();
+    QString constraintName = iTrigger->constraintName();
 
     QString refTableName;
-    if (ipTrigger->referencedTable().valid()) {
-        refTableName = ipTrigger->referencedTable()->fullName();
+    if (iTrigger->referencedTable().valid()) {
+        refTableName = iTrigger->referencedTable()->fullName();
     }
 
-    bool isDeferrable = ipTrigger->isDeferrable();
-    bool isInitiallyDeferred = ipTrigger->isInitiallyDeferred();
-    quint16 numArgs = ipTrigger->numArgs();
+    bool isDeferrable = iTrigger->isDeferrable();
+    bool isInitiallyDeferred = iTrigger->isInitiallyDeferred();
+    quint16 numArgs = iTrigger->numArgs();
 
     // fill name
     QTableWidgetItem *nameItem = new QTableWidgetItem();

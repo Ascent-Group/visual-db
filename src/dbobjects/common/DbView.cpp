@@ -42,12 +42,12 @@ namespace Common
 /*!
  * Constructor
  *
- * \param[in] ipName - Name of a view
- * \param[in] ipSchema - Handle to schema that contains the given view
+ * \param[in] iName - Name of a view
+ * \param[in] iSchema - Handle to schema that contains the given view
  */
-DbView::DbView(QString ipName, const DbSchemaPtr &ipSchema)
-    : DbObject(ipName),
-      mSchema(ipSchema),
+DbView::DbView(QString iName, const DbSchemaPtr &iSchema)
+    : DbObject(iName),
+      mSchema(iSchema),
       mOwner(),
       mDefinition("")
 {
@@ -81,12 +81,12 @@ DbView::schema() const
 }
 
 /*!
- * \param[in] ipSchema - Parent schema for the view
+ * \param[in] iSchema - Parent schema for the view
  */
 void
-DbView::setSchema(const DbSchemaPtr &ipSchema)
+DbView::setSchema(const DbSchemaPtr &iSchema)
 {
-    mSchema = ipSchema;
+    mSchema = iSchema;
 }
 
 /*!
@@ -99,12 +99,12 @@ DbView::owner() const
 }
 
 /*!
- * \param[in] ipOwner - Owner for this view
+ * \param[in] iOwner - Owner for this view
  */
 void
-DbView::setOwner(const DbRolePtr &ipOwner)
+DbView::setOwner(const DbRolePtr &iOwner)
 {
-    mOwner = ipOwner;
+    mOwner = iOwner;
 }
 
 /*!
@@ -119,12 +119,12 @@ DbView::definition() const
 /*!
  * Sets the definition for this view
  *
- * \param[in] ipDef - View's definition
+ * \param[in] iDef - View's definition
  */
 void
-DbView::setDefinition(const QString &ipDef)
+DbView::setDefinition(const QString &iDef)
 {
-    mDefinition = ipDef;
+    mDefinition = iDef;
 }
 
 /*!

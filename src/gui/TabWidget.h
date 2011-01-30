@@ -51,10 +51,10 @@ class TabWidget : public QTabWidget
         };
 
     public:
-        TabWidget(QWidget *ipParent = 0);
+        TabWidget(QWidget *iParent = 0);
         ~TabWidget();
 
-        void setActiveTab(int ipTabId);
+        void setActiveTab(int iTabId);
 
     private:
         QToolButton *mCloseTabButton;

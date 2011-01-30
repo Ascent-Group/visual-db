@@ -74,40 +74,40 @@ GraphicsView::~GraphicsView()
 /*!
  * \brief Handler for scrolling event
  *
- * \param[in] ipEvent - Wheel event
+ * \param[in] iEvent - Wheel event
  */
 void
-GraphicsView::wheelEvent(QWheelEvent *ipEvent)
+GraphicsView::wheelEvent(QWheelEvent *iEvent)
 {
     // if we scroll with control button pressed
-    if (ipEvent->modifiers() == Qt::CTRL) {
+    if (iEvent->modifiers() == Qt::CTRL) {
         // scale the view
-        if (ipEvent->delta() < 0) {
+        if (iEvent->delta() < 0) {
             emit valueDecreased();
         } else {
             emit valueIncreased();
         }
     } else {
         // else simply scroll
-        QGraphicsView::wheelEvent(ipEvent);
+        QGraphicsView::wheelEvent(iEvent);
     }
 }
 
 /*!
  * \brief Scaling the scheme
  *
- * \param[in] ipScaleFactor - Scale factor
+ * \param[in] iScaleFactor - Scale factor
  */
 void
-GraphicsView::scaleView(int ipScaleFactor)
+GraphicsView::scaleView(int iScaleFactor)
 {
     static int prevFactor = (MAXIMUM_FACTOR - MINIMUM_FACTOR) / 2;
 
     // by default we that scale factor increases
-    qreal factor = pow(1.2, fabs(ipScaleFactor - prevFactor));
+    qreal factor = pow(1.2, fabs(iScaleFactor - prevFactor));
     // but here we check if it decreases
-    if (prevFactor > ipScaleFactor) {
-        factor = 1 / pow(1.2, fabs(ipScaleFactor - prevFactor))/* 1 / factor */;
+    if (prevFactor > iScaleFactor) {
+        factor = 1 / pow(1.2, fabs(iScaleFactor - prevFactor))/* 1 / factor */;
     }
 
     mScaleFactor = matrix().scale(factor, factor).mapRect(QRectF(0, 0, 1, 1)).width();
@@ -116,7 +116,7 @@ GraphicsView::scaleView(int ipScaleFactor)
     }
 
     // remember previous factor
-    prevFactor = ipScaleFactor;
+    prevFactor = iScaleFactor;
 
     scale(factor, factor);
     if (mScaleFactor < 1) {
@@ -127,57 +127,57 @@ GraphicsView::scaleView(int ipScaleFactor)
 /*!
  * \brief Drag enter event
  *
- * \param[in] ipEvent - Drag enter event
+ * \param[in] iEvent - Drag enter event
  */
-void 
-GraphicsView::dragEnterEvent(QDragEnterEvent *ipEvent)
+void
+GraphicsView::dragEnterEvent(QDragEnterEvent *iEvent)
 {
-    if (ipEvent->mimeData()->hasFormat("table/x-table")) {
-        ipEvent->accept();
+    if (iEvent->mimeData()->hasFormat("table/x-table")) {
+        iEvent->accept();
     }
 }
 
 /*!
  * \brief Drag move event
  *
- * \param[in] ipEvent - Drag move event
+ * \param[in] iEvent - Drag move event
  */
-void 
-GraphicsView::dragMoveEvent(QDragMoveEvent *ipEvent)
+void
+GraphicsView::dragMoveEvent(QDragMoveEvent *iEvent)
 {
-    if (!ipEvent) {
-        qDebug() << "[E][" << __func__ << "][" << __LINE__ << 
-            "]Can't handle drag move event because input event is NULL";   
+    if (!iEvent) {
+        qDebug() << "[E][" << __func__ << "][" << __LINE__ <<
+            "]Can't handle drag move event because input event is NULL";
     }
 
-    if (ipEvent->mimeData()->hasFormat("table/x-table")) {
-        ipEvent->setDropAction(Qt::CopyAction);
-        ipEvent->accept();
+    if (iEvent->mimeData()->hasFormat("table/x-table")) {
+        iEvent->setDropAction(Qt::CopyAction);
+        iEvent->accept();
     }
 }
 
 /*!
  * \brief Drop event
  *
- * \param[in] ipEvent - Drop event
+ * \param[in] iEvent - Drop event
  */
 void
-GraphicsView::dropEvent(QDropEvent *ipEvent)
+GraphicsView::dropEvent(QDropEvent *iEvent)
 {
-    if (!ipEvent) {
-        qDebug() << "[E][" << __func__ << "][" << __LINE__ << 
-            "]Can't handle drop event because input event is NULL";   
+    if (!iEvent) {
+        qDebug() << "[E][" << __func__ << "][" << __LINE__ <<
+            "]Can't handle drop event because input event is NULL";
     }
 
-    if (ipEvent->mimeData()->hasFormat("table/x-table")) {
+    if (iEvent->mimeData()->hasFormat("table/x-table")) {
         GraphicsScene *graphicsScene = dynamic_cast<GraphicsScene *>(scene());
-        QTreeWidget *itemTree = dynamic_cast<QTreeWidget *>(ipEvent->source());
+        QTreeWidget *itemTree = dynamic_cast<QTreeWidget *>(iEvent->source());
         if (graphicsScene && itemTree) {
             int i = 0;
             foreach (QTreeWidgetItem *treeItem, itemTree->selectedItems()) {
-                QList<QGraphicsItem *> itemList = graphicsScene->showOnScene(treeItem, TreeWidget::NameCol, 
-                        mapToScene(ipEvent->pos() + QPoint(i * SEEK_STEP, i * SEEK_STEP)).toPoint());
-                
+                QList<QGraphicsItem *> itemList = graphicsScene->showOnScene(treeItem, TreeWidget::NameCol,
+                        mapToScene(iEvent->pos() + QPoint(i * SEEK_STEP, i * SEEK_STEP)).toPoint());
+
                 foreach (QGraphicsItem *item, itemList) {
                     if (toDbObject(item) && !graphicsScene->findItem(toDbObject(item)->schemaName(), toDbObject(item)->name())) {
                         // HACK: we have our own inner x:y coordinates, so we should compensate Qt shifting
@@ -189,33 +189,33 @@ GraphicsView::dropEvent(QDropEvent *ipEvent)
                 ++i;
             }
         } else {
-            qDebug() << "[E][" << __func__ << "][" << __LINE__ << 
-                "]Can't handle drop event because graphics scene or item tree doesn't have appropriate type";   
+            qDebug() << "[E][" << __func__ << "][" << __LINE__ <<
+                "]Can't handle drop event because graphics scene or item tree doesn't have appropriate type";
         }
-        ipEvent->setDropAction(Qt::CopyAction);
-        ipEvent->accept();    
+        iEvent->setDropAction(Qt::CopyAction);
+        iEvent->accept();
     } else {
-        qDebug() << "[W][" << __func__ << "][" << __LINE__ << 
-            "]Can't handle drop event because event mime type doesn't have appropriate type";   
+        qDebug() << "[W][" << __func__ << "][" << __LINE__ <<
+            "]Can't handle drop event because event mime type doesn't have appropriate type";
     }
 }
 
 /*!
  * \brief Handle scrolling event
  *
- * \param[in] ipDx - Gorizontal distance
- * \param[in] ipDy - Vertical distance
+ * \param[in] iDx - Gorizontal distance
+ * \param[in] iDy - Vertical distance
  */
 void
-GraphicsView::scrollContentsBy(int ipDx, int ipDy)
+GraphicsView::scrollContentsBy(int iDx, int iDy)
 {
     GraphicsScene *graphicsScene = dynamic_cast<GraphicsScene *>(scene());
     if (graphicsScene) {
-        graphicsScene->moveLegend(-ipDx / mScaleFactor, -ipDy / mScaleFactor);
-        QGraphicsView::scrollContentsBy(ipDx, ipDy);
+        graphicsScene->moveLegend(-iDx / mScaleFactor, -iDy / mScaleFactor);
+        QGraphicsView::scrollContentsBy(iDx, iDy);
     } else {
-        qDebug() << "[E][" << __func__ << "][" << __LINE__ << 
-            "]Can't handle scroll event because graphics scene doesn't have appropriate type";   
+        qDebug() << "[E][" << __func__ << "][" << __LINE__ <<
+            "]Can't handle scroll event because graphics scene doesn't have appropriate type";
     }
 }
 
@@ -223,12 +223,12 @@ GraphicsView::scrollContentsBy(int ipDx, int ipDy)
  * \brief Handle mouse press event
  */
 void
-GraphicsView::mousePressEvent(QMouseEvent *ipEvent)
+GraphicsView::mousePressEvent(QMouseEvent *iEvent)
 {
     if (mMoveMode) {
-        mStartPos = ipEvent->pos();
+        mStartPos = iEvent->pos();
     } else {
-        QGraphicsView::mousePressEvent(ipEvent);
+        QGraphicsView::mousePressEvent(iEvent);
     }
 }
 
@@ -236,14 +236,14 @@ GraphicsView::mousePressEvent(QMouseEvent *ipEvent)
  * \brief Handle mouse move event
  */
 void
-GraphicsView::mouseMoveEvent(QMouseEvent *ipEvent)
+GraphicsView::mouseMoveEvent(QMouseEvent *iEvent)
 {
-    if (mMoveMode && (ipEvent->buttons() & Qt::LeftButton)) {
-        verticalScrollBar()->setValue(verticalScrollBar()->value() - (ipEvent->pos().y() - mStartPos.y()));
-        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (ipEvent->pos().x() - mStartPos.x()));
-        mStartPos = ipEvent->pos();
+    if (mMoveMode && (iEvent->buttons() & Qt::LeftButton)) {
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - (iEvent->pos().y() - mStartPos.y()));
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (iEvent->pos().x() - mStartPos.x()));
+        mStartPos = iEvent->pos();
     } else {
-        QGraphicsView::mouseMoveEvent(ipEvent);
+        QGraphicsView::mouseMoveEvent(iEvent);
     }
 }
 
@@ -286,14 +286,14 @@ GraphicsView::moveRight()
 /*!
  * \brief Set move mode for the scene (when you drag and drop scene itself with mouse)
  *
- * \param[in] ipFlag - True if move mode is enabled, false otherwise
+ * \param[in] iFlag - True if move mode is enabled, false otherwise
  */
 void
-GraphicsView::setMoveMode(bool ipFlag)
+GraphicsView::setMoveMode(bool iFlag)
 {
-    mMoveMode = ipFlag;
-    dynamic_cast<GraphicsScene *>(scene())->setMoveMode(ipFlag);
-    if (ipFlag) {
+    mMoveMode = iFlag;
+    dynamic_cast<GraphicsScene *>(scene())->setMoveMode(iFlag);
+    if (iFlag) {
         setCursor(Qt::OpenHandCursor);
     } else {
         setCursor(Qt::ArrowCursor);

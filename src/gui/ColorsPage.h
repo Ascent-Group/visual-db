@@ -46,7 +46,7 @@ class ColorsPage : public QWidget
     Q_OBJECT
 
     public:
-        ColorsPage(QWidget *ipParent = 0);
+        ColorsPage(QWidget *iParent = 0);
         ~ColorsPage();
 
         QColor backgroundColor() const;

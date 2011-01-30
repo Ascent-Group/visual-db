@@ -68,45 +68,45 @@ ItemGroup::type() const
 /*!
  * \brief Set context menu
  *
- * \param[in] ipContextMenu - Context menu for group
+ * \param[in] iContextMenu - Context menu for group
  */
 void
-ItemGroup::setContextMenu(QMenu *ipContextMenu)
+ItemGroup::setContextMenu(QMenu *iContextMenu)
 {
-    mContextMenu = ipContextMenu;
+    mContextMenu = iContextMenu;
 }
 
 /*!
  * \brief Handler of the right mouse button click
  *
- * param[in] ipEvent - Context menu event
+ * param[in] iEvent - Context menu event
  */
 void
-ItemGroup::contextMenuEvent(QGraphicsSceneContextMenuEvent *ipEvent)
+ItemGroup::contextMenuEvent(QGraphicsSceneContextMenuEvent *iEvent)
 {
     if (mContextMenu) {
         setSelected(true);
         // show context menu
-        mContextMenu->exec(ipEvent->screenPos());
+        mContextMenu->exec(iEvent->screenPos());
     }
 }
 
 /*!
  * \brief Convert table group to xml
  *
- * \param[in] ipDoc - Dom document where the xml representation will be created
- * 
- * \return Xml representation of the items group 
+ * \param[in] iDoc - Dom document where the xml representation will be created
+ *
+ * \return Xml representation of the items group
  */
 QDomElement
-ItemGroup::toXml(QDomDocument &ipDoc)
+ItemGroup::toXml(QDomDocument &iDoc)
 {
-    QDomElement element = ipDoc.createElement("tableGroup");
+    QDomElement element = iDoc.createElement("tableGroup");
     foreach (QGraphicsItem *item, childItems()) {
         if (qgraphicsitem_cast<ItemGroup *>(item)) {
-            element.appendChild(qgraphicsitem_cast<ItemGroup *>(item)->toXml(ipDoc));
+            element.appendChild(qgraphicsitem_cast<ItemGroup *>(item)->toXml(iDoc));
         } else if (qgraphicsitem_cast<TableItem *>(item)) {
-            element.appendChild(qgraphicsitem_cast<TableItem *>(item)->toXml(ipDoc));
+            element.appendChild(qgraphicsitem_cast<TableItem *>(item)->toXml(iDoc));
         }
     }
     return element;
@@ -116,25 +116,25 @@ ItemGroup::toXml(QDomDocument &ipDoc)
  * Load table group from the xml file
  */
 QList<QGraphicsItem *>
-ItemGroup::fromXml(const QDomElement &ipElement, GraphicsScene *ipScene, QMenu *ipMenu)
+ItemGroup::fromXml(const QDomElement &iElement, GraphicsScene *iScene, QMenu *iMenu)
 {
     QList<QGraphicsItem *> tableList;
     // loop for all childs of this group
-    QDomNode child = ipElement.firstChild();
+    QDomNode child = iElement.firstChild();
     while (!child.isNull()) {
         QDomElement element = child.toElement();
         if (!element.isNull()) {
             if (element.tagName() == "table") {
-                tableList << TableItem::fromXml(element, ipScene, ipMenu);
+                tableList << TableItem::fromXml(element, iScene, iMenu);
             } else if (element.tagName() == "tableGroup") {
-                tableList << ItemGroup::fromXml(element, ipScene, ipMenu);
+                tableList << ItemGroup::fromXml(element, iScene, iMenu);
             }
         }
         child = child.nextSibling();
     }
 
-    ItemGroup *group = ipScene->createItemGroup(tableList);
-    group->setContextMenu(ipMenu);
+    ItemGroup *group = iScene->createItemGroup(tableList);
+    group->setContextMenu(iMenu);
     tableList << group;
     return tableList;
 }
@@ -142,12 +142,12 @@ ItemGroup::fromXml(const QDomElement &ipElement, GraphicsScene *ipScene, QMenu *
 /*!
  * \brief Check if input graphics item is group item
  *
- * \param[in] ipItem - Graphics item
+ * \param[in] iItem - Graphics item
  *
  * \return True if given item is a group item, false if not
  */
 ItemGroup *
-toGroup(QGraphicsItem *ipItem)
+toGroup(QGraphicsItem *iItem)
 {
-    return qgraphicsitem_cast<ItemGroup *>(ipItem);
+    return qgraphicsitem_cast<ItemGroup *>(iItem);
 }

@@ -41,13 +41,13 @@ namespace Common
 /*!
  * Constructor
  *
- * \param[in] ipName - Name of a trigger
- * \param[in] ipSchema - Handle to schema that contains the given trigger
+ * \param[in] iName - Name of a trigger
+ * \param[in] iSchema - Handle to schema that contains the given trigger
  */
-DbTrigger::DbTrigger(QString ipName, const DbSchemaPtr &ipSchema)
-    : DbObject(ipName),
+DbTrigger::DbTrigger(QString iName, const DbSchemaPtr &iSchema)
+    : DbObject(iName),
       mTable(),
-      mSchema(ipSchema),
+      mSchema(iSchema),
       mProcedure(),
       mEnabled(),
       mIsConstraint(false),
@@ -78,12 +78,12 @@ DbTrigger::schema() const
 }
 
 /*!
- * \param[in] ipSchema - Parent schema handle
+ * \param[in] iSchema - Parent schema handle
  */
 void
-DbTrigger::setSchema(const DbSchemaPtr &ipSchema)
+DbTrigger::setSchema(const DbSchemaPtr &iSchema)
 {
-    mSchema = ipSchema;
+    mSchema = iSchema;
 }
 
 /*!
@@ -97,12 +97,12 @@ DbTrigger::table() const
 
 /*!
  * Sets the table
- * \param[in] ipTable - Table handle
+ * \param[in] iTable - Table handle
  */
 void
-DbTrigger::setTable(const DbTablePtr &ipTable)
+DbTrigger::setTable(const DbTablePtr &iTable)
 {
-    mTable = ipTable;
+    mTable = iTable;
 }
 
 /*!
@@ -117,12 +117,12 @@ DbTrigger::procedure() const
 /*!
  * Sets the procedure
  *
- * \param[in] ipProcedure - Procedure handle
+ * \param[in] iProcedure - Procedure handle
  */
 void
-DbTrigger::setProcedure(const DbProcedurePtr &ipProcedure)
+DbTrigger::setProcedure(const DbProcedurePtr &iProcedure)
 {
-    mProcedure = ipProcedure;
+    mProcedure = iProcedure;
 }
 
 /*!
@@ -145,12 +145,12 @@ DbTrigger::fullName() const
 
 /*!
  * Sets the enabled flag
- * \param[in] ipFlag - Indicates whether the trigger is enabled
+ * \param[in] iFlag - Indicates whether the trigger is enabled
  */
 void
-DbTrigger::setEnabled(const QChar &ipFlag)
+DbTrigger::setEnabled(const QChar &iFlag)
 {
-    mEnabled = ipFlag;
+    mEnabled = iFlag;
 }
 
 /*!
@@ -168,9 +168,9 @@ DbTrigger::isConstraint() const
  *
  */
 void
-DbTrigger::setConstraint(bool ipFlag)
+DbTrigger::setConstraint(bool iFlag)
 {
-    mIsConstraint = ipFlag;
+    mIsConstraint = iFlag;
 }
 
 /*!
@@ -189,12 +189,12 @@ DbTrigger::constraintName() const
 /*!
  * Sets the constraint name for a constraint trigger
  *
- * \param[in] ipName - Constraint name
+ * \param[in] iName - Constraint name
  */
 void
-DbTrigger::setConstraintName(const QString &ipName)
+DbTrigger::setConstraintName(const QString &iName)
 {
-    mConstraintName = ipName;
+    mConstraintName = iName;
 }
 
 /*!
@@ -209,12 +209,12 @@ DbTrigger::referencedTable() const
 /*!
  * Sets the table referenced by this trigger
  *
- * \param[in] ipTable
+ * \param[in] iTable
  */
 void
-DbTrigger::setReferencedTable(const DbTablePtr &ipTable)
+DbTrigger::setReferencedTable(const DbTablePtr &iTable)
 {
-    mReferencedTable = ipTable;
+    mReferencedTable = iTable;
 }
 
 /*!
@@ -230,12 +230,12 @@ DbTrigger::isDeferrable() const
 /*!
  * Sets the deferrrable flag
  *
- * \param[in] ipFlag - Inidicates whether the trigger is deferrable
+ * \param[in] iFlag - Inidicates whether the trigger is deferrable
  */
 void
-DbTrigger::setDeferrable(bool ipFlag)
+DbTrigger::setDeferrable(bool iFlag)
 {
-    mIsDeferrable = ipFlag;
+    mIsDeferrable = iFlag;
 }
 
 /*!
@@ -251,12 +251,12 @@ DbTrigger::isInitiallyDeferred() const
 /*!
  * Sets the initially deferred flag
  *
- * \param[in] ipFlag - Indicates, whether the trigger is initially deferred
+ * \param[in] iFlag - Indicates, whether the trigger is initially deferred
  */
 void
-DbTrigger::setInitiallyDeferred(bool ipFlag)
+DbTrigger::setInitiallyDeferred(bool iFlag)
 {
-    mIsInitiallyDeferred = ipFlag;
+    mIsInitiallyDeferred = iFlag;
 }
 
 /*!
@@ -271,12 +271,12 @@ DbTrigger::numArgs() const
 /*!
  * Sets the number of arguments passed to the trigger
  *
- * \param[in] ipNum - Number of args
+ * \param[in] iNum - Number of args
  */
 void
-DbTrigger::setNumArgs(const quint16 &ipNum)
+DbTrigger::setNumArgs(const quint16 &iNum)
 {
-    mNumArgs = ipNum;
+    mNumArgs = iNum;
 }
 
 /*!

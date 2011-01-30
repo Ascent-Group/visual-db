@@ -60,16 +60,16 @@ class DbProcedure : public DbObject
         QString fullName() const;
 
         DbSchemaPtr schema() const;
-        void setSchema(const DbSchemaPtr &ipSchema);
+        void setSchema(const DbSchemaPtr &iSchema);
 
         DbRolePtr owner() const;
-        void setOwner(const DbRolePtr &ipRole);
+        void setOwner(const DbRolePtr &iRole);
 
         DbLanguagePtr language() const;
-        void setLanguage(const DbLanguagePtr &ipLang);
+        void setLanguage(const DbLanguagePtr &iLang);
 
         QString sourceCode() const;
-        void setSourceCode(const QString &ipText);
+        void setSourceCode(const QString &iText);
 
         virtual DbObject::Type type() const;
 
@@ -84,7 +84,7 @@ class DbProcedure : public DbObject
         QString mSourceCode;
 
     protected:
-        DbProcedure(QString ipName, const DbSchemaPtr &ipSchema);
+        DbProcedure(QString iName, const DbSchemaPtr &iSchema);
         virtual void resetData();
 
 };

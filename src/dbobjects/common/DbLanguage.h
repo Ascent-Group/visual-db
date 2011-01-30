@@ -49,7 +49,7 @@ class DbLanguage : public DbObject
         virtual ~DbLanguage();
 
         bool isTrusted() const;
-        void setTrusted(bool ipFlag);
+        void setTrusted(bool iFlag);
 
         virtual void resetData();
 
@@ -63,7 +63,7 @@ class DbLanguage : public DbObject
         bool mIsTrusted;
 
     protected:
-        DbLanguage(QString ipName);
+        DbLanguage(QString iName);
 };
 
 } // namespace Common

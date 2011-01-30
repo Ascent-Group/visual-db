@@ -41,13 +41,13 @@ namespace Factory
 {
 
 /*!
- * \param[in] ipName - Name of the table to construct
- * \param[in] ipSchemaName - Name of schema containing the procedure
+ * \param[in] iName - Name of the table to construct
+ * \param[in] iSchemaName - Name of schema containing the procedure
  *
  * \return Database table object
  */
 DbObjects::Common::DbTable*
-Table::createTable(const QString &ipName, const QString &ipSchemaName)
+Table::createTable(const QString &iName, const QString &iSchemaName)
 {
     using namespace DbObjects::Common;
 
@@ -55,10 +55,10 @@ Table::createTable(const QString &ipName, const QString &ipSchemaName)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                table = createPsqlTable(ipName, ipSchemaName);
+                table = createPsqlTable(iName, iSchemaName);
                 break;
         case Database::MySQL:
-//                table = createMysqlTable(ipName, ipSchemaName);
+//                table = createMysqlTable(iName, iSchemaName);
                 break;
         case Database::Oracle:
         case Database::SQLite:
@@ -77,27 +77,27 @@ Table::createTable(const QString &ipName, const QString &ipSchemaName)
 }
 
 /*!
- * \param[in] ipName - Name of table to construct
- * \param[in] ipSchemaName - Name of schema containing the procedure
+ * \param[in] iName - Name of table to construct
+ * \param[in] iSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to PostgreSQL table object
  */
 Psql::Table*
-Table::createPsqlTable(const QString &ipName, const QString &ipSchemaName)
+Table::createPsqlTable(const QString &iName, const QString &iSchemaName)
 {
-    return new(std::nothrow) Psql::Table(ipName, Database::instance()->findSchema(ipSchemaName));
+    return new(std::nothrow) Psql::Table(iName, Database::instance()->findSchema(iSchemaName));
 }
 
 /*!
- * \param[in] ipName - Name of table to construct
- * \param[in] ipSchemaName - Name of schema containing the procedure
+ * \param[in] iName - Name of table to construct
+ * \param[in] iSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to MySQL table object
  */
 //Mysql::Table*
-//Table::createMysqlTable(const QString &ipName, const QString &ipSchemaName)
+//Table::createMysqlTable(const QString &iName, const QString &iSchemaName)
 //{
-//    return new Mysql::Table(ipName, Database::instance()->findSchema(ipSchemaName));
+//    return new Mysql::Table(iName, Database::instance()->findSchema(iSchemaName));
 //}
 
 } // namespace Factory

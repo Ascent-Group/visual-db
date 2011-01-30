@@ -57,8 +57,8 @@ namespace Common
  * On creation automatically adds newly created schema object to
  * a Database's vector of schemas
  */
-DbSchema::DbSchema(QString ipName)
-    : DbObject(ipName),
+DbSchema::DbSchema(QString iName)
+    : DbObject(iName),
       mOwner(0),
       mDescription(""),
       mTables(),
@@ -79,102 +79,102 @@ DbSchema::~DbSchema()
 /*!
  * \brief Add table to a schema
  *
- * \param[in] ipTable
+ * \param[in] iTable
  *
  * \return true - If the table object has been added
  * \return false - If the table object has alread existed in the vector
  */
 bool
-DbSchema::addTable(const DbTablePtr &ipTable)
+DbSchema::addTable(const DbTablePtr &iTable)
 {
-    if (mTables.contains(ipTable)) {
+    if (mTables.contains(iTable)) {
         return false;
     }
 
-//    ipTable->setSchema(Database::instance()->findSchema(mName));
+//    iTable->setSchema(Database::instance()->findSchema(mName));
 
-    mTables.push_back(ipTable);
+    mTables.push_back(iTable);
     return true;
 }
 
 /*!
  * \brief Add view to a schema
  *
- * \param[in] ipView
+ * \param[in] iView
  *
  * \return true - If the view object has been added
  * \return false - If the view object has already existed in the vector
  */
 bool
-DbSchema::addView(const DbViewPtr &ipView)
+DbSchema::addView(const DbViewPtr &iView)
 {
-    if (mViews.contains(ipView)) {
+    if (mViews.contains(iView)) {
         return false;
     }
 
-//    ipView->setSchema(Database::instance()->findSchema(mName));
+//    iView->setSchema(Database::instance()->findSchema(mName));
 
-    mViews.push_back(ipView);
+    mViews.push_back(iView);
     return true;
 }
 
 /*!
  * \brief Add proc to a schema
  *
- * \param[in] ipProc
+ * \param[in] iProc
  *
  * \return true - If the proc object has been added
  * \return false - If the proc object has already existed in the vector
  */
 bool
-DbSchema::addProcedure(const DbProcedurePtr &ipProc)
+DbSchema::addProcedure(const DbProcedurePtr &iProc)
 {
-    if (mProcedures.contains(ipProc)) {
+    if (mProcedures.contains(iProc)) {
         return false;
     }
 
-//    ipProc->setSchema(Database::instance()->findSchema(mName));
+//    iProc->setSchema(Database::instance()->findSchema(mName));
 
-    mProcedures.push_back(ipProc);
+    mProcedures.push_back(iProc);
     return true;
 }
 
 /*!
  * \brief Add trig to a schema
  *
- * \param[in] ipTrig
+ * \param[in] iTrig
  *
  * \return true - If the trigger object has been added
  * \return false - If the trigger object has laready existed in the vector
  */
 bool
-DbSchema::addTrigger(const DbTriggerPtr &ipTrig)
+DbSchema::addTrigger(const DbTriggerPtr &iTrig)
 {
-    if (mTriggers.contains(ipTrig)) {
+    if (mTriggers.contains(iTrig)) {
         return false;
     }
 
-//    ipTrig->setSchema(Database::instance()->findSchema(mName));
+//    iTrig->setSchema(Database::instance()->findSchema(mName));
 
-    mTriggers.push_back(ipTrig);
+    mTriggers.push_back(iTrig);
     return true;
 }
 
 /*!
  * Get a list of tables' names
  *
- * \param[out] opList - List of tables' names
+ * \param[out] oList - List of tables' names
  */
 void
-DbSchema::tablesList(QStringList &opList) const
+DbSchema::tablesList(QStringList &oList) const
 {
-    opList.clear();
+    oList.clear();
 
     // \todo use foreach with const refs
     QVector<DbTablePtr>::const_iterator iter;
 
     for (iter = mTables.constBegin(); iter != mTables.constEnd(); ++iter) {
-        opList.append(iter->name());
+        oList.append(iter->name());
     }
 }
 
@@ -192,17 +192,17 @@ DbSchema::tablesCount() const
 /*!
  * Get a list of views' names
  *
- * \param[out] opList - List of views' names
+ * \param[out] oList - List of views' names
  */
 void
-DbSchema::viewsList(QStringList &opList) const
+DbSchema::viewsList(QStringList &oList) const
 {
-    opList.clear();
+    oList.clear();
 
     QVector<DbViewPtr>::const_iterator iter;
 
     for (iter = mViews.constBegin(); iter != mViews.constEnd(); ++iter) {
-        opList.append(iter->name());
+        oList.append(iter->name());
     }
 }
 
@@ -220,34 +220,34 @@ DbSchema::viewsCount() const
 /*!
  * Get a list of procs' names
  *
- * \param[out] opList - List of procs' names
+ * \param[out] oList - List of procs' names
  */
 void
-DbSchema::proceduresList(QStringList &opList) const
+DbSchema::proceduresList(QStringList &oList) const
 {
-    opList.clear();
+    oList.clear();
 
     QVector<DbProcedurePtr>::const_iterator iter;
 
     for (iter = mProcedures.constBegin(); iter != mProcedures.constEnd(); ++iter) {
-        opList.append(iter->name());
+        oList.append(iter->name());
     }
 }
 
 /*!
  * Get a list of triggers' names
  *
- * \param[out] opList - List of triggers' names
+ * \param[out] oList - List of triggers' names
  */
 void
-DbSchema::triggersList(QStringList &opList) const
+DbSchema::triggersList(QStringList &oList) const
 {
-    opList.clear();
+    oList.clear();
 
     QVector<DbTriggerPtr>::const_iterator iter;
 
     for (iter = mTriggers.constBegin(); iter != mTriggers.constEnd(); ++iter) {
-        opList.append(iter->name());
+        oList.append(iter->name());
     }
 }
 
@@ -276,15 +276,15 @@ DbSchema::triggersCount() const
 /*!
  * Find table by its name
  *
- * \param[in] ipTableName - Name of the table we are looking for
+ * \param[in] iTableName - Name of the table we are looking for
  *
  * \return Handle to the found table or NULL is not found.
  */
 DbTablePtr
-DbSchema::findTable(const QString &ipTableName) const
+DbSchema::findTable(const QString &iTableName) const
 {
     foreach (const DbTablePtr &table, mTables) {
-        if (ipTableName == table.name()) {
+        if (iTableName == table.name()) {
             return table;
         }
     }
@@ -294,15 +294,15 @@ DbSchema::findTable(const QString &ipTableName) const
 /*!
  * Find view by its name
  *
- * \param[in] ipViewName - Name of the view we are looking for
+ * \param[in] iViewName - Name of the view we are looking for
  *
  * \return Handle to the found view or NULL is not found.
  */
 DbViewPtr
-DbSchema::findView(const QString &ipViewName) const
+DbSchema::findView(const QString &iViewName) const
 {
     foreach (const DbViewPtr &view, mViews) {
-        if (ipViewName == view.name()) {
+        if (iViewName == view.name()) {
             return view;
         }
     }
@@ -312,15 +312,15 @@ DbSchema::findView(const QString &ipViewName) const
 /*!
  * Find procedure by its name
  *
- * \param[in] ipProcedureName - Name of the procedure we are looking for
+ * \param[in] iProcedureName - Name of the procedure we are looking for
  *
  * \return Handle to the found procedure or NULL is not found.
  */
 DbProcedurePtr
-DbSchema::findProcedure(const QString &ipProcedureName) const
+DbSchema::findProcedure(const QString &iProcedureName) const
 {
     foreach (const DbProcedurePtr &procedure, mProcedures) {
-        if (ipProcedureName == procedure.name()) {
+        if (iProcedureName == procedure.name()) {
             return procedure;
         }
     }
@@ -330,15 +330,15 @@ DbSchema::findProcedure(const QString &ipProcedureName) const
 /*!
  * Find trigger by its name
  *
- * \param[in] ipTriggerName - Name of the trigger we are looking for
+ * \param[in] iTriggerName - Name of the trigger we are looking for
  *
  * \return Handle to the found trigger or NULL is not found.
  */
 DbTriggerPtr
-DbSchema::findTrigger(const QString &ipTriggerName) const
+DbSchema::findTrigger(const QString &iTriggerName) const
 {
     foreach (const DbTriggerPtr &trigger, mTriggers) {
-        if (ipTriggerName == trigger.name()) {
+        if (iTriggerName == trigger.name()) {
             return trigger;
         }
     }
@@ -575,12 +575,12 @@ DbSchema::owner() const
 /*!
  * \brief Set owner of schema
  *
- * \param[in] ipRole - handle for role object
+ * \param[in] iRole - handle for role object
  */
 void
-DbSchema::setOwner(const DbRolePtr &ipRole)
+DbSchema::setOwner(const DbRolePtr &iRole)
 {
-    mOwner = ipRole;
+    mOwner = iRole;
 }
 
 /*!
@@ -595,12 +595,12 @@ DbSchema::description() const
 /*!
  * Set description for the schema
  *
- * \param[in] ipDescription - Description text
+ * \param[in] iDescription - Description text
  */
 void
-DbSchema::setDescription(const QString & ipDescription)
+DbSchema::setDescription(const QString &iDescription)
 {
-    mDescription = ipDescription;
+    mDescription = iDescription;
 }
 
 } // namespace Common

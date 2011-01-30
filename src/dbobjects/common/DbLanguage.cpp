@@ -39,10 +39,10 @@ namespace Common
 /*!
  * Ctor
  *
- * \param[in] ipName - Name of the language
+ * \param[in] iName - Name of the language
  */
-DbLanguage::DbLanguage(QString ipName)
-    : DbObject(ipName),
+DbLanguage::DbLanguage(QString iName)
+    : DbObject(iName),
       mIsTrusted(false)
 {
 
@@ -69,12 +69,12 @@ DbLanguage::isTrusted() const
 /*!
  * \brief Sets the trusted flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbLanguage::setTrusted(bool ipFlag)
+DbLanguage::setTrusted(bool iFlag)
 {
-    mIsTrusted = ipFlag;
+    mIsTrusted = iFlag;
 }
 
 /*!

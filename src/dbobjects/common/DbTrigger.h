@@ -54,34 +54,34 @@ class DbTrigger : public DbObject
         virtual ~DbTrigger();
 
         DbSchemaPtr schema() const;
-        void setSchema(const DbSchemaPtr &ipSchema);
+        void setSchema(const DbSchemaPtr &iSchema);
 
         DbTablePtr table() const;
-        void setTable(const DbTablePtr &ipTable);
+        void setTable(const DbTablePtr &iTable);
 
         DbProcedurePtr procedure() const;
-        void setProcedure(const DbProcedurePtr &ipProcedure);
+        void setProcedure(const DbProcedurePtr &iProcedure);
 
         QChar enabled() const;
-        void setEnabled(const QChar &ipFlag);
+        void setEnabled(const QChar &iFlag);
 
         bool isConstraint() const;
-        void setConstraint(bool ipFlag);
+        void setConstraint(bool iFlag);
 
         QString constraintName() const;
-        void setConstraintName(const QString &ipName);
+        void setConstraintName(const QString &iName);
 
         DbTablePtr referencedTable() const;
-        void setReferencedTable(const DbTablePtr &ipTable);
+        void setReferencedTable(const DbTablePtr &iTable);
 
         bool isDeferrable() const;
-        void setDeferrable(bool ipFlag);
+        void setDeferrable(bool iFlag);
 
         bool isInitiallyDeferred() const;
-        void setInitiallyDeferred(bool ipFlag);
+        void setInitiallyDeferred(bool iFlag);
 
         quint16 numArgs() const;
-        void setNumArgs(const quint16 &ipNum);
+        void setNumArgs(const quint16 &iNum);
 
         virtual DbObject::Type type() const;
 
@@ -90,7 +90,7 @@ class DbTrigger : public DbObject
         QString fullName() const;
 
     protected:
-        DbTrigger(QString ipName, const DbSchemaPtr &ipSchema);
+        DbTrigger(QString iName, const DbSchemaPtr &iSchema);
 
         /*! Table */
         DbTablePtr mTable;

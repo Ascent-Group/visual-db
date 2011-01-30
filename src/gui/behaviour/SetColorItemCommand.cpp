@@ -35,10 +35,10 @@
 /*!
  * Ctor
  */
-SetColorItemCommand::SetColorItemCommand(GraphicsItem *ipItem, 
-        QColor ipNewColor, QColor ipOldColor, QUndoCommand *ipParent)
-    : QUndoCommand(ipParent), mItem(ipItem)
-    , mNewColor(ipNewColor), mOldColor(ipOldColor)
+SetColorItemCommand::SetColorItemCommand(GraphicsItem *iItem,
+        QColor iNewColor, QColor iOldColor, QUndoCommand *iParent)
+    : QUndoCommand(iParent), mItem(iItem)
+    , mNewColor(iNewColor), mOldColor(iOldColor)
 {
     setText(QObject::tr("Set color"));
 }

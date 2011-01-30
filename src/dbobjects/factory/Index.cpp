@@ -39,12 +39,12 @@ namespace Factory
 {
 
 /*!
- * \param[in] ipName - Name of the index to construct
+ * \param[in] iName - Name of the index to construct
  *
  * \return Database index objects
  */
 DbObjects::Common::DbIndex*
-Index::createIndex(const QString &ipName)
+Index::createIndex(const QString &iName)
 {
     using namespace DbObjects::Common;
 
@@ -52,10 +52,10 @@ Index::createIndex(const QString &ipName)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                index = createPsqlIndex(ipName);
+                index = createPsqlIndex(iName);
                 break;
         case Database::MySQL:
-//                index = createMysqlIndex(ipName);
+//                index = createMysqlIndex(iName);
                 break;
         case Database::Oracle:
         case Database::SQLite:
@@ -74,24 +74,24 @@ Index::createIndex(const QString &ipName)
 }
 
 /*!
- * \param[in] ipName - Name of index to construct
+ * \param[in] iName - Name of index to construct
  * \return Pointer to PostgreSQL index object
  */
 Psql::Index*
-Index::createPsqlIndex(const QString &ipName)
+Index::createPsqlIndex(const QString &iName)
 {
-    return new(std::nothrow) Psql::Index(ipName);
+    return new(std::nothrow) Psql::Index(iName);
 }
 
 /*!
  *
- * \param[in] ipName - Name of index to construct
+ * \param[in] iName - Name of index to construct
  * \return Pointer to MySQL index object
  */
 //Mysql::Index*
-//Index::createMysqlIndex(const QString &ipName)
+//Index::createMysqlIndex(const QString &iName)
 //{
-//    return new Mysql::Index(ipName);
+//    return new Mysql::Index(iName);
 //}
 
 } // namespace Factory

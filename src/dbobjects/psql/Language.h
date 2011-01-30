@@ -46,7 +46,7 @@ namespace Psql
 class Language : public Common::DbLanguage
 {
     public:
-        Language(QString ipName);
+        Language(QString iName);
         ~Language();
 
     private:

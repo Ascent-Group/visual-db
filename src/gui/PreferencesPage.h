@@ -49,7 +49,7 @@ class PreferencesPage : public QWidget
     Q_OBJECT
 
     public:
-        PreferencesPage(QWidget *ipParent = 0);
+        PreferencesPage(QWidget *iParent = 0);
         ~PreferencesPage();
 
         bool showIndices() const;

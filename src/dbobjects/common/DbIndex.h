@@ -61,34 +61,34 @@ class DbIndex : public DbObject
         virtual ~DbIndex();
 
         DbTablePtr table() const;
-        void setTable(const DbTablePtr &ipTable);
+        void setTable(const DbTablePtr &iTable);
 
         DbSchemaPtr schema() const;
-        void setSchema(const DbSchemaPtr &ipSchema);
+        void setSchema(const DbSchemaPtr &iSchema);
 
         quint16 columnsCount() const;
-        void setColumnsCount(quint16 ipCount);
+        void setColumnsCount(quint16 iCount);
 
         QVector<qint16> columnsNumbers() const;
-        void addColumnNumber(qint16 ipNum);
+        void addColumnNumber(qint16 iNum);
 
         bool isUnique() const;
-        void setUnique(bool ipFlag);
+        void setUnique(bool iFlag);
 
         bool isPrimary() const;
-        void setPrimary(bool ipFlag);
+        void setPrimary(bool iFlag);
 
         bool isClustered() const;
-        void setClustered(bool ipFlag);
+        void setClustered(bool iFlag);
 
         bool isValid() const;
-        void setValid(bool ipFlag);
+        void setValid(bool iFlag);
 
         bool checksXMin() const;
-        void setChecksXMin(bool ipFlag);
+        void setChecksXMin(bool iFlag);
 
         bool isReady() const;
-        void setReady(bool ipFlag);
+        void setReady(bool iFlag);
 
         virtual void resetData();
 
@@ -125,7 +125,7 @@ class DbIndex : public DbObject
         bool mIsReady;
 
     protected:
-        DbIndex(QString ipName);
+        DbIndex(QString iName);
 };
 
 } // namespace Common

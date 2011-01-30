@@ -44,7 +44,7 @@ class QGraphicsItem;
 class DeleteItemCommand : public QUndoCommand
 {
     public:
-        DeleteItemCommand(GraphicsScene &ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *parent = 0);
+        DeleteItemCommand(GraphicsScene &iScene, QList<QGraphicsItem *> iTableList, QUndoCommand *parent = 0);
         ~DeleteItemCommand();
 
         void undo();

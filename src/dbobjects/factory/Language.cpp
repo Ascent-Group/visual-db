@@ -38,12 +38,12 @@ namespace Factory
 {
 
 /*!
- * \param[in] ipName - Name of a language that is going to be constructed
+ * \param[in] iName - Name of a language that is going to be constructed
  *
  * \return Pointer to database language object
  */
 DbObjects::Common::DbLanguage*
-Language::createLanguage(const QString &ipName)
+Language::createLanguage(const QString &iName)
 {
     using namespace DbObjects::Common;
 
@@ -51,7 +51,7 @@ Language::createLanguage(const QString &ipName)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                lang = createPsqlLanguage(ipName);
+                lang = createPsqlLanguage(iName);
                 break;
         case Database::MySQL:
         case Database::Oracle:
@@ -71,14 +71,14 @@ Language::createLanguage(const QString &ipName)
 }
 
 /*!
- * \param[in] ipName - Name of a language that is going to be constructed
+ * \param[in] iName - Name of a language that is going to be constructed
  *
  * \return Pointer to PostgreSQL language object
  */
 Psql::Language*
-Language::createPsqlLanguage(const QString &ipName)
+Language::createPsqlLanguage(const QString &iName)
 {
-    return new(std::nothrow) Psql::Language(ipName);
+    return new(std::nothrow) Psql::Language(iName);
 }
 
 } // namespace Factory

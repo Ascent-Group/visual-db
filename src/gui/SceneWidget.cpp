@@ -51,8 +51,8 @@
 /*!
  * Constructor
  */
-SceneWidget::SceneWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
-    : QWidget(ipParent, ipFlags),
+SceneWidget::SceneWidget(QWidget *iParent, Qt::WindowFlags iFlags)
+    : QWidget(iParent, iFlags),
       mScene(0),
       mView(0),
       mControlWidget(0),
@@ -112,37 +112,37 @@ SceneWidget::~SceneWidget()
 /*!
  * \brief Set the scene menu
  *
- * \param[in] ipMenu - Schema context menu
+ * \param[in] iMenu - Schema context menu
  */
 void
-SceneWidget::setSchemeMenu(QMenu *ipMenu)
+SceneWidget::setSchemeMenu(QMenu *iMenu)
 {
-    mSchemeMenu = ipMenu;
-    mScene->setSchemeMenu(ipMenu);
+    mSchemeMenu = iMenu;
+    mScene->setSchemeMenu(iMenu);
 }
 
 /*!
  * \brief Set the table menu
  *
- * \param[in] ipMenu - Table context menu
+ * \param[in] iMenu - Table context menu
  */
 void
-SceneWidget::setTableMenu(QMenu *ipMenu)
+SceneWidget::setTableMenu(QMenu *iMenu)
 {
-    mTableMenu = ipMenu;
-    mScene->setTableMenu(ipMenu);
+    mTableMenu = iMenu;
+    mScene->setTableMenu(iMenu);
 }
 
 /*!
  * \brief Add item from tree event to the scene
  *
- * \param[in] ipTreeItem - Tree item we should show on the scene
- * \param[in] ipCol - Tree item column identifier
+ * \param[in] iTreeItem - Tree item we should show on the scene
+ * \param[in] iCol - Tree item column identifier
  */
 void
-SceneWidget::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, bool ipCenterOn)
+SceneWidget::showOnScene(QTreeWidgetItem *iTreeItem, int iCol, bool iCenterOn)
 {
-    QList<QGraphicsItem *> itemList = mScene->showOnScene(ipTreeItem, ipCol, QPoint(0, 0), ipCenterOn);
+    QList<QGraphicsItem *> itemList = mScene->showOnScene(iTreeItem, iCol, QPoint(0, 0), iCenterOn);
     foreach (QGraphicsItem *item, itemList) {
         // add new item only if it isn't exist on the scene
         if (toDbObject(item) && !mScene->findItem(toDbObject(item)->schemaName(), toDbObject(item)->name())) {
@@ -157,12 +157,12 @@ SceneWidget::showOnScene(QTreeWidgetItem *ipTreeItem, int ipCol, bool ipCenterOn
 /*!
  * \brief Show/hide legend
  *
- * \param[in] ipFlag - True if we want to show legend, false otherwise
+ * \param[in] iFlag - True if we want to show legend, false otherwise
  */
 void
-SceneWidget::showLegend(bool ipFlag)
+SceneWidget::showLegend(bool iFlag)
 {
-    mScene->showLegend(ipFlag);
+    mScene->showLegend(iFlag);
 }
 
 /*!
@@ -300,34 +300,34 @@ SceneWidget::colorizeAccordingSchemas()
 /*!
  * \brief Show/hide grid
  *
- * \param[in] ipFlag - True if we want to show grid, false otherwise
+ * \param[in] iFlag - True if we want to show grid, false otherwise
  */
 void
-SceneWidget::showGrid(bool ipFlag)
+SceneWidget::showGrid(bool iFlag)
 {
-    mScene->showGrid(ipFlag);
+    mScene->showGrid(iFlag);
 }
 
 /*!
  * \brief (Un)Align items to the grid
  *
- * \param[in] ipFlag - True if we want to align items according grid, false otherwise
+ * \param[in] iFlag - True if we want to align items according grid, false otherwise
  */
 void
-SceneWidget::alignToGrid(bool ipFlag)
+SceneWidget::alignToGrid(bool iFlag)
 {
-    mScene->alignToGrid(ipFlag);
+    mScene->alignToGrid(iFlag);
 }
 
 /*!
  * \brief Show/hide grid
  *
- * \param[in] ipFlag - True if we want to show pages, false otherwise
+ * \param[in] iFlag - True if we want to show pages, false otherwise
  */
 void
-SceneWidget::divideIntoPages(bool ipFlag)
+SceneWidget::divideIntoPages(bool iFlag)
 {
-    mScene->divideIntoPages(ipFlag);
+    mScene->divideIntoPages(iFlag);
 }
 
 /*!
@@ -369,14 +369,14 @@ SceneWidget::flushCache()
 /*!
  * \brief Create item group from the given items
  *
- * \param[in] ipItems - List of items we will add to new group
+ * \param[in] iItems - List of items we will add to new group
  *
  * \return New item group
  */
 ItemGroup *
-SceneWidget::createItemGroup(const QList<QGraphicsItem *> &ipItems)
+SceneWidget::createItemGroup(const QList<QGraphicsItem *> &iItems)
 {
-    return mScene->createItemGroup(ipItems);
+    return mScene->createItemGroup(iItems);
 }
 
 /*!
@@ -419,47 +419,47 @@ SceneWidget::saveToImage()
 /*!
  * \brief Show/hide control widget
  *
- * \param[in] ipFlag - True if we want to show control widget, false otherwise
+ * \param[in] iFlag - True if we want to show control widget, false otherwise
  */
 void
-SceneWidget::showControlWidget(bool ipFlag)
+SceneWidget::showControlWidget(bool iFlag)
 {
-    mControlWidget->setVisible(ipFlag);
+    mControlWidget->setVisible(iFlag);
 }
 
 /*!
  * \brief Get xml structure of scene
  *
- * \param[in] ipDoc - Xml dom document
- * \param[in] ipShowGrid - Is grid shown or not
- * \param[in] ipDivideIntoPages - Is scene divided into pages or not
- * \param[in] ipShowLegend - Is legend shown or not
- * \param[in] ipShowControlWidget - Is control widget shown or not
+ * \param[in] iDoc - Xml dom document
+ * \param[in] iShowGrid - Is grid shown or not
+ * \param[in] iDivideIntoPages - Is scene divided into pages or not
+ * \param[in] iShowLegend - Is legend shown or not
+ * \param[in] iShowControlWidget - Is control widget shown or not
  *
  * \return Filled with scene info xml dom element
  */
 QDomElement
-SceneWidget::toXml(QDomDocument &ipDoc, bool ipShowGrid, bool ipDivideIntoPages, bool ipShowLegend, bool ipShowControlWidget)
+SceneWidget::toXml(QDomDocument &iDoc, bool iShowGrid, bool iDivideIntoPages, bool iShowLegend, bool iShowControlWidget)
 {
-    return mScene->toXml(ipDoc, ipShowGrid, ipDivideIntoPages, ipShowLegend, ipShowControlWidget);
+    return mScene->toXml(iDoc, iShowGrid, iDivideIntoPages, iShowLegend, iShowControlWidget);
 }
 
 /*!
  * \brief Load scene from the xml file
  *
- * \param[in] ipElement - Xml dom element
+ * \param[in] iElement - Xml dom element
  */
 void
-SceneWidget::fromXml(QDomElement &ipElement)
+SceneWidget::fromXml(QDomElement &iElement)
 {
-    QDomNode child = ipElement.firstChild();
-    bool grid = ipElement.attribute("grid").toInt();
+    QDomNode child = iElement.firstChild();
+    bool grid = iElement.attribute("grid").toInt();
     mScene->showGrid(grid);
-    bool divideIntoPages = ipElement.attribute("divideIntoPages").toInt();
+    bool divideIntoPages = iElement.attribute("divideIntoPages").toInt();
     mScene->divideIntoPages(divideIntoPages);
-    bool legend = ipElement.attribute("legend").toInt();
+    bool legend = iElement.attribute("legend").toInt();
     mScene->showLegend(legend);
-    bool controlWidget = ipElement.attribute("controlWidget").toInt();
+    bool controlWidget = iElement.attribute("controlWidget").toInt();
     showControlWidget(controlWidget);
 
     QList<QGraphicsItem *> itemLIst = mScene->fromXml(child);
@@ -470,16 +470,16 @@ SceneWidget::fromXml(QDomElement &ipElement)
 /*!
  * \brief Print the graphic widget
  *
- * \param[in] ipPrinter - Printer
+ * \param[in] iPrinter - Printer
  */
 void
-SceneWidget::print(QPrinter *ipPrinter)
+SceneWidget::print(QPrinter *iPrinter)
 {
-    QPainter painter(ipPrinter);
+    QPainter painter(iPrinter);
     painter.setFont(QFont("Arial", 10));
 
-    int pageWidth = ipPrinter->pageRect().width();
-    int pageHeight = ipPrinter->pageRect().height();
+    int pageWidth = iPrinter->pageRect().width();
+    int pageHeight = iPrinter->pageRect().height();
     int maxI = (int)(mScene->width() / pageWidth + 1);
     int maxJ = (int)(mScene->height() / pageHeight + 1);
 
@@ -489,7 +489,7 @@ SceneWidget::print(QPrinter *ipPrinter)
         for (int j = 0; j < maxJ; ++j) {
             mScene->render(&painter, QRectF(), QRectF(i * pageWidth, j * pageHeight, pageWidth, pageHeight));
             if (i != maxI - 1 || j != maxJ - 1) {
-                ipPrinter->newPage();
+                iPrinter->newPage();
             }
         }
     }
@@ -498,35 +498,35 @@ SceneWidget::print(QPrinter *ipPrinter)
 /*!
  * \brief Send 'item moved' signal
  *
- * \param[in] ipItemList - Item list were moved
- * \param[in] ipDiffX - Gorizontal shift
- * \param[in] ipDiffY - Vertical shift
+ * \param[in] iItemList - Item list were moved
+ * \param[in] iDiffX - Gorizontal shift
+ * \param[in] iDiffY - Vertical shift
  */
 void
-SceneWidget::sendItemMoved(QList <QGraphicsItem *> ipItemList, int ipDiffX, int ipDiffY)
+SceneWidget::sendItemMoved(QList <QGraphicsItem *> iItemList, int iDiffX, int iDiffY)
 {
-    emit itemActionDone(new MoveItemCommand(ipItemList, ipDiffX, ipDiffY));
+    emit itemActionDone(new MoveItemCommand(iItemList, iDiffX, iDiffY));
 }
 
 void
-SceneWidget::sendItemColorChanged(GraphicsItem *ipItem, const QColor &ipNewColor, const QColor &ipOldColor)
+SceneWidget::sendItemColorChanged(GraphicsItem *iItem, const QColor &iNewColor, const QColor &iOldColor)
 {
-    emit itemActionDone(new SetColorItemCommand(ipItem, ipNewColor, ipOldColor));
+    emit itemActionDone(new SetColorItemCommand(iItem, iNewColor, iOldColor));
 }
 
 void
-SceneWidget::sendItemResized(GraphicsItem *ipItem, const QRectF &ipNewRect, const QRectF &ipOldRect)
+SceneWidget::sendItemResized(GraphicsItem *iItem, const QRectF &iNewRect, const QRectF &iOldRect)
 {
-    emit itemActionDone(new ResizeItemCommand(ipItem, ipNewRect, ipOldRect));
+    emit itemActionDone(new ResizeItemCommand(iItem, iNewRect, iOldRect));
 }
 
 /*!
  * \brief Send 'action was performed' signal
  *
- * \param[in] ipCommand - Command which describes action
+ * \param[in] iCommand - Command which describes action
  */
 void
-SceneWidget::sendItemActionDone(QUndoCommand *ipCommand)
+SceneWidget::sendItemActionDone(QUndoCommand *iCommand)
 {
-    emit itemActionDone(ipCommand);
+    emit itemActionDone(iCommand);
 }

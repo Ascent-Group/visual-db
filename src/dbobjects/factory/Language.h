@@ -57,10 +57,10 @@ namespace Factory
 class Language
 {
     public:
-        static Common::DbLanguage* createLanguage(const QString &ipName);
+        static Common::DbLanguage* createLanguage(const QString &iName);
 
     protected:
-        static Psql::Language* createPsqlLanguage(const QString &ipName);
+        static Psql::Language* createPsqlLanguage(const QString &iName);
 
     private:
         Q_DISABLE_COPY(Language);

@@ -43,12 +43,12 @@ namespace Common
 /*!
  * Constructor
  *
- * \param[in] ipName - Name of a table
- * \param[in] ipSchema - Handle to schema that contains the given table
+ * \param[in] iName - Name of a table
+ * \param[in] iSchema - Handle to schema that contains the given table
  */
-DbTable::DbTable(QString ipName, const DbSchemaPtr &ipSchema)
-    : DbObject(ipName),
-      mSchema(ipSchema),
+DbTable::DbTable(QString iName, const DbSchemaPtr &iSchema)
+    : DbObject(iName),
+      mSchema(iSchema),
       mColumnDefs()
 {
     if (!mSchema.get()) qDebug() << "DbTable::DbTable> mSchema is NULL!";
@@ -81,12 +81,12 @@ DbTable::schema() const
 }
 
 /*!
- * \param[in] ipSchema - Parent schema
+ * \param[in] iSchema - Parent schema
  */
 void
-DbTable::setSchema(const DbSchemaPtr &ipSchema)
+DbTable::setSchema(const DbSchemaPtr &iSchema)
 {
-    mSchema = ipSchema;
+    mSchema = iSchema;
 }
 
 /*!
@@ -99,234 +99,234 @@ DbTable::fullName() const
 }
 
 /*!
- * \param[in] ipColId - Column id.
+ * \param[in] iColId - Column id.
  *
  * \return Column name
  */
 QString
-DbTable::columnName(qint16 ipColId) const
+DbTable::columnName(qint16 iColId) const
 {
     // if id is negative
-    if (ipColId < 0) {
+    if (iColId < 0) {
         // consider it as a id going from right to left
-        ipColId += mColumnDefs.count();
+        iColId += mColumnDefs.count();
     }
 
     // if id is out of bounds
-    if (0 > ipColId || ipColId >= mColumnDefs.count()) {
+    if (0 > iColId || iColId >= mColumnDefs.count()) {
     qDebug() << QString("DbTable::columnName> For %1 id %2 is out of bounds!!!")
         .arg(mName)
-        .arg(ipColId);
+        .arg(iColId);
         return QString("");
     }
 
-    return mColumnDefs.at(ipColId).name;
+    return mColumnDefs.at(iColId).name;
 }
 
 /*!
- * \param[in] ipColId - Column id.
+ * \param[in] iColId - Column id.
  *
- * \return The type of the column with ipColId id.
+ * \return The type of the column with iColId id.
  */
 QString
-DbTable::columnType(qint16 ipColId) const
+DbTable::columnType(qint16 iColId) const
 {
     // if id is negative
-    if (ipColId < 0) {
+    if (iColId < 0) {
         // consider it as a id going from right to left
-        ipColId += mColumnDefs.count();
+        iColId += mColumnDefs.count();
     }
 
     // if id is out of bounds
-    if (0 > ipColId || ipColId >= mColumnDefs.count()) {
+    if (0 > iColId || iColId >= mColumnDefs.count()) {
     qDebug() << QString("DbTable::columnType> For %1 id %2 is out of bounds!!!")
         .arg(mName)
-        .arg(ipColId);
+        .arg(iColId);
 
         return QString("");
     }
 
-    return mColumnDefs.at(ipColId).type;
+    return mColumnDefs.at(iColId).type;
 }
 
 /*!
- * \param[in] ipColId - Column id.
+ * \param[in] iColId - Column id.
  *
- * \return true - If a column specified by ipColId is nullable
+ * \return true - If a column specified by iColId is nullable
  * \return false - Otherwise
  */
 bool
-DbTable::isColumnNullable(qint16 ipColId) const
+DbTable::isColumnNullable(qint16 iColId) const
 {
     // if id is negative
-    if (ipColId < 0) {
+    if (iColId < 0) {
         // consider it as a id going from right to left
-        ipColId += mColumnDefs.count();
+        iColId += mColumnDefs.count();
     }
 
     // if id is out of bounds
-    if (0 > ipColId || ipColId >= mColumnDefs.count()) {
+    if (0 > iColId || iColId >= mColumnDefs.count()) {
     qDebug() << QString("DbTable::isColumnNullable> For %1 id %2 is out of bounds!!!")
         .arg(mName)
-        .arg(ipColId);
+        .arg(iColId);
     return false;
     }
 
-    return mColumnDefs.at(ipColId).isNullable;
+    return mColumnDefs.at(iColId).isNullable;
 }
 
 /*!
- * \param[in] ipColId - Column id.
+ * \param[in] iColId - Column id.
  *
- * \return true - If a column specified by ipColId is a primary key
+ * \return true - If a column specified by iColId is a primary key
  * \return false - Otherwise
  */
 bool
-DbTable::isColumnPrimaryKey(qint16 ipColId) const
+DbTable::isColumnPrimaryKey(qint16 iColId) const
 {
     // if id is negative
-    if (ipColId < 0) {
+    if (iColId < 0) {
         // consider it as a id going from right to left
-        ipColId += mColumnDefs.count();
+        iColId += mColumnDefs.count();
     }
 
     // if id is out of bounds
-    if (0 > ipColId || ipColId >= mColumnDefs.count()) {
+    if (0 > iColId || iColId >= mColumnDefs.count()) {
     qDebug() << QString("DbTable::isColumnPrimaryKey> For %1 id %2 is out of bounds!!!")
         .arg(mName)
-        .arg(ipColId);
+        .arg(iColId);
 
         return false;
     }
 
-    return mColumnDefs.at(ipColId).isPrimaryKey;
+    return mColumnDefs.at(iColId).isPrimaryKey;
 }
 
 /*!
- * \param[in] ipColId - Column id.
+ * \param[in] iColId - Column id.
  *
- * \return true - If a column specified by ipColId is a foreign key
+ * \return true - If a column specified by iColId is a foreign key
  * \return false - Otherwise
  */
 bool
-DbTable::isColumnForeignKey(qint16 ipColId) const
+DbTable::isColumnForeignKey(qint16 iColId) const
 {
     // if id is negative
-    if (ipColId < 0) {
+    if (iColId < 0) {
         // consider it as a id going from right to left
-        ipColId += mColumnDefs.count();
+        iColId += mColumnDefs.count();
     }
 
     // if id is out of bounds
-    if (0 > ipColId || ipColId >= mColumnDefs.count()) {
+    if (0 > iColId || iColId >= mColumnDefs.count()) {
     qDebug() << QString("DbTable::isColumnForeignKey> For %1 id %2 is out of bounds!!!")
         .arg(mName)
-        .arg(ipColId);
+        .arg(iColId);
 
         return false;
     }
 
-    return mColumnDefs.at(ipColId).isForeignKey;
+    return mColumnDefs.at(iColId).isForeignKey;
 }
 
 /*!
- * \param[in] ipColId - Column id
+ * \param[in] iColId - Column id
  *
  * \return Foreign table's schema name
  */
 QString
-DbTable::foreignSchemaName(qint16 ipColId) const
+DbTable::foreignSchemaName(qint16 iColId) const
 {
     // if id is negative
-    if (ipColId < 0) {
+    if (iColId < 0) {
         // consider it as a id going from right to left
-        ipColId += mColumnDefs.count();
+        iColId += mColumnDefs.count();
     }
 
     // if id is out of bounds
-    if (0 > ipColId || ipColId >= mColumnDefs.count()) {
+    if (0 > iColId || iColId >= mColumnDefs.count()) {
     qDebug() << QString("DbTable::foreignSchemaName> For %1 id %2 is out of bounds!!!")
         .arg(mName)
-        .arg(ipColId);
+        .arg(iColId);
 
         return QString("");
     }
 
-    return mColumnDefs.at(ipColId).foreignSchemaName;
+    return mColumnDefs.at(iColId).foreignSchemaName;
 }
 
 /*!
- * \param[in] ipColId - Column id
+ * \param[in] iColId - Column id
  *
  * \return A table name pointed to by a foregin key
  */
 QString
-DbTable::foreignTableName(qint16 ipColId) const
+DbTable::foreignTableName(qint16 iColId) const
 {
     // if id is negative
-    if (ipColId < 0) {
+    if (iColId < 0) {
         // consider it as a id going from right to left
-        ipColId += mColumnDefs.count();
+        iColId += mColumnDefs.count();
     }
 
     // if id is out of bounds
-    if (0 > ipColId || ipColId >= mColumnDefs.count()) {
+    if (0 > iColId || iColId >= mColumnDefs.count()) {
     qDebug() << QString("DbTable::foreignTableName> For %1 id %2 is out of bounds!!!")
         .arg(mName)
-        .arg(ipColId);
+        .arg(iColId);
 
         return QString("");
     }
 
-    return mColumnDefs.at(ipColId).foreignTableName;
+    return mColumnDefs.at(iColId).foreignTableName;
 }
 
 /*!
- * \param[in] ipColId - Column id
+ * \param[in] iColId - Column id
  *
  * \return The list of referenced fields by a foreign key column that has
- * ipColId id.
+ * iColId id.
  */
 QStringList
-DbTable::foreignFields(qint16 ipColId) const
+DbTable::foreignFields(qint16 iColId) const
 {
-    //quint16 count = mColumnDefs.at(ipColId).foreignFieldNames.count();
+    //quint16 count = mColumnDefs.at(iColId).foreignFieldNames.count();
 
     //QStringList list;
 
     //for (quint16 i = 0; i < count; ++i) {
-    //    list << mColumnDefs.at(ipColId).foreignFieldNames.at(i);
+    //    list << mColumnDefs.at(iColId).foreignFieldNames.at(i);
     //}
 
     //return list;
-    return mColumnDefs.at(ipColId).foreignFieldNames;
+    return mColumnDefs.at(iColId).foreignFieldNames;
 }
 
 /*!
- * \param[in] ipColId - Column id
+ * \param[in] iColId - Column id
  *
- * \return true - If column with id = ipColId has unique constraint
+ * \return true - If column with id = iColId has unique constraint
  * \return false - Otherwise
  */
 bool
-DbTable::isColumnUnique(qint16 ipColId) const
+DbTable::isColumnUnique(qint16 iColId) const
 {
     // if id is negative
-    if (ipColId < 0) {
+    if (iColId < 0) {
         // consider it as a id going from right to left
-        ipColId += mColumnDefs.count();
+        iColId += mColumnDefs.count();
     }
 
     // if id is out of bounds
-    if (0 > ipColId || ipColId >= mColumnDefs.count()) {
+    if (0 > iColId || iColId >= mColumnDefs.count()) {
     qDebug() << QString("DbTable::isColumnUnique> For %1 id %2 is out of bounds!!!")
         .arg(mName)
-        .arg(ipColId);
+        .arg(iColId);
 
         return false;
     }
 
-    return mColumnDefs.at(ipColId).isUnique;
+    return mColumnDefs.at(iColId).isUnique;
 }
 
 /*!
@@ -343,17 +343,17 @@ DbTable::resetData()
 }
 
 /*!
- * \param[out] opIndicesList - A list of indices assigned to the given table
+ * \param[out] oIndicesList - A list of indices assigned to the given table
  *
  * \returns The number of indices for the given table and populates the
  * input list with pointers to indices
  */
 quint64
-DbTable::getIndices(QVector<DbIndexPtr> &opIndicesList)
+DbTable::getIndices(QVector<DbIndexPtr> &oIndicesList)
 {
     // \todo Used DbTablePtr table(Database:: ...) initialization
     DbTablePtr table = Database::instance()->findSchema(mSchema->name())->findTable(mName);
-    return Database::instance()->findTableIndices(table, opIndicesList);
+    return Database::instance()->findTableIndices(table, oIndicesList);
 }
 
 /*!
@@ -366,19 +366,19 @@ DbTable::type() const
 }
 
 /*!
- * \param[out] opList - List of proxies to the given table's parents
+ * \param[out] oList - List of proxies to the given table's parents
  *
  * \return The number of parents
  */
 quint32
-DbTable::parentTables(QVector<DbTablePtr> &opList) const
+DbTable::parentTables(QVector<DbTablePtr> &oList) const
 {
     // we define count instead of returning list.size() because the non-empty list might
     // come here
     quint32 count = 0;
 
     foreach (const DbTablePtr &parent, mParentTables) {
-        opList.push_back(parent);
+        oList.push_back(parent);
         ++count;
     }
 

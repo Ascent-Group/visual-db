@@ -51,7 +51,7 @@ class DbObjectItem : public GraphicsItem
         enum { Type = UserType + 10 };
 
     public:
-        explicit DbObjectItem(QMenu *ipMenu = 0);
+        explicit DbObjectItem(QMenu *iMenu = 0);
         virtual ~DbObjectItem();
 
         virtual void setFieldsTypesVisible(bool);

@@ -57,7 +57,7 @@ typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
 class Procedure : public Common::DbProcedure
 {
     public:
-        Procedure(QString ipName, const DbSchemaPtr &ipSchema);
+        Procedure(QString iName, const DbSchemaPtr &iSchema);
         ~Procedure();
 
     private:

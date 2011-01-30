@@ -56,11 +56,11 @@ namespace Factory
 class Table
 {
     public:
-        static Common::DbTable* createTable(const QString &ipName, const QString &ipSchemaName);
+        static Common::DbTable* createTable(const QString &iName, const QString &iSchemaName);
 
     protected:
-        static Psql::Table* createPsqlTable(const QString &ipName, const QString &ipSchemaName);
-//        static Mysql::Table* createMysqlTable(const QString &ipName, const QString &ipSchemaName);
+        static Psql::Table* createPsqlTable(const QString &iName, const QString &iSchemaName);
+//        static Mysql::Table* createMysqlTable(const QString &iName, const QString &iSchemaName);
 
     private:
         Q_DISABLE_COPY(Table);

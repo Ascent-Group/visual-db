@@ -46,7 +46,7 @@ class AppearancePage : public QWidget
     Q_OBJECT
 
     public:
-        AppearancePage(QWidget *ipParent = 0);
+        AppearancePage(QWidget *iParent = 0);
         ~AppearancePage();
 
         int language() const;

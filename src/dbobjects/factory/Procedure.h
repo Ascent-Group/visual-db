@@ -56,11 +56,11 @@ namespace Factory
 class Procedure
 {
     public:
-        static Common::DbProcedure* createProcedure(const QString &ipName, const QString &ipSchemaName);
+        static Common::DbProcedure* createProcedure(const QString &iName, const QString &iSchemaName);
 
     protected:
-        static Psql::Procedure* createPsqlProcedure(const QString &ipName, const QString &ipSchemaName);
-//        static Mysql::Procedure* createMysqlProcedure(const QString &ipName, const QString &ipSchemaName);
+        static Psql::Procedure* createPsqlProcedure(const QString &iName, const QString &iSchemaName);
+//        static Mysql::Procedure* createMysqlProcedure(const QString &iName, const QString &iSchemaName);
 
     private:
         // \todo forbid default constructor

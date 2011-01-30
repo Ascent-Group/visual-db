@@ -64,13 +64,13 @@ class DbObjectPtr
         /*!
          * Constructor
          *
-         * \param[in] ipName - Name of an object
-         * \param[in] ipSchemaName - Name of schema that contains the given object or an
+         * \param[in] iName - Name of an object
+         * \param[in] iSchemaName - Name of schema that contains the given object or an
          *                           empty string if schema is not applicable.
          */
-        DbObjectPtr(const QString &ipName, const QString &ipSchemaName = "")
-            : mName(ipName),
-              mSchemaName(ipSchemaName),
+        DbObjectPtr(const QString &iName, const QString &iSchemaName = "")
+            : mName(iName),
+              mSchemaName(iSchemaName),
               mPointee(0)
         {
             initialize();
@@ -89,12 +89,12 @@ class DbObjectPtr
 
         /*!
          * Copying constructor
-         * \param[in] ipInst - Another instance of proxy
+         * \param[in] iInst - Another instance of proxy
          */
-        DbObjectPtr(const DbObjectPtr<T> &ipInst)
-            : mName(ipInst.mName),
-              mSchemaName(ipInst.mSchemaName),
-              mPointee(ipInst.mPointee)
+        DbObjectPtr(const DbObjectPtr<T> &iInst)
+            : mName(iInst.mName),
+              mSchemaName(iInst.mSchemaName),
+              mPointee(iInst.mPointee)
         {
             incrementRefCount();
         }
@@ -194,48 +194,48 @@ class DbObjectPtr
 //        }
 
         /*!
-         * \param[in] ipRhs Instance of proxy we are comparing our proxy to.
+         * \param[in] iRhs Instance of proxy we are comparing our proxy to.
          *
          * \return true If proxies are identical
          * \return false Otherwise
          */
-        bool operator==(const DbObjectPtr<T> &ipRhs) const
+        bool operator==(const DbObjectPtr<T> &iRhs) const
         {
-            return (mName == ipRhs.mName &&
-                mSchemaName == ipRhs.mSchemaName &&
-                mPointee == ipRhs.mPointee);
+            return (mName == iRhs.mName &&
+                mSchemaName == iRhs.mSchemaName &&
+                mPointee == iRhs.mPointee);
         }
 
         /*!
          * \note Used in operator=
          *
-         * \param[in] ipRhs - Another instance of proxy we are comparing to.
+         * \param[in] iRhs - Another instance of proxy we are comparing to.
          *
          */
-        bool operator!=(const DbObjectPtr<T> &ipRhs) const
+        bool operator!=(const DbObjectPtr<T> &iRhs) const
         {
-            return (!operator==(ipRhs));
+            return (!operator==(iRhs));
         }
 
         /*!
          * \brief Assignment operator
          *
-         * \param[in] ipRhs - Instance of a proxy we are assigning to the given proxy
+         * \param[in] iRhs - Instance of a proxy we are assigning to the given proxy
          *
          * \return Reference to the given proxy
          * \todo Implement assignment operator using copy constructor
          */
-        DbObjectPtr<T>& operator=(const DbObjectPtr<T> &ipRhs)
+        DbObjectPtr<T>& operator=(const DbObjectPtr<T> &iRhs)
         {
-//            qDebug() << "DbObjectPtr::operator= (" << this << " = " << &ipRhs << ")";
+//            qDebug() << "DbObjectPtr::operator= (" << this << " = " << &iRhs << ")";
             // we should compared dereferenced this, so that our operator ==  is used.
-            if (*this != ipRhs) {
+            if (*this != iRhs) {
                 // unregister old pointee
                 decrementRefCount();
                 // do copying
-                mName = ipRhs.mName;
-                mSchemaName = ipRhs.mSchemaName;
-                mPointee = ipRhs.mPointee;
+                mName = iRhs.mName;
+                mSchemaName = iRhs.mSchemaName;
+                mPointee = iRhs.mPointee;
                 // register new pointee
                 incrementRefCount();
             }

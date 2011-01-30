@@ -51,31 +51,31 @@ class DbRole : public DbObject
         virtual ~DbRole();
 
         bool isSuperUser() const;
-        void setSuperUser(bool ipFlag);
+        void setSuperUser(bool iFlag);
 
         bool inheritsPrivileges() const;
-        void setInheritsPrivileges(bool ipFlag);
+        void setInheritsPrivileges(bool iFlag);
 
         bool canCreateRole() const;
-        void setCanCreateRole(bool ipFlag);
+        void setCanCreateRole(bool iFlag);
 
         bool canCreateDb() const;
-        void setCanCreateDb(bool ipFlag);
+        void setCanCreateDb(bool iFlag);
 
         bool canUpdateSysCat() const;
-        void setCanUpdateSysCat(bool ipFlag);
+        void setCanUpdateSysCat(bool iFlag);
 
         bool canLogin() const;
-        void setCanLogin(bool ipFlag);
+        void setCanLogin(bool iFlag);
 
         quint32 connectionLimit() const;
-        void setConnectionLimit(quint32 ipLimit);
+        void setConnectionLimit(quint32 iLimit);
 
         QDate expiryDate() const;
-        void setExpiryDate(const QDate &ipDate);
+        void setExpiryDate(const QDate &iDate);
 
         quint64 id() const;
-        void setId(quint64 ipId);
+        void setId(quint64 iId);
 
         virtual void resetData();
         // virtual void save() = 0;
@@ -104,7 +104,7 @@ class DbRole : public DbObject
         quint64 mId;
 
     protected:
-        DbRole(QString ipName = 0);
+        DbRole(QString iName = 0);
 };
 
 } // namespace Common

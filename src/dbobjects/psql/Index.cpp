@@ -49,8 +49,8 @@ namespace Psql
 /*!
  * Constructor
  */
-Index::Index(QString ipName)
-    : DbIndex(ipName)
+Index::Index(QString iName)
+    : DbIndex(iName)
 {
 }
 

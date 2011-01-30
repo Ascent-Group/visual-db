@@ -37,8 +37,8 @@
 /*!
  * Ctor
  */
-SelectColorWidget::SelectColorWidget(QWidget *ipParent)
-    : QWidget(ipParent)
+SelectColorWidget::SelectColorWidget(QWidget *iParent)
+    : QWidget(iParent)
 {
     ui.setupUi(this);
 
@@ -63,12 +63,12 @@ SelectColorWidget::~SelectColorWidget()
 /*!
  * \brief Process color selection - open the dialog
  *
- * \param[in] ipIndex - input color for default value of color picker in the dialog
+ * \param[in] iIndex - input color for default value of color picker in the dialog
  */
 void
-SelectColorWidget::colorSelect(int ipIndex)
+SelectColorWidget::colorSelect(int iIndex)
 {
-    switch (ipIndex) {
+    switch (iIndex) {
         case 1:
             getColorFromDialog();
             break;
@@ -132,12 +132,12 @@ SelectColorWidget::labelText() const
 /*!
  * \brief Set the label text
  *
- * \param[in] ipText - Label text
+ * \param[in] iText - Label text
  */
 void
-SelectColorWidget::setLabelText(const QString &ipText)
+SelectColorWidget::setLabelText(const QString &iText)
 {
-    ui.mLabel->setText(ipText);
+    ui.mLabel->setText(iText);
 
     init();
 }
@@ -156,12 +156,12 @@ SelectColorWidget::defaultColor() const
 /*!
  * \brief Set default color
  *
- * \param[in] ipColor - Default color
+ * \param[in] iColor - Default color
  */
 void
-SelectColorWidget::setDefaultColor(const QColor &ipColor)
+SelectColorWidget::setDefaultColor(const QColor &iColor)
 {
-    mDefaultColor = ipColor;
+    mDefaultColor = iColor;
 
     if (mDefaultColor != mColor) {
         ui.mCombo->setCurrentIndex(1);
@@ -171,7 +171,7 @@ SelectColorWidget::setDefaultColor(const QColor &ipColor)
 }
 
 /*!
- * \brief Init the dialog 
+ * \brief Init the dialog
  */
 void
 SelectColorWidget::init()

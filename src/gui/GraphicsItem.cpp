@@ -46,15 +46,15 @@ int GraphicsItem::mSeek = 80;
 /*!
  * Constructor
  */
-GraphicsItem::GraphicsItem(QMenu *ipMenu)
+GraphicsItem::GraphicsItem(QMenu *iMenu)
     : QGraphicsPolygonItem(),
       mTitleItem(0),
       mFieldItems(),
       mLeftTopPoint(0, 0),
       mRightBottomPoint(0, 0),
-      mFont("Arial", 8), 
+      mFont("Arial", 8),
       mMode(GraphicsItem::MOVE),
-      mContextMenu(ipMenu)
+      mContextMenu(iMenu)
 {
     // get selected color
     QSettings settings;
@@ -77,105 +77,105 @@ GraphicsItem::~GraphicsItem()
 /*!
  * \brief Check if the poition is under left vertical border
  *
- * \param[in] ipPos - Position we are checking
+ * \param[in] iPos - Position we are checking
  *
  * \return True if the poition is under left vertical border, false otherwise
  */
 bool
-GraphicsItem::isLeftVerticalBorder(const QPointF &ipPos) const
+GraphicsItem::isLeftVerticalBorder(const QPointF &iPos) const
 {
-    return ipPos.x() > mLeftTopPoint.x() && ipPos.x() < mLeftTopPoint.x() + BORDER_WIDTH;
+    return iPos.x() > mLeftTopPoint.x() && iPos.x() < mLeftTopPoint.x() + BORDER_WIDTH;
 }
 
 /*!
  * \brief Check if the position is under right vertical border
  *
- * \param[in] ipPos - Position we are checking
+ * \param[in] iPos - Position we are checking
  *
  * \return True if the position is under right vertical border, false otherwise
  */
 bool
-GraphicsItem::isRightVerticalBorder(const QPointF &ipPos) const
+GraphicsItem::isRightVerticalBorder(const QPointF &iPos) const
 {
-    return ipPos.x() < mRightBottomPoint.x() && ipPos.x() > mRightBottomPoint.x() - BORDER_WIDTH;
+    return iPos.x() < mRightBottomPoint.x() && iPos.x() > mRightBottomPoint.x() - BORDER_WIDTH;
 }
 
 /*!
  * \brief Check if the positon is under top horizontal border
  *
- * \param[in] ipPos - Position we are checking
+ * \param[in] iPos - Position we are checking
  *
  * \return True if the positon is under top horizontal border, false otherwise
  */
 bool
-GraphicsItem::isTopHorizontalBorder(const QPointF &ipPos) const
+GraphicsItem::isTopHorizontalBorder(const QPointF &iPos) const
 {
-    return ipPos.y() > mLeftTopPoint.y() && ipPos.y() < mLeftTopPoint.y() + BORDER_WIDTH;
+    return iPos.y() > mLeftTopPoint.y() && iPos.y() < mLeftTopPoint.y() + BORDER_WIDTH;
 }
 
 /*!
  * \brief Check if the position is under bottom horizontal border
  *
- * \param[in] ipPos - Position we are checking
+ * \param[in] iPos - Position we are checking
  *
  * \return True if the position is under bottom horizontal border, false otherwise
  */
 bool
-GraphicsItem::isBottomHorizontalBorder(const QPointF &ipPos) const
+GraphicsItem::isBottomHorizontalBorder(const QPointF &iPos) const
 {
-    return ipPos.y() < mRightBottomPoint.y() && ipPos.y() > mRightBottomPoint.y() - BORDER_WIDTH;
+    return iPos.y() < mRightBottomPoint.y() && iPos.y() > mRightBottomPoint.y() - BORDER_WIDTH;
 }
 
 /*!
  * \brief Check if the position is under the right bottom corner
  *
- * \param[in] ipPos - Position we are checking
+ * \param[in] iPos - Position we are checking
  *
  * \return True if the position is under the right bottom corner, false otherwise
  */
 bool
-GraphicsItem::isRightBottomCorner(const QPointF &ipPos) const
+GraphicsItem::isRightBottomCorner(const QPointF &iPos) const
 {
-    return isBottomHorizontalBorder(ipPos) && isRightVerticalBorder(ipPos);
+    return isBottomHorizontalBorder(iPos) && isRightVerticalBorder(iPos);
 }
 
 /*!
  * \brief Check if the position is under the left bottom corner
  *
- * \param[in] ipPos - Position we are checking
+ * \param[in] iPos - Position we are checking
  *
  * \return True if the position is under the left bottom corner, false otherwise
  */
 bool
-GraphicsItem::isLeftBottomCorner(const QPointF &ipPos) const
+GraphicsItem::isLeftBottomCorner(const QPointF &iPos) const
 {
-    return isTopHorizontalBorder(ipPos) && isRightVerticalBorder(ipPos);
+    return isTopHorizontalBorder(iPos) && isRightVerticalBorder(iPos);
 }
 
 /*!
  * \brief Check if the position is under the left top corner
  *
- * \param[in] ipPos - Position we are checking
+ * \param[in] iPos - Position we are checking
  *
  * \return True if the position is under the left top corner, false otherwise
  */
 bool
-GraphicsItem::isLeftTopCorner(const QPointF &ipPos) const
+GraphicsItem::isLeftTopCorner(const QPointF &iPos) const
 {
-    return isTopHorizontalBorder(ipPos) && isLeftVerticalBorder(ipPos);
+    return isTopHorizontalBorder(iPos) && isLeftVerticalBorder(iPos);
 }
 
 /*!
  * \brief Check if the position is under the right top corner
  *
- * \param[in] ipPos - Position we are checking
+ * \param[in] iPos - Position we are checking
  *
  * \return True if position is under the right top corner, false otherwise
  */
 bool
-GraphicsItem::isRightTopCorner(const QPointF &ipPos) const
+GraphicsItem::isRightTopCorner(const QPointF &iPos) const
 {
-    return isBottomHorizontalBorder(ipPos) && isLeftVerticalBorder(ipPos);
+    return isBottomHorizontalBorder(iPos) && isLeftVerticalBorder(iPos);
 }
 
 /*!
@@ -263,45 +263,45 @@ GraphicsItem::height() const
 /*!
  * \brief Set x coordinate of left top corner
  *
- * \param[in] ipX - X coordinate of left top corner
+ * \param[in] iX - X coordinate of left top corner
  */
 void
-GraphicsItem::setX(qreal ipX)
+GraphicsItem::setX(qreal iX)
 {
-    mLeftTopPoint.setX(ipX);
+    mLeftTopPoint.setX(iX);
 }
 
 /*!
  * \brief Set y coordinate of left top corner
  *
- * \param[in] ipY - Y coordinate of left top corner
+ * \param[in] iY - Y coordinate of left top corner
  */
 void
-GraphicsItem::setY(qreal ipY)
+GraphicsItem::setY(qreal iY)
 {
-    mLeftTopPoint.setY(ipY);
+    mLeftTopPoint.setY(iY);
 }
 
 /*!
  * \brief Set width of the item
  *
- * \param[in] ipWidth - Item width
+ * \param[in] iWidth - Item width
  */
 void
-GraphicsItem::setWidth(qreal ipWidth)
+GraphicsItem::setWidth(qreal iWidth)
 {
-    mRightBottomPoint.setX(x() + ipWidth);
+    mRightBottomPoint.setX(x() + iWidth);
 }
 
 /*!
  * \brief Set height of the item
  *
- * \param[in] ipHeight - Item height
+ * \param[in] iHeight - Item height
  */
 void
-GraphicsItem::setHeight(qreal ipHeight)
+GraphicsItem::setHeight(qreal iHeight)
 {
-    mRightBottomPoint.setY(y() + ipHeight);
+    mRightBottomPoint.setY(y() + iHeight);
 }
 
 /*!
@@ -318,12 +318,12 @@ GraphicsItem::centerPoint() const
 /*!
  * \brief Set item color
  *
- * \param[in] ipColor - Item color
+ * \param[in] iColor - Item color
  */
 void
-GraphicsItem::setItemColor(const QColor &ipColor)
+GraphicsItem::setItemColor(const QColor &iColor)
 {
-    mItemColor = ipColor;
+    mItemColor = iColor;
     setBrush(QBrush(mItemColor));
 
     int red = mItemColor.red();
@@ -348,12 +348,12 @@ GraphicsItem::borderColor() const
 /*!
  * \brief Set border color
  *
- * \param[in] ipColor - Border color
+ * \param[in] iColor - Border color
  */
 void
-GraphicsItem::setBorderColor(const QColor &ipColor)
+GraphicsItem::setBorderColor(const QColor &iColor)
 {
-    mBorderColor = ipColor;
+    mBorderColor = iColor;
 }
 
 /*!
@@ -370,34 +370,34 @@ GraphicsItem::fontColor() const
 /*!
  * \brief Set font color
  *
- * \param[in] ipColor - Font color
+ * \param[in] iColor - Font color
  */
 void
-GraphicsItem::setFontColor(const QColor &ipColor)
+GraphicsItem::setFontColor(const QColor &iColor)
 {
-    mFontColor = ipColor;
+    mFontColor = iColor;
 }
 
 /*!
  * \brief Add field item to the list of field
  *
- * \param[in] ipItem - Pointer to the field item
+ * \param[in] iItem - Pointer to the field item
  */
 void
-GraphicsItem::addFieldItem(QGraphicsTextItem *ipItem)
+GraphicsItem::addFieldItem(QGraphicsTextItem *iItem)
 {
-    mFieldItems << ipItem;
+    mFieldItems << iItem;
 }
 
 /*!
  * \brief Set title item
  *
- * \param[in] ipItem - Pointer to the title item
+ * \param[in] iItem - Pointer to the title item
  */
 void
-GraphicsItem::setTitleItem(QGraphicsTextItem *ipItem)
+GraphicsItem::setTitleItem(QGraphicsTextItem *iItem)
 {
-    mTitleItem = ipItem;
+    mTitleItem = iItem;
 }
 
 /*!
@@ -414,25 +414,25 @@ GraphicsItem::titleText() const
 /*!
  * \brief Set title text
  *
- * \param[in] ipTexx - Title text
+ * \param[in] iText - Title text
  */
 void
-GraphicsItem::setTitleText(const QString &ipText)
+GraphicsItem::setTitleText(const QString &iText)
 {
-    mTitleItem->setPlainText(ipText);
+    mTitleItem->setPlainText(iText);
 }
 
 /*!
  * \brief Get field text
  *
- * \param[in] ipI - Field index
+ * \param[in] iI - Field index
  *
  * \return Field text
  */
 QString
-GraphicsItem::fieldText(int ipI) const
+GraphicsItem::fieldText(int iI) const
 {
-    return mFieldItems.at(ipI)->toPlainText();
+    return mFieldItems.at(iI)->toPlainText();
 }
 
 /*!
@@ -471,13 +471,13 @@ GraphicsItem::titleItem() const
 /*!
  * \brief Set field text
  *
- * \param[in] ipI - Field index
- * \param[in] ipText - Field text
+ * \param[in] iI - Field index
+ * \param[in] iText - Field text
  */
 void
-GraphicsItem::setFieldText(int ipI, const QString &ipText)
+GraphicsItem::setFieldText(int iI, const QString &iText)
 {
-    mFieldItems.at(ipI)->setPlainText(ipText);
+    mFieldItems.at(iI)->setPlainText(iText);
 }
 
 /*!
@@ -532,75 +532,75 @@ GraphicsItem::boundingRect() const
  * \overload
  */
 void
-GraphicsItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidget *ipWidget)
+GraphicsItem::paint(QPainter *iPainter, const QStyleOptionGraphicsItem *iItem, QWidget *iWidget)
 {
     // set the color of painting
-    ipPainter->setPen(fontColor());
-    ipPainter->setFont(mFont);
+    iPainter->setPen(fontColor());
+    iPainter->setFont(mFont);
 
-    paintBorder(ipPainter, ipItem, ipWidget);
-    paintTitle(ipPainter);
-    paintTitleImage(ipPainter);
-    paintTitleText(ipPainter);
-    paintFields(ipPainter);
-    paintAdditionalInfo(ipPainter);
-    paintAnchor(ipPainter);
+    paintBorder(iPainter, iItem, iWidget);
+    paintTitle(iPainter);
+    paintTitleImage(iPainter);
+    paintTitleText(iPainter);
+    paintFields(iPainter);
+    paintAdditionalInfo(iPainter);
+    paintAnchor(iPainter);
 }
 
 /*!
  * \brief Paints border for item
  *
- * \param[in] ipPainter - Painter
- * \param[in] ipItem - Style option item
- * \param[in] ipWidget - Widget
+ * \param[in] iPainter - Painter
+ * \param[in] iItem - Style option item
+ * \param[in] iWidget - Widget
  */
 void
-GraphicsItem::paintBorder(QPainter *ipPainter, const QStyleOptionGraphicsItem *ipItem, QWidget *ipWidget)
+GraphicsItem::paintBorder(QPainter *iPainter, const QStyleOptionGraphicsItem *iItem, QWidget *iWidget)
 {
     // draw the board of the table
-    QGraphicsPolygonItem::paint(ipPainter, ipItem, ipWidget);
-    ipPainter->fillRect((int)x() + SHADOW_SIZE, (int)y() + (int)height() + 1, (int)width() + 1, SHADOW_SIZE, mShadowColor);
-    ipPainter->fillRect((int)x() + (int)width() + 1, (int)y() + SHADOW_SIZE, SHADOW_SIZE, (int)height() - SHADOW_SIZE + 1, mShadowColor);
+    QGraphicsPolygonItem::paint(iPainter, iItem, iWidget);
+    iPainter->fillRect((int)x() + SHADOW_SIZE, (int)y() + (int)height() + 1, (int)width() + 1, SHADOW_SIZE, mShadowColor);
+    iPainter->fillRect((int)x() + (int)width() + 1, (int)y() + SHADOW_SIZE, SHADOW_SIZE, (int)height() - SHADOW_SIZE + 1, mShadowColor);
 }
 
 /*!
  * \brief Paints title for item
  *
- * \param[in] ipPainter - Painter
+ * \param[in] iPainter - Painter
  */
 void
-GraphicsItem::paintTitle(QPainter *ipPainter)
+GraphicsItem::paintTitle(QPainter *iPainter)
 {
     // fill title with a little darker color then another table
-    ipPainter->fillRect((int)x() + 1, (int)y() + 1,
+    iPainter->fillRect((int)x() + 1, (int)y() + 1,
             (int)width() - 1, (int)y() + FIELD_HEIGHT + INTERVAL * 2 - (int)y() - 1,
             QColor(abs(itemColor().red() - 80), abs(itemColor().green() - 80), abs(itemColor().blue() - 80)));
 
     // draw line under the title
-    ipPainter->drawLine((int)x(), (int)y() + FIELD_HEIGHT + INTERVAL * 2,
+    iPainter->drawLine((int)x(), (int)y() + FIELD_HEIGHT + INTERVAL * 2,
             (int)(x() + width()), (int)y() + FIELD_HEIGHT + INTERVAL * 2);
 }
 
 /*!
  * \brief Paints title image
  *
- * \param[in] ipPainter - Painter
+ * \param[in] iPainter - Painter
  */
 void
-GraphicsItem::paintTitleImage(QPainter *ipPainter)
+GraphicsItem::paintTitleImage(QPainter *iPainter)
 {
 }
 
 /*!
  * \brief Paints title text
  *
- * \param[in] ipPainter - Painter
+ * \param[in] iPainter - Painter
  */
 void
-GraphicsItem::paintTitleText(QPainter *ipPainter)
+GraphicsItem::paintTitleText(QPainter *iPainter)
 {
     // draw the title aligned on the center in upper case
-    ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + INTERVAL,
+    iPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + INTERVAL,
             (int)width() - IMG_WIDTH - INTERVAL * 4, FIELD_HEIGHT + INTERVAL,
             Qt::AlignCenter, titleText());
 }
@@ -608,10 +608,10 @@ GraphicsItem::paintTitleText(QPainter *ipPainter)
 /*!
  * \brief Paints all fields for item
  *
- * \param[in] ipPainter - Painter
+ * \param[in] iPainter - Painter
  */
 void
-GraphicsItem::paintFields(QPainter *ipPainter)
+GraphicsItem::paintFields(QPainter *iPainter)
 {
     // row in the graphic table (some items may be missed)
     // draw each field
@@ -621,24 +621,24 @@ GraphicsItem::paintFields(QPainter *ipPainter)
             break;
         }
 
-        paintFieldImage(ipPainter, i);
-        paintFieldText(ipPainter, i);
+        paintFieldImage(iPainter, i);
+        paintFieldText(iPainter, i);
     }
 }
 
 /*!
  * \brief Paints field text
  *
- * \param[in] ipPainter - Painter
- * \param[in] ipIdx - Field index
+ * \param[in] iPainter - Painter
+ * \param[in] iIdx - Field index
  */
 void
-GraphicsItem::paintFieldText(QPainter *ipPainter, int ipIdx)
+GraphicsItem::paintFieldText(QPainter *iPainter, int iIdx)
 {
     // draw field name with margins = INTERVAL for top, bottom, left and right sizes
-    ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (ipIdx + 1) + INTERVAL * 2,
+    iPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (iIdx + 1) + INTERVAL * 2,
             (int)width() - IMG_WIDTH - INTERVAL * 4, FIELD_HEIGHT + INTERVAL * 2,
             Qt::AlignLeft,
-            fieldText(ipIdx));
+            fieldText(iIdx));
 }
 

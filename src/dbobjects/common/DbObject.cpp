@@ -39,8 +39,8 @@ namespace Common
 /*!
  * Ctor
  */
-DbObject::DbObject(QString ipName)
-    : mName(ipName),
+DbObject::DbObject(QString iName)
+    : mName(iName),
       mIsLoaded(false)
 {
 
@@ -66,12 +66,12 @@ DbObject::name() const
 /*!
  * \brief Sets the name of the object
  *
- * \param[in] ipName - Name of the object
+ * \param[in] iName - Name of the object
  */
 void
-DbObject::setName(const QString &ipName)
+DbObject::setName(const QString &iName)
 {
-    mName = ipName;
+    mName = iName;
 }
 
 /*!

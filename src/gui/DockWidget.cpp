@@ -32,8 +32,8 @@
 /*!
  * Ctor
  */
-DockWidget::DockWidget(QWidget *ipParent, Qt::WindowFlags ipFlags)
-    : QDockWidget(ipParent, ipFlags)
+DockWidget::DockWidget(QWidget *iParent, Qt::WindowFlags iFlags)
+    : QDockWidget(iParent, iFlags)
 {
 }
 
@@ -47,11 +47,11 @@ DockWidget::~DockWidget()
 /*!
  * \brief Close event
  */
-void 
-DockWidget::closeEvent(QCloseEvent *ipEvent)
+void
+DockWidget::closeEvent(QCloseEvent *iEvent)
 {
     emit closed();
-    QDockWidget::closeEvent(ipEvent);
+    QDockWidget::closeEvent(iEvent);
 }
 
 /*!

@@ -48,7 +48,7 @@ class TreeWidget : public QTreeWidget
     Q_OBJECT
 
     public:
-        TreeWidget(/*QMenu *, */QWidget *ipParent = 0);
+        TreeWidget(/*QMenu *, */QWidget *iParent = 0);
         ~TreeWidget();
 
         // it is highly recommended that we keep the same order as
@@ -99,7 +99,7 @@ class TreeWidget : public QTreeWidget
         QMenu *mContextMenu;
 
     private:
-        void insertItems(QTreeWidgetItem *, QStringList *, TreeWidget::Item, bool ipDragEnabled = false);
+        void insertItems(QTreeWidgetItem *, QStringList *, TreeWidget::Item, bool iDragEnabled = false);
 };
 
 #endif // TREEWIDGET_H

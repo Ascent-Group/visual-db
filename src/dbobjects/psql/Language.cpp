@@ -45,10 +45,10 @@ namespace Psql
 /*!
  * Constructor
  *
- * \param[in] ipName - Name of the language
+ * \param[in] iName - Name of the language
  */
-Language::Language(QString ipName)
-    : DbLanguage(ipName)
+Language::Language(QString iName)
+    : DbLanguage(iName)
 {
 
 }

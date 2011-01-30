@@ -34,8 +34,8 @@
 /*!
  * Constructor
  */
-AppearancePage::AppearancePage(QWidget *ipParent)
-    : QWidget(ipParent)
+AppearancePage::AppearancePage(QWidget *iParent)
+    : QWidget(iParent)
 {
     ui.setupUi(this);
 

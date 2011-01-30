@@ -63,13 +63,13 @@ typedef DbObjectPtr<DbView> DbViewPtr;
 class DbSchema : public DbObject
 {
     public:
-        DbSchema(QString ipName);
+        DbSchema(QString iName);
         virtual ~DbSchema();
 
-        bool addTable(const DbTablePtr &ipTable);
-        bool addView(const DbViewPtr &ipView);
-        bool addProcedure(const DbProcedurePtr &ipProc);
-        bool addTrigger(const DbTriggerPtr &ipTrigger);
+        bool addTable(const DbTablePtr &iTable);
+        bool addView(const DbViewPtr &iView);
+        bool addProcedure(const DbProcedurePtr &iProc);
+        bool addTrigger(const DbTriggerPtr &iTrigger);
 
         void tablesList(QStringList &) const;
         quint64 tablesCount() const;
@@ -83,10 +83,10 @@ class DbSchema : public DbObject
         void triggersList(QStringList &) const;
         quint16 triggersCount() const;
 
-        DbTablePtr findTable(const QString &ipTableName) const;
-        DbViewPtr findView(const QString &ipViewName) const;
-        DbProcedurePtr findProcedure(const QString &ipProcName) const;
-        DbTriggerPtr findTrigger(const QString &ipTrigName) const;
+        DbTablePtr findTable(const QString &iTableName) const;
+        DbViewPtr findView(const QString &iViewName) const;
+        DbProcedurePtr findProcedure(const QString &iProcName) const;
+        DbTriggerPtr findTrigger(const QString &iTrigName) const;
 
         void readTables();
         void readViews();
@@ -99,7 +99,7 @@ class DbSchema : public DbObject
         void setOwner(const DbRolePtr &);
 
         QString description() const;
-        void setDescription(const QString &ipDescription);
+        void setDescription(const QString &iDescription);
 
         virtual bool loadChildren();
         virtual void resetData();

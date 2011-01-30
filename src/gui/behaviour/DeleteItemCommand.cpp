@@ -37,10 +37,10 @@
 /*!
  * Ctor
  */
-DeleteItemCommand::DeleteItemCommand(GraphicsScene &ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *ipParent)
-: QUndoCommand(ipParent)
-, mScene(ipScene)
-, mTableList(ipTableList)
+DeleteItemCommand::DeleteItemCommand(GraphicsScene &iScene, QList<QGraphicsItem *> iTableList, QUndoCommand *iParent)
+: QUndoCommand(iParent)
+, mScene(iScene)
+, mTableList(iTableList)
 {
     setText(QObject::tr("Delete table"));
 }

@@ -42,8 +42,8 @@ static void setBold(QTreeWidgetItem *, bool);
 /*!
  * Constructor
  */
-TreeWidget::TreeWidget(/*QMenu *ipMenu, */QWidget *ipParent)
-    : QTreeWidget(ipParent)//, mContextMenu(ipMenu)
+TreeWidget::TreeWidget(/*QMenu *iMenu, */QWidget *iParent)
+    : QTreeWidget(iParent)//, mContextMenu(iMenu)
 {
     setHeaderLabel(QString(""));
     setAnimated(true);
@@ -60,12 +60,12 @@ TreeWidget::~TreeWidget()
 /*!
  * \brief Set context menu
  *
- * \param[in] ipMenu - Context menu
+ * \param[in] iMenu - Context menu
  */
 void
-TreeWidget::setContextMenu(QMenu *ipMenu)
+TreeWidget::setContextMenu(QMenu *iMenu)
 {
-    mContextMenu = ipMenu;
+    mContextMenu = iMenu;
 }
 
 /*!
@@ -202,12 +202,12 @@ TreeWidget::refresh()
 /*!
  * \brief Handler for context menu event
  *
- * \param[in] ipEvent - Context menu event
+ * \param[in] iEvent - Context menu event
  */
 void
-TreeWidget::contextMenuEvent(QContextMenuEvent *ipEvent)
+TreeWidget::contextMenuEvent(QContextMenuEvent *iEvent)
 {
-    mContextMenu->exec(ipEvent->globalPos());
+    mContextMenu->exec(iEvent->globalPos());
 }
 
 /*!
@@ -236,11 +236,11 @@ TreeWidget::startDrag(Qt::DropActions)
 /*!
  * \brief Show the item on the scene when we double click on it
  *
- * \param[in] ipItem - Item we clicked on
- * \param[in] ipColumn - Column of the item
+ * \param[in] iItem - Item we clicked on
+ * \param[in] iColumn - Column of the item
  */
-//void 
-//TreeWidget::itemDoubleClicked(QTreeWidgetItem * /*ipItem*/, int /*ipColumn*/)
+//void
+//TreeWidget::itemDoubleClicked(QTreeWidgetItem * /*iItem*/, int /*iColumn*/)
 //{
 //    emit itemDoubleClicked();
 //}
@@ -248,21 +248,21 @@ TreeWidget::startDrag(Qt::DropActions)
 /*!
  * \brief Create the database caption
  *
- * \param[in] ipDb - Database connection
+ * \param[in] iDb - Database connection
  *
  * \return Database caption
  */
 static QString
-qDBCaption(const QSqlDatabase &ipDb)
+qDBCaption(const QSqlDatabase &iDb)
 {
-    QString driverName = ipDb.driverName();
+    QString driverName = iDb.driverName();
     driverName.append(QLatin1Char(':'));
 
-    if (!ipDb.userName().isEmpty()) {
-        driverName.append(ipDb.userName()).append(QLatin1Char('@'));
+    if (!iDb.userName().isEmpty()) {
+        driverName.append(iDb.userName()).append(QLatin1Char('@'));
     }
 
-    driverName.append(ipDb.databaseName());
+    driverName.append(iDb.databaseName());
 
     return driverName;
 }
@@ -270,40 +270,40 @@ qDBCaption(const QSqlDatabase &ipDb)
 /*!
  * \brief Set font to bold
  *
- * \param[in] ipItem - Tree item we need to change the boldness
- * \param[in] ipBold - True for bold font or false for normal one
+ * \param[in] iItem - Tree item we need to change the boldness
+ * \param[in] iBold - True for bold font or false for normal one
  */
 static void
-setBold(QTreeWidgetItem *ipItem, bool ipBold)
+setBold(QTreeWidgetItem *iItem, bool iBold)
 {
-    QFont font = ipItem->font(0);
-    font.setBold(ipBold);
-    ipItem->setFont(0, font);
+    QFont font = iItem->font(0);
+    font.setBold(iBold);
+    iItem->setFont(0, font);
 }
 
 /*!
  * \brief Populate tree under parent-item with triggers
  *
- * \param[in] ipParentItem - Parent item we will populate
- * \param[in] ipList - The list of captions we need to fill with the parent item
- * \param[in] ipType - Item type
+ * \param[in] iParentItem - Parent item we will populate
+ * \param[in] iList - The list of captions we need to fill with the parent item
+ * \param[in] iType - Item type
  */
 void
-TreeWidget::insertItems(QTreeWidgetItem *ipParentItem, QStringList *ipList, TreeWidget::Item ipType, bool /*ipDragEnabled*/)
+TreeWidget::insertItems(QTreeWidgetItem *iParentItem, QStringList *iList, TreeWidget::Item iType, bool /*iDragEnabled*/)
 {
-    ipList->sort();
+    iList->sort();
 
     QStringList::const_iterator iter;
 
     // for each item in the list
-    for (iter = ipList->begin(); iter != ipList->end(); ++iter) {
+    for (iter = iList->begin(); iter != iList->end(); ++iter) {
         QString name = *iter;
 
         // create an item
-        QTreeWidgetItem *item = new QTreeWidgetItem(ipParentItem);
+        QTreeWidgetItem *item = new QTreeWidgetItem(iParentItem);
         item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled);
         item->setText(TreeWidget::NameCol, name);
-        item->setText(TreeWidget::IdCol, QString::number(ipType));
+        item->setText(TreeWidget::IdCol, QString::number(iType));
         item->setData(TreeWidget::NameCol, Qt::DisplayRole, name);
     }
 }

@@ -55,7 +55,7 @@ typedef Common::DbObjectPtr<Common::DbTable> DbTablePtr;
 class Trigger : public Common::DbTrigger
 {
     public:
-        Trigger(QString ipName, const DbSchemaPtr &ipSchema);
+        Trigger(QString iName, const DbSchemaPtr &iSchema);
         ~Trigger();
 
     protected:

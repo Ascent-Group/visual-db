@@ -48,11 +48,11 @@ namespace Mysql
 /*!
  * Constructor
  *
- * \param[in] ipName - Name of the given table
- * \param[in] ipSchema - Handle to schema containing the table
+ * \param[in] iName - Name of the given table
+ * \param[in] iSchema - Handle to schema containing the table
  */
-Table::Table(QString ipName, const DbSchemaPtr &ipSchema)
-    : DbTable(ipName, ipSchema)
+Table::Table(QString iName, const DbSchemaPtr &iSchema)
+    : DbTable(iName, iSchema)
 {
 }
 
@@ -170,13 +170,13 @@ Table::loadData()
 /*!
  * Checks if a column is a primary key for the given table
  *
- * \param[in] ipColumnName - Name of a column
+ * \param[in] iColumnName - Name of a column
  *
  * \return true If a column is a primary key
  * \return false Otherwise
  */
 bool
-Table::checkPrimaryKey(const QString &ipColumnName) const
+Table::checkPrimaryKey(const QString &iColumnName) const
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -191,7 +191,7 @@ Table::checkPrimaryKey(const QString &ipColumnName) const
                                 "AND tc.constraint_name = '%2' "
                                 "AND UPPER(tc.constraint_type) = 'PRIMARY KEY';")
                 .arg(mName)
-                .arg(ipColumnName);
+                .arg(iColumnName);
 
 #ifdef DEBUG_QUERY
     qDebug() << "Table::checkPrimaryKey> " << qstr;
@@ -211,18 +211,18 @@ Table::checkPrimaryKey(const QString &ipColumnName) const
 /*!
  * Checks if column is a foreign key for the given table
  *
- * \param[in] ipColumnName - Name of a column
- * \param[out] opForeignSchemaName - Name of a schema containing the referenced table
- * \param[out] opForeignTableName - Name of a table references by this foreign key
+ * \param[in] iColumnName - Name of a column
+ * \param[out] oForeignSchemaName - Name of a schema containing the referenced table
+ * \param[out] oForeignTableName - Name of a table references by this foreign key
  *
  * \return true If a column is a foreign key
  * \return false Otherwise
  */
 bool
-Table::checkForeignKey(const QString &ipColumnName, QString &opForeignSchemaName, QString &opForeignTableName) const
+Table::checkForeignKey(const QString &iColumnName, QString &oForeignSchemaName, QString &oForeignTableName) const
 {
-    Q_UNUSED(opForeignSchemaName);
-    Q_UNUSED(opForeignTableName);
+    Q_UNUSED(oForeignSchemaName);
+    Q_UNUSED(oForeignTableName);
 
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -237,7 +237,7 @@ Table::checkForeignKey(const QString &ipColumnName, QString &opForeignSchemaName
                                 "AND tc.constraint_name = '%2' "
                                 "AND UPPER(tc.constraint_type) = 'FOREIGN KEY';")
                 .arg(mName)
-                .arg(ipColumnName);
+                .arg(iColumnName);
 
 #ifdef DEBUG_QUERY
     qDebug() << "Table::checkForeignKey> " << qstr;
@@ -257,13 +257,13 @@ Table::checkForeignKey(const QString &ipColumnName, QString &opForeignSchemaName
 /*!
  * Checks if a column is unique for the given table
  *
- * \param[in] ipColumnName - Name of a column
+ * \param[in] iColumnName - Name of a column
  *
  * \return true If the column has UNIQUE constraint
  * \return false Otherwise
  */
 bool
-Table::checkUnique(const QString &ipColumnName) const
+Table::checkUnique(const QString &iColumnName) const
 {
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
@@ -278,7 +278,7 @@ Table::checkUnique(const QString &ipColumnName) const
                                 "AND tc.constraint_name = '%2' "
                                 "AND UPPER(tc.constraint_type) = 'UNIQUE';")
                 .arg(mName)
-                .arg(ipColumnName);
+                .arg(iColumnName);
 
 #ifdef DEBUG_QUERY
     qDebug() << "Table::checkUnique> " << qstr;

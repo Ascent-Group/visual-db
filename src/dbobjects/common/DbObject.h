@@ -64,7 +64,7 @@ class DbObject
         };
 
         QString name() const;
-        void setName(const QString &ipName);
+        void setName(const QString &iName);
 
         bool isLoaded() const;
 
@@ -80,7 +80,7 @@ class DbObject
         bool mIsLoaded;
 
     protected:
-        DbObject(QString ipName = 0);
+        DbObject(QString iName = 0);
         virtual ~DbObject();
 };
 

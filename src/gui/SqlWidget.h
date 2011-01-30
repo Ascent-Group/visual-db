@@ -43,10 +43,10 @@ class SqlWidget : public QWidget
     Q_OBJECT
 
     public:
-        SqlWidget(QWidget *ipParent = 0);
+        SqlWidget(QWidget *iParent = 0);
         ~SqlWidget();
 
-        void setDefaultQuery(const QString &ipQueryText);
+        void setDefaultQuery(const QString &iQueryText);
 
     private:
         Ui::SqlWidget ui;
@@ -66,7 +66,7 @@ class SqlWidget : public QWidget
         Position mPos;
 
     private:
-        void readPortion(Portions ipDirection);
+        void readPortion(Portions iDirection);
 
     private slots:
         void runQuery();
@@ -75,7 +75,7 @@ class SqlWidget : public QWidget
         void readFullResult();
 };
 
-bool isQuerySafe(const QString &ipQueryText);
+bool isQuerySafe(const QString &iQueryText);
 
 #endif // SQLWIDGET_H
 

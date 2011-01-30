@@ -56,11 +56,11 @@ namespace Factory
 class View
 {
     public:
-        static Common::DbView* createView(const QString &ipName, const QString &ipSchemaName);
+        static Common::DbView* createView(const QString &iName, const QString &iSchemaName);
 
     protected:
-        static Psql::View* createPsqlView(const QString &ipName, const QString &ipSchemaName);
-//        static Mysql::View* createMysqlView(const QString &ipName, const QString &ipSchemaName);
+        static Psql::View* createPsqlView(const QString &iName, const QString &iSchemaName);
+//        static Mysql::View* createMysqlView(const QString &iName, const QString &iSchemaName);
 
     private:
         Q_DISABLE_COPY(View);

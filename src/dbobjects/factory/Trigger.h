@@ -56,11 +56,11 @@ namespace Factory
 class Trigger
 {
     public:
-        static Common::DbTrigger* createTrigger(const QString &ipName, const QString &ipSchemaName);
+        static Common::DbTrigger* createTrigger(const QString &iName, const QString &iSchemaName);
 
     protected:
-        static Psql::Trigger* createPsqlTrigger(const QString &ipName, const QString &ipSchemaName);
-//        static Mysql::Trigger* createMysqlTrigger(const QString &ipName, const QString &ipSchemaName);
+        static Psql::Trigger* createPsqlTrigger(const QString &iName, const QString &iSchemaName);
+//        static Mysql::Trigger* createMysqlTrigger(const QString &iName, const QString &iSchemaName);
 
     private:
         Q_DISABLE_COPY(Trigger);

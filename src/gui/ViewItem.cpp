@@ -39,55 +39,55 @@
 /*!
  * Constructor
  */
-ViewItem::ViewItem(const QString &ipSchemaName, const QString &ipViewName, QMenu *ipMenu, const QPoint &ipPos)
-    : DbObjectItem(ipMenu)
+ViewItem::ViewItem(const QString &iSchemaName, const QString &iViewName, QMenu *iMenu, const QPoint &iPos)
+    : DbObjectItem(iMenu)
 {
     using namespace DbObjects::Common;
     Database *dbInst = Database::instance();
 
     // find schema
-    DbSchemaPtr schema = dbInst->findSchema(ipSchemaName);
+    DbSchemaPtr schema = dbInst->findSchema(iSchemaName);
 
     // if found
     if (schema.get()) {
         // find view in this schema
-        DbViewPtr view = schema->findView(ipViewName);
+        DbViewPtr view = schema->findView(iViewName);
 
         // if found
         if (view.get()) {
             mModel = view;
         } else {
-            qDebug() << "Cann't find this view: " << ipViewName;
+            qDebug() << "Cann't find this view: " << iViewName;
             return;
         }
         // lyuts: maybe else we should do this
-        // mViewModel = new PsqlView(ipSchemaName, ipViewName);
+        // mViewModel = new PsqlView(iSchemaName, iViewName);
     } else {
-        qDebug() << "Cann't find this schema: " << ipSchemaName;
+        qDebug() << "Cann't find this schema: " << iSchemaName;
         return;
     }
 
     // create title item
-    setTitleItem(new QGraphicsTextItem(ipSchemaName.toUpper() + "." + ipViewName.toUpper()));
+    setTitleItem(new QGraphicsTextItem(iSchemaName.toUpper() + "." + iViewName.toUpper()));
 
     // create field items
     foreach (QString fieldName, mModel->columnsNames()) {
         addFieldItem(new QGraphicsTextItem(fieldName));
     }
-    
+
 //    for (int i = 0; i < mModel->columnsCount(); ++i) {
 //        addFieldItem(new QGraphicsTextItem(mModel->columnName(i) + ": " + mModel->columnType(i)));
 //    }
 
     // set left top point coordinates
-    if (ipPos.x() == 0 && ipPos.y() == 0) {
-        setX(ipPos.x() + seek());
-        setY(ipPos.y() + seek());
+    if (iPos.x() == 0 && iPos.y() == 0) {
+        setX(iPos.x() + seek());
+        setY(iPos.y() + seek());
 
         setSeek(seek() + SEEK_STEP);
     } else {
-        setX(ipPos.x());
-        setY(ipPos.y());
+        setX(iPos.x());
+        setY(iPos.y());
     }
 
     // set width and height
@@ -151,37 +151,37 @@ ViewItem::schemaName() const
 /*!
  * \brief Create the xml represantation for the view
  *
- * \param[in] ipDoc - Parent xml dom document
+ * \param[in] iDoc - Parent xml dom document
  *
  * \return Filled with schema info xml dom element connected to input document
  */
 QDomElement
-ViewItem::toXml(QDomDocument &ipDoc) const
+ViewItem::toXml(QDomDocument &iDoc) const
 {
-    return DbObjectItem::toXml(ipDoc, "view");
+    return DbObjectItem::toXml(iDoc, "view");
 }
 
 /*!
  * \brief According to the given flag show or hide fields' types
  *
- * \param[in] ipFlag - True if we want to show field types, false otherwise
+ * \param[in] iFlag - True if we want to show field types, false otherwise
  */
 void
-ViewItem::setFieldsTypesVisible(bool ipFlag)
+ViewItem::setFieldsTypesVisible(bool iFlag)
 {
     // \todo Here will be view specific code when we will read view column definitions
-    DbObjectItem::setFieldsTypesVisible(ipFlag);
+    DbObjectItem::setFieldsTypesVisible(iFlag);
 }
 
 /*!
  * \brief Check if input graphics item is view item
  *
- * \param[in] ipItem - any graphics item
+ * \param[in] iItem - any graphics item
  *
  * \return Converted to ViewItem element or 0 otherwise
  */
 ViewItem *
-toView(QGraphicsItem *ipItem)
+toView(QGraphicsItem *iItem)
 {
-    return qgraphicsitem_cast<ViewItem *>(ipItem);
+    return qgraphicsitem_cast<ViewItem *>(iItem);
 }

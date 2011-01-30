@@ -89,13 +89,13 @@ class MainWindow : public QMainWindow
 
     private:
         void createActions();
-        void setEnableForActions(bool ipFlag);
+        void setEnableForActions(bool iFlag);
         //  void showConnectionDialog(DbParameters *, ProxyParameters *, bool);
         void createMenus();
         void updateSessionMenu();
         void createStatusBar();
 
-        void closeEvent(QCloseEvent *ipEvent);
+        void closeEvent(QCloseEvent *iEvent);
 
         void saveToXml(const QString &);
         void loadFromXml(QString);
@@ -104,7 +104,7 @@ class MainWindow : public QMainWindow
 
     private slots:
         // this slot is not standard that's why it is declared here
-        int showConnectionDialog(bool ipLoadSession = false);
+        int showConnectionDialog(bool iLoadSession = false);
         void addCommand(QUndoCommand*);
         void reloadData();
         bool saveSession();

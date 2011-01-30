@@ -40,13 +40,13 @@ namespace Factory
 {
 
 /*!
- * \param[in] ipName - Name of the view to construct
- * \param[in] ipSchemaName - Name of schema containing the procedure
+ * \param[in] iName - Name of the view to construct
+ * \param[in] iSchemaName - Name of schema containing the procedure
  *
  * \return Database view object
  */
 DbObjects::Common::DbView*
-View::createView(const QString &ipName, const QString &ipSchemaName)
+View::createView(const QString &iName, const QString &iSchemaName)
 {
     using namespace DbObjects::Common;
 
@@ -54,10 +54,10 @@ View::createView(const QString &ipName, const QString &ipSchemaName)
 
     switch (Database::instance()->sqlDriver()) {
         case Database::PostgreSQL:
-                view = createPsqlView(ipName, ipSchemaName);
+                view = createPsqlView(iName, iSchemaName);
                 break;
         case Database::MySQL:
-//                view = createMysqlView(ipName, ipSchemaName);
+//                view = createMysqlView(iName, iSchemaName);
                 break;
         case Database::Oracle:
         case Database::SQLite:
@@ -76,27 +76,27 @@ View::createView(const QString &ipName, const QString &ipSchemaName)
 }
 
 /*!
- * \param[in] ipName - Name of view to construct
- * \param[in] ipSchemaName - Name of schema containing the procedure
+ * \param[in] iName - Name of view to construct
+ * \param[in] iSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to PostgreSQL view object
  */
 Psql::View*
-View::createPsqlView(const QString &ipName, const QString &ipSchemaName)
+View::createPsqlView(const QString &iName, const QString &iSchemaName)
 {
-    return new(std::nothrow) Psql::View(ipName, Database::instance()->findSchema(ipSchemaName));
+    return new(std::nothrow) Psql::View(iName, Database::instance()->findSchema(iSchemaName));
 }
 
 /*!
- * \param[in] ipName - Name of view to construct
- * \param[in] ipSchemaName - Name of schema containing the procedure
+ * \param[in] iName - Name of view to construct
+ * \param[in] iSchemaName - Name of schema containing the procedure
  *
  * \return Pointer to MySQL view object
  */
 //Mysql::View*
-//View::createMysqlView(const QString &ipName, const QString &ipSchemaName)
+//View::createMysqlView(const QString &iName, const QString &iSchemaName)
 //{
-//    return new Mysql::View(ipName, Database::instance()->findSchema(ipSchemaName));
+//    return new Mysql::View(iName, Database::instance()->findSchema(iSchemaName));
 //}
 
 } // namespace Factory

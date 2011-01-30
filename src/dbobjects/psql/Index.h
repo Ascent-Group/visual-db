@@ -49,7 +49,7 @@ typedef Common::DbObjectPtr<Common::DbTable> DbTablePtr;
 class Index : public Common::DbIndex
 {
     public:
-        Index(QString ipName);
+        Index(QString iName);
         ~Index();
 
     private:

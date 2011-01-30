@@ -37,11 +37,11 @@
 /*!
  * Ctor
  */
-AddItemCommand::AddItemCommand(GraphicsScene *ipScene, QList<QGraphicsItem *> ipTableList, QUndoCommand *ipParent)
-    : QUndoCommand(ipParent)
+AddItemCommand::AddItemCommand(GraphicsScene *iScene, QList<QGraphicsItem *> iTableList, QUndoCommand *iParent)
+    : QUndoCommand(iParent)
 {
-    mScene = ipScene;
-    mTableList = ipTableList;
+    mScene = iScene;
+    mTableList = iTableList;
     setText(QObject::tr("Add table"));
 }
 

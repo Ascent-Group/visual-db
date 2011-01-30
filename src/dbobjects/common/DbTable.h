@@ -60,26 +60,26 @@ class DbTable : public Common::DbObject
         quint16 columnsCount() const;
 
         DbSchemaPtr schema() const;
-        void setSchema(const DbSchemaPtr &ipSchema);
+        void setSchema(const DbSchemaPtr &iSchema);
 
         // \todo do we need these functions?
         QString fullName() const;
 
-        // params: [in] int ipColId
+        // params: [in] int iColId
         // specifies the index of a column
         //  e.g.
         // (+)id 0 1 2 3 4  5   6  7
         // col   A B C D E  F   G  H
         // (-)id 0 . . . . -3  -2 -1
-        QString columnName(qint16 ipColId) const;
-        QString columnType(qint16 ipColId) const;
-        bool isColumnNullable(qint16 ipColId) const;
-        bool isColumnPrimaryKey(qint16 ipColId) const;
-        bool isColumnForeignKey(qint16 ipColId) const;
-        QString foreignSchemaName(qint16 ipColId) const;
-        QString foreignTableName(qint16 ipColId) const;
-        QStringList foreignFields(qint16 ipColId) const;
-        bool isColumnUnique(qint16 ipColId) const;
+        QString columnName(qint16 iColId) const;
+        QString columnType(qint16 iColId) const;
+        bool isColumnNullable(qint16 iColId) const;
+        bool isColumnPrimaryKey(qint16 iColId) const;
+        bool isColumnForeignKey(qint16 iColId) const;
+        QString foreignSchemaName(qint16 iColId) const;
+        QString foreignTableName(qint16 iColId) const;
+        QStringList foreignFields(qint16 iColId) const;
+        bool isColumnUnique(qint16 iColId) const;
 
         virtual void resetData();
         // lyuts: for further functionality
@@ -92,11 +92,11 @@ class DbTable : public Common::DbObject
         /*! \return true - if the column is unique */
         virtual bool checkUnique(const QString &) const = 0;
 
-        quint64 getIndices(QVector<DbIndexPtr> &ipIndicesList);
+        quint64 getIndices(QVector<DbIndexPtr> &iIndicesList);
 
         virtual DbObject::Type type() const;
 
-        quint32 parentTables(QVector<DbTablePtr> &opList) const;
+        quint32 parentTables(QVector<DbTablePtr> &oList) const;
 
     protected:
         /*!
@@ -135,7 +135,7 @@ class DbTable : public Common::DbObject
         // \todo add member comment
 
     protected:
-        DbTable(QString ipName, const DbSchemaPtr &ipSchema);
+        DbTable(QString iName, const DbSchemaPtr &iSchema);
 };
 
 } // namespace Common

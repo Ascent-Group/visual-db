@@ -72,7 +72,7 @@ class GraphicsScene : public QGraphicsScene {
         static const int DEFAULT_HEIGHT = 1500;
 
     public:
-        GraphicsScene(QObject *ipParent = 0);
+        GraphicsScene(QObject *iParent = 0);
         ~GraphicsScene();
 
         void addItems(const QList<QGraphicsItem *> &);
@@ -80,7 +80,7 @@ class GraphicsScene : public QGraphicsScene {
         void setSchemeMenu(QMenu *);
         void setTableMenu(QMenu *);
         ItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
-        void deleteItems(QList<QGraphicsItem *> &ipTabliList);
+        void deleteItems(QList<QGraphicsItem *> &iTabliList);
         void setAcceptsHoverEvents(bool);
         void refreshLegend();
         void updateLegend();
@@ -99,7 +99,7 @@ class GraphicsScene : public QGraphicsScene {
         void itemColorChanged(GraphicsItem *, const QColor &, const QColor &);
 
     public slots:
-        QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int, const QPoint &, bool ipCenterOn = false);
+        QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int, const QPoint &, bool iCenterOn = false);
         void setFieldsTypesVisible();
         void setFieldsTypesInvisible();
         void setIndicesVisible(bool);
@@ -127,7 +127,7 @@ class GraphicsScene : public QGraphicsScene {
         virtual void mousePressEvent(QGraphicsSceneMouseEvent *);
         virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *);
         virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *);
-        virtual void keyPressEvent(QKeyEvent *ipEvent);
+        virtual void keyPressEvent(QKeyEvent *iEvent);
         virtual void drawBackground(QPainter *, const QRectF &);
 
     private:

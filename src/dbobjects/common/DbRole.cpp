@@ -39,8 +39,8 @@ namespace Common
 /*!
  * Ctor
  */
-DbRole::DbRole(QString ipName)
-    : DbObject(ipName),
+DbRole::DbRole(QString iName)
+    : DbObject(iName),
       mIsSuperUser(false),
       mInheritsPrivileges(false),
       mCanCreateRole(false),
@@ -75,12 +75,12 @@ DbRole::isSuperUser() const
 /*!
  * \brief Sets the rolsuper flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbRole::setSuperUser(bool ipFlag)
+DbRole::setSuperUser(bool iFlag)
 {
-    mIsSuperUser = ipFlag;
+    mIsSuperUser = iFlag;
 }
 
 /*!
@@ -96,12 +96,12 @@ DbRole::inheritsPrivileges() const
 /*!
  * \brief Sets the rolinherit flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbRole::setInheritsPrivileges(bool ipFlag)
+DbRole::setInheritsPrivileges(bool iFlag)
 {
-    mInheritsPrivileges = ipFlag;
+    mInheritsPrivileges = iFlag;
 }
 
 /*!
@@ -117,12 +117,12 @@ DbRole::canCreateRole() const
 /*!
  * \brief Sets the rolcreaterole flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbRole::setCanCreateRole(bool ipFlag)
+DbRole::setCanCreateRole(bool iFlag)
 {
-    mCanCreateRole = ipFlag;
+    mCanCreateRole = iFlag;
 }
 
 /*!
@@ -138,12 +138,12 @@ DbRole::canCreateDb() const
 /*!
  * \brief Sets the rolcreatedb flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbRole::setCanCreateDb(bool ipFlag)
+DbRole::setCanCreateDb(bool iFlag)
 {
-    mCanCreateDb = ipFlag;
+    mCanCreateDb = iFlag;
 }
 
 /*!
@@ -159,12 +159,12 @@ DbRole::canUpdateSysCat() const
 /*!
  * \brief Sets the rolcatupdate flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbRole::setCanUpdateSysCat(bool ipFlag)
+DbRole::setCanUpdateSysCat(bool iFlag)
 {
-    mCanUpdateSysCat = ipFlag;
+    mCanUpdateSysCat = iFlag;
 }
 
 /*!
@@ -180,12 +180,12 @@ DbRole::canLogin() const
 /*!
  * \brief Sets the rolcanlogin flag
  *
- * \param[in] ipFlag
+ * \param[in] iFlag
  */
 void
-DbRole::setCanLogin(bool ipFlag)
+DbRole::setCanLogin(bool iFlag)
 {
-    mCanLogin = ipFlag;
+    mCanLogin = iFlag;
 }
 
 /*!
@@ -200,12 +200,12 @@ DbRole::connectionLimit() const
 /*!
  * \brief Sets the connection limit for the role
  *
- * \param[in] ipLimit - Connection limit for the given role
+ * \param[in] iLimit - Connection limit for the given role
  */
 void
-DbRole::setConnectionLimit(quint32 ipLimit)
+DbRole::setConnectionLimit(quint32 iLimit)
 {
-    mConnectionLimit = ipLimit;
+    mConnectionLimit = iLimit;
 }
 
 /*!
@@ -220,12 +220,12 @@ DbRole::expiryDate() const
 /*!
  * \brief Sets the expiration date of the role
  *
- * \param[in] ipDate - Expiration date
+ * \param[in] iDate - Expiration date
  */
 void
-DbRole::setExpiryDate(const QDate &ipDate)
+DbRole::setExpiryDate(const QDate &iDate)
 {
-    mExpiryDate = ipDate;
+    mExpiryDate = iDate;
 }
 
 /*!
@@ -240,12 +240,12 @@ DbRole::id() const
 /*!
  * \brief Sets the id for the role
  *
- * \param[in] ipId - Role id
+ * \param[in] iId - Role id
  */
 void
-DbRole::setId(quint64 ipId)
+DbRole::setId(quint64 iId)
 {
-    mId = ipId;
+    mId = iId;
 }
 
 /*!

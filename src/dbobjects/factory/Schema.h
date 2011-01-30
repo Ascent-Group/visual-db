@@ -56,11 +56,11 @@ namespace Factory
 class Schema
 {
     public:
-        static Common::DbSchema* createSchema(const QString &ipName);
+        static Common::DbSchema* createSchema(const QString &iName);
 
     protected:
-        static Psql::Schema* createPsqlSchema(const QString &ipName);
-//        static Mysql::Schema* createMysqlSchema(const QString &ipName);
+        static Psql::Schema* createPsqlSchema(const QString &iName);
+//        static Mysql::Schema* createMysqlSchema(const QString &iName);
 
     private:
         Q_DISABLE_COPY(Schema);

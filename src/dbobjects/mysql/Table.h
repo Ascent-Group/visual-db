@@ -49,7 +49,7 @@ namespace Mysql
 class Table : public Common::DbTable
 {
     public:
-        Table(QString ipName, const Common::DbSchemaPtr &ipSchema);
+        Table(QString iName, const Common::DbSchemaPtr &iSchema);
         ~Table();
 
         bool checkPrimaryKey(const QString &) const;

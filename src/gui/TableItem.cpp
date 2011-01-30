@@ -44,8 +44,8 @@
 /*!
  * Constructor
  */
-TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QMenu *ipMenu, const QPoint &ipPos)
-    : DbObjectItem(ipMenu),
+TableItem::TableItem(const QString &iSchemaName, const QString &iTableName, QMenu *iMenu, const QPoint &iPos)
+    : DbObjectItem(iMenu),
       mIndexItems(),
       mIndicesVisible(true)
 {
@@ -53,29 +53,29 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     Database *dbInst = Database::instance();
 
     // find schema
-    DbSchemaPtr schema = dbInst->findSchema(ipSchemaName);
+    DbSchemaPtr schema = dbInst->findSchema(iSchemaName);
 
     // if foung
     if (schema.get()) {
         // find table in this schema
-        DbTablePtr table = schema->findTable(ipTableName);
+        DbTablePtr table = schema->findTable(iTableName);
 
         // if found
         if (table.get()) {
             mModel = table;
         } else {
-            qDebug() << "Cann't find this table: " << ipTableName;
+            qDebug() << "Cann't find this table: " << iTableName;
             return;
         }
         // lyuts: maybe else we should do this
-        // mTableModel = new PsqlTable(ipSchemaName, ipTableName);
+        // mTableModel = new PsqlTable(iSchemaName, iTableName);
     } else {
-        qDebug() << "Cann't find this schema: " << ipSchemaName;
+        qDebug() << "Cann't find this schema: " << iSchemaName;
         return;
     }
 
     // create title item
-    setTitleItem(new QGraphicsTextItem(ipSchemaName.toUpper() + "." + ipTableName.toUpper()));
+    setTitleItem(new QGraphicsTextItem(iSchemaName.toUpper() + "." + iTableName.toUpper()));
 
     // create field items
     for (int i = 0; i < mModel->columnsCount(); ++i) {
@@ -88,14 +88,14 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
     }
 
     // set left top point coordinates
-    if (ipPos.x() == 0 && ipPos.y() == 0) {
-        setX(ipPos.x() + seek());
-        setY(ipPos.y() + seek());
+    if (iPos.x() == 0 && iPos.y() == 0) {
+        setX(iPos.x() + seek());
+        setY(iPos.y() + seek());
 
         setSeek(seek() + SEEK_STEP);
     } else {
-        setX(ipPos.x());
-        setY(ipPos.y());
+        setX(iPos.x());
+        setY(iPos.y());
     }
 
     // set width and height
@@ -134,8 +134,8 @@ TableItem::TableItem(const QString &ipSchemaName, const QString &ipTableName, QM
 /*!
  * Constructor
  */
-TableItem::FullName::FullName(const QString &ipSchemaName, const QString &ipTableName)
-    : mSchemaName(ipSchemaName), mTableName(ipTableName)
+TableItem::FullName::FullName(const QString &iSchemaName, const QString &iTableName)
+    : mSchemaName(iSchemaName), mTableName(iTableName)
 {
 }
 
@@ -165,64 +165,64 @@ TableItem::type() const
 /*!
  * \brief Adds input index item to the list of indices for this table
  *
- * \param[in] ipIndexItem - Index item we will add
+ * \param[in] iIndexItem - Index item we will add
  */
 void
-TableItem::addIndexItem(QGraphicsTextItem *ipIndexItem)
+TableItem::addIndexItem(QGraphicsTextItem *iIndexItem)
 {
-    mIndexItems << ipIndexItem;
+    mIndexItems << iIndexItem;
 }
 
 /*!
  * \brief Draws an image in the title bar of the item
  *
- * \param[in] ipPainter - Painter
+ * \param[in] iPainter - Painter
  */
 void
-TableItem::paintTitleImage(QPainter *ipPainter)
+TableItem::paintTitleImage(QPainter *iPainter)
 {
     // draw image for table
     QRectF target((int)x() + INTERVAL, (int)y() + INTERVAL,
             IMG_HEIGHT + INTERVAL, IMG_HEIGHT + INTERVAL);
     QRectF source(0.0, 0.0, mTableImage->width(), mTableImage->height());
-    ipPainter->drawImage(target, *mTableImage, source);
+    iPainter->drawImage(target, *mTableImage, source);
 }
 
 /*!
  * \brief Paints field image
  *
- * \param[in] ipPainter - Painter
- * \param[in] ipIdx - Index of field we will draw image for
+ * \param[in] iPainter - Painter
+ * \param[in] iIdx - Index of field we will draw image for
  */
 void
-TableItem::paintFieldImage(QPainter *ipPainter, int ipIdx)
+TableItem::paintFieldImage(QPainter *iPainter, int iIdx)
 {
     QImage *image = 0;
     // draw image for primary key field with margins = INTERVAL for top, bottom, left and right sizes
-    if (mModel->isColumnPrimaryKey(ipIdx)) {
-        if (mModel->isColumnForeignKey(ipIdx)) {
+    if (mModel->isColumnPrimaryKey(iIdx)) {
+        if (mModel->isColumnForeignKey(iIdx)) {
             image = mPrimaryAndForeignKeyImage;
         } else {
             image = mKeyImage;
         }
-    } else if (mModel->isColumnForeignKey(ipIdx)) {
+    } else if (mModel->isColumnForeignKey(iIdx)) {
         image = mForeignKeyImage;
     }
     if (image) {
-        QRectF target((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (ipIdx + 1) + INTERVAL * 2,
+        QRectF target((int)x() + INTERVAL, (int)y() + (FIELD_HEIGHT + INTERVAL) * (iIdx + 1) + INTERVAL * 2,
                 IMG_WIDTH + INTERVAL, IMG_HEIGHT + INTERVAL);
         QRectF source(0.0, 0.0, image->width(), image->height());
-        ipPainter->drawImage(target, *image, source);
+        iPainter->drawImage(target, *image, source);
     }
 }
 
 /*!
  * \brief Paints indices
  *
- * \param[in] ipPainter - Painter
+ * \param[in] iPainter - Painter
  */
 void
-TableItem::paintAdditionalInfo(QPainter *ipPainter)
+TableItem::paintAdditionalInfo(QPainter *iPainter)
 {
     // if we need to show indices
     if (mIndicesVisible) {
@@ -231,15 +231,15 @@ TableItem::paintAdditionalInfo(QPainter *ipPainter)
             if (height() < (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 2) + INTERVAL) {
                 break;
             }
-            
-            QRectF target((int)x() + INTERVAL, 
+
+            QRectF target((int)x() + INTERVAL,
                     (int)y() + (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 1) + INTERVAL * 2,
-                    IMG_WIDTH + INTERVAL, 
+                    IMG_WIDTH + INTERVAL,
                     IMG_HEIGHT + INTERVAL);
             QRectF source(0.0, 0.0, mIndexImage->width(), mIndexImage->height());
-            ipPainter->drawImage(target, *mIndexImage, source);
-           
-            ipPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL,
+            iPainter->drawImage(target, *mIndexImage, source);
+
+            iPainter->drawText((int)x() + IMG_WIDTH + 3 * INTERVAL,
                     (int)y() + (FIELD_HEIGHT + INTERVAL) * (countFields() + i + 1) + INTERVAL * 2,
                     (int)width() - IMG_WIDTH - INTERVAL * 4,
                     FIELD_HEIGHT + INTERVAL * 2, Qt::AlignLeft,
@@ -251,13 +251,13 @@ TableItem::paintAdditionalInfo(QPainter *ipPainter)
 /*!
  * \brief Show or hide indices
  *
- * \param[in] ipFlag - True if we need to show indices, false if we don't
+ * \param[in] iFlag - True if we need to show indices, false if we don't
  */
 void
-TableItem::setIndicesVisible(bool ipFlag)
+TableItem::setIndicesVisible(bool iFlag)
 {
-    mIndicesVisible = ipFlag;
-    if (ipFlag) {
+    mIndicesVisible = iFlag;
+    if (iFlag) {
         setHeight((mModel->columnsCount() + mIndices.count() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 4);
     } else {
         setHeight((mModel->columnsCount() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);
@@ -269,40 +269,40 @@ TableItem::setIndicesVisible(bool ipFlag)
 /*!
  * \brief Get the foreign schema name for field
  *
- * \param[in] ipIdx - Field index for which we want to get info
+ * \param[in] iIdx - Field index for which we want to get info
  *
  * \return Foreign schema name
  */
 QString
-TableItem::foreignSchemaName(int ipIdx) const
+TableItem::foreignSchemaName(int iIdx) const
 {
-    return mModel->foreignSchemaName(ipIdx);
+    return mModel->foreignSchemaName(iIdx);
 }
 
 /*!
  * \brief Get the foreign table name
  *
- * \param[in] ipIdx - Field index for which we want to get info
+ * \param[in] iIdx - Field index for which we want to get info
  *
  * \return Foreign table name
  */
 QString
-TableItem::foreignTableName(int ipIdx) const
+TableItem::foreignTableName(int iIdx) const
 {
-    return mModel->foreignTableName(ipIdx);
+    return mModel->foreignTableName(iIdx);
 }
 
 /*!
  * \brief Get the flag for field - is it foreign key or not
  *
- * \param[in] ipIdx - Field index for which we want to get info
+ * \param[in] iIdx - Field index for which we want to get info
  *
  * \return True if the column is foreign key, false if it isn't
  */
 bool
-TableItem::isColumnForeignKey(int ipIdx) const
+TableItem::isColumnForeignKey(int iIdx) const
 {
-    return mModel->isColumnForeignKey(ipIdx);
+    return mModel->isColumnForeignKey(iIdx);
 }
 
 /*!
@@ -360,43 +360,43 @@ TableItem::parents() const
 /*!
  * \brief Create the xml represantation for the table
  *
- * \param[in] ipDoc - Xml dom document
+ * \param[in] iDoc - Xml dom document
  *
  * \return Filled with table info xml dom element
  */
 QDomElement
-TableItem::toXml(QDomDocument &ipDoc) const
+TableItem::toXml(QDomDocument &iDoc) const
 {
-    return DbObjectItem::toXml(ipDoc, "table");
+    return DbObjectItem::toXml(iDoc, "table");
 }
 
 /*!
  * \brief Load table from the xml file
  *
- * \param[in] ipElement - Xml dom element we will read the table info from
- * \param[in] ipScene - Scene where we will create new table item for
- * \param[in] ipMenu - Context menu for new table item
+ * \param[in] iElement - Xml dom element we will read the table info from
+ * \param[in] iScene - Scene where we will create new table item for
+ * \param[in] iMenu - Context menu for new table item
  *
  * \return Created table item
  */
 TableItem *
-TableItem::fromXml(const QDomElement &ipElement, GraphicsScene *ipScene, QMenu *ipMenu)
+TableItem::fromXml(const QDomElement &iElement, GraphicsScene *iScene, QMenu *iMenu)
 {
     // get table's coordinates
-    TableItem *newTable = ipScene->newTableItem(ipElement.attribute("schema"),
-            ipElement.attribute("name"), ipMenu, QPoint(ipElement.attribute("x").toInt(),
-            ipElement.attribute("y").toInt()));
+    TableItem *newTable = iScene->newTableItem(iElement.attribute("schema"),
+            iElement.attribute("name"), iMenu, QPoint(iElement.attribute("x").toInt(),
+            iElement.attribute("y").toInt()));
 
         // FIXME: we should check the newTable if it isn't null
 
     // get table's size
-    newTable->setWidth(ipElement.attribute("width").toInt());
-    newTable->setHeight(ipElement.attribute("height").toInt());
+    newTable->setWidth(iElement.attribute("width").toInt());
+    newTable->setHeight(iElement.attribute("height").toInt());
     newTable->updatePolygon();
 
     // get table's color
-    newTable->setItemColor(QColor(ipElement.attribute("red").toInt(),
-                ipElement.attribute("green").toInt(), ipElement.attribute("blue").toInt()));
+    newTable->setItemColor(QColor(iElement.attribute("red").toInt(),
+                iElement.attribute("green").toInt(), iElement.attribute("blue").toInt()));
 
     return newTable;
 }
@@ -404,33 +404,33 @@ TableItem::fromXml(const QDomElement &ipElement, GraphicsScene *ipScene, QMenu *
 /*!
  * \brief According to the given flag show or hide fields' types
  *
- * \param[in] ipFlag - True if we want to show field types, false otherwise
+ * \param[in] iFlag - True if we want to show field types, false otherwise
  */
 void
-TableItem::setFieldsTypesVisible(bool ipFlag)
+TableItem::setFieldsTypesVisible(bool iFlag)
 {
     // TODO: implement it according new class structure
     for (int i = 0; i < countFields(); ++i) {
-        if (ipFlag) {
+        if (iFlag) {
             setFieldText(i, mModel->columnName(i) + ": " + mModel->columnType(i));
         } else {
             setFieldText(i, mModel->columnName(i));
         }
     }
 
-    DbObjectItem::setFieldsTypesVisible(ipFlag);
+    DbObjectItem::setFieldsTypesVisible(iFlag);
 }
 
 /*!
  * \brief Check if input graphics item is table item
  *
- * \param[in] ipItem - Any graphics item
+ * \param[in] iItem - Any graphics item
  *
  * \return Converted to TableItem item or 0
  */
 TableItem *
-toTable(QGraphicsItem *ipItem)
+toTable(QGraphicsItem *iItem)
 {
-    return qgraphicsitem_cast<TableItem *>(ipItem);
+    return qgraphicsitem_cast<TableItem *>(iItem);
 }
 

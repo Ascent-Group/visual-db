@@ -99,201 +99,201 @@ Database::instance()
 /*!
  * \brief Register an object that has been created
  *
- * \param[in] ipObject - Pointer to the object that we want to register
+ * \param[in] iObject - Pointer to the object that we want to register
  *
  * \return true If the object has been successfully registered
  * \return false If the object has been registered earlier
  */
 //bool
-//Database::registerNew(const DbObject *ipObject)
+//Database::registerNew(const DbObject *iObject)
 //{
-//    if (mNewObjects.contains(ipObject)) {
+//    if (mNewObjects.contains(iObject)) {
 //        return false;
 //    }
 //
-//    mNewObjects.push_back(ipObject);
+//    mNewObjects.push_back(iObject);
 //    return true;
 //}
 
 /*!
  * \brief Register an object that has been modified
  *
- * \param[in] ipObject - Pointer to the object that we want to register
+ * \param[in] iObject - Pointer to the object that we want to register
  *
  * \return true If the object has been successfully registered
  * \return false If the object has been registered earlier
  */
 //bool
-//Database::registerModified(const DbObject *ipObject)
+//Database::registerModified(const DbObject *iObject)
 //{
-//    if (mModifiedObjects.contains(ipObject)) {
+//    if (mModifiedObjects.contains(iObject)) {
 //        return false;
 //    }
 //
-//    mModifiedObjects.push_back(ipObject);
+//    mModifiedObjects.push_back(iObject);
 //    return true;
 //}
 
 /*!
  * \brief Register an object that has been deleted
  *
- * \param[in] ipObject - Pointer to the object that we want to register
+ * \param[in] iObject - Pointer to the object that we want to register
  *
  * \return true If the object has been successfully registered
  * \return false If the object has been registered earlier
  */
 //bool
-//Database::registerDeleted(const DbObject *ipObject)
+//Database::registerDeleted(const DbObject *iObject)
 //{
-//    if (mDeletedObjects.contains(ipObject)) {
+//    if (mDeletedObjects.contains(iObject)) {
 //        return false;
 //    }
 //
-//    mDeletedObjects.push_back(ipObject);
+//    mDeletedObjects.push_back(iObject);
 //    return true;
 //}
 
 /*!
  * \brief Add schema to DB schema list
  *
- * \param[in] ipSchema - Schema object to add to schemas vector
+ * \param[in] iSchema - Schema object to add to schemas vector
  *
  * \return true - If the schema object has been added
  * \return false - If the schema object has already existed in the vector
  */
 bool
-Database::addSchema(const DbSchemaPtr &ipSchema)
+Database::addSchema(const DbSchemaPtr &iSchema)
 {
-    if (mSchemas.contains(ipSchema)) {
+    if (mSchemas.contains(iSchema)) {
         return false;
     }
 
-    mSchemas.push_back(ipSchema);
+    mSchemas.push_back(iSchema);
     return true;
 }
 
 /*!
  * \brief Add role to DB roles list
  *
- * \param[in] ipRole Role object to add to roles vector
+ * \param[in] iRole Role object to add to roles vector
  *
  * \return true - If the role object has been added
  * \return false - If the role object has already existed in the vector
  */
 bool
-Database::addRole(const DbRolePtr &ipRole)
+Database::addRole(const DbRolePtr &iRole)
 {
-    if (mRoles.contains(ipRole)) {
+    if (mRoles.contains(iRole)) {
         return false;
     }
 
-    mRoles.push_back(ipRole);
+    mRoles.push_back(iRole);
     return true;
 }
 
 /*!
  * \brief Adds index to indices list
  *
- * \param[in] ipIndex Index object to add to indices vector
+ * \param[in] iIndex Index object to add to indices vector
  *
  * \return true - If the index object has been added
  * \return false - If the index object has already existed in the vector
  */
 bool
-Database::addIndex(const DbIndexPtr &ipIndex)
+Database::addIndex(const DbIndexPtr &iIndex)
 {
-    if (mIndices.contains(ipIndex)) {
+    if (mIndices.contains(iIndex)) {
         return false;
     }
 
-    mIndices.push_back(ipIndex);
+    mIndices.push_back(iIndex);
     return true;
 }
 
 /*!
  * \brief Adds language to list
  *
- * \param[in] ipLanguage Language object to add to indices vector
+ * \param[in] iLanguage Language object to add to indices vector
  *
  * \return true - If the language object has been added
  * \return false - If the language object has already existed in the vector
  */
 bool
-Database::addLanguage(const DbLanguagePtr &ipLanguage)
+Database::addLanguage(const DbLanguagePtr &iLanguage)
 {
-    if (mLanguages.contains(ipLanguage)) {
+    if (mLanguages.contains(iLanguage)) {
         return false;
     }
 
-    mLanguages.push_back(ipLanguage);
+    mLanguages.push_back(iLanguage);
     return true;
 }
 
 /*!
  * \brief Returns a list of schemas' names
  *
- * \param[out] opList List with names of stored schemas
+ * \param[out] oList List with names of stored schemas
  */
 void
-Database::schemasList(QStringList &opList) const
+Database::schemasList(QStringList &oList) const
 {
-    opList.clear();
+    oList.clear();
 
     QVector<DbSchemaPtr>::const_iterator iter;
 
     for (iter = mSchemas.constBegin(); iter != mSchemas.constEnd(); ++iter) {
-        opList.append(iter->name());
+        oList.append(iter->name());
     }
 }
 
 /*!
  * \brief Returns a list of roles' names
  *
- * \param[out] opList List with names of stored roles
+ * \param[out] oList List with names of stored roles
  */
 void
-Database::rolesList(QStringList &opList) const
+Database::rolesList(QStringList &oList) const
 {
-    opList.clear();
+    oList.clear();
 
     QVector<DbRolePtr>::const_iterator iter;
 
     for (iter = mRoles.constBegin(); iter != mRoles.constEnd(); ++iter) {
-        opList.append(iter->name());
+        oList.append(iter->name());
     }
 }
 
 /*!
  * \brief Returns a list of indices' names
  *
- * \param[out] opList List with names of stored indices
+ * \param[out] oList List with names of stored indices
  */
 void
-Database::indicesList(QStringList &opList) const
+Database::indicesList(QStringList &oList) const
 {
-    opList.clear();
+    oList.clear();
 
     QVector<DbIndexPtr>::const_iterator iter;
 
     for (iter = mIndices.constBegin(); iter != mIndices.constEnd(); ++iter) {
-        opList.append(iter->name());
+        oList.append(iter->name());
     }
 }
 
 /*!
  * \brief Returns a list of languages' names
  *
- * \param[out] opList List with names of stored languages
+ * \param[out] oList List with names of stored languages
  */
 void
-Database::languagesList(QStringList &opList) const
+Database::languagesList(QStringList &oList) const
 {
-    opList.clear();
+    oList.clear();
 
     QVector<DbLanguagePtr>::const_iterator iter;
 
     for (iter = mLanguages.constBegin(); iter != mLanguages.constEnd(); ++iter) {
-        opList.append(iter->name());
+        oList.append(iter->name());
     }
 }
 
@@ -336,15 +336,15 @@ Database::languagesCount() const
 /*!
  * \brief Finds schema by its name
  *
- * \param[in] ipSchemaName - Name of a schema we are looking for
+ * \param[in] iSchemaName - Name of a schema we are looking for
  *
  * \return Found schema object or NULL if not found
  */
 DbSchemaPtr
-Database::findSchema(const QString &ipSchemaName) const
+Database::findSchema(const QString &iSchemaName) const
 {
     foreach (const DbSchemaPtr &schema, mSchemas) {
-        if (ipSchemaName == schema.name()) {
+        if (iSchemaName == schema.name()) {
             return schema;
         }
     }
@@ -354,15 +354,15 @@ Database::findSchema(const QString &ipSchemaName) const
 /*!
  * \brief Finds role by its name
  *
- * \param[in] ipRoleName - Name of a role we are looking for
+ * \param[in] iRoleName - Name of a role we are looking for
  *
  * \return Found role object or NULL if not found
  */
 DbRolePtr
-Database::findRole(const QString &ipRoleName) const
+Database::findRole(const QString &iRoleName) const
 {
     foreach (const DbRolePtr &role, mRoles) {
-        if (ipRoleName == role.name()) {
+        if (iRoleName == role.name()) {
             return role;
         }
     }
@@ -372,15 +372,15 @@ Database::findRole(const QString &ipRoleName) const
 /*!
  * \brief Finds index by its name
  *
- * \param[in] ipIndexName - Name of an index we are looking for
+ * \param[in] iIndexName - Name of an index we are looking for
  *
  * \return Found index object or NULL if not found
  */
 DbIndexPtr
-Database::findIndex(const QString &ipIndexName) const
+Database::findIndex(const QString &iIndexName) const
 {
     foreach (const DbIndexPtr &index, mIndices) {
-        if (ipIndexName == index.name()) {
+        if (iIndexName == index.name()) {
             return index;
         }
     }
@@ -391,15 +391,15 @@ Database::findIndex(const QString &ipIndexName) const
 /*!
  * \brief Finds language by its name
  *
- * \param[in] ipLanguageName - Name of a language we are looking for
+ * \param[in] iLanguageName - Name of a language we are looking for
  *
  * \return Found language object or NULL if not found
  */
 DbLanguagePtr
-Database::findLanguage(const QString &ipLanguageName) const
+Database::findLanguage(const QString &iLanguageName) const
 {
     foreach (const DbLanguagePtr &language, mLanguages) {
-        if (ipLanguageName == language.name()) {
+        if (iLanguageName == language.name()) {
             return language;
         }
     }
@@ -409,26 +409,26 @@ Database::findLanguage(const QString &ipLanguageName) const
 /*!
  * \brief Finds all indices for a table
  *
- * \param[in] ipTable - Table object whose indices we are looking for
- * \param[out] opList - Resulting list of indices objects that are assigned
+ * \param[in] iTable - Table object whose indices we are looking for
+ * \param[out] oList - Resulting list of indices objects that are assigned
  *                      to the given table
  *
  * \return Number of found indices
  */
 quint64
-Database::findTableIndices(DbTablePtr &ipTable, QVector<DbIndexPtr> &opList) const
+Database::findTableIndices(DbTablePtr &iTable, QVector<DbIndexPtr> &oList) const
 {
-    opList.clear();
+    oList.clear();
 
     quint64 count = mIndices.count();
 
     // if we don't have any indices
-    if (0 == count || 0 == ipTable.valid()) {
+    if (0 == count || 0 == iTable.valid()) {
         return 0;
     }
 
-    QString schemaName = ipTable.schemaName();
-    QString tableName = ipTable.name();
+    QString schemaName = iTable.schemaName();
+    QString tableName = iTable.name();
 
     // look through index's table names
     for (quint64 i = 0; i < count; ++i) {
@@ -436,34 +436,34 @@ Database::findTableIndices(DbTablePtr &ipTable, QVector<DbIndexPtr> &opList) con
         qDebug() << "Database::findTableIndices> table.name() = [" << mIndices.at(i)->table().name() << "]";
         if (tableName == mIndices.at(i)->table().name()
             && schemaName == mIndices.at(i)->schema().name()) {
-            opList.push_back(mIndices.at(i));
+            oList.push_back(mIndices.at(i));
         }
     }
 
-    return opList.count();
+    return oList.count();
 }
 /*!
  * \brief Sets sql driver by its name
  *
- * \param[in] ipSqlDriverName - SQL driver name
+ * \param[in] iSqlDriverName - SQL driver name
  */
 void
-Database::setSqlDriver(const QString &ipSqlDriverName)
+Database::setSqlDriver(const QString &iSqlDriverName)
 {
     Database* db = instance();
 
-    if (ipSqlDriverName.contains("PSQL")) {
+    if (iSqlDriverName.contains("PSQL")) {
         db->mSqlDriver = PostgreSQL;
-    } else if (ipSqlDriverName.contains("MYSQL")) {
+    } else if (iSqlDriverName.contains("MYSQL")) {
         db->mSqlDriver = MySQL;
-    } else if (ipSqlDriverName.contains("ODBC")) {
+    } else if (iSqlDriverName.contains("ODBC")) {
         db->mSqlDriver = Oracle;
-    } else if (ipSqlDriverName.contains("SQLITE")) {
+    } else if (iSqlDriverName.contains("SQLITE")) {
         db->mSqlDriver = Database::SQLite;
     } else {
         db->mSqlDriver = Database::Unknown;
 
-        qDebug() << __PRETTY_FUNCTION__ << "> Unknown SQL driver '" << ipSqlDriverName << "'";
+        qDebug() << __PRETTY_FUNCTION__ << "> Unknown SQL driver '" << iSqlDriverName << "'";
     }
 
 }

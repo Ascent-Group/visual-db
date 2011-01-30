@@ -44,8 +44,8 @@ namespace Psql
 /*!
  * Constructor
  */
-Schema::Schema(QString ipName)
-    : Common::DbSchema(ipName)
+Schema::Schema(QString iName)
+    : Common::DbSchema(iName)
 {
 
 }

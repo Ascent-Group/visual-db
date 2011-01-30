@@ -42,7 +42,7 @@ typedef Common::DbObjectPtr<Common::DbRole> DbRolePtr;
 class Schema : public DbObjects::Common::DbSchema
 {
     public:
-        Schema(QString ipName);
+        Schema(QString iName);
         ~Schema();
 
         virtual bool loadData();

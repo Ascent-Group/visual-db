@@ -45,10 +45,10 @@ namespace Psql
 /*!
  * Constructor
  *
- * \param[in] ipName - Name of the given table
+ * \param[in] iName - Name of the given table
  */
-Role::Role(QString ipName)
-    : DbRole(ipName)
+Role::Role(QString iName)
+    : DbRole(iName)
 {
 
 }

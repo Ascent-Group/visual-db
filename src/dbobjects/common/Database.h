@@ -77,9 +77,9 @@ class Database
             SQLite
         };
 
-//        bool registerNew(const DbObject *ipObject);
-//        bool registerModified(const DbObject *ipObject);
-//        bool registerDeleted(const DbObject *ipObject);
+//        bool registerNew(const DbObject *iObject);
+//        bool registerModified(const DbObject *iObject);
+//        bool registerDeleted(const DbObject *iObject);
 
     public:
         bool addSchema(const DbSchemaPtr &);
@@ -87,31 +87,31 @@ class Database
         bool addIndex(const DbIndexPtr &);
         bool addLanguage(const DbLanguagePtr &);
 
-        void schemasList(QStringList &opList) const;
+        void schemasList(QStringList &oList) const;
         quint64 schemasCount() const;
 
-        void rolesList(QStringList &opList) const;
+        void rolesList(QStringList &oList) const;
         quint64 rolesCount() const;
 
-        void indicesList(QStringList &opList) const;
+        void indicesList(QStringList &oList) const;
         quint64 indicesCount() const;
 
-        void languagesList(QStringList &opList) const;
+        void languagesList(QStringList &oList) const;
         quint8 languagesCount() const;
 
-        DbSchemaPtr findSchema(const QString &ipSchemaName) const;
+        DbSchemaPtr findSchema(const QString &iSchemaName) const;
 
         // \todo lyuts: maybe we will need this
-        //Schema* findSchema(DbTable *ipTable) const;
-        //DbTable* findTable(QString ipTableName) const;
+        //Schema* findSchema(DbTable *iTable) const;
+        //DbTable* findTable(QString iTableName) const;
 
-        DbRolePtr findRole(const QString &ipRoleName) const;
-        DbIndexPtr findIndex(const QString &ipIndexName) const;
-        DbLanguagePtr findLanguage(const QString &ipLangName) const;
+        DbRolePtr findRole(const QString &iRoleName) const;
+        DbIndexPtr findIndex(const QString &iIndexName) const;
+        DbLanguagePtr findLanguage(const QString &iLangName) const;
 
-        quint64 findTableIndices(DbTablePtr &ipTable, QVector<DbIndexPtr> &ipList) const;
+        quint64 findTableIndices(DbTablePtr &iTable, QVector<DbIndexPtr> &iList) const;
 
-        void setSqlDriver(const QString &ipSqlDriverName);
+        void setSqlDriver(const QString &iSqlDriverName);
         SqlDriverType sqlDriver() const;
 
         void readSchemas();

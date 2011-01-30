@@ -49,14 +49,14 @@ const qreal Pi = 3.14;
 /*!
  * Constructor
  */
-ArrowItem::ArrowItem(TableItem *ipStartItem,
-             TableItem *ipEndItem,
-             QString ipTitle,
-             QGraphicsItem *ipParent,
-             QGraphicsScene *ipScene)
-    : QGraphicsPathItem(ipParent, ipScene)
-    , mStartItem(ipStartItem), mEndItem(ipEndItem)
-    , mTitle(ipTitle)
+ArrowItem::ArrowItem(TableItem *iStartItem,
+             TableItem *iEndItem,
+             QString iTitle,
+             QGraphicsItem *iParent,
+             QGraphicsScene *iScene)
+    : QGraphicsPathItem(iParent, iScene)
+    , mStartItem(iStartItem), mEndItem(iEndItem)
+    , mTitle(iTitle)
 {
 
     // make arrow selectable
@@ -102,12 +102,12 @@ ArrowItem::updatePosition()
 /*!
  * \brief Set brush color
  *
- * \param[in] ipColor - Brush color
+ * \param[in] iColor - Brush color
  */
 void
-ArrowItem::setBrushColor(const QColor &ipColor)
+ArrowItem::setBrushColor(const QColor &iColor)
 {
-    mBrushColor = ipColor;
+    mBrushColor = iColor;
 }
 
 /*!
@@ -125,7 +125,7 @@ ArrowItem::brushColor() const
  * \override
  */
 void
-ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget *)
+ArrowItem::paint(QPainter *iPainter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     // return if start and end tables collides
     if (mStartItem != mEndItem && mStartItem->collidesWithItem(mEndItem)) {
@@ -136,53 +136,53 @@ ArrowItem::paint(QPainter *ipPainter, const QStyleOptionGraphicsItem *, QWidget 
     updatePosition();
 
     // set arrow's preoperties
-    ipPainter->setPen(pen());
+    iPainter->setPen(pen());
     if (isSelected()) {
-        ipPainter->setPen(QPen(QColor("black"), 2, Qt::DashDotLine));
+        iPainter->setPen(QPen(QColor("black"), 2, Qt::DashDotLine));
     }
-    ipPainter->setBrush(QColor(0, 0, 0, 0));
+    iPainter->setBrush(QColor(0, 0, 0, 0));
 
     // draw the line
-    ipPainter->drawPath(line());
+    iPainter->drawPath(line());
 
     // draw the head
-    ipPainter->setBrush(brushColor());
-    ipPainter->drawPolygon(head());
+    iPainter->setBrush(brushColor());
+    iPainter->drawPolygon(head());
 
     // draw the arrow title
-    ipPainter->drawText(mStartPoint, mTitle);
+    iPainter->drawText(mStartPoint, mTitle);
 
     // handle the selection of the arrow
 //    if (isSelected()) {
-//        ipPainter->setPen(QPen(QColor("black"), 1, Qt::DashLine));
-//        ipPainter->setBrush(QColor(0, 0, 0, 0));
+//        iPainter->setPen(QPen(QColor("black"), 1, Qt::DashLine));
+//        iPainter->setBrush(QColor(0, 0, 0, 0));
 //        QPainterPath selectedPath(line());
 //        selectedPath.translate(4.0, 4.0);
-//        ipPainter->drawPath(selectedPath);
+//        iPainter->drawPath(selectedPath);
 //        selectedPath.translate(-8.0, -8.0);
-//        ipPainter->drawPath(selectedPath);
+//        iPainter->drawPath(selectedPath);
 //    }
 }
 
 /*!
  * \brief Get the intersection point between given item and line
  *
- * \param[in] ipItem - Pointer to the table item
- * \param[in] ipLine - Line
+ * \param[in] iItem - Pointer to the table item
+ * \param[in] iLine - Line
  *
  * \return Intersection point if there is an intersection
  */
 QPointF
-findIntersection(const TableItem *ipItem, const QLineF &ipLine)
+findIntersection(const TableItem *iItem, const QLineF &iLine)
 {
     // find intersection between center line and  table border
-    QPolygonF polygon = ipItem->polygon();
-    QPointF point1 = polygon.first() + ipItem->scenePos();
+    QPolygonF polygon = iItem->polygon();
+    QPointF point1 = polygon.first() + iItem->scenePos();
     QPointF intersectPoint;
     for (int i = 1; i < polygon.count(); ++i) {
-        QPointF point2 = polygon.at(i) + ipItem->scenePos();
+        QPointF point2 = polygon.at(i) + iItem->scenePos();
         QLineF polyLine = QLineF(point1, point2);
-        QLineF::IntersectType intersectType = polyLine.intersect(ipLine, &intersectPoint);
+        QLineF::IntersectType intersectType = polyLine.intersect(iLine, &intersectPoint);
         if (intersectType == QLineF::BoundedIntersection) {
             break;
         }
@@ -195,27 +195,27 @@ findIntersection(const TableItem *ipItem, const QLineF &ipLine)
 /*!
  * \brief Make head for given arrow
  *
- * \param[in] ipLine - The line we are making the arrow head for
+ * \param[in] iLine - The line we are making the arrow head for
  *
  * \return Polygon that describes the arrow head
  */
 QPolygonF
-makeHead(const QLineF &ipLine, const QPointF &ipStartPoint)
+makeHead(const QLineF &iLine, const QPointF &iStartPoint)
 {
     QPolygonF head;
 
     // make arrow head
-    double angle = ::acos(ipLine.dx() / ipLine.length());
-    if (ipLine.dy() >= 0) {
+    double angle = ::acos(iLine.dx() / iLine.length());
+    if (iLine.dy() >= 0) {
         angle = (Pi * 2) - angle;
     }
 
-    QPointF arrowP1 = ipStartPoint + QPointF(sin(angle + Pi / 3) * ArrowItem::ARROW_SIZE,
+    QPointF arrowP1 = iStartPoint + QPointF(sin(angle + Pi / 3) * ArrowItem::ARROW_SIZE,
                     cos(angle + Pi / 3) * ArrowItem::ARROW_SIZE);
-    QPointF arrowP2 = ipStartPoint + QPointF(sin(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE,
+    QPointF arrowP2 = iStartPoint + QPointF(sin(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE,
                     cos(angle + Pi - Pi / 3) * ArrowItem::ARROW_SIZE);
 
-    head << ipStartPoint << arrowP1 << arrowP2;
+    head << iStartPoint << arrowP1 << arrowP2;
 
     return head;
 }

@@ -47,6 +47,9 @@ class HostInfo
         explicit HostInfo(const QString &iAddress = "", quint16 iPort = 0, const QString &iUser = "", const QString &iPassword = "");
         ~HostInfo();
 
+        HostInfo(const HostInfo &);
+        HostInfo &operator=(const HostInfo &iHostInfo);
+
         QString address() const;
         void setAddress(const QString &);
         
@@ -65,9 +68,8 @@ class HostInfo
         bool operator==(const HostInfo &iHostInfo);
         bool operator!=(const HostInfo &iHostInfo);
 
-    private:
-//        HostInfo(const HostInfo &);
-//        HostInfo &operator=(const HostInfo &iHostInfo);
+    protected:
+        virtual void swap(const HostInfo &iHostInfo);
 
     private:
         QString mAddress;

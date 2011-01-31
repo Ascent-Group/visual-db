@@ -43,6 +43,17 @@ DbHostInfo::~DbHostInfo()
 {
 }
 
+DbHostInfo::DbHostInfo(const DbHostInfo &iDbHostInfo)
+    : HostInfo(iDbHostInfo), mDbName(iDbHostInfo.mDbName), mDbDriver(iDbHostInfo.mDbDriver)
+{
+}
+
+DbHostInfo &DbHostInfo::operator=(const DbHostInfo &iDbHostInfo)
+{
+    swap(iDbHostInfo);
+    return *this;
+}
+
 QString DbHostInfo::dbName() const
 {
     return mDbName;
@@ -98,6 +109,13 @@ bool DbHostInfo::operator!=(const DbHostInfo &iDbHostInfo)
     return !(operator==(iDbHostInfo));
 }
 
+void DbHostInfo::swap(const DbHostInfo &iDbHostInfo)
+{
+    HostInfo::swap(iDbHostInfo);
+    mDbName = iDbHostInfo.mDbName;
+    mDbDriver = iDbHostInfo.mDbDriver;
+}
+
 /*
  * Create connection to the database
  */
@@ -132,5 +150,6 @@ createConnection(const DbHostInfo &iDbHostInfo)
 
     return success;
 }
+
 
 } // namespace Connect

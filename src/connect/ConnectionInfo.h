@@ -47,11 +47,17 @@ class ConnectionInfo
 {
     public:
         ConnectionInfo();
-        ConnectionInfo(const DbHostInfo &iDbHostInfo, const ProxyHostInfo &iProxyHostInfo);
+        ConnectionInfo(const DbHostInfo &iDbHostInfo, bool iUseProxy, const ProxyHostInfo &iProxyHostInfo);
         ~ConnectionInfo();
+
+        ConnectionInfo(const ConnectionInfo &);
+        ConnectionInfo &operator=(const ConnectionInfo &iConnectionInfo);
 
         const DbHostInfo &dbHostInfo() const;
         void setDbHostInfo(const DbHostInfo &iDbHostInfo);
+
+        bool useProxy() const;
+        void setUseProxy(bool iUse);
 
         const ProxyHostInfo &proxyHostInfo() const;
         void setProxyHostInfo(const ProxyHostInfo &iProxyHostInfo);
@@ -62,12 +68,12 @@ class ConnectionInfo
         bool operator==(const ConnectionInfo &iConnectionInfo);
         bool operator!=(const ConnectionInfo &iConnectionInfo);
 
-    private:
-//        ConnectionInfo(const ConnectionInfo &);
-        ConnectionInfo &operator=(const ConnectionInfo &iConnectionInfo);
+    protected:
+        void swap(const ConnectionInfo &iConnectionInfo);
 
     private:
         DbHostInfo mDbHostInfo;
+        bool mUseProxy;
         ProxyHostInfo mProxyHostInfo;
 };
 

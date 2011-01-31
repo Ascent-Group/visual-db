@@ -137,12 +137,12 @@ SqlConnectionDialog::createDialog(bool iLoadSession)
     // password edit should be always enabled
     ui.mDbPasswordEdit->setEnabled(true);
 
-    ui.mUseProxyBox->setEnabled(!iLoadSession);
+    ui.mUseProxyBox->setEnabled(true);
     ui.mProxyTypeBox->setEnabled(ui.mUseProxyBox->isChecked());
     ui.mProxyHostNameEdit->setEnabled(ui.mUseProxyBox->isChecked());
     ui.mProxyPortEdit->setEnabled(ui.mUseProxyBox->isChecked());
     ui.mProxyUserEdit->setEnabled(ui.mUseProxyBox->isChecked());
-    ui.mProxyPasswordEdit->setEnabled(true);
+    ui.mProxyPasswordEdit->setEnabled(ui.mUseProxyBox->isChecked());
 
     // initially we set connection failed flag to true
     mConnectionFailed = true;
@@ -160,7 +160,7 @@ SqlConnectionDialog::initConnectionFields()
     ui.mDbNameEdit->setText(mConnectionInfo.dbHostInfo().dbName());
     ui.mDbUserEdit->setText(mConnectionInfo.dbHostInfo().user());
 
-    ui.mUseProxyBox->setChecked(mConnectionInfo.proxyHostInfo().useProxy());
+    ui.mUseProxyBox->setChecked(mConnectionInfo.useProxy());
     ui.mProxyTypeBox->setCurrentIndex(ui.mProxyTypeBox->findData(mConnectionInfo.proxyHostInfo().type()));
     ui.mProxyHostNameEdit->setText(mConnectionInfo.proxyHostInfo().address());
     ui.mProxyPortEdit->setText(QString::number(mConnectionInfo.proxyHostInfo().port()));
@@ -178,10 +178,11 @@ SqlConnectionDialog::addConnection()
     // proxy section
 //    if (ui.mUseProxyBox->isChecked()) {
         // remember connection paramters
-        ProxyHostInfo proxyHostInfo(ui.mUseProxyBox->isChecked(), ui.mProxyHostNameEdit->text(),
+        ProxyHostInfo proxyHostInfo(ui.mProxyHostNameEdit->text(),
                 ui.mProxyPortEdit->text().toUInt(), ui.mProxyUserEdit->text(), "",
                 (QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toUInt());
         mConnectionInfo.setProxyHostInfo(proxyHostInfo);
+        mConnectionInfo.setUseProxy(ui.mUseProxyBox->isChecked());
 //        setProxy(ProxyHostInfo);
 //    } else {
 //        mConnectionInfo.setUseProxy(false);

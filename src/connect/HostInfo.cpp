@@ -42,6 +42,18 @@ HostInfo::~HostInfo()
 {
 }
 
+HostInfo::HostInfo(const HostInfo &iHostInfo)
+    : mAddress(iHostInfo.mAddress), mPort(iHostInfo.mPort)
+    , mUser(iHostInfo.mUser), mPassword(iHostInfo.mPassword)
+{
+}
+
+HostInfo &HostInfo::operator=(const HostInfo &iHostInfo)
+{
+    swap(iHostInfo);
+    return *this;
+}
+
 QString 
 HostInfo::address() const
 {
@@ -126,6 +138,15 @@ bool
 HostInfo::operator!=(const HostInfo &iHostInfo)
 {
     return !(operator==(iHostInfo));
+}
+
+void 
+HostInfo::swap(const HostInfo &iHostInfo)
+{
+    mAddress = iHostInfo.mAddress;
+    mPort = iHostInfo.mPort;
+    mUser = iHostInfo.mUser;
+    mPassword = iHostInfo.mPassword;
 }
 
 } // namespace Connect

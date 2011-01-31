@@ -31,10 +31,10 @@
 
 namespace Connect {
 
-ProxyHostInfo::ProxyHostInfo(bool iUseProxy, const QString &iAddress, 
-        quint16 iPort, const QString &iUser, const QString &iPassword, 
+ProxyHostInfo::ProxyHostInfo(const QString &iAddress, quint16 iPort,
+        const QString &iUser, const QString &iPassword, 
         const QNetworkProxy::ProxyType &iType)
-    : HostInfo(iAddress, iPort, iUser, iPassword), mUseProxy(iUseProxy), mType(iType)
+    : HostInfo(iAddress, iPort, iUser, iPassword), mType(iType)
 {
 }
 
@@ -42,22 +42,15 @@ ProxyHostInfo::~ProxyHostInfo()
 {
 }
 
-bool 
-ProxyHostInfo::useProxy() const
+ProxyHostInfo::ProxyHostInfo(const ProxyHostInfo &iProxyHostInfo)
+    : HostInfo(iProxyHostInfo), mType(iProxyHostInfo.mType)
 {
-    return mUseProxy;
 }
 
-void 
-ProxyHostInfo::setUseProxy(bool iUseProxy)
+ProxyHostInfo &ProxyHostInfo::operator=(const ProxyHostInfo &iProxyHostInfo)
 {
-    mUseProxy = iUseProxy;
-}
-
-QNetworkProxy::ProxyType 
-ProxyHostInfo::type() const
-{
-    return mType;
+    swap(iProxyHostInfo);
+    return *this;
 }
 
 void 
@@ -73,7 +66,6 @@ void
 ProxyHostInfo::fromXml(QDomElement &iElement)
 {
     HostInfo::fromXml(iElement);
-    setUseProxy((int)iElement.attribute("use").toInt());
     setType((QNetworkProxy::ProxyType)iElement.attribute("type").toInt());
 }
 
@@ -84,7 +76,6 @@ QDomElement
 ProxyHostInfo::toXml(QDomElement &iElement) const
 {
     HostInfo::toXml(iElement);
-    iElement.setAttribute("use", useProxy());
     iElement.setAttribute("type", type());
 
     return iElement;
@@ -98,6 +89,12 @@ bool ProxyHostInfo::operator==(const ProxyHostInfo &iProxyHostInfo)
 bool ProxyHostInfo::operator!=(const ProxyHostInfo &iProxyHostInfo)
 {
     return !(operator==(iProxyHostInfo));
+}
+
+void ProxyHostInfo::swap(const ProxyHostInfo &iProxyHostInfo)
+{
+    HostInfo::swap(iProxyHostInfo);
+    mType = iProxyHostInfo.mType;
 }
 
 } // namespace Connect

@@ -49,6 +49,9 @@ class DbHostInfo : public HostInfo
                 const QString &iDbName = "", const QString &iDbDriver = "QPSQL");
         ~DbHostInfo();
 
+        DbHostInfo(const DbHostInfo &);
+        DbHostInfo &operator=(const DbHostInfo &iDbHostInfo);
+
         QString dbName() const;
         void setDbName(const QString &iDbName);
 
@@ -61,9 +64,8 @@ class DbHostInfo : public HostInfo
         bool operator==(const DbHostInfo &iDbHostInfo);
         bool operator!=(const DbHostInfo &iDbHostInfo);
 
-    private:
-//        DbHostInfo(const DbHostInfo &);
-//        DbHostInfo &operator=(const DbHostInfo &iDbHostInfo);
+    protected:
+        virtual void swap(const DbHostInfo &iDbHostInfo);
 
     private:
         QString mDbName;

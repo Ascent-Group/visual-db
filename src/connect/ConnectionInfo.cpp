@@ -32,11 +32,12 @@
 namespace Connect {
 
 ConnectionInfo::ConnectionInfo()
+    : mDbHostInfo(), mUseProxy(false), mProxyHostInfo()
 {
 }
 
-ConnectionInfo::ConnectionInfo(const DbHostInfo &iDbHostInfo, const ProxyHostInfo &iProxyHostInfo)
-    : mDbHostInfo(iDbHostInfo), mProxyHostInfo(iProxyHostInfo)
+ConnectionInfo::ConnectionInfo(const DbHostInfo &iDbHostInfo, bool iUseProxy, const ProxyHostInfo &iProxyHostInfo)
+    : mDbHostInfo(iDbHostInfo), mUseProxy(iUseProxy), mProxyHostInfo(iProxyHostInfo)
 {
 }
 
@@ -44,8 +45,20 @@ ConnectionInfo::~ConnectionInfo()
 {
 }
 
-const 
-DbHostInfo &ConnectionInfo::dbHostInfo() const
+ConnectionInfo::ConnectionInfo(const ConnectionInfo &iConnectionInfo)
+    : mDbHostInfo(iConnectionInfo.mDbHostInfo), mUseProxy(iConnectionInfo.mUseProxy)
+    , mProxyHostInfo(iConnectionInfo.mProxyHostInfo)
+{
+}
+
+ConnectionInfo &ConnectionInfo::operator=(const ConnectionInfo &iConnectionInfo)
+{
+    swap(iConnectionInfo);
+    return *this;
+}
+
+const DbHostInfo &
+ConnectionInfo::dbHostInfo() const
 {
     return mDbHostInfo;
 }
@@ -56,8 +69,26 @@ ConnectionInfo::setDbHostInfo(const DbHostInfo &iDbHostInfo)
     mDbHostInfo = iDbHostInfo;
 }
 
-const 
-ProxyHostInfo &ConnectionInfo::proxyHostInfo() const
+bool 
+ConnectionInfo::useProxy() const
+{
+    return mUseProxy;
+}
+
+void 
+ConnectionInfo::setUseProxy(bool iUseProxy)
+{
+    mUseProxy = iUseProxy;
+}
+
+QNetworkProxy::ProxyType 
+ProxyHostInfo::type() const
+{
+    return mType;
+}
+
+const ProxyHostInfo &
+ConnectionInfo::proxyHostInfo() const
 {
     return mProxyHostInfo;
 }
@@ -82,6 +113,7 @@ ConnectionInfo::fromXml(QDomElement &iElement)
                 mDbHostInfo.fromXml(element);
             } else if (element.tagName() == "proxy") {
                 mProxyHostInfo.fromXml(element);
+                setUseProxy((int)element.attribute("use").toInt());
             }
         }
         child = child.nextSibling();
@@ -102,6 +134,7 @@ ConnectionInfo::toXml(QDomDocument &iDoc, QDomElement &iElement) const
 
     QDomElement proxyElement = iDoc.createElement("proxy");
     connElement.appendChild(mProxyHostInfo.toXml(proxyElement));
+    proxyElement.setAttribute("use", useProxy());
 }
 
 bool 
@@ -114,6 +147,14 @@ bool
 ConnectionInfo::operator!=(const ConnectionInfo &iConnectionInfo)
 {
     return !(operator==(iConnectionInfo));
+}
+
+void 
+ConnectionInfo::swap(const ConnectionInfo &iConnectionInfo)
+{
+    mDbHostInfo = iConnectionInfo.mDbHostInfo;
+    mUseProxy = iConnectionInfo.mUseProxy;
+    mProxyHostInfo = iConnectionInfo.mProxyHostInfo;
 }
 
 }

@@ -30,7 +30,7 @@
 #include <QDebug>
 #include <QUndoCommand>
 #include <gui/GraphicsScene.h>
-#include <gui/TableItem.h>
+#include <gui/graphicsitems/TableItem.h>
 #include <gui/ItemGroup.h>
 #include <gui/behaviour/AddItemCommand.h>
 

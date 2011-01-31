@@ -37,7 +37,7 @@
 #include <common/Database.h>
 #include <consts.h>
 #include <gui/GraphicsScene.h>
-#include <gui/TableItem.h>
+#include <gui/graphicsitems/TableItem.h>
 
 #include <QtDebug>
 

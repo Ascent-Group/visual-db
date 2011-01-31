@@ -28,7 +28,7 @@
  */
 
 #include <consts.h>
-#include <gui/ArrowItem.h>
+#include <gui/graphicsitems/ArrowItem.h>
 #include <QDebug>
 #include <QPainterPath>
 #include <QGraphicsLineItem>

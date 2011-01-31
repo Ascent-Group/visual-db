@@ -51,7 +51,7 @@
 #include <connect/ConnectionInfo.h>
 #include <consts.h>
 #include <gui/DescriptionWidget.h>
-#include <gui/Legend.h>
+#include <gui/graphicsitems/Legend.h>
 #include <gui/MainWindow.h>
 #include <gui/OptionsDialog.h>
 #include <gui/SceneWidget.h>

@@ -44,7 +44,7 @@ class QImage;
 
 /*!
  * \class GraphicsItem
- * \headerfile gui/GraphicsItem.h
+ * \headerfile gui/graphicsitems/GraphicsItem.h
  * \brief Parent class for graphics items on the scene
  */
 class GraphicsItem : public QGraphicsPolygonItem

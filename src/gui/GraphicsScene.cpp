@@ -38,15 +38,15 @@
 #include <common/Database.h>
 #include <consts.h>
 #include <gui/ControlWidget.h>
-#include <gui/ForeignArrow.h>
+#include <gui/graphicsitems/ForeignArrow.h>
 #include <gui/GraphicsScene.h>
-#include <gui/InheritanceArrow.h>
+#include <gui/graphicsitems/InheritanceArrow.h>
 #include <gui/ItemGroup.h>
-#include <gui/Legend.h>
-#include <gui/LoopArrow.h>
-#include <gui/TableItem.h>
+#include <gui/graphicsitems/Legend.h>
+#include <gui/graphicsitems/LoopArrow.h>
+#include <gui/graphicsitems/TableItem.h>
 #include <gui/TreeWidget.h>
-#include <gui/ViewItem.h>
+#include <gui/graphicsitems/ViewItem.h>
 #include <math.h>
 
 #include <QDebug>

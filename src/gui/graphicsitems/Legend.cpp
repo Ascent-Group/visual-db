@@ -33,8 +33,8 @@
 #include <QPainter>
 #include <QPen>
 #include <common/Database.h>
-#include <gui/Legend.h>
-#include <gui/TableItem.h>
+#include <gui/graphicsitems/Legend.h>
+#include <gui/graphicsitems/TableItem.h>
 
 /*!
  * Constructor

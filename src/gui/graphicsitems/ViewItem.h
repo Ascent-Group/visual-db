@@ -27,72 +27,57 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef ARROW_H
-#define ARROW_H
+#ifndef VIEWEITEM_H
+#define VIEWEITEM_H
 
-#include <gui/TableItem.h>
-#include <QGraphicsLineItem>
+#include <gui/DbObjectItem.h>
 
-class QGraphicsPolygonItem;
-class QGraphicsScene;
-class QGraphicsSceneMouseEvent;
-class QPainterPath;
-class QRectF;
+class QAction;
+class QDomDocument;
+class QDomElement;
+class QMenu;
+
+class ArrowItem;
+
+namespace DbObjects
+{
+namespace Common
+{
+class DbView;
+
+typedef DbObjectPtr<DbView> DbViewPtr;
+}
+}
 
 /*!
- * \class ArrowItem
- * \headerfile gui/ArrowItem.h
- * \brief Implement the visual relations between tables
+ * \class ViewItem
+ * \headerfile gui/graphicsitems/ViewItem.h
+ * \brief Graphics item, implements the database view. Support moving, resizing, changing of the color etc.
  */
-class ArrowItem : public QGraphicsPathItem
+class ViewItem : public DbObjectItem
 {
     public:
-        enum { Type = UserType + 4 };
+        ViewItem(const QString &, const QString &, QMenu *, const QPoint &);
+        ~ViewItem();
+        virtual int type() const;
 
-        static const int ARROW_SIZE = 12;
+        QString name() const;
+        QString schemaName() const;
+        
+        QDomElement toXml(QDomDocument &) const;
+        // \todo add fromXml(...)
+
+        void setFieldsTypesVisible(bool);
+        void setIndicesVisible(bool);
 
     public:
-        ArrowItem(TableItem *, TableItem *, QString, QGraphicsItem *iParent = 0, QGraphicsScene *iScene = 0);
-        virtual ~ArrowItem();
-
-        virtual int type() const;
-        virtual QRectF boundingRect() const;
-
-        virtual TableItem *startItem() const;
-        virtual TableItem *endItem() const;
-
-        virtual void updatePosition();
-
-    protected:
-        virtual QColor brushColor() const;
-        virtual void setBrushColor(const QColor &);
-
-        virtual QPainterPath line();
-        virtual QPolygonF head() = 0;
-
-        virtual QPointF startPoint() const;
-        virtual QPointF endPoint() const;
+        enum { Type = UserType + 8 };
 
     private:
-        TableItem *mStartItem;
-        TableItem *mEndItem;
-
-        QPointF mStartPoint;
-        QPointF mEndPoint;
-        QPainterPath mPath;
-
-        QColor mColor;
-        QColor mBrushColor;
-        QPolygonF mArrowItemHead;
-
-        QString mTitle;
-
-    private:
-        virtual QLineF makeLine();
-        void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *iWidget = 0);
+        DbObjects::Common::DbViewPtr mModel;
 };
 
-QPolygonF makeHead(const QLineF &, const QPointF &);
+ViewItem *toView(QGraphicsItem *);
 
-#endif // ARROW_H
+#endif // VIEWEITEM_H
 

@@ -27,58 +27,24 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/LoopArrow.h>
-#include <QPainter>
+#ifndef INHERITANCEARROW_H
+#define INHERITANCEARROW_H
+
+#include <gui/graphicsitems/ArrowItem.h>
 
 /*!
- * Constructor
+ * \class InheritanceArrow
+ * \headerfile gui/graphicsitems/InheritanceArrow.h
+ * \brief This class implements arrow for inheritance relations
  */
-LoopArrow::LoopArrow(TableItem *iStartItem,
-                                   TableItem *iEndItem,
-                                   QString iTitle,
-                                   QGraphicsItem *iParent,
-                                   QGraphicsScene *iScene)
-    : ForeignArrow(iStartItem, iEndItem, iTitle, iParent, iScene)
+class InheritanceArrow : public ArrowItem
 {
-}
+    public:
+        InheritanceArrow(TableItem *, TableItem *, QString, QGraphicsItem *iParent = 0, QGraphicsScene *iScene = 0);
+        virtual ~InheritanceArrow();
 
-/*!
- * Destructor
- */
-LoopArrow::~LoopArrow()
-{
-}
+    protected:
+        virtual QPolygonF head();
+};
 
-/*!
- * \brief Update the arrow's position
- */
-QPainterPath
-LoopArrow::line()
-{
-    QPainterPath path;
-    path.moveTo(centerPoint());
-    path.arcTo(QRectF(centerPoint() - QPointF(20, 20), QSizeF(50, 50)), -120, 360);
-    return path;
-}
-
-/*!
- * \brief Update the arrow's position
- */
-QPolygonF
-LoopArrow::head()
-{
-    QPointF headPoint = QPointF(centerPoint() + QPointF(0, 30));
-    QLineF line(headPoint, headPoint + QPointF(10, 0));
-    return makeHead(line, headPoint);
-}
-
-/*!
- * \brief Returns center point of the start item
- *
- * \return Center point
- */
-QPointF
-LoopArrow::centerPoint() const
-{
-    return startItem()->pos() + QPointF(startItem()->x() + startItem()->width(), startItem()->y());
-}
+#endif // INHERITANCEARROW_H

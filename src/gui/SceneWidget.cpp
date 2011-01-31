@@ -39,7 +39,7 @@
 #include <gui/GraphicsView.h>
 #include <gui/ItemGroup.h>
 #include <gui/SceneWidget.h>
-#include <gui/TableItem.h>
+#include <gui/graphicsitems/TableItem.h>
 #include <gui/behaviour/AddItemCommand.h>
 #include <gui/behaviour/DeleteItemCommand.h>
 #include <gui/behaviour/MoveItemCommand.h>

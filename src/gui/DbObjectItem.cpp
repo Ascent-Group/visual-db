@@ -36,7 +36,7 @@
 #include <QPixmap>
 #include <QSettings>
 #include <consts.h>
-#include <gui/ArrowItem.h>
+#include <gui/graphicsitems/ArrowItem.h>
 #include <gui/DbObjectItem.h>
 #include <gui/GraphicsScene.h>
 

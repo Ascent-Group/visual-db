@@ -34,7 +34,7 @@
 #include <QtDebug>
 #include <common/Database.h>
 #include <consts.h>
-#include <gui/ViewItem.h>
+#include <gui/graphicsitems/ViewItem.h>
 
 /*!
  * Constructor

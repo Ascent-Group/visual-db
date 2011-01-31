@@ -28,7 +28,7 @@
  */
 
 #include <QDebug>
-#include <gui/GraphicsItem.h>
+#include <gui/graphicsitems/GraphicsItem.h>
 #include <gui/behaviour/ResizeItemCommand.h>
 
 /*!

@@ -27,37 +27,28 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/InheritanceArrow.h>
-#include <QPainter>
+#ifndef LOOPARROW_H
+#define LOOPARROW_H
+
+#include <gui/graphicsitems/ForeignArrow.h>
 
 /*!
- * Constructor
+ * \class LoopArrow
+ * \headerfile gui/graphicsitems/LoopArrow.h
+ * \brief This class self referenced arrow
  */
-InheritanceArrow::InheritanceArrow(TableItem *iStartItem,
-                                   TableItem *iEndItem,
-                                   QString iTitle,
-                                   QGraphicsItem *iParent,
-                                   QGraphicsScene *iScene)
-    : ArrowItem(iStartItem, iEndItem, iTitle, iParent, iScene)
+class LoopArrow : public ForeignArrow
 {
-    setBrushColor("white");
-}
+    public:
+        LoopArrow(TableItem *, TableItem *, QString, QGraphicsItem *iParent = 0, QGraphicsScene *iScene = 0);
+        virtual ~LoopArrow();
 
-/*!
- * Destructor
- */
-InheritanceArrow::~InheritanceArrow()
-{
-}
+    protected:
+        virtual QPainterPath line();
+        virtual QPolygonF head();
 
+    private:
+        QPointF centerPoint() const;
+};
 
-/*!
- * \brief Update the arrow's position
- */
-QPolygonF
-InheritanceArrow::head()
-{
-    QPointF lineCenter(startPoint().x() + (endPoint().x() - startPoint().x()) / 2, startPoint().y() + (endPoint().y() - startPoint().y()) / 2);
-    QLineF line(endPoint(), startPoint());
-    return makeHead(line, lineCenter);
-}
+#endif // LOOPARROW_H

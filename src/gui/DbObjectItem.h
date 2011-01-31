@@ -30,7 +30,7 @@
 #ifndef DBOBJECTSITEM_H
 #define DBOBJECTSITEM_H
 
-#include <gui/GraphicsItem.h>
+#include <gui/graphicsitems/GraphicsItem.h>
 #include <QDomElement>
 
 class ArrowItem;

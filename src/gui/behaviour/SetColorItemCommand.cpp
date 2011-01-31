@@ -29,7 +29,7 @@
 
 #include <QDebug>
 #include <QUndoCommand>
-#include <gui/GraphicsItem.h>
+#include <gui/graphicsitems/GraphicsItem.h>
 #include <gui/behaviour/SetColorItemCommand.h>
 
 /*!

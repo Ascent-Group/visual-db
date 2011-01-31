@@ -32,7 +32,7 @@
 #include <QDomElement>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
-#include <gui/TableItem.h>
+#include <gui/graphicsitems/TableItem.h>
 #include <gui/ItemGroup.h>
 
 /*!

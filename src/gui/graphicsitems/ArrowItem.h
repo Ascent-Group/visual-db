@@ -27,40 +27,72 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef LEGEND_H
-#define LEGEND_H
+#ifndef ARROW_H
+#define ARROW_H
 
-#include "GraphicsItem.h"
+#include <gui/graphicsitems/TableItem.h>
+#include <QGraphicsLineItem>
+
+class QGraphicsPolygonItem;
+class QGraphicsScene;
+class QGraphicsSceneMouseEvent;
+class QPainterPath;
+class QRectF;
 
 /*!
- * \class Legend
- * \headerfile gui/Legend.h
- * \brief Class for legend. Legend describes each schama and it's color.
+ * \class ArrowItem
+ * \headerfile gui/graphicsitems/ArrowItem.h
+ * \brief Implement the visual relations between tables
  */
-class Legend : public GraphicsItem
+class ArrowItem : public QGraphicsPathItem
 {
     public:
-        Legend();
-        ~Legend();
-        virtual int type() const;
+        enum { Type = UserType + 4 };
 
-        void refresh();
-//        void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
+        static const int ARROW_SIZE = 12;
 
     public:
-        enum { Type = UserType + 7 };
+        ArrowItem(TableItem *, TableItem *, QString, QGraphicsItem *iParent = 0, QGraphicsScene *iScene = 0);
+        virtual ~ArrowItem();
+
+        virtual int type() const;
+        virtual QRectF boundingRect() const;
+
+        virtual TableItem *startItem() const;
+        virtual TableItem *endItem() const;
+
+        virtual void updatePosition();
 
     protected:
-        virtual void paintFieldImage(QPainter *, int);
-        virtual void paintAnchor(QPainter *);
-        virtual void paintAdditionalInfo(QPainter*) {};
+        virtual QColor brushColor() const;
+        virtual void setBrushColor(const QColor &);
+
+        virtual QPainterPath line();
+        virtual QPolygonF head() = 0;
+
+        virtual QPointF startPoint() const;
+        virtual QPointF endPoint() const;
 
     private:
-        static const int DEFAULT_X = 335;
-        static const int DEFAULT_Y = 15;
+        TableItem *mStartItem;
+        TableItem *mEndItem;
+
+        QPointF mStartPoint;
+        QPointF mEndPoint;
+        QPainterPath mPath;
+
+        QColor mColor;
+        QColor mBrushColor;
+        QPolygonF mArrowItemHead;
+
+        QString mTitle;
+
+    private:
+        virtual QLineF makeLine();
+        void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *iWidget = 0);
 };
 
-Legend * toLegend(QGraphicsItem *);
+QPolygonF makeHead(const QLineF &, const QPointF &);
 
-#endif // LEGEND_H
+#endif // ARROW_H
 

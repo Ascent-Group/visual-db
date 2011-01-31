@@ -37,8 +37,8 @@
 #include <QSettings>
 #include <QTextDocument>
 #include <consts.h>
-#include <gui/ArrowItem.h>
-#include <gui/GraphicsItem.h>
+#include <gui/graphicsitems/ArrowItem.h>
+#include <gui/graphicsitems/GraphicsItem.h>
 #include <gui/GraphicsScene.h>
 
 int GraphicsItem::mSeek = 80;

@@ -27,24 +27,34 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef FOREIGNARROW_H
-#define FOREIGNARROW_H
-
-#include <gui/ArrowItem.h>
+#include <gui/graphicsitems/ForeignArrow.h>
+#include <QPainter>
 
 /*!
- * \class ForeignArrow
- * \headerfile gui/ForeignArrow.h
- * \brief This class implements arrow for Foreign relations
+ * Constructor
  */
-class ForeignArrow : public ArrowItem
+ForeignArrow::ForeignArrow(TableItem *iStartItem,
+                                   TableItem *iEndItem,
+                                   QString iTitle,
+                                   QGraphicsItem *iParent,
+                                   QGraphicsScene *iScene)
+    : ArrowItem(iStartItem, iEndItem, iTitle, iParent, iScene)
 {
-    public:
-        ForeignArrow(TableItem *, TableItem *, QString, QGraphicsItem *iParent = 0, QGraphicsScene *iScene = 0);
-        virtual ~ForeignArrow();
+}
 
-    protected:
-        virtual QPolygonF head();
-};
+/*!
+ * Destructor
+ */
+ForeignArrow::~ForeignArrow()
+{
+}
 
-#endif // FOREIGNARROW_H
+/*!
+ * \brief Update the arrow's position
+ */
+QPolygonF
+ForeignArrow::head()
+{
+    QLineF line(endPoint(), startPoint());
+    return makeHead(line, endPoint());
+}

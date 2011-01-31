@@ -27,57 +27,40 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef VIEWEITEM_H
-#define VIEWEITEM_H
+#ifndef LEGEND_H
+#define LEGEND_H
 
-#include <gui/DbObjectItem.h>
-
-class QAction;
-class QDomDocument;
-class QDomElement;
-class QMenu;
-
-class ArrowItem;
-
-namespace DbObjects
-{
-namespace Common
-{
-class DbView;
-
-typedef DbObjectPtr<DbView> DbViewPtr;
-}
-}
+#include "GraphicsItem.h"
 
 /*!
- * \class ViewItem
- * \headerfile gui/ViewItem.h
- * \brief Graphics item, implements the database view. Support moving, resizing, changing of the color etc.
+ * \class Legend
+ * \headerfile gui/graphicsitems/Legend.h
+ * \brief Class for legend. Legend describes each schama and it's color.
  */
-class ViewItem : public DbObjectItem
+class Legend : public GraphicsItem
 {
     public:
-        ViewItem(const QString &, const QString &, QMenu *, const QPoint &);
-        ~ViewItem();
+        Legend();
+        ~Legend();
         virtual int type() const;
 
-        QString name() const;
-        QString schemaName() const;
-        
-        QDomElement toXml(QDomDocument &) const;
-        // \todo add fromXml(...)
-
-        void setFieldsTypesVisible(bool);
-        void setIndicesVisible(bool);
+        void refresh();
+//        void paint(QPainter *, const QStyleOptionGraphicsItem *, QWidget *);
 
     public:
-        enum { Type = UserType + 8 };
+        enum { Type = UserType + 7 };
+
+    protected:
+        virtual void paintFieldImage(QPainter *, int);
+        virtual void paintAnchor(QPainter *);
+        virtual void paintAdditionalInfo(QPainter*) {};
 
     private:
-        DbObjects::Common::DbViewPtr mModel;
+        static const int DEFAULT_X = 335;
+        static const int DEFAULT_Y = 15;
 };
 
-ViewItem *toView(QGraphicsItem *);
+Legend * toLegend(QGraphicsItem *);
 
-#endif // VIEWEITEM_H
+#endif // LEGEND_H
 

@@ -118,6 +118,7 @@ void DbHostInfo::swap(const DbHostInfo &iDbHostInfo)
 
 /*
  * Create connection to the database
+ * \todo Move this function to DatabaseManager
  */
 bool
 createConnection(const DbHostInfo &iDbHostInfo)

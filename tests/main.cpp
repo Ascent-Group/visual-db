@@ -1,6 +1,6 @@
 /* connect */
-#include <connect/DbParametersTest.h>
-#include <connect/ProxyParametersTest.h>
+//#include <connect/DbParametersTest.h>
+//#include <connect/ProxyParametersTest.h>
 
 /* control */
 #include <control/ContextTest.h>
@@ -32,6 +32,7 @@
 #include <gui/TabWidgetTest.h>
 #include <gui/TreeWidgetTest.h>
 
+#if TEST_DBOBJECTS
 /* dbobjects */
 #include <dbobjects/common/DatabaseTest.h>
 #include <dbobjects/common/DbIndexTest.h>
@@ -57,6 +58,8 @@
 #include <connect/DbParameters.h>
 #include <common/DatabaseCreator.h>
 
+#endif
+
 const QString DBHOST = "localhost";
 const QString DBNAME = "music_db";
 const QString DBUSER = "music_user";
@@ -67,6 +70,7 @@ const QString DBPASS = "qwe";
  */
 int main(int argc, char *argv[])
 {
+#if TEST_DBOBJECTS
     /*!
      * We cannot pass the db driver to use for testing via argv because QTestLib needs/uses
      * argv (e.g. a name of a test to run) and they will be parsed by QApplication. Adding
@@ -99,6 +103,7 @@ int main(int argc, char *argv[])
 
         return -1;
     }
+#endif
 
     QApplication app(argc, argv);
 
@@ -116,7 +121,7 @@ int main(int argc, char *argv[])
 //        return QSqlError::ConnectionError;
 //    }
 
-#if TEST_BEHAVIOUR
+#if TEST_GUI_BEHAVIOUR
     /* gui/behaviour */
     AddTableCommandTest addTableCommandTest;
     QTest::qExec(&addTableCommandTest, argc, argv);
@@ -127,11 +132,11 @@ int main(int argc, char *argv[])
 
 #if TEST_CONNECT
     /* connect */
-    DbParametersTest dbParametersTest;
-    QTest::qExec(&dbParametersTest, argc, argv);
-
-    ProxyParametersTest proxyParametersTest;
-    QTest::qExec(&proxyParametersTest, argc, argv);
+//    DbParametersTest dbParametersTest;
+//    QTest::qExec(&dbParametersTest, argc, argv);
+//
+//    ProxyParametersTest proxyParametersTest;
+//    QTest::qExec(&proxyParametersTest, argc, argv);
 #endif // TEST_CONNECT
 
 #if TEST_CONTROL

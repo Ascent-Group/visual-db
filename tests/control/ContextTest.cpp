@@ -69,9 +69,9 @@ ContextTest::connectionInfoTest1()
     QNetworkProxy::ProxyType proxyType = QNetworkProxy::NoProxy;
 
     // create proxy host info
-    ProxyHostInfo proxyHostInfo(true, proxyHost, proxyPort, proxyUser, proxyPassword, proxyType);
+    ProxyHostInfo proxyHostInfo(proxyHost, proxyPort, proxyUser, proxyPassword, proxyType);
     // create connection info
-    ConnectionInfo connInfo(dbHostInfo, proxyHostInfo);
+    ConnectionInfo connInfo(dbHostInfo, true, proxyHostInfo);
 
     // create context
     Context ctx(connInfo, QSqlDatabase());
@@ -84,7 +84,7 @@ ContextTest::connectionInfoTest1()
     QCOMPARE(ctx.connectionInfo().dbHostInfo().dbName(), dbName);
     QCOMPARE(ctx.connectionInfo().dbHostInfo().dbDriver(), dbDriver);
 
-    QCOMPARE(ctx.connectionInfo().proxyHostInfo().useProxy(), true);
+    QCOMPARE(ctx.connectionInfo().useProxy(), true);
     QCOMPARE(ctx.connectionInfo().proxyHostInfo().address(), proxyHost);
     QCOMPARE(ctx.connectionInfo().proxyHostInfo().port(), proxyPort);
     QCOMPARE(ctx.connectionInfo().proxyHostInfo().user(), proxyUser);
@@ -119,9 +119,9 @@ ContextTest::connectionInfoTest2()
     QNetworkProxy::ProxyType proxyType = QNetworkProxy::NoProxy;
 
     // create proxy host info
-    ProxyHostInfo proxyHostInfo(true, proxyHost, proxyPort, proxyUser, proxyPassword, proxyType);
+    ProxyHostInfo proxyHostInfo(proxyHost, proxyPort, proxyUser, proxyPassword, proxyType);
     // create connection info
-    ConnectionInfo connInfo(dbHostInfo, proxyHostInfo);
+    ConnectionInfo connInfo(dbHostInfo, true, proxyHostInfo);
 
     // create context
     Context ctx;
@@ -135,7 +135,7 @@ ContextTest::connectionInfoTest2()
     QCOMPARE(ctx.connectionInfo().dbHostInfo().dbName(), dbName);
     QCOMPARE(ctx.connectionInfo().dbHostInfo().dbDriver(), dbDriver);
 
-    QCOMPARE(ctx.connectionInfo().proxyHostInfo().useProxy(), true);
+    QCOMPARE(ctx.connectionInfo().useProxy(), true);
     QCOMPARE(ctx.connectionInfo().proxyHostInfo().address(), proxyHost);
     QCOMPARE(ctx.connectionInfo().proxyHostInfo().port(), proxyPort);
     QCOMPARE(ctx.connectionInfo().proxyHostInfo().user(), proxyUser);
@@ -159,7 +159,7 @@ ContextTest::dbHandleTest1()
     QString userName("user");
 
     // create database connection
-    QSqlDatabase dbHandle = QSqlDatabase::addDatabase(driverName);
+    QSqlDatabase dbHandle = QSqlDatabase::addDatabase(driverName, "mainConnection");
     dbHandle.setDatabaseName(dbName);
     dbHandle.setHostName(hostName);
     dbHandle.setPort(port);
@@ -218,9 +218,9 @@ ContextTest::comparisonTest()
     // create db host info
     DbHostInfo dbInfo1("host1", 111, "user1", "pass1", "db1", "driver1");
     // create proxy host info
-    ProxyHostInfo proxyInfo1(true, "host1", 111, "user1", "pass1", QNetworkProxy::HttpProxy);
+    ProxyHostInfo proxyInfo1("host1", 111, "user1", "pass1", QNetworkProxy::HttpProxy);
     // create connection info
-    ConnectionInfo connInfo1(dbInfo1, proxyInfo1);
+    ConnectionInfo connInfo1(dbInfo1, true, proxyInfo1);
     // create ctx1
     Context ctx1(connInfo1, QSqlDatabase::addDatabase("a", "b"));
 
@@ -229,7 +229,7 @@ ContextTest::comparisonTest()
     // create proxy host info
     ProxyHostInfo proxyInfo2(proxyInfo1);
     // create connection info
-    ConnectionInfo connInfo2(dbInfo2, proxyInfo2);
+    ConnectionInfo connInfo2(dbInfo2, true, proxyInfo2);
     // create ctx2 (!= ctx1)
     Context ctx2(connInfo2, QSqlDatabase::addDatabase("c", "d"));
 

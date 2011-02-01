@@ -59,18 +59,14 @@ LIBS += -L$$OUT_PWD/../src/dbobjects/common \
         -L$$OUT_PWD/../src/dbobjects/psql \
         -L$$OUT_PWD/../src/dbobjects/mysql
 
-LIBS += -lcommon -lpsql -lfactory -lcommon -lmysql -lpsql -lfactory -lcommon -lpsql -lfactory -lmysql -lpsql
-
-# Appears to be a solution but decreases the performance too much
-#QMAKE_LFLAGS += -Wl,--start-group -lcommon -lpsql -lmysql -lfactory -Wl,--end-group
 
 DEFINES -= QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 
-#DEFINES += TEST_BEHAVIOUR
 #DEFINES += TEST_GUI
+#DEFINES += TEST_GUI_BEHAVIOUR
 DEFINES += TEST_CONNECT
 DEFINES += TEST_CONTROL
-DEFINES += TEST_DBOBJECTS
+#DEFINES += TEST_DBOBJECTS
 
 SOURCES = $$PWD/main.cpp \
           $$TOP_SRC_DIR/consts.cpp
@@ -123,8 +119,14 @@ contains(DEFINES, TEST_DBOBJECTS) {
                $$files($$PWD/dbobjects/mysql/*.cpp) \
                $$files($$PWD/dbobjects/psql/*.cpp) \
                $$files($$PWD/dbobjects/factory/*.cpp)
-
 }
+
+#LIBS += -lcommon -lpsql -lfactory -lcommon -lmysql -lpsql -lfactory -lcommon -lpsql -lfactory -lmysql -lpsql
+LIBS += -lcommon -lfactory -lmysql -lpsql -lcommon -lmysql
+
+# Appears to be a solution but decreases the performance too much
+#QMAKE_LFLAGS += -Wl,--start-group -lcommon -lpsql -lmysql -lfactory -Wl,--end-group
+
 
 ### Expanding clean target
 QMAKE_CLEAN += $$OUT_PWD/$$DESTDIR/$$TARGET

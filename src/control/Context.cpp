@@ -95,8 +95,7 @@ Context::connectionInfo() const
 void
 Context::setConnectionInfo(const Connect::ConnectionInfo &iInfo)
 {
-    // \todo uncomment this
-//    mConnectionInfo = iInfo;
+    mConnectionInfo = iInfo;
 }
 
 /*!

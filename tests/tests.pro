@@ -15,7 +15,7 @@ QMAKE_EXTRA_TARGETS += build_tests run_tests report
 ### Target for building tests
 #build_tests.CONFIG = <nothing_here_yet>
 
-build_tests.commands = /bin/rm $$DESTDIR/$$TARGET && $(MAKE) -j3
+build_tests.commands = /bin/rm -f $$DESTDIR/$$TARGET && $(MAKE) -j3
 
 ### Target for running tests
 run_tests.depends = build_tests

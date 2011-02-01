@@ -27,96 +27,28 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <connect/ProxyParametersTest.h>
+#ifndef PROXYHOSTINFOTEST_H
+#define PROXYHOSTINFOTEST_H
 
-void
-ProxyParametersTest::initTestCase()
+#include <QtTest/QtTest>
+
+class ProxyHostInfoTest : public QObject
 {
+    Q_OBJECT
 
-}
+    private slots:
+        void initTestCase();
+        void cleanupTestCase();
 
-void
-ProxyParametersTest::cleanupTestCase()
-{
+        void fromXmlTest();
+        void notEqualsTest();
+        void equalsTest();
+        void assignmentTest();
+        void setTypeTest();
+        void swapTest();
+        void toXmlTest();
+        void typeTest();
+};
 
-}
-
-
-void
-ProxyParametersTest::fromXmlTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::proxyHostTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::proxyPortTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::proxyTypeTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::proxyUserTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::setProxyHostTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::setProxyPortTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::setProxyTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::setProxyTypeTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::setProxyUserTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::setUseProxyTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::toXmlTest()
-{
-    QVERIFY(0);
-}
-
-void
-ProxyParametersTest::useProxyTest()
-{
-    QVERIFY(0);
-}
+#endif // PROXYHOSTINFOTEST_H
 

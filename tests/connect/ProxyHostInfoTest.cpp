@@ -27,58 +27,65 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CONNECT_HOSTINFO_H
-#define CONNECT_HOSTINFO_H
+#include <ProxyHostInfoTest.h>
 
-#include <QString>
-#include <QDomDocument>
-#include <QDomElement>
-
-namespace Connect {
-
-/*!
- * \class HostInfo
- * \headerfile connect/HostInfo.h
- * \brief Incapsulation of host info parameters
- */
-class HostInfo
+void
+ProxyHostInfoTest::initTestCase()
 {
-    public:
-        explicit HostInfo(const QString &iAddress = "", quint16 iPort = 0, const QString &iUser = "", const QString &iPassword = "");
-        ~HostInfo();
-
-        HostInfo(const HostInfo &);
-        HostInfo &operator=(const HostInfo &iHostInfo);
-
-        QString address() const;
-        void setAddress(const QString &);
-        
-        quint16 port() const;
-        void setPort(quint16);
-        
-        QString user() const;
-        void setUser(const QString &);
-        
-        QString password() const;
-        void setPassword(const QString &);
-
-        QDomElement &toXml(QDomElement &) const;
-        void fromXml(QDomElement &);
-
-        bool operator==(const HostInfo &iHostInfo);
-        bool operator!=(const HostInfo &iHostInfo);
-
-    protected:
-        virtual void swap(const HostInfo &iHostInfo);
-
-    private:
-        QString mAddress;
-        quint16 mPort;
-        QString mUser;
-        QString mPassword;
-};
-
+    QVERIFY(0);
 }
 
-#endif // CONNECT_HOSTINFO_H
+void
+ProxyHostInfoTest::cleanupTestCase()
+{
+    QVERIFY(0);
+}
+
+void
+ProxyHostInfoTest::fromXmlTest()
+{
+    QVERIFY(0);
+}
+
+void
+ProxyHostInfoTest::notEqualsTest()
+{
+    QVERIFY(0);
+}
+
+void
+ProxyHostInfoTest::equalsTest()
+{
+    QVERIFY(0);
+}
+
+void
+ProxyHostInfoTest::assignmentTest()
+{
+    QVERIFY(0);
+}
+
+void
+ProxyHostInfoTest::setTypeTest()
+{
+    QVERIFY(0);
+}
+
+void
+ProxyHostInfoTest::swapTest()
+{
+    QVERIFY(0);
+}
+
+void
+ProxyHostInfoTest::toXmlTest()
+{
+    QVERIFY(0);
+}
+
+void
+ProxyHostInfoTest::typeTest()
+{
+    QVERIFY(0);
+}
 

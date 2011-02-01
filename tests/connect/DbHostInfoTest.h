@@ -27,12 +27,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef PROXYPARAMETERSTEST_H
-#define PROXYPARAMETERSTEST_H
+#ifndef DBHOSTINFOTEST_H
+#define DBHOSTINFOTEST_H
 
 #include <QtTest/QtTest>
 
-class ProxyParametersTest : public QObject
+class DbHostInfoTest : public QObject
 {
     Q_OBJECT
 
@@ -40,19 +40,17 @@ class ProxyParametersTest : public QObject
         void initTestCase();
         void cleanupTestCase();
 
+        void createConnectionTest();
+        void dbDriverTest();
+        void dbNameTest();
         void fromXmlTest();
-        void proxyHostTest();
-        void proxyPortTest();
-        void proxyTypeTest();
-        void proxyUserTest();
-        void setProxyHostTest();
-        void setProxyPortTest();
-        void setProxyTest();
-        void setProxyTypeTest();
-        void setProxyUserTest();
-        void setUseProxyTest();
+        void notEqualsTest();
+        void equalsTest();
+        void assignmentTest();
+        void setDbDriverTest();
+        void setDbNameTest();
         void toXmlTest();
-        void useProxyTest();
 };
-#endif // PROXYPARAMETERSTEST_H
+
+#endif // DBHOSTINFOTEST_H
 

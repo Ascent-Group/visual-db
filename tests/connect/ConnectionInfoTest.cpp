@@ -27,35 +27,89 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBPARAMETERSTEST_H
-#define DBPARAMETERSTEST_H
+#include <ConnectionInfoTest.h>
 
-#include <QtTest/QtTest>
-
-class DbParametersTest : public QObject
+void
+ConnectionInfoTest::initTestCase()
 {
-    Q_OBJECT
+    QVERIFY(0);
+}
 
-    private slots:
-        void initTestCase();
-        void cleanupTestCase();
+void
+ConnectionInfoTest::cleanupTestCase()
+{
+    QVERIFY(0);
+}
 
-        void createConnectionTest();
-        void dbDriverTest();
-        void dbHostTest();
-        void dbNameTest();
-        void dbPasswordTest();
-        void dbPortTest();
-        void dbUserTest();
-        void fromXmlTest();
-        void setDbDriverTest();
-        void setDbHostTest();
-        void setDbNameTest();
-        void setDbPasswordTest();
-        void setDbPortTest();
-        void setDbUserTest();
-        void toXmlTest();
-};
+void
+ConnectionInfoTest::dbHostInfoTest()
+{
+    QVERIFY(0);
+}
 
-#endif // DBPARAMETERSTEST_H
+void
+ConnectionInfoTest::fromXmlTest()
+{
+    QVERIFY(0);
+}
+
+void
+ConnectionInfoTest::notEqualsTest()
+{
+    QVERIFY(0);
+}
+
+void
+ConnectionInfoTest::equalsTest()
+{
+    QVERIFY(0);
+}
+
+void
+ConnectionInfoTest::assignmentTest()
+{
+    QVERIFY(0);
+}
+
+void
+ConnectionInfoTest::proxyHostInfoTest()
+{
+    QVERIFY(0);
+}
+
+void
+ConnectionInfoTest::setDbHostInfoTest()
+{
+    QVERIFY(0);
+}
+
+void
+ConnectionInfoTest::setProxyHostInfoTest()
+{
+    QVERIFY(0);
+}
+
+void
+ConnectionInfoTest::setUseProxyTest()
+{
+    QVERIFY(0);
+}
+
+void
+ConnectionInfoTest::swapTest()
+{
+    QVERIFY(0);
+}
+
+void
+ConnectionInfoTest::toXmlTest()
+{
+    QVERIFY(0);
+}
+
+void
+ConnectionInfoTest::useProxyTest()
+{
+    QVERIFY(0);
+}
 

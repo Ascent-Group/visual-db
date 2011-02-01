@@ -27,108 +27,33 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <connect/DbParametersTest.h>
+#ifndef HOSTINFOTEST_H
+#define HOSTINFOTEST_H
 
-void
-DbParametersTest::initTestCase()
+#include <QtTest/QtTest>
+
+class HostInfoTest : public QObject
 {
+    Q_OBJECT
 
-}
+    private slots:
+        void initTestCase();
+        void cleanupTestCase();
 
-void
-DbParametersTest::cleanupTestCase()
-{
+        void assignmentTest();
+        void addressTest();
+        void fromXmlTest();
+        void notEqualsTest();
+        void equalsTest();
+        void passwordTest();
+        void portTest();
+        void setAddressTest();
+        void setPasswordTest();
+        void setPortTest();
+        void setUserTest();
+        void toXmlTest();
+        void userTest();
+};
 
-}
-
-
-void
-DbParametersTest::createConnectionTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::dbDriverTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::dbHostTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::dbNameTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::dbPasswordTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::dbPortTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::dbUserTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::fromXmlTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::setDbDriverTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::setDbHostTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::setDbNameTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::setDbPasswordTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::setDbPortTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::setDbUserTest()
-{
-    QVERIFY(0);
-}
-
-void
-DbParametersTest::toXmlTest()
-{
-    QVERIFY(0);
-}
+#endif // HOSTINFOTEST_H
 

@@ -1,6 +1,10 @@
 /* connect */
-//#include <connect/DbParametersTest.h>
-//#include <connect/ProxyParametersTest.h>
+#ifdef TEST_CONNECT
+#include <connect/HostInfoTest.h>
+#include <connect/DbHostInfoTest.h>
+#include <connect/ProxyHostInfoTest.h>
+#include <connect/ConnectionInfoTest.h>
+#endif
 
 /* control */
 #include <control/ContextTest.h>
@@ -132,11 +136,17 @@ int main(int argc, char *argv[])
 
 #if TEST_CONNECT
     /* connect */
-//    DbParametersTest dbParametersTest;
-//    QTest::qExec(&dbParametersTest, argc, argv);
-//
-//    ProxyParametersTest proxyParametersTest;
-//    QTest::qExec(&proxyParametersTest, argc, argv);
+    HostInfoTest hostInfoTest;
+    QTest::qExec(&hostInfoTest, argc, argv);
+
+    DbHostInfoTest dbHostInfoTest;
+    QTest::qExec(&dbHostInfoTest, argc, argv);
+
+    ProxyHostInfoTest proxyHostInfoTest;
+    QTest::qExec(&proxyHostInfoTest, argc, argv);
+
+    ConnectionInfoTest connectionInfoTest;
+    QTest::qExec(&connectionInfoTest, argc, argv);
 #endif // TEST_CONNECT
 
 #if TEST_CONTROL

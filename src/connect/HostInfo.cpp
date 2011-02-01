@@ -117,7 +117,7 @@ HostInfo::fromXml(QDomElement &iElement)
 /*
  * Get xml structure of host settings
  */
-QDomElement
+QDomElement &
 HostInfo::toXml(QDomElement &iElement) const
 {
     iElement.setAttribute("host", address());

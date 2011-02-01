@@ -27,58 +27,32 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CONNECT_HOSTINFO_H
-#define CONNECT_HOSTINFO_H
+#ifndef CONNECTIONINFOTEST_H
+#define CONNECTIONINFOTEST_H
 
-#include <QString>
-#include <QDomDocument>
-#include <QDomElement>
+#include <QtTest/QtTest>
 
-namespace Connect {
-
-/*!
- * \class HostInfo
- * \headerfile connect/HostInfo.h
- * \brief Incapsulation of host info parameters
- */
-class HostInfo
+class ConnectionInfoTest : public QObject
 {
-    public:
-        explicit HostInfo(const QString &iAddress = "", quint16 iPort = 0, const QString &iUser = "", const QString &iPassword = "");
-        ~HostInfo();
+    Q_OBJECT
 
-        HostInfo(const HostInfo &);
-        HostInfo &operator=(const HostInfo &iHostInfo);
+    private slots:
+        void initTestCase();
+        void cleanupTestCase();
 
-        QString address() const;
-        void setAddress(const QString &);
-        
-        quint16 port() const;
-        void setPort(quint16);
-        
-        QString user() const;
-        void setUser(const QString &);
-        
-        QString password() const;
-        void setPassword(const QString &);
-
-        QDomElement &toXml(QDomElement &) const;
-        void fromXml(QDomElement &);
-
-        bool operator==(const HostInfo &iHostInfo);
-        bool operator!=(const HostInfo &iHostInfo);
-
-    protected:
-        virtual void swap(const HostInfo &iHostInfo);
-
-    private:
-        QString mAddress;
-        quint16 mPort;
-        QString mUser;
-        QString mPassword;
+        void dbHostInfoTest();
+        void fromXmlTest();
+        void notEqualsTest();
+        void equalsTest();
+        void assignmentTest();
+        void proxyHostInfoTest();
+        void setDbHostInfoTest();
+        void setProxyHostInfoTest();
+        void setUseProxyTest();
+        void swapTest();
+        void toXmlTest();
+        void useProxyTest();
 };
 
-}
-
-#endif // CONNECT_HOSTINFO_H
+#endif // CONNECTIONINFOTEST_H
 

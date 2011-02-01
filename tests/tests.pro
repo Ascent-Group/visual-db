@@ -54,11 +54,23 @@ INCLUDEPATH = $$PWD \
 
 QMAKE_CXXFLAGS = -Wextra
 
-LIBS += -L$$OUT_PWD/../src/dbobjects/common \
-        -L$$OUT_PWD/../src/dbobjects/factory \
-        -L$$OUT_PWD/../src/dbobjects/psql \
-        -L$$OUT_PWD/../src/dbobjects/mysql
+win32 {
+    CONFIG(debug, debug|release):LIBS += -L$$OUT_PWD/../src/dbobjects/common/debug \
+                                         -L$$OUT_PWD/../src/dbobjects/factory/debug \
+                                         -L$$OUT_PWD/../src/dbobjects/psql/debug \
+                                         -L$$OUT_PWD/../src/dbobjects/mysql/debug
+    else:LIBS += -L$$OUT_PWD/../src/dbobjects/common/release \
+                 -L$$OUT_PWD/../src/dbobjects/factory/release \
+                 -L$$OUT_PWD/../src/dbobjects/psql/release \
+                 -L$$OUT_PWD/../src/dbobjects/mysql/release
 
+### Unix specific paths
+} else:unix {
+    LIBS += -L$$OUT_PWD/../src/dbobjects/common \
+            -L$$OUT_PWD/../src/dbobjects/factory \
+            -L$$OUT_PWD/../src/dbobjects/psql \
+            -L$$OUT_PWD/../src/dbobjects/mysql
+}
 
 DEFINES -= QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 

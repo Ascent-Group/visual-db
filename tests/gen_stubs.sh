@@ -36,7 +36,7 @@ gen_h() {
     echo "        void cleanupTestCase();" >> $OUT_FILE
     echo "" >> $OUT_FILE
 
-    FUNCS=`cat $IN_FILE | egrep "\(.*\).*;" | sed 's,//.*;.*,,g' | sed 's/(.*).*;/Test();/g' | sed -e 's/const//g' -e 's/virtual//g' -e 's/=.*0//g' -e 's/<.*>//g' | sed 's/[\*~]//g' | sed 's/static//g' | awk '{print $2;}' | grep -v "$CLASS_NAME(" | sort -u`
+    FUNCS=`cat $IN_FILE | egrep "\(.*\).*;" | sed 's,//.*;.*,,g' | sed 's/(.*).*;/Test();/g' | sed -e 's/const//g' -e 's/virtual//g' -e 's/=.*0//g' -e 's/<.*>//g' | sed 's/[\*~]//g' | sed 's/static//g' | sed 's/&//g' | awk '{print $2;}' | grep -v "$CLASS_NAME(" | sort -u`
 
     for i in $FUNCS; do
     if [ "x`echo $i | tr -d ' ' | tr -d '\n'`" != "x" ]; then
@@ -75,7 +75,8 @@ gen_cpp() {
     echo "" >> $OUT_FILE
 
 
-    FUNCS=`cat $IN_FILE | egrep "\(.*\).*;" | sed 's,//.*;.*,,g' | sed 's/(.*).*;/Test();/g' | sed -e 's/const//g' -e 's/virtual//g' -e 's/=.*0//g' -e 's/<.*>//g' | sed 's/[\*~]//g' | sed 's/static//g' | awk '{print $2;}'`
+#    FUNCS=`cat $IN_FILE | egrep "\(.*\).*;" | sed 's,//.*;.*,,g' | sed 's/(.*).*;/Test();/g' | sed -e 's/const//g' -e 's/virtual//g' -e 's/=.*0//g' -e 's/<.*>//g' | sed 's/[\*~]//g' | sed 's/static//g' | awk '{print $2;}'`
+    FUNCS=`cat $IN_FILE | egrep "\(.*\).*;" | sed 's,//.*;.*,,g' | sed -e 's/const//g' -e 's/virtual//g' -e 's/=.*0//g' -e 's/<.*>//g' | sed 's/[\*~]//g' | sed 's/static//g' | sed 's/&//g' | awk '{print $2;}'`
 
     for i in $FUNCS; do
     if [ "x`echo $i | tr -d ' ' | tr -d '\n'`" != "x" ]; then

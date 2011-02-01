@@ -150,10 +150,8 @@ ContextTest::connectionInfoTest2()
 void
 ContextTest::dbHandleTest1()
 {
-    using namespace Control;
-
     QString dbName("db");
-    QString driverName("driver");
+    QString driverName("QPSQL");
     QString hostName("host");
     int port = 123;
     QString userName("user");
@@ -165,6 +163,7 @@ ContextTest::dbHandleTest1()
     dbHandle.setPort(port);
     dbHandle.setUserName(userName);
 
+    using namespace Control;
     // create context
     Context ctx(Connect::ConnectionInfo(), dbHandle);
     // verify the getter returns the same database connection
@@ -185,7 +184,8 @@ ContextTest::dbHandleTest2()
     using namespace Control;
 
     QString dbName("db");
-    QString driverName("driver");
+    // \note The driver name SHOULD be valid, otherwise all further setters will not work
+    QString driverName("QSQLITE");
     QString hostName("host");
     int port = 123;
     QString userName("user");

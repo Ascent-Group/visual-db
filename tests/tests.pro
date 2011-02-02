@@ -8,6 +8,12 @@ QT += testlib sql network xml
 TARGET = tests
 DESTDIR = .
 
+win32 {
+    TESTS_BINARY = $$DESTDIR/debug/$$TARGET
+} else:unix {
+    TESTS_BINARY = $$DESTDIR/$$TARGET
+}
+
 ###############################
 ### Extra targets for tests ###
 ###############################
@@ -15,12 +21,12 @@ QMAKE_EXTRA_TARGETS += build_tests run_tests report
 ### Target for building tests
 #build_tests.CONFIG = <nothing_here_yet>
 
-build_tests.commands = /bin/rm -f $$DESTDIR/$$TARGET && $(MAKE) -j3
+build_tests.commands = /bin/rm -f $$TESTS_BINARY && $(MAKE) -j3
 
 ### Target for running tests
 run_tests.depends = build_tests
 run_tests.commands = @echo "Running tests" \
-                     && env VDB_DB_DRV=$$(VDB_DB_DRV) ./tests | tee test.report
+                     && env VDB_DB_DRV=$$(VDB_DB_DRV) ./$$TESTS_BINARY | tee test.report
 
 report.depends = run_tests
 report.commands = @cat test.report | grep Totals | awk \

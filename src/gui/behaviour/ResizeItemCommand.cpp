@@ -34,7 +34,7 @@
 /*!
  * Ctor
  */
-ResizeItemCommand::ResizeItemCommand(GraphicsItem * iItem,
+ResizeItemCommand::ResizeItemCommand(Gui::GraphicsItems::GraphicsItem * iItem,
         const QRectF iNewRect, const QRectF iOldRect, QUndoCommand *iParent)
     : QUndoCommand(iParent), mItem(iItem), mNewRect(iNewRect), mOldRect(iOldRect)
 {
@@ -73,7 +73,7 @@ ResizeItemCommand::redo()
  * \param[in] iRect - New rectangle
  */
 void
-setRect(GraphicsItem *iItem, const QRectF &iRect)
+setRect(Gui::GraphicsItems::GraphicsItem *iItem, const QRectF &iRect)
 {
     iItem->setX(iRect.x());
     iItem->setY(iRect.y());

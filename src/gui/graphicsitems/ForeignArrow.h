@@ -32,6 +32,10 @@
 
 #include <gui/graphicsitems/ArrowItem.h>
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 /*!
  * \class ForeignArrow
  * \headerfile gui/graphicsitems/ForeignArrow.h
@@ -46,5 +50,10 @@ class ForeignArrow : public ArrowItem
     protected:
         virtual QPolygonF head();
 };
+
+
+}
+
+}
 
 #endif // FOREIGNARROW_H

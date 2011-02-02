@@ -39,9 +39,13 @@ class QDomElement;
 class QGraphicsSceneContextMenuEvent;
 class QMenu;
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 /*!
  * \class ItemGroup
- * \headerfile gui/ItemGroup.h
+ * \headerfile gui/graphicsitems/ItemGroup.h
  * \brief Graphics item, implements group of tables.
  */
 class ItemGroup : public QGraphicsItemGroup
@@ -66,6 +70,11 @@ class ItemGroup : public QGraphicsItemGroup
 };
 
 ItemGroup * toGroup(QGraphicsItem *);
+
+
+}
+
+}
 
 #endif // ITEMGROUP_H
 

@@ -44,14 +44,14 @@ class GraphicsItem;
 class SetColorItemCommand : public QUndoCommand
 {
     public:
-        SetColorItemCommand(GraphicsItem *, QColor, QColor, QUndoCommand *parent = 0);
+        SetColorItemCommand(Gui::GraphicsItems::GraphicsItem *, QColor, QColor, QUndoCommand *parent = 0);
         ~SetColorItemCommand();
 
         void undo();
         void redo();
 
     private:
-        GraphicsItem *mItem;
+        Gui::GraphicsItems::GraphicsItem *mItem;
         QColor mNewColor;
         QColor mOldColor;
 };

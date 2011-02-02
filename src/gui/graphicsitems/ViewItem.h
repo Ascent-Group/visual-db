@@ -30,14 +30,12 @@
 #ifndef VIEWEITEM_H
 #define VIEWEITEM_H
 
-#include <gui/DbObjectItem.h>
+#include <gui/graphicsitems/DbObjectItem.h>
 
 class QAction;
 class QDomDocument;
 class QDomElement;
 class QMenu;
-
-class ArrowItem;
 
 namespace DbObjects
 {
@@ -48,6 +46,12 @@ class DbView;
 typedef DbObjectPtr<DbView> DbViewPtr;
 }
 }
+
+namespace Gui {
+
+namespace GraphicsItems {
+
+class ArrowItem;
 
 /*!
  * \class ViewItem
@@ -78,6 +82,10 @@ class ViewItem : public DbObjectItem
 };
 
 ViewItem *toView(QGraphicsItem *);
+
+}
+
+}
 
 #endif // VIEWEITEM_H
 

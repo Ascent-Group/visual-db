@@ -41,6 +41,10 @@
 #include <gui/graphicsitems/GraphicsItem.h>
 #include <gui/GraphicsScene.h>
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 int GraphicsItem::mSeek = 80;
 
 /*!
@@ -642,3 +646,6 @@ GraphicsItem::paintFieldText(QPainter *iPainter, int iIdx)
             fieldText(iIdx));
 }
 
+}
+
+}

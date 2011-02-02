@@ -31,7 +31,7 @@
 #define TABLEITEM_H
 
 #include <common/DbObjectPtr.h>
-#include <gui/DbObjectItem.h>
+#include <gui/graphicsitems/DbObjectItem.h>
 
 class GraphicsScene;
 class QAction;
@@ -41,14 +41,21 @@ class QMenu;
 
 namespace DbObjects
 {
+
 namespace Common
 {
 class DbIndex;
 
 typedef DbObjectPtr<DbIndex> DbIndexPtr;
 typedef DbObjectPtr<DbTable> DbTablePtr;
+
 }
+
 }
+
+namespace Gui {
+
+namespace GraphicsItems {
 
 /*!
  * \class TableItem
@@ -113,6 +120,10 @@ class TableItem : public DbObjectItem
 };
 
 TableItem *toTable(QGraphicsItem *);
+
+}
+
+}
 
 #endif // TABLEITEM_H
 

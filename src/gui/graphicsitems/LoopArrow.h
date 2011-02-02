@@ -32,6 +32,10 @@
 
 #include <gui/graphicsitems/ForeignArrow.h>
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 /*!
  * \class LoopArrow
  * \headerfile gui/graphicsitems/LoopArrow.h
@@ -50,5 +54,10 @@ class LoopArrow : public ForeignArrow
     private:
         QPointF centerPoint() const;
 };
+
+
+}
+
+}
 
 #endif // LOOPARROW_H

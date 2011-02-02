@@ -39,7 +39,7 @@
 
 #include <gui/GraphicsScene.h>
 #include <gui/GraphicsView.h>
-#include <gui/DbObjectItem.h>
+#include <gui/graphicsitems/DbObjectItem.h>
 #include <gui/TreeWidget.h>
 #include <gui/behaviour/AddItemCommand.h>
 
@@ -179,6 +179,8 @@ GraphicsView::dropEvent(QDropEvent *iEvent)
                         mapToScene(iEvent->pos() + QPoint(i * SEEK_STEP, i * SEEK_STEP)).toPoint());
 
                 foreach (QGraphicsItem *item, itemList) {
+                    using namespace Gui::GraphicsItems;
+
                     if (toDbObject(item) && !graphicsScene->findItem(toDbObject(item)->schemaName(), toDbObject(item)->name())) {
                         // HACK: we have our own inner x:y coordinates, so we should compensate Qt shifting
                         item->moveBy(-item->x(), -item->y());

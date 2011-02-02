@@ -36,6 +36,10 @@
 #include <consts.h>
 #include <gui/graphicsitems/ViewItem.h>
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 /*!
  * Constructor
  */
@@ -184,4 +188,8 @@ ViewItem *
 toView(QGraphicsItem *iItem)
 {
     return qgraphicsitem_cast<ViewItem *>(iItem);
+}
+
+}
+
 }

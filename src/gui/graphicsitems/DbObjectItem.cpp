@@ -37,8 +37,12 @@
 #include <QSettings>
 #include <consts.h>
 #include <gui/graphicsitems/ArrowItem.h>
-#include <gui/DbObjectItem.h>
+#include <gui/graphicsitems/DbObjectItem.h>
 #include <gui/GraphicsScene.h>
+
+namespace Gui {
+
+namespace GraphicsItems {
 
 /*!
  * Constructor
@@ -380,4 +384,8 @@ toDbObject(QGraphicsItem *iItem)
 {
 //    return qgraphicsitem_cast<DbObjectItem *>(iItem);
     return dynamic_cast<DbObjectItem *>(iItem);
+}
+
+}
+
 }

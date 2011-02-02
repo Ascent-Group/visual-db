@@ -35,7 +35,7 @@
 /*!
  * Ctor
  */
-SetColorItemCommand::SetColorItemCommand(GraphicsItem *iItem,
+SetColorItemCommand::SetColorItemCommand(Gui::GraphicsItems::GraphicsItem *iItem,
         QColor iNewColor, QColor iOldColor, QUndoCommand *iParent)
     : QUndoCommand(iParent), mItem(iItem)
     , mNewColor(iNewColor), mOldColor(iOldColor)

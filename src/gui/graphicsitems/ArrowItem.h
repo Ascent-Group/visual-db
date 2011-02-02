@@ -39,6 +39,10 @@ class QGraphicsSceneMouseEvent;
 class QPainterPath;
 class QRectF;
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 /*!
  * \class ArrowItem
  * \headerfile gui/graphicsitems/ArrowItem.h
@@ -93,6 +97,10 @@ class ArrowItem : public QGraphicsPathItem
 };
 
 QPolygonF makeHead(const QLineF &, const QPointF &);
+
+}
+
+}
 
 #endif // ARROW_H
 

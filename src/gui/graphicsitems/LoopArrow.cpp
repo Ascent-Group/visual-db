@@ -30,6 +30,10 @@
 #include <gui/graphicsitems/LoopArrow.h>
 #include <QPainter>
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 /*!
  * Constructor
  */
@@ -81,4 +85,8 @@ QPointF
 LoopArrow::centerPoint() const
 {
     return startItem()->pos() + QPointF(startItem()->x() + startItem()->width(), startItem()->y());
+}
+
+}
+
 }

@@ -33,16 +33,20 @@
 #include <gui/graphicsitems/GraphicsItem.h>
 #include <QDomElement>
 
-class ArrowItem;
 class QColor;
 class QGraphicsSceneContextMenuEvent;
 class QGraphicsTextItem;
 class QImage;
 
+namespace Gui {
+
+namespace GraphicsItems {
+
+class ArrowItem;
 
 /*!
  * \class DbObjectItem
- * \headerfile gui/DbObjectItem.h
+ * \headerfile gui/graphicsitems/DbObjectItem.h
  * \brief Parent class for graphics items that implements real database objects on the scene (like table or view)
  */
 class DbObjectItem : public GraphicsItem 
@@ -97,6 +101,10 @@ class DbObjectItem : public GraphicsItem
 };
 
 DbObjectItem * toDbObject(QGraphicsItem *);
+
+}
+
+}
 
 #endif // DBOBJECTSITEM_H
 

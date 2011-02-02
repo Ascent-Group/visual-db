@@ -30,6 +30,10 @@
 #include <gui/graphicsitems/ForeignArrow.h>
 #include <QPainter>
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 /*!
  * Constructor
  */
@@ -57,4 +61,8 @@ ForeignArrow::head()
 {
     QLineF line(endPoint(), startPoint());
     return makeHead(line, endPoint());
+}
+
+}
+
 }

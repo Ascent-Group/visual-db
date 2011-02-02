@@ -53,8 +53,8 @@ DbHostInfoTest::dbDriverTest()
 {
 	using namespace Connect;
 
-    DbHostInfo dbHostInfo("testhost", 1234, "testuser", "testpassword", "testdbname", "testdriver");
-    QVERIFY("testdriver" == dbHostInfo.dbDriver());
+    DbHostInfo dbHostInfo("dbhost", 1234, "dbuser", "dbpassword", "dbname", "dbdriver");
+    QVERIFY("dbdriver" == dbHostInfo.dbDriver());
 }
 
 void
@@ -62,8 +62,8 @@ DbHostInfoTest::dbNameTest()
 {
 	using namespace Connect;
 
-    DbHostInfo dbHostInfo("testhost", 1234, "testuser", "testpassword", "testdbname", "testdriver");
-    QVERIFY("testdbname" == dbHostInfo.dbName());
+    DbHostInfo dbHostInfo("dbhost", 1234, "dbuser", "dbpassword", "dbname", "dbdriver");
+    QVERIFY("dbname" == dbHostInfo.dbName());
 }
 
 void
@@ -73,18 +73,18 @@ DbHostInfoTest::fromXmlTest()
 
     QDomDocument xmlDocument;
     QDomElement xmlElement = xmlDocument.createElement("DbHostInfo");
-    xmlElement.setAttribute("host", "testhost");
+    xmlElement.setAttribute("host", "dbhost");
     xmlElement.setAttribute("port", "1234");
-    xmlElement.setAttribute("testuser", "testuser");
-    xmlElement.setAttribute("name", "testdbname");
-    xmlElement.setAttribute("driver", "testdriver");
+    xmlElement.setAttribute("user", "dbuser");
+    xmlElement.setAttribute("name", "dbname");
+    xmlElement.setAttribute("driver", "dbdriver");
 
     DbHostInfo dbHostInfo;
     dbHostInfo.fromXml(xmlElement);
     
-    QVERIFY(dbHostInfo.address() == xmlElement.attribute("host") && dbHostInfo.port() == xmlElement.attribute("port").toInt()
-            && dbHostInfo.user() == xmlElement.attribute("user") && dbHostInfo.dbName() == xmlElement.attribute("name")
-            && dbHostInfo.dbDriver() == xmlElement.attribute("driver"));
+    QVERIFY("dbhost" == dbHostInfo.address() && 1234 == dbHostInfo.port()
+            && "dbuser" == dbHostInfo.user() && "dbname" == dbHostInfo.dbName()
+            && "dbdriver" == dbHostInfo.dbDriver());
 }
 
 void
@@ -92,13 +92,13 @@ DbHostInfoTest::notEqualsTest()
 {
 	using namespace Connect;
 
-    DbHostInfo dbHostInfo1("testhost", 1234, "testuser", "testpassword", "testdbname", "testdriver");
+    DbHostInfo dbHostInfo1("dbhost", 1234, "dbuser", "dbpassword", "dbname", "dbdriver");
     DbHostInfo dbHostInfo2;
 
     QVERIFY(dbHostInfo1 != dbHostInfo2);
 
-    DbHostInfo dbHostInfo3("testhost", 1234, "testuser", "testpassword", "testdbname", "testdriver");
-    DbHostInfo dbHostInfo4("testhost", 1234, "testuser", "testpassword", "testdbname", "testdriver");
+    DbHostInfo dbHostInfo3("dbhost", 1234, "dbuser", "dbpassword", "dbname", "dbdriver");
+    DbHostInfo dbHostInfo4("dbhost", 1234, "dbuser", "dbpassword", "dbname", "dbdriver");
 
     QVERIFY(!(dbHostInfo3 != dbHostInfo4));
 }
@@ -108,13 +108,13 @@ DbHostInfoTest::equalsTest()
 {
 	using namespace Connect;
 
-    DbHostInfo dbHostInfo1("testhost", 1234, "testuser", "testpassword", "testdbname", "testdriver");
+    DbHostInfo dbHostInfo1("dbhost", 1234, "dbuser", "dbpassword", "dbname", "dbdriver");
     DbHostInfo dbHostInfo2;
 
     QVERIFY(!(dbHostInfo1 == dbHostInfo2));
 
-    DbHostInfo dbHostInfo3("testhost", 1234, "testuser", "testpassword", "testdbname", "testdriver");
-    DbHostInfo dbHostInfo4("testhost", 1234, "testuser", "testpassword", "testdbname", "testdriver");
+    DbHostInfo dbHostInfo3("dbhost", 1234, "dbuser", "dbpassword", "dbname", "dbdriver");
+    DbHostInfo dbHostInfo4("dbhost", 1234, "dbuser", "dbpassword", "dbname", "dbdriver");
 
     QVERIFY(dbHostInfo3 == dbHostInfo4);
 }
@@ -124,7 +124,7 @@ DbHostInfoTest::assignmentTest()
 {
 	using namespace Connect;
 
-    DbHostInfo dbHostInfo1("testhost", 1234, "testuser", "testpassword", "testdbname", "testdriver");
+    DbHostInfo dbHostInfo1("dbhost", 1234, "dbuser", "dbpassword", "dbname", "dbdriver");
     DbHostInfo dbHostInfo2;
 
     dbHostInfo2 = dbHostInfo1;
@@ -140,8 +140,8 @@ DbHostInfoTest::setDbDriverTest()
 	using namespace Connect;
 
     DbHostInfo dbHostInfo;
-    dbHostInfo.setDbDriver("testdriver");
-    QVERIFY("testdriver" == dbHostInfo.dbDriver());
+    dbHostInfo.setDbDriver("dbdriver");
+    QVERIFY("dbdriver" == dbHostInfo.dbDriver());
 }
 
 void
@@ -150,8 +150,8 @@ DbHostInfoTest::setDbNameTest()
 	using namespace Connect;
 
     DbHostInfo dbHostInfo;
-    dbHostInfo.setDbName("testdbname");
-    QVERIFY("testdbname" == dbHostInfo.dbName());
+    dbHostInfo.setDbName("dbname");
+    QVERIFY("dbname" == dbHostInfo.dbName());
 }
 
 void
@@ -162,11 +162,11 @@ DbHostInfoTest::toXmlTest()
     QDomDocument xmlDocument;
     QDomElement xmlElement = xmlDocument.createElement("DbHostInfo");
     
-    DbHostInfo dbHostInfo("testhost", 1234, "testuser", "", "testdbname", "testdriver");
+    DbHostInfo dbHostInfo("dbhost", 1234, "dbuser", "", "dbname", "dbdriver");
     dbHostInfo.toXml(xmlElement);
     
-    QVERIFY("testhost" == xmlElement.attribute("host") && "1234" == xmlElement.attribute("port")
-            && "testuser" == xmlElement.attribute("user") && "testdbname" == xmlElement.attribute("name")
-            && "testdriver" == xmlElement.attribute("driver"));
+    QVERIFY("dbhost" == xmlElement.attribute("host") && "1234" == xmlElement.attribute("port")
+            && "dbuser" == xmlElement.attribute("user") && "dbname" == xmlElement.attribute("name")
+            && "dbdriver" == xmlElement.attribute("driver"));
 }
 

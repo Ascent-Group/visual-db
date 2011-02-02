@@ -58,8 +58,8 @@ class ProxyHostInfo : public HostInfo
         QDomElement toXml(QDomElement &) const;
         void fromXml(QDomElement &);
 
-        bool operator==(const ProxyHostInfo &iProxyHostInfo);
-        bool operator!=(const ProxyHostInfo &iProxyHostInfo);
+        bool operator==(const ProxyHostInfo &iProxyHostInfo) const;
+        bool operator!=(const ProxyHostInfo &iProxyHostInfo) const;
 
     protected:
         virtual void swap(const ProxyHostInfo &iProxyHostInfo);

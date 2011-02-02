@@ -49,7 +49,6 @@ class ConnectionInfoTest : public QObject
         void setDbHostInfoTest();
         void setProxyHostInfoTest();
         void setUseProxyTest();
-        void swapTest();
         void toXmlTest();
         void useProxyTest();
 };

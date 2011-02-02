@@ -65,8 +65,8 @@ class ConnectionInfo
         void fromXml(QDomElement &);
         void toXml(QDomDocument &, QDomElement &) const;
 
-        bool operator==(const ConnectionInfo &iConnectionInfo);
-        bool operator!=(const ConnectionInfo &iConnectionInfo);
+        bool operator==(const ConnectionInfo &iConnectionInfo) const;
+        bool operator!=(const ConnectionInfo &iConnectionInfo) const;
 
     protected:
         void swap(const ConnectionInfo &iConnectionInfo);

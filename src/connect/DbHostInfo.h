@@ -61,8 +61,8 @@ class DbHostInfo : public HostInfo
         QDomElement toXml(QDomElement &) const;
         void fromXml(QDomElement &);
 
-        bool operator==(const DbHostInfo &iDbHostInfo);
-        bool operator!=(const DbHostInfo &iDbHostInfo);
+        bool operator==(const DbHostInfo &iDbHostInfo) const;
+        bool operator!=(const DbHostInfo &iDbHostInfo) const;
 
     protected:
         virtual void swap(const DbHostInfo &iDbHostInfo);

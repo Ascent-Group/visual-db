@@ -32,6 +32,10 @@
 
 #include <gui/graphicsitems/ArrowItem.h>
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 /*!
  * \class InheritanceArrow
  * \headerfile gui/graphicsitems/InheritanceArrow.h
@@ -46,5 +50,10 @@ class InheritanceArrow : public ArrowItem
     protected:
         virtual QPolygonF head();
 };
+
+
+}
+
+}
 
 #endif // INHERITANCEARROW_H

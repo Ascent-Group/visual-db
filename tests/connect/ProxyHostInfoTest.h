@@ -45,7 +45,6 @@ class ProxyHostInfoTest : public QObject
         void equalsTest();
         void assignmentTest();
         void setTypeTest();
-        void swapTest();
         void toXmlTest();
         void typeTest();
 };

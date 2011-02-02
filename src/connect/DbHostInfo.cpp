@@ -98,13 +98,13 @@ DbHostInfo::toXml(QDomElement &iElement) const
     return iElement;
 }
 
-bool DbHostInfo::operator==(const DbHostInfo &iDbHostInfo)
+bool DbHostInfo::operator==(const DbHostInfo &iDbHostInfo) const
 {
     return HostInfo::operator==(iDbHostInfo) && 
         mDbName == iDbHostInfo.mDbName && mDbDriver == iDbHostInfo.mDbDriver;
 }
 
-bool DbHostInfo::operator!=(const DbHostInfo &iDbHostInfo)
+bool DbHostInfo::operator!=(const DbHostInfo &iDbHostInfo) const
 {
     return !(operator==(iDbHostInfo));
 }

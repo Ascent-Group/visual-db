@@ -28,64 +28,115 @@
  */
 
 #include <ProxyHostInfoTest.h>
+#include <connect/ProxyHostInfo.h>
 
 void
 ProxyHostInfoTest::initTestCase()
 {
-    QVERIFY(0);
 }
 
 void
 ProxyHostInfoTest::cleanupTestCase()
 {
-    QVERIFY(0);
 }
 
 void
 ProxyHostInfoTest::fromXmlTest()
 {
-    QVERIFY(0);
+ 	using namespace Connect;
+
+    QDomDocument xmlDocument;
+    QDomElement xmlElement = xmlDocument.createElement("ProxyHostInfo");
+    xmlElement.setAttribute("host", "proxyhost");
+    xmlElement.setAttribute("port", "1234");
+    xmlElement.setAttribute("user", "proxyuser");
+    xmlElement.setAttribute("type", "1");
+
+    ProxyHostInfo proxyHostInfo;
+    proxyHostInfo.fromXml(xmlElement);
+    
+    QVERIFY(proxyHostInfo.address() == "proxyhost" && proxyHostInfo.port() == 1234
+            && proxyHostInfo.user() == "proxyuser" && proxyHostInfo.type() == (QNetworkProxy::ProxyType)1);
 }
 
 void
 ProxyHostInfoTest::notEqualsTest()
 {
-    QVERIFY(0);
+	using namespace Connect;
+
+    ProxyHostInfo proxyHostInfo1("proxyhost", 1234, "proxyuser", "proxypassword", (QNetworkProxy::ProxyType)1);
+    ProxyHostInfo proxyHostInfo2;
+
+    QVERIFY(proxyHostInfo1 != proxyHostInfo2);
+
+    ProxyHostInfo proxyHostInfo3("proxyhost", 1234, "proxyuser", "proxypassword", (QNetworkProxy::ProxyType)1);
+    ProxyHostInfo proxyHostInfo4("proxyhost", 1234, "proxyuser", "proxypassword", (QNetworkProxy::ProxyType)1);
+
+    QVERIFY(!(proxyHostInfo3 != proxyHostInfo4));
 }
 
 void
 ProxyHostInfoTest::equalsTest()
 {
-    QVERIFY(0);
+	using namespace Connect;
+
+    ProxyHostInfo proxyHostInfo1("proxyhost", 1234, "proxyuser", "proxypassword", (QNetworkProxy::ProxyType)1);
+    ProxyHostInfo proxyHostInfo2;
+
+    QVERIFY(!(proxyHostInfo1 == proxyHostInfo2));
+
+    ProxyHostInfo proxyHostInfo3("proxyhost", 1234, "proxyuser", "proxypassword", (QNetworkProxy::ProxyType)1);
+    ProxyHostInfo proxyHostInfo4("proxyhost", 1234, "proxyuser", "proxypassword", (QNetworkProxy::ProxyType)1);
+
+    QVERIFY(proxyHostInfo3 == proxyHostInfo4);
 }
 
 void
 ProxyHostInfoTest::assignmentTest()
 {
-    QVERIFY(0);
+	using namespace Connect;
+
+    ProxyHostInfo proxyHostInfo1("proxyhost", 1234, "proxyuser", "proxypassword", (QNetworkProxy::ProxyType)1);
+    ProxyHostInfo proxyHostInfo2;
+
+    proxyHostInfo2 = proxyHostInfo1;
+
+    QVERIFY(proxyHostInfo2.address() == proxyHostInfo1.address() && proxyHostInfo2.port() == proxyHostInfo1.port() &&
+            proxyHostInfo2.user() == proxyHostInfo1.user() && proxyHostInfo2.password() == proxyHostInfo2.password() &&
+            proxyHostInfo2.type() == proxyHostInfo1.type());
 }
 
 void
 ProxyHostInfoTest::setTypeTest()
 {
-    QVERIFY(0);
-}
+	using namespace Connect;
 
-void
-ProxyHostInfoTest::swapTest()
-{
-    QVERIFY(0);
+    ProxyHostInfo proxyHostInfo;
+    proxyHostInfo.setType((QNetworkProxy::ProxyType)1);
+    QVERIFY((QNetworkProxy::ProxyType)1 == proxyHostInfo.type());
 }
 
 void
 ProxyHostInfoTest::toXmlTest()
 {
-    QVERIFY(0);
+	using namespace Connect;
+
+    QDomDocument xmlDocument;
+    QDomElement xmlElement = xmlDocument.createElement("ProxyHostInfo");
+    
+    ProxyHostInfo proxyHostInfo("proxyhost", 1234, "proxyuser", "", (QNetworkProxy::ProxyType)1);
+    proxyHostInfo.toXml(xmlElement);
+    
+    QVERIFY("proxyhost" == xmlElement.attribute("host") && "1234" == xmlElement.attribute("port")
+            && "proxyuser" == xmlElement.attribute("user") && 1 == xmlElement.attribute("type").toInt());
 }
 
 void
 ProxyHostInfoTest::typeTest()
 {
-    QVERIFY(0);
+	using namespace Connect;
+
+    ProxyHostInfo proxyHostInfo("proxyhost", 1234, "proxyuser", "proxypassword", (QNetworkProxy::ProxyType)1);
+    QVERIFY((QNetworkProxy::ProxyType)1 == proxyHostInfo.type());
 }
 

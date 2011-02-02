@@ -128,14 +128,14 @@ HostInfo::toXml(QDomElement &iElement) const
 }
 
 bool 
-HostInfo::operator==(const HostInfo &iHostInfo)
+HostInfo::operator==(const HostInfo &iHostInfo) const
 {
     return mAddress == iHostInfo.mAddress && mPort == iHostInfo.mPort && 
         mUser == iHostInfo.mUser && mPassword == iHostInfo.mPassword;
 }
 
 bool 
-HostInfo::operator!=(const HostInfo &iHostInfo)
+HostInfo::operator!=(const HostInfo &iHostInfo) const
 {
     return !(operator==(iHostInfo));
 }

@@ -43,7 +43,7 @@ class GraphicsItem;
 class ResizeItemCommand : public QUndoCommand
 {
     public:
-        ResizeItemCommand(GraphicsItem *, const QRectF, const QRectF, QUndoCommand *parent = 0);
+        ResizeItemCommand(Gui::GraphicsItems::GraphicsItem *, const QRectF, const QRectF, QUndoCommand *parent = 0);
         ~ResizeItemCommand();
 
         enum { Id = 1234 };
@@ -53,12 +53,12 @@ class ResizeItemCommand : public QUndoCommand
         int id() const { return Id; }
 
     private:
-        GraphicsItem *mItem;
+        Gui::GraphicsItems::GraphicsItem *mItem;
         QRectF mNewRect;
         QRectF mOldRect;
 };
 
-void setRect(GraphicsItem *, const QRectF &);
+void setRect(Gui::GraphicsItems::GraphicsItem *, const QRectF &);
 
 #endif // RESIZEITEMCOMMAND_H
 

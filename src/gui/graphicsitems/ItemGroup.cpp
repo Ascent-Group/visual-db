@@ -33,7 +33,11 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <gui/graphicsitems/TableItem.h>
-#include <gui/ItemGroup.h>
+#include <gui/graphicsitems/ItemGroup.h>
+
+namespace Gui {
+
+namespace GraphicsItems {
 
 /*!
  * Constructor
@@ -133,7 +137,8 @@ ItemGroup::fromXml(const QDomElement &iElement, GraphicsScene *iScene, QMenu *iM
         child = child.nextSibling();
     }
 
-    ItemGroup *group = iScene->createItemGroup(tableList);
+    // FIXME - C-style casting
+    ItemGroup *group = (ItemGroup *)iScene->createItemGroup(tableList);
     group->setContextMenu(iMenu);
     tableList << group;
     return tableList;
@@ -150,4 +155,8 @@ ItemGroup *
 toGroup(QGraphicsItem *iItem)
 {
     return qgraphicsitem_cast<ItemGroup *>(iItem);
+}
+
+}
+
 }

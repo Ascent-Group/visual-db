@@ -43,9 +43,18 @@ class QMenu;
 class QPrinter;
 class QTreeWidgetItem;
 class QUndoCommand;
+
+namespace Gui {
+
+namespace GraphicsItems {
+
 class TableItem;
 class ItemGroup;
 class GraphicsItem;
+
+}
+
+}
 
 /*!
  * \class SceneWidget
@@ -63,7 +72,7 @@ class SceneWidget : public QWidget
 
         QDomElement toXml(QDomDocument &, bool, bool, bool, bool);
         QList<QGraphicsItem *> items () const;
-        ItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
+        Gui::GraphicsItems::ItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
         void fromXml(QDomElement &);
         void print(QPrinter *);
         void refreshLegend();
@@ -109,8 +118,8 @@ class SceneWidget : public QWidget
 
     private slots:
         void sendItemMoved(QList <QGraphicsItem *>, int, int);
-        void sendItemColorChanged(GraphicsItem *, const QColor &, const QColor &);
-        void sendItemResized(GraphicsItem *, const QRectF &, const QRectF &);
+        void sendItemColorChanged(Gui::GraphicsItems::GraphicsItem *, const QColor &, const QColor &);
+        void sendItemResized(Gui::GraphicsItems::GraphicsItem *, const QRectF &, const QRectF &);
 
     private:
         GraphicsScene *mScene;

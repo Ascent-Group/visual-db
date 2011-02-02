@@ -31,7 +31,7 @@
 #include <QUndoCommand>
 #include <gui/GraphicsScene.h>
 #include <gui/graphicsitems/TableItem.h>
-#include <gui/ItemGroup.h>
+#include <gui/graphicsitems/ItemGroup.h>
 #include <gui/behaviour/DeleteItemCommand.h>
 
 /*!

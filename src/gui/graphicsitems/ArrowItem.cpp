@@ -41,6 +41,9 @@
 #include <QSettings>
 #include <math.h>
 
+namespace Gui {
+
+namespace GraphicsItems {
 
 QPointF findIntersection(const TableItem *, const QLineF &);
 
@@ -307,3 +310,6 @@ ArrowItem::type() const
     return Type;
 }
 
+}
+
+}

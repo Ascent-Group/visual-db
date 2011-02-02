@@ -81,17 +81,20 @@ ProxyHostInfo::toXml(QDomElement &iElement) const
     return iElement;
 }
 
-bool ProxyHostInfo::operator==(const ProxyHostInfo &iProxyHostInfo)
+bool 
+ProxyHostInfo::operator==(const ProxyHostInfo &iProxyHostInfo) const
 {
     return HostInfo::operator==(iProxyHostInfo) && mType == iProxyHostInfo.mType; 
 }
 
-bool ProxyHostInfo::operator!=(const ProxyHostInfo &iProxyHostInfo)
+bool 
+ProxyHostInfo::operator!=(const ProxyHostInfo &iProxyHostInfo) const
 {
     return !(operator==(iProxyHostInfo));
 }
 
-void ProxyHostInfo::swap(const ProxyHostInfo &iProxyHostInfo)
+void 
+ProxyHostInfo::swap(const ProxyHostInfo &iProxyHostInfo)
 {
     HostInfo::swap(iProxyHostInfo);
     mType = iProxyHostInfo.mType;

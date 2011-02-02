@@ -34,13 +34,17 @@
 #include <QFont>
 #include <QGraphicsPolygonItem>
 
-class ArrowItem;
 class QColor;
 class QGraphicsSceneContextMenuEvent;
 class QGraphicsTextItem;
 class QGraphicsTextItem;
 class QImage;
 
+namespace Gui {
+
+namespace GraphicsItems {
+
+class ArrowItem;
 
 /*!
  * \class GraphicsItem
@@ -172,6 +176,10 @@ class GraphicsItem : public QGraphicsPolygonItem
 
         QMenu *mContextMenu;
 };
+
+}
+
+}
 
 #endif // GRAPHICSITEM_H
 

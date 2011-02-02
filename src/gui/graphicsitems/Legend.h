@@ -32,6 +32,10 @@
 
 #include "GraphicsItem.h"
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 /*!
  * \class Legend
  * \headerfile gui/graphicsitems/Legend.h
@@ -61,6 +65,10 @@ class Legend : public GraphicsItem
 };
 
 Legend * toLegend(QGraphicsItem *);
+
+}
+
+}
 
 #endif // LEGEND_H
 

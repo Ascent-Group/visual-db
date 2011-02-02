@@ -30,6 +30,10 @@
 #include <gui/graphicsitems/InheritanceArrow.h>
 #include <QPainter>
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 /*!
  * Constructor
  */
@@ -60,4 +64,8 @@ InheritanceArrow::head()
     QPointF lineCenter(startPoint().x() + (endPoint().x() - startPoint().x()) / 2, startPoint().y() + (endPoint().y() - startPoint().y()) / 2);
     QLineF line(endPoint(), startPoint());
     return makeHead(line, lineCenter);
+}
+
+}
+
 }

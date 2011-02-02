@@ -37,7 +37,7 @@
 #include <gui/ControlWidget.h>
 #include <gui/GraphicsScene.h>
 #include <gui/GraphicsView.h>
-#include <gui/ItemGroup.h>
+#include <gui/graphicsitems/ItemGroup.h>
 #include <gui/SceneWidget.h>
 #include <gui/graphicsitems/TableItem.h>
 #include <gui/behaviour/AddItemCommand.h>
@@ -144,6 +144,8 @@ SceneWidget::showOnScene(QTreeWidgetItem *iTreeItem, int iCol, bool iCenterOn)
 {
     QList<QGraphicsItem *> itemList = mScene->showOnScene(iTreeItem, iCol, QPoint(0, 0), iCenterOn);
     foreach (QGraphicsItem *item, itemList) {
+        using namespace Gui::GraphicsItems;
+
         // add new item only if it isn't exist on the scene
         if (toDbObject(item) && !mScene->findItem(toDbObject(item)->schemaName(), toDbObject(item)->name())) {
             emit itemActionDone(new AddItemCommand(mScene, itemList));
@@ -186,6 +188,9 @@ SceneWidget::cleanSchemeScene()
         // first send the signal to remember deleted items
         emit itemActionDone(new DeleteItemCommand(*mScene, mScene->items()));
     }
+
+    using namespace Gui::GraphicsItems;
+
     TableItem::setSeek(20);
 }
 
@@ -373,7 +378,7 @@ SceneWidget::flushCache()
  *
  * \return New item group
  */
-ItemGroup *
+Gui::GraphicsItems::ItemGroup *
 SceneWidget::createItemGroup(const QList<QGraphicsItem *> &iItems)
 {
     return mScene->createItemGroup(iItems);
@@ -509,13 +514,13 @@ SceneWidget::sendItemMoved(QList <QGraphicsItem *> iItemList, int iDiffX, int iD
 }
 
 void
-SceneWidget::sendItemColorChanged(GraphicsItem *iItem, const QColor &iNewColor, const QColor &iOldColor)
+SceneWidget::sendItemColorChanged(Gui::GraphicsItems::GraphicsItem *iItem, const QColor &iNewColor, const QColor &iOldColor)
 {
     emit itemActionDone(new SetColorItemCommand(iItem, iNewColor, iOldColor));
 }
 
 void
-SceneWidget::sendItemResized(GraphicsItem *iItem, const QRectF &iNewRect, const QRectF &iOldRect)
+SceneWidget::sendItemResized(Gui::GraphicsItems::GraphicsItem *iItem, const QRectF &iNewRect, const QRectF &iOldRect)
 {
     emit itemActionDone(new ResizeItemCommand(iItem, iNewRect, iOldRect));
 }

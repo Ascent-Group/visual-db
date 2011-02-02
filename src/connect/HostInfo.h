@@ -65,8 +65,8 @@ class HostInfo
         QDomElement &toXml(QDomElement &) const;
         void fromXml(QDomElement &);
 
-        bool operator==(const HostInfo &iHostInfo);
-        bool operator!=(const HostInfo &iHostInfo);
+        bool operator==(const HostInfo &iHostInfo) const;
+        bool operator!=(const HostInfo &iHostInfo) const;
 
     protected:
         virtual void swap(const HostInfo &iHostInfo);

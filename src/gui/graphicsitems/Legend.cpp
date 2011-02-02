@@ -36,6 +36,10 @@
 #include <gui/graphicsitems/Legend.h>
 #include <gui/graphicsitems/TableItem.h>
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 /*!
  * Constructor
  */
@@ -152,4 +156,8 @@ Legend *
 toLegend(QGraphicsItem *iItem)
 {
     return qgraphicsitem_cast<Legend *>(iItem);
+}
+
+}
+
 }

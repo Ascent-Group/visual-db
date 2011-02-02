@@ -38,8 +38,11 @@
 #include <consts.h>
 #include <gui/GraphicsScene.h>
 #include <gui/graphicsitems/TableItem.h>
-
 #include <QtDebug>
+
+namespace Gui {
+
+namespace GraphicsItems {
 
 /*!
  * Constructor
@@ -383,7 +386,8 @@ TableItem *
 TableItem::fromXml(const QDomElement &iElement, GraphicsScene *iScene, QMenu *iMenu)
 {
     // get table's coordinates
-    TableItem *newTable = iScene->newTableItem(iElement.attribute("schema"),
+    // FIXME - C-style casting
+    TableItem *newTable = (TableItem *)iScene->newTableItem(iElement.attribute("schema"),
             iElement.attribute("name"), iMenu, QPoint(iElement.attribute("x").toInt(),
             iElement.attribute("y").toInt()));
 
@@ -434,3 +438,6 @@ toTable(QGraphicsItem *iItem)
     return qgraphicsitem_cast<TableItem *>(iItem);
 }
 
+}
+
+}

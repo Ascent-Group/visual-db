@@ -41,7 +41,7 @@
 #include <gui/graphicsitems/ForeignArrow.h>
 #include <gui/GraphicsScene.h>
 #include <gui/graphicsitems/InheritanceArrow.h>
-#include <gui/ItemGroup.h>
+#include <gui/graphicsitems/ItemGroup.h>
 #include <gui/graphicsitems/Legend.h>
 #include <gui/graphicsitems/LoopArrow.h>
 #include <gui/graphicsitems/TableItem.h>
@@ -64,6 +64,8 @@ GraphicsScene::GraphicsScene(QObject *iParent)
       mDiffY(0),
       mStartMovingTimer()
 {
+    using namespace Gui::GraphicsItems;
+
     setBackgroundBrush(QBrush(mSettings.value(Consts::COLOR_GRP + "/" + Consts::BACKGROUND_SETTING, Qt::white).value<QColor>()));
     setSceneRect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     // \todo We probably should pass this to Legend's constructor, so that graphics scene
@@ -156,6 +158,8 @@ GraphicsScene::showOnScene(QTreeWidgetItem *iTreeItem, int iCol, const QPoint &i
             return objectList;
         }
 
+        using namespace Gui::GraphicsItems;
+        
         if (TreeWidget::TableItem == objId) {
             TableItem *table = newTableItem(iTreeItem->parent()->parent()->text(TreeWidget::NameCol),
                     iTreeItem->text(TreeWidget::NameCol), mTableMenu, iPos);
@@ -183,9 +187,11 @@ GraphicsScene::showOnScene(QTreeWidgetItem *iTreeItem, int iCol, const QPoint &i
  *
  * \return Existent or new table item
  */
-TableItem *
+Gui::GraphicsItems::TableItem *
 GraphicsScene::newTableItem(const QString &iSchemaName, const QString &iTableName, QMenu *iMenu, const QPoint &iPos)
 {
+    using namespace Gui::GraphicsItems;
+
     DbObjectItem *newItem = findItem(iSchemaName, iTableName);
 
     // if item is currently not on scene
@@ -232,9 +238,11 @@ GraphicsScene::newTableItem(const QString &iSchemaName, const QString &iTableNam
  *
  * \return Existent or new view item
  */
-ViewItem *
+Gui::GraphicsItems::ViewItem *
 GraphicsScene::newViewItem(const QString &iSchemaName, const QString &iViewName, QMenu *iMenu, const QPoint &iPos)
 {
+    using namespace Gui::GraphicsItems;
+
     DbObjectItem *newItem = findItem(iSchemaName, iViewName);
 
     // if item is currently not on scene
@@ -277,6 +285,8 @@ GraphicsScene::newViewItem(const QString &iSchemaName, const QString &iViewName,
 void
 GraphicsScene::addItems(const QList<QGraphicsItem *> &iItems)
 {
+    using namespace Gui::GraphicsItems;
+
     foreach (QGraphicsItem *item, iItems) {
         if (toGroup(item)) {
             addItems(toGroup(item)->children());
@@ -296,6 +306,8 @@ GraphicsScene::addItems(const QList<QGraphicsItem *> &iItems)
 void
 GraphicsScene::drawRelations()
 {
+    using namespace Gui::GraphicsItems;
+
     // draw all relations between new table and already added ones
     foreach (QGraphicsItem *item, items()) {
         if (toTable(item)) {
@@ -310,11 +322,13 @@ GraphicsScene::drawRelations()
  * \param[in] iSourceItem - Source item
  */
 void
-GraphicsScene::createRelations(TableItem *iSourceItem)
+GraphicsScene::createRelations(Gui::GraphicsItems::TableItem *iSourceItem)
 {
     if (!iSourceItem) {
         return;
     }
+
+    using namespace Gui::GraphicsItems;
 
     ArrowItem *arrow = 0;
     // FIXME: this code is applicable only for tables
@@ -383,7 +397,7 @@ GraphicsScene::createRelations(TableItem *iSourceItem)
  * \param[in] iArrow - Arrow between source and destination tables
  */
 void
-GraphicsScene::createRelation(TableItem *iSource, TableItem *iDestination, ArrowItem *iArrow)
+GraphicsScene::createRelation(Gui::GraphicsItems::TableItem *iSource, Gui::GraphicsItems::TableItem *iDestination, Gui::GraphicsItems::ArrowItem *iArrow)
 {
     // register the arrow
     mArrows.insert(iArrow);
@@ -403,9 +417,11 @@ GraphicsScene::createRelation(TableItem *iSource, TableItem *iDestination, Arrow
  *
  * \return Founded item if it presents in the DB, 0 otherwise
  */
-DbObjectItem *
+Gui::GraphicsItems::DbObjectItem *
 GraphicsScene::findItem(const QString &iSchemaName, const QString &iItemName)
 {
+    using namespace Gui::GraphicsItems;
+
     foreach (QGraphicsItem *item, items()) {
         DbObjectItem *dbItem = toDbObject(item);
         if (dbItem) {
@@ -443,6 +459,8 @@ GraphicsScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *iEvent)
 void
 GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *iEvent)
 {
+    using namespace Gui::GraphicsItems;
+
     if (!mMoveMode) {
         // if we pressed under item - do default actions and return
         QGraphicsItem *item = itemAt(iEvent->scenePos());
@@ -468,6 +486,8 @@ GraphicsScene::mousePressEvent(QGraphicsSceneMouseEvent *iEvent)
 void
 GraphicsScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *iEvent)
 {
+    using namespace Gui::GraphicsItems;
+
     QGraphicsItem *item = itemAt(iEvent->scenePos());
     if ((toDbObject(item) || toGroup(item))) {
         // if it was resizing - emit resizing signal
@@ -543,6 +563,8 @@ GraphicsScene::mouseMoveEvent(QGraphicsSceneMouseEvent *iEvent)
 void
 GraphicsScene::keyPressEvent(QKeyEvent *iEvent)
 {
+    using namespace Gui::GraphicsItems;
+
     switch (iEvent->key()) {
         case Qt::Key_Plus:
             //      scaleView(mPrevFactor + 1);
@@ -613,7 +635,7 @@ GraphicsScene::movingTimerExpired()
  *
  * \return New items group
  */
-ItemGroup *
+Gui::GraphicsItems::ItemGroup *
 GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
 {
     clearSelection();
@@ -649,6 +671,8 @@ GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
             commonAncestor = ancestors.at(commonIndex);
         }
     }
+
+    using namespace Gui::GraphicsItems;
 
     // Create a new group at that level
     ItemGroup *group = new ItemGroup(commonAncestor);
@@ -812,6 +836,8 @@ GraphicsScene::updateLegend()
 void
 GraphicsScene::deleteItems(QList<QGraphicsItem *> &iItems)
 {
+    using namespace Gui::GraphicsItems;
+
     foreach (QGraphicsItem *item, iItems) {
         if (toLegend(item)) {
             continue;
@@ -859,6 +885,8 @@ void
 GraphicsScene::setFieldsTypesVisible(QList<QGraphicsItem *> iItems, bool iFlag)
 {
     foreach (QGraphicsItem *item, iItems) {
+        using namespace Gui::GraphicsItems;
+        
         if (toDbObject(item)) {
             toDbObject(item)->setFieldsTypesVisible(iFlag);
         } else if (toGroup(item)) {
@@ -888,6 +916,7 @@ void
 GraphicsScene::setIndicesVisible(QList<QGraphicsItem *> iItems, bool iFlag)
 {
     foreach (QGraphicsItem *item, iItems) {
+        using namespace Gui::GraphicsItems;
         if (toTable(item)) {
             toTable(item)->setIndicesVisible(iFlag);
         } else if (toGroup(item)) {
@@ -924,6 +953,7 @@ GraphicsScene::setItemColor(QList<QGraphicsItem *> iItems, const QColor &iColor)
 {
     // colorize each item that is on the scene
     foreach (QGraphicsItem *item, iItems) {
+        using namespace Gui::GraphicsItems;
         if (toDbObject(item)) {
             setItemColor(toDbObject(item), iColor);
         }
@@ -941,7 +971,7 @@ GraphicsScene::setItemColor(QList<QGraphicsItem *> iItems, const QColor &iColor)
  * \param[in] iColor - Item color
  */
 void
-GraphicsScene::setItemColor(GraphicsItem *iItem, const QColor &iColor)
+GraphicsScene::setItemColor(Gui::GraphicsItems::GraphicsItem *iItem, const QColor &iColor)
 {
 //    iItem->setItemColor(iColor);
     emit itemColorChanged(iItem, iColor, iItem->itemColor());
@@ -955,6 +985,7 @@ GraphicsScene::selectAllItems()
 {
     // items can mutate in the loop
     foreach (QGraphicsItem *item, items()) {
+        using namespace Gui::GraphicsItems;
         if (toDbObject(item)) {
             toDbObject(item)->setSelected(true);
         }
@@ -979,6 +1010,7 @@ void
 GraphicsScene::adjustItems(QList<QGraphicsItem *> iItems)
 {
     foreach (QGraphicsItem *item, iItems) {
+        using namespace Gui::GraphicsItems;
         if (toDbObject(item)) {
             mOldRect = toDbObject(item)->boundingRect();
             toDbObject(item)->adjustSize();
@@ -1002,6 +1034,8 @@ GraphicsScene::groupItems(QList<QGraphicsItem *> iItems)
         return;
     }
 
+    using namespace Gui::GraphicsItems;
+    
     ItemGroup *group = createItemGroup(iItems);
     group->setContextMenu(mTableMenu);
 }
@@ -1024,6 +1058,7 @@ void
 GraphicsScene::ungroupItems(QList<QGraphicsItem *> iItems)
 {
     foreach (QGraphicsItem *item, iItems) {
+        using namespace Gui::GraphicsItems;
         if (toGroup(item)) {
             destroyItemGroup(toGroup(item));
         }
@@ -1053,6 +1088,7 @@ GraphicsScene::colorizeAccordingSchemas()
     for (int i = 0; i < schemasNames.count(); ++i) {
         // items can mutate in the loop
         foreach (QGraphicsItem *item, items()) {
+            using namespace Gui::GraphicsItems;
             // FIXME doesn't work for views because schemaName returns empty string now for ViewItem
             if (toDbObject(item) && toDbObject(item)->schemaName() == schemasNames.at(i)) {
                 // use only two colors from the palette
@@ -1089,6 +1125,7 @@ void
 GraphicsScene::setAnchor(QList<QGraphicsItem *> iItems, bool iFlag)
 {
     foreach (QGraphicsItem *item, iItems) {
+        using namespace Gui::GraphicsItems;
         if (toGroup(item)) {
             item->setFlag(QGraphicsItem::ItemIsMovable, iFlag);
             setAnchor(item->children(), iFlag);
@@ -1144,6 +1181,7 @@ GraphicsScene::selectAllItemsInSchema()
     foreach (QGraphicsItem *itemFromSelected, selectedItems()) {
         // items can mutate in the loop
         foreach (QGraphicsItem *itemFromAll, items()) {
+            using namespace Gui::GraphicsItems;
             if (toDbObject(itemFromAll) && toDbObject(itemFromSelected) &&
                     toDbObject(itemFromAll)->schemaName() ==
                     toDbObject(itemFromSelected)->schemaName()) {
@@ -1175,6 +1213,7 @@ GraphicsScene::toXml(QDomDocument &iDoc, bool iShowGrid, bool iDivideIntoPages, 
     element.setAttribute("controlWidget", iShowControlWidget);
 
     foreach (QGraphicsItem *item, items()) {
+        using namespace Gui::GraphicsItems;
         if (toGroup(item) && 0 == toGroup(item)->parentItem()) {
             element.appendChild(toGroup(item)->toXml(iDoc));
         } else if (toDbObject(item) && 0 == toDbObject(item)->parentItem()) {
@@ -1201,6 +1240,8 @@ GraphicsScene::fromXml(const QDomNode &iNode)
     while (!node.isNull()) {
         QDomElement element = node.toElement();
         if (!element.isNull()) {
+            using namespace Gui::GraphicsItems;
+            
             // it's a table
             if (element.tagName() == "table") {
                 itemList << TableItem::fromXml(element, this, mTableMenu);

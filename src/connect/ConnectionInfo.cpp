@@ -138,13 +138,13 @@ ConnectionInfo::toXml(QDomDocument &iDoc, QDomElement &iElement) const
 }
 
 bool 
-ConnectionInfo::operator==(const ConnectionInfo &iConnectionInfo)
+ConnectionInfo::operator==(const ConnectionInfo &iConnectionInfo) const
 {
     return mDbHostInfo == iConnectionInfo.mDbHostInfo && mProxyHostInfo == iConnectionInfo.mProxyHostInfo;
 }
 
 bool 
-ConnectionInfo::operator!=(const ConnectionInfo &iConnectionInfo)
+ConnectionInfo::operator!=(const ConnectionInfo &iConnectionInfo) const
 {
     return !(operator==(iConnectionInfo));
 }

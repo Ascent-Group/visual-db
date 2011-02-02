@@ -47,6 +47,10 @@ class QPoint;
 class QSlider;
 class QTreeWidgetItem;
 
+namespace Gui {
+
+namespace GraphicsItems {
+
 class ArrowItem;
 class ControlWidget;
 class DbObjectItem;
@@ -55,6 +59,10 @@ class ItemGroup;
 class Legend;
 class TableItem;
 class ViewItem;
+
+}
+
+}
 
 /*!
  * \class GraphicsScene
@@ -76,18 +84,18 @@ class GraphicsScene : public QGraphicsScene {
         ~GraphicsScene();
 
         void addItems(const QList<QGraphicsItem *> &);
-        DbObjectItem *findItem(const QString &, const QString &);
+        Gui::GraphicsItems::DbObjectItem *findItem(const QString &, const QString &);
         void setSchemeMenu(QMenu *);
         void setTableMenu(QMenu *);
-        ItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
+        Gui::GraphicsItems::ItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
         void deleteItems(QList<QGraphicsItem *> &iTabliList);
         void setAcceptsHoverEvents(bool);
         void refreshLegend();
         void updateLegend();
         void drawRelations();
-        void createRelations(TableItem *);
-        TableItem *newTableItem(const QString &, const QString &, QMenu *, const QPoint &);
-        ViewItem *newViewItem(const QString &, const QString &, QMenu *, const QPoint &);
+        void createRelations(Gui::GraphicsItems::TableItem *);
+        Gui::GraphicsItems::TableItem *newTableItem(const QString &, const QString &, QMenu *, const QPoint &);
+        Gui::GraphicsItems::ViewItem *newViewItem(const QString &, const QString &, QMenu *, const QPoint &);
         void setItemColor(QList<QGraphicsItem *>, const QColor &);
         bool moveMode() const;
 
@@ -95,8 +103,8 @@ class GraphicsScene : public QGraphicsScene {
 
     signals:
         void itemMoved(QList <QGraphicsItem *>, int, int);
-        void itemResized(GraphicsItem *, const QRectF &, const QRectF &);
-        void itemColorChanged(GraphicsItem *, const QColor &, const QColor &);
+        void itemResized(Gui::GraphicsItems::GraphicsItem *, const QRectF &, const QRectF &);
+        void itemColorChanged(Gui::GraphicsItems::GraphicsItem *, const QColor &, const QColor &);
 
     public slots:
         QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int, const QPoint &, bool iCenterOn = false);
@@ -104,7 +112,7 @@ class GraphicsScene : public QGraphicsScene {
         void setFieldsTypesInvisible();
         void setIndicesVisible(bool);
         void setItemColor();
-        void setItemColor(GraphicsItem*, const QColor &);
+        void setItemColor(Gui::GraphicsItems::GraphicsItem*, const QColor &);
         void selectAllItems();
         void adjustItems();
         void groupItems();
@@ -135,7 +143,7 @@ class GraphicsScene : public QGraphicsScene {
         void setIndicesVisible(QList<QGraphicsItem *>, bool);
         void adjustItems(QList<QGraphicsItem *>);
         void setAnchor(QList<QGraphicsItem *>, bool);
-        void createRelation(TableItem *, TableItem *, ArrowItem *);
+        void createRelation(Gui::GraphicsItems::TableItem *, Gui::GraphicsItems::TableItem *, Gui::GraphicsItems::ArrowItem *);
         void groupItems(QList<QGraphicsItem *>);
         void ungroupItems(QList<QGraphicsItem *>);
         void drawGrid(QPainter *);
@@ -153,12 +161,12 @@ class GraphicsScene : public QGraphicsScene {
         QGraphicsPathItem *mSelectionPath;
 
         bool mMoveMode;
-        Legend *mLegend;
+        Gui::GraphicsItems::Legend *mLegend;
 
         QMenu *mSchemeMenu;
         QMenu *mTableMenu;
-        QSet<DbObjectItem *> mDbItems;
-        QSet<ArrowItem *> mArrows;
+        QSet<Gui::GraphicsItems::DbObjectItem *> mDbItems;
+        QSet<Gui::GraphicsItems::ArrowItem *> mArrows;
 
         QPointF mOldPos;
         QRectF mOldRect;

@@ -28,7 +28,7 @@
  */
 
 /*!
- * \mainpage VisualDB v1.1
+ * \mainpage VisualDB v1.2
  * \image html MainWindow.png "Application's main window"
  */
 

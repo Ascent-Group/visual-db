@@ -22,6 +22,7 @@ run_tests.depends = build_tests
 run_tests.commands = @echo "Running tests" \
                      && env VDB_DB_DRV=$$(VDB_DB_DRV) ./tests | tee test.report
 
+report.depends = run_tests
 report.commands = @cat test.report | grep Totals | awk \
     "'{ \
           passed += \$$2; \
@@ -29,9 +30,9 @@ report.commands = @cat test.report | grep Totals | awk \
           skipped += \$$6; \
      } END { \
           total = passed + failed + skipped; \
-          print \"Passed:\", passed; \
-          print \"Failed:\", failed; \
-          print \"Skipped:\", skipped; \
+          print \"[32mPassed:[0m\", passed; \
+          print \"[31mFailed:[0m\", failed; \
+          print \"[33mSkipped:[0m\", skipped; \
           print \"======\"; \
           print \"Total:\", total; \
           print \"Pass rate:\", passed * 100 / total; \

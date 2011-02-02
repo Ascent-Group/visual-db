@@ -7,6 +7,7 @@
 #endif
 
 /* control */
+#include <control/ConfigTest.h>
 #include <control/ContextTest.h>
 
 /* gui/behaviour */
@@ -151,6 +152,9 @@ int main(int argc, char *argv[])
 
 #if TEST_CONTROL
     /* control*/
+    ConfigTest configTest;
+    QTest::qExec(&configTest, argc, argv);
+
     ContextTest contextTest;
     QTest::qExec(&contextTest, argc, argv);
 #endif

@@ -94,6 +94,7 @@ namespace Consts
 
     // begin group LastSession
     /*! Name of a group of settings concerning last session */
+    // \todo Last session group will be removed. We will save this parameters in xml file
     extern const QString LAST_SESSION_GRP;
 
     /*! Name of a setting that holds the path to a saved session description file*/

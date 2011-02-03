@@ -180,7 +180,7 @@
    <addaction name="separator"/>
    <addaction name="mRemoveAllTablesAction"/>
   </widget>
-  <widget class="QDockWidget" name="mLogPanelWidget">
+  <widget class="Gui::DockWidget" name="mLogPanelWidget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="MinimumExpanding" vsizetype="Minimum">
      <horstretch>0</horstretch>

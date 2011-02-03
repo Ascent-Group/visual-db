@@ -212,7 +212,7 @@
     <string>Log panel</string>
    </property>
    <attribute name="dockWidgetArea">
-    <number>1</number>
+    <number>8</number>
    </attribute>
    <widget class="QWidget" name="mDock">
     <layout class="QGridLayout" name="gridLayout_2">

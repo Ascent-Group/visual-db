@@ -19,7 +19,8 @@ HEADERS = $$TOP_SRC_DIR/gui/PreferencesPage.h \
       PreferencesPagePlugin.h
 
 SOURCES = $$TOP_SRC_DIR/gui/PreferencesPage.cpp \
-      PreferencesPagePlugin.cpp
+      PreferencesPagePlugin.cpp \
+      $$TOP_SRC_DIR/consts.cpp
 
 RESOURCES += $$TOP_SRC_DIR/visual_db.qrc
 

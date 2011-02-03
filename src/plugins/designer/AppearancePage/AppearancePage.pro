@@ -19,7 +19,8 @@ HEADERS = $$TOP_SRC_DIR/gui/AppearancePage.h \
       AppearancePagePlugin.h
 
 SOURCES = $$TOP_SRC_DIR/gui/AppearancePage.cpp \
-      AppearancePagePlugin.cpp
+      AppearancePagePlugin.cpp \
+      $$TOP_SRC_DIR/consts.cpp
 
 RESOURCES += $$TOP_SRC_DIR/visual_db.qrc
 

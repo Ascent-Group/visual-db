@@ -56,6 +56,7 @@ DockWidgetPlugin::isInitialized() const
 QWidget*
 DockWidgetPlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new DockWidget(ipParent);
 }
 

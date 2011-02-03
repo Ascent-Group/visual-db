@@ -19,7 +19,8 @@ HEADERS = $$TOP_SRC_DIR/gui/SelectColorWidget.h \
       SelectColorWidgetPlugin.h
 
 SOURCES = $$TOP_SRC_DIR/gui/SelectColorWidget.cpp \
-      SelectColorWidgetPlugin.cpp
+      SelectColorWidgetPlugin.cpp \
+      $$TOP_SRC_DIR/consts.cpp
 
 RESOURCES += $$TOP_SRC_DIR/visual_db.qrc
 

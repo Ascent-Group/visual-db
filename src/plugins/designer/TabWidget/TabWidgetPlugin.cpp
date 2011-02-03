@@ -56,6 +56,7 @@ TabWidgetPlugin::isInitialized() const
 QWidget*
 TabWidgetPlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new TabWidget(ipParent);
 }
 

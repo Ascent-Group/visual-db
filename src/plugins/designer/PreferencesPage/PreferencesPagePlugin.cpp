@@ -56,6 +56,7 @@ PreferencesPagePlugin::isInitialized() const
 QWidget*
 PreferencesPagePlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new PreferencesPage(ipParent);
 }
 

@@ -56,6 +56,7 @@ SqlWidgetPlugin::isInitialized() const
 QWidget*
 SqlWidgetPlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new SqlWidget(ipParent);
 }
 

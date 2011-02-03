@@ -56,6 +56,7 @@ DescriptionWidgetPlugin::isInitialized() const
 QWidget*
 DescriptionWidgetPlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new DescriptionWidget(ipParent);
 }
 

@@ -57,6 +57,7 @@ ColorsPagePlugin::isInitialized() const
 QWidget*
 ColorsPagePlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new ColorsPage(ipParent);
 }
 

@@ -56,6 +56,7 @@ SceneWidgetPlugin::isInitialized() const
 QWidget*
 SceneWidgetPlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new SceneWidget(ipParent);
 }
 

@@ -56,6 +56,7 @@ ControlWidgetPlugin::isInitialized() const
 QWidget*
 ControlWidgetPlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new ControlWidget(ipParent);
 }
 

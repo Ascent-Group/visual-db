@@ -56,6 +56,7 @@ SelectColorWidgetPlugin::isInitialized() const
 QWidget*
 SelectColorWidgetPlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new SelectColorWidget(ipParent);
 }
 

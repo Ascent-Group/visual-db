@@ -56,6 +56,7 @@ AppearancePagePlugin::isInitialized() const
 QWidget*
 AppearancePagePlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new AppearancePage(ipParent);
 }
 

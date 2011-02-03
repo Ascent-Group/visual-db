@@ -22,7 +22,8 @@ HEADERS = $$TOP_SRC_DIR/gui/ColorsPage.h \
 
 SOURCES = $$TOP_SRC_DIR/gui/ColorsPage.cpp \
       $$TOP_SRC_DIR/gui/SelectColorWidget.cpp \
-      ColorsPagePlugin.cpp
+      ColorsPagePlugin.cpp \
+      $$TOP_SRC_DIR/consts.cpp
 
 RESOURCES += $$TOP_SRC_DIR/visual_db.qrc
 

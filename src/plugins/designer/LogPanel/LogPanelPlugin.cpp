@@ -56,6 +56,7 @@ LogPanelPlugin::isInitialized() const
 QWidget*
 LogPanelPlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new LogPanel(ipParent);
 }
 

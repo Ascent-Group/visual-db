@@ -56,6 +56,7 @@ TreeWidgetPlugin::isInitialized() const
 QWidget*
 TreeWidgetPlugin::createWidget(QWidget *ipParent)
 {
+    using namespace Gui;
     return new TreeWidget(ipParent);
 }
 

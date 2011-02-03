@@ -37,8 +37,6 @@
 
 #include <QtDebug>
 
-using namespace DbObjects::Common;
-
 namespace DbObjects
 {
 
@@ -51,7 +49,7 @@ namespace Mysql
  * \param[in] iName - Name of the given table
  * \param[in] iSchema - Handle to schema containing the table
  */
-Table::Table(QString iName, const DbSchemaPtr &iSchema)
+Table::Table(QString iName, const Common::DbSchemaPtr &iSchema)
     : DbTable(iName, iSchema)
 {
 }

@@ -31,8 +31,6 @@
 #include <factory/Procedure.h>
 #include <psql/Procedure.h>
 
-using namespace DbObjects::Common;
-
 namespace DbObjects
 {
 
@@ -87,7 +85,7 @@ Procedure::createPsqlProcedure(const QString &iName, const QString &iSchemaName)
     // \note we duplicate some code so that we don't make our signature (and therefore,
     // headers be dependent on DbObjectPtr
     // \todo but it should take dbschemaptr
-    return new(std::nothrow) Psql::Procedure(iName, Database::instance()->findSchema(iSchemaName));
+    return new(std::nothrow) Psql::Procedure(iName, Common::Database::instance()->findSchema(iSchemaName));
 }
 
 /*!

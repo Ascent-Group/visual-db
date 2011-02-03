@@ -101,7 +101,7 @@ QString
 SceneWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"SceneWidget\" name=\"mSceneWidget\">\n"
+    " <widget class=\"Gui::SceneWidget\" name=\"mSceneWidget\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

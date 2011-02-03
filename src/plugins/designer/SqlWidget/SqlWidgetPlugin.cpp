@@ -101,7 +101,7 @@ QString
 SqlWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"SqlWidget\" name=\"mSqlWidget\">\n"
+    " <widget class=\"Gui::SqlWidget\" name=\"mSqlWidget\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

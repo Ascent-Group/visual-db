@@ -101,7 +101,7 @@ QString
 AppearancePagePlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"AppearancePage\" name=\"mAppearancePage\">\n"
+    " <widget class=\"Gui::AppearancePage\" name=\"mAppearancePage\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

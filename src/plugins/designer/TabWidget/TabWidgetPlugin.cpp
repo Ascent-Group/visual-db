@@ -101,7 +101,7 @@ QString
 TabWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"TabWidget\" name=\"mTabWidget\">\n"
+    " <widget class=\"Gui::TabWidget\" name=\"mTabWidget\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

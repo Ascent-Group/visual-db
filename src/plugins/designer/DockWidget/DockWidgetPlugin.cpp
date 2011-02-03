@@ -101,7 +101,7 @@ QString
 DockWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"DockWidget\" name=\"mDockWidget\">\n"
+    " <widget class=\"Gui::DockWidget\" name=\"mDockWidget\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

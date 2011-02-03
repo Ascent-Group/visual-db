@@ -101,7 +101,7 @@ QString
 LogPanelPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"LogPanel\" name=\"mLogPanel\">\n"
+    " <widget class=\"Gui::LogPanel\" name=\"mLogPanel\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

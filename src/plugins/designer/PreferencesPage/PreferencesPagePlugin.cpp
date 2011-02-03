@@ -101,7 +101,7 @@ QString
 PreferencesPagePlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"PreferencesPage\" name=\"mPreferencesPage\">\n"
+    " <widget class=\"Gui::PreferencesPage\" name=\"mPreferencesPage\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

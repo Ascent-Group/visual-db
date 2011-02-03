@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <consts.h>
+#include <control/Config.h>
 #include <gui/PreferencesPage.h>
 #include <QFileDialog>
 
@@ -41,22 +41,22 @@ PreferencesPage::PreferencesPage(QWidget *iParent)
 {
     ui.setupUi(this);
 
-    using namespace Consts;
+    Control::Config cfg;
 
     // set this flag to the one from settings
-    ui.mShowIndicesBox->setChecked(mSettings.value(PREFS_GRP + "/" + SHOW_INDICES_SETTING, false).toBool());
+    ui.mShowIndicesBox->setChecked(cfg.showIndices());
 
     // create spin box to select count of saved sessions
-    ui.mCountSessionsSpin->setValue(mSettings.value(PREFS_GRP + "/" + COUNT_SAVED_SESSIONS_SETTING, 10).toInt());
+    ui.mCountSessionsSpin->setValue(cfg.savedSessionsNumber());
 
     // choose directory where sessions will be saved
-    ui.mSessionDirectoryEdit->setText(mSettings.value(PREFS_GRP + "/" + SESSION_DIR_SETTING, "./").toString());
+    ui.mSessionDirectoryEdit->setText(cfg.sessionDir());
 
     // set this flag to the one from settings
-    ui.mNewTabAutoSwitchBox->setChecked(mSettings.value(PREFS_GRP + "/" + NEW_TAB_AUTO_SWITCH_SETTING, true).toBool());
+    ui.mNewTabAutoSwitchBox->setChecked(cfg.newTabAutoSwitch());
 
     // set this flag to the one from settings
-    ui.mLoadLastSessionBox->setChecked(mSettings.value(PREFS_GRP + "/" + LOAD_LAST_SESSION_SETTING, false).toBool());
+    ui.mLoadLastSessionBox->setChecked(cfg.loadLastSession());
 
 }
 
@@ -138,3 +138,4 @@ PreferencesPage::loadLastSession() const
 }
 
 }
+

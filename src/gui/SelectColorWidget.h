@@ -31,11 +31,9 @@
 #define SELECTCOLORWIDGET_H
 
 #include <gui/ui/ui_SelectColorWidget.h>
+#include <QColor>
 #include <QDynamicPropertyChangeEvent>
-#include <QSettings>
 #include <QWidget>
-
-class QColor;
 
 namespace Gui {
 
@@ -55,6 +53,7 @@ class SelectColorWidget : public QWidget
         ~SelectColorWidget();
 
         QColor color() const;
+        void setColor(const QColor &);
 
         QString labelText() const;
         void setLabelText(const QString &iText);
@@ -64,13 +63,11 @@ class SelectColorWidget : public QWidget
 
     private:
         Ui::SelectColorWidget ui;
-        QSettings mSettings;
 
         QColor mColor;
         QColor mDefaultColor;
 
     private:
-        void init();
         void getColorFromDialog();
 
     private slots:

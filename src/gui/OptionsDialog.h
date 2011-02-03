@@ -31,7 +31,6 @@
 #define OPTIONSDIALOG_H
 
 #include <gui/ui/ui_OptionsDialog.h>
-#include <QSettings>
 
 namespace Gui {
 
@@ -50,8 +49,6 @@ class OptionsDialog : public QDialog
 
     private:
         Ui::OptionsDialog ui;
-
-        QSettings mSettings;
 
     private:
         void writeSettings();

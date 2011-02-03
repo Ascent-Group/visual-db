@@ -31,7 +31,6 @@
 #define APPEARANCEPAGE_H
 
 #include <gui/ui/ui_AppearancePage.h>
-#include <QSettings>
 #include <QWidget>
 
 class QComboBox;
@@ -39,8 +38,8 @@ class QComboBox;
 namespace Gui {
 
 /*!
- * \class AppearancePage 
- * \headerfile gui/AppearancePage.h 
+ * \class AppearancePage
+ * \headerfile gui/AppearancePage.h
  * \brief Appearance page in the settings dialog
  */
 class AppearancePage : public QWidget
@@ -51,11 +50,10 @@ class AppearancePage : public QWidget
         AppearancePage(QWidget *iParent = 0);
         ~AppearancePage();
 
-        int language() const;
+        QLocale::Language language() const;
 
     private:
         Ui::AppearancePage ui;
-        QSettings mSettings;
 };
 
 }

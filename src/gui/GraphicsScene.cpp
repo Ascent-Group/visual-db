@@ -36,16 +36,16 @@
 #include <QPen>
 #include <QPrinter>
 #include <common/Database.h>
-#include <consts.h>
+#include <control/Config.h>
 #include <gui/ControlWidget.h>
-#include <gui/graphicsitems/ForeignArrow.h>
 #include <gui/GraphicsScene.h>
+#include <gui/TreeWidget.h>
+#include <gui/graphicsitems/ForeignArrow.h>
 #include <gui/graphicsitems/InheritanceArrow.h>
 #include <gui/graphicsitems/ItemGroup.h>
 #include <gui/graphicsitems/Legend.h>
 #include <gui/graphicsitems/LoopArrow.h>
 #include <gui/graphicsitems/TableItem.h>
-#include <gui/TreeWidget.h>
 #include <gui/graphicsitems/ViewItem.h>
 #include <math.h>
 
@@ -68,7 +68,7 @@ GraphicsScene::GraphicsScene(QObject *iParent)
 {
     using namespace Gui::GraphicsItems;
 
-    setBackgroundBrush(QBrush(mSettings.value(Consts::COLOR_GRP + "/" + Consts::BACKGROUND_SETTING, Qt::white).value<QColor>()));
+    setBackgroundBrush(QBrush(Control::Config().backgroundColor()));
     setSceneRect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     // \todo We probably should pass this to Legend's constructor, so that graphics scene
     // takes parentship of it.
@@ -698,13 +698,14 @@ GraphicsScene::createItemGroup(const QList<QGraphicsItem *> &items)
 void
 GraphicsScene::drawBackground(QPainter *iPainter, const QRectF &)
 {
-    using namespace Consts;
-    bool needDrawGrid = mSettings.value(VIEW_GRP + "/" + SHOW_GRID_SETTING, true).value<bool>();
+    Control::Config cfg;
+
+    bool needDrawGrid = cfg.showGrid();
     if (needDrawGrid) {
         drawGrid(iPainter);
     }
 
-    bool needDivideIntoPages = mSettings.value(VIEW_GRP + "/" + DIVIDE_INTO_PAGES_SETTING, true).value<bool>();
+    bool needDivideIntoPages = cfg.divideIntoPages();
     if (needDivideIntoPages) {
         divideIntoPages(iPainter);
     }
@@ -1146,7 +1147,7 @@ void
 GraphicsScene::showGrid(bool iFlag)
 {
     // only remember given flag; all analyze will be done in scene class
-    mSettings.setValue(Consts::VIEW_GRP + "/" + Consts::SHOW_GRID_SETTING, iFlag);
+    Control::Config().setShowGrid(iFlag);
     update(QRectF(0.0, 0.0, width(), height()));
 }
 
@@ -1158,7 +1159,7 @@ GraphicsScene::showGrid(bool iFlag)
 void
 GraphicsScene::alignToGrid(bool iFlag)
 {
-    mSettings.setValue(Consts::VIEW_GRP + "/" + Consts::ALIGN_TO_GRID_SETTING, iFlag);
+    Control::Config().setAlignToGrid(iFlag);
 }
 
 /*!
@@ -1170,7 +1171,7 @@ void
 GraphicsScene::divideIntoPages(bool iFlag)
 {
     // only remember given flag; all analyze will be done in scene class
-    mSettings.setValue(Consts::VIEW_GRP + "/" + Consts::DIVIDE_INTO_PAGES_SETTING, iFlag);
+    Control::Config().setDivideIntoPages(iFlag);
     update(QRectF(0.0, 0.0, width(), height()));
 }
 

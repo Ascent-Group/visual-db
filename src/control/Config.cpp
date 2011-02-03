@@ -37,7 +37,7 @@ namespace Control
  * Constructor
  */
 Config::Config()
-    : mSettings()
+    : mSettings(QSettings::IniFormat, QSettings::UserScope, "Ascent Group", "VisualDB")
 {
 }
 

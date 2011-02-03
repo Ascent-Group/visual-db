@@ -30,5 +30,9 @@
 #ifndef GUI_DATAHOLDER_H
 #define GUI_DATAHOLDER_H
 
+namespace Gui {
+
+}
+
 #endif // GUI_DATAHOLDER_H
 

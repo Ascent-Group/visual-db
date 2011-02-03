@@ -37,7 +37,7 @@
 /*!
  * Ctor
  */
-AddItemCommand::AddItemCommand(GraphicsScene *iScene, QList<QGraphicsItem *> iTableList, QUndoCommand *iParent)
+AddItemCommand::AddItemCommand(Gui::GraphicsScene *iScene, QList<QGraphicsItem *> iTableList, QUndoCommand *iParent)
     : QUndoCommand(iParent)
 {
     mScene = iScene;
@@ -58,6 +58,7 @@ AddItemCommand::~AddItemCommand()
 void
 AddItemCommand::undo()
 {
+    using namespace Gui;
     mScene->deleteItems(mTableList);
 }
 
@@ -67,5 +68,6 @@ AddItemCommand::undo()
 void
 AddItemCommand::redo()
 {
+    using namespace Gui;
     mScene->addItems(mTableList);
 }

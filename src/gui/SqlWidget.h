@@ -33,6 +33,8 @@
 #include <gui/ui/ui_SqlWidget.h>
 #include <QWidget>
 
+namespace Gui {
+
 /*!
  * \class SqlWidget
  * \headerfile gui/SqlWidget.h
@@ -76,6 +78,8 @@ class SqlWidget : public QWidget
 };
 
 bool isQuerySafe(const QString &iQueryText);
+
+}
 
 #endif // SQLWIDGET_H
 

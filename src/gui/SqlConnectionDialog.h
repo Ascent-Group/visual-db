@@ -34,6 +34,8 @@
 #include <gui/ui/ui_SqlConnectionDialog.h>
 #include <QDialog>
 
+namespace Gui {
+
 /*!
  * \class SqlConnectionDialog
  * \headerfile gui/SqlConnectionDialog.h
@@ -64,6 +66,8 @@ class SqlConnectionDialog : public QDialog
         void addConnection();
         void switchProxy(bool);
 };
+
+}
 
 #endif // SQLCONNECTIONDIALOG_H
 

@@ -32,6 +32,8 @@
 
 #include <QDockWidget>
 
+namespace Gui {
+
 /*!
  * \class DockWidget
  * \headerfile gui/DockWidget.h
@@ -53,5 +55,7 @@ class DockWidget : public QDockWidget
         virtual void closeEvent(QCloseEvent *);
         virtual void showEvent(QShowEvent *);
 };
+
+}
 
 #endif // DOCKWIDGET_H

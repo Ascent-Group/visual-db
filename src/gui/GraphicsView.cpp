@@ -45,6 +45,8 @@
 
 #include <QDebug>
 
+namespace Gui {
+
 /*!
  * Constructor
  */
@@ -300,4 +302,6 @@ GraphicsView::setMoveMode(bool iFlag)
     } else {
         setCursor(Qt::ArrowCursor);
     }
+}
+
 }

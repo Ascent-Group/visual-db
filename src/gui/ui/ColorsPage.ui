@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="SelectColorWidget" name="mBackgroundWidget">
+    <widget class="Gui::SelectColorWidget" name="mBackgroundWidget">
      <property name="toolTip">
       <string>The current time</string>
      </property>
@@ -35,7 +35,7 @@
     </widget>
    </item>
    <item>
-    <widget class="SelectColorWidget" name="mTableWidget">
+    <widget class="Gui::SelectColorWidget" name="mTableWidget">
      <property name="toolTip">
       <string>The current time</string>
      </property>
@@ -55,7 +55,7 @@
     </widget>
    </item>
    <item>
-    <widget class="SelectColorWidget" name="mArrowItemWidget">
+    <widget class="Gui::SelectColorWidget" name="mArrowItemWidget">
      <property name="toolTip">
       <string>The current time</string>
      </property>
@@ -75,7 +75,7 @@
     </widget>
    </item>
    <item>
-    <widget class="SelectColorWidget" name="mBorderWidget">
+    <widget class="Gui::SelectColorWidget" name="mBorderWidget">
      <property name="toolTip">
       <string>The current time</string>
      </property>
@@ -111,7 +111,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>SelectColorWidget</class>
+   <class>Gui::SelectColorWidget</class>
    <extends>QWidget</extends>
    <header location="global">gui/SelectColorWidget.h</header>
   </customwidget>

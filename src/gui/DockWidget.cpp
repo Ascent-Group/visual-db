@@ -29,6 +29,8 @@
 
 #include "DockWidget.h"
 
+namespace Gui {
+
 /*!
  * Ctor
  */
@@ -62,4 +64,6 @@ DockWidget::showEvent(QShowEvent *event)
 {
     emit shown();
     QDockWidget::showEvent(event);
+}
+
 }

@@ -33,6 +33,8 @@
 
 #include <QtDebug>
 
+namespace Gui {
+
 /*!
  * Ctor
  */
@@ -88,3 +90,4 @@ LogPanel::print(const QString &iText)
     ui.mOutputEdit->append(iText);
 }
 
+}

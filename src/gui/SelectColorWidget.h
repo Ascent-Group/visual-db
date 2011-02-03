@@ -37,6 +37,8 @@
 
 class QColor;
 
+namespace Gui {
+
 /*!
  * \class SelectColorWidget
  * \headerfile gui/SelectColorWidget.h
@@ -75,6 +77,8 @@ class SelectColorWidget : public QWidget
         void colorSelect(int);
         void buttonClick();
 };
+
+}
 
 #endif // SELECTCOLORWIDGET_H
 

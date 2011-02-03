@@ -36,8 +36,6 @@
 #include <QSettings>
 #include <QPointF>
 
-class GraphicsScene;
-class GraphicsView;
 class QColorDialog;
 class QFileDialog;
 class QGraphicsItem;
@@ -47,6 +45,11 @@ class QProgressBar;
 class QTreeWidgetItem;
 class QUndoCommand;
 class QUndoStack;
+
+namespace Gui {
+
+class GraphicsScene;
+class GraphicsView;
 
 /*!
  * \class MainWindow
@@ -128,6 +131,8 @@ class MainWindow : public QMainWindow
         void showPrintDialog();
 
 };
+
+}
 
 #endif // MAINWINDOW_H
 

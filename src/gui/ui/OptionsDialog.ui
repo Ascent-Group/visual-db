@@ -105,7 +105,7 @@
      <widget class="QWidget" name="page_1">
       <layout class="QGridLayout" name="gridLayout_4">
        <item row="0" column="0">
-        <widget class="AppearancePage" name="mAppearancePage">
+        <widget class="Gui::AppearancePage" name="mAppearancePage">
          <property name="toolTip">
           <string>Appearance page</string>
          </property>
@@ -119,7 +119,7 @@
      <widget class="QWidget" name="page_2">
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
-        <widget class="PreferencesPage" name="mPreferencesPage">
+        <widget class="Gui::PreferencesPage" name="mPreferencesPage">
          <property name="toolTip">
           <string>Preferences page</string>
          </property>
@@ -139,7 +139,7 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="ColorsPage" name="mColorsPage">
+        <widget class="Gui::ColorsPage" name="mColorsPage">
          <property name="sizePolicy">
           <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
            <horstretch>0</horstretch>
@@ -162,17 +162,17 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>AppearancePage</class>
+   <class>Gui::AppearancePage</class>
    <extends>QWidget</extends>
    <header location="global">gui/AppearancePage.h</header>
   </customwidget>
   <customwidget>
-   <class>ColorsPage</class>
+   <class>Gui::ColorsPage</class>
    <extends>QWidget</extends>
    <header location="global">gui/ColorsPage.h</header>
   </customwidget>
   <customwidget>
-   <class>PreferencesPage</class>
+   <class>Gui::PreferencesPage</class>
    <extends>QWidget</extends>
    <header location="global">gui/PreferencesPage.h</header>
   </customwidget>

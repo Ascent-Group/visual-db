@@ -33,6 +33,7 @@
 #include <gui/ui/ui_ControlWidget.h>
 #include <QWidget>
 
+namespace Gui {
 
 /*!
  * \class ControlWidget
@@ -83,6 +84,8 @@ class ControlWidget : public QWidget
         void moveRight();
         void setMoveMode();
 };
+
+}
 
 #endif // CONTROLWIDGET_H
 

@@ -36,6 +36,8 @@
 
 #include <QtDebug>
 
+namespace Gui {
+
 /*!
  * Constructor
  */
@@ -99,3 +101,4 @@ OptionsDialog::changePage(QListWidgetItem *iCurrent, QListWidgetItem *iPrevious)
     ui.mOptionsPages->setCurrentIndex(ui.mOptionsList->row(iCurrent));
 }
 
+}

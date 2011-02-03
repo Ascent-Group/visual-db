@@ -30,6 +30,8 @@
 #include <QToolButton>
 #include <gui/TabWidget.h>
 
+namespace Gui {
+
 /*!
  * Ctor
  */
@@ -88,3 +90,4 @@ TabWidget::closeTabButtonClicked()
     }
 }
 
+}

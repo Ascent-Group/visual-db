@@ -39,6 +39,8 @@ class QLineEdit;
 class QPushButton;
 class QSpinBox;
 
+namespace Gui {
+
 /*!
  * \class PreferencesPage
  * \headerfile gui/PreferencesPage.h
@@ -65,6 +67,8 @@ class PreferencesPage : public QWidget
     private slots:
     void folder();
 };
+
+}
 
 #endif // PREFERENCESPAGE_H
 

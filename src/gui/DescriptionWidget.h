@@ -60,6 +60,7 @@ typedef DbObjectPtr<DbView> DbViewPtr;
 
 } //namespace DbObjects
 
+namespace Gui {
 
 /*!
  * \class DescriptionWidget
@@ -164,6 +165,8 @@ class DescriptionWidget : public QWidget
         static const QString sCreateSchemaScript;
         static const QString sAddSchemaDecriptionScript;
 };
+
+}
 
 #endif // DESCRIPTIONWIDGET_H
 

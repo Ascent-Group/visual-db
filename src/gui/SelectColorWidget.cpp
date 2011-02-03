@@ -34,6 +34,8 @@
 #include <QDebug>
 #include <QPalette>
 
+namespace Gui {
+
 /*!
  * Ctor
  */
@@ -190,3 +192,4 @@ SelectColorWidget::init()
     ui.mColorButton->setPalette(QPalette(mColor));
 }
 
+}

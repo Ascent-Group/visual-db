@@ -33,6 +33,8 @@
 #include <gui/ColorsPage.h>
 #include <gui/SelectColorWidget.h>
 
+namespace Gui {
+
 /*!
  * Constructor
  */
@@ -94,3 +96,4 @@ ColorsPage::borderColor() const
     return ui.mBorderWidget->color();
 }
 
+}

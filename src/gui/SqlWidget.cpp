@@ -38,6 +38,8 @@
 
 #include <QtDebug>
 
+namespace Gui {
+
 /*!
  * Ctor
  */
@@ -288,3 +290,4 @@ SqlWidget::readPortion(Portions iDirection)
 
 }
 
+}

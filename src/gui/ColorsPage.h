@@ -36,6 +36,8 @@
 
 class QColor;
 
+namespace Gui {
+
 /*!
  * \class ColorsPage
  * \headerfile gui/ColorsPage.h
@@ -57,6 +59,8 @@ class ColorsPage : public QWidget
     private:
         Ui::ColorsPage ui;
 };
+
+}
 
 #endif // COLORPAGE_H
 

@@ -36,6 +36,8 @@ class QAction;
 class QPointF;
 class QUndoCommand;
 
+namespace Gui {
+
 /*!
  * \class GraphicsView
  * \headerfile gui/GraphicsView.h
@@ -89,6 +91,8 @@ class GraphicsView : public QGraphicsView
         void moveRight();
         void setMoveMode(bool);
 };
+
+}
 
 #endif // GRAPHICSVIEW_H
 

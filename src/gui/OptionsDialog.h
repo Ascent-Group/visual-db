@@ -33,6 +33,8 @@
 #include <gui/ui/ui_OptionsDialog.h>
 #include <QSettings>
 
+namespace Gui {
+
 /*!
  * \class OptionsDialog
  * \headerfile gui/OptionsDialog.h
@@ -58,6 +60,8 @@ class OptionsDialog : public QDialog
         void accept();
         void changePage(QListWidgetItem *, QListWidgetItem *);
 };
+
+}
 
 #endif // OPTIONSDIALOG_H
 

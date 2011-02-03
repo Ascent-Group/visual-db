@@ -33,7 +33,12 @@
 #include <QPointF>
 #include <QUndoCommand>
 
+namespace Gui {
+
 class GraphicsScene;
+
+}
+
 class QGraphicsItem;
 
 /*!
@@ -44,14 +49,14 @@ class QGraphicsItem;
 class DeleteItemCommand : public QUndoCommand
 {
     public:
-        DeleteItemCommand(GraphicsScene &iScene, QList<QGraphicsItem *> iTableList, QUndoCommand *parent = 0);
+        DeleteItemCommand(Gui::GraphicsScene &iScene, QList<QGraphicsItem *> iTableList, QUndoCommand *parent = 0);
         ~DeleteItemCommand();
 
         void undo();
         void redo();
 
     private:
-        GraphicsScene &mScene;
+        Gui::GraphicsScene &mScene;
         QList<QGraphicsItem *> mTableList;
 };
 

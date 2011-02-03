@@ -33,6 +33,8 @@
 #include <gui/ui/ui_LogPanel.h>
 #include <QWidget>
 
+namespace Gui {
+
 /*!
  * \class LogPanel
  * \headerfile gui/LogPanel.h
@@ -54,6 +56,8 @@ class LogPanel : public QWidget
     private slots:
         void saveToFile();
 };
+
+}
 
 #endif // LOGPANEL_H
 

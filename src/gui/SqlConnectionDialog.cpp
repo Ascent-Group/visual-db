@@ -42,6 +42,8 @@
 
 #include <QtDebug>
 
+namespace Gui {
+
 /*!
  * Constructor
  */
@@ -222,4 +224,6 @@ SqlConnectionDialog::switchProxy(bool iToggle)
     ui.mProxyPortEdit->setEnabled(iToggle);
     ui.mProxyUserEdit->setEnabled(iToggle);
     ui.mProxyPasswordEdit->setEnabled(iToggle);
+}
+
 }

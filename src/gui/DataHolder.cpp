@@ -27,3 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <gui/DataHolder.h>
+
+namespace Gui {
+
+}

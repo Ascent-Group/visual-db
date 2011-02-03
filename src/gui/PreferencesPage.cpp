@@ -31,6 +31,8 @@
 #include <gui/PreferencesPage.h>
 #include <QFileDialog>
 
+namespace Gui {
+
 /*!
  * Constructor
  */
@@ -135,3 +137,4 @@ PreferencesPage::loadLastSession() const
     return ui.mLoadLastSessionBox->isChecked();
 }
 
+}

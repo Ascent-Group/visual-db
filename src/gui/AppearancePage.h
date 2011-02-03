@@ -36,6 +36,8 @@
 
 class QComboBox;
 
+namespace Gui {
+
 /*!
  * \class AppearancePage 
  * \headerfile gui/AppearancePage.h 
@@ -55,6 +57,8 @@ class AppearancePage : public QWidget
         Ui::AppearancePage ui;
         QSettings mSettings;
 };
+
+}
 
 #endif // APPEARANCEPAGE_H
 

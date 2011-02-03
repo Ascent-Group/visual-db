@@ -62,8 +62,6 @@ class ViewItem;
 
 }
 
-}
-
 /*!
  * \class GraphicsScene
  * \headerfile gui/GraphicsScene.h
@@ -179,6 +177,8 @@ class GraphicsScene : public QGraphicsScene {
         static const int MOVE_INTERVAL = 600;
         static const int SEEK_STEP = 20;
 };
+
+}
 
 #endif // GRAPHICSSCENE_H
 

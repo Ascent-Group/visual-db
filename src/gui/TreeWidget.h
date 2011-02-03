@@ -38,6 +38,8 @@ class QMenu;
 
 using namespace DbObjects::Common;
 
+namespace Gui {
+
 /*!
  * \class TreeWidget
  * \headerfile gui/TreeWidget.h
@@ -101,6 +103,8 @@ class TreeWidget : public QTreeWidget
     private:
         void insertItems(QTreeWidgetItem *, QStringList *, TreeWidget::Item, bool iDragEnabled = false);
 };
+
+}
 
 #endif // TREEWIDGET_H
 

@@ -48,6 +48,8 @@
 
 #include <QDebug>
 
+namespace Gui {
+
 /*!
  * Constructor
  */
@@ -534,4 +536,6 @@ void
 SceneWidget::sendItemActionDone(QUndoCommand *iCommand)
 {
     emit itemActionDone(iCommand);
+}
+
 }

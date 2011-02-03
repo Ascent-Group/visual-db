@@ -54,8 +54,6 @@ class GraphicsItem;
 
 }
 
-}
-
 /*!
  * \class SceneWidget
  * \headerfile gui/SceneWidget.h
@@ -129,6 +127,8 @@ class SceneWidget : public QWidget
         QMenu *mTableMenu;
         QMenu *mSchemeMenu;
 };
+
+}
 
 #endif // SCENEWIDGET_H
 

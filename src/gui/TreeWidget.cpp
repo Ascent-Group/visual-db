@@ -36,6 +36,8 @@
 #include <common/DbSchema.h>
 #include <gui/TreeWidget.h>
 
+namespace Gui {
+
 static QString qDBCaption(const QSqlDatabase &);
 static void setBold(QTreeWidgetItem *, bool);
 
@@ -308,3 +310,4 @@ TreeWidget::insertItems(QTreeWidgetItem *iParentItem, QStringList *iList, TreeWi
     }
 }
 
+}

@@ -31,6 +31,8 @@
 #include <gui/AppearancePage.h>
 #include <QLocale>
 
+namespace Gui {
+
 /*!
  * Constructor
  */
@@ -68,3 +70,4 @@ AppearancePage::language() const
     return ui.mLanguageCombo->itemData(ui.mLanguageCombo->currentIndex()).toInt();
 }
 
+}

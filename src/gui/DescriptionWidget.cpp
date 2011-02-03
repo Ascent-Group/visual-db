@@ -42,6 +42,8 @@
 
 using namespace DbObjects::Common;
 
+namespace Gui {
+
 const QString DescriptionWidget::sCreateSchemaScript = "CREATE SCHEMA %1 \nAUTHORIZATION %2;\n";
 const QString DescriptionWidget::sAddSchemaDecriptionScript = "\nCOMMENT ON SCHEMA public IS '%1';";
 
@@ -837,3 +839,4 @@ DescriptionWidget::describe(const DbTriggerPtr &iTrigger)
 
 }
 
+}

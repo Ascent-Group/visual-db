@@ -62,6 +62,8 @@
 
 #include <QtDebug>
 
+namespace Gui {
+
 using namespace QtConcurrent;
 
 /*!
@@ -985,3 +987,4 @@ MainWindow::printMsg(const QString &iText) const
     ui.mLogPanel->print(iText);
 }
 
+}

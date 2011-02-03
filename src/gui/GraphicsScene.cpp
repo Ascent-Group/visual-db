@@ -51,6 +51,8 @@
 
 #include <QDebug>
 
+namespace Gui {
+
 /*!
  * Constructor
  */
@@ -1322,4 +1324,6 @@ GraphicsScene::flushCache()
     mDbItems.clear();
     qDeleteAll(mArrows);
     mArrows.clear();
+}
+
 }

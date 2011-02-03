@@ -77,6 +77,8 @@ int main(int argc, char **argv)
     //
     app.installTranslator(&translator);
 
+    using namespace Gui;
+
     MainWindow *mainWindow = new MainWindow();
     mainWindow->show();
 

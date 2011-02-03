@@ -34,6 +34,8 @@
 
 class QToolButton;
 
+namespace Gui {
+
 /*!
  * \class TabWidget
  * \headerfile gui/TabWidget.h
@@ -62,6 +64,8 @@ class TabWidget : public QTabWidget
     private slots:
         void closeTabButtonClicked();
 };
+
+}
 
 #endif // TABWIDGET_H
 

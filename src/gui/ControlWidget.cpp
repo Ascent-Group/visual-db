@@ -31,6 +31,8 @@
 
 #include <QtDebug>
 
+namespace Gui {
+
 /*!
  * Constructor
  */
@@ -189,4 +191,6 @@ void
 ControlWidget::setZoom(int iVal)
 {
     ui.mScaleSlider->setValue(iVal);
+}
+
 }

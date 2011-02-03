@@ -383,7 +383,7 @@ TableItem::toXml(QDomDocument &iDoc) const
  * \return Created table item
  */
 TableItem *
-TableItem::fromXml(const QDomElement &iElement, GraphicsScene *iScene, QMenu *iMenu)
+TableItem::fromXml(const QDomElement &iElement, Gui::GraphicsScene *iScene, QMenu *iMenu)
 {
     // get table's coordinates
     // FIXME - C-style casting

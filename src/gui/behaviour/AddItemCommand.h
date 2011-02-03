@@ -33,7 +33,12 @@
 #include <QPointF>
 #include <QUndoCommand>
 
+namespace Gui {
+
 class GraphicsScene;
+
+}
+
 class QGraphicsItem;
 
 /*!
@@ -44,7 +49,7 @@ class QGraphicsItem;
 class AddItemCommand : public QUndoCommand
 {
     public:
-        AddItemCommand(GraphicsScene *, QList<QGraphicsItem *>, QUndoCommand *parent = 0);
+        AddItemCommand(Gui::GraphicsScene *, QList<QGraphicsItem *>, QUndoCommand *parent = 0);
         ~AddItemCommand();
 
         void undo();
@@ -52,7 +57,7 @@ class AddItemCommand : public QUndoCommand
 
     private:
         QList<QGraphicsItem *> mTableList;
-        GraphicsScene *mScene;
+        Gui::GraphicsScene *mScene;
         QPointF mInitialPosition;
 };
 

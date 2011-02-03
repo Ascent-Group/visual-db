@@ -33,7 +33,6 @@
 #include <common/DbObjectPtr.h>
 #include <gui/graphicsitems/DbObjectItem.h>
 
-class GraphicsScene;
 class QAction;
 class QDomDocument;
 class QDomElement;
@@ -54,6 +53,8 @@ typedef DbObjectPtr<DbTable> DbTablePtr;
 }
 
 namespace Gui {
+
+class GraphicsScene;
 
 namespace GraphicsItems {
 
@@ -94,7 +95,7 @@ class TableItem : public DbObjectItem
         QList<TableItem::FullName> parents() const;
 
         QDomElement toXml(QDomDocument &) const;
-        static TableItem *fromXml(const QDomElement &, GraphicsScene *, QMenu *);
+        static TableItem *fromXml(const QDomElement &, Gui::GraphicsScene *, QMenu *);
 
         virtual void setFieldsTypesVisible(bool);
 

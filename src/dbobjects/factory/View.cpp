@@ -31,8 +31,6 @@
 #include <factory/View.h>
 #include <psql/View.h>
 
-using namespace DbObjects::Common;
-
 namespace DbObjects
 {
 
@@ -84,7 +82,7 @@ View::createView(const QString &iName, const QString &iSchemaName)
 Psql::View*
 View::createPsqlView(const QString &iName, const QString &iSchemaName)
 {
-    return new(std::nothrow) Psql::View(iName, Database::instance()->findSchema(iSchemaName));
+    return new(std::nothrow) Psql::View(iName, Common::Database::instance()->findSchema(iSchemaName));
 }
 
 /*!

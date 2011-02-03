@@ -32,8 +32,6 @@
 //#include <mysql/Table.h>
 #include <psql/Table.h>
 
-using namespace DbObjects::Common;
-
 namespace DbObjects
 {
 
@@ -85,7 +83,7 @@ Table::createTable(const QString &iName, const QString &iSchemaName)
 Psql::Table*
 Table::createPsqlTable(const QString &iName, const QString &iSchemaName)
 {
-    return new(std::nothrow) Psql::Table(iName, Database::instance()->findSchema(iSchemaName));
+    return new(std::nothrow) Psql::Table(iName, Common::Database::instance()->findSchema(iSchemaName));
 }
 
 /*!

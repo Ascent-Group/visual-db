@@ -31,8 +31,6 @@
 #include <factory/Trigger.h>
 #include <psql/Trigger.h>
 
-using namespace DbObjects::Common;
-
 namespace DbObjects
 {
 
@@ -84,7 +82,7 @@ Trigger::createTrigger(const QString &iName, const QString &iSchemaName)
 Psql::Trigger*
 Trigger::createPsqlTrigger(const QString &iName, const QString &iSchemaName)
 {
-    return new(std::nothrow) Psql::Trigger(iName, Database::instance()->findSchema(iSchemaName));
+    return new(std::nothrow) Psql::Trigger(iName, Common::Database::instance()->findSchema(iSchemaName));
 }
 
 /*!

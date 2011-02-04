@@ -109,7 +109,7 @@ class Database
         DbIndexPtr findIndex(const QString &iIndexName) const;
         DbLanguagePtr findLanguage(const QString &iLangName) const;
 
-        quint64 findTableIndices(DbTablePtr &iTable, QVector<DbIndexPtr> &iList) const;
+        quint64 findTableIndices(const DbTablePtr &iTable, QVector<DbIndexPtr> &iList) const;
 
         void setSqlDriver(const QString &iSqlDriverName);
         SqlDriverType sqlDriver() const;

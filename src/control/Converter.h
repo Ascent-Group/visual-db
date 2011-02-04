@@ -30,5 +30,63 @@
 #ifndef CONTROL_CONVERTER_H
 #define CONTROL_CONVERTER_H
 
+#include <dbobjects/common/DbIndex.h>
+#include <dbobjects/common/DbLanguage.h>
+#include <dbobjects/common/DbProcedure.h>
+#include <dbobjects/common/DbRole.h>
+#include <dbobjects/common/DbSchema.h>
+#include <dbobjects/common/DbTable.h>
+#include <dbobjects/common/DbTrigger.h>
+#include <dbobjects/common/DbView.h>
+#include <gui/DescriptionWidget.h>
+#include <gui/graphicsitems/TableItem.h>
+#include <gui/graphicsitems/ViewItem.h>
+
+namespace DbObjects
+{
+
+namespace Common
+{
+
+typedef DbObjectPtr<DbTable> DbTablePtr;
+
+}
+
+}
+
+namespace Control {
+
+/*!
+ * \brief Auxiliary class that converts objects from one type to another.
+ * \class Converter
+ * \file control/converter.h
+ */
+class Converter {
+    
+    public:
+        static bool toTableItem(const DbObjects::Common::DbTablePtr &iDbTablePtr, Gui::GraphicsItems::TableItem &oTableItem);
+//        static bool toDbTable(DbObjects::Common::DbTablePtr &oDbTablePtr, const Gui::GraphicsItems::TableItem &iTableItem);
+
+        static bool toViewItem(const DbObjects::Common::DbViewPtr &iDbViewPtr, Gui::GraphicsItems::ViewItem &oViewItem);
+//        static bool toDbView(DbObjects::Common::DbViewPtr &oDbViewPtr, const Gui::GraphicsItems::ViewItem &iViewItem);
+
+        static bool toDescriptionWidget(const DbObjects::Common::DbIndexPtr &iDbIndexPtr, Gui::DescriptionWidget &oDescriptionWidget);
+        static bool toDescriptionWidget(const DbObjects::Common::DbLanguagePtr &iDbLanguagePtr, Gui::DescriptionWidget &oDescriptionWidget);
+        static bool toDescriptionWidget(const DbObjects::Common::DbProcedurePtr &iDbProcedurePtr, Gui::DescriptionWidget &oDescriptionWidget);
+        static bool toDescriptionWidget(const DbObjects::Common::DbRolePtr &iDbRolePtr, Gui::DescriptionWidget &oDescriptionWidget);
+        static bool toDescriptionWidget(const DbObjects::Common::DbSchemaPtr &iDbSchemaPtr, Gui::DescriptionWidget &oDescriptionWidget);
+        static bool toDescriptionWidget(const DbObjects::Common::DbTablePtr &iDbTablePtr, Gui::DescriptionWidget &oDescriptionWidget);
+        static bool toDescriptionWidget(const DbObjects::Common::DbTriggerPtr &iDbTriggerPtr, Gui::DescriptionWidget &oDescriptionWidget);
+        static bool toDescriptionWidget(const DbObjects::Common::DbViewPtr &iDbTablePtr, Gui::DescriptionWidget &oDescriptionWidget);
+
+    private:
+        Converter();
+        Converter(const Converter &iConverter);
+        Converter &operator=(const Converter &iConverter);
+        ~Converter();
+};
+
+}
+
 #endif // CONTROL_CONVERTER_H
 

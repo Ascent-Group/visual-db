@@ -27,4 +27,119 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <control/Converter.h>
+
+namespace Control {
+
+bool 
+Converter::toTableItem(const DbObjects::Common::DbTablePtr &iDbTablePtr, 
+        Gui::GraphicsItems::TableItem &oTableItem)
+{
+    // create title item
+    oTableItem.setTitleItem(new QGraphicsTextItem(iDbTablePtr.schemaName().toUpper() + "." + iDbTablePtr.name().toUpper()));
+
+    for (int i = 0; i < iDbTablePtr->columnsCount(); ++i) {
+        oTableItem.addFieldItem(new QGraphicsTextItem(iDbTablePtr->columnName(i) + ": " + iDbTablePtr->columnType(i)));
+    }
+
+    using namespace DbObjects::Common;
+    Database *dbInst = Database::instance();
+    QVector<DbObjects::Common::DbIndexPtr> indices;
+    
+    dbInst->findTableIndices(iDbTablePtr, indices);
+    foreach (const DbIndexPtr &index, indices) {
+        oTableItem.addIndexItem(new QGraphicsTextItem(index.name()));
+    }
+
+	return true;
+}
+
+//bool 
+//Converter::toDbTable(DbObjects::Common::DbTablePtr &oDbTablePtr, 
+//	const Gui::GraphicsItems::TableItem &iTableItem)
+//{
+//    
+//
+//	return true;
+//}
+
+bool 
+Converter::toViewItem(const DbObjects::Common::DbViewPtr &iDbViewPtr, 
+        Gui::GraphicsItems::ViewItem &oViewItem)
+{
+    // create title item
+    oViewItem.setTitleItem(new QGraphicsTextItem(iDbViewPtr.schemaName().toUpper() + "." + iDbViewPtr.name().toUpper()));
+
+    // create field items
+    foreach (QString fieldName, iDbViewPtr->columnsNames()) {
+        oViewItem.addFieldItem(new QGraphicsTextItem(fieldName));
+    }
+
+	return true;
+}
+
+//bool 
+//Converter::toDbView(DbObjects::Common::DbViewPtr &oDbViewPtr, 
+//	const Gui::GraphicsItems::ViewItem &iViewItem)
+//{
+//	return true;
+//}
+
+bool 
+Converter::toDescriptionWidget(const DbObjects::Common::DbIndexPtr &iDbIndexPtr, 
+		Gui::DescriptionWidget &oDescriptionWidget)
+{
+	return true;
+}
+
+bool 
+Converter::toDescriptionWidget(const DbObjects::Common::DbLanguagePtr &iDbLanguagePtr, 
+		Gui::DescriptionWidget &oDescriptionWidget)
+{
+	return true;
+}
+
+bool 
+Converter::toDescriptionWidget(const DbObjects::Common::DbProcedurePtr &iDbProcedurePtr, 
+		Gui::DescriptionWidget &oDescriptionWidget)
+{
+	return true;
+}
+
+bool 
+Converter::toDescriptionWidget(const DbObjects::Common::DbRolePtr &iDbRolePtr, 
+		Gui::DescriptionWidget &oDescriptionWidget)
+{
+	return true;
+}
+
+bool 
+Converter::toDescriptionWidget(const DbObjects::Common::DbSchemaPtr &iDbSchemaPtr, 
+		Gui::DescriptionWidget &oDescriptionWidget)
+{
+	return true;
+}
+
+bool 
+Converter::toDescriptionWidget(const DbObjects::Common::DbTablePtr &iDbTablePtr, 
+		Gui::DescriptionWidget &oDescriptionWidget)
+{
+	return true;
+}
+
+bool 
+Converter::toDescriptionWidget(const DbObjects::Common::DbTriggerPtr &iDbTriggerPtr, 
+		Gui::DescriptionWidget &oDescriptionWidget)
+{
+	return true;
+}
+
+bool 
+Converter::toDescriptionWidget(const DbObjects::Common::DbViewPtr &iDbTablePtr, 
+		Gui::DescriptionWidget &oDescriptionWidget)
+{
+	return true;
+}
+
+}
 

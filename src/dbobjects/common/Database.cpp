@@ -416,14 +416,14 @@ Database::findLanguage(const QString &iLanguageName) const
  * \return Number of found indices
  */
 quint64
-Database::findTableIndices(DbTablePtr &iTable, QVector<DbIndexPtr> &oList) const
+Database::findTableIndices(const DbTablePtr &iTable, QVector<DbIndexPtr> &oList) const
 {
     oList.clear();
 
     quint64 count = mIndices.count();
 
     // if we don't have any indices
-    if (0 == count || 0 == iTable.valid()) {
+    if (0 == count || !iTable.valid()) {
         return 0;
     }
 

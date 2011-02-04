@@ -10,3 +10,5 @@ tags
 test.report
 *.pro.user
 visdb
+
+*~

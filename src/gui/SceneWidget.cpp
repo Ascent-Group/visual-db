@@ -81,10 +81,10 @@ SceneWidget::SceneWidget(QWidget *iParent, Qt::WindowFlags iFlags)
 
     connect(mScene, SIGNAL(itemMoved(QList <QGraphicsItem *>, int, int)),
             this, SLOT(sendItemMoved(QList <QGraphicsItem *>, int, int)));
-    connect(mScene, SIGNAL(itemColorChanged(GraphicsItem *, const QColor &, const QColor &)),
-            this, SLOT(sendItemColorChanged(GraphicsItem *, const QColor &, const QColor &)));
-    connect(mScene, SIGNAL(itemResized(GraphicsItem *, const QRectF &, const QRectF &)),
-            this, SLOT(sendItemResized(GraphicsItem *, const QRectF &, const QRectF &)));
+    connect(mScene, SIGNAL(itemColorChanged(Gui::GraphicsItems::GraphicsItem *, const QColor &, const QColor &)),
+            this, SLOT(sendItemColorChanged(Gui::GraphicsItems::GraphicsItem *, const QColor &, const QColor &)));
+    connect(mScene, SIGNAL(itemResized(Gui::GraphicsItems::GraphicsItem *, const QRectF &, const QRectF &)),
+            this, SLOT(sendItemResized(Gui::GraphicsItems::GraphicsItem *, const QRectF &, const QRectF &)));
 
     connect(mView, SIGNAL(valueIncreased()), mControlWidget, SLOT(increaseValue()));
     connect(mView, SIGNAL(valueDecreased()), mControlWidget, SLOT(decreaseValue()));

@@ -27,4 +27,105 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <control/Director.h>
+#include <gui/MainWindow.h>
+
+
+#include <QtDebug>
+
+namespace Control
+{
+
+/*!
+ * Constructor
+ */
+Director::Director(QObject *iParent)
+    : QObject(iParent),
+      mSplashScreen(QPixmap(":/img/splashscreen.png")),
+      mFSM(),
+      mInitialState(),
+      mIdleState(),
+      mBusyState(),
+      mMainWindow(0)
+{
+    mSplashScreen.show();
+//    mSplashScreen.showMessage("Loading...");
+
+    mFSM.addState(&mInitialState);
+    mFSM.addState(&mIdleState);
+    mFSM.addState(&mBusyState);
+
+    // set transitions
+    mInitialState.addTransition(this, SIGNAL(initializationComplete()), &mIdleState);
+    mIdleState.addTransition(this, SIGNAL(requestReceived()), &mBusyState);
+    mBusyState.addTransition(this, SIGNAL(requestProcessed()), &mIdleState);
+
+    // connections for states
+    connect(&mBusyState, SIGNAL(entered()), this, SLOT(busyStateEntered()));
+    connect(&mBusyState, SIGNAL(exited()), this, SLOT(busyStateExited()));
+
+    mFSM.setInitialState(&mInitialState);
+    mFSM.start();
+
+    // do the initialization
+    if (!initialize()) {
+        qDebug() << "[[31mERROR[0m] Director initialization failed!";
+        // terminate the app
+        // we cannot use qApp->quit or qApp->exit() here because the main loop has not
+        // started yet
+        throw -1;
+    }
+}
+
+/*!
+ * Destructor
+ */
+Director::~Director()
+{
+}
+
+void
+Director::start()
+{
+    mMainWindow->show();
+}
+
+/*!
+ *
+ */
+bool
+Director::initialize()
+{
+    using namespace Gui;
+
+    try {
+        // main window
+        mMainWindow = new MainWindow();
+        mSplashScreen.finish(mMainWindow);
+    } catch (...) {
+        return false;
+    }
+
+    return true;
+}
+
+/*!
+ *
+ */
+void
+Director::busyStateEntered()
+{
+
+}
+
+/*!
+ *
+ */
+void
+Director::busyStateExited()
+{
+
+}
+
+} // namespace Control
 

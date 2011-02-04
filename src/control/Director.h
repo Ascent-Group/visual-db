@@ -30,5 +30,56 @@
 #ifndef CONTROL_DIRECTOR_H
 #define CONTROL_DIRECTOR_H
 
+#include <QObject>
+#include <QSplashScreen>
+#include <QStateMachine>
+
+namespace Gui
+{
+class MainWindow;
+}
+
+namespace Control
+{
+
+/*!
+ * \class Director
+ * \headerfile control/Director.h
+ * \brief Class that represents the environment of current execution.
+ */
+class Director : public QObject
+{
+    Q_OBJECT
+
+    public:
+        Director(QObject *iParent = 0);
+        ~Director();
+
+        void start();
+
+    private:
+        QSplashScreen mSplashScreen;
+        QStateMachine mFSM;
+
+        QState mInitialState;
+        QState mIdleState;
+        QState mBusyState;
+
+        Gui::MainWindow *mMainWindow;
+
+        bool initialize();
+
+    private slots:
+        void busyStateEntered();
+        void busyStateExited();
+
+    signals:
+        void initializationComplete();
+        void requestReceived();
+        void requestProcessed();
+};
+
+} // namespace Control
+
 #endif // CONTROL_DIRECTOR_H
 

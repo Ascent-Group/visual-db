@@ -37,7 +37,7 @@
 #include <QIcon>
 
 #include <control/Config.h>
-#include <gui/MainWindow.h>
+#include <control/Director.h>
 
 int main(int argc, char **argv)
 {
@@ -75,10 +75,12 @@ int main(int argc, char **argv)
     //
     app.installTranslator(&translator);
 
-    using namespace Gui;
-
-    MainWindow *mainWindow = new MainWindow();
-    mainWindow->show();
+    try {
+        Control::Director director;
+        director.start();
+    } catch (...)  {
+        return -1;
+    }
 
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 

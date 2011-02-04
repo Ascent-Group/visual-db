@@ -33,7 +33,6 @@
 #include <connect/ConnectionInfo.h>
 #include <gui/ui/ui_MainWindow.h>
 #include <QMainWindow>
-#include <QSettings>
 #include <QPointF>
 
 class QColorDialog;
@@ -82,7 +81,6 @@ class MainWindow : public QMainWindow
 
         QProgressBar *mProgressBar;
 
-        QSettings mSettings;
         Connect::ConnectionInfo mConnectionInfo;
 
         QUndoStack *mUndoStack;

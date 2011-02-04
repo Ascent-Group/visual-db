@@ -33,12 +33,10 @@
  */
 
 #include <QApplication>
-#include <QLocale>
-#include <QSettings>
 #include <QTranslator>
 #include <QIcon>
 
-#include <consts.h>
+#include <control/Config.h>
 #include <gui/MainWindow.h>
 
 int main(int argc, char **argv)
@@ -61,11 +59,11 @@ int main(int argc, char **argv)
     // set additional plugins path
     app.addLibraryPath("./lib/");
 
-    const QSettings settings;
+    const Control::Config cfg;
     QTranslator translator;
 
     // load qm translation
-    switch (settings.value(Consts::APPEARANCE_GRP + "/" + Consts::LANG_SETTING).toInt()) {
+    switch (cfg.language()) {
         case QLocale::Russian:
             translator.load(":/visual_db_ru");
             break;

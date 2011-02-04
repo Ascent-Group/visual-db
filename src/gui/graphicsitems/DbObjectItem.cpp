@@ -34,8 +34,7 @@
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
-#include <QSettings>
-#include <consts.h>
+#include <control/Config.h>
 #include <gui/graphicsitems/ArrowItem.h>
 #include <gui/graphicsitems/DbObjectItem.h>
 #include <gui/GraphicsScene.h>
@@ -177,8 +176,7 @@ void
 DbObjectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *iEvent)
 {
     QGraphicsItem::mouseReleaseEvent(iEvent);
-    QSettings settings;
-    if (settings.value(Consts::VIEW_GRP + "/" + Consts::ALIGN_TO_GRID_SETTING, false).toBool()) {
+    if (Control::Config().alignToGrid()) {
         moveBy(-(int)pos().x() % GraphicsScene::LOW_GRID_DX, -(int)pos().y() % GraphicsScene::LOW_GRID_DY);
     }
 }

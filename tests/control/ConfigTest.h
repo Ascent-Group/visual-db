@@ -44,7 +44,6 @@ class ConfigTest : public QObject
         void sessionDirTest();
         void newTabAutoSwitchTest();
         void loadLastSessionTest();
-        // \fixme COUNT_SAVED_SESSIONS -> Saved_sessions_number
         void savedSessionsNumberTest();
         void showIndicesTest();
         void backgroundColorTest();

@@ -328,5 +328,10 @@ ConfigTest::savedSessionTest()
 
     // try to save a session without a specific index, this should fail
     QCOMPARE(cfg.setSavedSession("sessionN"), -1);
+
+
+    // explicit overriding of a saved session
+    QCOMPARE(cfg.setSavedSession("OverridingSession.vdb", 0), 0);
+    QCOMPARE(cfg.savedSession(0), QString("OverridingSession.vdb"));
 }
 

@@ -44,7 +44,7 @@ const QString PREFS_GRP("Preferences");
 const QString SESSION_DIR_SETTING("SessionDir");
 const QString NEW_TAB_AUTO_SWITCH_SETTING("NewTabAutoSwitch");
 const QString LOAD_LAST_SESSION_SETTING("LoadLastSession");
-const QString COUNT_SAVED_SESSIONS_SETTING("CountSavedSessions");
+const QString SAVED_SESSIONS_NUMBER_SETTING("SavedSessionsNumber");
 const QString SHOW_INDICES_SETTING("ShowIndices");
 // end Preferences group
 

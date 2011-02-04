@@ -56,7 +56,7 @@ namespace Consts
      */
     extern const QString LOAD_LAST_SESSION_SETTING;
     /*! Name of a setting that defines the maximum number of sessions to save */
-    extern const QString COUNT_SAVED_SESSIONS_SETTING;
+    extern const QString SAVED_SESSIONS_NUMBER_SETTING;
     /*! Name of a setting that indicates whether indices should be shown or not */
     extern const QString SHOW_INDICES_SETTING;
     // end Preferences group
@@ -94,11 +94,11 @@ namespace Consts
 
     // begin group LastSession
     /*! Name of a group of settings concerning last session */
-    // \todo Last session group will be removed. We will save this parameters in xml file
     extern const QString LAST_SESSION_GRP;
 
     /*! Name of a setting that holds the path to a saved session description file*/
     extern const QString SAVED_SESSION_SETTING;
+    // \todo All settings below will be removed. We will save this parameters in xml file
     /*! Name of a setting that holds a name of db driver that has been used during last session */
     extern const QString DB_DRV_SETTING;
     /*! Name of a setting that holds a name of db explored during last session */

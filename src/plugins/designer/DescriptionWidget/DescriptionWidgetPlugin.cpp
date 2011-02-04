@@ -101,7 +101,7 @@ QString
 DescriptionWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"DescriptionWidget\" name=\"mDescriptionWidget\">\n"
+    " <widget class=\"Gui::DescriptionWidget\" name=\"mDescriptionWidget\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

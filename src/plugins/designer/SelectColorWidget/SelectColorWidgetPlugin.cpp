@@ -101,7 +101,7 @@ QString
 SelectColorWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"SelectColorWidget\" name=\"mSelectColorWidget\">\n"
+    " <widget class=\"Gui::SelectColorWidget\" name=\"mSelectColorWidget\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

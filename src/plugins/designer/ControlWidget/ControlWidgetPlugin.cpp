@@ -101,7 +101,7 @@ QString
 ControlWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"ControlWidget\" name=\"mControlWidget\">\n"
+    " <widget class=\"Gui::ControlWidget\" name=\"mControlWidget\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

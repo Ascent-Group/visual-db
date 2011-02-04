@@ -101,7 +101,7 @@ QString
 TreeWidgetPlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"TreeWidget\" name=\"mTreeWidget\">\n"
+    " <widget class=\"Gui::TreeWidget\" name=\"mTreeWidget\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

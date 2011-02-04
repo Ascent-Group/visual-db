@@ -102,7 +102,7 @@ QString
 ColorsPagePlugin::domXml() const
 {
     return "<ui language=\"c++\">\n"
-    " <widget class=\"ColorsPage\" name=\"mColorsPage\">\n"
+    " <widget class=\"Gui::ColorsPage\" name=\"mColorsPage\">\n"
     "  <property name=\"geometry\">\n"
     "   <rect>\n"
     "    <x>0</x>\n"

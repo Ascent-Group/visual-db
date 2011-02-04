@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <consts.h>
+#include <control/Config.h>
 #include <gui/AppearancePage.h>
 #include <QLocale>
 
@@ -46,8 +46,8 @@ AppearancePage::AppearancePage(QWidget *iParent)
     ui.mLanguageCombo->addItem(QLocale::languageToString(QLocale::Russian), QLocale::Russian);
 
     // set language to the one from settings
-    using namespace Consts;
-    int currentIndex = ui.mLanguageCombo->findData(mSettings.value(APPEARANCE_GRP + "/" + LANG_SETTING, QLocale::English));
+    Control::Config cfg;
+    int currentIndex = ui.mLanguageCombo->findData(cfg.language());
     ui.mLanguageCombo->setCurrentIndex(currentIndex);
 
 }
@@ -64,10 +64,10 @@ AppearancePage::~AppearancePage()
  *
  * \return Language id
  */
-int
+QLocale::Language
 AppearancePage::language() const
 {
-    return ui.mLanguageCombo->itemData(ui.mLanguageCombo->currentIndex()).toInt();
+    return static_cast<QLocale::Language>(ui.mLanguageCombo->itemData(ui.mLanguageCombo->currentIndex()).toInt());
 }
 
 }

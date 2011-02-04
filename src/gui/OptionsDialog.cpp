@@ -27,12 +27,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <control/Config.h>
 #include <gui/AppearancePage.h>
 #include <gui/ColorsPage.h>
 #include <gui/OptionsDialog.h>
 #include <gui/PreferencesPage.h>
-
-#include <consts.h>
 
 #include <QtDebug>
 
@@ -60,18 +59,19 @@ OptionsDialog::~OptionsDialog()
 void
 OptionsDialog::writeSettings()
 {
-    using namespace Consts;
-    mSettings.setValue(APPEARANCE_GRP + "/" + LANG_SETTING, ui.mAppearancePage->language());
-    mSettings.setValue(PREFS_GRP + "/" + SESSION_DIR_SETTING, ui.mPreferencesPage->sessionFolder());
-    mSettings.setValue(PREFS_GRP + "/" + NEW_TAB_AUTO_SWITCH_SETTING, ui.mPreferencesPage->newTabAutoSwitch());
-    mSettings.setValue(PREFS_GRP + "/" + LOAD_LAST_SESSION_SETTING, ui.mPreferencesPage->loadLastSession());
-    mSettings.setValue(PREFS_GRP + "/" + COUNT_SAVED_SESSIONS_SETTING, ui.mPreferencesPage->countSavedSession());
-    mSettings.setValue(PREFS_GRP + "/" + SHOW_INDICES_SETTING, ui.mPreferencesPage->showIndices());
-    mSettings.setValue(COLOR_GRP + "/" + BACKGROUND_SETTING, ui.mColorsPage->backgroundColor());
-    mSettings.setValue(COLOR_GRP + "/" + TABLE_SETTING, ui.mColorsPage->tableColor());
-//    mSettings.setValue(COLOR_GRP + "/" + FONT_SETTING, ui.mColorsPage->fontColor());
-    mSettings.setValue(COLOR_GRP + "/" + ARROW_SETTING, ui.mColorsPage->arrowColor());
-    mSettings.setValue(COLOR_GRP + "/" + BORDER_SETTING, ui.mColorsPage->borderColor());
+    Control::Config cfg;
+
+    cfg.setLanguage(ui.mAppearancePage->language());
+    cfg.setSessionDir(ui.mPreferencesPage->sessionFolder());
+    cfg.setNewTabAutoSwitch(ui.mPreferencesPage->newTabAutoSwitch());
+    cfg.setLoadLastSession(ui.mPreferencesPage->loadLastSession());
+    cfg.setSavedSessionsNumber(ui.mPreferencesPage->countSavedSession());
+    cfg.setShowIndices(ui.mPreferencesPage->showIndices());
+    cfg.setBackgroundColor(ui.mColorsPage->backgroundColor());
+    cfg.setTableColor(ui.mColorsPage->tableColor());
+//    cfg.setFontColor(ui.mColorsPage->fontColor());
+    cfg.setArrowColor(ui.mColorsPage->arrowColor());
+    cfg.setBorderColor(ui.mColorsPage->borderColor());
 }
 
 /*!

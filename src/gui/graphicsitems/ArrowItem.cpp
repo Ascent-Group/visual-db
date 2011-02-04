@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <consts.h>
+#include <control/Config.h>
 #include <gui/graphicsitems/ArrowItem.h>
 #include <QDebug>
 #include <QPainterPath>
@@ -38,7 +38,6 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QRectF>
-#include <QSettings>
 #include <math.h>
 
 namespace Gui {
@@ -65,8 +64,8 @@ ArrowItem::ArrowItem(TableItem *iStartItem,
     // make arrow selectable
     setFlag(QGraphicsItem::ItemIsSelectable, true);
     // set the style of the arrow
-    QSettings settings;
-    mColor = settings.value(Consts::COLOR_GRP + "/" + Consts::ARROW_SETTING, Qt::black).value<QColor>();
+    Control::Config cfg;
+    mColor = cfg.arrowColor();
     mBrushColor = mColor;
     setPen(QPen(mColor, 2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 }

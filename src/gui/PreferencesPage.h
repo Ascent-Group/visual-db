@@ -31,7 +31,6 @@
 #define PREFERENCESPAGE_H
 
 #include <gui/ui/ui_PreferencesPage.h>
-#include <QSettings>
 #include <QWidget>
 
 class QCheckBox;
@@ -62,10 +61,9 @@ class PreferencesPage : public QWidget
 
     private:
         Ui::PreferencesPage ui;
-        QSettings mSettings;
 
     private slots:
-    void folder();
+        void folder();
 };
 
 }

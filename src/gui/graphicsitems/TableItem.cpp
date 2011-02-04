@@ -33,9 +33,8 @@
 #include <QGraphicsTextItem>
 #include <QMenu>
 #include <QPainter>
-#include <QSettings>
 #include <common/Database.h>
-#include <consts.h>
+#include <control/Config.h>
 #include <gui/GraphicsScene.h>
 #include <gui/graphicsitems/TableItem.h>
 #include <QtDebug>
@@ -104,8 +103,7 @@ TableItem::TableItem(const QString &iSchemaName, const QString &iTableName, QMen
     // set width and height
     setWidth(DEFAULT_WIDTH);
 
-    QSettings settings;
-    mIndicesVisible = settings.value(Consts::PREFS_GRP + "/" + Consts::SHOW_INDICES_SETTING, false).toBool();
+    mIndicesVisible = Control::Config().showIndices();
     setIndicesVisible(mIndicesVisible);
 //    if (mIndicesVisible) {
 //        setHeight((mModel->columnsCount() + mIndices.count() + 1) * (FIELD_HEIGHT + INTERVAL) + INTERVAL * 3);

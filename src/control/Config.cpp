@@ -154,7 +154,7 @@ Config::setLoadLastSession(bool iFlag)
 quint32
 Config::savedSessionsNumber() const
 {
-    return mSettings.value(Consts::PREFS_GRP + "/" + Consts::COUNT_SAVED_SESSIONS_SETTING, 0).toUInt();
+    return mSettings.value(Consts::PREFS_GRP + "/" + Consts::SAVED_SESSIONS_NUMBER_SETTING, 0).toUInt();
 }
 
 /*!
@@ -172,7 +172,7 @@ Config::setSavedSessionsNumber(quint32 iNum)
         }
     }
 
-    mSettings.setValue(Consts::PREFS_GRP + "/" + Consts::COUNT_SAVED_SESSIONS_SETTING, iNum);
+    mSettings.setValue(Consts::PREFS_GRP + "/" + Consts::SAVED_SESSIONS_NUMBER_SETTING, iNum);
 }
 
 /*!

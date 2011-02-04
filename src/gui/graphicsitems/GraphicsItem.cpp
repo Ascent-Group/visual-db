@@ -34,9 +34,8 @@
 #include <QPainter>
 #include <QPen>
 #include <QPixmap>
-#include <QSettings>
 #include <QTextDocument>
-#include <consts.h>
+#include <control/Config.h>
 #include <gui/graphicsitems/ArrowItem.h>
 #include <gui/graphicsitems/GraphicsItem.h>
 #include <gui/GraphicsScene.h>
@@ -61,10 +60,9 @@ GraphicsItem::GraphicsItem(QMenu *iMenu)
       mContextMenu(iMenu)
 {
     // get selected color
-    QSettings settings;
-    mItemColor = settings.value(Consts::COLOR_GRP + "/" + Consts::TABLE_SETTING, Qt::white).value<QColor>();
-    mBorderColor = settings.value(Consts::COLOR_GRP + "/" + Consts::BORDER_SETTING, Qt::black).value<QColor>();
-
+    Control::Config cfg;
+    mItemColor = cfg.tableColor();
+    mBorderColor = cfg.borderColor();
 
     mShadowColor = QColor(60, 60, 60, 175);
 }

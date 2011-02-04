@@ -30,6 +30,7 @@
 #include <QColor>
 #include <QDebug>
 
+#include <control/Config.h>
 #include <gui/ColorsPage.h>
 #include <gui/SelectColorWidget.h>
 
@@ -43,6 +44,11 @@ ColorsPage::ColorsPage(QWidget *iParent)
 {
     ui.setupUi(this);
 
+    Control::Config cfg;
+    ui.mBackgroundWidget->setColor(cfg.backgroundColor());
+    ui.mTableWidget->setColor(cfg.tableColor());
+    ui.mArrowItemWidget->setColor(cfg.arrowColor());
+    ui.mBorderWidget->setColor(cfg.borderColor());
 }
 
 /*!

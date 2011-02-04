@@ -35,7 +35,6 @@
 #include <QDomNode>
 #include <QGraphicsScene>
 #include <QSet>
-#include <QSettings>
 #include <QTimer>
 
 class QGraphicsItem;
@@ -152,8 +151,6 @@ class GraphicsScene : public QGraphicsScene {
         void movingTimerExpired();
 
     private:
-        QSettings mSettings;
-
         QPointF mStartSelect;
         QPointF mEndSelect;
         QGraphicsPathItem *mSelectionPath;

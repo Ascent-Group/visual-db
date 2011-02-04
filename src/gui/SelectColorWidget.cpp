@@ -27,12 +27,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <consts.h>
+#include <control/Config.h>
 #include <gui/SelectColorWidget.h>
-#include <QColor>
 #include <QColorDialog>
-#include <QDebug>
 #include <QPalette>
+
+#include <QDebug>
 
 namespace Gui {
 
@@ -45,8 +45,6 @@ SelectColorWidget::SelectColorWidget(QWidget *iParent)
     ui.setupUi(this);
 
     ui.mLabel->setText("");
-
-    init();
 
     // these connects, should be at the end !!!
     // we are connecting them manually, because if setupUi does this
@@ -141,7 +139,7 @@ SelectColorWidget::setLabelText(const QString &iText)
 {
     ui.mLabel->setText(iText);
 
-    init();
+//    init();
 }
 
 /*!
@@ -173,13 +171,12 @@ SelectColorWidget::setDefaultColor(const QColor &iColor)
 }
 
 /*!
- * \brief Init the dialog
  */
 void
-SelectColorWidget::init()
+SelectColorWidget::setColor(const QColor &iColor)
 {
     // get the default colors from the settings
-    mColor = mSettings.value(Consts::COLOR_GRP + "/" + ui.mLabel->text(), mDefaultColor).value<QColor>();
+    mColor = iColor;
 
     qDebug() << mDefaultColor << ":" << mColor;
     // select default color
@@ -193,3 +190,4 @@ SelectColorWidget::init()
 }
 
 }
+

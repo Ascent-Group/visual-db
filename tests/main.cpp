@@ -112,6 +112,12 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
+    // \todo Determine whether this should be set or not for tests
+//    app.setOrganizationName("Ascent Group");
+//    app.setOrganizationDomain("sourceforge.net");
+//    app.setApplicationName("VisualDB");
+//    app.setWindowIcon(QIcon(":/img/logo.png"));
+
 //    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", "mainConnect");
 //    db.setHostName(DBHOST);
 //    db.setDatabaseName(DBNAME);

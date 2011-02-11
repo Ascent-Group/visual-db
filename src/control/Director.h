@@ -34,6 +34,8 @@
 #include <QSplashScreen>
 #include <QStateMachine>
 
+#include <QtDebug>
+
 namespace Gui
 {
 class MainWindow;
@@ -72,6 +74,8 @@ class Director : public QObject
     private slots:
         void busyStateEntered();
         void busyStateExited();
+
+        void connectionDialogRequested() { qDebug() << "Director::slot>"; abort();}
 
     signals:
         void initializationComplete();

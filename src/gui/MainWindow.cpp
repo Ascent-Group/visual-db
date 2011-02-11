@@ -95,7 +95,9 @@ MainWindow::MainWindow()
 
     initSession();
 
-    connect(ui.mNewConnectionAction, SIGNAL(triggered()), this, SLOT(showConnectionDialog()));
+//    connect(ui.mNewConnectionAction, SIGNAL(triggered()), this, SLOT(showConnectionDialog()));
+    connect(ui.mNewConnectionAction, SIGNAL(triggered()), this, SIGNAL(connectionDialogRequest()));
+//    connect(this, SIGNAL(connectionDialogRequest()), this, SLOT(a()));
     connect(ui.mLogPanelWidget, SIGNAL(closed()), this, SLOT(closeLogPanel()));
     connect(ui.mDatabaseTreeWidget, SIGNAL(closed()), this, SLOT(closeDatabaseTree()));
     connect(ui.mLogPanelWidget, SIGNAL(shown()), this, SLOT(showLogPanel()));

@@ -128,6 +128,9 @@ class MainWindow : public QMainWindow
         void showPrintPreviewDialog();
         void showPrintDialog();
 
+        void a() { qDebug() << "MainWindow::slot>"; abort();}
+    signals:
+        void connectionDialogRequest();
 };
 
 }

@@ -30,13 +30,14 @@ main:director.new()
 
 director:director.showSplashScreen()
 (2)director[1]:director.initializeRegistry()
-director[1]:director.initialize()
-director:converter=converter.new()
 
 *2 window
 This will initialize the map of
 <QWidget*, Context*>
 *2
+
+main:director.initialize()
+director:converter=converter.new()
 
 director:dbMgr=dbMgr.new()
 
@@ -66,15 +67,19 @@ This will initialize the map of
 
 
 director:window.new()
-director:window.exec()
 
-director[1]:director.removeSplashScreen()
+main:director.start()
+director:window.show()
+
+director:director.removeSplashScreen()
 director[1]:director.enterState(Waiting)
 
 user:window.clicks "New Connection" button
-window:director.newConnectionRequest(connInfo)
+window:director.connectionDialogRequest()
 director:director.enterState(ProcessingRequest)
 director:director.showProgressDialog()
+director[2]:director.connectionDialogRequested()
+director:director.showConnectionDialog(false)
 
 *20 window
 The director will pass ConnectionInfo to dbMgr
@@ -83,7 +88,7 @@ DatabaseManager will return a valid context on
 successfull connection.
 *20
 
-(20)director[2]:ctx=dbMgr.newConnectionRequest(connInfo)
+(20)director[1]:ctx=dbMgr.newConnectionRequest(connInfo)
 
 dbMgr:QSqlDatabase*=dbMgr.createQSqlDatabaseDescriptor()
 

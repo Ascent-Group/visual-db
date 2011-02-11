@@ -101,6 +101,7 @@ Director::initialize()
     try {
         // main window
         mMainWindow = new MainWindow();
+        connect(mMainWindow, SIGNAL(connectionDialogRequest()), this, SLOT(connectionDialogRequested()));
         mSplashScreen.finish(mMainWindow);
     } catch (...) {
         return false;

@@ -113,5 +113,99 @@ DatabaseManager::establishConnection(const Connect::ConnectionInfo &iInfo, QStri
     return ctx;
 }
 
+/*!
+ * Adds contex-database pair to the registry.
+ *
+ * \param[in] iContext - Context
+ * \param[it] iDatabase - Database that corresponds to the given context
+ *
+ * \return true - If the pair has been successfully registered.
+ * \return false - Otherwise, i.e. the pair has been registered before.
+ */
+bool
+DatabaseManager::add(const Control::Context *iContext, DbObjects::Common::Database *iDatabase)
+{
+    if (!mRegistry.contains(iContext)) {
+        mRegistry.insert(iContext, iDatabase);
+        return true;
+    }
+
+    // unlike director, whose map is many-to-one, we have one-one registry and if we got
+    // here, then it means we are trying to register several contexts for the same
+    // database, which is wrong.
+    Q_ASSERT(false);
+    return false;
+}
+
+/*!
+ * Removes given context and its database from the registry.
+ *
+ * \param[in] iContext - Context we are trying to unregsiter.
+ *
+ * \return true - If the pair has been successfully unregsitered.
+ * \return false - Otherwise.
+ */
+bool
+DatabaseManager::remove(const Control::Context *iContext)
+{
+    if (!mRegistry.contains(iContext)) {
+        mRegistry.remove(iContext);
+        // \todo destroy database
+        return true;
+    }
+
+    // We should not get here (in theory). If we got here, then it means that we are
+    // trying to unregister a context that has never been registered, i.e. we missed its
+    // registration and need to check the code.
+    Q_ASSERT(false);
+
+    return false;
+}
+
+/*!
+ * Removes a record for the specified database from the registry
+ *
+ * \param[in] iDatabase - Database that we are trying to unregister.
+ *
+ * \return true - If the database has been successfully unregistered.
+ * \return false - Otherwise.
+ */
+bool
+DatabaseManager::remove(DbObjects::Common::Database *iDatabase)
+{
+    QList<const Control::Context *> contexts = mRegistry.keys(iDatabase);
+
+    // we have 1-to-1 registry, that's why the next condition should always be kept.
+    // note, that this assert may fail if:
+    // 1) we have several contexts for the same database.
+    // 2) we don't have any context for the given database.
+    // Both cases are invalid, and if they occur, we need to check code.
+    Q_ASSERT(contexts.size() == 1);
+
+    return remove(contexts.first());
+}
+
+/*!
+ *
+ */
+const Control::Context*
+DatabaseManager::findContext(DbObjects::Common::Database *iDatabase) const
+{
+    return mRegistry.key(iDatabase, 0);
+}
+
+/*!
+ * Finds the database of the specified context.
+ *
+ * \param[in] iContext - Context whose database we are looking for
+ *
+ * \return Database of the specified context
+ */
+DbObjects::Common::Database*
+DatabaseManager::findDatabase(const Control::Context *iContext) const
+{
+    return mRegistry.value(iContext);
+}
+
 } // namespace Control
 

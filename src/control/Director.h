@@ -74,8 +74,22 @@ class Director : public QObject
 
         Gui::MainWindow *mMainWindow;
 
-        QMap<QWidget*, Control::Context*> mRegistry;
+        /*!
+         * Many-to-one registry. Used for correct request handling taking into
+         * consideration the fact that several multiple connections are supported.
+         * We are probably allowed to have a map of non-consts here because director is
+         * the one who is responsible for their modifications. As for the function
+         * parameters of other modules, then they will definitely accpet const pointers.
+         */
+        QMap<QWidget *, Control::Context *> mRegistry;
         Control::DatabaseManager mDbMgr;
+
+        bool add(QWidget *, Control::Context *);
+        bool remove(QWidget *);
+        bool remove(Control::Context *);
+
+        Control::Context* findContext(QWidget *) const;
+        quint32 findWidgets(Control::Context *, QVector<QWidget*> &oWidgets) const;
 
         void showConnectionDialog(bool iLoadSession);
 

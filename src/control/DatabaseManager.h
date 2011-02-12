@@ -59,8 +59,22 @@ class DatabaseManager
         void flush();
         Control::Context* establishConnection(const Connect::ConnectionInfo &, QString &);
 
+        bool add(const Control::Context *, DbObjects::Common::Database *);
+        bool remove(const Control::Context *);
+        bool remove(DbObjects::Common::Database *);
+
     private:
-        QMap<Control::Context*, DbObjects::Common::Database*> mRegistry;
+        /*!
+         * One-to-one registry of contexts and database instances. Context is under
+         * control of director, that's why we handle it as const. As for the database,
+         * then we don't make it const, since Database manager is taking care of all of
+         * them.
+         */
+        QMap<const Control::Context *, DbObjects::Common::Database *> mRegistry;
+
+        const Control::Context* findContext(DbObjects::Common::Database *) const;
+        DbObjects::Common::Database* findDatabase(const Control::Context *) const;
+
 };
 
 } // namespace Control

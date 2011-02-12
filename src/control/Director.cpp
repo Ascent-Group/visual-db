@@ -126,6 +126,160 @@ Director::initialize()
 }
 
 /*!
+ * Adds widget-ctx pair to the registry. The most appropriate name for this function is
+ * probably 'register' but since this is a keyword we ca'nt use it, so that's why 'add' is
+ * used for the name.
+ *
+ * \param[in] iWidget - Widget we are registering.
+ * \param[in] iContext - a context this widget belongs to.
+ *
+ * \return true - If the pair has been successfully added to the registry.
+ * \return false - Otherwise, when this pair has been registered before.
+ */
+bool
+Director::add(QWidget *iWidget, Control::Context *iContext)
+{
+    if (!mRegistry.contains(iWidget)) {
+        mRegistry.insert(iWidget, iContext);
+        return true;
+    }
+
+    return false;
+}
+
+/*!
+ * Removes a record for the given widget from a registry.
+ *
+ * \param[in] iWidget - Widget we are trying to unregister.
+ *
+ * \return true - If the widget has been removed from the registry.
+ * \return false - If there were no such widget registered.
+ */
+bool
+Director::remove(QWidget *iWidget)
+{
+    if (!mRegistry.contains(iWidget)) {
+        mRegistry.remove(iWidget);
+        return true;
+    }
+
+    // We should not get here (in theory). If we got here, then it means that we are
+    // trying to unregister a widget that has never been registered, i.e. we missed its
+    // registration and need to check the code.
+    Q_ASSERT(false);
+
+    return false;
+}
+
+/*!
+ * Removes all widgets for the specified context from the registry.
+ *
+ * \param[in] iContext - a context whose widgets we are trying to unregister.
+ *
+ * \return true - If all widgets for the given context have been successfully remove from
+ * the registry.
+ * \return false - Otherwise.
+ */
+bool
+Director::remove(Control::Context *iContext)
+{
+    QList<QWidget *>::const_iterator iter = mRegistry.keys(iContext).begin();
+
+    bool flag = true;
+    for (; iter != mRegistry.keys(iContext).end(); ++iter) {
+        flag = (flag && remove(*iter));
+    }
+
+    mDbMgr.remove(iContext);
+
+    return flag;
+}
+
+/*!
+ * Finds a context for the specified widget
+ *
+ * \param[in] iWidget - Widget whose context we are looking for.
+ *
+ * \return Context of the specified widget
+ */
+Control::Context*
+Director::findContext(QWidget *iWidget) const
+{
+    return mRegistry.value(iWidget);
+}
+
+/*!
+ * Finds all widgets for the given context
+ *
+ * \param[in] iContext - A context whose widgets we are looking for
+ * \param[out] oWidgets - Vector with the found widgets.
+ *
+ * \return Number of widgets that we found.
+ */
+quint32
+Director::findWidgets(Control::Context *iContext, QVector<QWidget*> &oWidgets) const
+{
+    QList<QWidget *>::const_iterator iter = mRegistry.keys(iContext).begin();
+
+    quint32 count = 0;
+    for (; iter != mRegistry.keys(iContext).end(); ++iter) {
+        oWidgets.push_back(*iter);
+        ++count;
+    }
+
+    return count;
+}
+
+/*!
+ * Used to bring up a connection dialog for further connection establishing. This function
+ * can be used either from slot Director::connectionDialogRequested() or from a function
+ * that will restore sessions \todo name the mentioned fucntion
+ *
+ * \param[in] iLoadSession - Inidicates whether the connection dialog is needed for
+ * session restoring or for establishing a new connection.
+ *
+ * \todo Implement
+ */
+void
+Director::showConnectionDialog(bool iLoadSession)
+{
+    using namespace Gui;
+    using namespace Connect;
+
+    // \todo we should get the last connetion info somehow
+    // \note I Suggest we have a constructor with only bool parameter.
+
+    // create sql connection dialog
+    SqlConnectionDialog connDialog(iLoadSession);
+
+    // \todo set last used connection info
+//    connDialog.setConnectionInfos(QVector);
+
+    Context *ctx = 0;
+    do {
+        // nothing to do if canceled
+        if (QDialog::Rejected == connDialog.exec()) {
+            return;
+        }
+
+        QString errorMsg;
+        ctx = mDbMgr.establishConnection(connDialog.connectionInfo(), errorMsg);
+
+        if (!errorMsg.isEmpty()) {
+            QMessageBox::critical(0, tr("Connection error"), errorMsg, QMessageBox::Ok);
+        }
+    } while (!ctx);
+
+    // if we got here, then we have a valid ctx
+    emit logMessageRequest(QString("Connected to '%1'")
+            .arg(ctx->connectionInfo().dbHostInfo().dbName()));
+
+    // \todo create scene and tree for it
+
+    // \todo register them
+}
+
+/*!
  *
  */
 void
@@ -195,53 +349,6 @@ Director::exitRequested()
     qDebug() << "Director::exitRequested>";
     // \todo Do cleanup
 //    qApp->exit();
-}
-
-/*!
- * Used to bring up a connection dialog for further connection establishing. This function
- * can be used either from slot Director::connectionDialogRequested() or from a function
- * that will restore sessions \todo name the mentioned fucntion
- *
- * \param[in] iLoadSession - Inidicates whether the connection dialog is needed for
- * session restoring or for establishing a new connection.
- *
- * \todo Implement
- */
-void
-Director::showConnectionDialog(bool iLoadSession)
-{
-    using namespace Gui;
-    using namespace Connect;
-
-    // \todo we should get the last connetion info somehow
-    // \note I Suggest we have a constructor with only bool parameter.
-
-    // create sql connection dialog
-    SqlConnectionDialog connDialog(iLoadSession);
-
-    // \todo set last used connection info
-//    connDialog.setConnectionInfos(QVector);
-
-    Context *ctx = 0;
-    do {
-        // nothing to do if canceled
-        if (QDialog::Rejected == connDialog.exec()) {
-            return;
-        }
-
-        QString errorMsg;
-        ctx = mDbMgr.establishConnection(connDialog.connectionInfo(), errorMsg);
-
-        if (!errorMsg.isEmpty()) {
-            QMessageBox::critical(0, tr("Connection error"), errorMsg, QMessageBox::Ok);
-        }
-        // \todo if error occurs, we need to show message dialog
-    } while (!ctx);
-
-    // if we got here, then we have a valid ctx
-    emit logMessageRequest(QString("Connected to '%1'").arg(ctx->connectionInfo().dbHostInfo().dbName()));
-    // \todo create scene and tree for it
-    // \todo register them
 }
 
 } // namespace Control

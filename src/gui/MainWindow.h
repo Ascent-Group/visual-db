@@ -63,6 +63,7 @@ class MainWindow : public QMainWindow
         MainWindow();
         ~MainWindow();
 
+    public slots:
         void printMsg(const QString &) const;
 
     private:
@@ -81,7 +82,7 @@ class MainWindow : public QMainWindow
 
         QProgressBar *mProgressBar;
 
-        Connect::ConnectionInfo mConnectionInfo;
+//        Connect::ConnectionInfo mConnectionInfo;
 
         QUndoStack *mUndoStack;
 
@@ -105,9 +106,9 @@ class MainWindow : public QMainWindow
 
     private slots:
         // this slot is not standard that's why it is declared here
-        int showConnectionDialog(bool iLoadSession = false);
+//        int showConnectionDialog(bool iLoadSession = false);
         void addCommand(QUndoCommand*);
-        void reloadData();
+//        void reloadData();
         bool saveSession();
         void loadSession();
         void loadLastSession();
@@ -124,13 +125,17 @@ class MainWindow : public QMainWindow
         void closeLogPanel();
         void showLogPanel();
         void printPreview(QPrinter*);
-        void showOptionsDialog();
+//        void showOptionsDialog();
         void showPrintPreviewDialog();
         void showPrintDialog();
 
-        void a() { qDebug() << "MainWindow::slot>"; abort();}
     signals:
         void connectionDialogRequest();
+        void reloadDataRequest();
+        void optionsDialogRequest();
+
+        void saveSessionRequest();
+        void exitRequest();
 };
 
 }

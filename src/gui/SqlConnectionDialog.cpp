@@ -47,11 +47,9 @@ namespace Gui {
 /*!
  * Constructor
  */
-SqlConnectionDialog::SqlConnectionDialog(Connect::ConnectionInfo &iConnectionInfo,
-        bool iLoadSession,
+SqlConnectionDialog::SqlConnectionDialog(bool iLoadSession,
         QWidget *iParent)
     : QDialog(iParent)
-    , mConnectionInfo(iConnectionInfo)
     , mConnectionFailed(true)
 {
     ui.setupUi(this);
@@ -86,11 +84,56 @@ SqlConnectionDialog::~SqlConnectionDialog()
  * during connection.
  * \return false If the accept button was clicked and the connection has been successfully
  * established.
+ *
+ * \todo remove this func
  */
 bool
 SqlConnectionDialog::connectionFailed() const
 {
     return mConnectionFailed;
+}
+
+/*!
+ * \return The currently selected connection info
+ */
+Connect::ConnectionInfo
+SqlConnectionDialog::connectionInfo() const
+{
+    using namespace Connect;
+    ConnectionInfo connInfo;
+    DbHostInfo dbHostInfo;
+
+    dbHostInfo.setAddress(ui.mDbHostEdit->text());
+    dbHostInfo.setPort(ui.mDbPortEdit->text().toUInt()),
+    dbHostInfo.setUser(ui.mDbUserEdit->text()),
+    dbHostInfo.setPassword(ui.mDbPasswordEdit->text()),
+    dbHostInfo.setDbName(ui.mDbNameEdit->text());
+    dbHostInfo.setDbDriver(ui.mDbDriverCombo->currentText());
+
+    connInfo.setDbHostInfo(dbHostInfo);
+
+    connInfo.setUseProxy(ui.mUseProxyBox->isChecked());
+    if (connInfo.useProxy()) {
+        ProxyHostInfo proxyHostInfo;
+        proxyHostInfo.setAddress(ui.mProxyHostNameEdit->text());
+        proxyHostInfo.setPort(ui.mProxyPortEdit->text().toUInt());
+        proxyHostInfo.setUser(ui.mProxyUserEdit->text());
+        proxyHostInfo.setPassword(ui.mProxyPasswordEdit->text());
+        proxyHostInfo.setType((QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toUInt());
+
+        connInfo.setProxyHostInfo(proxyHostInfo);
+    }
+
+    return connInfo;
+}
+
+/*!
+ *
+ */
+void
+SqlConnectionDialog::setConnectionInfos(const QVector<Connect::ConnectionInfo> &iInfos)
+{
+    mConnectionInfos = iInfos;
 }
 
 /*!
@@ -156,60 +199,60 @@ SqlConnectionDialog::createDialog(bool iLoadSession)
 void
 SqlConnectionDialog::initConnectionFields()
 {
-    ui.mDbDriverCombo->setCurrentIndex(ui.mDbDriverCombo->findText(mConnectionInfo.dbHostInfo().dbDriver()));
-    ui.mDbHostEdit->setText(mConnectionInfo.dbHostInfo().address());
-    ui.mDbPortEdit->setText(QString::number(mConnectionInfo.dbHostInfo().port()));
-    ui.mDbNameEdit->setText(mConnectionInfo.dbHostInfo().dbName());
-    ui.mDbUserEdit->setText(mConnectionInfo.dbHostInfo().user());
-
-    ui.mUseProxyBox->setChecked(mConnectionInfo.useProxy());
-    ui.mProxyTypeBox->setCurrentIndex(ui.mProxyTypeBox->findData(mConnectionInfo.proxyHostInfo().type()));
-    ui.mProxyHostNameEdit->setText(mConnectionInfo.proxyHostInfo().address());
-    ui.mProxyPortEdit->setText(QString::number(mConnectionInfo.proxyHostInfo().port()));
-    ui.mProxyUserEdit->setText(mConnectionInfo.proxyHostInfo().user());
+//    ui.mDbDriverCombo->setCurrentIndex(ui.mDbDriverCombo->findText(mConnectionInfo.dbHostInfo().dbDriver()));
+//    ui.mDbHostEdit->setText(mConnectionInfo.dbHostInfo().address());
+//    ui.mDbPortEdit->setText(QString::number(mConnectionInfo.dbHostInfo().port()));
+//    ui.mDbNameEdit->setText(mConnectionInfo.dbHostInfo().dbName());
+//    ui.mDbUserEdit->setText(mConnectionInfo.dbHostInfo().user());
+//
+//    ui.mUseProxyBox->setChecked(mConnectionInfo.useProxy());
+//    ui.mProxyTypeBox->setCurrentIndex(ui.mProxyTypeBox->findData(mConnectionInfo.proxyHostInfo().type()));
+//    ui.mProxyHostNameEdit->setText(mConnectionInfo.proxyHostInfo().address());
+//    ui.mProxyPortEdit->setText(QString::number(mConnectionInfo.proxyHostInfo().port()));
+//    ui.mProxyUserEdit->setText(mConnectionInfo.proxyHostInfo().user());
 }
 
 /*!
  * \brief Establish connection
  */
-void
-SqlConnectionDialog::addConnection()
-{
-    using namespace Connect;
-
-    // proxy section
-//    if (ui.mUseProxyBox->isChecked()) {
-        // remember connection paramters
-        ProxyHostInfo proxyHostInfo(ui.mProxyHostNameEdit->text(),
-                ui.mProxyPortEdit->text().toUInt(), ui.mProxyUserEdit->text(), "",
-                (QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toUInt());
-        mConnectionInfo.setProxyHostInfo(proxyHostInfo);
-        mConnectionInfo.setUseProxy(ui.mUseProxyBox->isChecked());
-//        setProxy(ProxyHostInfo);
-//    } else {
-//        mConnectionInfo.setUseProxy(false);
+//void
+//SqlConnectionDialog::addConnection()
+//{
+//    using namespace Connect;
+//
+//    // proxy section
+////    if (ui.mUseProxyBox->isChecked()) {
+//        // remember connection paramters
+//        ProxyHostInfo proxyHostInfo(ui.mProxyHostNameEdit->text(),
+//                ui.mProxyPortEdit->text().toUInt(), ui.mProxyUserEdit->text(), "",
+//                (QNetworkProxy::ProxyType)ui.mProxyTypeBox->itemData(ui.mProxyTypeBox->currentIndex()).toUInt());
+//        mConnectionInfo.setProxyHostInfo(proxyHostInfo);
+//        mConnectionInfo.setUseProxy(ui.mUseProxyBox->isChecked());
+////        setProxy(ProxyHostInfo);
+////    } else {
+////        mConnectionInfo.setUseProxy(false);
+////    }
+//
+//    // remember database settings
+//    DbHostInfo dbHostInfo(ui.mDbHostEdit->text(), ui.mDbPortEdit->text().toUInt(),
+//            ui.mDbUserEdit->text(), ui.mDbPasswordEdit->text(), ui.mDbNameEdit->text(), ui.mDbDriverCombo->currentText());
+//    mConnectionInfo.setDbHostInfo(dbHostInfo);
+//
+//    // create connection to database
+//    mConnectionFailed = !createConnection(dbHostInfo);
+//
+//    /*!
+//     * If we are in addConnection dialog, then we definitely pressed Ok and NOT Cancel
+//     * button.
+//     */
+//    if (mConnectionFailed) {
+//        QMessageBox::warning(
+//                this,
+//                tr("Error"),
+//                tr("Connection refused: ") + QSqlDatabase::database("mainConnect").lastError().text());
 //    }
-
-    // remember database settings
-    DbHostInfo dbHostInfo(ui.mDbHostEdit->text(), ui.mDbPortEdit->text().toUInt(),
-            ui.mDbUserEdit->text(), ui.mDbPasswordEdit->text(), ui.mDbNameEdit->text(), ui.mDbDriverCombo->currentText());
-    mConnectionInfo.setDbHostInfo(dbHostInfo);
-
-    // create connection to database
-    mConnectionFailed = !createConnection(dbHostInfo);
-
-    /*!
-     * If we are in addConnection dialog, then we definitely pressed Ok and NOT Cancel
-     * button.
-     */
-    if (mConnectionFailed) {
-        QMessageBox::warning(
-                this,
-                tr("Error"),
-                tr("Connection refused: ") + QSqlDatabase::database("mainConnect").lastError().text());
-    }
-    accept();
-}
+//    accept();
+//}
 
 /*!
  * \brief Switch on/off proxy connection parameters

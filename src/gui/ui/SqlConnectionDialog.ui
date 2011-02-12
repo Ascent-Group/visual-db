@@ -236,7 +236,7 @@
    <sender>mConnectButton</sender>
    <signal>clicked()</signal>
    <receiver>SqlConnectionDialog</receiver>
-   <slot>addConnection()</slot>
+   <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>114</x>

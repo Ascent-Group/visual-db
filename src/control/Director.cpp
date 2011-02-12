@@ -27,9 +27,12 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <control/Context.h>
 #include <control/Director.h>
 #include <gui/MainWindow.h>
+#include <gui/SqlConnectionDialog.h>
 
+#include <QMessageBox>
 
 #include <QtDebug>
 
@@ -46,7 +49,9 @@ Director::Director(QObject *iParent)
       mInitialState(),
       mIdleState(),
       mBusyState(),
-      mMainWindow(0)
+      mMainWindow(0),
+      mRegistry(),
+      mDbMgr()
 {
     mSplashScreen.show();
 //    mSplashScreen.showMessage("Loading...");
@@ -66,15 +71,6 @@ Director::Director(QObject *iParent)
 
     mFSM.setInitialState(&mInitialState);
     mFSM.start();
-
-    // do the initialization
-    if (!initialize()) {
-        qDebug() << "[[31mERROR[0m] Director initialization failed!";
-        // terminate the app
-        // we cannot use qApp->quit or qApp->exit() here because the main loop has not
-        // started yet
-        throw -1;
-    }
 }
 
 /*!
@@ -82,12 +78,20 @@ Director::Director(QObject *iParent)
  */
 Director::~Director()
 {
+    qDebug() << "Director::~Director>";
+    // clear the registry
+//    qDeleteAll(mRegistry);
+    mRegistry.clear();
+
+    // \note we don't delete mainwindow since it has delete-on-close attribute  set
+//    delete mMainWindow;
 }
 
 void
 Director::start()
 {
     mMainWindow->show();
+    emit logMessageRequest("Started...");
 }
 
 /*!
@@ -96,17 +100,28 @@ Director::start()
 bool
 Director::initialize()
 {
-    using namespace Gui;
-
     try {
-        // main window
+        using namespace Gui;
+        using namespace Connect;
+
+        // main window + connections
         mMainWindow = new MainWindow();
         connect(mMainWindow, SIGNAL(connectionDialogRequest()), this, SLOT(connectionDialogRequested()));
-        mSplashScreen.finish(mMainWindow);
+        connect(mMainWindow, SIGNAL(reloadDataRequest()), this, SLOT(reloadDataRequested()));
+        connect(mMainWindow, SIGNAL(optionsDialogRequest()), this, SLOT(optionsDialogRequested()));
+        connect(mMainWindow, SIGNAL(saveSessionRequest()), this, SLOT(saveSessionRequested()));
+        connect(mMainWindow, SIGNAL(exitRequest()), this, SLOT(exitRequested()));
+
+        connect(this, SIGNAL(logMessageRequest(const QString &)),
+                mMainWindow, SLOT(printMsg(const QString &)));
+
+        // \fixme Set more adequate text
+//        mSplashScreen.showMessage("Loading something else...", Qt::AlignBottom | Qt::AlignLeft, Qt::cyan);
     } catch (...) {
         return false;
     }
 
+    emit initializationComplete();
     return true;
 }
 
@@ -116,7 +131,7 @@ Director::initialize()
 void
 Director::busyStateEntered()
 {
-
+    // \todo show progress bar
 }
 
 /*!
@@ -125,7 +140,108 @@ Director::busyStateEntered()
 void
 Director::busyStateExited()
 {
+    // \todo hide and reset progress bar
+}
 
+/*!
+ * Slot for handling new connection request. Executed when a 'New connection' button is
+ * clicked. On execution shows the connection dialog.
+ */
+void
+Director::connectionDialogRequested()
+{
+    showConnectionDialog(false);
+}
+
+/*!
+ * Slot for handling options dialog request. Executed when a user chooses options... in
+ * file dialog.
+ */
+void
+Director::optionsDialogRequested()
+{
+    // \todo Implement
+}
+
+/*!
+ * Slot for handling reload data request. Executed when a user clicks 'Reload' button.
+ */
+void
+Director::reloadDataRequested()
+{
+    // \todo Find the active context
+    // \todo Do reload for this context
+}
+
+/*!
+ *
+ */
+void
+Director::saveSessionRequested()
+{
+    qDebug() << "Director::saveSessionRequested>";
+    // \todo Implement
+    // \todo Go through all contexts
+    // \todo save session for each context
+}
+
+/*!
+ * Slot for handling application exit. Executed when a user closes main window and
+ * confirms its closing.
+ */
+void
+Director::exitRequested()
+{
+    qDebug() << "Director::exitRequested>";
+    // \todo Do cleanup
+//    qApp->exit();
+}
+
+/*!
+ * Used to bring up a connection dialog for further connection establishing. This function
+ * can be used either from slot Director::connectionDialogRequested() or from a function
+ * that will restore sessions \todo name the mentioned fucntion
+ *
+ * \param[in] iLoadSession - Inidicates whether the connection dialog is needed for
+ * session restoring or for establishing a new connection.
+ *
+ * \todo Implement
+ */
+void
+Director::showConnectionDialog(bool iLoadSession)
+{
+    using namespace Gui;
+    using namespace Connect;
+
+    // \todo we should get the last connetion info somehow
+    // \note I Suggest we have a constructor with only bool parameter.
+
+    // create sql connection dialog
+    SqlConnectionDialog connDialog(iLoadSession);
+
+    // \todo set last used connection info
+//    connDialog.setConnectionInfos(QVector);
+
+    Context *ctx = 0;
+    do {
+        // nothing to do if canceled
+        if (QDialog::Rejected == connDialog.exec()) {
+            return;
+        }
+
+        QString errorMsg;
+        ctx = mDbMgr.establishConnection(connDialog.connectionInfo(), errorMsg);
+
+        if (!errorMsg.isEmpty()) {
+            QMessageBox::critical(0, tr("Connection error"), errorMsg, QMessageBox::Ok);
+        }
+        // \todo if error occurs, we need to show message dialog
+    } while (!ctx);
+
+    // if we got here, then we have a valid ctx
+    emit logMessageRequest(QString("Connected to '%1'").arg(ctx->connectionInfo().dbHostInfo().dbName()));
+    // \todo create scene and tree for it
+    // \todo register them
 }
 
 } // namespace Control

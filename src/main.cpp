@@ -33,6 +33,8 @@
  */
 
 #include <QApplication>
+//#include <QSplashScreen>
+//#include <QTimer>
 #include <QTranslator>
 #include <QIcon>
 
@@ -75,13 +77,20 @@ int main(int argc, char **argv)
     //
     app.installTranslator(&translator);
 
-    try {
-        Control::Director director;
-        director.start();
-    } catch (...)  {
+//    QSplashScreen splashScreen(QPixmap(":/img/splashscreen.png"));
+//    splashScreen.show();
+
+//    QTimer::singleShot(2000, &splashScreen, SLOT(close()));
+
+    Control::Director director;
+    if (!director.initialize()) {
+        qDebug() << "[^[[31mERROR^[[0m] Director initialization failed!";
         return -1;
     }
 
+    director.start();
+
+    // \todo decide whether we need this
     app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
 
     return app.exec();

@@ -30,6 +30,8 @@
 #ifndef CONTROL_DIRECTOR_H
 #define CONTROL_DIRECTOR_H
 
+#include <connect/ConnectionInfo.h>
+#include <control/DatabaseManager.h>
 #include <QObject>
 #include <QSplashScreen>
 #include <QStateMachine>
@@ -43,6 +45,8 @@ class MainWindow;
 
 namespace Control
 {
+
+class Context;
 
 /*!
  * \class Director
@@ -58,6 +62,7 @@ class Director : public QObject
         ~Director();
 
         void start();
+        bool initialize();
 
     private:
         QSplashScreen mSplashScreen;
@@ -69,18 +74,32 @@ class Director : public QObject
 
         Gui::MainWindow *mMainWindow;
 
-        bool initialize();
+        QMap<QWidget*, Control::Context*> mRegistry;
+        Control::DatabaseManager mDbMgr;
+
+        void showConnectionDialog(bool iLoadSession);
 
     private slots:
+        // FSM slots
         void busyStateEntered();
         void busyStateExited();
 
-        void connectionDialogRequested() { qDebug() << "Director::slot>"; abort();}
+        // slots for processing requests from ui
+        void connectionDialogRequested();
+        void reloadDataRequested();
+        void optionsDialogRequested();
+
+        void saveSessionRequested();
+        void exitRequested();
 
     signals:
+        // signals for internal use
         void initializationComplete();
         void requestReceived();
         void requestProcessed();
+
+        void logMessageRequest(const QString &);
+
 };
 
 } // namespace Control

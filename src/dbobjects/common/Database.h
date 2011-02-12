@@ -149,22 +149,6 @@ class Database
 
 };
 
-/*!
- * \class DatabaseManager
- * \headerfile common/Database.h
- * \brief Singleton manager that knows how to utilize the Database instance
- *
- * The main purpose for this class is to handle Database's instance
- * deletion. That's why it is Database's friend, so that it has
- * access to Database::mInstance;
- */
-class DatabaseManager
-{
-    public:
-        void flush();
-
-};
-
 } // namespace Common
 
 } // namespace DbObjects

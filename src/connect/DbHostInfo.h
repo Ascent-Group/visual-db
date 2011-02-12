@@ -72,7 +72,8 @@ class DbHostInfo : public HostInfo
         QString mDbDriver;
 };
 
-bool createConnection(const DbHostInfo &iDbHostInfo);
+// \todo remove this func
+//bool createConnection(const DbHostInfo &iDbHostInfo);
 
 }
 

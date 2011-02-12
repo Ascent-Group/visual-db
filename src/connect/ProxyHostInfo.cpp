@@ -93,6 +93,22 @@ ProxyHostInfo::operator!=(const ProxyHostInfo &iProxyHostInfo) const
     return !(operator==(iProxyHostInfo));
 }
 
+/*!
+ * Activates the given proxy. This function reduces the amount of code to be written, when
+ * we will be working with db connections.
+ */
+void
+ProxyHostInfo::activate() const
+{
+    QNetworkProxy proxy;
+    proxy.setType(type());
+    proxy.setHostName(address());
+    proxy.setPort(port());
+    proxy.setUser(user());
+    proxy.setPassword(password());
+    QNetworkProxy::setApplicationProxy(proxy);
+}
+
 void 
 ProxyHostInfo::swap(const ProxyHostInfo &iProxyHostInfo)
 {

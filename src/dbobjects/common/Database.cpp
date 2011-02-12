@@ -690,15 +690,6 @@ Database::resetData()
 //    mDeletedObjects.clear();
 }
 
-/*!
- * \brief Deletes an instance of the Database class
- */
-void
-DatabaseManager::flush()
-{
-    delete Database::mInstance;
-}
-
 } // namespace Common
 
 } // namespace DbObjects

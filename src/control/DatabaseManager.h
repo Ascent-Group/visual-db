@@ -27,8 +27,43 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECTS_COMMON_DATABASEMANAGER_H
-#define DBOBJECTS_COMMON_DATABASEMANAGER_H
+#ifndef CONTROL_DATABASEMANAGER_H
+#define CONTROL_DATABASEMANAGER_H
 
-#endif // DBOBJECTS_COMMON_DATABASEMANAGER_H
+#include <connect/ConnectionInfo.h>
+
+namespace DbObjects
+{
+namespace Common
+{
+class Database;
+}
+}
+
+namespace Control
+{
+
+class Context;
+
+/*!
+ * \class DatabaseManager
+ * \headerfile control/Database.h
+ * \brief This class manages databases and controls them
+ */
+class DatabaseManager
+{
+    public:
+        DatabaseManager();
+        ~DatabaseManager();
+
+        void flush();
+        Control::Context* establishConnection(const Connect::ConnectionInfo &, QString &);
+
+    private:
+        QMap<Control::Context*, DbObjects::Common::Database*> mRegistry;
+};
+
+} // namespace Control
+
+#endif // CONNECT_DATABASEMANAGER_H
 

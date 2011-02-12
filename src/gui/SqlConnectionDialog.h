@@ -33,6 +33,7 @@
 #include <connect/ConnectionInfo.h>
 #include <gui/ui/ui_SqlConnectionDialog.h>
 #include <QDialog>
+#include <QVector>
 
 namespace Gui {
 
@@ -46,15 +47,18 @@ class SqlConnectionDialog : public QDialog
     Q_OBJECT
 
     public:
-        SqlConnectionDialog(Connect::ConnectionInfo &, bool, QWidget *iParent = 0);
+        SqlConnectionDialog(bool, QWidget *iParent = 0);
         ~SqlConnectionDialog();
 
         bool connectionFailed() const;
 
+        Connect::ConnectionInfo connectionInfo() const;
+        void setConnectionInfos(const QVector<Connect::ConnectionInfo> &iInfos);
+
     private:
         Ui::SqlConnectionDialog ui;
 
-        Connect::ConnectionInfo &mConnectionInfo;
+        QVector<Connect::ConnectionInfo> mConnectionInfos;
 
         bool mConnectionFailed;
 
@@ -63,7 +67,7 @@ class SqlConnectionDialog : public QDialog
         void initConnectionFields();
 
     private slots:
-        void addConnection();
+//        void addConnection();
         void switchProxy(bool);
 };
 

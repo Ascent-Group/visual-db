@@ -61,6 +61,8 @@ class ProxyHostInfo : public HostInfo
         bool operator==(const ProxyHostInfo &iProxyHostInfo) const;
         bool operator!=(const ProxyHostInfo &iProxyHostInfo) const;
 
+        void activate() const;
+
     protected:
         virtual void swap(const ProxyHostInfo &iProxyHostInfo);
 

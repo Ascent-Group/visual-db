@@ -88,6 +88,7 @@ LogPanel::saveToFile()
 void
 LogPanel::print(const QString &iText)
 {
+    // \todo Add colors
     QString formattedText = QString("[%1] %2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(iText);
     ui.mOutputEdit->append(formattedText);
 }

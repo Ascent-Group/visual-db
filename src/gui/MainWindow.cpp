@@ -33,21 +33,19 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFileDialog>
-#include <QFutureWatcher>
+//#include <QFutureWatcher>
 #include <QMessageBox>
 #include <QPainter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
 #include <QProgressBar>
-#include <QProgressDialog>
-#include <QSqlDatabase>
+//#include <QProgressDialog>
+//#include <QSqlDatabase>
 #include <QStatusBar>
-#include <QtConcurrentRun>
 #include <QTime>
 #include <QUndoCommand>
 #include <QUndoStack>
-#include <common/Database.h>
 #include <connect/ConnectionInfo.h>
 #include <control/Config.h>
 #include <gui/DescriptionWidget.h>
@@ -64,7 +62,7 @@
 
 namespace Gui {
 
-using namespace QtConcurrent;
+//using namespace QtConcurrent;
 
 /*!
  * Constructor
@@ -81,13 +79,12 @@ MainWindow::MainWindow()
     createMenus();
 
     /*DO NOT DELETE ME ALEX*/
-    ui.mTree->setContextMenu(mTreeItemMenu);
-
+//    ui.mTree->setContextMenu(mTreeItemMenu);
     createStatusBar();
 
-    using namespace Connect;
-    DbHostInfo dbHostInfo;
-    ProxyHostInfo proxyHostInfo;
+//    using namespace Connect;
+//    DbHostInfo dbHostInfo;
+//    ProxyHostInfo proxyHostInfo;
 
     // set attributes
     setAttribute(Qt::WA_DeleteOnClose);
@@ -95,9 +92,10 @@ MainWindow::MainWindow()
 
     initSession();
 
-//    connect(ui.mNewConnectionAction, SIGNAL(triggered()), this, SLOT(showConnectionDialog()));
     connect(ui.mNewConnectionAction, SIGNAL(triggered()), this, SIGNAL(connectionDialogRequest()));
-//    connect(this, SIGNAL(connectionDialogRequest()), this, SLOT(a()));
+    connect(ui.mReloadDataAction, SIGNAL(triggered()), this, SIGNAL(reloadDataRequest()));
+    connect(ui.mShowOptionsDialogAction, SIGNAL(triggered()), this, SIGNAL(optionsDialogRequest()));
+
     connect(ui.mLogPanelWidget, SIGNAL(closed()), this, SLOT(closeLogPanel()));
     connect(ui.mDatabaseTreeWidget, SIGNAL(closed()), this, SLOT(closeDatabaseTree()));
     connect(ui.mLogPanelWidget, SIGNAL(shown()), this, SLOT(showLogPanel()));
@@ -110,12 +108,13 @@ MainWindow::MainWindow()
 MainWindow::~MainWindow()
 {
     delete mTreeItemMenu;
+    // \todo remove progress bar
     delete mProgressBar;
     delete mUndoStack;
     // \note We have to delete it here because somehow the parent is not set for scene
     // widget in setupUi. If don't do this then graphics scene that is inside scene widget
     // won't get deleted.
-    delete ui.mSceneWidget;
+//    delete ui.mSceneWidget;
 }
 
 /*!
@@ -162,8 +161,10 @@ MainWindow::createMenus()
     mTreeItemMenu->addAction(ui.mDescribeObjectAction);
     mTreeItemMenu->addAction(ui.mQueryDataAction);
 
+#if 0
     ui.mSceneWidget->setSchemeMenu(ui.mSchemeMenu);
     ui.mSceneWidget->setTableMenu(ui.mTableMenu);
+#endif
 }
 
 /*!
@@ -239,10 +240,10 @@ MainWindow::setEnableForActions(bool iFlag)
 int
 importDatabase(const Ui::MainWindow &ui)
 {
-    Q_UNUSED(ui);
-    if (QSqlDatabase::database("mainConnect").open()) {
-        return QDialog::Accepted;
-    }
+//    Q_UNUSED(ui);
+//    if (QSqlDatabase::database("mainConnect").open()) {
+//        return QDialog::Accepted;
+//    }
 
     return QDialog::Rejected;
 }
@@ -254,6 +255,7 @@ importDatabase(const Ui::MainWindow &ui)
  *
  * \return Result of dialog processing
  */
+#if 0
 int
 MainWindow::showConnectionDialog(bool iLoadSession)
 {
@@ -296,21 +298,22 @@ MainWindow::showConnectionDialog(bool iLoadSession)
 
     return futureWatcher.result();
 }
+#endif
 
 /*!
  * \brief Show options dialog
  */
-void
-MainWindow::showOptionsDialog()
-{
-    OptionsDialog optionsDialog;
-
-    // no need to check for accept/reject
-    // this will be done by optionsDialog's accept method
-    if (optionsDialog.exec() == QDialog::Accepted) {
-        updateSessionMenu();
-    }
-}
+//void
+//MainWindow::showOptionsDialog()
+//{
+//    OptionsDialog optionsDialog;
+//
+//    // no need to check for accept/reject
+//    // this will be done by optionsDialog's accept method
+//    if (optionsDialog.exec() == QDialog::Accepted) {
+//        updateSessionMenu();
+//    }
+//}
 
 /*!
  * \brief Show print preview dialog
@@ -331,12 +334,14 @@ MainWindow::showPrintPreviewDialog()
 void
 MainWindow::showPrintDialog()
 {
+#if 0
 #ifndef QT_NO_PRINTER
     QPrinter printer(QPrinter::ScreenResolution);
     QPrintDialog printDialog(&printer);
     if (printDialog.exec() == QDialog::Accepted) {
         ui.mSceneWidget->print(&printer);
     }
+#endif
 #endif
 }
 
@@ -348,10 +353,12 @@ MainWindow::showPrintDialog()
 void
 MainWindow::printPreview(QPrinter *iPrinter)
 {
+#if 0
 #ifdef QT_NO_PRINTER
     Q_UNUSED(iPrinter);
 #else
     ui.mSceneWidget->print(iPrinter);
+#endif
 #endif
 }
 
@@ -442,10 +449,12 @@ MainWindow::showLogPanel()
 
 /*!
  * \brief Add table to scene
+ * \todo this function will be replaced with another one in Director
  */
 void
 MainWindow::addItem()
 {
+#if 0
     QTreeWidgetItemIterator treeIter(ui.mTree);
 
     while (*treeIter) {
@@ -456,6 +465,7 @@ MainWindow::addItem()
     }
 
     ui.mSceneWidget->updateLegend();
+#endif
 }
 
 /*!
@@ -463,20 +473,27 @@ MainWindow::addItem()
  *
  * \param[in] iItem - Item we clicked on
  * \param[in] iColumn - Column of the item
+ *
+ * \todo move to director
  */
 void
 MainWindow::addItem(QTreeWidgetItem *iItem, int iColumn)
 {
+#if 0
     ui.mSceneWidget->showOnScene(iItem, iColumn, true);
+#endif
 }
 
 
 /*!
  * \brief Draw full db scheme
+ *
+ * \todo move to director
  */
 void
 MainWindow::drawFullDbScheme()
 {
+#if 0
     int topLevelItemCount = ui.mTree->topLevelItemCount();
 
     for (int j = 0; j < topLevelItemCount; ++j) {
@@ -502,6 +519,7 @@ MainWindow::drawFullDbScheme()
         //mProgressBar->reset();
         statusBar()->showMessage(tr("Processing tables complete"), 3);
     }
+#endif
 }
 
 /*!
@@ -539,19 +557,14 @@ MainWindow::closeEvent(QCloseEvent *iEvent)
         // if yes || no
         if (QMessageBox::Cancel != result) {
             if (QMessageBox::Yes == result) {
-                // save parameters to xml file
-                if (!saveSession()) {
-                    continue;
-                }
+                emit saveSessionRequest();
+//                // save parameters to xml file
+//                if (!saveSession()) {
+//                    continue;
+//                }
             }
 
-            // get singleton instance and cleanup
-            Database *dbInst = Database::instance();
-
-            dbInst->resetData();
-
-            DatabaseManager dbMngr;
-            dbMngr.flush();
+            emit exitRequest();
 
             iEvent->accept();
         } else {
@@ -564,10 +577,12 @@ MainWindow::closeEvent(QCloseEvent *iEvent)
 
 /*!
  * \brief Describe selected database object
+ * \todo move to director
  */
 void
 MainWindow::describeObject()
 {
+#if 0
     // get selected item
     QTreeWidgetItem *item = ui.mTree->currentItem();
 
@@ -697,14 +712,17 @@ MainWindow::describeObject()
         // activate last tab
         ui.mTabWidget->setCurrentIndex(ui.mTabWidget->count() - 1);
     }
+#endif
 }
 
 /*!
  * \brief Show query dialog tab
+ * \todo move to director
  */
 void
 MainWindow::queryData()
 {
+#if 0
     // get selected item
     QTreeWidgetItem *item = ui.mTree->currentItem();
 
@@ -769,16 +787,20 @@ MainWindow::queryData()
         // activate last tab
         ui.mTabWidget->setCurrentIndex(ui.mTabWidget->count() - 1);
     }
+#endif
 }
 
 /*!
  * \brief Save all parameters to xml file
  *
  * \param[in] iFileName - Xml file name were we will store parameters to
+ *
+ * \todo move to director
  */
 void
 MainWindow::saveToXml(const QString &iFileName)
 {
+#if 0
     QDomDocument doc("VisualDB");
     QDomElement root = doc.createElement("visual-db");
     doc.appendChild(root);
@@ -797,16 +819,19 @@ MainWindow::saveToXml(const QString &iFileName)
     stream << doc.toString();
 
     file.close();
+#endif
 }
 
 /*!
  * \brief Load parameters from xml file
  *
  * \param[in] iFileName - Xml file name were load parameter from
+ * \todo move to director
  */
 void
 MainWindow::loadFromXml(QString iFileName)
 {
+#if 0
     QFile file(iFileName);
     if (!file.open(QIODevice::ReadOnly)) {
         QMessageBox messageBox;
@@ -852,6 +877,7 @@ MainWindow::loadFromXml(QString iFileName)
             child = child.nextSibling();
         }
     }
+#endif
 }
 
 /*!
@@ -941,18 +967,19 @@ MainWindow::setFullScreen(bool iFlag)
 
 /*!
  * \brief Reload data from DB
+ * \todo move to director
  */
-void
-MainWindow::reloadData()
-{
-    ui.mSceneWidget->cleanSchemeScene();
-    Database::instance()->resetData();
-    ui.mTree->refresh();
-
-    // flush scene cache
-    mUndoStack->clear();
-    ui.mSceneWidget->flushCache();
-}
+//void
+//MainWindow::reloadData()
+//{
+//    ui.mSceneWidget->cleanSchemeScene();
+//    Database::instance()->resetData();
+//    ui.mTree->refresh();
+//
+//    // flush scene cache
+//    mUndoStack->clear();
+//    ui.mSceneWidget->flushCache();
+//}
 
 /*!
  * \brief Initialize session
@@ -989,8 +1016,10 @@ MainWindow::addCommand(QUndoCommand *iCommand)
 void
 MainWindow::printMsg(const QString &iText) const
 {
-    qDebug() << ui.mLogPanel;
+//    qDebug() << ui.mLogPanel;
+
     ui.mLogPanel->print(iText);
 }
 
 }
+

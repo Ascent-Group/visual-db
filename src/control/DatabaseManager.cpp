@@ -103,9 +103,10 @@ DatabaseManager::establishConnection(const Connect::ConnectionInfo &iInfo, QStri
     if (success) {
         ctx = new Context(iInfo, db);
         // \todo create Database
-        // \todo set driver for it
-        // \todo set db connection descriptor
+//        DbObjects::Common::Database *database = new Database(db, iInfo.dbHostInfo().dbDriver());
         // \todo register ctx<->db pair
+//        add(ctx, database);
+        oErrorMsg.clear();
     } else {
         oErrorMsg = db.lastError().text();
     }
@@ -117,7 +118,7 @@ DatabaseManager::establishConnection(const Connect::ConnectionInfo &iInfo, QStri
  * Adds contex-database pair to the registry.
  *
  * \param[in] iContext - Context
- * \param[it] iDatabase - Database that corresponds to the given context
+ * \param[in] iDatabase - Database that corresponds to the given context
  *
  * \return true - If the pair has been successfully registered.
  * \return false - Otherwise, i.e. the pair has been registered before.

@@ -72,6 +72,8 @@ class DatabaseManager
          */
         QMap<const Control::Context *, DbObjects::Common::Database *> mRegistry;
 
+//        QMap<QString, QMap<DbObjects::Common::DbOject::Type, DbObjects::Factory>>
+
         const Control::Context* findContext(DbObjects::Common::Database *) const;
         DbObjects::Common::Database* findDatabase(const Control::Context *) const;
 

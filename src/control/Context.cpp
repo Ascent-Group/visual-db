@@ -43,7 +43,10 @@ Context::Context()
 }
 
 /*!
+ * Constructor
  *
+ * \param[in] iConnectionInfo - Connection info.
+ * \param[in] iDbHandle - database connection handle.
  */
 Context::Context(const Connect::ConnectionInfo &iConnectionInfo, const QSqlDatabase &iDbHandle)
     : mConnectionInfo(iConnectionInfo),

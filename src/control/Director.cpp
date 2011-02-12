@@ -91,6 +91,10 @@ Director::~Director()
 //    delete mMainWindow;
 }
 
+/*!
+ * Command the director to start the execution of the application. When this function is
+ * called the main window is being shown and a user can start exploring databases.
+ */
 void
 Director::start()
 {
@@ -99,7 +103,10 @@ Director::start()
 }
 
 /*!
+ * Performs initialization mostly of gui objects needed to start working with application.
  *
+ * \return true - If the initialization succeeded.
+ * \return false - If some error occured during the initialization.
  */
 bool
 Director::initialize()
@@ -299,7 +306,7 @@ Director::showConnectionDialog(bool iLoadSession)
 }
 
 /*!
- *
+ * Slot. Executed when the director's state machine enters busy state.
  */
 void
 Director::busyStateEntered()
@@ -308,7 +315,7 @@ Director::busyStateEntered()
 }
 
 /*!
- *
+ * Slot. Executed when the director's state machine enters idle state.
  */
 void
 Director::busyStateExited()
@@ -347,7 +354,8 @@ Director::reloadDataRequested()
 }
 
 /*!
- *
+ * Slot for handling request to save session. Executed when a user closes main window and
+ * confirm saving active sessions.
  */
 void
 Director::saveSessionRequested()

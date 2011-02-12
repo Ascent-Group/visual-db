@@ -108,10 +108,14 @@ class Director : public QObject
 
     signals:
         // signals for internal use
+        /*! Used to signal the state machine that we can enter idle state. */
         void initializationComplete();
+        /*! Used to signal the state machine that we should enter busy state. */
         void requestReceived();
+        /*! Used to signal the state machine that the request has been processed and we
+         * may leave busy state.*/
         void requestProcessed();
-
+        /*! Used to print messages to log panel */
         void logMessageRequest(const QString &);
 
 };

@@ -84,6 +84,8 @@ TabWidget::closeTabButtonClicked()
 
     // lyuts: remember last tab index so we can switch to it back!!
     // \todo check for the tab's widget, if it is a scene, then don't close it.
+    // \todo another case to consider is when we are closing a tab someone (director)
+    // should somehow destroy the embedded widget.
 
     // if id is greater than 0 = we are closing any tab except grachics scheme
     if (0 < activeTabId) {

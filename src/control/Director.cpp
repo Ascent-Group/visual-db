@@ -30,9 +30,12 @@
 #include <control/Context.h>
 #include <control/Director.h>
 #include <gui/MainWindow.h>
+#include <gui/SceneWidget.h>
 #include <gui/SqlConnectionDialog.h>
+#include <gui/TreeWidget.h>
 
 #include <QMessageBox>
+#include <QTimer>
 
 #include <QtDebug>
 
@@ -54,6 +57,7 @@ Director::Director(QObject *iParent)
       mDbMgr()
 {
     mSplashScreen.show();
+    QTimer::singleShot(2000, &mSplashScreen, SLOT(close()));
 //    mSplashScreen.showMessage("Loading...");
 
     mFSM.addState(&mInitialState);
@@ -271,12 +275,27 @@ Director::showConnectionDialog(bool iLoadSession)
     } while (!ctx);
 
     // if we got here, then we have a valid ctx
-    emit logMessageRequest(QString("Connected to '%1'")
-            .arg(ctx->connectionInfo().dbHostInfo().dbName()));
+    emit logMessageRequest(QString("Connected to '<b>%1@%2</b> on behalf of <b>%3</b>'")
+            .arg(ctx->connectionInfo().dbHostInfo().dbName())
+            .arg(ctx->connectionInfo().dbHostInfo().address())
+            .arg(ctx->connectionInfo().dbHostInfo().user()));
 
-    // \todo create scene and tree for it
+    QString tabTitle = QString("%1@%2 (%3)")
+        .arg(ctx->connectionInfo().dbHostInfo().dbName())
+        .arg(ctx->connectionInfo().dbHostInfo().address())
+        .arg(ctx->connectionInfo().dbHostInfo().user());
 
-    // \todo register them
+    // create scene for it and register it
+    SceneWidget *scene = new SceneWidget();
+    mMainWindow->addScene(scene, "Scene: " + tabTitle);
+    add(scene, ctx);
+
+    // create tree for it and register it
+    TreeWidget *tree = new TreeWidget();
+    mMainWindow->addTree(tree, tabTitle);
+    add(tree, ctx);
+
+     reloadDataRequested();
 }
 
 /*!
@@ -337,6 +356,7 @@ Director::saveSessionRequested()
     // \todo Implement
     // \todo Go through all contexts
     // \todo save session for each context
+    // this includes saving connection infos, tab infos, widget sizes, etc.
 }
 
 /*!
@@ -347,6 +367,7 @@ void
 Director::exitRequested()
 {
     qDebug() << "Director::exitRequested>";
+    // \todo disconnect
     // \todo Do cleanup
 //    qApp->exit();
 }

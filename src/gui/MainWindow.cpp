@@ -118,6 +118,35 @@ MainWindow::~MainWindow()
 }
 
 /*!
+ * Adds a tab with scene
+ *
+ * \note Widgets are passed by non const pointers because QTabWidget::addTab accepts
+ * widgets in such a way.
+ *
+ * \param[in] iScene - Scene to put into this tab
+ * \param[in] iTabTitle - Title of this tab
+ */
+void
+MainWindow::addScene(Gui::SceneWidget *iScene, const QString &iTabTitle) const
+{
+    ui.mTabWidget->addTab(iScene, iTabTitle);
+}
+
+/*!
+ * Adds a tab with tree
+ *
+ * \see note for MainWindow::addTree
+ *
+ * \param[in] iTree - Tree to put into this tab
+ * \param[in] iTabTitle - Title of this tab
+ */
+void
+MainWindow::addTree(Gui::TreeWidget *iTree, const QString &iTabTitle) const
+{
+    ui.mTreeTabWidget->addTab(iTree, iTabTitle);
+}
+
+/*!
  * \brief Create actions
  */
 void MainWindow::createActions()
@@ -1013,8 +1042,6 @@ MainWindow::addCommand(QUndoCommand *iCommand)
 void
 MainWindow::printMsg(const QString &iText) const
 {
-//    qDebug() << ui.mLogPanel;
-
     ui.mLogPanel->print(iText);
 }
 

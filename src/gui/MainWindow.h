@@ -49,6 +49,8 @@ namespace Gui {
 
 class GraphicsScene;
 class GraphicsView;
+class SceneWidget;
+class TreeWidget;
 
 /*!
  * \class MainWindow
@@ -62,6 +64,9 @@ class MainWindow : public QMainWindow
     public:
         MainWindow();
         ~MainWindow();
+
+        void addScene(Gui::SceneWidget *, const QString &) const;
+        void addTree(Gui::TreeWidget *, const QString &) const;
 
     public slots:
         void printMsg(const QString &) const;

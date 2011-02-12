@@ -34,6 +34,11 @@
        <height>94</height>
       </size>
      </property>
+     <property name="font">
+      <font>
+       <family>Monospace</family>
+      </font>
+     </property>
      <property name="readOnly">
       <bool>true</bool>
      </property>

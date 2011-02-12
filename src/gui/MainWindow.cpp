@@ -419,15 +419,12 @@ MainWindow::showDatabaseTree()
  *
  * \param[in] iFlag - True if we want to show log panel, false otherwise
  */
-void
-MainWindow::showLogPanel(bool iFlag)
-{
-    if (iFlag) {
-        ui.mLogPanelWidget->show();
-    } else {
-        ui.mLogPanelWidget->hide();
-    }
-}
+//void
+//MainWindow::showLogPanel(bool iFlag)
+//{
+//    // \todo Maybe we can use a signal slot connection for this???
+//    ui.mLogPanelWidget->setVisible(iFlag);
+//}
 
 /*!
  * \brief Close log panel

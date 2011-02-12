@@ -716,8 +716,8 @@
   <connection>
    <sender>mShowLogPanelAction</sender>
    <signal>toggled(bool)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>showLogPanel(bool)</slot>
+   <receiver>mLogPanel</receiver>
+   <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -725,7 +725,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>399</x>
-     <y>299</y>
+     <y>571</y>
     </hint>
    </hints>
   </connection>

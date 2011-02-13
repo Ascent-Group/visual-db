@@ -53,16 +53,6 @@ DatabaseManager::~DatabaseManager()
 }
 
 /*!
- * \brief Deletes an instance of the Database class
- * \todo replace this function
- */
-void
-DatabaseManager::flush()
-{
-//    delete Database::mInstance;
-}
-
-/*!
  *
  * \todo Implement
  */
@@ -126,6 +116,9 @@ DatabaseManager::establishConnection(const Connect::ConnectionInfo &iInfo, QStri
 bool
 DatabaseManager::add(const Control::Context *iContext, DbObjects::Common::Database *iDatabase)
 {
+    Q_ASSERT(0 != iContext);
+    Q_ASSERT(0 != iDatabase);
+
     if (!mRegistry.contains(iContext)) {
         mRegistry.insert(iContext, iDatabase);
         return true;

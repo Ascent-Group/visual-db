@@ -119,6 +119,7 @@ Director::initialize()
         mMainWindow = new MainWindow();
         connect(mMainWindow, SIGNAL(connectionDialogRequest()), this, SLOT(connectionDialogRequested()));
         connect(mMainWindow, SIGNAL(reloadDataRequest()), this, SLOT(reloadDataRequested()));
+        connect(mMainWindow, SIGNAL(disconnectRequest()), this, SLOT(disconnectRequested()));
         connect(mMainWindow, SIGNAL(optionsDialogRequest()), this, SLOT(optionsDialogRequested()));
         connect(mMainWindow, SIGNAL(saveSessionRequest()), this, SLOT(saveSessionRequested()));
         connect(mMainWindow, SIGNAL(exitRequest()), this, SLOT(exitRequested()));
@@ -150,6 +151,9 @@ Director::initialize()
 bool
 Director::add(QWidget *iWidget, Control::Context *iContext)
 {
+    Q_ASSERT(0 != iWidget);
+    Q_ASSERT(0 != iContext);
+
     if (!mRegistry.contains(iWidget)) {
         mRegistry.insert(iWidget, iContext);
         return true;
@@ -264,7 +268,8 @@ Director::showConnectionDialog(bool iLoadSession)
     SqlConnectionDialog connDialog(iLoadSession);
 
     // \todo set last used connection info
-//    connDialog.setConnectionInfos(QVector);
+    QVector<ConnectionInfo> infos;
+    connDialog.setConnectionInfos(infos);
 
     Context *ctx = 0;
     do {
@@ -280,6 +285,8 @@ Director::showConnectionDialog(bool iLoadSession)
             QMessageBox::critical(0, tr("Connection error"), errorMsg, QMessageBox::Ok);
         }
     } while (!ctx);
+
+    // \todo save context's connection info
 
     // if we got here, then we have a valid ctx
     emit logMessageRequest(QString("Connected to '<b>%1@%2</b> on behalf of <b>%3</b>'")
@@ -351,6 +358,16 @@ Director::reloadDataRequested()
 {
     // \todo Find the active context
     // \todo Do reload for this context
+}
+
+/*!
+ * Slot for handling disconnect request. Executed when a user clicks 'Disconnect button'.
+ */
+void
+Director::disconnectRequested()
+{
+    Context *ctx/* \todo get active context */;
+    mDbMgr.remove(ctx);
 }
 
 /*!

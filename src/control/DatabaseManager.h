@@ -56,7 +56,6 @@ class DatabaseManager
         DatabaseManager();
         ~DatabaseManager();
 
-        void flush();
         Control::Context* establishConnection(const Connect::ConnectionInfo &, QString &);
 
         bool add(const Control::Context *, DbObjects::Common::Database *);

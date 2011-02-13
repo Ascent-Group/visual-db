@@ -101,6 +101,7 @@ class Director : public QObject
         // slots for processing requests from ui
         void connectionDialogRequested();
         void reloadDataRequested();
+        void disconnectRequested();
         void optionsDialogRequested();
 
         void saveSessionRequested();

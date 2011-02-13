@@ -129,6 +129,7 @@ class MainWindow : public QMainWindow
     signals:
         void connectionDialogRequest();
         void reloadDataRequest();
+        void disconnectRequest();
         void optionsDialogRequest();
 
         void saveSessionRequest();

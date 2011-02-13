@@ -55,7 +55,7 @@ SqlConnectionDialog::SqlConnectionDialog(bool iLoadSession,
     ui.setupUi(this);
 
     createDialog(iLoadSession);
-    initConnectionFields();
+//    initConnectionFields();
 }
 
 /*!
@@ -134,6 +134,20 @@ void
 SqlConnectionDialog::setConnectionInfos(const QVector<Connect::ConnectionInfo> &iInfos)
 {
     mConnectionInfos = iInfos;
+
+    qint32 index = 0;
+    QString text;
+    foreach (const Connect::ConnectionInfo &info, mConnectionInfos) {
+        text = QString("%1@%2 (%3)")
+            .arg(info.dbHostInfo().dbName())
+            .arg(info.dbHostInfo().address())
+            .arg(info.dbHostInfo().user());
+
+        ui.mConnectionsBox->insertItem(index++, text);
+    }
+
+    // add dummy entry for new connections
+    ui.mConnectionsBox->insertItem(index, tr("<New connection>"));
 }
 
 /*!
@@ -197,19 +211,24 @@ SqlConnectionDialog::createDialog(bool iLoadSession)
  * \brief Set fields in the dialog from the given connection parameters
  */
 void
-SqlConnectionDialog::initConnectionFields()
+SqlConnectionDialog::initConnectionFields(int iIndex)
 {
-//    ui.mDbDriverCombo->setCurrentIndex(ui.mDbDriverCombo->findText(mConnectionInfo.dbHostInfo().dbDriver()));
-//    ui.mDbHostEdit->setText(mConnectionInfo.dbHostInfo().address());
-//    ui.mDbPortEdit->setText(QString::number(mConnectionInfo.dbHostInfo().port()));
-//    ui.mDbNameEdit->setText(mConnectionInfo.dbHostInfo().dbName());
-//    ui.mDbUserEdit->setText(mConnectionInfo.dbHostInfo().user());
-//
-//    ui.mUseProxyBox->setChecked(mConnectionInfo.useProxy());
-//    ui.mProxyTypeBox->setCurrentIndex(ui.mProxyTypeBox->findData(mConnectionInfo.proxyHostInfo().type()));
-//    ui.mProxyHostNameEdit->setText(mConnectionInfo.proxyHostInfo().address());
-//    ui.mProxyPortEdit->setText(QString::number(mConnectionInfo.proxyHostInfo().port()));
-//    ui.mProxyUserEdit->setText(mConnectionInfo.proxyHostInfo().user());
+    Connect::ConnectionInfo info;
+    if (iIndex <= mConnectionInfos.size()) {
+        info = mConnectionInfos.value(iIndex);
+    }
+
+    ui.mDbDriverCombo->setCurrentIndex(ui.mDbDriverCombo->findText(info.dbHostInfo().dbDriver()));
+    ui.mDbHostEdit->setText(info.dbHostInfo().address());
+    ui.mDbPortEdit->setText(QString::number(info.dbHostInfo().port()));
+    ui.mDbNameEdit->setText(info.dbHostInfo().dbName());
+    ui.mDbUserEdit->setText(info.dbHostInfo().user());
+
+    ui.mUseProxyBox->setChecked(info.useProxy());
+    ui.mProxyTypeBox->setCurrentIndex(ui.mProxyTypeBox->findData(info.proxyHostInfo().type()));
+    ui.mProxyHostNameEdit->setText(info.proxyHostInfo().address());
+    ui.mProxyPortEdit->setText(QString::number(info.proxyHostInfo().port()));
+    ui.mProxyUserEdit->setText(info.proxyHostInfo().user());
 }
 
 /*!

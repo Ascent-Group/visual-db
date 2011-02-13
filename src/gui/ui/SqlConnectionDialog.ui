@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>250</width>
+    <width>190</width>
     <height>415</height>
    </rect>
   </property>
@@ -25,7 +25,10 @@
   <property name="windowTitle">
    <string>Connect to db</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0">
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
+   <item>
+    <widget class="QComboBox" name="mConnectionsBox"/>
+   </item>
    <item>
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
@@ -223,12 +226,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>193</x>
-     <y>401</y>
+     <x>179</x>
+     <y>404</y>
     </hint>
     <hint type="destinationlabel">
      <x>145</x>
-     <y>-18</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -239,12 +242,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>114</x>
-     <y>406</y>
+     <x>94</x>
+     <y>404</y>
     </hint>
     <hint type="destinationlabel">
      <x>69</x>
-     <y>-12</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>
@@ -255,8 +258,8 @@
    <slot>switchProxy(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>29</x>
+     <y>226</y>
     </hint>
     <hint type="destinationlabel">
      <x>20</x>
@@ -264,8 +267,25 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>mConnectionsBox</sender>
+   <signal>activated(int)</signal>
+   <receiver>SqlConnectionDialog</receiver>
+   <slot>initConnectionFields(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>40</x>
+     <y>19</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>2</x>
+     <y>4</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addConnection()</slot>
+  <slot>initConnectionFields(int)</slot>
  </slots>
 </ui>

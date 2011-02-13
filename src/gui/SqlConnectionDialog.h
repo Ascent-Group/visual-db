@@ -64,11 +64,11 @@ class SqlConnectionDialog : public QDialog
 
     private:
         void createDialog(bool);
-        void initConnectionFields();
 
     private slots:
 //        void addConnection();
         void switchProxy(bool);
+        void initConnectionFields(int);
 };
 
 }

@@ -87,8 +87,6 @@ class MainWindow : public QMainWindow
 
         QProgressBar *mProgressBar;
 
-//        Connect::ConnectionInfo mConnectionInfo;
-
         QUndoStack *mUndoStack;
 
         static const int STATUS_BAR_DEFAULT_WIDTH = 700;
@@ -97,7 +95,6 @@ class MainWindow : public QMainWindow
     private:
         void createActions();
         void setEnableForActions(bool iFlag);
-        //  void showConnectionDialog(DbParameters *, ProxyParameters *, bool);
         void createMenus();
         void updateSessionMenu();
         void createStatusBar();
@@ -110,10 +107,7 @@ class MainWindow : public QMainWindow
         void initSession();
 
     private slots:
-        // this slot is not standard that's why it is declared here
-//        int showConnectionDialog(bool iLoadSession = false);
         void addCommand(QUndoCommand*);
-//        void reloadData();
         bool saveSession();
         void loadSession();
         void loadLastSession();
@@ -126,11 +120,9 @@ class MainWindow : public QMainWindow
         void showDatabaseTree(bool);
         void closeDatabaseTree();
         void showDatabaseTree();
-//        void showLogPanel(bool);
         void closeLogPanel();
         void showLogPanel();
         void printPreview(QPrinter*);
-//        void showOptionsDialog();
         void showPrintPreviewDialog();
         void showPrintDialog();
 

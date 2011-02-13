@@ -260,76 +260,6 @@ MainWindow::setEnableForActions(bool iFlag)
 }
 
 /*!
- * \brief Import database
- *
- * \param[in] ui - UI of main window
- *
- * \return Result of dialog processing
- */
-int
-importDatabase(const Ui::MainWindow &ui)
-{
-//    Q_UNUSED(ui);
-//    if (QSqlDatabase::database("mainConnect").open()) {
-//        return QDialog::Accepted;
-//    }
-
-    return QDialog::Rejected;
-}
-
-/*!
- * \brief Show connection dialog
- *
- * \param[in] iLoadSession - True if we want to load session parameters, false otherwise
- *
- * \return Result of dialog processing
- */
-#if 0
-int
-MainWindow::showConnectionDialog(bool iLoadSession)
-{
-    SqlConnectionDialog connDialog(mConnectionInfo, iLoadSession);
-
-    while (connDialog.connectionFailed()) {
-        // nothing to do if canceled
-        if (QDialog::Rejected == connDialog.exec()) {
-            return QDialog::Rejected;
-        }
-    }
-
-    QProgressDialog progress("Importing database...", 0, 0, 0, this, Qt::CustomizeWindowHint | Qt::WindowTitleHint);
-    progress.setRange(0, 0);
-    progress.setWindowModality(Qt::WindowModal);
-
-    QFutureWatcher<int> futureWatcher;
-    connect(&futureWatcher, SIGNAL(finished()), &progress, SLOT(reset()));
-    connect(&progress, SIGNAL(canceled()), &futureWatcher, SLOT(cancel()));
-
-    futureWatcher.setFuture(QtConcurrent::run(importDatabase, ui));
-
-    progress.exec();
-
-    futureWatcher.waitForFinished();
-
-    if (futureWatcher.isCanceled()) {
-        ui.mTree->clear();
-        ui.mTree->setHeaderLabel(QString(""));
-        return QDialog::Rejected;
-    }
-
-    if (futureWatcher.result() == QDialog::Accepted) {
-        ui.mSceneWidget->cleanSchemeScene();
-        Database::instance()->resetData();
-        ui.mTree->refresh();
-        ui.mSceneWidget->refreshLegend();
-        setEnableForActions(true);
-    }
-
-    return futureWatcher.result();
-}
-#endif
-
-/*!
  * \brief Show options dialog
  */
 //void
@@ -973,7 +903,9 @@ void
 MainWindow::loadLastSession()
 {
     QAction *action = dynamic_cast<QAction *>(QObject::sender());
-    loadFromXml(action->text());
+    if (action) {
+        loadFromXml(action->text());
+    }
 }
 
 /*!

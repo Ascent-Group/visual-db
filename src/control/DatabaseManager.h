@@ -58,10 +58,6 @@ class DatabaseManager
 
         Control::Context* establishConnection(const Connect::ConnectionInfo &, QString &);
 
-        bool add(const Control::Context *, DbObjects::Common::Database *);
-        bool remove(const Control::Context *);
-        bool remove(DbObjects::Common::Database *);
-
     private:
         /*!
          * One-to-one registry of contexts and database instances. Context is under
@@ -73,8 +69,14 @@ class DatabaseManager
 
 //        QMap<QString, QMap<DbObjects::Common::DbOject::Type, DbObjects::Factory>>
 
+        bool add(const Control::Context *, DbObjects::Common::Database *);
+        bool remove(const Control::Context *);
+        bool remove(DbObjects::Common::Database *);
+
         const Control::Context* findContext(DbObjects::Common::Database *) const;
         DbObjects::Common::Database* findDatabase(const Control::Context *) const;
+
+        friend class Director;
 
 };
 

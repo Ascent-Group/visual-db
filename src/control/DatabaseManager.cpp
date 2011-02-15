@@ -29,6 +29,7 @@
 
 #include <control/Context.h>
 #include <control/DatabaseManager.h>
+#include <dbobjects/common/Database.h>
 #include <QFile>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -37,7 +38,7 @@ namespace Control
 {
 
 /*!
- *
+ * Constructor
  */
 DatabaseManager::DatabaseManager()
 {
@@ -45,7 +46,7 @@ DatabaseManager::DatabaseManager()
 }
 
 /*!
- *
+ * Destructor
  */
 DatabaseManager::~DatabaseManager()
 {
@@ -53,8 +54,14 @@ DatabaseManager::~DatabaseManager()
 }
 
 /*!
+ * Establishes a connection and creates a context for it.
  *
- * \todo Implement
+ * \param[in] iInfo - Connection info
+ * \param[out] oErrorMsg - Text of occured error, if connection to db failed. This text is
+ * used for displaying to a user via message box.
+ *
+ * \return Context for the specified connection info if the connection was successfully
+ * established. Otherwise, it return 0;
  */
 Control::Context*
 DatabaseManager::establishConnection(const Connect::ConnectionInfo &iInfo, QString &oErrorMsg)
@@ -142,9 +149,11 @@ DatabaseManager::add(const Control::Context *iContext, DbObjects::Common::Databa
 bool
 DatabaseManager::remove(const Control::Context *iContext)
 {
-    if (!mRegistry.contains(iContext)) {
+    if (mRegistry.contains(iContext)) {
+        DbObjects::Common::Database *database = mRegistry.value(iContext);
+        delete database;
+
         mRegistry.remove(iContext);
-        // \todo destroy database
         return true;
     }
 
@@ -180,7 +189,11 @@ DatabaseManager::remove(DbObjects::Common::Database *iDatabase)
 }
 
 /*!
+ * Finds the context for the specified database.
  *
+ * \param[in] iDatabase - Database
+ *
+ * \return Context for the specified database.
  */
 const Control::Context*
 DatabaseManager::findContext(DbObjects::Common::Database *iDatabase) const

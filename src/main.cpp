@@ -84,7 +84,7 @@ int main(int argc, char **argv)
 
     Control::Director director;
     if (!director.initialize()) {
-        qDebug() << "[^[[31mERROR^[[0m] Director initialization failed!";
+        qDebug() << "[[31mERROR[0m] Director initialization failed!";
         return -1;
     }
 

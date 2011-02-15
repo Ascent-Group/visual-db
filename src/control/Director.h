@@ -33,7 +33,7 @@
 #include <connect/ConnectionInfo.h>
 #include <control/DatabaseManager.h>
 #include <QObject>
-#include <QSplashScreen>
+//#include <QSplashScreen>
 #include <QStateMachine>
 
 #include <QtDebug>
@@ -65,7 +65,8 @@ class Director : public QObject
         bool initialize();
 
     private:
-        QSplashScreen mSplashScreen;
+        // \note maybe this should go to main()
+//        QSplashScreen mSplashScreen;
         QStateMachine mFSM;
 
         QState mInitialState;

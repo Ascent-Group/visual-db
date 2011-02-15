@@ -35,7 +35,7 @@
 #include <gui/TreeWidget.h>
 
 #include <QMessageBox>
-#include <QTimer>
+//#include <QTimer>
 
 #include <QtDebug>
 
@@ -47,7 +47,7 @@ namespace Control
  */
 Director::Director(QObject *iParent)
     : QObject(iParent),
-      mSplashScreen(QPixmap(":/img/splashscreen.png")),
+//      mSplashScreen(QPixmap(":/img/splashscreen.png")),
       mFSM(),
       mInitialState(),
       mIdleState(),
@@ -56,9 +56,9 @@ Director::Director(QObject *iParent)
       mRegistry(),
       mDbMgr()
 {
-    mSplashScreen.show();
-    QTimer::singleShot(2000, &mSplashScreen, SLOT(close()));
-//    mSplashScreen.showMessage("Loading...");
+//    mSplashScreen.show();
+//    QTimer::singleShot(2000, &mSplashScreen, SLOT(close()));
+////    mSplashScreen.showMessage("Loading...");
 
     mFSM.addState(&mInitialState);
     mFSM.addState(&mIdleState);
@@ -173,7 +173,7 @@ Director::add(QWidget *iWidget, Control::Context *iContext)
 bool
 Director::remove(QWidget *iWidget)
 {
-    if (!mRegistry.contains(iWidget)) {
+    if (mRegistry.contains(iWidget)) {
         mRegistry.remove(iWidget);
         return true;
     }

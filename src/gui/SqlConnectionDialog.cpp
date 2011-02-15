@@ -50,12 +50,12 @@ namespace Gui {
 SqlConnectionDialog::SqlConnectionDialog(bool iLoadSession,
         QWidget *iParent)
     : QDialog(iParent)
-    , mConnectionFailed(true)
+//    , mConnectionFailed(true)
 {
     ui.setupUi(this);
 
     createDialog(iLoadSession);
-//    initConnectionFields();
+    initConnectionFields(-1);
 }
 
 /*!
@@ -87,11 +87,11 @@ SqlConnectionDialog::~SqlConnectionDialog()
  *
  * \todo remove this func
  */
-bool
-SqlConnectionDialog::connectionFailed() const
-{
-    return mConnectionFailed;
-}
+//bool
+//SqlConnectionDialog::connectionFailed() const
+//{
+//    return mConnectionFailed;
+//}
 
 /*!
  * \return The currently selected connection info
@@ -204,7 +204,7 @@ SqlConnectionDialog::createDialog(bool iLoadSession)
     ui.mProxyPasswordEdit->setEnabled(ui.mUseProxyBox->isChecked());
 
     // initially we set connection failed flag to true
-    mConnectionFailed = true;
+//    mConnectionFailed = true;
 }
 
 /*!
@@ -214,7 +214,7 @@ void
 SqlConnectionDialog::initConnectionFields(int iIndex)
 {
     Connect::ConnectionInfo info;
-    if (iIndex <= mConnectionInfos.size()) {
+    if (0 >= iIndex && iIndex <= mConnectionInfos.size()) {
         info = mConnectionInfos.value(iIndex);
     }
 
@@ -289,3 +289,4 @@ SqlConnectionDialog::switchProxy(bool iToggle)
 }
 
 }
+

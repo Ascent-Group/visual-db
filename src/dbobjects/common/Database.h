@@ -62,6 +62,10 @@ typedef DbObjectPtr<DbTable> DbTablePtr;
 class Database
 {
     public:
+        Database();
+        virtual ~Database();
+
+        // \todo remove this func
         static Database* instance();
 
         /*!
@@ -122,12 +126,8 @@ class Database
         virtual bool loadData();
         virtual void resetData();
 
-    protected:
-        Database();
-        virtual ~Database();
-
     private:
-        static Database *mInstance;
+//        static Database *mInstance;
         QVector<DbSchemaPtr> mSchemas;
         QVector<DbRolePtr> mRoles;
         QVector<DbIndexPtr> mIndices;
@@ -142,7 +142,7 @@ class Database
 //        QVector<const DbObject*> mModifiedObjects;
 //        QVector<const DbObject*> mDeletedObjects;
 
-        friend class DatabaseManager;
+//        friend class DatabaseManager;
 
     private:
         Q_DISABLE_COPY(Database);

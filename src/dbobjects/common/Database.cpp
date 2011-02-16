@@ -53,7 +53,7 @@ namespace Common
 {
 
 // null initialization of instance
-Database *Database::mInstance = 0;
+//Database *Database::mInstance = 0;
 
 /*!
  * Constructor
@@ -77,7 +77,7 @@ Database::Database()
 Database::~Database()
 {
     resetData();
-    Database::mInstance = 0;
+//    Database::mInstance = 0;
 }
 
 /*!
@@ -88,12 +88,13 @@ Database::~Database()
 Database*
 Database::instance()
 {
-    // if not yet created => create
-    if (0 == mInstance) {
-        mInstance = new(std::nothrow) Database();
-    }
-
-    return mInstance;
+    /*intended hack*/return 0;
+//    // if not yet created => create
+//    if (0 == mInstance) {
+//        mInstance = new(std::nothrow) Database();
+//    }
+//
+//    return mInstance;
 }
 
 /*!
@@ -450,22 +451,21 @@ Database::findTableIndices(const DbTablePtr &iTable, QVector<DbIndexPtr> &oList)
 void
 Database::setSqlDriver(const QString &iSqlDriverName)
 {
-    Database* db = instance();
+//    Database* db = instance();
 
     if (iSqlDriverName.contains("PSQL")) {
-        db->mSqlDriver = PostgreSQL;
+        mSqlDriver = PostgreSQL;
     } else if (iSqlDriverName.contains("MYSQL")) {
-        db->mSqlDriver = MySQL;
+        mSqlDriver = MySQL;
     } else if (iSqlDriverName.contains("ODBC")) {
-        db->mSqlDriver = Oracle;
+        mSqlDriver = Oracle;
     } else if (iSqlDriverName.contains("SQLITE")) {
-        db->mSqlDriver = Database::SQLite;
+        mSqlDriver = Database::SQLite;
     } else {
-        db->mSqlDriver = Database::Unknown;
+        mSqlDriver = Database::Unknown;
 
         qDebug() << __PRETTY_FUNCTION__ << "> Unknown SQL driver '" << iSqlDriverName << "'";
     }
-
 }
 
 /*!

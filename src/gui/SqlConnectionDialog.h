@@ -50,7 +50,7 @@ class SqlConnectionDialog : public QDialog
         SqlConnectionDialog(bool, QWidget *iParent = 0);
         ~SqlConnectionDialog();
 
-        bool connectionFailed() const;
+//        bool connectionFailed() const;
 
         Connect::ConnectionInfo connectionInfo() const;
         void setConnectionInfos(const QVector<Connect::ConnectionInfo> &iInfos);
@@ -60,7 +60,7 @@ class SqlConnectionDialog : public QDialog
 
         QVector<Connect::ConnectionInfo> mConnectionInfos;
 
-        bool mConnectionFailed;
+//        bool mConnectionFailed;
 
     private:
         void createDialog(bool);

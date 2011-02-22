@@ -58,6 +58,8 @@ class DatabaseManager
 
         Control::Context* establishConnection(const Connect::ConnectionInfo &, QString &);
 
+        void reloadData(Control::Context *) const;
+
     private:
         /*!
          * One-to-one registry of contexts and database instances. Context is under

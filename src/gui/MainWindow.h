@@ -68,6 +68,8 @@ class MainWindow : public QMainWindow
         void addScene(Gui::SceneWidget *, const QString &) const;
         void addTree(Gui::TreeWidget *, const QString &) const;
 
+        Gui::TreeWidget* activeTree() const;
+
     public slots:
         void printMsg(const QString &) const;
 

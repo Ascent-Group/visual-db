@@ -98,17 +98,30 @@ DatabaseManager::establishConnection(const Connect::ConnectionInfo &iInfo, QStri
 
     Control::Context *ctx = 0;
     if (success) {
+        using namespace DbObjects::Common;
         ctx = new Context(iInfo, db);
-        // \todo create Database
-//        DbObjects::Common::Database *database = new Database(db, iInfo.dbHostInfo().dbDriver());
-        // \todo register ctx<->db pair
-//        add(ctx, database);
+
+        Database *database = new Database(db);
+        database->setSqlDriver(iInfo.dbHostInfo().dbDriver());
+
+        add(ctx, database);
         oErrorMsg.clear();
     } else {
         oErrorMsg = db.lastError().text();
     }
 
     return ctx;
+}
+
+/*!
+ * \todo Implement
+ */
+void
+DatabaseManager::reloadData(Control::Context *iCtx) const
+{
+    DbObjects::Common::Database *db = findDatabase(iCtx);
+    db->resetData();
+    db->loadData();
 }
 
 /*!
@@ -152,6 +165,8 @@ DatabaseManager::remove(const Control::Context *iContext)
     if (mRegistry.contains(iContext)) {
         DbObjects::Common::Database *database = mRegistry.value(iContext);
         delete database;
+
+        iContext->dbHandle().close();
 
         mRegistry.remove(iContext);
         return true;

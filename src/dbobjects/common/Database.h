@@ -32,6 +32,7 @@
 
 #include <common/DbObjectPtr.h>
 
+#include <QSqlDatabase>
 #include <QStringList>
 #include <QVector>
 
@@ -62,7 +63,7 @@ typedef DbObjectPtr<DbTable> DbTablePtr;
 class Database
 {
     public:
-        Database();
+        Database(const QSqlDatabase &iDb);
         virtual ~Database();
 
         // \todo remove this func
@@ -86,6 +87,8 @@ class Database
 //        bool registerDeleted(const DbObject *iObject);
 
     public:
+        QSqlDatabase dbHandle() const;
+
         bool addSchema(const DbSchemaPtr &);
         bool addRole(const DbRolePtr &);
         bool addIndex(const DbIndexPtr &);
@@ -115,8 +118,8 @@ class Database
 
         quint64 findTableIndices(const DbTablePtr &iTable, QVector<DbIndexPtr> &iList) const;
 
-        void setSqlDriver(const QString &iSqlDriverName);
         SqlDriverType sqlDriver() const;
+        void setSqlDriver(const QString &iSqlDriverName);
 
         void readSchemas();
         void readRoles();
@@ -127,6 +130,8 @@ class Database
         virtual void resetData();
 
     private:
+        // \todo add function for query execution that will use this handle
+        QSqlDatabase mDbHandle;
 //        static Database *mInstance;
         QVector<DbSchemaPtr> mSchemas;
         QVector<DbRolePtr> mRoles;

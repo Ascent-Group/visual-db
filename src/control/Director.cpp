@@ -309,7 +309,7 @@ Director::showConnectionDialog(bool iLoadSession)
     mMainWindow->addTree(tree, tabTitle);
     add(tree, ctx);
 
-     reloadDataRequested();
+    reloadDataRequested();
 }
 
 /*!
@@ -356,8 +356,16 @@ Director::optionsDialogRequested()
 void
 Director::reloadDataRequested()
 {
-    // \todo Find the active context
-    // \todo Do reload for this context
+    emit requestReceived();
+    Gui::TreeWidget *tree = mMainWindow->activeTree();
+    if (tree) {
+        // find the active context
+        Control::Context *ctx = findContext(tree);
+        // do reload for this context
+        mDbMgr.reloadData(ctx);
+    }
+
+    emit requestProcessed();
 }
 
 /*!

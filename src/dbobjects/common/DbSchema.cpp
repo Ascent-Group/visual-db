@@ -395,6 +395,7 @@ DbSchema::readTables()
 void
 DbSchema::readViews()
 {
+    // \todo Replace with parent database's db handle
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr;

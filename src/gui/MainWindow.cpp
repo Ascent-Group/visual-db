@@ -147,6 +147,18 @@ MainWindow::addTree(Gui::TreeWidget *iTree, const QString &iTabTitle) const
 }
 
 /*!
+ * Returns tree which is currently active. This function is used by director to determine
+ * the current active context.
+ *
+ * \return Pointer to tree
+ */
+Gui::TreeWidget*
+MainWindow::activeTree() const
+{
+    return dynamic_cast<Gui::TreeWidget*>(ui.mTreeTabWidget->currentWidget());
+}
+
+/*!
  * \brief Create actions
  */
 void MainWindow::createActions()

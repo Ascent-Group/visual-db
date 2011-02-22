@@ -52,7 +52,7 @@ namespace Psql
  * \param[in] iSchema - Handle to schema containing this view
  */
 Table::Table(QString iName, const DbSchemaPtr &iSchema)
-    :DbTable(iName, iSchema)
+    : DbTable(iName, iSchema)
 {
     // load column definitions
 //    loadData();

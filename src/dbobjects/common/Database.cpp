@@ -38,7 +38,6 @@
 #include <common/DbView.h>
 #include <mysql/Tools.h>
 #include <psql/Tools.h>
-#include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -58,8 +57,9 @@ namespace Common
 /*!
  * Constructor
  */
-Database::Database()
-    : mSchemas(),
+Database::Database(const QSqlDatabase &iDbHandle)
+    : mDbHandle(iDbHandle),
+      mSchemas(),
       mRoles(),
       mIndices(),
       mLanguages(),
@@ -153,6 +153,15 @@ Database::instance()
 //    mDeletedObjects.push_back(iObject);
 //    return true;
 //}
+
+/*!
+ * \return Database connection handle
+ */
+QSqlDatabase
+Database::dbHandle() const
+{
+    return mDbHandle;
+}
 
 /*!
  * \brief Add schema to DB schema list

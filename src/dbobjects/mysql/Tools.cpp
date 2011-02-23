@@ -29,7 +29,6 @@
 
 #include <mysql/Tools.h>
 
-#include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -52,10 +51,9 @@ namespace Tools
  * \return The version of MySQL that is currently used
  */
 Tools::Version
-version()
+version(const QSqlDatabase &iDbHandle)
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(iDbHandle);
     QString qstr("SELECT version();");
 
     if (!query.exec(qstr) || !query.first()) {
@@ -76,11 +74,11 @@ version()
  * \return The number of schemas read.
  */
 quint32
-schemasList(QStringList &oList)
+schemasList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr = QString("SELECT schema_name AS name FROM information_schema.schemata;");
 
-    return objectNamesList(qstr, oList);
+    return objectNamesList(iDbHandle, qstr, oList);
 }
 
 /*!
@@ -92,31 +90,33 @@ schemasList(QStringList &oList)
  * \return The number of indices read by the query
  */
 quint32
-indicesList(QStringList &oList)
+indicesList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr = QString("");
 
-    return objectNamesList(qstr, oList);
+    return objectNamesList(iDbHandle, qstr, oList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-languagesList(QStringList &oList)
+languagesList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr("");
 
-    return objectNamesList(qstr, oList);
+    return objectNamesList(iDbHandle, qstr, oList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-proceduresList(QStringList &oList)
+proceduresList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
+    QString qstr("");
 
+    return objectNamesList(iDbHandle, qstr, oList);
 }
 
 /*!
@@ -128,21 +128,20 @@ proceduresList(QStringList &oList)
  * \return The number of roles read by the query
  */
 quint32
-rolesList(QStringList &oList)
+rolesList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr = QString("");
 
-    return objectNamesList(qstr, oList);
+    return objectNamesList(iDbHandle, qstr, oList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-objectNamesList(const QString &iQstr, QStringList &oList)
+objectNamesList(const QSqlDatabase &iDbHandle, const QString &iQstr, QStringList &oList)
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(iDbHandle);
 
     // if query failed
     if (!query.exec(iQstr)) {
@@ -170,27 +169,33 @@ objectNamesList(const QString &iQstr, QStringList &oList)
  * \todo Implement
  */
 quint32
-tablesList(QStringList &oList)
+tablesList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
+    QString qstr("");
 
+    return objectNamesList(iDbHandle, qstr, oList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-triggersList(QStringList &oList)
+triggersList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
+    QString qstr("");
 
+    return objectNamesList(iDbHandle, qstr, oList);
 }
 
 /*!
  * \todo Implement
  */
 quint32
-viewsList(QStringList &oList)
+viewsList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
+    QString qstr("");
 
+    return objectNamesList(iDbHandle, qstr, oList);
 }
 
 } // namespace Tools

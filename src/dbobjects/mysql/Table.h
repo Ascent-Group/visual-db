@@ -53,7 +53,7 @@ class Table : public Common::DbTable
         ~Table();
 
         bool checkPrimaryKey(const QString &) const;
-        bool checkForeignKey(const QString &, QString &, QString &) const;
+        bool checkForeignKey(const QString &, QString &, QString &, QStringList &) const;
         bool checkUnique(const QString &) const;
 
     private:

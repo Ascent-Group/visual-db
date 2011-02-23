@@ -79,7 +79,7 @@ Table::loadData()
         return true;
     }
 
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
+    QSqlDatabase db = mDatabase->dbHandle();
     QSqlQuery query(db);
     QString qstr;
 
@@ -87,7 +87,7 @@ Table::loadData()
      *        Bersion check can help support different Postgres versions,
      *        especcialy when the system catalogs change in newer versions
      */
-    Tools::Version version = Tools::version();
+    Tools::Version version = Tools::version(db);
 
     /*! \todo version check */
     /*! \todo do version specific actions */
@@ -228,8 +228,7 @@ Table::loadData()
 bool
 Table::checkPrimaryKey(const QString &iColumnName) const
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(mDatabase->dbHandle());
 
     // create query
     QString qstr = QString("SELECT "
@@ -285,8 +284,7 @@ Table::checkForeignKey(const QString &iColumnName,
                QString &oForeignTableName,
                QStringList &oForeignFieldsNames) const
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(mDatabase->dbHandle());
 
     // create query
     QString qstr = QString("SELECT "
@@ -371,8 +369,9 @@ Table::checkForeignKey(const QString &iColumnName,
 bool
 Table::checkUnique(const QString &iColumnName) const
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    // \todo If we are going to use version here then we need to declare QSqlDatabase and
+    // initialize it with mDatabase->dbHandle();
+    QSqlQuery query(mDatabase->dbHandle());
 
     // create query
     QString qstr = QString("SELECT "

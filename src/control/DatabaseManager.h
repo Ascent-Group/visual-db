@@ -30,13 +30,16 @@
 #ifndef CONTROL_DATABASEMANAGER_H
 #define CONTROL_DATABASEMANAGER_H
 
+#include <dbobjects/common/Database.h>
 #include <connect/ConnectionInfo.h>
 
 namespace DbObjects
 {
 namespace Common
 {
-class Database;
+//class Database;
+class Factories;
+class Tools;
 }
 }
 
@@ -53,14 +56,10 @@ class Context;
 class DatabaseManager
 {
     public:
-        DatabaseManager();
         ~DatabaseManager();
 
-        Control::Context* establishConnection(const Connect::ConnectionInfo &, QString &);
-
-        void reloadData(Control::Context *) const;
-
     private:
+        DatabaseManager();
         /*!
          * One-to-one registry of contexts and database instances. Context is under
          * control of director, that's why we handle it as const. As for the database,
@@ -68,8 +67,14 @@ class DatabaseManager
          * them.
          */
         QMap<const Control::Context *, DbObjects::Common::Database *> mRegistry;
+        // \todo Maybe we should combine next 2 maps ???
+        QMap<DbObjects::Common::Database::SqlDriverType, DbObjects::Common::Factories *> mFactories;
+        QMap<DbObjects::Common::Database::SqlDriverType, DbObjects::Common::Tools *> mTools;
 
 //        QMap<QString, QMap<DbObjects::Common::DbOject::Type, DbObjects::Factory>>
+
+        Control::Context* establishConnection(const Connect::ConnectionInfo &, QString &);
+        void reloadData(Control::Context *) const;
 
         bool add(const Control::Context *, DbObjects::Common::Database *);
         bool remove(const Control::Context *);

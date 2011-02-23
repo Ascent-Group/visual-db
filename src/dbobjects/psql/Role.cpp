@@ -72,8 +72,7 @@ Role::loadData()
     }
 
     // lyuts: maybe it should be done in Database in one sweep
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(mDatabase->dbHandle());
     QString qstr;
 
     // create a query

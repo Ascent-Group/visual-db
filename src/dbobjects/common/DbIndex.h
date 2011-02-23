@@ -125,6 +125,7 @@ class DbIndex : public DbObject
         bool mIsReady;
 
     protected:
+        // \todo pass by const ref
         DbIndex(QString iName);
 };
 

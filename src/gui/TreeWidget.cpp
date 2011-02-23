@@ -78,6 +78,7 @@ TreeWidget::refresh()
 {
     clear();
 
+    // \todo reimplement according to new design
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
 
     setHeaderLabel(qDBCaption(db));

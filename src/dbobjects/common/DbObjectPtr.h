@@ -50,6 +50,8 @@ namespace DbObjects
 namespace Common
 {
 
+class Database;
+
 /*!
  * \class DbObjectPtr
  * \brief Defines a template proxy for database objects
@@ -146,11 +148,7 @@ class DbObjectPtr
          */
         bool valid() const
         {
-            if (mPointee && !mName.isEmpty()) {
-                return true;
-            }
-
-            return false;
+            return (mPointee && !mName.isEmpty());
         }
 
         /*!

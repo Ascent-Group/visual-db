@@ -27,6 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <common/Database.h>
 #include <psql/Language.h>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -71,8 +72,7 @@ Language::loadData()
         return true;
     }
 
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(mDatabase->dbHandle());
     QString qstr;
 
     qstr = QString("SELECT "

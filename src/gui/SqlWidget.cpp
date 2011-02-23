@@ -176,6 +176,7 @@ isQuerySafe(const QString &iQueryText)
 void
 SqlWidget::readPortion(Portions iDirection)
 {
+    // todo reimplement according to new design
     QSqlDatabase db = QSqlDatabase::database("mainConnect");
     QSqlQuery query(db);
     QString qstr = ui.mQueryEdit->toPlainText().trimmed();

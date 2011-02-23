@@ -1,6 +1,8 @@
 TEMPLATE = lib
 CONFIG += staticlib
 
+QT += sql
+
 DEPENDPATH += $$PWD
 INCLUDEPATH += $$PWD/..
 

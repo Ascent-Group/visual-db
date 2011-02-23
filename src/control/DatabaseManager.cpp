@@ -30,6 +30,10 @@
 #include <control/Context.h>
 #include <control/DatabaseManager.h>
 #include <dbobjects/common/Database.h>
+#include <dbobjects/mysql/Factories.h>
+#include <dbobjects/mysql/Tools.h>
+#include <dbobjects/psql/Factories.h>
+#include <dbobjects/psql/Tools.h>
 #include <QFile>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -50,7 +54,7 @@ DatabaseManager::DatabaseManager()
  */
 DatabaseManager::~DatabaseManager()
 {
-
+    // \todo clear registries
 }
 
 /*!
@@ -119,9 +123,21 @@ DatabaseManager::establishConnection(const Connect::ConnectionInfo &iInfo, QStri
 void
 DatabaseManager::reloadData(Control::Context *iCtx) const
 {
-    DbObjects::Common::Database *db = findDatabase(iCtx);
+    using namespace DbObjects::Common;
+
+    Database *db = findDatabase(iCtx);
     db->resetData();
-    db->loadData();
+
+    // \todo find factories for this driver
+    Factories *factories = mFactories.value(db->sqlDriver());
+    // \todo find tools for this driver
+    Tools *tools = mTools.value(db->sqlDriver());
+
+    Q_ASSERT(0 != factories);
+    Q_ASSERT(0 != tools);
+
+    // \todo Uncomment
+//    db->loadData(factories, tools);
 }
 
 /*!
@@ -140,7 +156,40 @@ DatabaseManager::add(const Control::Context *iContext, DbObjects::Common::Databa
     Q_ASSERT(0 != iDatabase);
 
     if (!mRegistry.contains(iContext)) {
+        using namespace DbObjects;
+        using namespace DbObjects::Common;
+
         mRegistry.insert(iContext, iDatabase);
+        Factories *factories = 0;
+        Tools *tools = 0;
+
+        // \todo if no factories were created before - then create and put into registry
+        // \todo if no tools were created before - then create and put into registry
+        switch (iDatabase->sqlDriver()) {
+            case Database::PostgreSQL:
+                    factories = new Psql::Factories();
+                    // \todo uncomment
+//                    tools = new Psql::Tools();
+                    break;
+
+            case Database::MySQL:
+                    factories = new Mysql::Factories();
+                    // \todo uncomment
+//                    tools = new Mysql::Tools();
+                    break;
+
+            case Database::Oracle:
+            case Database::SQLite:
+            case Database::Unknown:
+                    break;
+        }
+
+        Q_ASSERT(0 != factories);
+        Q_ASSERT(0 != tools);
+
+        mFactories.insert(iDatabase->sqlDriver(), factories);
+        mTools.insert(iDatabase->sqlDriver(), tools);
+
         return true;
     }
 
@@ -169,6 +218,8 @@ DatabaseManager::remove(const Control::Context *iContext)
         iContext->dbHandle().close();
 
         mRegistry.remove(iContext);
+
+        // \note we won't drop factories/tools here. They will be dropped in destructor
         return true;
     }
 

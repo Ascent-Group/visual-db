@@ -30,7 +30,7 @@
 //#include <mysql/Schema.h>
 #include <mysql/Table.h>
 #include <mysql/Tools.h>
-#include <QSqlDatabase>
+//#include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QVariant>
@@ -75,12 +75,13 @@ Table::loadData()
         return true;
     }
 
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery    query(db);
-    QString  qstr;
+    // \todo or maybe pass QSqlDatabase as input parameter.
+    QSqlDatabase db = mDatabase->dbHandle();
+    QSqlQuery query(db);
+    QString qstr;
 
     /*! \todo get version */
-    Tools::Version version = Tools::version();
+    Tools::Version version = Tools::version(db);
 
     /*! \todo do version check */
     /*! \todo do version specific actions */
@@ -176,8 +177,7 @@ Table::loadData()
 bool
 Table::checkPrimaryKey(const QString &iColumnName) const
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(mDatabase->dbHandle());
 
     // create query
     QString qstr = QString("SELECT "
@@ -217,13 +217,12 @@ Table::checkPrimaryKey(const QString &iColumnName) const
  * \return false Otherwise
  */
 bool
-Table::checkForeignKey(const QString &iColumnName, QString &oForeignSchemaName, QString &oForeignTableName) const
+Table::checkForeignKey(const QString &iColumnName, QString &oForeignSchemaName, QString &oForeignTableName, QStringList &) const
 {
     Q_UNUSED(oForeignSchemaName);
     Q_UNUSED(oForeignTableName);
 
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(mDatabase->dbHandle());
 
     // create a query
     QString qstr = QString("SELECT "
@@ -263,8 +262,7 @@ Table::checkForeignKey(const QString &iColumnName, QString &oForeignSchemaName, 
 bool
 Table::checkUnique(const QString &iColumnName) const
 {
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(mDatabase->dbHandle());
 
     // create query
     QString qstr = QString("SELECT "

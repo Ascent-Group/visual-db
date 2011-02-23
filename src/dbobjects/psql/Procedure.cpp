@@ -75,8 +75,7 @@ Procedure::loadData()
         return true;
     }
 
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(mDatabase->dbHandle());
     QString qstr;
 
     // prepare a query

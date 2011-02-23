@@ -72,8 +72,7 @@ Index::loadData()
         return true;
     }
 
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(mDatabase->dbHandle());
     QString qstr;
 
     // construct the query

@@ -503,10 +503,10 @@ Database::readSchemas()
         case Database::Unknown:
             qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
         case Database::PostgreSQL:
-            Psql::Tools::schemasList(schemasNamesList);
+            Psql::Tools::schemasList(mDbHandle, schemasNamesList);
             break;
         case Database::MySQL:
-            Mysql::Tools::schemasList(schemasNamesList);
+            Mysql::Tools::schemasList(mDbHandle, schemasNamesList);
             break;
         case Database::Oracle:
         case Database::SQLite:
@@ -546,10 +546,10 @@ Database::readRoles()
                         qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                         return;
         case Database::PostgreSQL:
-                        Psql::Tools::rolesList(rolesList);
+                        Psql::Tools::rolesList(mDbHandle, rolesList);
                         break;
         case Database::MySQL:
-                        Mysql::Tools::rolesList(rolesList);
+                        Mysql::Tools::rolesList(mDbHandle, rolesList);
                         break;
         case Database::Oracle:
         case Database::SQLite:
@@ -588,10 +588,10 @@ Database::readIndices()
                         qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                         return;
         case Database::PostgreSQL:
-                        Psql::Tools::indicesList(indicesList);
+                        Psql::Tools::indicesList(mDbHandle, indicesList);
                         break;
         case Database::MySQL:
-                        Mysql::Tools::indicesList(indicesList);
+                        Mysql::Tools::indicesList(mDbHandle, indicesList);
                         break;
         case Database::Oracle:
         case Database::SQLite:
@@ -629,10 +629,10 @@ Database::readLanguages()
                         qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
                         return;
         case Database::PostgreSQL:
-                        Psql::Tools::languagesList(languagesList);
+                        Psql::Tools::languagesList(mDbHandle, languagesList);
                         break;
         case Database::MySQL:
-                        Mysql::Tools::languagesList(languagesList);
+                        Mysql::Tools::languagesList(mDbHandle, languagesList);
                         break;
         case Database::Oracle:
         case Database::SQLite:

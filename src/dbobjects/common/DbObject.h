@@ -38,6 +38,8 @@ namespace DbObjects
 namespace Common
 {
 
+class Database;
+
 /*!
  * \class DbObject
  * \headerfile common/DbObject.h
@@ -78,6 +80,9 @@ class DbObject
         QString mName;
         /*! Flag the indicates whether the object's data has been already read or not */
         bool mIsLoaded;
+
+        // \todo this will probably go away
+        DbObjects::Common::Database *mDatabase;
 
     protected:
         DbObject(QString iName = 0);

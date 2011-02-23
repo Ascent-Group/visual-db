@@ -30,6 +30,7 @@
 #ifndef DBOBJECTS_MYSQL_TOOLS_H
 #define DBOBJECTS_MYSQL_TOOLS_H
 
+#include <QSqlDatabase>
 #include <QStringList>
 #include <QtCore/qglobal.h>
 
@@ -56,18 +57,18 @@ namespace Tools
         MySQL_5
     };
 
-    Tools::Version version();
+    Tools::Version version(const QSqlDatabase &);
 
-    quint32 schemasList(QStringList &oList);
-    quint32 indicesList(QStringList &oList);
-    quint32 languagesList(QStringList &oList);
-    quint32 proceduresList(QStringList &oList);
-    quint32 rolesList(QStringList &oList);
-    quint32 tablesList(QStringList &oList);
-    quint32 triggersList(QStringList &oList);
-    quint32 viewsList(QStringList &oList);
+    quint32 schemasList(const QSqlDatabase &, QStringList &oList);
+    quint32 indicesList(const QSqlDatabase &, QStringList &oList);
+    quint32 languagesList(const QSqlDatabase &, QStringList &oList);
+    quint32 proceduresList(const QSqlDatabase &, QStringList &oList);
+    quint32 rolesList(const QSqlDatabase &, QStringList &oList);
+    quint32 tablesList(const QSqlDatabase &, QStringList &oList);
+    quint32 triggersList(const QSqlDatabase &, QStringList &oList);
+    quint32 viewsList(const QSqlDatabase &, QStringList &oList);
 
-    quint32 objectNamesList(const QString &iQstr, QStringList &oList);
+    quint32 objectNamesList(const QSqlDatabase &, const QString &iQstr, QStringList &oList);
 
 } // namespace Tools
 

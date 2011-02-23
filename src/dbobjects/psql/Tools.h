@@ -30,6 +30,7 @@
 #ifndef DBOBJECTS_PSQL_TOOLS_H
 #define DBOBJECTS_PSQL_TOOLS_H
 
+#include <QSqlDatabase>
 #include <QStringList>
 #include <QtCore/qglobal.h>
 
@@ -60,18 +61,18 @@ namespace Tools
         PostgreSQL_9
     };
 
-    Tools::Version version();
+    Tools::Version version(const QSqlDatabase &);
 
-    quint32 schemasList(QStringList &oList);
-    quint32 indicesList(QStringList &oList);
-    quint32 languagesList(QStringList &oList);
-    quint32 proceduresList(const QString &iSchemaName, QStringList &oList);
-    quint32 rolesList(QStringList &oList);
-    quint32 tablesList(const QString &iSchemaName, QStringList &oList);
-    quint32 triggersList(const QString &iSchemaName, QStringList &oList);
-    quint32 viewsList(const QString &iSchemaName, QStringList &oList);
+    quint32 schemasList(const QSqlDatabase &, QStringList &oList);
+    quint32 indicesList(const QSqlDatabase &, QStringList &oList);
+    quint32 languagesList(const QSqlDatabase &, QStringList &oList);
+    quint32 proceduresList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
+    quint32 rolesList(const QSqlDatabase &, QStringList &oList);
+    quint32 tablesList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
+    quint32 triggersList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
+    quint32 viewsList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
 
-    quint32 objectNamesList(const QString &iQstr, QStringList &oList);
+    quint32 objectNamesList(const QSqlDatabase &, const QString &iQstr, QStringList &oList);
 
 } // namespace Tools
 

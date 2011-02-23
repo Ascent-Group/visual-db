@@ -75,11 +75,11 @@ Trigger::loadData()
         return DbTrigger::loadData();
     }
 
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
+    QSqlDatabase db = mDatabase->dbHandle();
     QSqlQuery query(db);
     QString qstr;
 
-    Tools::Version version = Tools::version();
+    Tools::Version version = Tools::version(db);
 
     switch (version) {
         case Tools::PostgreSQL_8:

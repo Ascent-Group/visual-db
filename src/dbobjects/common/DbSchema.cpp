@@ -27,7 +27,6 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlRecord>
@@ -367,7 +366,7 @@ DbSchema::readTables()
             break;
 
         case Database::PostgreSQL:
-            DbObjects::Psql::Tools::tablesList(mName, tablesNamesList);
+            DbObjects::Psql::Tools::tablesList(mDatabase->dbHandle(), mName, tablesNamesList);
             break;
 
         case Database::MySQL:
@@ -395,9 +394,7 @@ DbSchema::readTables()
 void
 DbSchema::readViews()
 {
-    // \todo Replace with parent database's db handle
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(mDatabase->dbHandle());
     QString qstr;
 
     // clear views list
@@ -413,7 +410,7 @@ DbSchema::readViews()
         case Database::Unknown:
                         qDebug() << "Database::readViews> SqlDriver was not set";
         case Database::PostgreSQL:
-                        Psql::Tools::viewsList(mName, viewsNamesList);
+                        Psql::Tools::viewsList(mDatabase->dbHandle(), mName, viewsNamesList);
                         break;
         case Database::MySQL:
         case Database::Oracle:
@@ -454,7 +451,7 @@ DbSchema::readProcedures()
         case Database::Unknown:
                         qDebug() << "Database::readProcedures> SqlDriver was not set";
         case Database::PostgreSQL:
-                        Psql::Tools::proceduresList(mName, proceduresNamesList);
+                        Psql::Tools::proceduresList(mDatabase->dbHandle(), mName, proceduresNamesList);
                         break;
         case Database::MySQL:
         case Database::Oracle:
@@ -496,7 +493,7 @@ DbSchema::readTriggers()
                         qDebug() << "DbSchema::readTriggers> SqlDriver was not set";
                         return;
         case Database::PostgreSQL:
-                        Psql::Tools::triggersList(mName, triggersNamesList);
+                        Psql::Tools::triggersList(mDatabase->dbHandle(), mName, triggersNamesList);
                         break;
         case Database::MySQL:
 //                        Mysql::Tools::triggersList(mName, triggersNamesList);

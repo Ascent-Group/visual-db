@@ -70,8 +70,7 @@ Schema::loadData()
         return true;
     }
 
-    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-    QSqlQuery query(db);
+    QSqlQuery query(mDatabase->dbHandle());
     QString qstr;
 
     qstr = QString("SELECT "
@@ -87,7 +86,7 @@ Schema::loadData()
         .arg(mName);
 
 #ifdef DEBUG_QUERY
-    qDebug() << "Psql::Role::loadData> " << qstr;
+    qDebug() << "Psql::Schema::loadData> " << qstr;
 #endif
 
     // if query failed

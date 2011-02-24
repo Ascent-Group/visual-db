@@ -121,7 +121,7 @@ View::loadData()
     colId = query.record().indexOf("owner");
     Q_ASSERT(colId > 0);
     QString ownerName = query.value(colId).toString();
-    mOwner = Common::Database::instance()->findRole(ownerName);
+    mOwner = mDatabase->findRole(ownerName);
 
     colId = query.record().indexOf("def");
     Q_ASSERT(colId > 0);

@@ -155,7 +155,7 @@ Index::loadData()
     Q_ASSERT(colId > 0);
     QString schemaName = query.value(colId).toString();
 
-    DbSchemaPtr schema = Common::Database::instance()->findSchema(schemaName);
+    DbSchemaPtr schema = mDatabase->findSchema(schemaName);
 
     if (schema.valid()) {
         DbTablePtr table = schema->findTable(tableName);

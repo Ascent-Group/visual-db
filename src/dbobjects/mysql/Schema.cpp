@@ -100,7 +100,7 @@ Schema::loadData()
 
     using namespace DbObjects::Common;
     // find owner for scheme
-    DbRolePtr dbRole = Database::instance()->findRole(ownerName);
+    DbRolePtr dbRole = mDatabase->findRole(ownerName);
 //    Q_CHECK_PTR(dbRole);
 
     setOwner(dbRole);

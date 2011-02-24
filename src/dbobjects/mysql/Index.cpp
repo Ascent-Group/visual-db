@@ -133,7 +133,7 @@ Index::loadData()
     QString schemaName = query.value(colId).toString();
 
     using namespace DbObjects::Common;
-    DbSchemaPtr schema = Database::instance()->findSchema(schemaName);
+    DbSchemaPtr schema = mDatabase->findSchema(schemaName);
 
     if (schema.valid()) {
         DbTablePtr table = schema->findTable(tableName);

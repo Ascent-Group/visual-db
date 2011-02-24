@@ -109,7 +109,7 @@ Schema::loadData()
     QString description = query.value(colId).toString();
 
     // find owner for scheme
-    DbRolePtr dbRole = Common::Database::instance()->findRole(ownerName);
+    DbRolePtr dbRole = mDatabase->findRole(ownerName);
 //    Q_CHECK_PTR(dbRole);
 
     setOwner(dbRole);

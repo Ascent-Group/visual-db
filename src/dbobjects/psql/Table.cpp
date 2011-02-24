@@ -199,7 +199,7 @@ Table::loadData()
     if (query.first()) {
 
         do {
-            DbSchemaPtr schema = Common::Database::instance()->findSchema(query.value(0).toString());
+            DbSchemaPtr schema = mDatabase->findSchema(query.value(0).toString());
             // devtime assert
             Q_ASSERT(0 != schema.get());
 

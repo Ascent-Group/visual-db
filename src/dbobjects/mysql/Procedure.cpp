@@ -100,12 +100,12 @@ Procedure::loadData()
     qint32 colId = query.record().indexOf("owner");
     Q_ASSERT(colId > 0);
     QString ownerName = query.value(colId).toString();
-    mOwner = Common::Database::instance()->findRole(ownerName);
+    mOwner = mDatabase->findRole(ownerName);
 
     colId = query.record().indexOf("lang");
     Q_ASSERT(colId > 0);
     QString languageName = query.value(colId).toString();
-    mLanguage = Common::Database::instance()->findLanguage(languageName);
+    mLanguage = mDatabase->findLanguage(languageName);
 
     colId = query.record().indexOf("src");
     Q_ASSERT(colId > 0);

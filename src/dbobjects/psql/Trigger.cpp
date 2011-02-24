@@ -196,7 +196,7 @@ Trigger::loadData()
     Q_ASSERT(colId >= 0);
     QString schemaName = query.value(colId).toString();
 
-    schema = Common::Database::instance()->findSchema(schemaName);
+    schema = mDatabase->findSchema(schemaName);
 
     if (schema.valid()) {
         colId = query.record().indexOf("table");
@@ -216,7 +216,7 @@ Trigger::loadData()
     Q_ASSERT(colId > 0);
     QString procSchemaName = query.value(colId).toString();
 
-    schema = Common::Database::instance()->findSchema(procSchemaName);
+    schema = mDatabase->findSchema(procSchemaName);
 
     if (schema.valid()) {
         colId = query.record().indexOf("proc");
@@ -253,7 +253,7 @@ Trigger::loadData()
     Q_ASSERT(colId > 0);
     QString refSchemaName = query.value(colId).toString();
 
-    schema = Common::Database::instance()->findSchema(refSchemaName);
+    schema = mDatabase->findSchema(refSchemaName);
 
     if (schema.valid()) {
         colId = query.record().indexOf("ref_table");

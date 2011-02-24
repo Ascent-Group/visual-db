@@ -29,6 +29,8 @@
 
 #include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbProcedureTest.h>
+#include <dbobjects/common/Factories.h>
+#include <dbobjects/common/Tools.h>
 
 using namespace DbObjects;
 
@@ -39,21 +41,29 @@ DbProcedureTest::initTestCase()
     mProcedureName = "insert_album";
     mRoleName = "music_user";
     mLanguageName = "plpgsql";
+
     mDbInst = DatabaseCreator::createDatabase();
     QVERIFY(0 != mDbInst);
+
+    mFactories = DatabaseCreator::factories();
+    QVERIFY(0 != mFactories);
+
+    mTools = DatabaseCreator::tools();
+    QVERIFY(0 != mTools);
 }
 
 void
 DbProcedureTest::cleanupTestCase()
 {
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
+    delete mDbInst;
+    delete mFactories;
+    delete mTools;
 }
 
 void
 DbProcedureTest::init()
 {
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
 
     mProcedure = mDbInst->findSchema(mSchemaName)->findProcedure(mProcedureName);
     QVERIFY(0 != mProcedure.get());
@@ -100,7 +110,7 @@ DbProcedureTest::typeTest()
 void
 DbProcedureTest::ownerTest()
 {
-    mDbInst->readRoles();
+    mDbInst->readRoles(mFactories, mTools);
 
     DbRolePtr role = mProcedure->owner();
     QVERIFY(role.valid());

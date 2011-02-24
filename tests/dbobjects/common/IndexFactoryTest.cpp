@@ -27,49 +27,50 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dbobjects/factory/LanguageFactoryTest.h>
+#include <dbobjects/common/IndexFactoryTest.h>
 
 #include <dbobjects/common/Database.h>
-#include <dbobjects/factory/Language.h>
-#include <dbobjects/psql/Language.h>
+#include <dbobjects/common/IndexFactory.h>
+#include <dbobjects/psql/Index.h>
 
 void
-LanguageFactoryTest::initTestCase()
+IndexFactoryTest::initTestCase()
 {
 
 }
 
 void
-LanguageFactoryTest::cleanupTestCase()
+IndexFactoryTest::cleanupTestCase()
 {
 
 }
 
 void
-LanguageFactoryTest::createLanguageTest()
+IndexFactoryTest::createIndexTest()
 {
-    using namespace DbObjects;
-
-    QString langName("plpgsql");
-
-    Common::Database *dbInst = Common::Database::instance();
-
-    QVERIFY(0 != dbInst);
-
-    dbInst->setSqlDriver("QPSQL");
-    QVERIFY(0 != dynamic_cast<Psql::Language*>(Factory::Language::createLanguage(langName)));
-
-    // \todo update this check as for psql when more RDBMS are supported
-    dbInst->setSqlDriver("QMYSQL");
-    QVERIFY(0 == Factory::Language::createLanguage(langName));
-
-    dbInst->setSqlDriver("QIODBC");
-    QVERIFY(0 == Factory::Language::createLanguage(langName));
-
-    dbInst->setSqlDriver("QSQLITE");
-    QVERIFY(0 == Factory::Language::createLanguage(langName));
-
-    dbInst->setSqlDriver("NODRV");
-    QVERIFY(0 == Factory::Language::createLanguage(langName));
+    QVERIFY(0);
+//    using namespace DbObjects;
+//
+//    QString indexName("ind_artists");
+//
+//    Common::Database *dbInst = Common::Database::instance();
+//
+//    QVERIFY(0 != dbInst);
+//
+//    dbInst->setSqlDriver("QPSQL");
+//    QVERIFY(0 != dynamic_cast<Psql::Index*>(Factory::Index::createIndex(indexName)));
+//
+//    // \todo update this check as for psql when more RDBMS are supported
+//    dbInst->setSqlDriver("QMYSQL");
+//    QVERIFY(0 == Factory::Index::createIndex(indexName));
+//
+//    dbInst->setSqlDriver("QIODBC");
+//    QVERIFY(0 == Factory::Index::createIndex(indexName));
+//
+//    dbInst->setSqlDriver("QSQLITE");
+//    QVERIFY(0 == Factory::Index::createIndex(indexName));
+//
+//    dbInst->setSqlDriver("NODRV");
+//    QVERIFY(0 == Factory::Index::createIndex(indexName));
 }
 

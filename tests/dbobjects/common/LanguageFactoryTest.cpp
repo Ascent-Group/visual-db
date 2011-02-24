@@ -27,52 +27,50 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dbobjects/factory/ViewFactoryTest.h>
+#include <dbobjects/common/LanguageFactoryTest.h>
 
 #include <dbobjects/common/Database.h>
-#include <dbobjects/factory/View.h>
-#include <dbobjects/psql/View.h>
+#include <dbobjects/common/LanguageFactory.h>
+#include <dbobjects/psql/Language.h>
 
 void
-ViewFactoryTest::initTestCase()
+LanguageFactoryTest::initTestCase()
 {
 
 }
 
 void
-ViewFactoryTest::cleanupTestCase()
+LanguageFactoryTest::cleanupTestCase()
 {
 
 }
 
 void
-ViewFactoryTest::createViewTest()
+LanguageFactoryTest::createLanguageTest()
 {
-    using namespace DbObjects;
-
-    QString viewName("users_playlists");
-    QString schemaName("vtunes");
-
-    Common::Database *dbInst = Common::Database::instance();
-    QVERIFY(0 != dbInst);
-
-//    Common::DbSchema *schema = dbInst->findSchema(schemaName);
-//    QVERIFY(0 != schema);
-
-    dbInst->setSqlDriver("QPSQL");
-    QVERIFY(0 != dynamic_cast<Psql::View*>(Factory::View::createView(viewName, schemaName)));
-
-    // \todo update this check as for psql when more RDBMS are supported
-    dbInst->setSqlDriver("QMYSQL");
-    QVERIFY(0 == Factory::View::createView(viewName, schemaName));
-
-    dbInst->setSqlDriver("QIODBC");
-    QVERIFY(0 == Factory::View::createView(viewName, schemaName));
-
-    dbInst->setSqlDriver("QSQLITE");
-    QVERIFY(0 == Factory::View::createView(viewName, schemaName));
-
-    dbInst->setSqlDriver("NODRV");
-    QVERIFY(0 == Factory::View::createView(viewName, schemaName));
+    QVERIFY(0);
+//    using namespace DbObjects;
+//
+//    QString langName("plpgsql");
+//
+//    Common::Database *dbInst = Common::Database::instance();
+//
+//    QVERIFY(0 != dbInst);
+//
+//    dbInst->setSqlDriver("QPSQL");
+//    QVERIFY(0 != dynamic_cast<Psql::Language*>(Factory::Language::createLanguage(langName)));
+//
+//    // \todo update this check as for psql when more RDBMS are supported
+//    dbInst->setSqlDriver("QMYSQL");
+//    QVERIFY(0 == Factory::Language::createLanguage(langName));
+//
+//    dbInst->setSqlDriver("QIODBC");
+//    QVERIFY(0 == Factory::Language::createLanguage(langName));
+//
+//    dbInst->setSqlDriver("QSQLITE");
+//    QVERIFY(0 == Factory::Language::createLanguage(langName));
+//
+//    dbInst->setSqlDriver("NODRV");
+//    QVERIFY(0 == Factory::Language::createLanguage(langName));
 }
 

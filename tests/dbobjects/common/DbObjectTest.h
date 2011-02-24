@@ -47,6 +47,8 @@ class DbObjectTest : public QObject
 
     private:
         DbObjects::Common::Database *mDbInst;
+        DbObjects::Common::Factories *mFactories;
+        DbObjects::Common::Tools *mTools;
 };
 
 #endif // DBOBJECTTEST_H

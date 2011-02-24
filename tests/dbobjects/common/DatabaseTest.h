@@ -37,6 +37,8 @@ namespace DbObjects
 namespace Common
 {
 class Database;
+class Factories;
+class Tools;
 }
 
 }
@@ -85,6 +87,9 @@ class DatabaseTest : public QObject
 
     private:
         DbObjects::Common::Database *mDbInst;
+        DbObjects::Common::Factories *mFactories;
+        DbObjects::Common::Tools *mTools;
+
         static const quint8 LANGUAGES_COUNT;
         static const quint64 SCHEMAS_COUNT;
         static const quint64 ROLES_COUNT;

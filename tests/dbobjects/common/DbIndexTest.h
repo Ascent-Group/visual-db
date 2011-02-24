@@ -32,6 +32,7 @@
 
 #include <QtTest/QtTest>
 #include <dbobjects/common/Database.h>
+#include <dbobjects/common/DbObjectPtr.h>
 
 typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbIndex> DbIndexPtr;
 typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbSchema> DbSchemaPtr;
@@ -78,6 +79,8 @@ class DbIndexTest : public QObject
         DbIndexPtr mIndex;
 
         DbObjects::Common::Database *mDbInst;
+        DbObjects::Common::Factories *mFactories;
+        DbObjects::Common::Tools *mTools;
 };
 
 #endif // DBINDEXTEST_H

@@ -32,6 +32,15 @@
 
 #include <QtTest/QtTest>
 
+namespace DbObjects
+{
+namespace Common
+{
+class Database;
+class Tools;
+}
+}
+
 class PsqlToolsTest : public QObject
 {
     Q_OBJECT
@@ -58,6 +67,9 @@ class PsqlToolsTest : public QObject
         QStringList mTablesNamesList;
         QStringList mTriggersNamesList;
         QStringList mViewsNamesList;
+
+        DbObjects::Common::Database *mDbInst;
+        DbObjects::Common::Tools *mTools;
 };
 
 #endif // DBOBJECTS_PSQL_TOOLS_TEST_H

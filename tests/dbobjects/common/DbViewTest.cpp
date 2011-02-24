@@ -29,6 +29,8 @@
 
 #include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbViewTest.h>
+#include <dbobjects/common/Factories.h>
+#include <dbobjects/common/Tools.h>
 
 using namespace DbObjects;
 
@@ -38,15 +40,23 @@ DbViewTest::initTestCase()
     mSchemaName = "vtunes";
     mViewName = "users_playlists";
     mRoleName = "music_user";
+
     mDbInst = DatabaseCreator::createDatabase();
     QVERIFY(0 != mDbInst);
+
+    mFactories = DatabaseCreator::factories();
+    QVERIFY(0 != mFactories);
+
+    mTools = DatabaseCreator::tools();
+    QVERIFY(0 != mTools);
 }
 
 void
 DbViewTest::cleanupTestCase()
 {
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
+    delete mDbInst;
+    delete mFactories;
+    delete mTools;
 }
 
 /*!
@@ -55,7 +65,7 @@ DbViewTest::cleanupTestCase()
 void
 DbViewTest::init()
 {
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
 
     DbSchemaPtr schema = mDbInst->findSchema(mSchemaName);
     QVERIFY(schema.valid());

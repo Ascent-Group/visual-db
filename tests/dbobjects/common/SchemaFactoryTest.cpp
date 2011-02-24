@@ -27,49 +27,50 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dbobjects/factory/IndexFactoryTest.h>
+#include <dbobjects/common/SchemaFactoryTest.h>
 
 #include <dbobjects/common/Database.h>
-#include <dbobjects/factory/Index.h>
-#include <dbobjects/psql/Index.h>
+#include <dbobjects/common/SchemaFactory.h>
+#include <dbobjects/psql/Schema.h>
 
 void
-IndexFactoryTest::initTestCase()
+SchemaFactoryTest::initTestCase()
 {
 
 }
 
 void
-IndexFactoryTest::cleanupTestCase()
+SchemaFactoryTest::cleanupTestCase()
 {
 
 }
 
 void
-IndexFactoryTest::createIndexTest()
+SchemaFactoryTest::createSchemaTest()
 {
-    using namespace DbObjects;
-
-    QString indexName("ind_artists");
-
-    Common::Database *dbInst = Common::Database::instance();
-
-    QVERIFY(0 != dbInst);
-
-    dbInst->setSqlDriver("QPSQL");
-    QVERIFY(0 != dynamic_cast<Psql::Index*>(Factory::Index::createIndex(indexName)));
-
-    // \todo update this check as for psql when more RDBMS are supported
-    dbInst->setSqlDriver("QMYSQL");
-    QVERIFY(0 == Factory::Index::createIndex(indexName));
-
-    dbInst->setSqlDriver("QIODBC");
-    QVERIFY(0 == Factory::Index::createIndex(indexName));
-
-    dbInst->setSqlDriver("QSQLITE");
-    QVERIFY(0 == Factory::Index::createIndex(indexName));
-
-    dbInst->setSqlDriver("NODRV");
-    QVERIFY(0 == Factory::Index::createIndex(indexName));
+    QVERIFY(0);
+//    using namespace DbObjects;
+//
+//    QString schemaName("vtunes");
+//
+//    Common::Database *dbInst = Common::Database::instance();
+//
+//    QVERIFY(0 != dbInst);
+//
+//    dbInst->setSqlDriver("QPSQL");
+//    QVERIFY(0 != dynamic_cast<Psql::Schema*>(Factory::Schema::createSchema(schemaName)));
+//
+//    // \todo update this check as for psql when more RDBMS are supported
+//    dbInst->setSqlDriver("QMYSQL");
+//    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
+//
+//    dbInst->setSqlDriver("QIODBC");
+//    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
+//
+//    dbInst->setSqlDriver("QSQLITE");
+//    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
+//
+//    dbInst->setSqlDriver("NODRV");
+//    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
 }
 

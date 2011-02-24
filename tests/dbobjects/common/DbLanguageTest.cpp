@@ -38,19 +38,26 @@ DbLanguageTest::initTestCase()
     mLanguageName = "plpgsql";
     mDbInst = DatabaseCreator::createDatabase();
     QVERIFY(0 != mDbInst);
+
+    mFactories = DatabaseCreator::factories();
+    QVERIFY(0 != mFactories);
+
+    mTools = DatabaseCreator::tools();
+    QVERIFY(0 != mTools);
+
 }
 
 void
 DbLanguageTest::cleanupTestCase()
 {
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
+//    Common::DatabaseManager dbMgr;
+//    dbMgr.flush();
 }
 
 void
 DbLanguageTest::init()
 {
-    mDbInst->readLanguages();
+    mDbInst->readLanguages(mFactories, mTools);
 
     mLanguage = mDbInst->findLanguage(mLanguageName);
     QVERIFY(0 != mLanguage.get());

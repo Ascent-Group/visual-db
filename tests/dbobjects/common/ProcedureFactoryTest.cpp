@@ -27,49 +27,54 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dbobjects/factory/RoleFactoryTest.h>
+#include <dbobjects/common/ProcedureFactoryTest.h>
 
 #include <dbobjects/common/Database.h>
-#include <dbobjects/factory/Role.h>
-#include <dbobjects/psql/Role.h>
+#include <dbobjects/common/ProcedureFactory.h>
+#include <dbobjects/psql/Procedure.h>
+
 
 void
-RoleFactoryTest::initTestCase()
+ProcedureFactoryTest::initTestCase()
 {
 
 }
 
 void
-RoleFactoryTest::cleanupTestCase()
+ProcedureFactoryTest::cleanupTestCase()
 {
 
 }
 
 void
-RoleFactoryTest::createRoleTest()
+ProcedureFactoryTest::createProcedureTest()
 {
-    using namespace DbObjects;
-
-    QString roleName("music_user");
-
-    Common::Database *dbInst = Common::Database::instance();
-
-    QVERIFY(0 != dbInst);
-
-    dbInst->setSqlDriver("QPSQL");
-    QVERIFY(0 != dynamic_cast<Psql::Role*>(Factory::Role::createRole(roleName)));
-
-    // \todo update this check as for psql when more RDBMS are supported
-    dbInst->setSqlDriver("QMYSQL");
-    QVERIFY(0 == Factory::Role::createRole(roleName));
-
-    dbInst->setSqlDriver("QIODBC");
-    QVERIFY(0 == Factory::Role::createRole(roleName));
-
-    dbInst->setSqlDriver("QSQLITE");
-    QVERIFY(0 == Factory::Role::createRole(roleName));
-
-    dbInst->setSqlDriver("NODRV");
-    QVERIFY(0 == Factory::Role::createRole(roleName));
+    QVERIFY(0);
+//    using namespace DbObjects;
+//
+//    QString procName("insert_album");
+//    QString schemaName("vtunes");
+//
+//    Common::Database *dbInst = Common::Database::instance();
+//    QVERIFY(0 != dbInst);
+//
+////    DbSchemaPtr schema = dbInst->findSchema(schemaName);
+////    QVERIFY(0 != schema.get());
+//
+//    dbInst->setSqlDriver("QPSQL");
+//    QVERIFY(0 != dynamic_cast<Psql::Procedure*>(Factory::Procedure::createProcedure(procName, schemaName)));
+//
+//    // \todo update this check as for psql when more RDBMS are supported
+//    dbInst->setSqlDriver("QMYSQL");
+//    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
+//
+//    dbInst->setSqlDriver("QIODBC");
+//    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
+//
+//    dbInst->setSqlDriver("QSQLITE");
+//    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
+//
+//    dbInst->setSqlDriver("NODRV");
+//    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
 }
 

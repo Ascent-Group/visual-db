@@ -27,6 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <control/DatabaseManager.h>
 #include <dbobjects/common/DbIndexTest.h>
 
 #include <dbobjects/common/DatabaseCreator.h>
@@ -43,13 +44,15 @@ DbIndexTest::initTestCase()
     mIndexName = "ind_artists";
     mTableName = "artists";
     mDbInst = DatabaseCreator::createDatabase();
+    mFactories = DatabaseCreator::factories();
+    mTools = DatabaseCreator::tools();
 }
 
 void
 DbIndexTest::cleanupTestCase()
 {
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
+//    Control::DatabaseManager dbMgr;
+//    dbMgr.flush();
 }
 
 /*!
@@ -58,7 +61,7 @@ DbIndexTest::cleanupTestCase()
 void
 DbIndexTest::init()
 {
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
 
     mIndex = mDbInst->findIndex(mIndexName);
     QVERIFY(0 != mIndex.get());
@@ -66,6 +69,9 @@ DbIndexTest::init()
     QCOMPARE(mIndex.name(), mIndexName);
     QCOMPARE(mIndex->name(), mIndexName);
 
+    QVERIFY(mDbInst);
+    QVERIFY(mFactories);
+    QVERIFY(mTools);
 }
 
 /*!

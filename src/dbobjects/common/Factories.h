@@ -54,6 +54,8 @@ class ViewFactory;
 class Factories
 {
     public:
+        virtual ~Factories();
+
         DbObjects::Common::IndexFactory* indexFactory() const;
         DbObjects::Common::LanguageFactory* languageFactory() const;
         DbObjects::Common::ProcedureFactory* procedureFactory() const;
@@ -65,7 +67,6 @@ class Factories
 
     protected:
         Factories();
-        virtual ~Factories();
 
         Q_DISABLE_COPY(Factories);
 

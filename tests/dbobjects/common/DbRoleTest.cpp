@@ -29,6 +29,8 @@
 
 #include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbRoleTest.h>
+#include <dbobjects/common/Factories.h>
+#include <dbobjects/common/Tools.h>
 
 using namespace DbObjects;
 
@@ -36,21 +38,29 @@ void
 DbRoleTest::initTestCase()
 {
     mRoleName = "music_user";
+
     mDbInst = DatabaseCreator::createDatabase();
     QVERIFY(0 != mDbInst);
+
+    mFactories = DatabaseCreator::factories();
+    QVERIFY(0 != mFactories);
+
+    mTools = DatabaseCreator::tools();
+    QVERIFY(0 != mTools);
 }
 
 void
 DbRoleTest::cleanupTestCase()
 {
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
+    delete mDbInst;
+    delete mFactories;
+    delete mTools;
 }
 
 void
 DbRoleTest::init()
 {
-    mDbInst->readRoles();
+    mDbInst->readRoles(mFactories, mTools);
 
     mRole = mDbInst->findRole(mRoleName);
     QVERIFY(0 != mRole.get());

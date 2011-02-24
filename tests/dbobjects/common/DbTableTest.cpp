@@ -29,6 +29,8 @@
 
 #include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbTableTest.h>
+#include <dbobjects/common/Factories.h>
+#include <dbobjects/common/Tools.h>
 
 using namespace DbObjects;
 
@@ -48,13 +50,20 @@ DbTableTest::initTestCase()
 
     mDbInst = DatabaseCreator::createDatabase();
     QVERIFY(0 != mDbInst);
+
+    mFactories = DatabaseCreator::factories();
+    QVERIFY(0 != mFactories);
+
+    mTools = DatabaseCreator::tools();
+    QVERIFY(0 != mTools);
 }
 
 void
 DbTableTest::cleanupTestCase()
 {
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
+    delete mDbInst;
+    delete mFactories;
+    delete mTools;
 }
 
 /*!
@@ -63,7 +72,7 @@ DbTableTest::cleanupTestCase()
 void
 DbTableTest::init()
 {
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
 
     DbSchemaPtr schema = mDbInst->findSchema(mSchemaName);
     QVERIFY(schema.valid());

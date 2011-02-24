@@ -30,6 +30,8 @@
 #include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbSchemaTest.h>
 #include <dbobjects/common/DbSchema.h>
+#include <dbobjects/common/Factories.h>
+#include <dbobjects/common/Tools.h>
 
 using namespace DbObjects;
 
@@ -37,8 +39,15 @@ void
 DbSchemaTest::initTestCase()
 {
     mSchemaName = "vtunes";
+
     mDbInst = DatabaseCreator::createDatabase();
     QVERIFY(0 != mDbInst);
+
+    mFactories = DatabaseCreator::factories();
+    QVERIFY(0 != mFactories);
+
+    mTools = DatabaseCreator::tools();
+    QVERIFY(0 != mTools);
 
     mTablesNamesList << "artists"
                      << "genres"
@@ -63,8 +72,9 @@ DbSchemaTest::initTestCase()
 void
 DbSchemaTest::cleanupTestCase()
 {
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
+    delete mDbInst;
+    delete mFactories;
+    delete mTools;
 }
 
 /*!
@@ -73,7 +83,7 @@ DbSchemaTest::cleanupTestCase()
 void
 DbSchemaTest::init()
 {
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
     mSchema = mDbInst->findSchema(mSchemaName);
     QVERIFY(mSchema.valid());
 }
@@ -101,7 +111,7 @@ DbSchemaTest::addProcedureTest()
 
     QString dummyName("dummyProcedure");
     // create a dummy procedure and add it
-    DbProcedurePtr dummyProcedure(dummyName, mSchemaName);
+    DbProcedurePtr dummyProcedure(mDbInst, mFactories, dummyName, mSchemaName);
 
     // try to add it
     QVERIFY(mSchema->addProcedure(dummyProcedure));
@@ -126,7 +136,7 @@ DbSchemaTest::addTableTest()
 
     QString dummyName("dummyTable");
     // create a dummy table and add it
-    DbTablePtr dummyTable(dummyName, mSchemaName);
+    DbTablePtr dummyTable(mDbInst, mFactories, dummyName, mSchemaName);
 
     // try to add it
     QVERIFY(mSchema->addTable(dummyTable));
@@ -151,7 +161,7 @@ DbSchemaTest::addTriggerTest()
 
     QString dummyName("dummyTrigger");
     // create a dummy trigger and add it
-    DbTriggerPtr dummyTrigger(dummyName, mSchemaName);
+    DbTriggerPtr dummyTrigger(mDbInst, mFactories, dummyName, mSchemaName);
 
     // try to add it
     QVERIFY(mSchema->addTrigger(dummyTrigger));
@@ -176,7 +186,7 @@ DbSchemaTest::addViewTest()
 
     QString dummyName("dummyView");
     // create a dummy view and add it
-    DbViewPtr dummyView(dummyName, mSchemaName);
+    DbViewPtr dummyView(mDbInst, mFactories, dummyName, mSchemaName);
 
     // try to add it
     QVERIFY(mSchema->addView(dummyView));
@@ -211,8 +221,8 @@ DbSchemaTest::resetDataTest()
 void
 DbSchemaTest::findProcedureTest()
 {
-    mDbInst->readRoles();
-    mDbInst->readLanguages();
+    mDbInst->readRoles(mFactories, mTools);
+    mDbInst->readLanguages(mFactories, mTools);
 
     DbProcedurePtr procedure;
     foreach (const QString &name, mProceduresNamesList) {
@@ -239,10 +249,10 @@ void
 DbSchemaTest::findTriggerTest()
 {
 //    mDbInst->loadData();
-    mDbInst->readRoles();
-    mDbInst->readLanguages();
+    mDbInst->readRoles(mFactories, mTools);
+    mDbInst->readLanguages(mFactories, mTools);
 
-    mSchema->readTriggers();
+    mSchema->readTriggers(mFactories, mTools);
 
     DbTriggerPtr trigger;
     foreach (const QString &name, mTriggersNamesList) {
@@ -298,7 +308,7 @@ DbSchemaTest::readProceduresTest()
     schema->resetData();
     QCOMPARE(schema->proceduresCount(), (quint64)0);
 
-    schema->readProcedures();
+    schema->readProcedures(mFactories, mTools);
     QVERIFY(0 < schema->proceduresCount());
     QVERIFY(mProceduresNamesList.count() <= schema->proceduresCount());
 }
@@ -313,7 +323,7 @@ DbSchemaTest::readTablesTest()
     schema->resetData();
     QCOMPARE(schema->tablesCount(), (quint64)0);
 
-    schema->readTables();
+    schema->readTables(mFactories, mTools);
     QVERIFY(0 < schema->tablesCount());
     QVERIFY(mTablesNamesList.count() <= schema->tablesCount());
 }
@@ -328,7 +338,7 @@ DbSchemaTest::readTriggersTest()
     schema->resetData();
     QCOMPARE(schema->triggersCount(), (quint16)0);
 
-    schema->readTriggers();
+    schema->readTriggers(mFactories, mTools);
     QVERIFY(0 < schema->triggersCount());
     QVERIFY(mTriggersNamesList.count() <= schema->triggersCount());
 }
@@ -343,7 +353,7 @@ DbSchemaTest::readViewsTest()
     schema->resetData();
     QCOMPARE(schema->viewsCount(), (quint64)0);
 
-    schema->readViews();
+    schema->readViews(mFactories, mTools);
     QVERIFY(0 < schema->viewsCount());
     QVERIFY(mViewsNamesList.count() <= schema->viewsCount());
 }

@@ -29,6 +29,8 @@
 
 #include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DbTriggerTest.h>
+#include <dbobjects/common/Factories.h>
+#include <dbobjects/common/Tools.h>
 
 using namespace DbObjects;
 
@@ -46,19 +48,26 @@ DbTriggerTest::initTestCase()
 
     mDbInst = DatabaseCreator::createDatabase();
     QVERIFY(0 != mDbInst);
+
+    mFactories = DatabaseCreator::factories();
+    QVERIFY(0 != mFactories);
+
+    mTools = DatabaseCreator::tools();
+    QVERIFY(0 != mTools);
 }
 
 void
 DbTriggerTest::cleanupTestCase()
 {
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
+    delete mDbInst;
+    delete mFactories;
+    delete mTools;
 }
 
 void
 DbTriggerTest::init()
 {
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
 
     DbSchemaPtr schema = mDbInst->findSchema(mSchemaName);
     QVERIFY(schema.valid());

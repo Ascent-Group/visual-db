@@ -32,6 +32,7 @@
 
 #include <QtTest/QtTest>
 #include <dbobjects/common/Database.h>
+#include <dbobjects/common/DbObjectPtr.h>
 
 typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbSchema> DbSchemaPtr;
 typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbTable> DbTablePtr;
@@ -72,7 +73,8 @@ class DbTableTest : public QObject
         DbTablePtr mTable;
 
         DbObjects::Common::Database *mDbInst;
-
+        DbObjects::Common::Factories *mFactories;
+        DbObjects::Common::Tools *mTools;
 };
 
 #endif // DBTABLETEST_H

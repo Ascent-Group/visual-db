@@ -32,6 +32,7 @@
 
 #include <QtTest/QtTest>
 #include <dbobjects/common/Database.h>
+#include <dbobjects/common/DbObjectPtr.h>
 
 typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbLanguage> DbLanguagePtr;
 typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbProcedure> DbProcedurePtr;
@@ -68,6 +69,8 @@ class DbProcedureTest : public QObject
         DbProcedurePtr mProcedure;
 
         DbObjects::Common::Database *mDbInst;
+        DbObjects::Common::Factories *mFactories;
+        DbObjects::Common::Tools *mTools;
 };
 
 #endif // DBPROCEDURETEST_H

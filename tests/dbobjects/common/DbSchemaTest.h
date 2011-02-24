@@ -31,6 +31,7 @@
 #define DBSCHEMATEST_H
 
 #include <dbobjects/common/Database.h>
+#include <dbobjects/common/DbObjectPtr.h>
 #include <QtTest/QtTest>
 
 typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbProcedure> DbProcedurePtr;
@@ -75,7 +76,10 @@ class DbSchemaTest : public QObject
     private:
         QString mSchemaName;
         DbSchemaPtr mSchema;
+
         DbObjects::Common::Database *mDbInst;
+        DbObjects::Common::Factories *mFactories;
+        DbObjects::Common::Tools *mTools;
 
         QStringList mTablesNamesList;
         QStringList mTriggersNamesList;

@@ -48,13 +48,20 @@ void
 DbObjectTest::initTestCase()
 {
     mDbInst = DatabaseCreator::createDatabase();
+    QVERIFY(0 != mDbInst);
+
+    mFactories = DatabaseCreator::factories();
+    QVERIFY(0 != mFactories);
+
+    mTools = DatabaseCreator::tools();
+    QVERIFY(0 != mTools);
 }
 
 void
 DbObjectTest::cleanupTestCase()
 {
-    DatabaseManager dbMgr;
-    dbMgr.flush();
+//    DatabaseManager dbMgr;
+//    dbMgr.flush();
 }
 
 
@@ -65,35 +72,35 @@ DbObjectTest::nameTest()
     QString objName("dummy");
     QString nsName("ns");
 
-    DbIndexPtr index(objName);
+    DbIndexPtr index(mDbInst, mFactories, objName);
     QVERIFY(0 != (obj = const_cast<DbIndex*>(index.get())));
     QCOMPARE(obj->name(), objName);
 
-    DbLanguagePtr language(objName);
+    DbLanguagePtr language(mDbInst, mFactories, objName);
     QVERIFY(0 != (obj = const_cast<DbLanguage*>(language.get())));
     QCOMPARE(obj->name(), objName);
 
-    DbProcedurePtr procedure(objName, nsName);
+    DbProcedurePtr procedure(mDbInst, mFactories, objName, nsName);
     QVERIFY(0 != (obj = const_cast<DbProcedure*>(procedure.get())));
     QCOMPARE(obj->name(), objName);
 
-    DbRolePtr role(objName);
+    DbRolePtr role(mDbInst, mFactories, objName);
     QVERIFY(0 != (obj = const_cast<DbRole*>(role.get())));
     QCOMPARE(obj->name(), objName);
 
-    DbSchemaPtr schema(objName);
+    DbSchemaPtr schema(mDbInst, mFactories, objName);
     QVERIFY(0 != (obj = const_cast<DbSchema*>(schema.get())));
     QCOMPARE(obj->name(), objName);
 
-    DbTablePtr table(objName, nsName);
+    DbTablePtr table(mDbInst, mFactories, objName, nsName);
     QVERIFY(0 != (obj = const_cast<DbTable*>(table.get())));
     QCOMPARE(obj->name(), objName);
 
-    DbTriggerPtr trigger(objName, nsName);
+    DbTriggerPtr trigger(mDbInst, mFactories, objName, nsName);
     QVERIFY(0 != (obj = const_cast<DbTrigger*>(trigger.get())));
     QCOMPARE(obj->name(), objName);
 
-    DbViewPtr view(objName, nsName);
+    DbViewPtr view(mDbInst, mFactories, objName, nsName);
     QVERIFY(0 != (obj = const_cast<DbView*>(view.get())));
     QCOMPARE(obj->name(), objName);
 }
@@ -103,35 +110,35 @@ DbObjectTest::typeTest()
 {
     DbObject *obj;
 
-    DbIndexPtr index("index");
+    DbIndexPtr index(mDbInst, mFactories, "index");
     QVERIFY(0 != (obj = const_cast<DbIndex*>(index.get())));
     QCOMPARE(obj->type(), DbObjects::Common::DbObject::IndexObject);
 
-    DbLanguagePtr language("language");
+    DbLanguagePtr language(mDbInst, mFactories, "language");
     QVERIFY(0 != (obj = const_cast<DbLanguage*>(language.get())));
     QCOMPARE(obj->type(), DbObjects::Common::DbObject::LanguageObject);
 
-    DbProcedurePtr procedure("procedure", "ns");
+    DbProcedurePtr procedure(mDbInst, mFactories, "procedure", "ns");
     QVERIFY(0 != (obj = const_cast<DbProcedure*>(procedure.get())));
     QCOMPARE(obj->type(), DbObjects::Common::DbObject::ProcedureObject);
 
-    DbRolePtr role("role");
+    DbRolePtr role(mDbInst, mFactories, "role");
     QVERIFY(0 != (obj = const_cast<DbRole*>(role.get())));
     QCOMPARE(obj->type(), DbObjects::Common::DbObject::RoleObject);
 
-    DbSchemaPtr schema("schema");
+    DbSchemaPtr schema(mDbInst, mFactories, "schema");
     QVERIFY(0 != (obj = const_cast<DbSchema*>(schema.get())));
     QCOMPARE(obj->type(), DbObjects::Common::DbObject::SchemaObject);
 
-    DbTablePtr table("table", "ns");
+    DbTablePtr table(mDbInst, mFactories, "table", "ns");
     QVERIFY(0 != (obj = const_cast<DbTable*>(table.get())));
     QCOMPARE(obj->type(), DbObjects::Common::DbObject::TableObject);
 
-    DbTriggerPtr trigger("trigger", "ns");
+    DbTriggerPtr trigger(mDbInst, mFactories, "trigger", "ns");
     QVERIFY(0 != (obj = const_cast<DbTrigger*>(trigger.get())));
     QCOMPARE(obj->type(), DbObjects::Common::DbObject::TriggerObject);
 
-    DbViewPtr view("view", "ns");
+    DbViewPtr view(mDbInst, mFactories, "view", "ns");
     QVERIFY(0 != (obj = const_cast<DbView*>(view.get())));
     QCOMPARE(obj->type(), DbObjects::Common::DbObject::ViewObject);
 }
@@ -144,50 +151,50 @@ DbObjectTest::setNameTest()
     QString newObjName("dummy~");
     QString nsName("ns");
 
-    DbIndexPtr index(objName);
+    DbIndexPtr index(mDbInst, mFactories, objName);
     QVERIFY(0 != (obj = const_cast<DbIndex*>(index.get())));
     QCOMPARE(obj->name(), objName);
     // change name
     obj->setName(newObjName);
     QCOMPARE(obj->name(), newObjName);
 
-    DbLanguagePtr language(objName);
+    DbLanguagePtr language(mDbInst, mFactories, objName);
     QVERIFY(0 != (obj = const_cast<DbLanguage*>(language.get())));
     QCOMPARE(obj->name(), objName);
     obj->setName(newObjName);
     QCOMPARE(obj->name(), newObjName);
 
-    DbProcedurePtr procedure(objName, nsName);
+    DbProcedurePtr procedure(mDbInst, mFactories, objName, nsName);
     QVERIFY(0 != (obj = const_cast<DbProcedure*>(procedure.get())));
     QCOMPARE(obj->name(), objName);
     obj->setName(newObjName);
     QCOMPARE(obj->name(), newObjName);
 
-    DbRolePtr role(objName);
+    DbRolePtr role(mDbInst, mFactories, objName);
     QVERIFY(0 != (obj = const_cast<DbRole*>(role.get())));
     QCOMPARE(obj->name(), objName);
     obj->setName(newObjName);
     QCOMPARE(obj->name(), newObjName);
 
-    DbSchemaPtr schema(objName);
+    DbSchemaPtr schema(mDbInst, mFactories, objName);
     QVERIFY(0 != (obj = const_cast<DbSchema*>(schema.get())));
     QCOMPARE(obj->name(), objName);
     obj->setName(newObjName);
     QCOMPARE(obj->name(), newObjName);
 
-    DbTablePtr table(objName, nsName);
+    DbTablePtr table(mDbInst, mFactories, objName, nsName);
     QVERIFY(0 != (obj = const_cast<DbTable*>(table.get())));
     QCOMPARE(obj->name(), objName);
     obj->setName(newObjName);
     QCOMPARE(obj->name(), newObjName);
 
-    DbTriggerPtr trigger(objName, nsName);
+    DbTriggerPtr trigger(mDbInst, mFactories, objName, nsName);
     QVERIFY(0 != (obj = const_cast<DbTrigger*>(trigger.get())));
     QCOMPARE(obj->name(), objName);
     obj->setName(newObjName);
     QCOMPARE(obj->name(), newObjName);
 
-    DbViewPtr view(objName, nsName);
+    DbViewPtr view(mDbInst, mFactories, objName, nsName);
     QVERIFY(0 != (obj = const_cast<DbView*>(view.get())));
     QCOMPARE(obj->name(), objName);
     obj->setName(newObjName);

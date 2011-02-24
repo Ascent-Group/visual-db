@@ -32,6 +32,7 @@
 
 #include <QtTest/QtTest>
 #include <dbobjects/common/Database.h>
+#include <dbobjects/common/DbObjectPtr.h>
 
 typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbProcedure> DbProcedurePtr;
 typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbSchema> DbSchemaPtr;
@@ -82,6 +83,8 @@ class DbTriggerTest : public QObject
         DbTriggerPtr mTrigger;
 
         DbObjects::Common::Database *mDbInst;
+        DbObjects::Common::Factories *mFactories;
+        DbObjects::Common::Tools *mTools;
 };
 
 #endif // DBTRIGGERTEST_H

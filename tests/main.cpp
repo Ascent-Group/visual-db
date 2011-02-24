@@ -49,18 +49,17 @@
 #include <dbobjects/common/DbTableTest.h>
 #include <dbobjects/common/DbTriggerTest.h>
 #include <dbobjects/common/DbViewTest.h>
-#include <dbobjects/factory/IndexFactoryTest.h>
-#include <dbobjects/factory/LanguageFactoryTest.h>
-#include <dbobjects/factory/ProcedureFactoryTest.h>
-#include <dbobjects/factory/RoleFactoryTest.h>
-#include <dbobjects/factory/SchemaFactoryTest.h>
-#include <dbobjects/factory/TableFactoryTest.h>
-#include <dbobjects/factory/TriggerFactoryTest.h>
-#include <dbobjects/factory/ViewFactoryTest.h>
+#include <dbobjects/common/IndexFactoryTest.h>
+#include <dbobjects/common/LanguageFactoryTest.h>
+#include <dbobjects/common/ProcedureFactoryTest.h>
+#include <dbobjects/common/RoleFactoryTest.h>
+#include <dbobjects/common/SchemaFactoryTest.h>
+#include <dbobjects/common/TableFactoryTest.h>
+#include <dbobjects/common/TriggerFactoryTest.h>
+#include <dbobjects/common/ViewFactoryTest.h>
 #include <dbobjects/mysql/MysqlToolsTest.h>
 #include <dbobjects/psql/PsqlToolsTest.h>
 
-#include <connect/DbParameters.h>
 #include <common/DatabaseCreator.h>
 
 #endif
@@ -90,21 +89,17 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    DatabaseCreator::setDriver(drv);
+//    DatabaseCreator::setDriver(drv);
 
-    DbParameters dbParams;
-    dbParams.setDbDriver(drv);
+    Connect::DbHostInfo dbHostInfo;
+    dbHostInfo.setDbDriver(drv);
+    dbHostInfo.setAddress(DBHOST);
+    dbHostInfo.setDbName(DBNAME);
+    dbHostInfo.setUser(DBUSER);
+    dbHostInfo.setPassword(DBPASS);
 
-    dbParams.setDbHost(DBHOST);
-    dbParams.setDbName(DBNAME);
-    dbParams.setDbUser(DBUSER);
-    dbParams.setDbPassword(DBPASS);
 
-    if (!createConnection(dbParams)) {
-        qCritical() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
-                .arg(DBNAME)
-                .arg(DBHOST)
-                .arg(DBUSER);
+    if (!DatabaseCreator::connect(dbHostInfo)) {
 
         return -1;
     }

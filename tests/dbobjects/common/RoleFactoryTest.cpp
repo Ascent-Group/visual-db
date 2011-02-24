@@ -27,52 +27,50 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dbobjects/factory/TriggerFactoryTest.h>
+#include <dbobjects/common/RoleFactoryTest.h>
 
 #include <dbobjects/common/Database.h>
-#include <dbobjects/factory/Trigger.h>
-#include <dbobjects/psql/Trigger.h>
+#include <dbobjects/common/RoleFactory.h>
+#include <dbobjects/psql/Role.h>
 
 void
-TriggerFactoryTest::initTestCase()
+RoleFactoryTest::initTestCase()
 {
 
 }
 
 void
-TriggerFactoryTest::cleanupTestCase()
+RoleFactoryTest::cleanupTestCase()
 {
 
 }
 
 void
-TriggerFactoryTest::createTriggerTest()
+RoleFactoryTest::createRoleTest()
 {
-    using namespace DbObjects;
-
-    QString triggerName("check_location");
-    QString schemaName("vtunes");
-
-    Common::Database *dbInst = Common::Database::instance();
-    QVERIFY(0 != dbInst);
-
-//    Common::DbSchema *schema = dbInst->findSchema(schemaName);
-//    QVERIFY(0 != schema);
-
-    dbInst->setSqlDriver("QPSQL");
-    QVERIFY(0 != dynamic_cast<Psql::Trigger*>(Factory::Trigger::createTrigger(triggerName, schemaName)));
-
-    // \todo update this check as for psql when more RDBMS are supported
-    dbInst->setSqlDriver("QMYSQL");
-    QVERIFY(0 == Factory::Trigger::createTrigger(triggerName, schemaName));
-
-    dbInst->setSqlDriver("QIODBC");
-    QVERIFY(0 == Factory::Trigger::createTrigger(triggerName, schemaName));
-
-    dbInst->setSqlDriver("QSQLITE");
-    QVERIFY(0 == Factory::Trigger::createTrigger(triggerName, schemaName));
-
-    dbInst->setSqlDriver("NODRV");
-    QVERIFY(0 == Factory::Trigger::createTrigger(triggerName, schemaName));
+    QVERIFY(0);
+//    using namespace DbObjects;
+//
+//    QString roleName("music_user");
+//
+//    Common::Database *dbInst = Common::Database::instance();
+//
+//    QVERIFY(0 != dbInst);
+//
+//    dbInst->setSqlDriver("QPSQL");
+//    QVERIFY(0 != dynamic_cast<Psql::Role*>(Factory::Role::createRole(roleName)));
+//
+//    // \todo update this check as for psql when more RDBMS are supported
+//    dbInst->setSqlDriver("QMYSQL");
+//    QVERIFY(0 == Factory::Role::createRole(roleName));
+//
+//    dbInst->setSqlDriver("QIODBC");
+//    QVERIFY(0 == Factory::Role::createRole(roleName));
+//
+//    dbInst->setSqlDriver("QSQLITE");
+//    QVERIFY(0 == Factory::Role::createRole(roleName));
+//
+//    dbInst->setSqlDriver("NODRV");
+//    QVERIFY(0 == Factory::Role::createRole(roleName));
 }
 

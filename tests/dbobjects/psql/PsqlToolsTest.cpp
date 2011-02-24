@@ -27,6 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <dbobjects/common/Database.h>
+#include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/psql/Tools.h>
 #include <dbobjects/psql/PsqlToolsTest.h>
 
@@ -70,18 +72,26 @@ PsqlToolsTest::initTestCase()
 
     mViewsNamesList << "users_playlists"
                     << "artists_tracks";
+
+    mDbInst = DatabaseCreator::createDatabase();
+    QVERIFY(0 != mDbInst);
+
+    mTools = DatabaseCreator::tools();
+    QVERIFY(0 != mTools);
 }
 
 void
 PsqlToolsTest::cleanupTestCase()
 {
+    delete mDbInst;
+    delete mTools;
 }
 
 void
 PsqlToolsTest::schemasListTest()
 {
     QStringList actualSchemasNames;
-    Tools::schemasList(actualSchemasNames);
+    mTools->schemasList(mDbInst->dbHandle(), actualSchemasNames);
 
     foreach (const QString &name, mSchemasNamesList) {
         QVERIFY(actualSchemasNames.contains(name));
@@ -93,7 +103,7 @@ void
 PsqlToolsTest::indicesListTest()
 {
     QStringList actualIndicesNames;
-    Tools::indicesList(actualIndicesNames);
+    mTools->indicesList(mDbInst->dbHandle(), actualIndicesNames);
 
     foreach (const QString &name, mIndicesNamesList) {
         QVERIFY(actualIndicesNames.contains(name));
@@ -105,7 +115,7 @@ void
 PsqlToolsTest::languagesListTest()
 {
     QStringList actualLanguagesNames;
-    Tools::languagesList(actualLanguagesNames);
+    mTools->languagesList(mDbInst->dbHandle(), actualLanguagesNames);
 
     foreach (const QString &name, mLanguagesNamesList) {
         QVERIFY(actualLanguagesNames.contains(name));
@@ -117,7 +127,7 @@ void
 PsqlToolsTest::proceduresListTest()
 {
     QStringList actualProceduresNames;
-    Tools::proceduresList("vtunes", actualProceduresNames);
+    mTools->proceduresList(mDbInst->dbHandle(), "vtunes", actualProceduresNames);
 
     foreach (const QString &name, mProceduresNamesList) {
         QVERIFY(actualProceduresNames.contains(name));
@@ -129,7 +139,7 @@ void
 PsqlToolsTest::rolesListTest()
 {
     QStringList actualRolesNames;
-    Tools::rolesList(actualRolesNames);
+    mTools->rolesList(mDbInst->dbHandle(), actualRolesNames);
 
     foreach (const QString &name, mRolesNamesList) {
         QVERIFY(actualRolesNames.contains(name));
@@ -141,7 +151,7 @@ void
 PsqlToolsTest::tablesListTest()
 {
     QStringList actualTablesNames;
-    Tools::tablesList("vtunes", actualTablesNames);
+    mTools->tablesList(mDbInst->dbHandle(), "vtunes", actualTablesNames);
 
     foreach (const QString &name, mTablesNamesList) {
         QVERIFY(actualTablesNames.contains(name));
@@ -153,7 +163,7 @@ void
 PsqlToolsTest::triggersListTest()
 {
     QStringList actualTriggersNames;
-    Tools::triggersList("vtunes", actualTriggersNames);
+    mTools->triggersList(mDbInst->dbHandle(), "vtunes", actualTriggersNames);
 
     foreach (const QString &name, mTriggersNamesList) {
         QVERIFY(actualTriggersNames.contains(name));
@@ -165,7 +175,7 @@ void
 PsqlToolsTest::viewsListTest()
 {
     QStringList actualViewsNames;
-    Tools::viewsList("vtunes", actualViewsNames);
+    mTools->viewsList(mDbInst->dbHandle(), "vtunes", actualViewsNames);
 
     foreach (const QString &name, mViewsNamesList) {
         QVERIFY(actualViewsNames.contains(name));

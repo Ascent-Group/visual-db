@@ -32,6 +32,7 @@
 
 #include <QtTest/QtTest>
 #include <dbobjects/common/Database.h>
+#include <dbobjects/common/DbObjectPtr.h>
 
 typedef DbObjects::Common::DbObjectPtr<DbObjects::Common::DbRole> DbRolePtr;
 
@@ -72,6 +73,8 @@ class DbRoleTest : public QObject
         DbRolePtr mRole;
 
         DbObjects::Common::Database *mDbInst;
+        DbObjects::Common::Factories *mFactories;
+        DbObjects::Common::Tools *mTools;
 };
 
 #endif // DBROLETEST_H

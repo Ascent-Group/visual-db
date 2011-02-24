@@ -27,10 +27,13 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <control/DatabaseManager.h>
 #include <dbobjects/common/Database.h>
 #include <dbobjects/common/DatabaseCreator.h>
 #include <dbobjects/common/DatabaseTest.h>
 #include <dbobjects/common/DbSchema.h>
+#include <dbobjects/common/Factories.h>
+#include <dbobjects/common/Tools.h>
 #include <dbobjects/psql/Index.h>
 #include <dbobjects/psql/Language.h>
 #include <dbobjects/psql/Role.h>
@@ -66,13 +69,16 @@ void
 DatabaseTest::initTestCase()
 {
     mDbInst = 0;
+    mFactories = 0;
+    mTools = 0;
 }
 
 void
 DatabaseTest::cleanupTestCase()
 {
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
+    delete mDbInst;
+    delete mFactories;
+    delete mTools;
 }
 
 /*!
@@ -83,6 +89,13 @@ DatabaseTest::init()
 {
     mDbInst = DatabaseCreator::createDatabase();
     QVERIFY(0 != mDbInst);
+
+    mFactories = DatabaseCreator::factories();
+    QVERIFY(0 != mFactories);
+
+    mTools = DatabaseCreator::tools();
+    QVERIFY(0 != mTools);
+
 //    mDbInst->setSqlDriver("QPSQL");
 }
 
@@ -94,8 +107,8 @@ DatabaseTest::cleanup()
 {
     mDbInst->resetData();
 
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
+//    Common::DatabaseManager dbMgr;
+//    dbMgr.flush();
 }
 
 void
@@ -104,14 +117,14 @@ DatabaseTest::addIndexTest()
     QVERIFY(0 != mDbInst);
 
     // read all indices
-    mDbInst->readIndices();
+    mDbInst->readIndices(mFactories, mTools);
 
     quint64 count = mDbInst->indicesCount();
 
     QVERIFY(0 < count);
 
     // try to add dummy index
-    DbIndexPtr dummyIndex = DbIndexPtr("dummy");
+    DbIndexPtr dummyIndex = DbIndexPtr(mDbInst, mFactories, "dummy");
 
     QVERIFY(0 != dummyIndex.get());
 
@@ -135,7 +148,7 @@ DatabaseTest::addLanguageTest()
     QVERIFY(0 != mDbInst);
 
     // read languages
-    mDbInst->readLanguages();
+    mDbInst->readLanguages(mFactories, mTools);
 
     // get language count
     quint8 count = mDbInst->languagesCount();
@@ -143,7 +156,7 @@ DatabaseTest::addLanguageTest()
     QVERIFY(0 < count);
 
     // add dummy language
-    DbLanguagePtr dummyLang("dummy");
+    DbLanguagePtr dummyLang(mDbInst, mFactories, "dummy");
 
     QVERIFY(0 != dummyLang.get());
 
@@ -169,7 +182,7 @@ DatabaseTest::addRoleTest()
     QVERIFY(0 != mDbInst);
 
     // read roles
-    mDbInst->readRoles();
+    mDbInst->readRoles(mFactories, mTools);
 
     // get roles count
     quint64 count = mDbInst->rolesCount();
@@ -177,7 +190,7 @@ DatabaseTest::addRoleTest()
     QVERIFY(0 < count);
 
     // add dummy role
-    DbRolePtr dummyRole("dummy");
+    DbRolePtr dummyRole(mDbInst, mFactories, "dummy");
 
     QVERIFY(0 != dummyRole.get());
 
@@ -202,9 +215,9 @@ DatabaseTest::addSchemaTest()
     // check db instance
     QVERIFY(0 != mDbInst);
 
-    mDbInst->readRoles();
+    mDbInst->readRoles(mFactories, mTools);
     // read schemas
-    mDbInst->readSchemas();
+    mDbInst->readSchemas(mFactories, mTools);
 
     // get schemas count
     quint64 count = mDbInst->schemasCount();
@@ -212,7 +225,7 @@ DatabaseTest::addSchemaTest()
     QVERIFY(0 < count);
 
     // add dummy schema
-    DbSchemaPtr dummySchema("dummy");
+    DbSchemaPtr dummySchema(mDbInst, mFactories, "dummy");
 
     QVERIFY(0 != dummySchema.get());
 
@@ -239,7 +252,7 @@ DatabaseTest::resetDataTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
 //    mDbInst->readIndices();
 //    mDbInst->readLanguages();
 //    mDbInst->readRoles();
@@ -264,7 +277,7 @@ DatabaseTest::findIndexTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->readIndices();
+    mDbInst->readIndices(mFactories, mTools);
 
     QVERIFY(mDbInst->findIndex("ind_artists").valid());
     QVERIFY(mDbInst->findIndex("ind_albums").valid());
@@ -278,7 +291,7 @@ DatabaseTest::findLanguageTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->readLanguages();
+    mDbInst->readLanguages(mFactories, mTools);
 
     QVERIFY(mDbInst->findLanguage("plpgsql").valid());
 }
@@ -288,7 +301,7 @@ DatabaseTest::findRoleTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->readRoles();
+    mDbInst->readRoles(mFactories, mTools);
 
     QVERIFY(mDbInst->findRole("music_user").valid());
 }
@@ -298,8 +311,8 @@ DatabaseTest::findSchemaTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->readRoles();
-    mDbInst->readSchemas();
+    mDbInst->readRoles(mFactories, mTools);
+    mDbInst->readSchemas(mFactories, mTools);
 
     QVERIFY(mDbInst->findSchema("public").valid());
     QVERIFY(mDbInst->findSchema("vtunes").valid());
@@ -311,7 +324,7 @@ DatabaseTest::findTableIndicesTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
 
     QVector<DbIndexPtr> indicesList;
 
@@ -334,15 +347,16 @@ DatabaseTest::flushTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
 
     QVERIFY(0 != mDbInst->indicesCount());
     QVERIFY(0 != mDbInst->languagesCount());
     QVERIFY(0 != mDbInst->rolesCount());
     QVERIFY(0 != mDbInst->schemasCount());
 
-    Common::DatabaseManager dbMgr;
-    dbMgr.flush();
+    // \todo commente out due to removal of flush
+//    Common::DatabaseManager dbMgr;
+//    dbMgr.flush();
 
     // this check might not be valid if the object will be reconstructed in the same location
 //    QVERIFY(mDbInst != Database::instance());
@@ -365,7 +379,7 @@ DatabaseTest::indicesCountTest()
 
     QCOMPARE(mDbInst->indicesCount(), (quint64)0);
 
-    mDbInst->readIndices();
+    mDbInst->readIndices(mFactories, mTools);
 
     QVERIFY(mDbInst->indicesCount() >= INDICES_COUNT);
 
@@ -379,7 +393,7 @@ DatabaseTest::indicesListTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->readIndices();
+    mDbInst->readIndices(mFactories, mTools);
 
     QStringList namesList;
 
@@ -423,7 +437,7 @@ DatabaseTest::languagesCountTest()
 
     QCOMPARE(mDbInst->languagesCount(), (quint8)0);
 
-    mDbInst->readLanguages();
+    mDbInst->readLanguages(mFactories, mTools);
 
     QVERIFY(mDbInst->languagesCount() >= LANGUAGES_COUNT);
 
@@ -437,7 +451,7 @@ DatabaseTest::languagesListTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->readLanguages();
+    mDbInst->readLanguages(mFactories, mTools);
 
     QStringList langNames;
     langNames << "plpgsql";
@@ -461,7 +475,7 @@ DatabaseTest::readIndicesTest()
 
     QCOMPARE(mDbInst->indicesCount(), (quint64)0);
 
-    mDbInst->readIndices();
+    mDbInst->readIndices(mFactories, mTools);
 
     quint64 count = mDbInst->indicesCount();
 
@@ -469,7 +483,7 @@ DatabaseTest::readIndicesTest()
 
     QVERIFY(mDbInst->indicesCount() >= INDICES_COUNT);
 
-    mDbInst->readIndices();
+    mDbInst->readIndices(mFactories, mTools);
     QCOMPARE(mDbInst->indicesCount(), count);
 }
 
@@ -478,7 +492,7 @@ DatabaseTest::readLanguagesTest()
 {
     QVERIFY(0 != mDbInst);
     // read langs
-    mDbInst->readLanguages();
+    mDbInst->readLanguages(mFactories, mTools);
 
     // plpgsql MUST be there
     QString name("plpgsql");
@@ -496,7 +510,7 @@ DatabaseTest::readRolesTest()
     QVERIFY(0 != mDbInst);
 
     // read roles
-    mDbInst->readRoles();
+    mDbInst->readRoles(mFactories, mTools);
 
     // validate names
     QString name("music_user");
@@ -512,7 +526,7 @@ DatabaseTest::readSchemasTest()
 {
     QVERIFY(0 != mDbInst);
 
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
 
     DbSchemaPtr schema;
     // validate their names
@@ -539,7 +553,7 @@ DatabaseTest::rolesCountTest()
 
     QCOMPARE(mDbInst->rolesCount(), (quint64)0);
 
-    mDbInst->readRoles();
+    mDbInst->readRoles(mFactories, mTools);
 
     QVERIFY(mDbInst->rolesCount() >= ROLES_COUNT);
 
@@ -558,7 +572,7 @@ DatabaseTest::rolesListTest()
     rolesNames << "music_user"
                << "postgres";
 
-    mDbInst->readRoles();
+    mDbInst->readRoles(mFactories, mTools);
 
     QStringList rolesList;
 
@@ -578,7 +592,7 @@ DatabaseTest::schemasCountTest()
 
     QCOMPARE(mDbInst->schemasCount(), (quint64)0);
 
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
 
 //    QDEBUG_PRINT_ALL(schemas);
 
@@ -600,7 +614,7 @@ DatabaseTest::schemasListTest()
           << "information_schema"
           << "vtunes";
 
-    mDbInst->loadData();
+    mDbInst->loadData(mFactories, mTools);
 
     QStringList schemasList;
 

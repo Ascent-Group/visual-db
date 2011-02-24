@@ -27,53 +27,53 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dbobjects/factory/ProcedureFactoryTest.h>
+#include <dbobjects/common/ViewFactoryTest.h>
 
 #include <dbobjects/common/Database.h>
-#include <dbobjects/factory/Procedure.h>
-#include <dbobjects/psql/Procedure.h>
-
+#include <dbobjects/common/ViewFactory.h>
+#include <dbobjects/psql/View.h>
 
 void
-ProcedureFactoryTest::initTestCase()
+ViewFactoryTest::initTestCase()
 {
 
 }
 
 void
-ProcedureFactoryTest::cleanupTestCase()
+ViewFactoryTest::cleanupTestCase()
 {
 
 }
 
 void
-ProcedureFactoryTest::createProcedureTest()
+ViewFactoryTest::createViewTest()
 {
-    using namespace DbObjects;
-
-    QString procName("insert_album");
-    QString schemaName("vtunes");
-
-    Common::Database *dbInst = Common::Database::instance();
-    QVERIFY(0 != dbInst);
-
-//    DbSchemaPtr schema = dbInst->findSchema(schemaName);
-//    QVERIFY(0 != schema.get());
-
-    dbInst->setSqlDriver("QPSQL");
-    QVERIFY(0 != dynamic_cast<Psql::Procedure*>(Factory::Procedure::createProcedure(procName, schemaName)));
-
-    // \todo update this check as for psql when more RDBMS are supported
-    dbInst->setSqlDriver("QMYSQL");
-    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
-
-    dbInst->setSqlDriver("QIODBC");
-    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
-
-    dbInst->setSqlDriver("QSQLITE");
-    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
-
-    dbInst->setSqlDriver("NODRV");
-    QVERIFY(0 == Factory::Procedure::createProcedure(procName, schemaName));
+    QVERIFY(0);
+//    using namespace DbObjects;
+//
+//    QString viewName("users_playlists");
+//    QString schemaName("vtunes");
+//
+//    Common::Database *dbInst = Common::Database::instance();
+//    QVERIFY(0 != dbInst);
+//
+////    Common::DbSchema *schema = dbInst->findSchema(schemaName);
+////    QVERIFY(0 != schema);
+//
+//    dbInst->setSqlDriver("QPSQL");
+//    QVERIFY(0 != dynamic_cast<Psql::View*>(Factory::View::createView(viewName, schemaName)));
+//
+//    // \todo update this check as for psql when more RDBMS are supported
+//    dbInst->setSqlDriver("QMYSQL");
+//    QVERIFY(0 == Factory::View::createView(viewName, schemaName));
+//
+//    dbInst->setSqlDriver("QIODBC");
+//    QVERIFY(0 == Factory::View::createView(viewName, schemaName));
+//
+//    dbInst->setSqlDriver("QSQLITE");
+//    QVERIFY(0 == Factory::View::createView(viewName, schemaName));
+//
+//    dbInst->setSqlDriver("NODRV");
+//    QVERIFY(0 == Factory::View::createView(viewName, schemaName));
 }
 

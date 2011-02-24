@@ -27,49 +27,53 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dbobjects/factory/SchemaFactoryTest.h>
+#include <dbobjects/common/TableFactoryTest.h>
 
 #include <dbobjects/common/Database.h>
-#include <dbobjects/factory/Schema.h>
-#include <dbobjects/psql/Schema.h>
+#include <dbobjects/common/TableFactory.h>
+#include <dbobjects/psql/Table.h>
 
 void
-SchemaFactoryTest::initTestCase()
+TableFactoryTest::initTestCase()
 {
 
 }
 
 void
-SchemaFactoryTest::cleanupTestCase()
+TableFactoryTest::cleanupTestCase()
 {
 
 }
 
 void
-SchemaFactoryTest::createSchemaTest()
+TableFactoryTest::createTableTest()
 {
-    using namespace DbObjects;
-
-    QString schemaName("vtunes");
-
-    Common::Database *dbInst = Common::Database::instance();
-
-    QVERIFY(0 != dbInst);
-
-    dbInst->setSqlDriver("QPSQL");
-    QVERIFY(0 != dynamic_cast<Psql::Schema*>(Factory::Schema::createSchema(schemaName)));
-
-    // \todo update this check as for psql when more RDBMS are supported
-    dbInst->setSqlDriver("QMYSQL");
-    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
-
-    dbInst->setSqlDriver("QIODBC");
-    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
-
-    dbInst->setSqlDriver("QSQLITE");
-    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
-
-    dbInst->setSqlDriver("NODRV");
-    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
+    QVERIFY(0);
+//    using namespace DbObjects;
+//
+//    QString tableName("artists");
+//    QString schemaName("vtunes");
+//
+//    Common::Database *dbInst = Common::Database::instance();
+//    QVERIFY(0 != dbInst);
+//
+////    Common::DbSchema *schema = dbInst->findSchema(schemaName);
+////    QVERIFY(0 != schema);
+//
+//    dbInst->setSqlDriver("QPSQL");
+//    QVERIFY(0 != dynamic_cast<Psql::Table*>(Factory::Table::createTable(tableName, schemaName)));
+//
+//    // \todo update this check as for psql when more RDBMS are supported
+//    dbInst->setSqlDriver("QMYSQL");
+//    QVERIFY(0 == Factory::Table::createTable(tableName, schemaName));
+//
+//    dbInst->setSqlDriver("QIODBC");
+//    QVERIFY(0 == Factory::Table::createTable(tableName, schemaName));
+//
+//    dbInst->setSqlDriver("QSQLITE");
+//    QVERIFY(0 == Factory::Table::createTable(tableName, schemaName));
+//
+//    dbInst->setSqlDriver("NODRV");
+//    QVERIFY(0 == Factory::Table::createTable(tableName, schemaName));
 }
 

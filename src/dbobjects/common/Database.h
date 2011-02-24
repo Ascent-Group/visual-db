@@ -48,6 +48,8 @@ class DbLanguage;
 class DbRole;
 class DbSchema;
 class DbTable;
+class Factories;
+class Tools;
 typedef DbObjectPtr<DbIndex> DbIndexPtr;
 typedef DbObjectPtr<DbLanguage> DbLanguagePtr;
 typedef DbObjectPtr<DbRole> DbRolePtr;
@@ -71,7 +73,7 @@ class Database
 
         /*!
          * \enum SqlDriverType
-         * Sql driver indentifiers
+         * \brief Sql driver indentifiers
          */
         enum SqlDriverType
         {
@@ -82,11 +84,28 @@ class Database
             SQLite
         };
 
+        /*!
+         * \enum DBMSVersion
+         * \brief Version of DBMS
+         */
+        enum DBMSVersion
+        {
+            DBMS_Unknown = 0,
+            /*! PostgreSQL */
+            PostgreSQL_Unknown,
+            PostgreSQL_8,
+            PostgreSQL_9,
+            /*! MySQL */
+            MySQL_Unknown,
+            MySQL_5
+        };
+
 //        bool registerNew(const DbObject *iObject);
 //        bool registerModified(const DbObject *iObject);
 //        bool registerDeleted(const DbObject *iObject);
 
     public:
+        DBMSVersion version() const;
         QSqlDatabase dbHandle() const;
 
         bool addSchema(const DbSchemaPtr &);
@@ -121,17 +140,18 @@ class Database
         SqlDriverType sqlDriver() const;
         void setSqlDriver(const QString &iSqlDriverName);
 
-        void readSchemas();
-        void readRoles();
-        void readIndices();
-        void readLanguages();
+        void readSchemas(Factories *iFactories, Tools *iTools);
+        void readRoles(Factories *iFactories, Tools *iTools);
+        void readIndices(Factories *iFactories, Tools *iTools);
+        void readLanguages(Factories *iFactories, Tools *iTools);
 
-        virtual bool loadData();
+        virtual bool loadData(Factories *iFactories, Tools *iTools);
         virtual void resetData();
 
     private:
         // \todo add function for query execution that will use this handle
         QSqlDatabase mDbHandle;
+        DBMSVersion mVersion;
 //        static Database *mInstance;
         QVector<DbSchemaPtr> mSchemas;
         QVector<DbRolePtr> mRoles;

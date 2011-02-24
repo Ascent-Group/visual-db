@@ -118,7 +118,9 @@ DatabaseManager::establishConnection(const Connect::ConnectionInfo &iInfo, QStri
 }
 
 /*!
- * \todo Implement
+ * Reloads database for for the specified context.
+ *
+ * \param[in] iCtx - Context whose data is going to be reloaded
  */
 void
 DatabaseManager::reloadData(Control::Context *iCtx) const
@@ -128,16 +130,17 @@ DatabaseManager::reloadData(Control::Context *iCtx) const
     Database *db = findDatabase(iCtx);
     db->resetData();
 
-    // \todo find factories for this driver
+    // find factories for this driver
     Factories *factories = mFactories.value(db->sqlDriver());
-    // \todo find tools for this driver
+    // find tools for this driver
     Tools *tools = mTools.value(db->sqlDriver());
 
     Q_ASSERT(0 != factories);
     Q_ASSERT(0 != tools);
 
-    // \todo Uncomment
-//    db->loadData(factories, tools);
+    db->loadData(factories, tools);
+
+    // \todo notify for data updates
 }
 
 /*!
@@ -163,19 +166,16 @@ DatabaseManager::add(const Control::Context *iContext, DbObjects::Common::Databa
         Factories *factories = 0;
         Tools *tools = 0;
 
-        // \todo if no factories were created before - then create and put into registry
-        // \todo if no tools were created before - then create and put into registry
+        // if no factories/tools were created before - then create and put into registry
         switch (iDatabase->sqlDriver()) {
             case Database::PostgreSQL:
                     factories = new Psql::Factories();
-                    // \todo uncomment
-//                    tools = new Psql::Tools();
+                    tools = new Psql::Tools();
                     break;
 
             case Database::MySQL:
                     factories = new Mysql::Factories();
-                    // \todo uncomment
-//                    tools = new Mysql::Tools();
+                    tools = new Mysql::Tools();
                     break;
 
             case Database::Oracle:

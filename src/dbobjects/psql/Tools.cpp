@@ -29,36 +29,47 @@
 
 #include <psql/Tools.h>
 
-#include <QSqlError>
+//#include <QString>
 #include <QSqlQuery>
-#include <QSqlRecord>
-#include <QString>
 #include <QVariant>
 
 #include <QtDebug>
 
 namespace DbObjects
 {
-
 namespace Psql
 {
 
-namespace Tools
+/*!
+ * Constructor
+ */
+Tools::Tools()
+    : Common::Tools()
 {
+}
+
+/*!
+ *
+ */
+Tools::~Tools()
+{
+}
 
 /*!
  * \todo Implement
  * \brief Detects the version of PostgreSQL
  * \return The version of PostgreSQL that is currently used
  */
-Tools::Version
-version(const QSqlDatabase &iDbHandle)
+Common::Database::DBMSVersion
+Tools::version(const QSqlDatabase &iDbHandle)
 {
     QSqlQuery query(iDbHandle);
     QString qstr("SELECT version();");
 
+    using namespace DbObjects::Common;
+
     if (!query.exec(qstr) || !query.first()) {
-        return Tools::PostgreSQL_Unknown;
+        return Database::PostgreSQL_Unknown;
     }
 
     QString versionString = query.value(0).toString();
@@ -68,12 +79,12 @@ version(const QSqlDatabase &iDbHandle)
     versionString.remove(versionString.indexOf("."), versionString.length() - versionString.indexOf("."));
 
     if ("9" == versionString) {
-        return Tools::PostgreSQL_9;
+        return Database::PostgreSQL_9;
     } else if ("8" == versionString) {
-        return Tools::PostgreSQL_8;
+        return Database::PostgreSQL_8;
     }
 
-    return Tools::PostgreSQL_Unknown;
+    return Database::PostgreSQL_Unknown;
 }
 
 /*!
@@ -84,7 +95,7 @@ version(const QSqlDatabase &iDbHandle)
  * \return The number of schemas read.
  */
 quint32
-schemasList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::schemasList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                "nspname AS name "
@@ -102,7 +113,7 @@ schemasList(const QSqlDatabase &iDbHandle, QStringList &oList)
  * \return The number of indices read by the query
  */
 quint32
-indicesList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::indicesList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                 "pgi.indexname as name "
@@ -122,7 +133,7 @@ indicesList(const QSqlDatabase &iDbHandle, QStringList &oList)
  * \return The number of languages' names read from db
  */
 quint32
-languagesList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::languagesList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr("SELECT "
                     "l.lanname AS name "
@@ -141,7 +152,7 @@ languagesList(const QSqlDatabase &iDbHandle, QStringList &oList)
  * \return The number of procedures' names read from db
  */
 quint32
-proceduresList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
+Tools::proceduresList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                 "p.proname AS name "
@@ -164,7 +175,7 @@ proceduresList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStrin
  * \return The number of roles read by the query
  */
 quint32
-rolesList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::rolesList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                "r.rolname as name "
@@ -172,49 +183,6 @@ rolesList(const QSqlDatabase &iDbHandle, QStringList &oList)
                                "pg_catalog.pg_roles r;");
 
     return objectNamesList(iDbHandle, qstr, oList);
-}
-
-/*!
- * \brief Reads thelist of objects' names
- *
- * \note The functions looks for a field by name 'name' !!!
- *
- * \param[in] iQstr - The query used to select names of objects
- * \param[out] oList - List that will hold objects' names
- *
- * \return The number of names in the list
- */
-quint32
-objectNamesList(const QSqlDatabase &iDbHandle, const QString &iQstr, QStringList &oList)
-{
-#if DEBUG_QUERY
-    qDebug() << "DbObjects::Psql::Tools::objectNamesList> " << iQstr;
-#endif
-
-    QSqlQuery query(iDbHandle);
-
-    // if query failed
-    if (!query.exec(iQstr)) {
-        qDebug() << query.lastError().text();
-        return 0;
-    }
-
-    // if query didn't retrieve a row
-    if (!query.first()) {
-        return 0;
-    }
-
-    quint32 count = 0;
-    qint32 colId = query.record().indexOf("name");
-
-    do {
-        oList.append(query.value(colId).toString());
-        ++count;
-    } while (query.next());
-
-    // we return count instead of oList.count() because oList might come not empty to
-    // this function (since it is passed by reference
-    return count;
 }
 
 /*!
@@ -226,7 +194,7 @@ objectNamesList(const QSqlDatabase &iDbHandle, const QString &iQstr, QStringList
  * \return The number of tables' names read from db
  */
 quint32
-tablesList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
+Tools::tablesList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
 {
     QString qstr = QString("SELECT tablename AS name "
                            "FROM pg_catalog.pg_tables pgt "
@@ -245,7 +213,7 @@ tablesList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringLis
  * \return The number of triggers' names read from db
  */
 quint32
-triggersList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
+Tools::triggersList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                "t.tgname AS name "
@@ -271,7 +239,7 @@ triggersList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringL
  * \return The number of views' names read from db
  */
 quint32
-viewsList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
+Tools::viewsList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
 {
     QString qstr = QString("SELECT "
                                 "v.viewname as name "
@@ -284,9 +252,6 @@ viewsList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList
     return objectNamesList(iDbHandle, qstr, oList);
 }
 
-} // namespace Tools
-
 } // namespace Psql
-
 } // namespace DbObjects
 

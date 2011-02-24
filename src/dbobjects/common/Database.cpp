@@ -155,6 +155,15 @@ Database::instance()
 //}
 
 /*!
+ *
+ */
+Database::DBMSVersion
+Database::version() const
+{
+    return mVersion;
+}
+
+/*!
  * \return Database connection handle
  */
 QSqlDatabase
@@ -491,30 +500,14 @@ Database::sqlDriver() const
  * \brief Retrieve all available schemas from the DB
  */
 void
-Database::readSchemas()
+Database::readSchemas(Factories *iFactories, Tools *iTools)
 {
     QStringList schemasNamesList;
 
     // clear schemas list
     mSchemas.clear();
 
-    // read schemas names depending on sql driver
-    switch (mSqlDriver) {
-        case Database::Unknown:
-            qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
-        case Database::PostgreSQL:
-            Psql::Tools::schemasList(mDbHandle, schemasNamesList);
-            break;
-        case Database::MySQL:
-            Mysql::Tools::schemasList(mDbHandle, schemasNamesList);
-            break;
-        case Database::Oracle:
-        case Database::SQLite:
-        default:
-            /* temporarily no support for these DBMS */
-            return;
-            break;
-    }
+    iTools->schemasList(mDbHandle, schemasNamesList);
 
     // for every retrieved row
     foreach (const QString &name, schemasNamesList) {
@@ -526,7 +519,7 @@ Database::readSchemas()
         // we should add schema to database vector BEFORE we start calling read* functions
         addSchema(schema);
 
-        schema->loadChildren();
+        schema->loadChildren(iFactories, iTools);
     }
 }
 
@@ -534,30 +527,13 @@ Database::readSchemas()
  * \brief Retrieve all available roles from the DB
  */
 void
-Database::readRoles()
+Database::readRoles(Factories *iFactories, Tools *iTools)
 {
     // clear roles list
     mRoles.clear();
 
     QStringList rolesList;
-    // read names depending on sql driver
-    switch (mSqlDriver) {
-        case Database::Unknown:
-                        qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
-                        return;
-        case Database::PostgreSQL:
-                        Psql::Tools::rolesList(mDbHandle, rolesList);
-                        break;
-        case Database::MySQL:
-                        Mysql::Tools::rolesList(mDbHandle, rolesList);
-                        break;
-        case Database::Oracle:
-        case Database::SQLite:
-        default:
-                        /* temporarily no support for these DBMS */
-                        return;
-                        break;
-    }
+    iTools->rolesList(mDbHandle, rolesList);
 
     DbRolePtr role;
     // for every retrieved row
@@ -576,30 +552,13 @@ Database::readRoles()
  * \brief Retrieve all available indices from the DB
  */
 void
-Database::readIndices()
+Database::readIndices(Factories *iFactories, Tools *iTools)
 {
     // clear indices list
     mIndices.clear();
 
     QStringList indicesList;
-    // read names depending on sql driver
-    switch (mSqlDriver) {
-        case Database::Unknown:
-                        qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
-                        return;
-        case Database::PostgreSQL:
-                        Psql::Tools::indicesList(mDbHandle, indicesList);
-                        break;
-        case Database::MySQL:
-                        Mysql::Tools::indicesList(mDbHandle, indicesList);
-                        break;
-        case Database::Oracle:
-        case Database::SQLite:
-        default:
-                        /* temporarily no support for these DBMS */
-                        return;
-                        break;
-    }
+    iTools->indicesList(mDbHandle, indicesList);
 
     // for every retrieved row
     foreach (const QString &name, indicesList) {
@@ -617,30 +576,13 @@ Database::readIndices()
  * \brief Retrieve all available languages from the DB
  */
 void
-Database::readLanguages()
+Database::readLanguages(Factories *iFactories, Tools *iTools)
 {
     // clear languages list
     mLanguages.clear();
 
     QStringList languagesList;
-    // read names depending on sql driver
-    switch (mSqlDriver) {
-        case Database::Unknown:
-                        qDebug() << __PRETTY_FUNCTION__ << "> SqlDriver was not set";
-                        return;
-        case Database::PostgreSQL:
-                        Psql::Tools::languagesList(mDbHandle, languagesList);
-                        break;
-        case Database::MySQL:
-                        Mysql::Tools::languagesList(mDbHandle, languagesList);
-                        break;
-        case Database::Oracle:
-        case Database::SQLite:
-        default:
-                        /* temporarily no support for these DBMS */
-                        return;
-                        break;
-    }
+    iTools->languagesList(mDbHandle, languagesList);
 
     // for every retrieved row
     foreach (const QString &name, languagesList) {
@@ -658,12 +600,14 @@ Database::readLanguages()
  * \return true - Even if nothing has been read
  */
 bool
-Database::loadData()
+Database::loadData(Factories *iFactories, Tools *iTools)
 {
-    readRoles();
-    readLanguages();
-    readSchemas();
-    readIndices();
+    mVersion = iTools->version(mDbHandle);
+
+    readRoles(iFactories, iTools);
+    readLanguages(iFactories, iTools);
+    readSchemas(iFactories, iTools);
+    readIndices(iFactories, iTools);
 
     return true;
 }

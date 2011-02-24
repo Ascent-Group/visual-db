@@ -30,54 +30,50 @@
 #ifndef DBOBJECTS_PSQL_TOOLS_H
 #define DBOBJECTS_PSQL_TOOLS_H
 
-#include <QSqlDatabase>
-#include <QStringList>
-#include <QtCore/qglobal.h>
+#include <common/Tools.h>
 
 namespace DbObjects
 {
-
 namespace Psql
 {
 
 /*!
- * \namespace Tools
+ * \class Tools
  * \headerfile psql/Tools.h
  * \brief Contains helper functions for PostgreSQL
  */
-namespace Tools
+class Tools : public Common::Tools
 {
+    public:
+        Tools();
+        ~Tools();
 
-    /*!
-     * \enum Psql::Tools::Version
-     * \brief Defines PostgreSQL version
-     */
-    enum Version {
-        /*! Denotes that PostgreSQL version couldn't be recognized */
-        PostgreSQL_Unknown = 0,
-        /*! PostgreSQL version is >= 8 */
-        PostgreSQL_8,
-        /*! PostgreSQL version is >= 9 */
-        PostgreSQL_9
-    };
+        /*!
+         * \enum Psql::Tools::Version
+         * \brief Defines PostgreSQL version
+         */
+//        enum Version {
+//            /*! Denotes that PostgreSQL version couldn't be recognized */
+//            PostgreSQL_Unknown = 0,
+//            /*! PostgreSQL version is >= 8 */
+//            PostgreSQL_8,
+//            /*! PostgreSQL version is >= 9 */
+//            PostgreSQL_9
+//        };
 
-    Tools::Version version(const QSqlDatabase &);
+        Common::Database::DBMSVersion version(const QSqlDatabase &);
 
-    quint32 schemasList(const QSqlDatabase &, QStringList &oList);
-    quint32 indicesList(const QSqlDatabase &, QStringList &oList);
-    quint32 languagesList(const QSqlDatabase &, QStringList &oList);
-    quint32 proceduresList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
-    quint32 rolesList(const QSqlDatabase &, QStringList &oList);
-    quint32 tablesList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
-    quint32 triggersList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
-    quint32 viewsList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
-
-    quint32 objectNamesList(const QSqlDatabase &, const QString &iQstr, QStringList &oList);
-
-} // namespace Tools
+        quint32 schemasList(const QSqlDatabase &, QStringList &oList);
+        quint32 indicesList(const QSqlDatabase &, QStringList &oList);
+        quint32 languagesList(const QSqlDatabase &, QStringList &oList);
+        quint32 proceduresList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
+        quint32 rolesList(const QSqlDatabase &, QStringList &oList);
+        quint32 tablesList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
+        quint32 triggersList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
+        quint32 viewsList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
+};
 
 } // namespace Psql
-
 } // namespace DbObjects
 
 #endif // DBOBJECTS_PSQL_TOOLS_H

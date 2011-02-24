@@ -48,6 +48,8 @@ class DbRole;
 class DbTable;
 class DbTrigger;
 class DbView;
+class Factories;
+class Tools;
 
 typedef DbObjectPtr<DbProcedure> DbProcedurePtr;
 typedef DbObjectPtr<DbRole> DbRolePtr;
@@ -88,10 +90,10 @@ class DbSchema : public DbObject
         DbProcedurePtr findProcedure(const QString &iProcName) const;
         DbTriggerPtr findTrigger(const QString &iTrigName) const;
 
-        void readTables();
-        void readViews();
-        void readProcedures();
-        void readTriggers();
+        void readTables(Factories *iFactories, Tools *iTools);
+        void readViews(Factories *iFactories, Tools *iTools);
+        void readProcedures(Factories *iFactories, Tools *iTools);
+        void readTriggers(Factories *iFactories, Tools *iTools);
 
         virtual DbObject::Type type() const;
 
@@ -101,7 +103,7 @@ class DbSchema : public DbObject
         QString description() const;
         void setDescription(const QString &iDescription);
 
-        virtual bool loadChildren();
+        virtual bool loadChildren(Factories *iFactories, Tools *iTools);
         virtual void resetData();
 
     private:

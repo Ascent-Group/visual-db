@@ -79,16 +79,17 @@ Trigger::loadData()
     QSqlQuery query(db);
     QString qstr;
 
+    using namespace DbObjects::Common;
     // \todo how are we going to use tools here?
-    Tools::Version version = Tools::version(db);
+    Database::DBMSVersion version = mDatabase->version();
 
     switch (version) {
-        case Tools::MySQL_5:
+        case Database::MySQL_5:
                 // prepare query
                 qstr = QString("MySQL specific query 1");
                 break;
 
-        case Tools::MySQL_Unknown:
+        case Database::MySQL_Unknown:
                 qstr = QString("MySQL specific query 1");
                 break;
 

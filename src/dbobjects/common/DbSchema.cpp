@@ -349,38 +349,20 @@ DbSchema::findTrigger(const QString &iTriggerName) const
  * tables vector with *Table objects
  */
 void
-DbSchema::readTables()
+DbSchema::readTables(Factories *iFactories, Tools *iTools)
 {
     // clear tables list
     mTables.clear();
 
     QStringList tablesNamesList;
 
-    // get sql driver
-    Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
-
-    // choose a query depending on sql driver
-    switch (sqlDriverType) {
-        case Database::Unknown:
-            qDebug() << "DbSchema::readTables> Sql driver was not set";
-            break;
-
-        case Database::PostgreSQL:
-            DbObjects::Psql::Tools::tablesList(mDatabase->dbHandle(), mName, tablesNamesList);
-            break;
-
-        case Database::MySQL:
-        case Database::Oracle:
-        case Database::SQLite:
-            /* temporarily no support */
-            return;
-            break;
-
-    }
+    iTools->tablesList(mDatabase->dbHandle(), mName, tablesNamesList);
 
     // for every retrieved row
     foreach (const QString &name, tablesNamesList) {
 
+        // \todo determine how we will pass factory/tools inside the proxy
+        // \todo determine how to use tools inside Table.loadData for version() calls
         DbTablePtr table(name, mName);
 
         // add table
@@ -392,7 +374,7 @@ DbSchema::readTables()
  * Reads views within the schema
  */
 void
-DbSchema::readViews()
+DbSchema::readViews(Factories *iFactories, Tools *iTools)
 {
     QSqlQuery query(mDatabase->dbHandle());
     QString qstr;
@@ -402,24 +384,7 @@ DbSchema::readViews()
 
     QStringList viewsNamesList;
 
-    // get sql driver
-    Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
-
-    // choose a query depending on sql driver
-    switch (sqlDriverType) {
-        case Database::Unknown:
-                        qDebug() << "Database::readViews> SqlDriver was not set";
-        case Database::PostgreSQL:
-                        Psql::Tools::viewsList(mDatabase->dbHandle(), mName, viewsNamesList);
-                        break;
-        case Database::MySQL:
-        case Database::Oracle:
-        case Database::SQLite:
-        default:
-                        /* temporarily no support for these DBMS */
-                        return;
-                        break;
-    }
+    iTools->viewsList(mDatabase->dbHandle(), mName, viewsNamesList);
 
     // for every retrieved row
     foreach (const QString &name, viewsNamesList) {
@@ -436,31 +401,14 @@ DbSchema::readViews()
  * Read procs within the given schema
  */
 void
-DbSchema::readProcedures()
+DbSchema::readProcedures(Factories *iFactories, Tools *iTools)
 {
     // clear procs list
     mProcedures.clear();
 
     QStringList proceduresNamesList;
 
-    // get sql driver
-    Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
-
-        // choose a query depending on sql driver
-    switch (sqlDriverType) {
-        case Database::Unknown:
-                        qDebug() << "Database::readProcedures> SqlDriver was not set";
-        case Database::PostgreSQL:
-                        Psql::Tools::proceduresList(mDatabase->dbHandle(), mName, proceduresNamesList);
-                        break;
-        case Database::MySQL:
-        case Database::Oracle:
-        case Database::SQLite:
-        default:
-                        /* temporarily no support for these DBMS */
-                        return;
-                        break;
-    }
+    iTools->proceduresList(mDatabase->dbHandle(), mName, proceduresNamesList);
 
     // for every retrieved row
     foreach (const QString &name, proceduresNamesList) {
@@ -477,34 +425,14 @@ DbSchema::readProcedures()
  * Reads triggers
  */
 void
-DbSchema::readTriggers()
+DbSchema::readTriggers(Factories *iFactories, Tools *iTools)
 {
     // clear triggers list
     mTriggers.clear();
 
     QStringList triggersNamesList;
 
-    // get sql driver
-    Database::SqlDriverType sqlDriverType = Database::instance()->sqlDriver();
-
-    // choose a query depending on sql driver
-    switch (sqlDriverType) {
-        case Database::Unknown:
-                        qDebug() << "DbSchema::readTriggers> SqlDriver was not set";
-                        return;
-        case Database::PostgreSQL:
-                        Psql::Tools::triggersList(mDatabase->dbHandle(), mName, triggersNamesList);
-                        break;
-        case Database::MySQL:
-//                        Mysql::Tools::triggersList(mName, triggersNamesList);
-                        break;
-        case Database::Oracle:
-        case Database::SQLite:
-        default:
-                        /* temporarily no support for these DBMS */
-                        return;
-                        break;
-    }
+    iTools->triggersList(mDatabase->dbHandle(), mName, triggersNamesList);
 
     // for every retrieved row
     foreach (const QString &name, triggersNamesList) {
@@ -522,13 +450,13 @@ DbSchema::readTriggers()
  * \return true - Even if nothing has been read
  */
 bool
-DbSchema::loadChildren()
+DbSchema::loadChildren(Factories *iFactories, Tools *iTools)
 {
     qDebug() << "Common::DbSchema::loadChildren> ";
-    readTables();
-    readViews();
-    readProcedures();
-    readTriggers();
+    readTables(iFactories, iTools);
+    readViews(iFactories, iTools);
+    readProcedures(iFactories, iTools);
+    readTriggers(iFactories, iTools);
 
     return true/*DbObject::loadData()*/;
 }

@@ -114,7 +114,7 @@ TreeWidget::refresh()
     // (better place rather than inside ctor)
     DbObjects::Common::Database *dbInst = DbObjects::Common::Database::instance();
     dbInst->resetData();
-    dbInst->loadData();
+    dbInst->loadData(0, 0);
 
     //// ROLES
     // read roles

@@ -79,10 +79,11 @@ Trigger::loadData()
     QSqlQuery query(db);
     QString qstr;
 
-    Tools::Version version = Tools::version(db);
+    using namespace DbObjects::Common;
+    Database::DBMSVersion version = mDatabase->version();
 
     switch (version) {
-        case Tools::PostgreSQL_8:
+        case Database::PostgreSQL_8:
                 // prepare query
                 qstr = QString("SELECT "
                                    "tbl_nsp.nspname AS schema, "
@@ -124,7 +125,7 @@ Trigger::loadData()
                                    .arg(mName)
                                    .arg(mSchema->name());
                 break;
-        case Tools::PostgreSQL_9:
+        case Database::PostgreSQL_9:
                 qstr = QString("SELECT "
                                    "tbl_nsp.nspname AS schema, "
                                    "tbl.relname AS table, "

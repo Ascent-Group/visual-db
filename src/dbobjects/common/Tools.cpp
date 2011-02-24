@@ -27,56 +27,79 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DBOBJECTS_MYSQL_TOOLS_H
-#define DBOBJECTS_MYSQL_TOOLS_H
-
-#include <common/Database.h>
 #include <common/Tools.h>
-//#include <QSqlDatabase>
-//#include <QStringList>
-//#include <QtCore/qglobal.h>
+
+#include <QSqlError>
+#include <QSqlQuery>
+#include <QSqlRecord>
+#include <QVariant>
+
+#include <QtDebug>
 
 namespace DbObjects
 {
-
-namespace Mysql
+namespace Common
 {
 
 /*!
- * \class Tools
- * \headerfile mysql/Tools.h
- * \brief Contains helper functions for MySQL
+ * Constructor
  */
-class Tools : public Common::Tools
+Tools::Tools()
 {
-    public:
-        Tools();
-        ~Tools();
 
-        /*!
-         * \enum Mysql::Tools::Version
-         * \brief Defines MySQL version
-         */
-//        enum Version {
-//            MySQL_Unknown = 0,
-//            MySQL_5
-//        };
+}
 
-        Common::Database::DBMSVersion version(const QSqlDatabase &);
+/*!
+ * Destructor
+ */
+Tools::~Tools()
+{
 
-        quint32 schemasList(const QSqlDatabase &, QStringList &oList);
-        quint32 indicesList(const QSqlDatabase &, QStringList &oList);
-        quint32 languagesList(const QSqlDatabase &, QStringList &oList);
-        quint32 proceduresList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
-        quint32 rolesList(const QSqlDatabase &, QStringList &oList);
-        quint32 tablesList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
-        quint32 triggersList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
-        quint32 viewsList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList);
-};
+}
 
-} // namespace Mysql
+/*!
+ * \brief Reads thelist of objects' names
+ *
+ * \note The functions looks for a field by name 'name' !!!
+ *
+ * \param[in] iQstr - The query used to select names of objects
+ * \param[out] oList - List that will hold objects' names
+ *
+ * \return The number of names in the list
+ */
+quint32
+Tools::objectNamesList(const QSqlDatabase &iDbHandle, const QString &iQstr, QStringList &oList)
+{
+#if DEBUG_QUERY
+    qDebug() << "DbObjects::Psql::Tools::objectNamesList> " << iQstr;
+#endif
 
+    QSqlQuery query(iDbHandle);
+
+    // if query failed
+    if (!query.exec(iQstr)) {
+        qDebug() << query.lastError().text();
+        return 0;
+    }
+
+    // if query didn't retrieve a row
+    if (!query.first()) {
+        return 0;
+    }
+
+    quint32 count = 0;
+    qint32 colId = query.record().indexOf("name");
+
+    do {
+        oList.append(query.value(colId).toString());
+        ++count;
+    } while (query.next());
+
+    // we return count instead of oList.count() because oList might come not empty to
+    // this function (since it is passed by reference
+    return count;
+}
+
+} // namespace Common
 } // namespace DbObjects
-
-#endif // DBOBJECTS_MYSQL_TOOLS_H
 

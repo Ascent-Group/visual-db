@@ -30,6 +30,12 @@
 #ifndef DBOBJECTS_COMMON_TOOLS_H
 #define DBOBJECTS_COMMON_TOOLS_H
 
+#include <common/Database.h>
+#include <QSqlDatabase>
+#include <QString>
+#include <QStringList>
+#include <QtCore/qglobal.h>
+
 namespace DbObjects
 {
 namespace Common
@@ -43,16 +49,24 @@ namespace Common
 class Tools
 {
     public:
-//        virtual quint32 schemasList(const QSqlDatabase &, QStringList &oList) = 0;
-//        virtual quint32 indicesList(const QSqlDatabase &, QStringList &oList) = 0;
-//        virtual quint32 languagesList(const QSqlDatabase &, QStringList &oList) = 0;
-//        virtual quint32 proceduresList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList) = 0;
-//        virtual quint32 rolesList(const QSqlDatabase &, QStringList &oList) = 0;
-//        virtual quint32 tablesList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList) = 0;
-//        virtual quint32 triggersList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList) = 0;
-//        virtual quint32 viewsList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList) = 0;
-//
-//        virtual quint32 objectNamesList(const QSqlDatabase &, const QString &iQstr, QStringList &oList);
+        virtual ~Tools();
+
+        virtual Database::DBMSVersion version(const QSqlDatabase &) = 0;
+        virtual quint32 schemasList(const QSqlDatabase &, QStringList &oList) = 0;
+        virtual quint32 indicesList(const QSqlDatabase &, QStringList &oList) = 0;
+        virtual quint32 languagesList(const QSqlDatabase &, QStringList &oList) = 0;
+        virtual quint32 proceduresList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList) = 0;
+        virtual quint32 rolesList(const QSqlDatabase &, QStringList &oList) = 0;
+        virtual quint32 tablesList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList) = 0;
+        virtual quint32 triggersList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList) = 0;
+        virtual quint32 viewsList(const QSqlDatabase &, const QString &iSchemaName, QStringList &oList) = 0;
+
+    protected:
+        Tools();
+
+        Q_DISABLE_COPY(Tools);
+
+        virtual quint32 objectNamesList(const QSqlDatabase &, const QString &iQstr, QStringList &oList);
 };
 
 } // namespace Common

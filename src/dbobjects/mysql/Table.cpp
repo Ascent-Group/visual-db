@@ -81,7 +81,7 @@ Table::loadData()
     QString qstr;
 
     /*! \todo get version */
-    Tools::Version version = Tools::version(db);
+    Common::Database::DBMSVersion version = mDatabase->version();
 
     /*! \todo do version check */
     /*! \todo do version specific actions */

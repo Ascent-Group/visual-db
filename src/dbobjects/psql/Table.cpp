@@ -87,7 +87,7 @@ Table::loadData()
      *        Bersion check can help support different Postgres versions,
      *        especcialy when the system catalogs change in newer versions
      */
-    Tools::Version version = Tools::version(db);
+    Common::Database::DBMSVersion version = mDatabase->version();
 
     /*! \todo version check */
     /*! \todo do version specific actions */

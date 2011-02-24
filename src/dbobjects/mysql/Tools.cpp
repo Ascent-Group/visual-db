@@ -39,31 +39,45 @@
 
 namespace DbObjects
 {
-
 namespace Mysql
 {
 
-namespace Tools
+/*!
+ *
+ */
+Tools::Tools()
+    : Common::Tools()
 {
+}
+
+/*!
+ *
+ */
+Tools::~Tools()
+{
+
+}
 
 /*!
  * \todo Implement
  * \return The version of MySQL that is currently used
  */
-Tools::Version
-version(const QSqlDatabase &iDbHandle)
+Common::Database::DBMSVersion
+Tools::version(const QSqlDatabase &iDbHandle)
 {
     QSqlQuery query(iDbHandle);
     QString qstr("SELECT version();");
 
+    using namespace DbObjects::Common;
+
     if (!query.exec(qstr) || !query.first()) {
-        return Tools::MySQL_Unknown;
+        return Database::MySQL_Unknown;
     }
 
     QString versionString = query.value(0).toString();
     /* \todo detect the version */
 
-    return Tools::MySQL_Unknown;
+    return Database::MySQL_Unknown;
 }
 
 /*!
@@ -74,7 +88,7 @@ version(const QSqlDatabase &iDbHandle)
  * \return The number of schemas read.
  */
 quint32
-schemasList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::schemasList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr = QString("SELECT schema_name AS name FROM information_schema.schemata;");
 
@@ -90,7 +104,7 @@ schemasList(const QSqlDatabase &iDbHandle, QStringList &oList)
  * \return The number of indices read by the query
  */
 quint32
-indicesList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::indicesList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr = QString("");
 
@@ -101,7 +115,7 @@ indicesList(const QSqlDatabase &iDbHandle, QStringList &oList)
  * \todo Implement
  */
 quint32
-languagesList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::languagesList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr("");
 
@@ -112,7 +126,7 @@ languagesList(const QSqlDatabase &iDbHandle, QStringList &oList)
  * \todo Implement
  */
 quint32
-proceduresList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::proceduresList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
 {
     QString qstr("");
 
@@ -128,7 +142,7 @@ proceduresList(const QSqlDatabase &iDbHandle, QStringList &oList)
  * \return The number of roles read by the query
  */
 quint32
-rolesList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::rolesList(const QSqlDatabase &iDbHandle, QStringList &oList)
 {
     QString qstr = QString("");
 
@@ -139,37 +153,7 @@ rolesList(const QSqlDatabase &iDbHandle, QStringList &oList)
  * \todo Implement
  */
 quint32
-objectNamesList(const QSqlDatabase &iDbHandle, const QString &iQstr, QStringList &oList)
-{
-    QSqlQuery query(iDbHandle);
-
-    // if query failed
-    if (!query.exec(iQstr)) {
-        qDebug() << query.lastError().text();
-        return 0;
-    }
-
-    // if query didn't retrieve a row
-    if (!query.first()) {
-        return 0;
-    }
-
-    quint32 count = 0;
-    qint32 colId = query.record().indexOf("name");
-
-    do {
-        oList.append(query.value(colId).toString());
-        ++count;
-    } while (query.next());
-
-    return count;
-}
-
-/*!
- * \todo Implement
- */
-quint32
-tablesList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::tablesList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
 {
     QString qstr("");
 
@@ -180,7 +164,7 @@ tablesList(const QSqlDatabase &iDbHandle, QStringList &oList)
  * \todo Implement
  */
 quint32
-triggersList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::triggersList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
 {
     QString qstr("");
 
@@ -191,16 +175,13 @@ triggersList(const QSqlDatabase &iDbHandle, QStringList &oList)
  * \todo Implement
  */
 quint32
-viewsList(const QSqlDatabase &iDbHandle, QStringList &oList)
+Tools::viewsList(const QSqlDatabase &iDbHandle, const QString &iSchemaName, QStringList &oList)
 {
     QString qstr("");
 
     return objectNamesList(iDbHandle, qstr, oList);
 }
-
-} // namespace Tools
 
 } // namespace Mysql
-
 } // namespace DbObjects
 

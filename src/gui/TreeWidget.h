@@ -32,6 +32,7 @@
 
 #include <QTreeWidget>
 #include <common/Database.h>
+#include <common/DbObject.h>
 
 class QContextMenuEvent;
 class QMenu;

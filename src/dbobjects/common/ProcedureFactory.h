@@ -37,11 +37,13 @@ namespace DbObjects
 {
 namespace Common
 {
+
 template<typename T> class DbObjectPtr;
-class DbSchema;
-typedef DbObjectPtr<DbSchema> DbSchemaPtr;
 
 class DbProcedure;
+class DbSchema;
+
+typedef DbObjectPtr<DbSchema> DbSchemaPtr;
 
 /*!
  * \class ProcedureFactory

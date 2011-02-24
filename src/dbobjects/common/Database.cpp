@@ -512,7 +512,7 @@ Database::readSchemas(Factories *iFactories, Tools *iTools)
     // for every retrieved row
     foreach (const QString &name, schemasNamesList) {
         // create new schema object
-        DbSchemaPtr schema(name);
+        DbSchemaPtr schema(this, iFactories, name);
 
         Q_CHECK_PTR(schema.get());
 
@@ -539,7 +539,7 @@ Database::readRoles(Factories *iFactories, Tools *iTools)
     // for every retrieved row
     foreach (const QString &name, rolesList) {
         // declare new role object
-        role = DbRolePtr(name);
+        role = DbRolePtr(this, iFactories, name);
 
         Q_ASSERT(0 != role.get());
 
@@ -563,7 +563,7 @@ Database::readIndices(Factories *iFactories, Tools *iTools)
     // for every retrieved row
     foreach (const QString &name, indicesList) {
         // declare new index object
-        DbIndexPtr index(name);
+        DbIndexPtr index(this, iFactories, name);
 
         // add index
         addIndex(index);
@@ -587,7 +587,7 @@ Database::readLanguages(Factories *iFactories, Tools *iTools)
     // for every retrieved row
     foreach (const QString &name, languagesList) {
         // declare new language object
-        DbLanguagePtr lang(name);
+        DbLanguagePtr lang(this, iFactories, name);
 
         // add language
         addLanguage(lang);

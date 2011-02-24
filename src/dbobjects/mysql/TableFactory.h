@@ -37,13 +37,13 @@ namespace DbObjects
 
 namespace Common
 {
-//class DbSchema;
 class DbTable;
-//typedef DbObjectPtr<DbSchema> DbSchemaPtr;
 }
 
 namespace Mysql
 {
+
+typedef Common::DbObjectPtr<Common::DbSchema> DbSchemaPtr;
 
 /*!
  * \class TableFactory
@@ -53,7 +53,7 @@ namespace Mysql
 class TableFactory : public Common::TableFactory
 {
     public:
-        Common::DbTable* create(const QString &iName, const Common::DbSchemaPtr &iSchema) const;
+        Common::DbTable* create(const QString &iName, const DbSchemaPtr &iSchema) const;
 };
 
 } // namespace Mysql

@@ -30,6 +30,7 @@
 #ifndef DBOBJECTS_COMMON_DBOBJECTPTR_H
 #define DBOBJECTS_COMMON_DBOBJECTPTR_H
 
+//#include <common/Database.h>
 //#include <common/DbIndex.h>
 //#include <common/DbLanguage.h>
 //#include <common/DbProcedure.h>
@@ -46,11 +47,11 @@
 
 namespace DbObjects
 {
-
 namespace Common
 {
 
 class Database;
+class Factories;
 
 /*!
  * \class DbObjectPtr
@@ -70,12 +71,13 @@ class DbObjectPtr
          * \param[in] iSchemaName - Name of schema that contains the given object or an
          *                           empty string if schema is not applicable.
          */
-        DbObjectPtr(const QString &iName, const QString &iSchemaName = "")
+        DbObjectPtr(const Database *iDb, const Factories *iFactories, const QString &iName, const QString &iSchemaName = "")
             : mName(iName),
               mSchemaName(iSchemaName),
               mPointee(0)
         {
-            initialize();
+            initialize(iDb, iFactories);
+            mPointee->setDatabase(iDb);
             // register reference
             incrementRefCount();
         }
@@ -272,7 +274,7 @@ class DbObjectPtr
          *       The default implementation implies that this proxy is applicable only to
          *       db objects.
          */
-        inline T* initialize()
+        inline T* initialize(const Database *iDatabase, const Factories *iFactories)
         {
             return 0;
         }

@@ -44,7 +44,7 @@ namespace Mysql
  * \return MySQL table
  */
 Common::DbTable*
-TableFactory::create(const QString &iName, const Common::DbSchemaPtr &iSchema) const
+TableFactory::create(const QString &iName, const DbSchemaPtr &iSchema) const
 {
     return new(std::nothrow) Table(iName, iSchema);
 }

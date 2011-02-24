@@ -30,7 +30,7 @@
 #ifndef DBOBJECTS_COMMON_DATABASE_H
 #define DBOBJECTS_COMMON_DATABASE_H
 
-#include <common/DbObjectPtr.h>
+//#include <common/DbObjectPtr.h>
 
 #include <QSqlDatabase>
 #include <QStringList>

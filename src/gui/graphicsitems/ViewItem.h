@@ -30,6 +30,7 @@
 #ifndef VIEWEITEM_H
 #define VIEWEITEM_H
 
+#include <dbobjects/common/DbObjectPtr.h>
 #include <gui/graphicsitems/DbObjectItem.h>
 
 class QAction;

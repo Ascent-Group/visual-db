@@ -70,6 +70,8 @@ class DbObject
 
         bool isLoaded() const;
 
+        void setDatabase(const DbObjects::Common::Database *iDatabase);
+
         /*! \see Descendants' implementation */
         virtual DbObject::Type type() const = 0;
         virtual bool loadData();
@@ -82,7 +84,7 @@ class DbObject
         bool mIsLoaded;
 
         // \todo this will probably go away
-        DbObjects::Common::Database *mDatabase;
+        const DbObjects::Common::Database *mDatabase;
 
     protected:
         DbObject(QString iName = 0);

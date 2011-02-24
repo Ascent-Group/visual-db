@@ -37,11 +37,13 @@ namespace DbObjects
 {
 namespace Common
 {
-template<typename T> class DbObjectPtr;
-class DbSchema;
-typedef DbObjectPtr<DbSchema> DbSchemaPtr;
 
+template<typename T> class DbObjectPtr;
+
+class DbSchema;
 class DbView;
+
+typedef DbObjectPtr<DbSchema> DbSchemaPtr;
 
 /*!
  * \class ViewFactory

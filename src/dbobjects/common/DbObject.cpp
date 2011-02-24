@@ -85,6 +85,15 @@ DbObject::isLoaded() const
 }
 
 /*!
+ *
+ */
+void
+DbObject::setDatabase(const DbObjects::Common::Database *iDatabase)
+{
+    mDatabase = iDatabase;
+}
+
+/*!
  * \brief Loads object informaton from datase
  *
  * \return true If the information has been successfully read

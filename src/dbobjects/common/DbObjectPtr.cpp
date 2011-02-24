@@ -30,26 +30,27 @@
 #ifndef DBOBJECTS_COMMON_DBOBJECTPTRIMPL_H
 #define DBOBJECTS_COMMON_DBOBJECTPTRIMPL_H
 
-#include <common/DbObjectPtr.h>
-
+#include <common/Database.h>
 #include <common/DbIndex.h>
 #include <common/DbLanguage.h>
+#include <common/DbObjectPtr.h>
 #include <common/DbProcedure.h>
 #include <common/DbRole.h>
 #include <common/DbSchema.h>
 #include <common/DbTable.h>
 #include <common/DbTrigger.h>
 #include <common/DbView.h>
+#include <common/Factories.h>
+#include <common/IndexFactory.h>
+#include <common/LanguageFactory.h>
+#include <common/ProcedureFactory.h>
+#include <common/RoleFactory.h>
+#include <common/SchemaFactory.h>
+#include <common/TableFactory.h>
+#include <common/TriggerFactory.h>
+#include <common/ViewFactory.h>
 
-#include <factory/Index.h>
-#include <factory/Language.h>
-#include <factory/Procedure.h>
-#include <factory/Role.h>
-#include <factory/Schema.h>
-#include <factory/Table.h>
-#include <factory/Trigger.h>
-#include <factory/View.h>
-
+#include <QtCore/qglobal.h>
 #include <QtDebug>
 
 namespace DbObjects
@@ -78,9 +79,11 @@ class DbView;
  * Specialization for index
  */
 template<> inline
-DbIndex* DbObjectPtr<DbIndex>::initialize()
+DbIndex* DbObjectPtr<DbIndex>::initialize(const Database *iDatabase, const Factories *iFactories)
 {
-    mPointee = Factory::Index::createIndex(mName);
+    Q_UNUSED(iDatabase);
+
+    mPointee = iFactories->indexFactory()->create(mName);
     return mPointee;
 }
 
@@ -88,9 +91,11 @@ DbIndex* DbObjectPtr<DbIndex>::initialize()
  * Specialization for language
  */
 template<> inline
-DbLanguage* DbObjectPtr<DbLanguage>::initialize()
+DbLanguage* DbObjectPtr<DbLanguage>::initialize(const Database *iDatabase, const Factories *iFactories)
 {
-    mPointee = Factory::Language::createLanguage(mName);
+    Q_UNUSED(iDatabase);
+
+    mPointee = iFactories->languageFactory()->create(mName);
     return mPointee;
 }
 
@@ -98,9 +103,9 @@ DbLanguage* DbObjectPtr<DbLanguage>::initialize()
  * Specialization for procedure
  */
 template<> inline
-DbProcedure* DbObjectPtr<DbProcedure>::initialize()
+DbProcedure* DbObjectPtr<DbProcedure>::initialize(const Database *iDatabase, const Factories *iFactories)
 {
-    mPointee = Factory::Procedure::createProcedure(mName, mSchemaName);
+    mPointee = iFactories->procedureFactory()->create(mName, iDatabase->findSchema(mSchemaName));
     return mPointee;
 }
 
@@ -108,9 +113,11 @@ DbProcedure* DbObjectPtr<DbProcedure>::initialize()
  * Specialization for role
  */
 template<> inline
-DbRole* DbObjectPtr<DbRole>::initialize()
+DbRole* DbObjectPtr<DbRole>::initialize(const Database *iDatabase, const Factories *iFactories)
 {
-    mPointee = Factory::Role::createRole(mName);
+    Q_UNUSED(iDatabase);
+
+    mPointee = iFactories->roleFactory()->create(mName);
     return mPointee;
 }
 
@@ -118,10 +125,11 @@ DbRole* DbObjectPtr<DbRole>::initialize()
  * Specialization for schema
  */
 template<> inline
-DbSchema* DbObjectPtr<DbSchema>::initialize()
+DbSchema* DbObjectPtr<DbSchema>::initialize(const Database *iDatabase, const Factories *iFactories)
 {
-//    qDebug () << mName;
-    mPointee = Factory::Schema::createSchema(mName);
+    Q_UNUSED(iDatabase);
+
+    mPointee = iFactories->schemaFactory()->create(mName);
     return mPointee;
 }
 
@@ -129,9 +137,9 @@ DbSchema* DbObjectPtr<DbSchema>::initialize()
  * Specialization for table
  */
 template<> inline
-DbTable* DbObjectPtr<DbTable>::initialize()
+DbTable* DbObjectPtr<DbTable>::initialize(const Database *iDatabase, const Factories *iFactories)
 {
-    mPointee = Factory::Table::createTable(mName, mSchemaName);
+    mPointee = iFactories->tableFactory()->create(mName, iDatabase->findSchema(mSchemaName));
     return mPointee;
 }
 
@@ -139,10 +147,9 @@ DbTable* DbObjectPtr<DbTable>::initialize()
  * Specialization for trigger
  */
 template<> inline
-DbTrigger* DbObjectPtr<DbTrigger>::initialize()
+DbTrigger* DbObjectPtr<DbTrigger>::initialize(const Database *iDatabase, const Factories *iFactories)
 {
-    mPointee = Factory::Trigger::createTrigger(mName, mSchemaName);
-//    qDebug() << "DbObjectPtr<DbTrigger>::initialize> " << mPointee << " " << mName;
+    mPointee = iFactories->triggerFactory()->create(mName, iDatabase->findSchema(mSchemaName));
     return mPointee;
 }
 
@@ -150,9 +157,9 @@ DbTrigger* DbObjectPtr<DbTrigger>::initialize()
  * Specialization for view
  */
 template<> inline
-DbView* DbObjectPtr<DbView>::initialize()
+DbView* DbObjectPtr<DbView>::initialize(const Database *iDatabase, const Factories *iFactories)
 {
-    mPointee = Factory::View::createView(mName, mSchemaName);
+    mPointee = iFactories->viewFactory()->create(mName, iDatabase->findSchema(mSchemaName));
     return mPointee;
 }
 

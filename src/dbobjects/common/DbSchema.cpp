@@ -36,10 +36,6 @@
 #include <common/DbSchema.h>
 #include <common/DbTrigger.h>
 #include <common/DbView.h>
-#include <factory/Procedure.h>
-#include <factory/Table.h>
-#include <factory/Trigger.h>
-#include <factory/View.h>
 #include <psql/Tools.h>
 
 #include <QtDebug>
@@ -58,7 +54,7 @@ namespace Common
  */
 DbSchema::DbSchema(QString iName)
     : DbObject(iName),
-      mOwner(0),
+      mOwner(),
       mDescription(""),
       mTables(),
       mViews(),
@@ -363,7 +359,7 @@ DbSchema::readTables(Factories *iFactories, Tools *iTools)
 
         // \todo determine how we will pass factory/tools inside the proxy
         // \todo determine how to use tools inside Table.loadData for version() calls
-        DbTablePtr table(name, mName);
+        DbTablePtr table(mDatabase, iFactories, name, mName);
 
         // add table
         addTable(table);
@@ -390,7 +386,7 @@ DbSchema::readViews(Factories *iFactories, Tools *iTools)
     foreach (const QString &name, viewsNamesList) {
 
         // declare new view object
-        DbViewPtr view(name, mName);
+        DbViewPtr view(mDatabase, iFactories, name, mName);
 
         // add view
         addView(view);
@@ -414,7 +410,7 @@ DbSchema::readProcedures(Factories *iFactories, Tools *iTools)
     foreach (const QString &name, proceduresNamesList) {
 
         // declare new proc object
-        DbProcedurePtr proc(name, mName);
+        DbProcedurePtr proc(mDatabase, iFactories, name, mName);
 
         // add proc
         addProcedure(proc);
@@ -437,7 +433,7 @@ DbSchema::readTriggers(Factories *iFactories, Tools *iTools)
     // for every retrieved row
     foreach (const QString &name, triggersNamesList) {
         // declare new trigger object
-        DbTriggerPtr trigger(name, mName);
+        DbTriggerPtr trigger(mDatabase, iFactories, name, mName);
 
         // add trigger
         addTrigger(trigger);

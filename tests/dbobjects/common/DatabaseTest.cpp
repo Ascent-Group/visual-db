@@ -342,35 +342,35 @@ DatabaseTest::findTableIndicesTest()
     QVERIFY(indicesList.contains(mDbInst->findIndex("ind_artists")));
 }
 
-void
-DatabaseTest::flushTest()
-{
-    QVERIFY(0 != mDbInst);
-
-    mDbInst->loadData(mFactories, mTools);
-
-    QVERIFY(0 != mDbInst->indicesCount());
-    QVERIFY(0 != mDbInst->languagesCount());
-    QVERIFY(0 != mDbInst->rolesCount());
-    QVERIFY(0 != mDbInst->schemasCount());
-
-    // \todo commente out due to removal of flush
-//    Common::DatabaseManager dbMgr;
-//    dbMgr.flush();
-
-    // this check might not be valid if the object will be reconstructed in the same location
-//    QVERIFY(mDbInst != Database::instance());
-
-    mDbInst = Common::Database::instance();
-
-    QVERIFY(0 != mDbInst);
-
-    QCOMPARE(mDbInst->indicesCount(), (quint64)0);
-    QCOMPARE(mDbInst->languagesCount(), (quint8)0);
-    QCOMPARE(mDbInst->rolesCount(), (quint64)0);
-    QCOMPARE(mDbInst->schemasCount(), (quint64)0);
-
-}
+//void
+//DatabaseTest::flushTest()
+//{
+//    QVERIFY(0 != mDbInst);
+//
+//    mDbInst->loadData(mFactories, mTools);
+//
+//    QVERIFY(0 != mDbInst->indicesCount());
+//    QVERIFY(0 != mDbInst->languagesCount());
+//    QVERIFY(0 != mDbInst->rolesCount());
+//    QVERIFY(0 != mDbInst->schemasCount());
+//
+//    // \todo commente out due to removal of flush
+////    Common::DatabaseManager dbMgr;
+////    dbMgr.flush();
+//
+//    // this check might not be valid if the object will be reconstructed in the same location
+////    QVERIFY(mDbInst != Database::instance());
+//
+//    mDbInst = Common::Database::instance();
+//
+//    QVERIFY(0 != mDbInst);
+//
+//    QCOMPARE(mDbInst->indicesCount(), (quint64)0);
+//    QCOMPARE(mDbInst->languagesCount(), (quint8)0);
+//    QCOMPARE(mDbInst->rolesCount(), (quint64)0);
+//    QCOMPARE(mDbInst->schemasCount(), (quint64)0);
+//
+//}
 
 void
 DatabaseTest::indicesCountTest()

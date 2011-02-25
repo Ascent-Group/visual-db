@@ -3,6 +3,7 @@
 
 #include <common/Database.h>
 #include <connect/DbHostInfo.h>
+#include <QSqlDatabase>
 
 class DatabaseCreator
 {

@@ -1,6 +1,4 @@
 #include <common/DatabaseCreator.h>
-#include <common/Factories.h>
-#include <common/Tools.h>
 #include <mysql/Factories.h>
 #include <mysql/Tools.h>
 #include <psql/Factories.h>
@@ -9,8 +7,7 @@
 #include <QFile>
 
 QString DatabaseCreator::mDriverName("");
-
-using namespace DbObjects::Common;
+QSqlDatabase DatabaseCreator::mDbHandle = QSqlDatabase();
 
 bool
 DatabaseCreator::connect(const Connect::DbHostInfo &iDbHostInfo)
@@ -46,10 +43,11 @@ DatabaseCreator::connect(const Connect::DbHostInfo &iDbHostInfo)
     return success;
 }
 
-Database*
+DbObjects::Common::Database*
 DatabaseCreator::createDatabase()
 {
-    Database *dbInst = new Database(mDbHandle);
+    using namespace DbObjects::Common;
+    Database *dbInst = new(std::nothrow) Database(DatabaseCreator::mDbHandle);
 
     dbInst->setSqlDriver(mDriverName);
 
@@ -66,9 +64,9 @@ DbObjects::Common::Factories*
 DatabaseCreator::factories()
 {
     if (mDriverName == "QPSQL") {
-        return new DbObjects::Psql::Factories();
+        return new(std::nothrow) DbObjects::Psql::Factories();
     } else if (mDriverName == "QMYSQL") {
-        return new DbObjects::Mysql::Factories();
+        return new(std::nothrow) DbObjects::Mysql::Factories();
     }
     return 0;
 }
@@ -77,9 +75,9 @@ DbObjects::Common::Tools*
 DatabaseCreator::tools()
 {
     if (mDriverName == "QPSQL") {
-        return new DbObjects::Psql::Tools();
+        return new(std::nothrow) DbObjects::Psql::Tools();
     } else if (mDriverName == "QMYSQL") {
-        return new DbObjects::Mysql::Tools();
+        return new(std::nothrow) DbObjects::Mysql::Tools();
     }
     return 0;
 }

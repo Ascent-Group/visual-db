@@ -6,9 +6,11 @@
 #include <connect/ConnectionInfoTest.h>
 #endif
 
+#ifdef TEST_CONTROL
 /* control */
 #include <control/ConfigTest.h>
 #include <control/ContextTest.h>
+#endif
 
 /* gui/behaviour */
 #include <gui/behaviour/AddTableCommandTest.h>
@@ -49,15 +51,9 @@
 #include <dbobjects/common/DbTableTest.h>
 #include <dbobjects/common/DbTriggerTest.h>
 #include <dbobjects/common/DbViewTest.h>
-#include <dbobjects/common/IndexFactoryTest.h>
-#include <dbobjects/common/LanguageFactoryTest.h>
-#include <dbobjects/common/ProcedureFactoryTest.h>
-#include <dbobjects/common/RoleFactoryTest.h>
-#include <dbobjects/common/SchemaFactoryTest.h>
-#include <dbobjects/common/TableFactoryTest.h>
-#include <dbobjects/common/TriggerFactoryTest.h>
-#include <dbobjects/common/ViewFactoryTest.h>
+#include <dbobjects/mysql/MysqlFactoriesTest.h>
 #include <dbobjects/mysql/MysqlToolsTest.h>
+#include <dbobjects/psql/PsqlFactoriesTest.h>
 #include <dbobjects/psql/PsqlToolsTest.h>
 
 #include <common/DatabaseCreator.h>
@@ -100,6 +96,10 @@ int main(int argc, char *argv[])
 
 
     if (!DatabaseCreator::connect(dbHostInfo)) {
+        qDebug() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
+            .arg(DBNAME)
+            .arg(DBHOST)
+            .arg(DBUSER);
 
         return -1;
     }
@@ -258,34 +258,16 @@ int main(int argc, char *argv[])
     DbViewTest dbViewTest;
     QTest::qExec(&dbViewTest, argc, argv);
 
-    IndexFactoryTest indexFactoryTest;
-    QTest::qExec(&indexFactoryTest, argc, argv);
-
-    LanguageFactoryTest languageFactoryTest;
-    QTest::qExec(&languageFactoryTest, argc, argv);
-
-    ProcedureFactoryTest procedureFactoryTest;
-    QTest::qExec(&procedureFactoryTest, argc, argv);
-
-    RoleFactoryTest roleFactoryTest;
-    QTest::qExec(&roleFactoryTest, argc, argv);
-
-    SchemaFactoryTest schemaFactoryTest;
-    QTest::qExec(&schemaFactoryTest, argc, argv);
-
-    TableFactoryTest tableFactoryTest;
-    QTest::qExec(&tableFactoryTest, argc, argv);
-
-    TriggerFactoryTest triggerFactoryTest;
-    QTest::qExec(&triggerFactoryTest, argc, argv);
-
-    ViewFactoryTest viewFactoryTest;
-    QTest::qExec(&viewFactoryTest, argc, argv);
-
     if (drv.contains("MYSQL")) {
+        MysqlFactoriesTest mysqlFactoriesTest;
+        QTest::qExec(&mysqlFactoriesTest, argc, argv);
+
         MysqlToolsTest mysqlToolsTest;
         QTest::qExec(&mysqlToolsTest, argc, argv);
     } else if (drv.contains("PSQL")) {
+        PsqlFactoriesTest psqlFactoriesTest;
+        QTest::qExec(&psqlFactoriesTest, argc, argv);
+
         PsqlToolsTest psqlToolsTest;
         QTest::qExec(&psqlToolsTest, argc, argv);
     }

@@ -27,50 +27,41 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dbobjects/common/SchemaFactoryTest.h>
+#ifndef DBOBJECTS_PSQL_FACTORIES_TEST_H
+#define DBOBJECTS_PSQL_FACTORIES_TEST_H
 
-#include <dbobjects/common/Database.h>
-#include <dbobjects/common/SchemaFactory.h>
-#include <dbobjects/psql/Schema.h>
+#include <QtTest/QtTest>
 
-void
-SchemaFactoryTest::initTestCase()
+namespace DbObjects
 {
-
+namespace Common
+{
+class Database;
+class Factories;
+}
 }
 
-void
-SchemaFactoryTest::cleanupTestCase()
+class PsqlFactoriesTest : public QObject
 {
+    Q_OBJECT
 
-}
+    private slots:
+        void initTestCase();
+        void cleanupTestCase();
 
-void
-SchemaFactoryTest::createSchemaTest()
-{
-    QVERIFY(0);
-//    using namespace DbObjects;
-//
-//    QString schemaName("vtunes");
-//
-//    Common::Database *dbInst = Common::Database::instance();
-//
-//    QVERIFY(0 != dbInst);
-//
-//    dbInst->setSqlDriver("QPSQL");
-//    QVERIFY(0 != dynamic_cast<Psql::Schema*>(Factory::Schema::createSchema(schemaName)));
-//
-//    // \todo update this check as for psql when more RDBMS are supported
-//    dbInst->setSqlDriver("QMYSQL");
-//    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
-//
-//    dbInst->setSqlDriver("QIODBC");
-//    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
-//
-//    dbInst->setSqlDriver("QSQLITE");
-//    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
-//
-//    dbInst->setSqlDriver("NODRV");
-//    QVERIFY(0 == Factory::Schema::createSchema(schemaName));
-}
+        void createIndexTest();
+        void createLanguageTest();
+        void createProcedureTest();
+        void createRoleTest();
+        void createSchemaTest();
+        void createTableTest();
+        void createTriggerTest();
+        void createViewTest();
+
+    private:
+        DbObjects::Common::Database *mDbInst;
+        DbObjects::Common::Factories *mFactories;
+};
+
+#endif // DBOBJECTS_PSQL_FACTORIES_TEST_H
 

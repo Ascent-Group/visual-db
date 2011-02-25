@@ -27,53 +27,41 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <dbobjects/common/TriggerFactoryTest.h>
+#ifndef DBOBJECTS_MYSQL_FACTORIES_TEST_H
+#define DBOBJECTS_MYSQL_FACTORIES_TEST_H
 
-#include <dbobjects/common/Database.h>
-#include <dbobjects/common/TriggerFactory.h>
-#include <dbobjects/psql/Trigger.h>
+#include <QtTest/QtTest>
 
-void
-TriggerFactoryTest::initTestCase()
+namespace DbObjects
 {
-
+namespace Common
+{
+class Database;
+class Factories;
+}
 }
 
-void
-TriggerFactoryTest::cleanupTestCase()
+class MysqlFactoriesTest : public QObject
 {
+    Q_OBJECT
 
-}
+    private slots:
+        void initTestCase();
+        void cleanupTestCase();
 
-void
-TriggerFactoryTest::createTriggerTest()
-{
-    QVERIFY(0);
-//    using namespace DbObjects;
-//
-//    QString triggerName("check_location");
-//    QString schemaName("vtunes");
-//
-//    Common::Database *dbInst = Common::Database::instance();
-//    QVERIFY(0 != dbInst);
-//
-////    Common::DbSchema *schema = dbInst->findSchema(schemaName);
-////    QVERIFY(0 != schema);
-//
-//    dbInst->setSqlDriver("QPSQL");
-//    QVERIFY(0 != dynamic_cast<Psql::Trigger*>(Factory::Trigger::createTrigger(triggerName, schemaName)));
-//
-//    // \todo update this check as for psql when more RDBMS are supported
-//    dbInst->setSqlDriver("QMYSQL");
-//    QVERIFY(0 == Factory::Trigger::createTrigger(triggerName, schemaName));
-//
-//    dbInst->setSqlDriver("QIODBC");
-//    QVERIFY(0 == Factory::Trigger::createTrigger(triggerName, schemaName));
-//
-//    dbInst->setSqlDriver("QSQLITE");
-//    QVERIFY(0 == Factory::Trigger::createTrigger(triggerName, schemaName));
-//
-//    dbInst->setSqlDriver("NODRV");
-//    QVERIFY(0 == Factory::Trigger::createTrigger(triggerName, schemaName));
-}
+        void createIndexTest();
+        void createLanguageTest();
+        void createProcedureTest();
+        void createRoleTest();
+        void createSchemaTest();
+        void createTableTest();
+        void createTriggerTest();
+        void createViewTest();
+
+    private:
+        DbObjects::Common::Database *mDbInst;
+        DbObjects::Common::Factories *mFactories;
+};
+
+#endif // DBOBJECTS_MYSQL_FACTORIES_TEST_H
 

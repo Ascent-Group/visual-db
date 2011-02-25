@@ -68,7 +68,7 @@ class DatabaseTest : public QObject
         void findRoleTest();
         void findSchemaTest();
         void findTableIndicesTest();
-        void flushTest();
+//        void flushTest();
         void indicesCountTest();
         void indicesListTest();
         void instanceTest();

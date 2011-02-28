@@ -47,7 +47,7 @@ class ProxyHostInfo : public HostInfo
     public:
         explicit ProxyHostInfo(const QString &iAddress = "", quint16 iPort = 0, const QString &iUser = "",
                 const QString &iPassword = "", const QNetworkProxy::ProxyType &iType = QNetworkProxy::NoProxy);
-        ~ProxyHostInfo();
+        virtual ~ProxyHostInfo();
 
         ProxyHostInfo(const ProxyHostInfo &);
         ProxyHostInfo &operator=(const ProxyHostInfo &iProxyHostInfo);

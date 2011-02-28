@@ -27,6 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <QDomDocument>
+#include <QDomElement>
 #include <control/Session.h>
 
 namespace Control {
@@ -41,12 +43,58 @@ Session::~Session()
 
 bool Session::setFile(const QString &iFileName)
 {
-    QFile mFile(iFileName);
+    mFile.close();
+
+    mFile.setFileName(iFileName);
     if (!mFile.open(QIODevice::WriteOnly)) {
         return false;
     }
 
     return true;
+}
+
+bool Session::setConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo)
+{
+    if (!mFile.isOpen()) {
+        return false;
+    }
+
+    QDomDocument doc("VisualDB");
+    QDomElement root = doc.createElement("visual-db");
+    doc.appendChild(root);
+    iConnectionInfo.toXml(doc, root);
+//    root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(),
+//                ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
+
+    return true;
+}
+
+bool Session::getConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const
+{
+    if (!mFile.isOpen()) {
+        return false;
+    }
+ 
+    QDomDocument doc("VisualDB");
+    // FIXME: remove const_cast
+    if (!doc.setContent(const_cast<QFile *>(&mFile))) {
+        return false;
+    }
+
+    QDomElement docElem = doc.documentElement();
+    QDomNode child = docElem.firstChild();
+    while (!child.isNull()) {
+        QDomElement element = child.toElement(); // try to convert the node to an element.
+        if (!element.isNull()) {
+            if (element.tagName() == "connection") {
+                oConnectionInfo.fromXml(element);
+                return true;
+            }
+        }
+        child = child.nextSibling();
+    }
+   
+    return false;
 }
 
 }

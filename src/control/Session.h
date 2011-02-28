@@ -30,6 +30,7 @@
 #ifndef CONTROL_SESSION_H
 #define CONTROL_SESSION_H
 
+#include <connect/ConnectionInfo.h>
 #include <QFile>
 
 namespace Control {
@@ -41,6 +42,8 @@ class Session {
         virtual ~Session();
 
         bool setFile(const QString &iFileName);
+        bool setConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo);
+        bool getConnectionInfo(Connect::ConnectionInfo &iConnectionInfo) const;
 
     private:
         QFile mFile;

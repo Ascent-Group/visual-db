@@ -27,58 +27,28 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CONNECT_HOSTINFO_H
-#define CONNECT_HOSTINFO_H
+#ifndef CONTROL_SESSION_H
+#define CONTROL_SESSION_H
 
-#include <QString>
-#include <QDomDocument>
-#include <QDomElement>
+#include <connect/ConnectionInfo.h>
+#include <QFile>
 
-namespace Connect {
+namespace Control {
 
-/*!
- * \class HostInfo
- * \headerfile connect/HostInfo.h
- * \brief Incapsulation of host info parameters
- */
-class HostInfo
-{
+class Session {
+
     public:
-        explicit HostInfo(const QString &iAddress = "", quint16 iPort = 0, const QString &iUser = "", const QString &iPassword = "");
-        virtual ~HostInfo();
+        explicit Session();
+        virtual ~Session();
 
-        HostInfo(const HostInfo &);
-        HostInfo &operator=(const HostInfo &iHostInfo);
-
-        QString address() const;
-        void setAddress(const QString &);
-        
-        quint16 port() const;
-        void setPort(quint16);
-        
-        QString user() const;
-        void setUser(const QString &);
-        
-        QString password() const;
-        void setPassword(const QString &);
-
-        QDomElement &toXml(QDomElement &) const;
-        void fromXml(QDomElement &);
-
-        bool operator==(const HostInfo &iHostInfo) const;
-        bool operator!=(const HostInfo &iHostInfo) const;
-
-    protected:
-        virtual void swap(const HostInfo &iHostInfo);
+        bool setFile(const QString &iFileName);
+        bool setConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo);
+        bool getConnectionInfo(Connect::ConnectionInfo &iConnectionInfo) const;
 
     private:
-        QString mAddress;
-        quint16 mPort;
-        QString mUser;
-        QString mPassword;
+        QFile mFile;
 };
 
 }
 
-#endif // CONNECT_HOSTINFO_H
-
+#endif // CONTROL_SESSION_H

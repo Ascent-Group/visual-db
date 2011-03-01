@@ -47,7 +47,7 @@ class DbHostInfo : public HostInfo
         explicit DbHostInfo(const QString &iAddress = "localhost", quint16 iPort = 5432, 
                 const QString &iUser = "", const QString &iPassword = "", 
                 const QString &iDbName = "", const QString &iDbDriver = "QPSQL");
-        ~DbHostInfo();
+        virtual ~DbHostInfo();
 
         DbHostInfo(const DbHostInfo &);
         DbHostInfo &operator=(const DbHostInfo &iDbHostInfo);

@@ -27,58 +27,74 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CONNECT_HOSTINFO_H
-#define CONNECT_HOSTINFO_H
-
-#include <QString>
 #include <QDomDocument>
 #include <QDomElement>
+#include <control/Session.h>
 
-namespace Connect {
+namespace Control {
 
-/*!
- * \class HostInfo
- * \headerfile connect/HostInfo.h
- * \brief Incapsulation of host info parameters
- */
-class HostInfo
+Session::Session()
 {
-    public:
-        explicit HostInfo(const QString &iAddress = "", quint16 iPort = 0, const QString &iUser = "", const QString &iPassword = "");
-        virtual ~HostInfo();
-
-        HostInfo(const HostInfo &);
-        HostInfo &operator=(const HostInfo &iHostInfo);
-
-        QString address() const;
-        void setAddress(const QString &);
-        
-        quint16 port() const;
-        void setPort(quint16);
-        
-        QString user() const;
-        void setUser(const QString &);
-        
-        QString password() const;
-        void setPassword(const QString &);
-
-        QDomElement &toXml(QDomElement &) const;
-        void fromXml(QDomElement &);
-
-        bool operator==(const HostInfo &iHostInfo) const;
-        bool operator!=(const HostInfo &iHostInfo) const;
-
-    protected:
-        virtual void swap(const HostInfo &iHostInfo);
-
-    private:
-        QString mAddress;
-        quint16 mPort;
-        QString mUser;
-        QString mPassword;
-};
-
 }
 
-#endif // CONNECT_HOSTINFO_H
+Session::~Session()
+{
+}
 
+bool Session::setFile(const QString &iFileName)
+{
+    mFile.close();
+
+    mFile.setFileName(iFileName);
+    if (!mFile.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+
+    return true;
+}
+
+bool Session::setConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo)
+{
+    if (!mFile.isOpen()) {
+        return false;
+    }
+
+    QDomDocument doc("VisualDB");
+    QDomElement root = doc.createElement("visual-db");
+    doc.appendChild(root);
+    iConnectionInfo.toXml(doc, root);
+//    root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(),
+//                ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
+
+    return true;
+}
+
+bool Session::getConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const
+{
+    if (!mFile.isOpen()) {
+        return false;
+    }
+ 
+    QDomDocument doc("VisualDB");
+    // FIXME: remove const_cast
+    if (!doc.setContent(const_cast<QFile *>(&mFile))) {
+        return false;
+    }
+
+    QDomElement docElem = doc.documentElement();
+    QDomNode child = docElem.firstChild();
+    while (!child.isNull()) {
+        QDomElement element = child.toElement(); // try to convert the node to an element.
+        if (!element.isNull()) {
+            if (element.tagName() == "connection") {
+                oConnectionInfo.fromXml(element);
+                return true;
+            }
+        }
+        child = child.nextSibling();
+    }
+   
+    return false;
+}
+
+}

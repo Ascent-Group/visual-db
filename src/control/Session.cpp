@@ -41,7 +41,8 @@ Session::~Session()
 {
 }
 
-bool Session::setFile(const QString &iFileName)
+bool 
+Session::setFile(const QString &iFileName)
 {
     mFile.close();
 
@@ -53,7 +54,35 @@ bool Session::setFile(const QString &iFileName)
     return true;
 }
 
-bool Session::setConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo)
+qint32
+Session::connectionsNumber() const
+{
+    if (!mFile.isOpen()) {
+        return -1;
+    }
+ 
+    QDomDocument doc("VisualDB");
+    // FIXME: remove const_cast
+    if (!doc.setContent(const_cast<QFile *>(&mFile))) {
+        return -1;
+    }
+
+    QDomElement docElem = doc.documentElement();
+    QDomNode child = docElem.firstChild();
+    while (!child.isNull()) {
+        QDomElement element = child.toElement(); // try to convert the node to an element.
+        if (!element.isNull()) {
+            if (element.tagName() == "connections") {
+                return element.attribute("number", -1).toInt();
+            }
+        }
+    }
+
+    return -1;
+}
+
+bool 
+Session::setConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo)
 {
     if (!mFile.isOpen()) {
         return false;
@@ -69,7 +98,8 @@ bool Session::setConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo)
     return true;
 }
 
-bool Session::getConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const
+bool 
+Session::connectionInfo(Connect::ConnectionInfo &oConnectionInfo, qint32 iNumber) const
 {
     if (!mFile.isOpen()) {
         return false;
@@ -86,7 +116,7 @@ bool Session::getConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const
     while (!child.isNull()) {
         QDomElement element = child.toElement(); // try to convert the node to an element.
         if (!element.isNull()) {
-            if (element.tagName() == "connection") {
+            if (element.tagName() == "connection" + iNumber) {
                 oConnectionInfo.fromXml(element);
                 return true;
             }

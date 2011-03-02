@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <RoleFactory.h>
+#include <common/RoleFactory.h>
 
 namespace DbObjects
 {

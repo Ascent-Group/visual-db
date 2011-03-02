@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <SchemaFactory.h>
+#include <common/SchemaFactory.h>
 
 namespace DbObjects
 {

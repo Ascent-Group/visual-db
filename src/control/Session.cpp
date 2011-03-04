@@ -73,7 +73,7 @@ Session::connectionsNumber() const
         QDomElement element = child.toElement(); // try to convert the node to an element.
         if (!element.isNull()) {
             if (element.tagName() == "connections") {
-                return element.attribute("number", -1).toInt();
+                return element.attribute("number", "-1").toInt();
             }
         }
     }

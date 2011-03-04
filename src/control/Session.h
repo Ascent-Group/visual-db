@@ -42,7 +42,9 @@ class Session {
         virtual ~Session();
 
         bool setFile(const QString &iFileName);
-        bool ConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo);
+        
+        qint32 connectionsNumber() const;
+        bool setConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo);
         bool connectionInfo(Connect::ConnectionInfo &oConnectionInfo, qint32 iNumber) const;
 
     private:

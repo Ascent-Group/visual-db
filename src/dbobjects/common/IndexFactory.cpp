@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <IndexFactory.h>
+#include <common/IndexFactory.h>
 
 namespace DbObjects
 {

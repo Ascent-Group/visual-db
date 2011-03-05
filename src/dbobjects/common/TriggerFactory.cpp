@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <TriggerFactory.h>
+#include <common/TriggerFactory.h>
 
 namespace DbObjects
 {

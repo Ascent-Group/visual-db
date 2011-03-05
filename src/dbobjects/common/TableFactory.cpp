@@ -27,7 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <TableFactory.h>
+#include <common/TableFactory.h>
 
 namespace DbObjects
 {

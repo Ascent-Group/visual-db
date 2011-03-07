@@ -116,41 +116,5 @@ void DbHostInfo::swap(const DbHostInfo &iDbHostInfo)
     mDbDriver = iDbHostInfo.mDbDriver;
 }
 
-/*
- * Create connection to the database
- * \todo Move this function to DatabaseManager
- */
-//bool
-//createConnection(const DbHostInfo &iDbHostInfo)
-//{
-//    bool success = false;
-//    QSqlDatabase db = QSqlDatabase::addDatabase(iDbHostInfo.dbDriver(), "mainConnect");
-//    db.setDatabaseName(iDbHostInfo.dbName());
-//
-//    // if SQLite db
-//    if (QString("QSQLITE") == iDbHostInfo.dbDriver()) {
-//        // check only if fie exists
-//        if ((success = QFile::exists(iDbHostInfo.dbName()))) {
-//            db.open();
-//        }
-//    // of other DBMS
-//    } else {
-//        // check credentials and host
-//        db.setHostName(iDbHostInfo.address());
-//        db.setUserName(iDbHostInfo.user());
-//        db.setPassword(iDbHostInfo.password());
-//        db.setPort(iDbHostInfo.port());
-//
-//        if ((success = db.open())) {
-//            // initialize Database for further use and get schemas
-//            using namespace DbObjects::Common;
-//            Database *dbInst = Database::instance();
-//            dbInst->setSqlDriver(iDbHostInfo.dbDriver());
-//        }
-//    }
-//
-//    return success;
-//}
-
-
 } // namespace Connect
+

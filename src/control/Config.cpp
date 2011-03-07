@@ -30,6 +30,8 @@
 #include <consts.h>
 #include <control/Config.h>
 
+#include <QDir>
+
 namespace Control
 {
 
@@ -100,7 +102,14 @@ Config::sessionDir() const
 void
 Config::setSessionDir(const QString &iSessionDir)
 {
-    mSettings.setValue(Consts::PREFS_GRP + "/" + Consts::SESSION_DIR_SETTING, iSessionDir);
+    QString sessionDir(iSessionDir);
+    // if the path is relative, then it should be relative according to user's home
+    if (QDir::isRelativePath(sessionDir)) {
+        sessionDir.prepend(QDir::homePath());
+    }
+//    sessionDir.append("/");
+
+    mSettings.setValue(Consts::PREFS_GRP + "/" + Consts::SESSION_DIR_SETTING, sessionDir);
 }
 
 /*!

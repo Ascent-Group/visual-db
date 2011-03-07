@@ -51,7 +51,7 @@
 #include <gui/DescriptionWidget.h>
 #include <gui/graphicsitems/Legend.h>
 #include <gui/MainWindow.h>
-#include <gui/OptionsDialog.h>
+//#include <gui/OptionsDialog.h>
 #include <gui/SceneWidget.h>
 #include <gui/SqlConnectionDialog.h>
 #include <gui/SqlWidget.h>
@@ -270,21 +270,6 @@ MainWindow::setEnableForActions(bool iFlag)
 
     ui.mReloadDataAction->setEnabled(iFlag);
 }
-
-/*!
- * \brief Show options dialog
- */
-//void
-//MainWindow::showOptionsDialog()
-//{
-//    OptionsDialog optionsDialog;
-//
-//    // no need to check for accept/reject
-//    // this will be done by optionsDialog's accept method
-//    if (optionsDialog.exec() == QDialog::Accepted) {
-//        updateSessionMenu();
-//    }
-//}
 
 /*!
  * \brief Show print preview dialog

@@ -77,6 +77,8 @@ ConfigTest::sessionDirTest()
 
     QCOMPARE(cfg.sessionDir(), newSessionDir);
     QCOMPARE(Config().sessionDir(), cfg.sessionDir());
+
+    // \todo Add testing for relative paths
 }
 
 void

@@ -49,7 +49,7 @@ class ViewFactory;
 /*!
  * \class Factories
  * \headerfile common/Factories.h
- * \brief Defines a collection of abstract factories for all database objects
+ * \brief Defines a collection of factories with factory methods for all database objects
  */
 class Factories
 {

@@ -35,10 +35,10 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QMessageBox>
-#include <QNetworkProxy>
+//#include <QNetworkProxy>
 #include <QPushButton>
 #include <QSqlDatabase>
-#include <QSqlError>
+//#include <QSqlError>
 
 #include <QtDebug>
 
@@ -47,10 +47,8 @@ namespace Gui {
 /*!
  * Constructor
  */
-SqlConnectionDialog::SqlConnectionDialog(bool iLoadSession,
-        QWidget *iParent)
+SqlConnectionDialog::SqlConnectionDialog(bool iLoadSession, QWidget *iParent)
     : QDialog(iParent)
-//    , mConnectionFailed(true)
 {
     ui.setupUi(this);
 

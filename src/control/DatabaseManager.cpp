@@ -54,7 +54,16 @@ DatabaseManager::DatabaseManager()
  */
 DatabaseManager::~DatabaseManager()
 {
-    // \todo clear registries
+    foreach (DbObjects::Common::Database *db, mRegistry.values()) {
+        remove(db);
+    }
+    mRegistry.clear();
+
+    qDeleteAll(mFactories);
+    mFactories.clear();
+
+    qDeleteAll(mTools);
+    mTools.clear();
 }
 
 /*!

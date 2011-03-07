@@ -27,13 +27,16 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <control/Config.h>
 #include <control/Context.h>
 #include <control/Director.h>
 #include <gui/MainWindow.h>
+#include <gui/OptionsDialog.h>
 #include <gui/SceneWidget.h>
 #include <gui/SqlConnectionDialog.h>
 #include <gui/TreeWidget.h>
 
+#include <QFileDialog>
 #include <QMessageBox>
 //#include <QTimer>
 
@@ -84,7 +87,9 @@ Director::~Director()
 {
     qDebug() << "Director::~Director>";
     // clear the registry
-//    qDeleteAll(mRegistry);
+    foreach (Control::Context *ctx, mRegistry.values()) {
+        mDbMgr.remove(ctx);
+    }
     mRegistry.clear();
 
     // \note we don't delete mainwindow since it has delete-on-close attribute  set
@@ -341,13 +346,20 @@ Director::connectionDialogRequested()
 }
 
 /*!
- * Slot for handling options dialog request. Executed when a user chooses options... in
- * file dialog.
+ * Slot for handling options dialog request. Executed when a user chooses Options... in
+ * file menu.
  */
 void
 Director::optionsDialogRequested()
 {
-    // \todo Implement
+    Gui::OptionsDialog optionsDialog;
+
+    // this will be done by optionsDialog's accept method
+    if (QDialog::Accepted == optionsDialog.exec()) {
+        // \fixme where we should update session menu?
+//        mMainWindow->updateSessionMenu();
+    }
+
 }
 
 /*!
@@ -386,10 +398,25 @@ void
 Director::saveSessionRequested()
 {
     qDebug() << "Director::saveSessionRequested>";
-    // \todo Implement
-    // \todo Go through all contexts
-    // \todo save session for each context
-    // this includes saving connection infos, tab infos, widget sizes, etc.
+    using namespace Control;
+
+    Config cfg;
+    // check whether the default directory for saved sessions exists
+    QString sessionDirPath(cfg.sessionDir());
+
+    // create session dir if not it doesn't exist
+    if (!QDir(sessionDirPath).exists()) {
+        QDir().mkpath(sessionDirPath);
+    }
+
+    QString fileName = QFileDialog::getSaveFileName(mMainWindow, tr("Save session..."), sessionDirPath, tr("Session files (*.vdb)"));
+    if (!fileName.isEmpty()) {
+        // \todo Go through all contexts
+        foreach (Context *ctx, mRegistry.values()) {
+            // \todo save session for each context
+            // this includes saving connection infos, tab infos, widget sizes, etc.
+        }
+    }
 }
 
 /*!

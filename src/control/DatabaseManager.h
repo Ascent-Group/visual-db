@@ -71,8 +71,6 @@ class DatabaseManager
         QMap<DbObjects::Common::Database::SqlDriverType, DbObjects::Common::Factories *> mFactories;
         QMap<DbObjects::Common::Database::SqlDriverType, DbObjects::Common::Tools *> mTools;
 
-//        QMap<QString, QMap<DbObjects::Common::DbOject::Type, DbObjects::Factory>>
-
         Control::Context* establishConnection(const Connect::ConnectionInfo &, QString &);
         void reloadData(Control::Context *) const;
 

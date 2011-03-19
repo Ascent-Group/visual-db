@@ -69,6 +69,7 @@ class MainWindow : public QMainWindow
         void addTree(Gui::TreeWidget *, const QString &) const;
 
         Gui::TreeWidget* activeTree() const;
+        void setEnableForActions(bool iFlag);
 
     public slots:
         void printMsg(const QString &) const;
@@ -96,7 +97,6 @@ class MainWindow : public QMainWindow
 
     private:
         void createActions();
-        void setEnableForActions(bool iFlag);
         void createMenus();
         void updateSessionMenu();
         void createStatusBar();

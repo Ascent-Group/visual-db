@@ -72,7 +72,7 @@ class DatabaseManager
         QMap<DbObjects::Common::Database::SqlDriverType, DbObjects::Common::Tools *> mTools;
 
         Control::Context* establishConnection(const Connect::ConnectionInfo &, QString &);
-        void reloadData(Control::Context *) const;
+        bool reloadData(Control::Context *) const;
 
         bool add(const Control::Context *, DbObjects::Common::Database *);
         bool remove(const Control::Context *);

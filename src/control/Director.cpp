@@ -30,6 +30,7 @@
 #include <control/Config.h>
 #include <control/Context.h>
 #include <control/Director.h>
+#include <control/Session.h>
 #include <gui/MainWindow.h>
 #include <gui/OptionsDialog.h>
 #include <gui/SceneWidget.h>
@@ -374,7 +375,19 @@ Director::reloadDataRequested()
         // find the active context
         Control::Context *ctx = findContext(tree);
         // do reload for this context
-        mDbMgr.reloadData(ctx);
+        if (!mDbMgr.reloadData(ctx)) {
+            // \todo Error message should be taken from dbMgr, something like lastError().
+            QString errorMsg("Unable to reload data.");
+            emit logMessageRequest(errorMsg);
+
+            QMessageBox::critical(0, tr("Update error"), errorMsg, QMessageBox::Ok);
+
+            return;
+        }
+
+        // \todo activate buttons on toolbar
+        mMainWindow->setEnableForActions(true);
+        // \todo get updated data and notify clients
     }
 
     emit requestProcessed();
@@ -388,6 +401,10 @@ Director::disconnectRequested()
 {
     Context *ctx/* \todo get active context */;
     mDbMgr.remove(ctx);
+
+    if (mRegistry.isEmpty()) {
+        mMainWindow->setEnableForActions(false);
+    }
 }
 
 /*!
@@ -411,10 +428,14 @@ Director::saveSessionRequested()
 
     QString fileName = QFileDialog::getSaveFileName(mMainWindow, tr("Save session..."), sessionDirPath, tr("Session files (*.vdb)"));
     if (!fileName.isEmpty()) {
-        // \todo Go through all contexts
+        // Go through all contexts
         foreach (Context *ctx, mRegistry.values()) {
-            // \todo save session for each context
-            // this includes saving connection infos, tab infos, widget sizes, etc.
+            // save session for each context
+            Session session;
+            session.setFile(fileName);
+
+            // \todo this includes saving connection infos, tab infos, widget sizes, etc.
+            session.setConnectionInfo(ctx->connectionInfo());
         }
     }
 }

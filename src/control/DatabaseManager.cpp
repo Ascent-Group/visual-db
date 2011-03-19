@@ -130,8 +130,11 @@ DatabaseManager::establishConnection(const Connect::ConnectionInfo &iInfo, QStri
  * Reloads database for for the specified context.
  *
  * \param[in] iCtx - Context whose data is going to be reloaded
+ *
+ * \return true - If data for the given context has been successfully reloaded
+ * \return false - Otherwise
  */
-void
+bool
 DatabaseManager::reloadData(Control::Context *iCtx) const
 {
     using namespace DbObjects::Common;
@@ -147,9 +150,7 @@ DatabaseManager::reloadData(Control::Context *iCtx) const
     Q_ASSERT(0 != factories);
     Q_ASSERT(0 != tools);
 
-    db->loadData(factories, tools);
-
-    // \todo notify for data updates
+    return db->loadData(factories, tools);
 }
 
 /*!

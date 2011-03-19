@@ -66,9 +66,16 @@ class MainWindow : public QMainWindow
         ~MainWindow();
 
         void addScene(Gui::SceneWidget *, const QString &) const;
+        void removeScene(Gui::SceneWidget *);
+        void activateScene(Gui::SceneWidget *) const;
+
         void addTree(Gui::TreeWidget *, const QString &) const;
+        void activateTree(Gui::TreeWidget *) const;
 
         Gui::TreeWidget* activeTree() const;
+
+
+
         void setEnableForActions(bool iFlag);
 
     public slots:
@@ -124,18 +131,28 @@ class MainWindow : public QMainWindow
         void showDatabaseTree();
         void closeLogPanel();
         void showLogPanel();
-        void printPreview(QPrinter*);
+        void printPreview(QPrinter *);
         void showPrintPreviewDialog();
         void showPrintDialog();
+
+        void treeTabCloseRequested(int);
+        void treeTabChanged(int);
+        
+        void tabChanged(int);
 
     signals:
         void connectionDialogRequest();
         void reloadDataRequest();
-        void disconnectRequest();
+//        void disconnectRequest();
         void optionsDialogRequest();
 
         void saveSessionRequest();
         void exitRequest();
+
+        void treeTabClosed(Gui::TreeWidget *iTree);
+        void treeTabChanged(Gui::TreeWidget *iTree);
+
+        void tabChanged(Gui::SceneWidget *iScene);
 };
 
 }

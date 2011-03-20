@@ -438,6 +438,7 @@ SceneWidget::showControlWidget(bool iFlag)
  * \brief Get xml structure of scene
  *
  * \param[in] iDoc - Xml dom document
+ * \param[in] iElement - root element for SceneWidget
  * \param[in] iShowGrid - Is grid shown or not
  * \param[in] iDivideIntoPages - Is scene divided into pages or not
  * \param[in] iShowLegend - Is legend shown or not
@@ -445,10 +446,10 @@ SceneWidget::showControlWidget(bool iFlag)
  *
  * \return Filled with scene info xml dom element
  */
-QDomElement
-SceneWidget::toXml(QDomDocument &iDoc, bool iShowGrid, bool iDivideIntoPages, bool iShowLegend, bool iShowControlWidget)
+void
+SceneWidget::toXml(QDomDocument &iDoc, QDomElement &iElement, bool iShowGrid, bool iDivideIntoPages, bool iShowLegend, bool iShowControlWidget)
 {
-    return mScene->toXml(iDoc, iShowGrid, iDivideIntoPages, iShowLegend, iShowControlWidget);
+    return mScene->toXml(iDoc, iElement, iShowGrid, iDivideIntoPages, iShowLegend, iShowControlWidget);
 }
 
 /*!

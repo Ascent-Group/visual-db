@@ -31,6 +31,7 @@
 #define CONTROL_SESSION_H
 
 #include <connect/ConnectionInfo.h>
+#include <gui/GraphicsScene.h>
 #include <QFile>
 
 namespace Control {
@@ -41,14 +42,11 @@ class Session {
         explicit Session();
         virtual ~Session();
 
-        bool setFile(const QString &iFileName);
-        
-        qint32 connectionsNumber() const;
-        bool setConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo);
-        bool connectionInfo(Connect::ConnectionInfo &oConnectionInfo, qint32 iNumber) const;
+        static bool save(const QString &iSessionFile, const QList<Connect::ConnectionInfo> &iConnectionInfoList, 
+                    const QList<Gui::GraphicsScene> &iGraphicsSceneList);
 
-    private:
-        QFile mFile;
+        static bool load(const QString &oSessionFile, QList<Connect::ConnectionInfo> &oConnectionInfoList,
+                    QList<Gui::GraphicsScene> &oGraphicsSceneList);
 };
 
 }

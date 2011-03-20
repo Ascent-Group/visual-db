@@ -48,6 +48,7 @@
 #include <gui/graphicsitems/TableItem.h>
 #include <gui/graphicsitems/ViewItem.h>
 #include <math.h>
+#include <algorithm>
 
 #include <QDebug>
 
@@ -66,16 +67,7 @@ GraphicsScene::GraphicsScene(QObject *iParent)
       mDiffY(0),
       mStartMovingTimer()
 {
-    using namespace Gui::GraphicsItems;
-
-    setBackgroundBrush(QBrush(Control::Config().backgroundColor()));
-    setSceneRect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-    // \todo We probably should pass this to Legend's constructor, so that graphics scene
-    // takes parentship of it.
-    mLegend = new Legend();
-    mLegend->setZValue(1000);
-
-    connect(&mStartMovingTimer, SIGNAL(timeout()), this, SLOT(movingTimerExpired()));
+    init();
 }
 
 /*!
@@ -93,6 +85,62 @@ GraphicsScene::~GraphicsScene()
     mDbItems.clear();
     mArrows.clear();
     delete mLegend;
+}
+
+GraphicsScene::GraphicsScene(const GraphicsScene &iGraphicsScene)
+    : QGraphicsScene()
+    , mSelectionPath(iGraphicsScene.mSelectionPath)
+    , mMoveMode(iGraphicsScene.mMoveMode)
+    , mOldPos(iGraphicsScene.mOldPos)
+    , mOldRect(iGraphicsScene.mOldRect)
+    , mDiffX(iGraphicsScene.mDiffX)
+    , mDiffY(iGraphicsScene.mDiffY)
+//    , mStartMovingTimer(iGraphicsScene.mStartMovingTimer)
+{
+    init();
+}
+
+GraphicsScene &
+GraphicsScene::operator=(const GraphicsScene &iGraphicsScene)
+{
+    swap(iGraphicsScene);
+    return *this;
+}
+
+void
+GraphicsScene::init()
+{
+    using namespace Gui::GraphicsItems;
+
+    setBackgroundBrush(QBrush(Control::Config().backgroundColor()));
+    setSceneRect(0, 0, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    // \todo We probably should pass this to Legend's constructor, so that graphics scene
+    // takes parentship of it.
+    mLegend = new Legend();
+    mLegend->setZValue(1000);
+
+    connect(&mStartMovingTimer, SIGNAL(timeout()), this, SLOT(movingTimerExpired()));
+}
+
+void 
+GraphicsScene::swap(const GraphicsScene &iGraphicsScene)
+{
+    using std::swap;
+    using Gui::GraphicsItems::Legend;
+    
+    mStartSelect = iGraphicsScene.mStartSelect;
+    mEndSelect = iGraphicsScene.mEndSelect;
+    mSelectionPath = iGraphicsScene.mSelectionPath;
+    mMoveMode = iGraphicsScene.mMoveMode;
+    mLegend = iGraphicsScene.mLegend;
+    mSchemeMenu = iGraphicsScene.mSchemeMenu;
+    mTableMenu = iGraphicsScene.mTableMenu;
+    mDbItems = iGraphicsScene.mDbItems;
+    mArrows = iGraphicsScene.mArrows;
+    mOldPos = iGraphicsScene.mOldPos;
+    mOldRect = iGraphicsScene.mOldRect;
+    mDiffX = mDiffX;
+    mDiffY = mDiffY;
 }
 
 /*!
@@ -1199,6 +1247,7 @@ GraphicsScene::selectAllItemsInSchema()
  * \brief Save scene to xml
  *
  * \param[in] iDoc - Xml dom document
+ * \param[in] iElement - Root element for the scene
  * \param[in] iShowGrid - True if we need to show grid, false otherwise
  * \param[in] iDivideIntoPages - True if we need to divide scene into pages, false otherwise
  * \param[in] iShowLegend - True if we need to show legend, false otherwise
@@ -1206,10 +1255,13 @@ GraphicsScene::selectAllItemsInSchema()
  *
  * \return Filled with scene info xml dom element
  */
-QDomElement
-GraphicsScene::toXml(QDomDocument &iDoc, bool iShowGrid, bool iDivideIntoPages, bool iShowLegend, bool iShowControlWidget) const
+void
+GraphicsScene::toXml(QDomDocument &iDoc, QDomElement &iElement, 
+        bool iShowGrid, bool iDivideIntoPages, bool iShowLegend, bool iShowControlWidget) const
 {
     QDomElement element = iDoc.createElement("scene");
+    iElement.appendChild(element);
+    
     element.setAttribute("grid", iShowGrid);
     element.setAttribute("divideIntoPages", iDivideIntoPages);
     element.setAttribute("legend", iShowLegend);
@@ -1223,8 +1275,6 @@ GraphicsScene::toXml(QDomDocument &iDoc, bool iShowGrid, bool iDivideIntoPages, 
             element.appendChild(toDbObject(item)->toXml(iDoc));
         }
     }
-
-    return element;
 }
 
 /*!

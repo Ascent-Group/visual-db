@@ -41,90 +41,78 @@ Session::~Session()
 {
 }
 
-bool 
-Session::setFile(const QString &iFileName)
+bool
+Session::save(const QString &iSessionFile, const QList<Connect::ConnectionInfo> &iConnectionInfoList, 
+        const QList<Gui::GraphicsScene> &iGraphicsSceneList)
 {
-    mFile.close();
-
-    mFile.setFileName(iFileName);
-    if (!mFile.open(QIODevice::WriteOnly)) {
+    if (iConnectionInfoList.size() != iGraphicsSceneList.size()) {
         return false;
     }
 
-    return true;
-}
-
-qint32
-Session::connectionsNumber() const
-{
-    if (!mFile.isOpen()) {
-        return -1;
-    }
- 
-    QDomDocument doc("VisualDB");
-    // FIXME: remove const_cast
-    if (!doc.setContent(const_cast<QFile *>(&mFile))) {
-        return -1;
-    }
-
-    QDomElement docElem = doc.documentElement();
-    QDomNode child = docElem.firstChild();
-    while (!child.isNull()) {
-        QDomElement element = child.toElement(); // try to convert the node to an element.
-        if (!element.isNull()) {
-            if (element.tagName() == "connections") {
-                return element.attribute("number", "-1").toInt();
-            }
-        }
-    }
-
-    return -1;
-}
-
-bool 
-Session::setConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo)
-{
-    if (!mFile.isOpen()) {
+    QFile file;
+    file.setFileName(iSessionFile);
+    if (!file.open(QIODevice::WriteOnly)) {
         return false;
     }
 
     QDomDocument doc("VisualDB");
     QDomElement root = doc.createElement("visual-db");
     doc.appendChild(root);
-    iConnectionInfo.toXml(doc, root);
-//    root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(),
-//                ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
+
+    for (int i = 0; i < iConnectionInfoList.size(); ++i) {
+        iConnectionInfoList.at(i).toXml(doc, root);
+        iGraphicsSceneList.at(i).toXml(doc, root);
+    }
+
+    QTextStream stream(&file);
+    stream << doc.toString();
 
     return true;
 }
 
-bool 
-Session::connectionInfo(Connect::ConnectionInfo &oConnectionInfo, qint32 iNumber) const
+bool
+Session::load(const QString &iSessionFile, QList<Connect::ConnectionInfo> &oConnectionInfoList,
+        QList<Gui::GraphicsScene> &oGraphicsSceneList)
 {
-    if (!mFile.isOpen()) {
+    using namespace Connect;
+    using namespace Gui;
+
+    oConnectionInfoList.clear();
+    oGraphicsSceneList.clear();
+
+    QFile file;
+    file.setFileName(iSessionFile);
+    if (!file.open(QIODevice::ReadOnly)) {
         return false;
     }
- 
+
     QDomDocument doc("VisualDB");
-    // FIXME: remove const_cast
-    if (!doc.setContent(const_cast<QFile *>(&mFile))) {
+    if (!doc.setContent(&file)) {
+        file.close();
         return false;
     }
+    file.close();
 
     QDomElement docElem = doc.documentElement();
     QDomNode child = docElem.firstChild();
     while (!child.isNull()) {
         QDomElement element = child.toElement(); // try to convert the node to an element.
         if (!element.isNull()) {
-            if (element.tagName() == "connection" + iNumber) {
-                oConnectionInfo.fromXml(element);
-                return true;
+            if (element.tagName() == "connection") {
+                ConnectionInfo connectionInfo;
+                connectionInfo.fromXml(element);
+                oConnectionInfoList.append(connectionInfo);
+            }
+            if (element.tagName() == "scene") {
+                GraphicsScene graphicsScene;
+                graphicsScene.fromXml(element);
+                oGraphicsSceneList.append(graphicsScene);
             }
         }
         child = child.nextSibling();
     }
-   
-    return false;
+
+    return true;
 }
 
 }

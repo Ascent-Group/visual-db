@@ -302,8 +302,6 @@ Director::findScene(Control::Context *iCtx) const
  *
  * \param[in] iLoadSession - Inidicates whether the connection dialog is needed for
  * session restoring or for establishing a new connection.
- *
- * \todo Implement
  */
 void
 Director::showConnectionDialog(bool iLoadSession)
@@ -420,8 +418,7 @@ Director::reloadDataRequested()
         Control::Context *ctx = findContext(tree);
         // do reload for this context
         if (!mDbMgr.reloadData(ctx)) {
-            // \todo Error message should be taken from dbMgr, something like lastError().
-            QString errorMsg("Unable to reload data.");
+            QString errorMsg = mDbMgr.lastError(ctx);
             emit logMessageRequest(errorMsg);
 
             QMessageBox::critical(0, tr("Update error"), errorMsg, QMessageBox::Ok);

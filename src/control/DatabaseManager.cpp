@@ -73,6 +73,11 @@ DatabaseManager::~DatabaseManager()
  * \param[out] oErrorMsg - Text of occured error, if connection to db failed. This text is
  * used for displaying to a user via message box.
  *
+ * \note The caller of this function doesn't need to user lastError(Control::Context *)
+ * function and has to use oErrorMsg parameter, because if some error occurs during
+ * execution of this function it means we don't have a context at all, so we can't get the
+ * error for the context that has not been created.
+ *
  * \return Context for the specified connection info if the connection was successfully
  * established. Otherwise, it return 0;
  */
@@ -288,6 +293,17 @@ DbObjects::Common::Database*
 DatabaseManager::findDatabase(const Control::Context *iContext) const
 {
     return mRegistry.value(iContext);
+}
+
+/*!
+ * \param[in] iCtx - Context whose last error we want to get.
+ *
+ * \return Text of the very last error that occured for the given database.
+ */
+QString
+DatabaseManager::lastError(const Control::Context *iCtx) const
+{
+    return findDatabase(iCtx)->lastError();
 }
 
 } // namespace Control

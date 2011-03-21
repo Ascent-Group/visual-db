@@ -81,6 +81,8 @@ class DatabaseManager
         const Control::Context* findContext(DbObjects::Common::Database *) const;
         DbObjects::Common::Database* findDatabase(const Control::Context *) const;
 
+        QString lastError(const Control::Context *) const;
+
         friend class Director;
 
 };

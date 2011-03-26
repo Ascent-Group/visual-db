@@ -89,7 +89,7 @@ Director::~Director()
     qDebug() << "Director::~Director>";
     // clear the registry
     foreach (Control::Context *ctx, mRegistry.values()) {
-        mDbMgr.remove(ctx);
+        remove(ctx);
     }
     mRegistry.clear();
 
@@ -167,12 +167,9 @@ Director::add(QWidget *iWidget, Control::Context *iContext)
 
     if (!mRegistry.contains(iWidget)) {
         mRegistry.insert(iWidget, iContext);
+
         return true;
     }
-
-    // debug info
-    qDebug() << "Director::add> Registry contains " << mRegistry.values().size() << " contexts";
-    qDebug() << "Director::add> Registry contains " << mRegistry.keys().size() << " widgets";
 
     return false;
 }
@@ -192,6 +189,14 @@ Director::remove(QWidget *iWidget)
         mRegistry.remove(iWidget);
         return true;
     }
+
+#ifdef DEBUG_TRACE
+    qDebug() << "Director::remove>(QWidget *)> Didn't find " << iWidget;
+
+    foreach (QWidget *widget, mRegistry.keys()) {
+        qDebug() << "Director::remove> Still here " << widget;
+    }
+#endif
 
     // We should not get here (in theory). If we got here, then it means that we are
     // trying to unregister a widget that has never been registered, i.e. we missed its
@@ -213,14 +218,19 @@ Director::remove(QWidget *iWidget)
 bool
 Director::remove(Control::Context *iContext)
 {
+    mDbMgr.remove(iContext);
+
     QList<QWidget *>::const_iterator iter = mRegistry.keys(iContext).begin();
+#ifdef DEBUG_TRACE
+    qDebug() << "Director::remove(Context*)> Context's widgets: " << mRegistry.keys(iContext).size();
+#endif
 
     bool flag = true;
-    for (; iter != mRegistry.keys(iContext).end(); ++iter) {
-        flag = (flag && remove(*iter));
+    foreach (QWidget *widget, mRegistry.keys(iContext)) {
+        flag = remove(widget) && flag;
     }
 
-    mDbMgr.remove(iContext);
+    delete iContext;
 
     return flag;
 }
@@ -298,7 +308,7 @@ Director::findScene(Control::Context *iCtx) const
 /*!
  * Used to bring up a connection dialog for further connection establishing. This function
  * can be used either from slot Director::connectionDialogRequested() or from a function
- * that will restore sessions \todo name the mentioned fucntion
+ * that will restore sessions \todo name the mentioned function
  *
  * \param[in] iLoadSession - Inidicates whether the connection dialog is needed for
  * session restoring or for establishing a new connection.
@@ -440,11 +450,12 @@ Director::reloadDataRequested()
 void
 Director::disconnectRequested(Control::Context *iCtx)
 {
-    mDbMgr.remove(iCtx);
-
     mMainWindow->removeScene(findScene(iCtx));
+    remove(iCtx);
 
-    // \todo log message
+    emit logMessageRequest(QString("Disconnected from '<b>%1@%2</b>'")
+            .arg(iCtx->connectionInfo().dbHostInfo().dbName())
+            .arg(iCtx->connectionInfo().dbHostInfo().address()));
 
     if (mRegistry.isEmpty()) {
         mMainWindow->setEnableForActions(false);
@@ -507,7 +518,10 @@ Director::treeTabClosed(Gui::TreeWidget *iTree)
 }
 
 /*!
- * \todo comment
+ * Handles the activation of a tree widget. When this happends the corresponding scene
+ * should come to front.
+ *
+ * \param[in] iTree - Tree widget that came up to front in a tab tree widget.
  */
 void
 Director::treeTabChanged(Gui::TreeWidget *iTree)

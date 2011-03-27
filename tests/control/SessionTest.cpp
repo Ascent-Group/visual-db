@@ -27,6 +27,8 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <control/Session.h>
+#include <connect/ConnectionInfo.h>
 
 void 
 ConnectTest::initTestCase()
@@ -55,13 +57,22 @@ ConnectTest::loadSceneTest()
 void 
 ConnectTest::saveConnectionInfoTest()
 {
-
+    using namespace Control;
+    
+    Session session;
+    ConnectionInfo connectionInfo; 
+   
+    Q_VERIFY(!session.saveConnectionInfo(connectionInfo));
+    
+    session.setFile("test.vdb");
+    session.startWriting();
+    Q_VERIFY(session.saveConnectionInfo(connectionInfo));
 }
 
 void 
 ConnectTest::saveSceneTest()
 {
-
+    
 }
 
 void 
@@ -73,7 +84,7 @@ ConnectTest::sessionFileTest()
 void 
 ConnectTest::setSessionFileTest()
 {
-
+   
 }
 
 void 

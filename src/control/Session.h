@@ -52,8 +52,8 @@ class Session {
 
         bool startReading();
         bool stopReading();
-        bool loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo);
-        bool loadScene(Gui::GraphicsScene &oGraphicsScene);
+        bool loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const;
+        bool loadScene(Gui::GraphicsScene &oGraphicsScene) const;
 
         static bool save(const QString &iSessionFile, const QList<Connect::ConnectionInfo> &iConnectionInfoList, 
                     const QList<Gui::GraphicsScene> &iGraphicsSceneList);
@@ -69,6 +69,11 @@ class Session {
         bool mWasWritingStarted;
         bool mWasReadingStarted;
 };
+
+Session &operator<<(Session &iSession, const Connect::ConnectionInfo &iConnectionInfo);
+Session &operator>>(Session &iSession, Connect::ConnectionInfo &oConnectionInfo);
+Session &operator>>(Session &iSession, const Gui::GraphicsScene &iGraphicsScene);
+Session &operator<<(Session &iSession, Gui::GraphicsScene &oGraphicsScene);
 
 }
 

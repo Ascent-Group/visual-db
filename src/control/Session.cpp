@@ -164,7 +164,7 @@ Session::saveScene(const Gui::GraphicsScene &iGraphicsScene)
 }
 
 bool
-Session::loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo)
+Session::loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const
 {
     if (!mWasReadingStarted) {
         qCritical() << "Error: you should call startReading() method!";
@@ -188,7 +188,7 @@ Session::loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo)
 }
 
 bool
-Session::loadScene(Gui::GraphicsScene &oGraphicsScene)
+Session::loadScene(Gui::GraphicsScene &oGraphicsScene) const
 {
     if (!mWasReadingStarted) {
         qCritical() << "Error: you should call startReading() method!";
@@ -284,6 +284,34 @@ Session::load(const QString &iSessionFile, QList<Connect::ConnectionInfo> &oConn
     }
 
     return true;
+}
+
+Session &
+operator<<(Session &iSession, const Connect::ConnectionInfo &iConnectionInfo)
+{
+    iSession.saveConnectionInfo(iConnectionInfo);
+    return iSession;
+}
+
+Session &
+operator>>(Session &iSession, Connect::ConnectionInfo &oConnectionInfo)
+{
+    iSession.loadConnectionInfo(oConnectionInfo);
+    return iSession;
+}
+
+Session &
+operator<<(Session &iSession, const Gui::GraphicsScene &iGraphicsScene)
+{
+    iSession.saveScene(iGraphicsScene);
+    return iSession;
+}
+
+Session &
+operator>>(Session &iSession, Gui::GraphicsScene &oGraphicsScene)
+{
+    iSession.loadScene(oGraphicsScene);
+    return iSession;
 }
 
 }

@@ -473,14 +473,15 @@ Director::saveSessionRequested()
     QString fileName = QFileDialog::getSaveFileName(mMainWindow, tr("Save session..."), sessionDirPath, tr("Session files (*.vdb)"));
     if (!fileName.isEmpty()) {
         // Go through all contexts
+        Session session(fileName);
+        session.startWriting();
         foreach (Context *ctx, mRegistry.values()) {
             // save session for each context
-            Session session;
-            session.setFile(fileName);
 
             // \todo this includes saving connection infos, tab infos, widget sizes, etc.
-            session.setConnectionInfo(ctx->connectionInfo());
+            session.saveConnectionInfo(ctx->connectionInfo());
         }
+        session.stopWriting();
     }
 }
 

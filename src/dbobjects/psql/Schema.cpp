@@ -66,6 +66,10 @@ Schema::~Schema()
 bool
 Schema::loadData()
 {
+    // \note there is an assert instead of if because having no parent database is totally
+    // unacceptable and deserves a crash.
+    Q_ASSERT(0 != mDatabase);
+
     if (mIsLoaded) {
         return true;
     }

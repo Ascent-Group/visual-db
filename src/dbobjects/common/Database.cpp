@@ -643,6 +643,15 @@ Database::resetData()
 //    mDeletedObjects.clear();
 }
 
+/*!
+ * \return Text of the very last error that occured for the given database.
+ */
+QString
+Database::lastError() const
+{
+    return mDbHandle.lastError().text();
+}
+
 } // namespace Common
 
 } // namespace DbObjects

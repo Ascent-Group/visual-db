@@ -41,6 +41,8 @@
 namespace Gui
 {
 class MainWindow;
+class SceneWidget;
+class TreeWidget;
 }
 
 namespace Control
@@ -92,7 +94,11 @@ class Director : public QObject
         Control::Context* findContext(QWidget *) const;
         quint32 findWidgets(Control::Context *, QVector<QWidget*> &oWidgets) const;
 
+        Gui::TreeWidget* findTree(Control::Context *) const;
+        Gui::SceneWidget* findScene(Control::Context *) const;
+
         void showConnectionDialog(bool iLoadSession);
+        void disconnectRequested(Control::Context *);
 
     private slots:
         // FSM slots
@@ -102,11 +108,15 @@ class Director : public QObject
         // slots for processing requests from ui
         void connectionDialogRequested();
         void reloadDataRequested();
-        void disconnectRequested();
         void optionsDialogRequested();
 
         void saveSessionRequested();
         void exitRequested();
+
+        void treeTabClosed(Gui::TreeWidget *iTree);
+        void treeTabChanged(Gui::TreeWidget *iTree);
+
+        void tabChanged(Gui::SceneWidget *iScene);
 
     signals:
         // signals for internal use

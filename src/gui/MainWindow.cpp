@@ -33,15 +33,12 @@
 #include <QDomDocument>
 #include <QDomElement>
 #include <QFileDialog>
-//#include <QFutureWatcher>
 #include <QMessageBox>
 #include <QPainter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include <QPrinter>
 #include <QProgressBar>
-//#include <QProgressDialog>
-//#include <QSqlDatabase>
 #include <QStatusBar>
 #include <QTime>
 #include <QUndoCommand>
@@ -51,7 +48,6 @@
 #include <gui/DescriptionWidget.h>
 #include <gui/graphicsitems/Legend.h>
 #include <gui/MainWindow.h>
-//#include <gui/OptionsDialog.h>
 #include <gui/SceneWidget.h>
 #include <gui/SqlConnectionDialog.h>
 #include <gui/SqlWidget.h>
@@ -100,6 +96,11 @@ MainWindow::MainWindow()
     connect(ui.mDatabaseTreeWidget, SIGNAL(closed()), this, SLOT(closeDatabaseTree()));
     connect(ui.mLogPanelWidget, SIGNAL(shown()), this, SLOT(showLogPanel()));
     connect(ui.mDatabaseTreeWidget, SIGNAL(shown()), this, SLOT(showDatabaseTree()));
+
+    connect(ui.mTreeTabWidget, SIGNAL(tabCloseRequested(int)), this, SLOT(treeTabCloseRequested(int)));
+    connect(ui.mTreeTabWidget, SIGNAL(currentChanged(int)), this, SLOT(treeTabChanged(int)));
+
+    connect(ui.mTabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
 }
 
 /*!
@@ -133,6 +134,31 @@ MainWindow::addScene(Gui::SceneWidget *iScene, const QString &iTabTitle) const
 }
 
 /*!
+ * This function is used when we close the corresponding tree tab, i.e. disconnecting.
+ *
+ * \param[in] iScene - Scene whose tab we are going to close.
+ */
+void
+MainWindow::removeScene(Gui::SceneWidget *iScene)
+{
+    ui.mTabWidget->removeTab(ui.mTabWidget->indexOf(iScene));
+}
+
+/*!
+ * This function is used when a corresponding tree tab becomes active, i.e. activated by
+ * user.
+ *
+ * \param[in] iScene - Scene to bring up to front
+ */
+void
+MainWindow::activateScene(Gui::SceneWidget *iScene) const
+{
+    if (0 != iScene) {
+        ui.mTabWidget->setCurrentIndex(ui.mTabWidget->indexOf(iScene));
+    }
+}
+
+/*!
  * Adds a tab with tree
  *
  * \see note for MainWindow::addTree
@@ -144,6 +170,20 @@ void
 MainWindow::addTree(Gui::TreeWidget *iTree, const QString &iTabTitle) const
 {
     ui.mTreeTabWidget->addTab(iTree, iTabTitle);
+}
+
+/*!
+ * This function is used when a corresponding scene tab becomes active, i.e. activated by
+ * user.
+ *
+ * \param[in] iTree - Tree widget to bring up to front
+ */
+void
+MainWindow::activateTree(Gui::TreeWidget *iTree) const
+{
+    if (0 != iTree) {
+        ui.mTreeTabWidget->setCurrentIndex(ui.mTreeTabWidget->indexOf(iTree));
+    }
 }
 
 /*!
@@ -299,6 +339,43 @@ MainWindow::showPrintDialog()
     }
 #endif
 #endif
+}
+
+/*!
+ * Slot for handling tree tab closing.
+ *
+ * \param[in] iIndex - Index of a tab that is about to be closed.
+ */
+void
+MainWindow::treeTabCloseRequested(int iIndex)
+{
+    Gui::TreeWidget *tree = dynamic_cast<Gui::TreeWidget*>(ui.mTreeTabWidget->widget(iIndex));
+    ui.mTreeTabWidget->removeTab(iIndex);
+    emit treeTabClosed(tree);
+}
+
+/*!
+ * Slot for handling tree tab switch.
+ *
+ * \param[in] iIndex - Index of a tab that became active
+ */
+void
+MainWindow::treeTabChanged(int iIndex)
+{
+    Gui::TreeWidget *tree = dynamic_cast<Gui::TreeWidget*>(ui.mTreeTabWidget->widget(iIndex));
+    emit treeTabChanged(tree);
+}
+
+/*!
+ * \todo Comment
+ */
+void
+MainWindow::tabChanged(int iIndex)
+{
+    Gui::SceneWidget *scene = dynamic_cast<Gui::SceneWidget*>(ui.mTabWidget->widget(iIndex));
+    if (0 != scene) {
+        emit tabChanged(scene);
+    }
 }
 
 /*!

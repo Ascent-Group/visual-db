@@ -30,6 +30,7 @@
 #include <control/Config.h>
 #include <control/Context.h>
 #include <control/Director.h>
+#include <control/Session.h>
 #include <gui/MainWindow.h>
 #include <gui/OptionsDialog.h>
 #include <gui/SceneWidget.h>
@@ -124,10 +125,15 @@ Director::initialize()
         mMainWindow = new MainWindow();
         connect(mMainWindow, SIGNAL(connectionDialogRequest()), this, SLOT(connectionDialogRequested()));
         connect(mMainWindow, SIGNAL(reloadDataRequest()), this, SLOT(reloadDataRequested()));
-        connect(mMainWindow, SIGNAL(disconnectRequest()), this, SLOT(disconnectRequested()));
+//        connect(mMainWindow, SIGNAL(disconnectRequest()), this, SLOT(disconnectRequested()));
         connect(mMainWindow, SIGNAL(optionsDialogRequest()), this, SLOT(optionsDialogRequested()));
         connect(mMainWindow, SIGNAL(saveSessionRequest()), this, SLOT(saveSessionRequested()));
         connect(mMainWindow, SIGNAL(exitRequest()), this, SLOT(exitRequested()));
+
+        connect(mMainWindow, SIGNAL(treeTabClosed(Gui::TreeWidget *)), this, SLOT(treeTabClosed(Gui::TreeWidget *)));
+        connect(mMainWindow, SIGNAL(treeTabChanged(Gui::TreeWidget *)), this, SLOT(treeTabChanged(Gui::TreeWidget *)));
+
+        connect(mMainWindow, SIGNAL(tabChanged(Gui::SceneWidget *)), this, SLOT(tabChanged(Gui::SceneWidget *)));
 
         connect(this, SIGNAL(logMessageRequest(const QString &)),
                 mMainWindow, SLOT(printMsg(const QString &)));
@@ -163,6 +169,10 @@ Director::add(QWidget *iWidget, Control::Context *iContext)
         mRegistry.insert(iWidget, iContext);
         return true;
     }
+
+    // debug info
+    qDebug() << "Director::add> Registry contains " << mRegistry.values().size() << " contexts";
+    qDebug() << "Director::add> Registry contains " << mRegistry.keys().size() << " widgets";
 
     return false;
 }
@@ -239,15 +249,50 @@ Director::findContext(QWidget *iWidget) const
 quint32
 Director::findWidgets(Control::Context *iContext, QVector<QWidget*> &oWidgets) const
 {
-    QList<QWidget *>::const_iterator iter = mRegistry.keys(iContext).begin();
-
     quint32 count = 0;
-    for (; iter != mRegistry.keys(iContext).end(); ++iter) {
-        oWidgets.push_back(*iter);
+    foreach (QWidget *widget, mRegistry.keys(iContext)) {
+        oWidgets.push_back(widget);
         ++count;
     }
 
     return count;
+}
+
+/*!
+ *
+ */
+Gui::TreeWidget*
+Director::findTree(Control::Context *iCtx) const
+{
+    QVector<QWidget*> widgets;
+    findWidgets(iCtx, widgets);
+
+    int i = 0;
+    Gui::TreeWidget *tree = 0;
+    while (i < widgets.size() && 0 == (tree = dynamic_cast<Gui::TreeWidget*>(widgets.at(i)))) {
+        ++i;
+    }
+
+    return tree;
+}
+
+/*!
+ *
+ */
+Gui::SceneWidget*
+Director::findScene(Control::Context *iCtx) const
+{
+    QVector<QWidget*> widgets;
+    findWidgets(iCtx, widgets);
+
+    int i = 0;
+    Gui::SceneWidget *scene = 0;
+    while (i < widgets.size() && 0 == (scene = dynamic_cast<Gui::SceneWidget*>(widgets.at(i)))) {
+        ++i;
+    }
+
+//    qDebug() << "Director::findScene> scene = " << widgets.at(i);
+    return scene;
 }
 
 /*!
@@ -257,8 +302,6 @@ Director::findWidgets(Control::Context *iContext, QVector<QWidget*> &oWidgets) c
  *
  * \param[in] iLoadSession - Inidicates whether the connection dialog is needed for
  * session restoring or for establishing a new connection.
- *
- * \todo Implement
  */
 void
 Director::showConnectionDialog(bool iLoadSession)
@@ -306,13 +349,13 @@ Director::showConnectionDialog(bool iLoadSession)
 
     // create scene for it and register it
     SceneWidget *scene = new SceneWidget();
-    mMainWindow->addScene(scene, "Scene: " + tabTitle);
     add(scene, ctx);
+    mMainWindow->addScene(scene, "Scene: " + tabTitle);
 
     // create tree for it and register it
     TreeWidget *tree = new TreeWidget();
-    mMainWindow->addTree(tree, tabTitle);
     add(tree, ctx);
+    mMainWindow->addTree(tree, tabTitle);
 
     reloadDataRequested();
 }
@@ -374,7 +417,18 @@ Director::reloadDataRequested()
         // find the active context
         Control::Context *ctx = findContext(tree);
         // do reload for this context
-        mDbMgr.reloadData(ctx);
+        if (!mDbMgr.reloadData(ctx)) {
+            QString errorMsg = mDbMgr.lastError(ctx);
+            emit logMessageRequest(errorMsg);
+
+            QMessageBox::critical(0, tr("Update error"), errorMsg, QMessageBox::Ok);
+
+            return;
+        }
+
+        // \todo activate buttons on toolbar
+        mMainWindow->setEnableForActions(true);
+        // \todo get updated data and notify clients
     }
 
     emit requestProcessed();
@@ -384,10 +438,17 @@ Director::reloadDataRequested()
  * Slot for handling disconnect request. Executed when a user clicks 'Disconnect button'.
  */
 void
-Director::disconnectRequested()
+Director::disconnectRequested(Control::Context *iCtx)
 {
-    Context *ctx/* \todo get active context */;
-    mDbMgr.remove(ctx);
+    mDbMgr.remove(iCtx);
+
+    mMainWindow->removeScene(findScene(iCtx));
+
+    // \todo log message
+
+    if (mRegistry.isEmpty()) {
+        mMainWindow->setEnableForActions(false);
+    }
 }
 
 /*!
@@ -411,10 +472,14 @@ Director::saveSessionRequested()
 
     QString fileName = QFileDialog::getSaveFileName(mMainWindow, tr("Save session..."), sessionDirPath, tr("Session files (*.vdb)"));
     if (!fileName.isEmpty()) {
-        // \todo Go through all contexts
+        // Go through all contexts
         foreach (Context *ctx, mRegistry.values()) {
-            // \todo save session for each context
-            // this includes saving connection infos, tab infos, widget sizes, etc.
+            // save session for each context
+            Session session;
+            session.setFile(fileName);
+
+            // \todo this includes saving connection infos, tab infos, widget sizes, etc.
+            session.setConnectionInfo(ctx->connectionInfo());
         }
     }
 }
@@ -430,6 +495,33 @@ Director::exitRequested()
     // \todo disconnect
     // \todo Do cleanup
 //    qApp->exit();
+}
+
+/*!
+ * \todo comment
+ */
+void
+Director::treeTabClosed(Gui::TreeWidget *iTree)
+{
+    disconnectRequested(findContext(iTree));
+}
+
+/*!
+ * \todo comment
+ */
+void
+Director::treeTabChanged(Gui::TreeWidget *iTree)
+{
+    mMainWindow->activateScene(findScene(findContext(iTree)));
+}
+
+/*!
+ *
+ */
+void
+Director::tabChanged(Gui::SceneWidget *iScene)
+{
+    mMainWindow->activateTree(findTree(findContext(iScene)));
 }
 
 } // namespace Control

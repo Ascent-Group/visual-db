@@ -10,6 +10,7 @@
 /* control */
 #include <control/ConfigTest.h>
 #include <control/ContextTest.h>
+#include <control/DirectorTest.h>
 #endif
 
 /* gui/behaviour */
@@ -158,6 +159,9 @@ int main(int argc, char *argv[])
 
     ContextTest contextTest;
     QTest::qExec(&contextTest, argc, argv);
+
+    DirectorTest directorTest;
+    QTest::qExec(&directorTest, argc, argv);
 #endif
 
 #if TEST_GUI

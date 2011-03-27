@@ -148,6 +148,8 @@ class Database
         virtual bool loadData(Factories *iFactories, Tools *iTools);
         virtual void resetData();
 
+        QString lastError() const;
+
     private:
         // \todo add function for query execution that will use this handle
         QSqlDatabase mDbHandle;

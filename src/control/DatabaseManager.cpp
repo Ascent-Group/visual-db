@@ -228,6 +228,7 @@ DatabaseManager::remove(const Control::Context *iContext)
 {
     if (mRegistry.contains(iContext)) {
         DbObjects::Common::Database *database = mRegistry.value(iContext);
+        database->resetData();
         delete database;
 
         iContext->dbHandle().close();

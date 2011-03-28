@@ -118,7 +118,6 @@ class MainWindow : public QMainWindow
     private slots:
         void addCommand(QUndoCommand*);
         bool saveSession();
-        void loadSession();
         void loadLastSession();
         void setFullScreen(bool);
         void queryData();
@@ -146,6 +145,7 @@ class MainWindow : public QMainWindow
 //        void disconnectRequest();
         void optionsDialogRequest();
 
+        void loadSessionRequest();
         void saveSessionRequest();
         void exitRequest();
 

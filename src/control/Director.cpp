@@ -89,7 +89,7 @@ Director::~Director()
     qDebug() << "Director::~Director>";
     // clear the registry
     foreach (Control::Context *ctx, mRegistry.values()) {
-        mDbMgr.remove(ctx);
+        remove(ctx);
     }
     mRegistry.clear();
 
@@ -127,6 +127,7 @@ Director::initialize()
         connect(mMainWindow, SIGNAL(reloadDataRequest()), this, SLOT(reloadDataRequested()));
 //        connect(mMainWindow, SIGNAL(disconnectRequest()), this, SLOT(disconnectRequested()));
         connect(mMainWindow, SIGNAL(optionsDialogRequest()), this, SLOT(optionsDialogRequested()));
+        connect(mMainWindow, SIGNAL(loadSessionRequest()), this, SLOT(loadSessionRequested()));
         connect(mMainWindow, SIGNAL(saveSessionRequest()), this, SLOT(saveSessionRequested()));
         connect(mMainWindow, SIGNAL(exitRequest()), this, SLOT(exitRequested()));
 
@@ -145,6 +146,9 @@ Director::initialize()
     }
 
     emit initializationComplete();
+
+    // \todo check the flag for auto session restoring
+    //restoreSession(lastSessionFileName);
     return true;
 }
 
@@ -167,12 +171,9 @@ Director::add(QWidget *iWidget, Control::Context *iContext)
 
     if (!mRegistry.contains(iWidget)) {
         mRegistry.insert(iWidget, iContext);
+
         return true;
     }
-
-    // debug info
-    qDebug() << "Director::add> Registry contains " << mRegistry.values().size() << " contexts";
-    qDebug() << "Director::add> Registry contains " << mRegistry.keys().size() << " widgets";
 
     return false;
 }
@@ -192,6 +193,14 @@ Director::remove(QWidget *iWidget)
         mRegistry.remove(iWidget);
         return true;
     }
+
+#ifdef DEBUG_TRACE
+    qDebug() << "Director::remove>(QWidget *)> Didn't find " << iWidget;
+
+    foreach (QWidget *widget, mRegistry.keys()) {
+        qDebug() << "Director::remove> Still here " << widget;
+    }
+#endif
 
     // We should not get here (in theory). If we got here, then it means that we are
     // trying to unregister a widget that has never been registered, i.e. we missed its
@@ -213,14 +222,19 @@ Director::remove(QWidget *iWidget)
 bool
 Director::remove(Control::Context *iContext)
 {
+    mDbMgr.remove(iContext);
+
     QList<QWidget *>::const_iterator iter = mRegistry.keys(iContext).begin();
+#ifdef DEBUG_TRACE
+    qDebug() << "Director::remove(Context*)> Context's widgets: " << mRegistry.keys(iContext).size();
+#endif
 
     bool flag = true;
-    for (; iter != mRegistry.keys(iContext).end(); ++iter) {
-        flag = (flag && remove(*iter));
+    foreach (QWidget *widget, mRegistry.keys(iContext)) {
+        flag = remove(widget) && flag;
     }
 
-    mDbMgr.remove(iContext);
+    delete iContext;
 
     return flag;
 }
@@ -298,7 +312,7 @@ Director::findScene(Control::Context *iCtx) const
 /*!
  * Used to bring up a connection dialog for further connection establishing. This function
  * can be used either from slot Director::connectionDialogRequested() or from a function
- * that will restore sessions \todo name the mentioned fucntion
+ * that will restore sessions \todo name the mentioned function
  *
  * \param[in] iLoadSession - Inidicates whether the connection dialog is needed for
  * session restoring or for establishing a new connection.
@@ -337,9 +351,8 @@ Director::showConnectionDialog(bool iLoadSession)
     // \todo save context's connection info
 
     // if we got here, then we have a valid ctx
-    emit logMessageRequest(QString("Connected to '<b>%1@%2</b> on behalf of <b>%3</b>'")
-            .arg(ctx->connectionInfo().dbHostInfo().dbName())
-            .arg(ctx->connectionInfo().dbHostInfo().address())
+    emit logMessageRequest(QString("Connected to '<b>%1</b> on behalf of <b>%2</b>'.")
+            .arg(connectionName(ctx))
             .arg(ctx->connectionInfo().dbHostInfo().user()));
 
     QString tabTitle = QString("%1@%2 (%3)")
@@ -426,9 +439,12 @@ Director::reloadDataRequested()
             return;
         }
 
-        // \todo activate buttons on toolbar
-        mMainWindow->setEnableForActions(true);
         // \todo get updated data and notify clients
+//        QList<DbObject*> newObjects;
+//        mDbMgr->updatedObjects(iCtx, );
+//        tree->update();
+
+        mMainWindow->setEnableForActions(true);
     }
 
     emit requestProcessed();
@@ -440,11 +456,11 @@ Director::reloadDataRequested()
 void
 Director::disconnectRequested(Control::Context *iCtx)
 {
-    mDbMgr.remove(iCtx);
-
     mMainWindow->removeScene(findScene(iCtx));
+    remove(iCtx);
 
-    // \todo log message
+    emit logMessageRequest(QString("Disconnected from '<b>%1</b>'.")
+            .arg(connectionName(iCtx)));
 
     if (mRegistry.isEmpty()) {
         mMainWindow->setEnableForActions(false);
@@ -452,8 +468,28 @@ Director::disconnectRequested(Control::Context *iCtx)
 }
 
 /*!
+ * Slot for handling request to load session. Executed when user chooses to load session
+ * from menu.
+ */
+void
+Director::loadSessionRequested()
+{
+    QString fileName = QFileDialog::getOpenFileName(0,
+            tr("Open session..."),
+            Control::Config().sessionDir(),
+            tr("Session files (*.vdb)"));
+
+    if (!QFile::exists(fileName)) {
+        QMessageBox::critical(0, tr("Load session error"), tr("File doesn't exists"), QMessageBox::Ok);
+        return;
+    }
+
+    restoreSession(fileName);
+}
+
+/*!
  * Slot for handling request to save session. Executed when a user closes main window and
- * confirm saving active sessions.
+ * confirm saving active sessions OR when user chooses to save session from the menu.
  */
 void
 Director::saveSessionRequested()
@@ -485,6 +521,17 @@ Director::saveSessionRequested()
 }
 
 /*!
+ * Restores session from a file.
+ *
+ * \param[in] iFileName - Path to the file that contains session info.
+ */
+void
+Director::restoreSession(const QString &iFileName)
+{
+    // \todo Implement
+}
+
+/*!
  * Slot for handling application exit. Executed when a user closes main window and
  * confirms its closing.
  */
@@ -498,7 +545,9 @@ Director::exitRequested()
 }
 
 /*!
- * \todo comment
+ * Handles closing of a tree widget.
+ *
+ * \param[in] iTree - Tree widget whose tab has been closed.
  */
 void
 Director::treeTabClosed(Gui::TreeWidget *iTree)
@@ -507,7 +556,10 @@ Director::treeTabClosed(Gui::TreeWidget *iTree)
 }
 
 /*!
- * \todo comment
+ * Handles the activation of a tree widget. When this happends the corresponding scene
+ * should come to front.
+ *
+ * \param[in] iTree - Tree widget that came up to front in a tab tree widget.
  */
 void
 Director::treeTabChanged(Gui::TreeWidget *iTree)
@@ -516,12 +568,32 @@ Director::treeTabChanged(Gui::TreeWidget *iTree)
 }
 
 /*!
+ * Handles activation of a scene. In this case we agreed to activate the corresponding
+ * tree widget.
  *
+ * \param[in] iScene - Scene widget whose tab has been activated.
  */
 void
 Director::tabChanged(Gui::SceneWidget *iScene)
 {
     mMainWindow->activateTree(findTree(findContext(iScene)));
+}
+
+/*!
+ * \note Global helper function
+ * Construct a connection name for the given context
+ *
+ * \param[in] iCtx - Context
+ *
+ * \return String with a connection name
+ */
+QString
+connectionName(const Control::Context *iCtx)
+{
+    return QString("%1@%2")
+        .arg(iCtx->connectionInfo().dbHostInfo().dbName())
+        .arg(iCtx->connectionInfo().dbHostInfo().address());
+
 }
 
 } // namespace Control

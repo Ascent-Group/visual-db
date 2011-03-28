@@ -28,85 +28,80 @@
  */
 
 #include <control/Session.h>
+#include <control/SessionTest.h>
 #include <connect/ConnectionInfo.h>
 
 void 
-ConnectTest::initTestCase()
+SessionTest::initTestCase()
 {
 
 }
 
 void 
-ConnectTest::cleanupTestCase()
+SessionTest::cleanupTestCase()
 {
 
 }
 
-void 
-ConnectTest::loadConnectionInfoTest()
-{
-
-}
-
-void 
-ConnectTest::loadSceneTest()
-{
-
-}
-
-void 
-ConnectTest::saveConnectionInfoTest()
+void
+SessionTest::loadTest()
 {
     using namespace Control;
+    using namespace Connect;
+
+    saveTest();
+
+    Session session;
+    ConnectionInfo connectionInfo;
+
+    QVERIFY(session.load("test.vdb"));
+    QVERIFY(session.loadConnectionInfo(connectionInfo));
+
+    QVERIFY("dbhost" == connectionInfo.dbHostInfo().address() && 1234 == connectionInfo.dbHostInfo().port()
+            && "dbuser" == connectionInfo.dbHostInfo().user() && "dbname" == connectionInfo.dbHostInfo().dbName()
+            && "dbdriver" == connectionInfo.dbHostInfo().dbDriver() && connectionInfo.proxyHostInfo().address() == "proxyhost" 
+            && connectionInfo.proxyHostInfo().port() == 1234 && connectionInfo.proxyHostInfo().user() == "proxyuser" 
+            && connectionInfo.proxyHostInfo().type() == (QNetworkProxy::ProxyType)1 && connectionInfo.useProxy() == true);
+
+    QVERIFY(!session.load("test_not_found.vdb"));
+}
+
+void 
+SessionTest::loadConnectionInfoTest()
+{
+
+}
+
+void 
+SessionTest::loadSceneTest()
+{
+
+}
+
+void
+SessionTest::saveTest()
+{
+    using namespace Control;
+    using namespace Connect;
+    using namespace Gui;
     
     Session session;
-    ConnectionInfo connectionInfo; 
+    GraphicsScene scene;
+    DbHostInfo dbHostInfo("dbhost", 1234, "dbuser", "dbpassword", "dbname", "dbdriver");
+    ProxyHostInfo proxyInfo("proxyhost", 1234, "proxyuser", "proxypassword", (QNetworkProxy::ProxyType)1);
+    ConnectionInfo connectionInfo(dbHostInfo, true, proxyInfo); 
    
-    Q_VERIFY(!session.saveConnectionInfo(connectionInfo));
-    
-    session.setFile("test.vdb");
-    session.startWriting();
-    Q_VERIFY(session.saveConnectionInfo(connectionInfo));
+    session.saveConnectionInfo(connectionInfo);
+    session.save("test.vdb");
 }
 
 void 
-ConnectTest::saveSceneTest()
+SessionTest::saveConnectionInfoTest()
 {
-    
 }
 
 void 
-ConnectTest::sessionFileTest()
-{
-
-}
-
-void 
-ConnectTest::setSessionFileTest()
-{
-   
-}
-
-void 
-ConnectTest::startReadingTest()
-{
-
-}
-
-void 
-ConnectTest::startWritingTest()
-{
-
-}
-
-void 
-ConnectTest::stopReadingTest()
-{
-
-}
-
-void 
-ConnectTest::stopWritingTest()
+SessionTest::saveSceneTest()
 {
 
 }

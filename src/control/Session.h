@@ -39,19 +39,14 @@ namespace Control {
 class Session {
 
     public:
-        explicit Session(const QString &iSessionFile);
+        explicit Session();
         virtual ~Session();
 
-        bool setSessionFile(const QString &iSessionFile);
-        QString sessionFile() const;
-
-        bool startWriting();
-        bool stopWriting();
+        bool save(const QString &iFileName);
         bool saveConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo);
         bool saveScene(const Gui::GraphicsScene &iGraphicsScene);
 
-        bool startReading();
-        bool stopReading();
+        bool load(const QString &iFileName);
         bool loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const;
         bool loadScene(Gui::GraphicsScene &oGraphicsScene) const;
 
@@ -62,12 +57,8 @@ class Session {
                     QList<Gui::GraphicsScene> &oGraphicsSceneList);
 
     private:
-        QString mSessionFile;
-        QFile mFile;
         QDomDocument mXmlDoc;
         QDomElement mRootXmlElement;
-        bool mWasWritingStarted;
-        bool mWasReadingStarted;
 };
 
 Session &operator<<(Session &iSession, const Connect::ConnectionInfo &iConnectionInfo);

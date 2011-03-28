@@ -79,10 +79,10 @@ win32 {
 
 DEFINES -= QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 
-#DEFINES += TEST_GUI
-#DEFINES += TEST_GUI_BEHAVIOUR
+DEFINES += TEST_GUI
+DEFINES += TEST_GUI_BEHAVIOUR
 DEFINES += TEST_CONNECT
-#DEFINES += TEST_CONTROL
+DEFINES += TEST_CONTROL
 DEFINES += TEST_DBOBJECTS
 
 SOURCES = $$PWD/main.cpp \
@@ -90,7 +90,7 @@ SOURCES = $$PWD/main.cpp \
 
 HEADERS = $$TOP_SRC_DIR/consts.h
 
-contains(DEFINES, TEST_BEHAVIOUR) {
+contains(DEFINES, TEST_GUI_BEHAVIOUR) {
     HEADERS += $$files($$PWD/gui/behaviour/*.h) \
                $$files($$TOP_SRC_DIR/gui/behaviour/*.h)
 
@@ -100,10 +100,12 @@ contains(DEFINES, TEST_BEHAVIOUR) {
 
 contains(DEFINES, TEST_GUI) {
     HEADERS += $$files($$PWD/gui/*.h) \
-               $$files($$TOP_SRC_DIR/gui/*.h)
+               $$files($$TOP_SRC_DIR/gui/*.h) \
+               $$files($$TOP_SRC_DIR/gui/graphicsitems/*.h)
 
     SOURCES += $$files($$PWD/gui/*.cpp) \
-               $$files($$TOP_SRC_DIR/gui/*.cpp)
+               $$files($$TOP_SRC_DIR/gui/*.cpp) \
+               $$files($$TOP_SRC_DIR/gui/graphicsitems/*.cpp)
 }
 
 contains(DEFINES, TEST_CONNECT) {

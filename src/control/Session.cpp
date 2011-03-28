@@ -33,12 +33,8 @@
 
 namespace Control {
 
-Session::Session(const QString &iSessionFile)
-    : mSessionFile(iSessionFile)
-    , mFile(iSessionFile)
-    , mXmlDoc("VisualDB")
-    , mWasWritingStarted(false)
-    , mWasReadingStarted(false)
+Session::Session()
+    : mXmlDoc("VisualDB")
 {
     mRootXmlElement = mXmlDoc.createElement("visual-db");
     mXmlDoc.appendChild(mRootXmlElement);
@@ -46,95 +42,43 @@ Session::Session(const QString &iSessionFile)
 
 Session::~Session()
 {
-    mFile.close();
 }
 
 bool
-Session::setSessionFile(const QString &iSessionFile)
+Session::save(const QString &iFileName)
 {
-    mSessionFile = iSessionFile;
-    mFile.setFileName(iSessionFile);
-    return QFile::exists(iSessionFile);
-}
-
-QString
-Session::sessionFile() const
-{
-    return mSessionFile;
-}
-
-bool
-Session::startWriting()
-{
-    if (mWasReadingStarted) {
-        qCritical() << "Error: you should call stopReading() method first!";
+    QFile file(iFileName);
+    if (!file.open(QIODevice::WriteOnly)) {
+        qCritical() << "[Error] while opening file " << iFileName << " for writing!";
         return false;
     }
 
-    if (QFile::exists(mSessionFile)) {
-        qCritical() << "Error: file " << mSessionFile << " does not exists!";
-        return false;
-    }
-
-    if (mFile.isOpen()) {
-        mFile.close();
-    }
-
-    if (!mFile.open(QIODevice::WriteOnly)) {
-        qCritical() << "Error while opening file " << mSessionFile << " for writing!";
-        return false;
-    }
-
-    mWasWritingStarted = true;
-
-    return true;
-}
-
-bool
-Session::stopWriting()
-{
-    QTextStream stream(&mFile);
+    QTextStream stream(&file);
     stream << mXmlDoc.toString();
-    mFile.close();
-
-    mWasWritingStarted = false;
+    file.close();
 
     return true;
 }
 
 bool
-Session::startReading()
+Session::load(const QString &iFileName)
 {
-    if (mWasWritingStarted) {
-        qCritical() << "Error: you should call stopWriting() method first!";
+//    if (QFile::exists(iFileName)) {
+//        qCritical() << "[Error] file " << iFileName << " does not exists!";
+//        return false;
+//    }
+
+    QFile file(iFileName);
+    if (!file.open(QIODevice::ReadOnly)) {
+        qCritical() << "[Error] while opening file " << iFileName << " for writing!";
         return false;
     }
 
-    if (QFile::exists(mSessionFile)) {
-        qCritical() << "Error: file " << mSessionFile << " does not exists!";
+    if (!mXmlDoc.setContent(&file)) {
+        file.close();
         return false;
     }
-
-    if (mFile.isOpen()) {
-        mFile.close();
-    }
-
-    if (!mFile.open(QIODevice::ReadOnly)) {
-        qCritical() << "Error while opening file " << mSessionFile << " for reading!";
-        return false;
-    }
-
-    mWasReadingStarted = true;
-
-    return true;
-}
-
-bool
-Session::stopReading()
-{
-    mFile.close();
-
-    mWasReadingStarted = false;
+    file.close();
 
     return true;
 }
@@ -142,11 +86,6 @@ Session::stopReading()
 bool
 Session::saveConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo)
 {
-    if (!mWasWritingStarted) {
-        qCritical() << "Error: you should call startWriting() method first!";
-        return false;
-    }
-    
     iConnectionInfo.toXml(mXmlDoc, mRootXmlElement);
     return true;
 }
@@ -154,11 +93,6 @@ Session::saveConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo)
 bool
 Session::saveScene(const Gui::GraphicsScene &iGraphicsScene)
 {
-    if (!mWasWritingStarted) {
-        qCritical() << "Error: you should call startWriting() method!";
-        return false;   
-    }
-
     iGraphicsScene.toXml(mXmlDoc, mRootXmlElement);
     return true;
 }
@@ -166,11 +100,6 @@ Session::saveScene(const Gui::GraphicsScene &iGraphicsScene)
 bool
 Session::loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const
 {
-    if (!mWasReadingStarted) {
-        qCritical() << "Error: you should call startReading() method!";
-        return false;   
-    }
-
     QDomElement docElem = mXmlDoc.documentElement();
     QDomNode child = docElem.firstChild();
     while (!child.isNull()) {
@@ -190,11 +119,6 @@ Session::loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const
 bool
 Session::loadScene(Gui::GraphicsScene &oGraphicsScene) const
 {
-    if (!mWasReadingStarted) {
-        qCritical() << "Error: you should call startReading() method!";
-        return false;   
-    }
-
     QDomElement docElem = mXmlDoc.documentElement();
     QDomNode child = docElem.firstChild();
     while (!child.isNull()) {

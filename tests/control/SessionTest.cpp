@@ -27,54 +27,87 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CONTROL_SESSION_H
-#define CONTROL_SESSION_H
-
+#include <control/Session.h>
 #include <connect/ConnectionInfo.h>
-#include <gui/GraphicsScene.h>
-#include <QFile>
 
-namespace Control {
-
-class Session {
-
-    public:
-        explicit Session(const QString &iSessionFile);
-        virtual ~Session();
-
-        bool setSessionFile(const QString &iSessionFile);
-        QString sessionFile() const;
-
-        bool startWriting();
-        bool stopWriting();
-        bool saveConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo);
-        bool saveScene(const Gui::GraphicsScene &iGraphicsScene);
-
-        bool startReading();
-        bool stopReading();
-        bool loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const;
-        bool loadScene(Gui::GraphicsScene &oGraphicsScene) const;
-
-        static bool save(const QString &iSessionFile, const QList<Connect::ConnectionInfo> &iConnectionInfoList, 
-                    const QList<Gui::GraphicsScene> &iGraphicsSceneList);
-
-        static bool load(const QString &iSessionFile, QList<Connect::ConnectionInfo> &oConnectionInfoList,
-                    QList<Gui::GraphicsScene> &oGraphicsSceneList);
-
-    private:
-        QString mSessionFile;
-        QFile mFile;
-        QDomDocument mXmlDoc;
-        QDomElement mRootXmlElement;
-        bool mWasWritingStarted;
-        bool mWasReadingStarted;
-};
-
-Session &operator<<(Session &iSession, const Connect::ConnectionInfo &iConnectionInfo);
-Session &operator>>(Session &iSession, Connect::ConnectionInfo &oConnectionInfo);
-Session &operator>>(Session &iSession, const Gui::GraphicsScene &iGraphicsScene);
-Session &operator<<(Session &iSession, Gui::GraphicsScene &oGraphicsScene);
+void 
+ConnectTest::initTestCase()
+{
 
 }
 
-#endif // CONTROL_SESSION_H
+void 
+ConnectTest::cleanupTestCase()
+{
+
+}
+
+void 
+ConnectTest::loadConnectionInfoTest()
+{
+
+}
+
+void 
+ConnectTest::loadSceneTest()
+{
+
+}
+
+void 
+ConnectTest::saveConnectionInfoTest()
+{
+    using namespace Control;
+    
+    Session session;
+    ConnectionInfo connectionInfo; 
+   
+    Q_VERIFY(!session.saveConnectionInfo(connectionInfo));
+    
+    session.setFile("test.vdb");
+    session.startWriting();
+    Q_VERIFY(session.saveConnectionInfo(connectionInfo));
+}
+
+void 
+ConnectTest::saveSceneTest()
+{
+    
+}
+
+void 
+ConnectTest::sessionFileTest()
+{
+
+}
+
+void 
+ConnectTest::setSessionFileTest()
+{
+   
+}
+
+void 
+ConnectTest::startReadingTest()
+{
+
+}
+
+void 
+ConnectTest::startWritingTest()
+{
+
+}
+
+void 
+ConnectTest::stopReadingTest()
+{
+
+}
+
+void 
+ConnectTest::stopWritingTest()
+{
+
+}
+

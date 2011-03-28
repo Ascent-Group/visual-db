@@ -33,98 +33,285 @@
 
 namespace Control {
 
-Session::Session()
+Session::Session(const QString &iSessionFile)
+    : mSessionFile(iSessionFile)
+    , mFile(iSessionFile)
+    , mXmlDoc("VisualDB")
+    , mWasWritingStarted(false)
+    , mWasReadingStarted(false)
 {
+    mRootXmlElement = mXmlDoc.createElement("visual-db");
+    mXmlDoc.appendChild(mRootXmlElement);
 }
 
 Session::~Session()
 {
+    mFile.close();
 }
 
-bool 
-Session::setFile(const QString &iFileName)
+bool
+Session::setSessionFile(const QString &iSessionFile)
+{
+    mSessionFile = iSessionFile;
+    mFile.setFileName(iSessionFile);
+    return QFile::exists(iSessionFile);
+}
+
+QString
+Session::sessionFile() const
+{
+    return mSessionFile;
+}
+
+bool
+Session::startWriting()
+{
+    if (mWasReadingStarted) {
+        qCritical() << "Error: you should call stopReading() method first!";
+        return false;
+    }
+
+    if (QFile::exists(mSessionFile)) {
+        qCritical() << "Error: file " << mSessionFile << " does not exists!";
+        return false;
+    }
+
+    if (mFile.isOpen()) {
+        mFile.close();
+    }
+
+    if (!mFile.open(QIODevice::WriteOnly)) {
+        qCritical() << "Error while opening file " << mSessionFile << " for writing!";
+        return false;
+    }
+
+    mWasWritingStarted = true;
+
+    return true;
+}
+
+bool
+Session::stopWriting()
+{
+    QTextStream stream(&mFile);
+    stream << mXmlDoc.toString();
+    mFile.close();
+
+    mWasWritingStarted = false;
+
+    return true;
+}
+
+bool
+Session::startReading()
+{
+    if (mWasWritingStarted) {
+        qCritical() << "Error: you should call stopWriting() method first!";
+        return false;
+    }
+
+    if (QFile::exists(mSessionFile)) {
+        qCritical() << "Error: file " << mSessionFile << " does not exists!";
+        return false;
+    }
+
+    if (mFile.isOpen()) {
+        mFile.close();
+    }
+
+    if (!mFile.open(QIODevice::ReadOnly)) {
+        qCritical() << "Error while opening file " << mSessionFile << " for reading!";
+        return false;
+    }
+
+    mWasReadingStarted = true;
+
+    return true;
+}
+
+bool
+Session::stopReading()
 {
     mFile.close();
 
-    mFile.setFileName(iFileName);
-    if (!mFile.open(QIODevice::WriteOnly)) {
-        return false;
-    }
+    mWasReadingStarted = false;
 
     return true;
 }
 
-qint32
-Session::connectionsNumber() const
+bool
+Session::saveConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo)
 {
-    if (!mFile.isOpen()) {
-        return -1;
-    }
- 
-    QDomDocument doc("VisualDB");
-    // FIXME: remove const_cast
-    if (!doc.setContent(const_cast<QFile *>(&mFile))) {
-        return -1;
-    }
-
-    QDomElement docElem = doc.documentElement();
-    QDomNode child = docElem.firstChild();
-    while (!child.isNull()) {
-        QDomElement element = child.toElement(); // try to convert the node to an element.
-        if (!element.isNull()) {
-            if (element.tagName() == "connections") {
-                return element.attribute("number", "-1").toInt();
-            }
-        }
-    }
-
-    return -1;
-}
-
-bool 
-Session::setConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo)
-{
-    if (!mFile.isOpen()) {
+    if (!mWasWritingStarted) {
+        qCritical() << "Error: you should call startWriting() method first!";
         return false;
     }
-
-    QDomDocument doc("VisualDB");
-    QDomElement root = doc.createElement("visual-db");
-    doc.appendChild(root);
-    iConnectionInfo.toXml(doc, root);
-//    root.appendChild(ui.mSceneWidget->toXml(doc, ui.mShowGridAction->isChecked(), ui.mDivideIntoPagesAction->isChecked(),
-//                ui.mShowLegendAction->isChecked(), ui.mShowControlWidgetAction->isChecked()));
-
+    
+    iConnectionInfo.toXml(mXmlDoc, mRootXmlElement);
     return true;
 }
 
-bool 
-Session::connectionInfo(Connect::ConnectionInfo &oConnectionInfo, qint32 iNumber) const
+bool
+Session::saveScene(const Gui::GraphicsScene &iGraphicsScene)
 {
-    if (!mFile.isOpen()) {
-        return false;
-    }
- 
-    QDomDocument doc("VisualDB");
-    // FIXME: remove const_cast
-    if (!doc.setContent(const_cast<QFile *>(&mFile))) {
-        return false;
+    if (!mWasWritingStarted) {
+        qCritical() << "Error: you should call startWriting() method!";
+        return false;   
     }
 
-    QDomElement docElem = doc.documentElement();
+    iGraphicsScene.toXml(mXmlDoc, mRootXmlElement);
+    return true;
+}
+
+bool
+Session::loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const
+{
+    if (!mWasReadingStarted) {
+        qCritical() << "Error: you should call startReading() method!";
+        return false;   
+    }
+
+    QDomElement docElem = mXmlDoc.documentElement();
     QDomNode child = docElem.firstChild();
     while (!child.isNull()) {
         QDomElement element = child.toElement(); // try to convert the node to an element.
         if (!element.isNull()) {
-            if (element.tagName() == "connection" + iNumber) {
+            if (element.tagName() == "connection") {
                 oConnectionInfo.fromXml(element);
                 return true;
             }
         }
         child = child.nextSibling();
     }
-   
+
     return false;
+}
+
+bool
+Session::loadScene(Gui::GraphicsScene &oGraphicsScene) const
+{
+    if (!mWasReadingStarted) {
+        qCritical() << "Error: you should call startReading() method!";
+        return false;   
+    }
+
+    QDomElement docElem = mXmlDoc.documentElement();
+    QDomNode child = docElem.firstChild();
+    while (!child.isNull()) {
+        QDomElement element = child.toElement(); // try to convert the node to an element.
+        if (!element.isNull()) {
+            if (element.tagName() == "scene") {
+                oGraphicsScene.fromXml(element);
+                return true;
+            }
+        }
+        child = child.nextSibling();
+    }
+
+    return false;
+}
+
+bool
+Session::save(const QString &iSessionFile, const QList<Connect::ConnectionInfo> &iConnectionInfoList, 
+        const QList<Gui::GraphicsScene> &iGraphicsSceneList)
+{
+    if (iConnectionInfoList.size() != iGraphicsSceneList.size()) {
+        return false;
+    }
+
+    QFile file;
+    file.setFileName(iSessionFile);
+    if (!file.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+
+    QDomDocument doc("VisualDB");
+    QDomElement root = doc.createElement("visual-db");
+    doc.appendChild(root);
+
+    for (int i = 0; i < iConnectionInfoList.size(); ++i) {
+        iConnectionInfoList.at(i).toXml(doc, root);
+        iGraphicsSceneList.at(i).toXml(doc, root);
+    }
+
+    QTextStream stream(&file);
+    stream << doc.toString();
+    file.close();
+
+    return true;
+}
+
+bool
+Session::load(const QString &iSessionFile, QList<Connect::ConnectionInfo> &oConnectionInfoList,
+        QList<Gui::GraphicsScene> &oGraphicsSceneList)
+{
+    using namespace Connect;
+    using namespace Gui;
+
+    oConnectionInfoList.clear();
+    oGraphicsSceneList.clear();
+
+    QFile file;
+    file.setFileName(iSessionFile);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+
+    QDomDocument doc("VisualDB");
+    if (!doc.setContent(&file)) {
+        file.close();
+        return false;
+    }
+    file.close();
+
+    QDomElement docElem = doc.documentElement();
+    QDomNode child = docElem.firstChild();
+    while (!child.isNull()) {
+        QDomElement element = child.toElement(); // try to convert the node to an element.
+        if (!element.isNull()) {
+            if (element.tagName() == "connection") {
+                ConnectionInfo connectionInfo;
+                connectionInfo.fromXml(element);
+                oConnectionInfoList.append(connectionInfo);
+            }
+            if (element.tagName() == "scene") {
+                GraphicsScene graphicsScene;
+                graphicsScene.fromXml(element);
+                oGraphicsSceneList.append(graphicsScene);
+            }
+        }
+        child = child.nextSibling();
+    }
+
+    return true;
+}
+
+Session &
+operator<<(Session &iSession, const Connect::ConnectionInfo &iConnectionInfo)
+{
+    iSession.saveConnectionInfo(iConnectionInfo);
+    return iSession;
+}
+
+Session &
+operator>>(Session &iSession, Connect::ConnectionInfo &oConnectionInfo)
+{
+    iSession.loadConnectionInfo(oConnectionInfo);
+    return iSession;
+}
+
+Session &
+operator<<(Session &iSession, const Gui::GraphicsScene &iGraphicsScene)
+{
+    iSession.saveScene(iGraphicsScene);
+    return iSession;
+}
+
+Session &
+operator>>(Session &iSession, Gui::GraphicsScene &oGraphicsScene)
+{
+    iSession.loadScene(oGraphicsScene);
+    return iSession;
 }
 
 }

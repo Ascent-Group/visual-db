@@ -66,8 +66,8 @@ class ViewItem;
  * \headerfile gui/GraphicsScene.h
  * \brief Scene for db items. Allow browsing db items, relations between them and move them.
  */
-class GraphicsScene : public QGraphicsScene {
-
+class GraphicsScene : public QGraphicsScene 
+{
     Q_OBJECT
 
     public:
@@ -79,6 +79,9 @@ class GraphicsScene : public QGraphicsScene {
     public:
         GraphicsScene(QObject *iParent = 0);
         ~GraphicsScene();
+
+        GraphicsScene(const GraphicsScene &);
+        GraphicsScene &operator=(const GraphicsScene &iGraphicsScene);
 
         void addItems(const QList<QGraphicsItem *> &);
         Gui::GraphicsItems::DbObjectItem *findItem(const QString &, const QString &);
@@ -123,9 +126,9 @@ class GraphicsScene : public QGraphicsScene {
         void moveLegend(int, int);
         void selectAllItemsInSchema();
         void setMoveMode(bool);
-        QDomElement toXml(QDomDocument &, bool, bool, bool, bool) const;
+        void toXml(QDomDocument &, QDomElement &, bool iShowGrid = true, bool iDivideIntoPages = true, 
+                bool iShowLegend = true, bool showControlWidget = true) const;
         QList<QGraphicsItem *> fromXml(const QDomNode &);
-
 
     protected:
         virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent *);
@@ -136,6 +139,8 @@ class GraphicsScene : public QGraphicsScene {
         virtual void drawBackground(QPainter *, const QRectF &);
 
     private:
+        void init();
+        void swap(const GraphicsScene &iGraphicsScene);
         void setFieldsTypesVisible(QList<QGraphicsItem *>, bool);
         void setIndicesVisible(QList<QGraphicsItem *>, bool);
         void adjustItems(QList<QGraphicsItem *>);
@@ -166,8 +171,8 @@ class GraphicsScene : public QGraphicsScene {
         QPointF mOldPos;
         QRectF mOldRect;
 
-        int mDiffX;
-        int mDiffY;
+        qint32 mDiffX;
+        qint32 mDiffY;
         QTimer mStartMovingTimer;
 
         static const int MOVE_STEP = 10;

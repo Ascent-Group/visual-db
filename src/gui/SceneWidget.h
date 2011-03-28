@@ -68,7 +68,7 @@ class SceneWidget : public QWidget
         SceneWidget(QWidget *iParent = 0, Qt::WindowFlags iFlags = 0);
         ~SceneWidget();
 
-        QDomElement toXml(QDomDocument &, bool, bool, bool, bool);
+        void toXml(QDomDocument &, QDomElement &, bool, bool, bool, bool);
         QList<QGraphicsItem *> items () const;
         Gui::GraphicsItems::ItemGroup *createItemGroup(const QList<QGraphicsItem *> &);
         void fromXml(QDomElement &);

@@ -127,6 +127,7 @@ Director::initialize()
         connect(mMainWindow, SIGNAL(reloadDataRequest()), this, SLOT(reloadDataRequested()));
 //        connect(mMainWindow, SIGNAL(disconnectRequest()), this, SLOT(disconnectRequested()));
         connect(mMainWindow, SIGNAL(optionsDialogRequest()), this, SLOT(optionsDialogRequested()));
+        connect(mMainWindow, SIGNAL(loadSessionRequest()), this, SLOT(loadSessionRequested()));
         connect(mMainWindow, SIGNAL(saveSessionRequest()), this, SLOT(saveSessionRequested()));
         connect(mMainWindow, SIGNAL(exitRequest()), this, SLOT(exitRequested()));
 
@@ -145,6 +146,9 @@ Director::initialize()
     }
 
     emit initializationComplete();
+
+    // \todo check the flag for auto session restoring
+    //restoreSession(lastSessionFileName);
     return true;
 }
 
@@ -347,9 +351,8 @@ Director::showConnectionDialog(bool iLoadSession)
     // \todo save context's connection info
 
     // if we got here, then we have a valid ctx
-    emit logMessageRequest(QString("Connected to '<b>%1@%2</b> on behalf of <b>%3</b>'")
-            .arg(ctx->connectionInfo().dbHostInfo().dbName())
-            .arg(ctx->connectionInfo().dbHostInfo().address())
+    emit logMessageRequest(QString("Connected to '<b>%1</b> on behalf of <b>%2</b>'.")
+            .arg(connectionName(ctx))
             .arg(ctx->connectionInfo().dbHostInfo().user()));
 
     QString tabTitle = QString("%1@%2 (%3)")
@@ -436,9 +439,12 @@ Director::reloadDataRequested()
             return;
         }
 
-        // \todo activate buttons on toolbar
-        mMainWindow->setEnableForActions(true);
         // \todo get updated data and notify clients
+//        QList<DbObject*> newObjects;
+//        mDbMgr->updatedObjects(iCtx, );
+//        tree->update();
+
+        mMainWindow->setEnableForActions(true);
     }
 
     emit requestProcessed();
@@ -453,9 +459,8 @@ Director::disconnectRequested(Control::Context *iCtx)
     mMainWindow->removeScene(findScene(iCtx));
     remove(iCtx);
 
-    emit logMessageRequest(QString("Disconnected from '<b>%1@%2</b>'")
-            .arg(iCtx->connectionInfo().dbHostInfo().dbName())
-            .arg(iCtx->connectionInfo().dbHostInfo().address()));
+    emit logMessageRequest(QString("Disconnected from '<b>%1</b>'.")
+            .arg(connectionName(iCtx)));
 
     if (mRegistry.isEmpty()) {
         mMainWindow->setEnableForActions(false);
@@ -463,8 +468,28 @@ Director::disconnectRequested(Control::Context *iCtx)
 }
 
 /*!
+ * Slot for handling request to load session. Executed when user chooses to load session
+ * from menu.
+ */
+void
+Director::loadSessionRequested()
+{
+    QString fileName = QFileDialog::getOpenFileName(0,
+            tr("Open session..."),
+            Control::Config().sessionDir(),
+            tr("Session files (*.vdb)"));
+
+    if (!QFile::exists(fileName)) {
+        QMessageBox::critical(0, tr("Load session error"), tr("File doesn't exists"), QMessageBox::Ok);
+        return;
+    }
+
+    restoreSession(fileName);
+}
+
+/*!
  * Slot for handling request to save session. Executed when a user closes main window and
- * confirm saving active sessions.
+ * confirm saving active sessions OR when user chooses to save session from the menu.
  */
 void
 Director::saveSessionRequested()
@@ -496,6 +521,17 @@ Director::saveSessionRequested()
 }
 
 /*!
+ * Restores session from a file.
+ *
+ * \param[in] iFileName - Path to the file that contains session info.
+ */
+void
+Director::restoreSession(const QString &iFileName)
+{
+    // \todo Implement
+}
+
+/*!
  * Slot for handling application exit. Executed when a user closes main window and
  * confirms its closing.
  */
@@ -509,7 +545,9 @@ Director::exitRequested()
 }
 
 /*!
- * \todo comment
+ * Handles closing of a tree widget.
+ *
+ * \param[in] iTree - Tree widget whose tab has been closed.
  */
 void
 Director::treeTabClosed(Gui::TreeWidget *iTree)
@@ -530,12 +568,32 @@ Director::treeTabChanged(Gui::TreeWidget *iTree)
 }
 
 /*!
+ * Handles activation of a scene. In this case we agreed to activate the corresponding
+ * tree widget.
  *
+ * \param[in] iScene - Scene widget whose tab has been activated.
  */
 void
 Director::tabChanged(Gui::SceneWidget *iScene)
 {
     mMainWindow->activateTree(findTree(findContext(iScene)));
+}
+
+/*!
+ * \note Global helper function
+ * Construct a connection name for the given context
+ *
+ * \param[in] iCtx - Context
+ *
+ * \return String with a connection name
+ */
+QString
+connectionName(const Control::Context *iCtx)
+{
+    return QString("%1@%2")
+        .arg(iCtx->connectionInfo().dbHostInfo().dbName())
+        .arg(iCtx->connectionInfo().dbHostInfo().address());
+
 }
 
 } // namespace Control

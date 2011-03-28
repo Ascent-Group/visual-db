@@ -92,6 +92,9 @@ MainWindow::MainWindow()
     connect(ui.mReloadDataAction, SIGNAL(triggered()), this, SIGNAL(reloadDataRequest()));
     connect(ui.mShowOptionsDialogAction, SIGNAL(triggered()), this, SIGNAL(optionsDialogRequest()));
 
+    connect(ui.mLoadSessionAction, SIGNAL(triggered()), this, SIGNAL(loadSessionRequest()));
+    connect(ui.mSaveSessionAction, SIGNAL(triggered()), this, SIGNAL(saveSessionRequest()));
+
     connect(ui.mLogPanelWidget, SIGNAL(closed()), this, SLOT(closeLogPanel()));
     connect(ui.mDatabaseTreeWidget, SIGNAL(closed()), this, SLOT(closeDatabaseTree()));
     connect(ui.mLogPanelWidget, SIGNAL(shown()), this, SLOT(showLogPanel()));
@@ -943,28 +946,6 @@ MainWindow::saveSession()
     saveToXml(fileName);
 
     return true;
-}
-
-/*!
- * \brief Load session.
- *
- * This function is called when we decide to load a session from a File... menu.
- */
-void
-MainWindow::loadSession()
-{
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open session..."),
-            Control::Config().sessionDir(),
-            tr("Session files (*.vdb)"));
-    if (!QFile::exists(fileName)) {
-        QMessageBox messageBox;
-        messageBox.setText(tr("File doesn't exists"));
-        messageBox.exec();
-        //  qDebug() << "File doesn't exists";
-        return;
-    }
-
-    loadFromXml(fileName);
 }
 
 /*!

@@ -110,7 +110,9 @@ class Director : public QObject
         void reloadDataRequested();
         void optionsDialogRequested();
 
+        void loadSessionRequested();
         void saveSessionRequested();
+        void restoreSession(const QString &iFileName);
         void exitRequested();
 
         void treeTabClosed(Gui::TreeWidget *iTree);
@@ -131,6 +133,8 @@ class Director : public QObject
         void logMessageRequest(const QString &);
 
 };
+
+QString connectionName(const Control::Context *iCtx);
 
 } // namespace Control
 

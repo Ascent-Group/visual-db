@@ -40,16 +40,13 @@ class SessionTest : public QObject
         void initTestCase();
         void cleanupTestCase();
 
+        void loadTest();
         void loadConnectionInfoTest();
         void loadSceneTest();
+
+        void saveTest();
         void saveConnectionInfoTest();
         void saveSceneTest();
-        void sessionFileTest();
-        void setSessionFileTest();
-        void startReadingTest();
-        void startWritingTest();
-        void stopReadingTest();
-        void stopWritingTest();
 };
 
 #endif // SESSIONTEST_H

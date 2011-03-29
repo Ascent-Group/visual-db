@@ -28,85 +28,125 @@
  */
 
 #include <control/Session.h>
+#include <control/SessionTest.h>
 #include <connect/ConnectionInfo.h>
 
 void 
-ConnectTest::initTestCase()
+SessionTest::initTestCase()
 {
 
 }
 
 void 
-ConnectTest::cleanupTestCase()
+SessionTest::cleanupTestCase()
 {
 
 }
 
-void 
-ConnectTest::loadConnectionInfoTest()
-{
-
-}
-
-void 
-ConnectTest::loadSceneTest()
-{
-
-}
-
-void 
-ConnectTest::saveConnectionInfoTest()
+void
+SessionTest::loadTest()
 {
     using namespace Control;
+    using namespace Connect;
+
+    saveTest();
+
+    Session session;
+    QVERIFY(session.load("test.vdb"));
+    
+    // test loading from file with wrong order
+    ConnectionInfo connectionInfo0;
+    QVERIFY(session.loadConnectionInfo(connectionInfo0, 0));
+    QVERIFY("dbhost0" == connectionInfo0.dbHostInfo().address());
+    QVERIFY(4321 == connectionInfo0.dbHostInfo().port());
+    QVERIFY("dbuser0" == connectionInfo0.dbHostInfo().user());
+    QVERIFY("dbname0" == connectionInfo0.dbHostInfo().dbName());
+    QVERIFY("dbdriver0" == connectionInfo0.dbHostInfo().dbDriver());
+    QVERIFY("proxyhost0" == connectionInfo0.proxyHostInfo().address());
+    QVERIFY(4321 == connectionInfo0.proxyHostInfo().port());
+    QVERIFY("proxyuser0" == connectionInfo0.proxyHostInfo().user());
+    QVERIFY((QNetworkProxy::ProxyType)0 == connectionInfo0.proxyHostInfo().type());
+    QVERIFY(false == connectionInfo0.useProxy());
+
+    ConnectionInfo connectionInfo;
+    QVERIFY(session.load("test.vdb"));
+    QVERIFY(session.loadConnectionInfo(connectionInfo, 1));
+    QVERIFY("dbhost" == connectionInfo.dbHostInfo().address());
+    QVERIFY(1234 == connectionInfo.dbHostInfo().port());
+    QVERIFY("dbuser" == connectionInfo.dbHostInfo().user());
+    QVERIFY("dbname" == connectionInfo.dbHostInfo().dbName());
+    QVERIFY("dbdriver" == connectionInfo.dbHostInfo().dbDriver());
+    QVERIFY("proxyhost" == connectionInfo.proxyHostInfo().address());
+    QVERIFY(1234 == connectionInfo.proxyHostInfo().port());
+    QVERIFY("proxyuser" == connectionInfo.proxyHostInfo().user());
+    QVERIFY((QNetworkProxy::ProxyType)1 == connectionInfo.proxyHostInfo().type());
+    QVERIFY(true == connectionInfo.useProxy());
+
+    // test loading connection info with non-existant index
+    QVERIFY(!session.loadConnectionInfo(connectionInfo, 100500));
+
+    // test loading connection info without calling load function before
+    Session sessionWrongLoad;
+    ConnectionInfo connectionInfoEmpty;
+    QVERIFY(!sessionWrongLoad.loadConnectionInfo(connectionInfoEmpty, 0));
+    
+    QVERIFY("localhost" == connectionInfoEmpty.dbHostInfo().address());
+    QVERIFY(5432 == connectionInfoEmpty.dbHostInfo().port());
+    QVERIFY("" == connectionInfoEmpty.dbHostInfo().user());
+    QVERIFY("" == connectionInfoEmpty.dbHostInfo().dbName());
+    QVERIFY("QPSQL" == connectionInfoEmpty.dbHostInfo().dbDriver());
+    QVERIFY("" == connectionInfoEmpty.proxyHostInfo().address());
+    QVERIFY(0 == connectionInfoEmpty.proxyHostInfo().port());
+    QVERIFY("" == connectionInfoEmpty.proxyHostInfo().user());
+    QVERIFY(QNetworkProxy::NoProxy == connectionInfoEmpty.proxyHostInfo().type());
+    QVERIFY(false == connectionInfoEmpty.useProxy());
+
+    // test loading from the non-existant file
+    QVERIFY(!session.load("test_not_found.vdb"));
+}
+
+void 
+SessionTest::loadConnectionInfoTest()
+{
+
+}
+
+void 
+SessionTest::loadSceneTest()
+{
+
+}
+
+void
+SessionTest::saveTest()
+{
+    using namespace Control;
+    using namespace Connect;
+    using namespace Gui;
     
     Session session;
-    ConnectionInfo connectionInfo; 
-   
-    Q_VERIFY(!session.saveConnectionInfo(connectionInfo));
+    GraphicsScene scene;
     
-    session.setFile("test.vdb");
-    session.startWriting();
-    Q_VERIFY(session.saveConnectionInfo(connectionInfo));
-}
+    DbHostInfo dbHostInfo("dbhost", 1234, "dbuser", "dbpassword", "dbname", "dbdriver");
+    ProxyHostInfo proxyInfo("proxyhost", 1234, "proxyuser", "proxypassword", (QNetworkProxy::ProxyType)1);
+    ConnectionInfo connectionInfo(dbHostInfo, true, proxyInfo); 
+    session.saveConnectionInfo(connectionInfo, 1);
 
-void 
-ConnectTest::saveSceneTest()
-{
+    DbHostInfo dbHostInfo0("dbhost0", 4321, "dbuser0", "dbpassword0", "dbname0", "dbdriver0");
+    ProxyHostInfo proxyInfo0("proxyhost0", 4321, "proxyuser0", "proxypassword0", (QNetworkProxy::ProxyType)0);
+    ConnectionInfo connectionInfo0(dbHostInfo0, false, proxyInfo0); 
+    session.saveConnectionInfo(connectionInfo0, 0);
     
+    session.save("test.vdb");
 }
 
 void 
-ConnectTest::sessionFileTest()
+SessionTest::saveConnectionInfoTest()
 {
-
 }
 
 void 
-ConnectTest::setSessionFileTest()
-{
-   
-}
-
-void 
-ConnectTest::startReadingTest()
-{
-
-}
-
-void 
-ConnectTest::startWritingTest()
-{
-
-}
-
-void 
-ConnectTest::stopReadingTest()
-{
-
-}
-
-void 
-ConnectTest::stopWritingTest()
+SessionTest::saveSceneTest()
 {
 
 }

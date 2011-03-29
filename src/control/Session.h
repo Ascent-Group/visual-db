@@ -42,16 +42,15 @@ class Session {
         explicit Session();
         virtual ~Session();
 
-        bool setSessionFile(const QString &iSessionFile);
-        QString sessionFile() const;
-
         bool save(const QString &iFileName);
-        bool saveConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo);
-        bool saveScene(const Gui::GraphicsScene &iGraphicsScene);
+        bool saveConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo, quint32 iId);
+        bool saveScene(const Gui::GraphicsScene &iGraphicsScene, quint32 iId);
 
         bool load(const QString &iFileName);
-        bool loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const;
-        bool loadScene(Gui::GraphicsScene &oGraphicsScene) const;
+        bool loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo, quint32 iId) const;
+        bool loadScene(Gui::GraphicsScene &oGraphicsScene, quint32 iId) const;
+
+        QDomElement xmlConnection(quint32 iId);
 
         static bool save(const QString &iSessionFile, const QList<Connect::ConnectionInfo> &iConnectionInfoList, 
                     const QList<Gui::GraphicsScene> &iGraphicsSceneList);
@@ -61,13 +60,13 @@ class Session {
 
     private:
         QDomDocument mXmlDoc;
-        QDomElement mRootXmlElement;
+        QDomElement mSessionElement;
 };
 
-Session &operator<<(Session &iSession, const Connect::ConnectionInfo &iConnectionInfo);
-Session &operator>>(Session &iSession, Connect::ConnectionInfo &oConnectionInfo);
-Session &operator>>(Session &iSession, const Gui::GraphicsScene &iGraphicsScene);
-Session &operator<<(Session &iSession, Gui::GraphicsScene &oGraphicsScene);
+//Session &operator<<(Session &iSession, const Connect::ConnectionInfo &iConnectionInfo);
+//Session &operator>>(Session &iSession, Connect::ConnectionInfo &oConnectionInfo);
+//Session &operator>>(Session &iSession, const Gui::GraphicsScene &iGraphicsScene);
+//Session &operator<<(Session &iSession, Gui::GraphicsScene &oGraphicsScene);
 
 }
 

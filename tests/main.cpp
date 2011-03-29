@@ -11,6 +11,7 @@
 #include <control/ConfigTest.h>
 #include <control/ContextTest.h>
 #include <control/DirectorTest.h>
+#include <control/SessionTest.h>
 #endif
 
 /* gui/behaviour */
@@ -162,6 +163,9 @@ int main(int argc, char *argv[])
 
     DirectorTest directorTest;
     QTest::qExec(&directorTest, argc, argv);
+
+    SessionTest sessionTest;
+    QTest::qExec(&sessionTest, argc, argv);
 #endif
 
 #if TEST_GUI

@@ -36,8 +36,11 @@ namespace Control {
 Session::Session()
     : mXmlDoc("VisualDB")
 {
-    mRootXmlElement = mXmlDoc.createElement("visual-db");
-    mXmlDoc.appendChild(mRootXmlElement);
+    QDomElement rootElement = mXmlDoc.createElement("visual-db");
+    mXmlDoc.appendChild(rootElement);
+    
+    mSessionElement = mXmlDoc.createElement("session");
+    rootElement.appendChild(mSessionElement);
 }
 
 Session::~Session()
@@ -47,17 +50,17 @@ Session::~Session()
 bool
 Session::save(const QString &iFileName)
 {
-    if (QFile::exists(iFileName)) {
-        qCritical() << "Error: file " << iFileName << " does not exists!";
-        return false;
-    }
-
-    QFile file;
+    // open file
+    QFile file(iFileName);
     if (!file.open(QIODevice::WriteOnly)) {
-        qCritical() << "Error while opening file " << iFileName << " for reading!";
+        qCritical() << "[Error] while opening file " << iFileName << " for writing!";
         return false;
     }
 
+    // calculate total number of sessions
+    mSessionElement.setAttribute("count", mXmlDoc.elementsByTagName("connection").size());
+
+    // flush xml to file
     QTextStream stream(&file);
     stream << mXmlDoc.toString();
     file.close();
@@ -66,21 +69,37 @@ Session::save(const QString &iFileName)
 }
 
 bool
+Session::saveConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo, quint32 iId)
+{
+    QDomElement connection = xmlConnection(iId);
+    iConnectionInfo.toXml(mXmlDoc, connection);
+    return true;
+}
+
+bool
+Session::saveScene(const Gui::GraphicsScene &iGraphicsScene, quint32 iId)
+{
+    QDomElement connection = xmlConnection(iId);
+    iGraphicsScene.toXml(mXmlDoc, connection);
+    return true;
+}
+
+bool
 Session::load(const QString &iFileName)
 {
-    if (QFile::exists(iFileName)) {
-        qCritical() << "Error: file " << iFileName << " does not exists!";
-        return false;
-    }
+//    if (QFile::exists(iFileName)) {
+//        qCritical() << "[Error] file " << iFileName << " does not exists!";
+//        return false;
+//    }
 
-    QFile file;
+    QFile file(iFileName);
     if (!file.open(QIODevice::ReadOnly)) {
-        qCritical() << "Error while opening file " << iFileName << " for reading!";
+        qCritical() << "[Error] while opening file " << iFileName << " for writing!";
         return false;
     }
 
     if (!mXmlDoc.setContent(&file)) {
-        qCritical() << "Error while loading xml structure from file " << iFileName;
+        qCritical() << "[Error] while loading xml structure from file " << iFileName;
         file.close();
         return false;
     }
@@ -90,55 +109,65 @@ Session::load(const QString &iFileName)
 }
 
 bool
-Session::saveConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo)
+Session::loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo, quint32 iId) const
 {
-   iConnectionInfo.toXml(mXmlDoc, mRootXmlElement);
-    return true;
-}
+    for (qint32 i = 0; i < mXmlDoc.elementsByTagName("connection").size(); ++i) {
+        QDomElement connection = mXmlDoc.elementsByTagName("connection").at(i).toElement();
 
-bool
-Session::saveScene(const Gui::GraphicsScene &iGraphicsScene)
-{
-   iGraphicsScene.toXml(mXmlDoc, mRootXmlElement);
-    return true;
-}
-
-bool
-Session::loadConnectionInfo(Connect::ConnectionInfo &oConnectionInfo) const
-{
-   QDomElement docElem = mXmlDoc.documentElement();
-    QDomNode child = docElem.firstChild();
-    while (!child.isNull()) {
-        QDomElement element = child.toElement(); // try to convert the node to an element.
-        if (!element.isNull()) {
-            if (element.tagName() == "connection") {
-                oConnectionInfo.fromXml(element);
-                return true;
+        if (!connection.isNull() && connection.attribute("id").toUInt() == iId) {
+            QDomElement node = connection.firstChild().toElement();
+            while (!node.isNull()) {
+                if (node.tagName() == "connectionInfo") {
+                    oConnectionInfo.fromXml(node);
+                    return true;
+                }
             }
+            node = node.nextSibling().toElement();
         }
-        child = child.nextSibling();
     }
 
+    qCritical() << "[Error] Could not found connection info for connection with id (" << iId << ")";
     return false;
 }
 
 bool
-Session::loadScene(Gui::GraphicsScene &oGraphicsScene) const
+Session::loadScene(Gui::GraphicsScene &oGraphicsScene, quint32 iId) const
 {
-   QDomElement docElem = mXmlDoc.documentElement();
-    QDomNode child = docElem.firstChild();
-    while (!child.isNull()) {
-        QDomElement element = child.toElement(); // try to convert the node to an element.
-        if (!element.isNull()) {
-            if (element.tagName() == "scene") {
-                oGraphicsScene.fromXml(element);
-                return true;
+    for (qint32 i = 0; i < mXmlDoc.elementsByTagName("scene").size(); ++i) {
+        QDomElement connection = mXmlDoc.elementsByTagName("scene").at(i).toElement();
+
+        if (!connection.isNull() && connection.attribute("id").toUInt() == iId) {
+            QDomElement node = connection.firstChild().toElement();
+            while (!node.isNull()) {
+                if (node.tagName() == "scene") {
+                    oGraphicsScene.fromXml(node);
+                    return true;
+                }
             }
+            node = node.nextSibling().toElement();
         }
-        child = child.nextSibling();
     }
 
+    qCritical() << "[Error] Could not found scene for connection with id (" << iId << ")";
     return false;
+}
+
+QDomElement
+Session::xmlConnection(quint32 iId)
+{
+    for (qint32 i = 0; i < mXmlDoc.elementsByTagName("connection").size(); ++i) {
+        QDomElement connection = mXmlDoc.elementsByTagName("connection").at(i).toElement();
+
+        if (!connection.isNull() && connection.attribute("id").toUInt() == iId) {
+            return connection;
+        }
+    }
+
+    QDomElement connection = mXmlDoc.createElement("connection");
+    connection.setAttribute("id", iId);
+    mSessionElement.appendChild(connection);
+
+    return connection;
 }
 
 bool
@@ -199,7 +228,7 @@ Session::load(const QString &iSessionFile, QList<Connect::ConnectionInfo> &oConn
     while (!child.isNull()) {
         QDomElement element = child.toElement(); // try to convert the node to an element.
         if (!element.isNull()) {
-            if (element.tagName() == "connection") {
+            if (element.tagName() == "connectionInfo") {
                 ConnectionInfo connectionInfo;
                 connectionInfo.fromXml(element);
                 oConnectionInfoList.append(connectionInfo);
@@ -216,32 +245,32 @@ Session::load(const QString &iSessionFile, QList<Connect::ConnectionInfo> &oConn
     return true;
 }
 
-Session &
-operator<<(Session &iSession, const Connect::ConnectionInfo &iConnectionInfo)
-{
-    iSession.saveConnectionInfo(iConnectionInfo);
-    return iSession;
-}
-
-Session &
-operator>>(Session &iSession, Connect::ConnectionInfo &oConnectionInfo)
-{
-    iSession.loadConnectionInfo(oConnectionInfo);
-    return iSession;
-}
-
-Session &
-operator<<(Session &iSession, const Gui::GraphicsScene &iGraphicsScene)
-{
-    iSession.saveScene(iGraphicsScene);
-    return iSession;
-}
-
-Session &
-operator>>(Session &iSession, Gui::GraphicsScene &oGraphicsScene)
-{
-    iSession.loadScene(oGraphicsScene);
-    return iSession;
-}
+//Session &
+//operator<<(Session &iSession, const Connect::ConnectionInfo &iConnectionInfo)
+//{
+//    iSession.saveConnectionInfo(iConnectionInfo);
+//    return iSession;
+//}
+//
+//Session &
+//operator>>(Session &iSession, Connect::ConnectionInfo &oConnectionInfo)
+//{
+//    iSession.loadConnectionInfo(oConnectionInfo);
+//    return iSession;
+//}
+//
+//Session &
+//operator<<(Session &iSession, const Gui::GraphicsScene &iGraphicsScene)
+//{
+//    iSession.saveScene(iGraphicsScene);
+//    return iSession;
+//}
+//
+//Session &
+//operator>>(Session &iSession, Gui::GraphicsScene &oGraphicsScene)
+//{
+//    iSession.loadScene(oGraphicsScene);
+//    return iSession;
+//}
 
 }

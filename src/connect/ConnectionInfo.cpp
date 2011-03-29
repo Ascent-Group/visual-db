@@ -126,7 +126,7 @@ ConnectionInfo::fromXml(QDomElement &iElement)
 void
 ConnectionInfo::toXml(QDomDocument &iDoc, QDomElement &iElement) const
 {
-    QDomElement connElement = iDoc.createElement("connection");
+    QDomElement connElement = iDoc.createElement("connectionInfo");
     iElement.appendChild(connElement);
 
     QDomElement dbElement = iDoc.createElement("database");

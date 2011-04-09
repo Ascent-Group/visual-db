@@ -83,5 +83,7 @@ const QString PROXY_PORT_SETTING("ProxyPort");
 const QString PROXY_USER_SETTING("ProxyUser");
 // end group LastSession
 
+const QString SESSION_FILE_EXT(".vdb");
+
 } // namespace Consts
 

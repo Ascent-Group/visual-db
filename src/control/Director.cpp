@@ -27,6 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <consts.h>
 #include <control/Config.h>
 #include <control/Context.h>
 #include <control/Director.h>
@@ -88,8 +89,18 @@ Director::~Director()
 {
     qDebug() << "Director::~Director>";
     // clear the registry
-    foreach (Control::Context *ctx, mRegistry.values()) {
+    QList<Control::Context*> contexts = mRegistry.values();
+
+    /**
+     * We have to use a separate list for contexts because:
+     * 1. we can't modify the registry
+     * 2. registry values returns non unique value list.
+     */
+    Control::Context *ctx;
+    while (!contexts.isEmpty()) {
+        ctx = contexts.takeFirst();
         remove(ctx);
+        contexts.removeAll(ctx);
     }
     mRegistry.clear();
 
@@ -322,15 +333,27 @@ Director::showConnectionDialog(bool iLoadSession)
 {
     using namespace Gui;
     using namespace Connect;
-
-    // \todo we should get the last connetion info somehow
-    // \note I Suggest we have a constructor with only bool parameter.
+    using namespace Control;
 
     // create sql connection dialog
     SqlConnectionDialog connDialog(iLoadSession);
 
-    // \todo set last used connection info
+    // set last used connection info
     QVector<ConnectionInfo> infos;
+
+    Config cfg;
+    ConnectionInfo recentConnInfo;
+    for (int i = 0; i < cfg.savedSessionsNumber() ; ++i) {
+        if (!cfg.savedSession(i).isEmpty()) {
+            Session session;
+            session.load(cfg.savedSession(i));
+            for (int j = 0; j < 1/* \todo session.connectionsNumber()*/; ++j) {
+                session.loadConnectionInfo(recentConnInfo, j);
+                infos.push_back(recentConnInfo);
+            }
+        }
+    }
+
     connDialog.setConnectionInfos(infos);
 
     Context *ctx = 0;
@@ -477,7 +500,7 @@ Director::loadSessionRequested()
     QString fileName = QFileDialog::getOpenFileName(0,
             tr("Open session..."),
             Control::Config().sessionDir(),
-            tr("Session files (*.vdb)"));
+            tr("Session files (*%1)").arg(Consts::SESSION_FILE_EXT));
 
     if (!QFile::exists(fileName)) {
         QMessageBox::critical(0, tr("Load session error"), tr("File doesn't exists"), QMessageBox::Ok);
@@ -506,18 +529,34 @@ Director::saveSessionRequested()
         QDir().mkpath(sessionDirPath);
     }
 
-    QString fileName = QFileDialog::getSaveFileName(mMainWindow, tr("Save session..."), sessionDirPath, tr("Session files (*.vdb)"));
+    QString fileName = QFileDialog::getSaveFileName(mMainWindow, tr("Save session..."), sessionDirPath, tr("Session files (*%1)").arg(Consts::SESSION_FILE_EXT));
     if (!fileName.isEmpty()) {
         // Go through all contexts
         Session session;
         quint32 index = 0;
-        foreach (Context *ctx, mRegistry.values()) {
+        QList<Context*> contexts = mRegistry.values();
+        Context *ctx = 0;
+
+        // \sa Director::~Director for reasons why we use this kind of loop
+        while (!contexts.isEmpty()) {
+            ctx = contexts.takeFirst();
             // save session for each context
 
             // \todo this includes saving connection infos, tab infos, widget sizes, etc.
             session.saveConnectionInfo(ctx->connectionInfo(), index++);
+
+            contexts.removeAll(ctx);
         }
+
+        if (!fileName.endsWith(Consts::SESSION_FILE_EXT)) {
+            fileName.append(Consts::SESSION_FILE_EXT);
+        }
+
         session.save(fileName);
+
+        Control::Config cfg;
+        qDebug() << fileName;
+        cfg.setSavedSession(fileName);
     }
 }
 
@@ -529,6 +568,7 @@ Director::saveSessionRequested()
 void
 Director::restoreSession(const QString &iFileName)
 {
+    qDebug() << "Director::restoreSession>";
     // \todo Implement
 }
 

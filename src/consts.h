@@ -123,6 +123,8 @@ namespace Consts
     extern const QString PROXY_USER_SETTING;
     // end group LastSession
 
+    /*! Extension of a file with a saed session */
+    extern const QString SESSION_FILE_EXT;
 } // namespace Consts
 
 #endif // CONSTS_H

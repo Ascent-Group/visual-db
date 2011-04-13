@@ -144,8 +144,9 @@ SqlConnectionDialog::setConnectionInfos(const QVector<Connect::ConnectionInfo> &
         ui.mConnectionsBox->insertItem(index++, text);
     }
 
-    // add dummy entry for new connections
+    // add dummy entry for new connection and select it
     ui.mConnectionsBox->insertItem(index, tr("<New connection>"));
+    ui.mConnectionsBox->setCurrentIndex(ui.mConnectionsBox->count() - 1);
 }
 
 /*!

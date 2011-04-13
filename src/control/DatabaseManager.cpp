@@ -307,5 +307,69 @@ DatabaseManager::lastError(const Control::Context *iCtx) const
     return findDatabase(iCtx)->lastError();
 }
 
+/*!
+ * Reads indices names for the given context
+ *
+ * \param[in] iCtx - Context
+ * \param[out] oList - List with indices names.
+ */
+void
+DatabaseManager::indicesList(const Control::Context *iCtx, QStringList &oList) const
+{
+    DbObjects::Common::Database *db = findDatabase(iCtx);
+
+    if (db) {
+        db->indicesList(oList);
+    }
+}
+
+/*!
+ * Reads languages names for the given context
+ *
+ * \param[in] iCtx - Context
+ * \param[out] oList - List with languages names.
+ */
+void
+DatabaseManager::languagesList(const Control::Context *iCtx, QStringList &oList) const
+{
+    DbObjects::Common::Database *db = findDatabase(iCtx);
+
+    if (db) {
+        db->languagesList(oList);
+    }
+}
+
+/*!
+ * Reads roles names for the given context
+ *
+ * \param[in] iCtx - Context
+ * \param[out] oList - List with roles names.
+ */
+void
+DatabaseManager::rolesList(const Control::Context *iCtx, QStringList &oList) const
+{
+    DbObjects::Common::Database *db = findDatabase(iCtx);
+
+    if (db) {
+        db->rolesList(oList);
+    }
+}
+
+/*!
+ * Reads schemas names for the given context.
+ *
+ * \param[in] iCtx - Context.
+ * \param[out] oList - List with schema names.
+ */
+void
+DatabaseManager::schemasList(const Control::Context *iCtx, QStringList &oList) const
+{
+    DbObjects::Common::Database *db = findDatabase(iCtx);
+
+    if (db) {
+        db->schemasList(oList);
+    }
+}
+
 } // namespace Control
 

@@ -27,11 +27,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef TREEWIDGET_H
-#define TREEWIDGET_H
+#ifndef GUI_TREEWIDGET_H
+#define GUI_TREEWIDGET_H
 
 #include <QTreeWidget>
-#include <common/Database.h>
+//#include <common/Database.h>
 #include <common/DbObject.h>
 
 class QContextMenuEvent;
@@ -90,6 +90,10 @@ class TreeWidget : public QTreeWidget
             IdCol
         };
 
+        void displayIndices(const QStringList &iList);
+        void displayLanguages(const QStringList &iList);
+        void displayRoles(const QStringList &iList);
+        void displaySchemas(const QStringList &iList);
 //    signals:
 //        void itemDoubleClicked();
 
@@ -100,12 +104,16 @@ class TreeWidget : public QTreeWidget
 
     private:
         QMenu *mContextMenu;
+        QTreeWidgetItem *mIndicesNode;
+        QTreeWidgetItem *mLanguagesNode;
+        QTreeWidgetItem *mRolesNode;
+        QTreeWidgetItem *mSchemasNode;
 
     private:
-        void insertItems(QTreeWidgetItem *, QStringList *, TreeWidget::Item, bool iDragEnabled = false);
+        void insertItems(QTreeWidgetItem *, const QStringList &, TreeWidget::Item, bool iDragEnabled = false);
 };
 
 }
 
-#endif // TREEWIDGET_H
+#endif // GUI_TREEWIDGET_H
 

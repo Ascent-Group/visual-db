@@ -83,6 +83,12 @@ class DatabaseManager
 
         QString lastError(const Control::Context *) const;
 
+        // actual database functions
+        void indicesList(const Control::Context *, QStringList &oList) const;
+        void languagesList(const Control::Context *, QStringList &oList) const;
+        void rolesList(const Control::Context *, QStringList &oList) const;
+        void schemasList(const Control::Context *, QStringList &oList) const;
+
         friend class Director;
 
 };

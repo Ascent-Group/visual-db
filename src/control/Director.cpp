@@ -462,7 +462,34 @@ Director::reloadDataRequested()
             return;
         }
 
+        // here goes the reading of all objects
         // \todo get updated data and notify clients
+        tree->clear();
+
+        QStringList schemasNames;
+        mDbMgr.schemasList(ctx, schemasNames);
+        tree->displaySchemas(schemasNames);
+
+        QStringList rolesNames;
+        mDbMgr.rolesList(ctx, rolesNames);
+        tree->displayRoles(rolesNames);
+
+        QStringList indicesNames;
+        mDbMgr.indicesList(ctx, indicesNames);
+        tree->displayIndices(indicesNames);
+
+        QStringList languagesNames;
+        mDbMgr.languagesList(ctx, languagesNames);
+        tree->displayLanguages(languagesNames);
+
+        foreach (const QString &schemaName, schemasNames) {
+            // read triggers
+            // read tables
+            // read views
+            // read procs
+//            mDbMgr.
+        }
+
 //        QList<DbObject*> newObjects;
 //        mDbMgr->updatedObjects(iCtx, );
 //        tree->update();
@@ -529,7 +556,11 @@ Director::saveSessionRequested()
         QDir().mkpath(sessionDirPath);
     }
 
-    QString fileName = QFileDialog::getSaveFileName(mMainWindow, tr("Save session..."), sessionDirPath, tr("Session files (*%1)").arg(Consts::SESSION_FILE_EXT));
+    QString fileName = QFileDialog::getSaveFileName(mMainWindow,
+            tr("Save session..."),
+            sessionDirPath,
+            tr("Session files (*%1)").arg(Consts::SESSION_FILE_EXT));
+
     if (!fileName.isEmpty()) {
         // Go through all contexts
         Session session;

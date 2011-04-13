@@ -253,6 +253,8 @@ MainWindow::createMenus()
 
 /*!
  * \brief Update session menu
+ *
+ * \todo fix it to work with director
  */
 void
 MainWindow::updateSessionMenu()

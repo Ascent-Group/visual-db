@@ -31,6 +31,11 @@
 
 namespace Control {
 
+Converter::Converter(DatabaseManager &iDbManager)
+    : mDbManager(iDbManager)
+{
+}
+
 bool 
 Converter::toTableItem(const DbObjects::Common::DbTablePtr &iDbTablePtr, 
         Gui::GraphicsItems::TableItem &oTableItem)
@@ -54,14 +59,14 @@ Converter::toTableItem(const DbObjects::Common::DbTablePtr &iDbTablePtr,
 	return true;
 }
 
-//bool 
-//Converter::toDbTable(DbObjects::Common::DbTablePtr &oDbTablePtr, 
-//	const Gui::GraphicsItems::TableItem &iTableItem)
-//{
-//    
-//
-//	return true;
-//}
+bool 
+Converter::toDbTable(DbObjects::Common::DbTablePtr &oDbTablePtr, 
+	const Gui::GraphicsItems::TableItem &iTableItem)
+{
+    
+
+	return true;
+}
 
 bool 
 Converter::toViewItem(const DbObjects::Common::DbViewPtr &iDbViewPtr, 
@@ -78,12 +83,12 @@ Converter::toViewItem(const DbObjects::Common::DbViewPtr &iDbViewPtr,
 	return true;
 }
 
-//bool 
-//Converter::toDbView(DbObjects::Common::DbViewPtr &oDbViewPtr, 
-//	const Gui::GraphicsItems::ViewItem &iViewItem)
-//{
-//	return true;
-//}
+bool 
+Converter::toDbView(DbObjects::Common::DbViewPtr &oDbViewPtr, 
+	const Gui::GraphicsItems::ViewItem &iViewItem)
+{
+	return true;
+}
 
 bool 
 Converter::toDescriptionWidget(const DbObjects::Common::DbIndexPtr &iDbIndexPtr, 

@@ -42,6 +42,8 @@ class Session {
         explicit Session();
         virtual ~Session();
 
+        quint32 countConnections() const;
+
         bool save(const QString &iFileName);
         bool saveConnectionInfo(const Connect::ConnectionInfo &iConnectionInfo, quint32 iId);
         bool saveScene(const Gui::GraphicsScene &iGraphicsScene, quint32 iId);

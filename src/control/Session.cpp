@@ -47,6 +47,12 @@ Session::~Session()
 {
 }
 
+quint32
+Session::countConnections() const
+{
+    return mSessionElement.attribute("count").toInt();
+}
+
 bool
 Session::save(const QString &iFileName)
 {

@@ -31,7 +31,7 @@
 #define GUI_TREEWIDGET_H
 
 #include <QTreeWidget>
-//#include <common/Database.h>
+#include <common.h>
 #include <common/DbObject.h>
 
 class QContextMenuEvent;
@@ -81,7 +81,7 @@ class TreeWidget : public QTreeWidget
             ProcedureNode
         };
 
-        void refresh();
+//        void refresh();
 
         void setContextMenu(QMenu *);
 
@@ -90,10 +90,7 @@ class TreeWidget : public QTreeWidget
             IdCol
         };
 
-        void displayIndices(const QStringList &iList);
-        void displayLanguages(const QStringList &iList);
-        void displayRoles(const QStringList &iList);
-        void displaySchemas(const QStringList &iList);
+        void displayObjects(const Objects &iList);
 //    signals:
 //        void itemDoubleClicked();
 
@@ -110,7 +107,7 @@ class TreeWidget : public QTreeWidget
         QTreeWidgetItem *mSchemasNode;
 
     private:
-        void insertItems(QTreeWidgetItem *, const QStringList &, TreeWidget::Item, bool iDragEnabled = false);
+//        void insertItems(QTreeWidgetItem *, QStringList &, TreeWidget::Item, bool iDragEnabled = false);
 };
 
 }

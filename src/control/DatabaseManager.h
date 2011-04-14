@@ -30,8 +30,10 @@
 #ifndef CONTROL_DATABASEMANAGER_H
 #define CONTROL_DATABASEMANAGER_H
 
-#include <dbobjects/common/Database.h>
+#include <common.h>
 #include <connect/ConnectionInfo.h>
+#include <dbobjects/common/Database.h>
+#include <dbobjects/common/DbObject.h>
 
 namespace DbObjects
 {
@@ -84,10 +86,7 @@ class DatabaseManager
         QString lastError(const Control::Context *) const;
 
         // actual database functions
-        void indicesList(const Control::Context *, QStringList &oList) const;
-        void languagesList(const Control::Context *, QStringList &oList) const;
-        void rolesList(const Control::Context *, QStringList &oList) const;
-        void schemasList(const Control::Context *, QStringList &oList) const;
+        void newObjects(const Control::Context *, Objects &oList) const;
 
         friend class Director;
 

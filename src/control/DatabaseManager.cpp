@@ -30,6 +30,7 @@
 #include <control/Context.h>
 #include <control/DatabaseManager.h>
 #include <dbobjects/common/Database.h>
+#include <dbobjects/common/DbObjectPtr.h>
 #include <dbobjects/mysql/Factories.h>
 #include <dbobjects/mysql/Tools.h>
 #include <dbobjects/psql/Factories.h>
@@ -308,66 +309,82 @@ DatabaseManager::lastError(const Control::Context *iCtx) const
 }
 
 /*!
- * Reads indices names for the given context
+ * Reads new objects for the given context
  *
  * \param[in] iCtx - Context
  * \param[out] oList - List with indices names.
  */
 void
-DatabaseManager::indicesList(const Control::Context *iCtx, QStringList &oList) const
+DatabaseManager::newObjects(const Control::Context *iCtx, Objects &oList) const
 {
-    DbObjects::Common::Database *db = findDatabase(iCtx);
+    using namespace DbObjects::Common;
+
+    Database *db = findDatabase(iCtx);
 
     if (db) {
-        db->indicesList(oList);
-    }
-}
+        QString parentName("");
 
-/*!
- * Reads languages names for the given context
- *
- * \param[in] iCtx - Context
- * \param[out] oList - List with languages names.
- */
-void
-DatabaseManager::languagesList(const Control::Context *iCtx, QStringList &oList) const
-{
-    DbObjects::Common::Database *db = findDatabase(iCtx);
+        // roles
+        QStringList rolesNames;
+        db->rolesList(rolesNames);
+        foreach (const QString &name, rolesNames) {
+            oList.insert(name, qMakePair(parentName, (int)DbObject::RoleObject));
+        }
 
-    if (db) {
-        db->languagesList(oList);
-    }
-}
+        // languages
+        QStringList languagesNames;
+        db->languagesList(languagesNames);
+        foreach (const QString &name, languagesNames) {
+            oList.insert(name, qMakePair(parentName, (int)DbObject::LanguageObject));
+        }
 
-/*!
- * Reads roles names for the given context
- *
- * \param[in] iCtx - Context
- * \param[out] oList - List with roles names.
- */
-void
-DatabaseManager::rolesList(const Control::Context *iCtx, QStringList &oList) const
-{
-    DbObjects::Common::Database *db = findDatabase(iCtx);
+        // indices
+        QStringList indicesNames;
+        db->indicesList(indicesNames);
+        foreach (const QString &name, indicesNames) {
+            oList.insert(name, qMakePair(parentName, (int)DbObject::IndexObject));
+        }
 
-    if (db) {
-        db->rolesList(oList);
-    }
-}
+        // schemas
+        QStringList schemasNames;
+        db->schemasList(schemasNames);
+        foreach (const QString &name, schemasNames) {
+            oList.insert(name, qMakePair(parentName, (int)DbObject::SchemaObject));
+        }
 
-/*!
- * Reads schemas names for the given context.
- *
- * \param[in] iCtx - Context.
- * \param[out] oList - List with schema names.
- */
-void
-DatabaseManager::schemasList(const Control::Context *iCtx, QStringList &oList) const
-{
-    DbObjects::Common::Database *db = findDatabase(iCtx);
+        // read schemas children
+        QStringList childrenNames;
+        foreach (const QString &schemaName, schemasNames) {
+            // tables
+            db->findSchema(schemaName)->tablesList(childrenNames);
+            foreach (const QString &name, childrenNames) {
+                oList.insert(name, qMakePair(schemaName, (int)DbObject::TableObject));
+            }
 
-    if (db) {
-        db->schemasList(oList);
+            childrenNames.clear();
+
+            // triggers
+            db->findSchema(schemaName)->triggersList(childrenNames);
+            foreach (const QString &name, childrenNames) {
+                oList.insert(name, qMakePair(schemaName, (int)DbObject::TriggerObject));
+            }
+
+            childrenNames.clear();
+
+            // views
+            db->findSchema(schemaName)->viewsList(childrenNames);
+            foreach (const QString &name, childrenNames) {
+                oList.insert(name, qMakePair(schemaName, (int)DbObject::ViewObject));
+            }
+
+            childrenNames.clear();
+
+            // procs
+            db->findSchema(schemaName)->proceduresList(childrenNames);
+            foreach (const QString &name, childrenNames) {
+                oList.insert(name, qMakePair(schemaName, (int)DbObject::ProcedureObject));
+            }
+        }
     }
 }
 

@@ -163,7 +163,7 @@ Config::setLoadLastSession(bool iFlag)
 quint32
 Config::savedSessionsNumber() const
 {
-    return mSettings.value(Consts::PREFS_GRP + "/" + Consts::SAVED_SESSIONS_NUMBER_SETTING, 0).toUInt();
+    return mSettings.value(Consts::PREFS_GRP + "/" + Consts::SAVED_SESSIONS_NUMBER_SETTING, 10).toUInt();
 }
 
 /*!

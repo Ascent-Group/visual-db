@@ -27,6 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <common.h>
 #include <consts.h>
 #include <control/Config.h>
 #include <control/Context.h>
@@ -341,15 +342,21 @@ Director::showConnectionDialog(bool iLoadSession)
     // set last used connection info
     QVector<ConnectionInfo> infos;
 
+    QString sessionFile;
     Config cfg;
     ConnectionInfo recentConnInfo;
     for (int i = 0; i < cfg.savedSessionsNumber() ; ++i) {
-        if (!cfg.savedSession(i).isEmpty()) {
-            Session session;
-            session.load(cfg.savedSession(i));
-            for (int j = 0; j < 1/* \todo session.connectionsNumber()*/; ++j) {
-                session.loadConnectionInfo(recentConnInfo, j);
-                infos.push_back(recentConnInfo);
+        sessionFile = cfg.savedSession(i);
+        if (!sessionFile.isEmpty()) {
+            if (QFile::exists(sessionFile)) {
+                Session session;
+                session.load(sessionFile);
+                for (int j = 0; j < 1/* \todo session.connectionsNumber()*/; ++j) {
+                    session.loadConnectionInfo(recentConnInfo, j);
+                    infos.push_back(recentConnInfo);
+                }
+            } else {
+                emit logMessageRequest(QString("Session file '%1' doesn't exist!").arg(sessionFile));
             }
         }
     }
@@ -462,37 +469,11 @@ Director::reloadDataRequested()
             return;
         }
 
-        // here goes the reading of all objects
-        // \todo get updated data and notify clients
-        tree->clear();
-
-        QStringList schemasNames;
-        mDbMgr.schemasList(ctx, schemasNames);
-        tree->displaySchemas(schemasNames);
-
-        QStringList rolesNames;
-        mDbMgr.rolesList(ctx, rolesNames);
-        tree->displayRoles(rolesNames);
-
-        QStringList indicesNames;
-        mDbMgr.indicesList(ctx, indicesNames);
-        tree->displayIndices(indicesNames);
-
-        QStringList languagesNames;
-        mDbMgr.languagesList(ctx, languagesNames);
-        tree->displayLanguages(languagesNames);
-
-        foreach (const QString &schemaName, schemasNames) {
-            // read triggers
-            // read tables
-            // read views
-            // read procs
-//            mDbMgr.
-        }
-
-//        QList<DbObject*> newObjects;
-//        mDbMgr->updatedObjects(iCtx, );
-//        tree->update();
+        // get new data and notify clients
+        Objects objects;
+//        tree->clear();
+        mDbMgr.newObjects(ctx, objects);
+        tree->displayObjects(objects);
 
         mMainWindow->setEnableForActions(true);
     }
@@ -582,11 +563,10 @@ Director::saveSessionRequested()
         if (!fileName.endsWith(Consts::SESSION_FILE_EXT)) {
             fileName.append(Consts::SESSION_FILE_EXT);
         }
-
+        qDebug() << fileName;
         session.save(fileName);
 
         Control::Config cfg;
-        qDebug() << fileName;
         cfg.setSavedSession(fileName);
     }
 }

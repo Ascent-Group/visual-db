@@ -36,43 +36,37 @@
 
 namespace Gui {
 
-//static QString qDBCaption(const QSqlDatabase &);
 static void setBold(QTreeWidgetItem *, bool);
+static QTreeWidgetItem* createNode(QTreeWidgetItem *, const QString &, TreeWidget::Node);
 
 /*!
  * Constructor
  */
 TreeWidget::TreeWidget(/*QMenu *iMenu, */QWidget *iParent)
-    : QTreeWidget(iParent)//, mContextMenu(iMenu)
+    : QTreeWidget(iParent),
+      mContextMenu(0),
+      mIndicesNode(0),
+      mLanguagesNode(0),
+      mRolesNode(0),
+      mSchemasNode(0)
 {
-    setHeaderLabel(QString(""));
-    setAnimated(true);
-    setFont(QFont("Arial", 8));
-
     // construct the tree skeleton
-    mIndicesNode = new QTreeWidgetItem(this);
-    mIndicesNode->setText(TreeWidget::NameCol, tr("Indices"));
-    mIndicesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::IndexNode));
-    setBold(mIndicesNode, true);
+    mIndicesNode = createNode(0, tr("Indices"), TreeWidget::IndexNode);
     addTopLevelItem(mIndicesNode);
 
-    mLanguagesNode = new QTreeWidgetItem(this);
-    mLanguagesNode->setText(TreeWidget::NameCol, tr("Languages"));
-    mLanguagesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::LanguageNode));
-    setBold(mLanguagesNode, true);
+    mLanguagesNode = createNode(0, tr("Languages"), TreeWidget::LanguageNode);
     addTopLevelItem(mLanguagesNode);
 
-    mRolesNode = new QTreeWidgetItem(this);
-    mRolesNode->setText(TreeWidget::NameCol, tr("Roles"));
-    mRolesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::RoleNode));
-    setBold(mRolesNode, true);
+    mRolesNode = createNode(0, tr("Roles"), TreeWidget::RoleNode);
     addTopLevelItem(mRolesNode);
 
-    mSchemasNode = new QTreeWidgetItem(this);
-    mSchemasNode->setText(TreeWidget::NameCol, tr("Schemas"));
-    mSchemasNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::SchemaNode));
-    setBold(mSchemasNode, true);
+    mSchemasNode = createNode(0, tr("Schemas"), TreeWidget::SchemaNode);
     addTopLevelItem(mSchemasNode);
+
+    setHeaderLabel(QString(""));
+    setHeaderHidden(true);
+    setAnimated(true);
+    setFont(QFont("Arial", 8));
 }
 
 /*!
@@ -96,43 +90,10 @@ TreeWidget::setContextMenu(QMenu *iMenu)
 /*!
  * \brief Read database and fill the tree
  */
+#if 0
 void
 TreeWidget::refresh()
 {
-#if 0
-    clear();
-
-    // \todo reimplement according to new design
-//    QSqlDatabase db = QSqlDatabase::database("mainConnect");
-
-//    setHeaderLabel(qDBCaption(db));
-
-
-    // interact with progressbar here
-
-    // populate object tree
-    // (better place rather than inside ctor)
-    DbObjects::Common::Database *dbInst = DbObjects::Common::Database::instance();
-    dbInst->resetData();
-    dbInst->loadData(0, 0);
-
-    //// ROLES
-    // read roles
-    QStringList rolesList;
-    dbInst->rolesList(rolesList);
-    insertItems(rolesNode, &rolesList, TreeWidget::RoleItem);
-
-    //// LANGS
-    // get and sort langs list
-    QStringList langsList;
-    dbInst->languagesList(langsList);
-    insertItems(langsNode, &langsList, TreeWidget::LanguageItem);
-
-    //// SCHEMAS
-    // get and sort schemas list
-    QStringList schemasList;
-    dbInst->schemasList(schemasList);
-
     QStringList::const_iterator schemaIter;
     // for each schema on the list
     for (schemaIter = schemasList.begin(); schemaIter != schemasList.end(); ++schemaIter) {
@@ -192,64 +153,78 @@ TreeWidget::refresh()
         schema->triggersList(trigsList);
         insertItems(trigsNode, &trigsList, TreeWidget::TriggerItem);
     }
-
-    //// INDICES
-
-    // get and sort indices list
-    QStringList indicesList;
-    dbInst->indicesList(indicesList);
-
     insertItems(indicesNode, &indicesList, TreeWidget::IndexItem);
+}
 #endif
-}
-
-/*!
- * \todo comments
- */
-void
-TreeWidget::displayIndices(const QStringList &iList)
-{
-    insertItems(mIndicesNode, iList, TreeWidget::IndexItem);
-}
-
-/*!
- * \todo comments
- */
-void
-TreeWidget::displayLanguages(const QStringList &iList)
-{
-    insertItems(mLanguagesNode, iList, TreeWidget::LanguageItem);
-}
 
 /*!
  * \todo comment
  */
 void
-TreeWidget::displayRoles(const QStringList &iList)
+TreeWidget::displayObjects(const Objects &iList)
 {
-    insertItems(mRolesNode, iList, TreeWidget::RoleItem);
-}
+    using namespace DbObjects::Common;
 
-/*!
- * \todo comment
- */
-void
-TreeWidget::displaySchemas(const QStringList &iList)
-{
-    insertItems(mSchemasNode, iList, TreeWidget::SchemaItem);
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
+    QTreeWidgetItem *item = 0;
 
-//    QStringList::const_iterator schemaIter;
-//    // for each schema on the list
-//    for (schemaIter = iList.begin(); schemaIter != iList.end(); ++schemaIter) {
-//        // keep app responsive
-//        QApplication::processEvents();
-//
-//        QString schemaName = *schemaIter;
-//        // create an item
-//        QTreeWidgetItem *schemaItem = new QTreeWidgetItem(mSchemasNode);
-//        schemaItem->setText(TreeWidget::NameCol, schemaName);
-//        schemaItem->setText(TreeWidget::IdCol, QString::number(TreeWidget::SchemaItem));
-//    }
+    foreach(const QString &name, iList.keys()) {
+        QString parentName = iList.value(name).first;
+        int type = iList.value(name).second;
+        switch (type) {
+            case IndexItem:
+                item = new(std::nothrow) QTreeWidgetItem(mIndicesNode);
+                break;
+
+            case LanguageItem:
+                item = new(std::nothrow) QTreeWidgetItem(mLanguagesNode);
+                break;
+
+            case RoleItem:
+                item = new(std::nothrow) QTreeWidgetItem(mRolesNode);
+                break;
+
+            case SchemaItem:
+            {
+                item = new(std::nothrow) QTreeWidgetItem(mSchemasNode);
+                // create children
+                createNode(item, tr("Procedures"), TreeWidget::ProcedureNode);
+                createNode(item, tr("Tables"), TreeWidget::TableNode);
+                createNode(item, tr("Triggers"), TreeWidget::TriggerNode);
+                createNode(item, tr("Views"), TreeWidget::ViewNode);
+            }
+                break;
+
+            case ViewItem:
+            case ProcedureItem:
+            case TableItem:
+            case TriggerItem:
+            {
+                // find schemas nodes
+//                QTreeWidgetItem *schemaNode = findItems(tr("Schemas"));
+//                Q_ASSERT(0 != schemaNode);
+                // find schema item with parent's name
+//                QTreeWidgetItem *parentNode = schemaNode->findItems(parentName);
+                // find nested tables node
+                // if there is no such node, then create it
+            }
+                break;
+            case UnkItem:
+            default:
+                item = 0;
+                break;
+        }
+
+        if (item) {
+            item->setFlags(flags);
+            item->setText(TreeWidget::NameCol, name);
+            item->setText(TreeWidget::IdCol, QString::number(type));
+            item->setData(TreeWidget::NameCol, Qt::DisplayRole, name);
+        }
+
+    }
+
+    // \todo sort tree here
 }
 
 /*!
@@ -299,28 +274,6 @@ TreeWidget::startDrag(Qt::DropActions)
 //}
 
 /*!
- * \brief Create the database caption
- *
- * \param[in] iDb - Database connection
- *
- * \return Database caption
- */
-//static QString
-//qDBCaption(const QSqlDatabase &iDb)
-//{
-//    QString driverName = iDb.driverName();
-//    driverName.append(QLatin1Char(':'));
-//
-//    if (!iDb.userName().isEmpty()) {
-//        driverName.append(iDb.userName()).append(QLatin1Char('@'));
-//    }
-//
-//    driverName.append(iDb.databaseName());
-//
-//    return driverName;
-//}
-
-/*!
  * \brief Set font to bold
  *
  * \param[in] iItem - Tree item we need to change the boldness
@@ -329,42 +282,62 @@ TreeWidget::startDrag(Qt::DropActions)
 static void
 setBold(QTreeWidgetItem *iItem, bool iBold)
 {
-    QFont font = iItem->font(0);
+    QFont font = iItem->font(TreeWidget::NameCol);
     font.setBold(iBold);
-    iItem->setFont(0, font);
+    iItem->setFont(TreeWidget::NameCol, font);
 }
 
 /*!
- * \brief Populate tree under parent-item with triggers
- *
- * \param[in] iParentItem - Parent item we will populate
- * \param[in] iList - The list of captions we need to fill with the parent item
- * \param[in] iType - Item type
+ * \todo comments
  */
-void
-TreeWidget::insertItems(QTreeWidgetItem *iParentItem, const QStringList &iList, TreeWidget::Item iType, bool /*iDragEnabled*/)
+static QTreeWidgetItem*
+createNode(QTreeWidgetItem *iParent, const QString &iName, TreeWidget::Node iType)
 {
-    // \fixme temp hack
-    return;
+    QTreeWidgetItem *node = new(std::nothrow) QTreeWidgetItem(iParent);
 
-    // \todo determine what to do with sorting
-//    iList.sort();
-
-    QStringList::const_iterator iter;
-
-    // for each item in the list
-    for (iter = iList.constBegin(); iter != iList.constEnd(); ++iter) {
-
-        // create an item
-        QTreeWidgetItem *item = new(std::nothrow) QTreeWidgetItem(iParentItem);
-        if (item) {
-            // \todo if iDragEnabled then append last flag, otherwise no
-            item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled);
-            item->setText(TreeWidget::NameCol, *iter);
-            item->setText(TreeWidget::IdCol, QString::number(iType));
-            item->setData(TreeWidget::NameCol, Qt::DisplayRole, *iter);
-        }
+    if (node) {
+        node->setText(TreeWidget::NameCol, iName);
+        node->setText(TreeWidget::IdCol, QString::number(iType));
+        setBold(node, true);
     }
+
+    return node;
 }
+
+/*!
+ * \brief Populate tree under parent-item with triggers.
+ *
+ * \param[in] iParentItem - Parent item we will populate.
+ * \param[in] iList - The list of captions we need to fill with the parent item.
+ * \param[in] iType - Item type.
+ * \param[in] iDrabEnabled - Indicates whether these items should be draggable or not.
+ */
+//void
+//TreeWidget::insertItems(QTreeWidgetItem *iParentItem, QStringList &iList, TreeWidget::Item iType, bool iDragEnabled)
+//{
+//    qDebug() << "=>" << iParentItem;
+//    iList.sort();
+//
+//    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+//    if (iDragEnabled) {
+//        flags |= Qt::ItemIsDragEnabled;
+//    }
+//
+//    QTreeWidgetItem *item;
+//    QStringList::const_iterator iter;
+//    // for each item in the list
+//    for (iter = iList.constBegin(); iter != iList.constEnd(); ++iter) {
+//
+//        qDebug() << "A";
+//        item = new(std::nothrow) QTreeWidgetItem(iParentItem);
+//        qDebug() << "B";
+//        if (item) {
+//            item->setFlags(flags);
+//            item->setText(TreeWidget::NameCol, *iter);
+//            item->setText(TreeWidget::IdCol, QString::number(iType));
+//            item->setData(TreeWidget::NameCol, Qt::DisplayRole, *iter);
+//        }
+//    }
+//}
 
 }

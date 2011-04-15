@@ -50,19 +50,6 @@ TreeWidget::TreeWidget(/*QMenu *iMenu, */QWidget *iParent)
       mRolesNode(0),
       mSchemasNode(0)
 {
-    // construct the tree skeleton
-    mIndicesNode = createNode(0, tr("Indices"), TreeWidget::IndexNode);
-    addTopLevelItem(mIndicesNode);
-
-    mLanguagesNode = createNode(0, tr("Languages"), TreeWidget::LanguageNode);
-    addTopLevelItem(mLanguagesNode);
-
-    mRolesNode = createNode(0, tr("Roles"), TreeWidget::RoleNode);
-    addTopLevelItem(mRolesNode);
-
-    mSchemasNode = createNode(0, tr("Schemas"), TreeWidget::SchemaNode);
-    addTopLevelItem(mSchemasNode);
-
     setHeaderLabel(QString(""));
     setHeaderHidden(true);
     setAnimated(true);
@@ -163,6 +150,22 @@ TreeWidget::refresh()
 void
 TreeWidget::displayObjects(const Objects &iList)
 {
+    clear();
+
+    // construct the tree skeleton
+    mIndicesNode = createNode(0, tr("Indices"), TreeWidget::IndexNode);
+    addTopLevelItem(mIndicesNode);
+
+    mLanguagesNode = createNode(0, tr("Languages"), TreeWidget::LanguageNode);
+    addTopLevelItem(mLanguagesNode);
+
+    mRolesNode = createNode(0, tr("Roles"), TreeWidget::RoleNode);
+    addTopLevelItem(mRolesNode);
+
+    mSchemasNode = createNode(0, tr("Schemas"), TreeWidget::SchemaNode);
+    addTopLevelItem(mSchemasNode);
+
+    // preparing is done, get to displaying
     using namespace DbObjects::Common;
 
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
@@ -170,7 +173,9 @@ TreeWidget::displayObjects(const Objects &iList)
 
     foreach(const QString &name, iList.keys()) {
         QString parentName = iList.value(name).first;
-        int type = iList.value(name).second;
+        TreeWidget::Item type = static_cast<TreeWidget::Item>(iList.value(name).second);
+        item = 0;
+
         switch (type) {
             case IndexItem:
                 item = new(std::nothrow) QTreeWidgetItem(mIndicesNode);
@@ -200,18 +205,17 @@ TreeWidget::displayObjects(const Objects &iList)
             case TableItem:
             case TriggerItem:
             {
-                // find schemas nodes
-//                QTreeWidgetItem *schemaNode = findItems(tr("Schemas"));
-//                Q_ASSERT(0 != schemaNode);
-                // find schema item with parent's name
-//                QTreeWidgetItem *parentNode = schemaNode->findItems(parentName);
-                // find nested tables node
-                // if there is no such node, then create it
+                qDebug() << name;
+                // find parent schema item
+//                QTreeWidgetItem *schemaItem = findItem(mSchemasNode, parentName, TreeWidget::NameCol);
+//                Q_ASSERT(0 != schemaItem);
+                // find nested node for the given item type
+//                item = findItem(schemaItem, QString::number((int)nodeForItem(type)), TreeWidget::IdCol);
+                // \todo ??? if there is no such node, then create it
             }
                 break;
             case UnkItem:
             default:
-                item = 0;
                 break;
         }
 
@@ -302,6 +306,42 @@ createNode(QTreeWidgetItem *iParent, const QString &iName, TreeWidget::Node iTyp
     }
 
     return node;
+}
+
+/*!
+ * Finds the treewidget item with the specified text and whose parent is the one that we
+ * said.
+ *
+ * \param[in] iParent - Parent of the item.
+ * \param[in] iText - Text of the item.
+ *
+ * \return Desired tree widget item
+ */
+QTreeWidgetItem*
+TreeWidget::findItem(QTreeWidgetItem *iParent, const QString &iValue, int iColumn) const
+{
+    QList<QTreeWidgetItem*> items = QTreeWidget::findItems(iValue, Qt::MatchExactly, iColumn);
+
+    QList<QTreeWidgetItem*>::iterator iter = items.begin();
+    QTreeWidgetItem *item = 0;
+
+    while (!item && iter != items.end()) {
+        if ((*iter)->parent() == iParent) {
+            item = (*iter);
+        }
+        ++iter;
+    }
+
+    return item;
+}
+
+/*!
+ *
+ */
+TreeWidget::Node
+TreeWidget::nodeForItem(TreeWidget::Item type) const
+{
+    return static_cast<TreeWidget::Node>(TreeWidget::UnkNode + type);
 }
 
 /*!

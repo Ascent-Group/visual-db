@@ -355,8 +355,11 @@ DatabaseManager::newObjects(const Control::Context *iCtx, Objects &oList) const
         // read schemas children
         QStringList childrenNames;
         foreach (const QString &schemaName, schemasNames) {
+            DbSchemaPtr schema = db->findSchema(schemaName);
+            Q_ASSERT(schema.valid());
+
             // tables
-            db->findSchema(schemaName)->tablesList(childrenNames);
+            schema->tablesList(childrenNames);
             foreach (const QString &name, childrenNames) {
                 oList.insert(name, qMakePair(schemaName, (int)DbObject::TableObject));
             }
@@ -364,7 +367,7 @@ DatabaseManager::newObjects(const Control::Context *iCtx, Objects &oList) const
             childrenNames.clear();
 
             // triggers
-            db->findSchema(schemaName)->triggersList(childrenNames);
+            schema->triggersList(childrenNames);
             foreach (const QString &name, childrenNames) {
                 oList.insert(name, qMakePair(schemaName, (int)DbObject::TriggerObject));
             }
@@ -372,7 +375,7 @@ DatabaseManager::newObjects(const Control::Context *iCtx, Objects &oList) const
             childrenNames.clear();
 
             // views
-            db->findSchema(schemaName)->viewsList(childrenNames);
+            schema->viewsList(childrenNames);
             foreach (const QString &name, childrenNames) {
                 oList.insert(name, qMakePair(schemaName, (int)DbObject::ViewObject));
             }
@@ -380,7 +383,7 @@ DatabaseManager::newObjects(const Control::Context *iCtx, Objects &oList) const
             childrenNames.clear();
 
             // procs
-            db->findSchema(schemaName)->proceduresList(childrenNames);
+            schema->proceduresList(childrenNames);
             foreach (const QString &name, childrenNames) {
                 oList.insert(name, qMakePair(schemaName, (int)DbObject::ProcedureObject));
             }

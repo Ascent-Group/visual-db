@@ -324,7 +324,7 @@ Director::findScene(Control::Context *iCtx) const
 /*!
  * Used to bring up a connection dialog for further connection establishing. This function
  * can be used either from slot Director::connectionDialogRequested() or from a function
- * that will restore sessions \todo name the mentioned function
+ * that will restore sessions \sa Director::restoreSession
  *
  * \param[in] iLoadSession - Inidicates whether the connection dialog is needed for
  * session restoring or for establishing a new connection.
@@ -351,7 +351,7 @@ Director::showConnectionDialog(bool iLoadSession)
             if (QFile::exists(sessionFile)) {
                 Session session;
                 session.load(sessionFile);
-                for (int j = 0; j < 1/* \todo session.connectionsNumber()*/; ++j) {
+                for (int j = 0; j < 1/* \todo session.countConnections()*/; ++j) {
                     session.loadConnectionInfo(recentConnInfo, j);
                     infos.push_back(recentConnInfo);
                 }
@@ -393,7 +393,7 @@ Director::showConnectionDialog(bool iLoadSession)
     // create scene for it and register it
     SceneWidget *scene = new SceneWidget();
     add(scene, ctx);
-    mMainWindow->addScene(scene, "Scene: " + tabTitle);
+    mMainWindow->addScene(scene, QString("Scene: %1").arg(tabTitle));
 
     // create tree for it and register it
     TreeWidget *tree = new TreeWidget();

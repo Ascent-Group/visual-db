@@ -107,6 +107,8 @@ class TreeWidget : public QTreeWidget
         QTreeWidgetItem *mSchemasNode;
 
     private:
+        QTreeWidgetItem* findItem(QTreeWidgetItem *iParent, const QString &iValue, int iColumn) const;
+        TreeWidget::Node nodeForItem(TreeWidget::Item type) const;
 //        void insertItems(QTreeWidgetItem *, QStringList &, TreeWidget::Item, bool iDragEnabled = false);
 };
 

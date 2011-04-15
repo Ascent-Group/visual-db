@@ -379,6 +379,7 @@ Config::savedSession(qint32 iIndex) const
 qint32
 Config::setSavedSession(const QString &iPath, qint32 iIndex)
 {
+    // \todo Make sure we don't duplicate sessions
     /*!
      * -inf | ... | -1              | 0 | 1 | ... | savedSessionsNumber() | ... | +inf |
      *  -1  | ... | first empty pos | 0 | 1 | ... |          -1           | ... |  -1  |

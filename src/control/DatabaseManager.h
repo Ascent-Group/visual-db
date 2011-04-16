@@ -60,6 +60,9 @@ class DatabaseManager
     public:
         ~DatabaseManager();
 
+        bool indices(const Context &iContext, const DbObjects::Common::DbTablePtr &iDbTablePtr,
+                QVector<DbObjects::Common::DbIndexPtr> oDbIndexPtrVector);
+
     private:
         DatabaseManager();
         /*!

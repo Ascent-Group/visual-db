@@ -50,6 +50,8 @@ TreeWidget::TreeWidget(/*QMenu *iMenu, */QWidget *iParent)
       mRolesNode(0),
       mSchemasNode(0)
 {
+    setColumnCount(TreeWidget::ColumnsCount);
+    setColumnHidden(TreeWidget::IdCol, true);
     setHeaderLabel(QString(""));
     setHeaderHidden(true);
     setAnimated(true);
@@ -75,77 +77,12 @@ TreeWidget::setContextMenu(QMenu *iMenu)
 }
 
 /*!
- * \brief Read database and fill the tree
- */
-#if 0
-void
-TreeWidget::refresh()
-{
-    QStringList::const_iterator schemaIter;
-    // for each schema on the list
-    for (schemaIter = schemasList.begin(); schemaIter != schemasList.end(); ++schemaIter) {
-        // keep app responsive
-        QApplication::processEvents();
-
-        QString schemaName = *schemaIter;
-        // create an item
-        QTreeWidgetItem *schemaItem = new QTreeWidgetItem(schemasNode);
-        schemaItem->setText(TreeWidget::NameCol, schemaName);
-        schemaItem->setText(TreeWidget::IdCol, QString::number(TreeWidget::SchemaItem));
-
-        // add to the scena subtree
-        //addTopLevelItem(schemaItem);
-
-        // create schema
-        DbSchemaPtr schema = dbInst->findSchema(schemaName);
-
-        // create tables node
-        QTreeWidgetItem *tablesNode = new QTreeWidgetItem(schemaItem);
-        tablesNode->setText(TreeWidget::NameCol, tr("Tables"));
-        tablesNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TableNode));
-        setBold(tablesNode, true);
-        // create views node
-        QTreeWidgetItem *viewsNode = new QTreeWidgetItem(schemaItem);
-        viewsNode->setText(TreeWidget::NameCol, tr("Views"));
-        viewsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::ViewNode));
-        setBold(viewsNode, true);
-        // create procedures node
-        QTreeWidgetItem *procsNode = new QTreeWidgetItem(schemaItem);
-        procsNode->setText(TreeWidget::NameCol, tr("Procedures"));
-        procsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::ProcedureNode));
-        setBold(procsNode, true);
-        // create triggers node
-        QTreeWidgetItem *trigsNode = new QTreeWidgetItem(schemaItem);
-        trigsNode->setText(TreeWidget::NameCol, tr("Triggers"));
-        trigsNode->setText(TreeWidget::IdCol, QString::number(TreeWidget::TriggerNode));
-        setBold(trigsNode, true);
-
-        // get tables list for the given schema
-        QStringList tablesList;
-        schema->tablesList(tablesList);
-        insertItems(tablesNode, &tablesList, TreeWidget::TableItem, true);
-
-        // get views list for the given schema
-        QStringList viewsList;
-        schema->viewsList(viewsList);
-        insertItems(viewsNode, &viewsList, TreeWidget::ViewItem);
-
-        // get procs list for the given schema
-        QStringList procsList;
-        schema->proceduresList(procsList);
-        insertItems(procsNode, &procsList, TreeWidget::ProcedureItem);
-
-        // get triggers list for the given schema
-        QStringList trigsList;
-        schema->triggersList(trigsList);
-        insertItems(trigsNode, &trigsList, TreeWidget::TriggerItem);
-    }
-    insertItems(indicesNode, &indicesList, TreeWidget::IndexItem);
-}
-#endif
-
-/*!
- * \todo comment
+ * Displays specified objects.
+ *
+ * \param[in] iList - A collection of objects which includes name, schema name and object
+ * type.
+ *
+ * \note Maybe we should use TreeView and a standard model here
  */
 void
 TreeWidget::displayObjects(const Objects &iList)
@@ -169,35 +106,30 @@ TreeWidget::displayObjects(const Objects &iList)
     using namespace DbObjects::Common;
 
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
-    QTreeWidgetItem *item = 0;
+    QTreeWidgetItem *parentNode = 0;
 
     foreach(const QString &name, iList.keys()) {
+        QApplication::processEvents();
         QString parentName = iList.value(name).first;
         TreeWidget::Item type = static_cast<TreeWidget::Item>(iList.value(name).second);
-        item = 0;
+
+        parentNode = 0;
 
         switch (type) {
             case IndexItem:
-                item = new(std::nothrow) QTreeWidgetItem(mIndicesNode);
+                parentNode = mIndicesNode;
                 break;
 
             case LanguageItem:
-                item = new(std::nothrow) QTreeWidgetItem(mLanguagesNode);
+                parentNode = mLanguagesNode;
                 break;
 
             case RoleItem:
-                item = new(std::nothrow) QTreeWidgetItem(mRolesNode);
+                parentNode = mRolesNode;
                 break;
 
             case SchemaItem:
-            {
-                item = new(std::nothrow) QTreeWidgetItem(mSchemasNode);
-                // create children
-                createNode(item, tr("Procedures"), TreeWidget::ProcedureNode);
-                createNode(item, tr("Tables"), TreeWidget::TableNode);
-                createNode(item, tr("Triggers"), TreeWidget::TriggerNode);
-                createNode(item, tr("Views"), TreeWidget::ViewNode);
-            }
+                parentNode = mSchemasNode;
                 break;
 
             case ViewItem:
@@ -205,13 +137,15 @@ TreeWidget::displayObjects(const Objects &iList)
             case TableItem:
             case TriggerItem:
             {
-                qDebug() << name;
                 // find parent schema item
-//                QTreeWidgetItem *schemaItem = findItem(mSchemasNode, parentName, TreeWidget::NameCol);
-//                Q_ASSERT(0 != schemaItem);
-                // find nested node for the given item type
-//                item = findItem(schemaItem, QString::number((int)nodeForItem(type)), TreeWidget::IdCol);
-                // \todo ??? if there is no such node, then create it
+                QTreeWidgetItem *schemaItem = findItem(mSchemasNode, parentName, TreeWidget::NameCol);
+                // or create it with subnodes
+                if (!schemaItem) {
+                    schemaItem = insertItem(mSchemasNode, parentName, TreeWidget::SchemaItem);
+                }
+
+                // find nested node for the given parentNode type
+                parentNode = findItem(schemaItem, QString::number((int)nodeForItem(type)), TreeWidget::IdCol);
             }
                 break;
             case UnkItem:
@@ -219,16 +153,21 @@ TreeWidget::displayObjects(const Objects &iList)
                 break;
         }
 
-        if (item) {
-            item->setFlags(flags);
-            item->setText(TreeWidget::NameCol, name);
-            item->setText(TreeWidget::IdCol, QString::number(type));
-            item->setData(TreeWidget::NameCol, Qt::DisplayRole, name);
+        Q_ASSERT_X(0 != parentNode, "displayObjects", QString("name = %1, type = %2").arg(name).arg(type).toAscii().data());
+        if (parentNode) {
+            insertItem(parentNode, name, type, true);
         }
 
     }
 
-    // \todo sort tree here
+    // \todo sort the tree
+//    QList<QTreeWidgetItem *> nodes = findItems("", Qt::MatchContains | Qt::MatchRecursive, TreeWidget::NameCol);
+//    foreach (QTreeWidgetItem *node, nodes) {
+//        if (node->text(TreeWidget::IdCol).toUInt() > TreeWidget::UnkNode) {
+//            node->sortChildren(TreeWidget::NameCol, Qt::AscendingOrder);
+//        }
+//    }
+
 }
 
 /*!
@@ -292,7 +231,14 @@ setBold(QTreeWidgetItem *iItem, bool iBold)
 }
 
 /*!
- * \todo comments
+ * Creates a node for storing objects of specified type.
+ *
+ * \param[in] iParent - Parent item who will hold this node as a child.
+ * \param[in] iName - Name of the node.
+ * \param[in] iType - Type of a node that is going to be created.
+ *
+ * \return Newly created tree widget node if its creation succeeded.
+ * \return 0 - Otherwise.
  */
 static QTreeWidgetItem*
 createNode(QTreeWidgetItem *iParent, const QString &iName, TreeWidget::Node iType)
@@ -313,15 +259,16 @@ createNode(QTreeWidgetItem *iParent, const QString &iName, TreeWidget::Node iTyp
  * said.
  *
  * \param[in] iParent - Parent of the item.
- * \param[in] iText - Text of the item.
+ * \param[in] iValue - Value of the item text.
+ * \param[in] iColumn - ID of the column that should be considered during the search.
  *
- * \return Desired tree widget item
+ * \return Desired tree widget item if found.
+ * \return 0 - Otherwise.
  */
 QTreeWidgetItem*
 TreeWidget::findItem(QTreeWidgetItem *iParent, const QString &iValue, int iColumn) const
 {
-    QList<QTreeWidgetItem*> items = QTreeWidget::findItems(iValue, Qt::MatchExactly, iColumn);
-
+    QList<QTreeWidgetItem*> items = findItems(iValue, Qt::MatchExactly | Qt::MatchRecursive, iColumn);
     QList<QTreeWidgetItem*>::iterator iter = items.begin();
     QTreeWidgetItem *item = 0;
 
@@ -336,48 +283,56 @@ TreeWidget::findItem(QTreeWidgetItem *iParent, const QString &iValue, int iColum
 }
 
 /*!
+ * Converts tree widget item id into a corresponding node id.
  *
+ * \fixme This function is a complete magic. I think I should fix it... later.
+ *
+ * \param[in] iType - Tree widget item id.
+ *
+ * \return Tree widget node id.
  */
 TreeWidget::Node
-TreeWidget::nodeForItem(TreeWidget::Item type) const
+TreeWidget::nodeForItem(TreeWidget::Item iType) const
 {
-    return static_cast<TreeWidget::Node>(TreeWidget::UnkNode + type);
+    return static_cast<TreeWidget::Node>(TreeWidget::UnkNode + iType);
 }
 
 /*!
- * \brief Populate tree under parent-item with triggers.
+ * \brief Insert a child item for the given parent
  *
- * \param[in] iParentItem - Parent item we will populate.
- * \param[in] iList - The list of captions we need to fill with the parent item.
+ * \param[in] iParentNode - Parent item we will populate.
+ * \param[in] iText - Text to display by the new item.
  * \param[in] iType - Item type.
  * \param[in] iDrabEnabled - Indicates whether these items should be draggable or not.
+ *
+ * \return Tree widget item that was created
  */
-//void
-//TreeWidget::insertItems(QTreeWidgetItem *iParentItem, QStringList &iList, TreeWidget::Item iType, bool iDragEnabled)
-//{
-//    qDebug() << "=>" << iParentItem;
-//    iList.sort();
-//
-//    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-//    if (iDragEnabled) {
-//        flags |= Qt::ItemIsDragEnabled;
-//    }
-//
-//    QTreeWidgetItem *item;
-//    QStringList::const_iterator iter;
-//    // for each item in the list
-//    for (iter = iList.constBegin(); iter != iList.constEnd(); ++iter) {
-//
-//        qDebug() << "A";
-//        item = new(std::nothrow) QTreeWidgetItem(iParentItem);
-//        qDebug() << "B";
-//        if (item) {
-//            item->setFlags(flags);
-//            item->setText(TreeWidget::NameCol, *iter);
-//            item->setText(TreeWidget::IdCol, QString::number(iType));
-//            item->setData(TreeWidget::NameCol, Qt::DisplayRole, *iter);
-//        }
-//    }
-//}
+QTreeWidgetItem*
+TreeWidget::insertItem(QTreeWidgetItem *iParentNode, const QString &iText, TreeWidget::Item iType, bool iDragEnabled)
+{
+    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    if (iDragEnabled) {
+        flags |= Qt::ItemIsDragEnabled;
+    }
+
+    QTreeWidgetItem *item = new(std::nothrow) QTreeWidgetItem(iParentNode);
+
+    if (item) {
+        item->setFlags(flags);
+        item->setText(TreeWidget::NameCol, iText);
+        item->setText(TreeWidget::IdCol, QString::number(iType));
+        item->setData(TreeWidget::NameCol, Qt::DisplayRole, iText);
+
+        if (TreeWidget::SchemaItem == iType) {
+            createNode(item, tr("Procedures"), TreeWidget::ProcedureNode);
+            createNode(item, tr("Tables"), TreeWidget::TableNode);
+            createNode(item, tr("Triggers"), TreeWidget::TriggerNode);
+            createNode(item, tr("Views"), TreeWidget::ViewNode);
+        }
+    }
+
+    return item;
+}
 
 }
+

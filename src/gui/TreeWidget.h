@@ -81,13 +81,13 @@ class TreeWidget : public QTreeWidget
             ProcedureNode
         };
 
-//        void refresh();
-
         void setContextMenu(QMenu *);
 
         enum Columns {
             NameCol = 0,
-            IdCol
+            IdCol,
+
+            ColumnsCount
         };
 
         void displayObjects(const Objects &iList);
@@ -109,7 +109,7 @@ class TreeWidget : public QTreeWidget
     private:
         QTreeWidgetItem* findItem(QTreeWidgetItem *iParent, const QString &iValue, int iColumn) const;
         TreeWidget::Node nodeForItem(TreeWidget::Item type) const;
-//        void insertItems(QTreeWidgetItem *, QStringList &, TreeWidget::Item, bool iDragEnabled = false);
+        QTreeWidgetItem* insertItem(QTreeWidgetItem *, const QString &, TreeWidget::Item, bool iDragEnabled = false);
 };
 
 }

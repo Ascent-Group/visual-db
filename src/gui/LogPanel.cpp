@@ -69,7 +69,7 @@ LogPanel::saveToFile()
 
         QFile file(fileName);
 
-        if (!file.open(QIODevice::Text)) {
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
             QMessageBox::critical(this, tr("Error"), tr("Unable to open file!"), tr("Ok"));
             return;
         }

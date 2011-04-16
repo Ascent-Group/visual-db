@@ -40,6 +40,8 @@ bool
 Converter::toTableItem(const DbObjects::Common::DbTablePtr &iDbTablePtr, 
         Gui::GraphicsItems::TableItem &oTableItem)
 {
+    using namespace DbObjects::Common;
+    
     // create title item
     oTableItem.setTitleItem(new QGraphicsTextItem(iDbTablePtr.schemaName().toUpper() + "." + iDbTablePtr.name().toUpper()));
 
@@ -47,7 +49,6 @@ Converter::toTableItem(const DbObjects::Common::DbTablePtr &iDbTablePtr,
         oTableItem.addFieldItem(new QGraphicsTextItem(iDbTablePtr->columnName(i) + ": " + iDbTablePtr->columnType(i)));
     }
 
-    using namespace DbObjects::Common;
     Database *dbInst = Database::instance();
     QVector<DbObjects::Common::DbIndexPtr> indices;
     

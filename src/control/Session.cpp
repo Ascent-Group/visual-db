@@ -50,7 +50,7 @@ Session::~Session()
 quint32
 Session::countConnections() const
 {
-    return mSessionElement.attribute("count").toInt();
+    return mXmlDoc.elementsByTagName("connection").size();
 }
 
 bool
@@ -93,11 +93,6 @@ Session::saveScene(const Gui::GraphicsScene &iGraphicsScene, quint32 iId)
 bool
 Session::load(const QString &iFileName)
 {
-//    if (QFile::exists(iFileName)) {
-//        qCritical() << "[Error] file " << iFileName << " does not exists!";
-//        return false;
-//    }
-
     QFile file(iFileName);
     if (!file.open(QIODevice::ReadOnly)) {
         qCritical() << "[Error] while opening file " << iFileName << " for writing!";

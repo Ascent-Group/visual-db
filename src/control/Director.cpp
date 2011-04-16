@@ -351,7 +351,7 @@ Director::showConnectionDialog(bool iLoadSession)
             if (QFile::exists(sessionFile)) {
                 Session session;
                 session.load(sessionFile);
-                for (int j = 0; j < 1/* \todo session.countConnections()*/; ++j) {
+                for (int j = 0; j < session.countConnections(); ++j) {
                     session.loadConnectionInfo(recentConnInfo, j);
                     infos.push_back(recentConnInfo);
                 }

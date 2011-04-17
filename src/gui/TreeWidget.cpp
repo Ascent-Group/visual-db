@@ -109,7 +109,6 @@ TreeWidget::displayObjects(const Objects &iList)
     QTreeWidgetItem *parentNode = 0;
 
     foreach(const QString &name, iList.keys()) {
-        QApplication::processEvents();
         QString parentName = iList.value(name).first;
         TreeWidget::Item type = static_cast<TreeWidget::Item>(iList.value(name).second);
 
@@ -129,7 +128,15 @@ TreeWidget::displayObjects(const Objects &iList)
                 break;
 
             case SchemaItem:
-                parentNode = mSchemasNode;
+                QApplication::processEvents();
+                // if schema item already exists, then just skip it.
+                // this may occur when schema's child comes earlier than the schema
+                // itself.
+                if (findItem(mSchemasNode, name, TreeWidget::NameCol)) {
+                    continue;
+                } else {
+                    parentNode = mSchemasNode;
+                }
                 break;
 
             case ViewItem:
@@ -148,8 +155,11 @@ TreeWidget::displayObjects(const Objects &iList)
                 parentNode = findItem(schemaItem, QString::number((int)nodeForItem(type)), TreeWidget::IdCol);
             }
                 break;
+
             case UnkItem:
             default:
+                qDebug() << "TreeWidget::displayObjects> Unknown object type: " << type;
+                continue;
                 break;
         }
 
@@ -160,13 +170,13 @@ TreeWidget::displayObjects(const Objects &iList)
 
     }
 
-    // \todo sort the tree
-//    QList<QTreeWidgetItem *> nodes = findItems("", Qt::MatchContains | Qt::MatchRecursive, TreeWidget::NameCol);
-//    foreach (QTreeWidgetItem *node, nodes) {
-//        if (node->text(TreeWidget::IdCol).toUInt() > TreeWidget::UnkNode) {
-//            node->sortChildren(TreeWidget::NameCol, Qt::AscendingOrder);
-//        }
-//    }
+    // todo sort the tree
+    QList<QTreeWidgetItem *> nodes = findItems("", Qt::MatchContains | Qt::MatchRecursive, TreeWidget::NameCol);
+    foreach (QTreeWidgetItem *node, nodes) {
+        if (node->text(TreeWidget::IdCol).toUInt() > TreeWidget::UnkNode) {
+            node->sortChildren(TreeWidget::NameCol, Qt::AscendingOrder);
+        }
+    }
 
 }
 

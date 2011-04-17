@@ -1,4 +1,4 @@
-/* connect */
+// connect
 #ifdef TEST_CONNECT
 #include <connect/HostInfoTest.h>
 #include <connect/DbHostInfoTest.h>
@@ -7,18 +7,25 @@
 #endif
 
 #ifdef TEST_CONTROL
-/* control */
+// control
 #include <control/ConfigTest.h>
 #include <control/ContextTest.h>
 #include <control/DirectorTest.h>
 #include <control/SessionTest.h>
 #endif
 
-/* gui/behaviour */
+// gui/strategy
+#ifdef TEST_GUI_STRATEGY
+#include <gui/strategy/NodeTest.h>
+#include <gui/strategy/EdgeTest.h>
+#include <gui/strategy/GraphTest.h>
+#endif
+
+// gui/behaviour
 #include <gui/behaviour/AddTableCommandTest.h>
 #include <gui/behaviour/MoveTableCommandTest.h>
 
-/* gui */
+// gui
 #include <gui/AppearancePageTest.h>
 #include <gui/ArrowItemTest.h>
 #include <gui/ColorsPageTest.h>
@@ -42,7 +49,7 @@
 #include <gui/TreeWidgetTest.h>
 
 #if TEST_DBOBJECTS
-/* dbobjects */
+// dbobjects
 #include <dbobjects/common/DatabaseTest.h>
 #include <dbobjects/common/DbIndexTest.h>
 #include <dbobjects/common/DbLanguageTest.h>
@@ -83,7 +90,7 @@ int main(int argc, char *argv[])
     QString drv(getenv("VDB_DB_DRV"));
 
     if (drv.isEmpty()) {
-        qCritical("[ERROR] db driver not set!");
+        qCritical("[ERROR] Database driver is not set! In order to run tests you should set the VDB_DB_DRV variable. Available values are: [QPSQL, QMYSQL]");
         return -1;
     }
 
@@ -128,6 +135,18 @@ int main(int argc, char *argv[])
 //
 //        return QSqlError::ConnectionError;
 //    }
+
+#if TEST_GUI_STRATEGY
+    // gui/strategy
+    NodeTest nodeTest;
+    QTest::qExec(&nodeTest, argc, argv);
+
+    EdgeTest edgeTest;
+    QTest::qExec(&edgeTest, argc, argv);
+
+    GraphTest graphTest;
+    QTest::qExec(&graphTest, argc, argv);
+#endif // TEST_GUI_STRATEGY
 
 #if TEST_GUI_BEHAVIOUR
     /* gui/behaviour */

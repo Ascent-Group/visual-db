@@ -58,7 +58,7 @@ gen_h() {
 }
 
 gen_cpp() {
-    IN_FILE=`basename $1 | sed -s 's/\.h/Test.h/g'`
+    IN_FILE=`basename $1 | sed 's/\.h/Test.h/g'`
 
     OUT_FILE=`echo $IN_FILE | sed 's/\.h/.cpp/'`
 

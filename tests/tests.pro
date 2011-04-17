@@ -61,6 +61,7 @@ INCLUDEPATH = $$PWD \
               $$OUT_PWD/../src
 
 QMAKE_CXXFLAGS = -Wextra
+QMAKE_CXXFLAGS += -O2 -g2
 
 win32 {
     CONFIG(debug, debug|release):LIBS += -L$$OUT_PWD/../src/dbobjects/common/debug \
@@ -80,6 +81,7 @@ win32 {
 DEFINES -= QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 
 DEFINES += TEST_GUI
+DEFINES += TEST_GUI_STRATEGY
 DEFINES += TEST_GUI_BEHAVIOUR
 DEFINES += TEST_CONNECT
 DEFINES += TEST_CONTROL
@@ -89,6 +91,14 @@ SOURCES = $$PWD/main.cpp \
           $$TOP_SRC_DIR/consts.cpp
 
 HEADERS = $$TOP_SRC_DIR/consts.h
+
+contains(DEFINES, TEST_GUI_STRATEGY) {
+    HEADERS += $$files($$PWD/gui/strategy/*.h) \
+               $$files($$TOP_SRC_DIR/gui/strategy/*.h)
+
+    SOURCES += $$files($$PWD/gui/strategy/*.cpp) \
+               $$files($$TOP_SRC_DIR/gui/strategy/*.cpp)
+}
 
 contains(DEFINES, TEST_GUI_BEHAVIOUR) {
     HEADERS += $$files($$PWD/gui/behaviour/*.h) \

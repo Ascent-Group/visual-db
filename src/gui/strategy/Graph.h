@@ -51,7 +51,7 @@ class Graph
     private:
         Graph(const Graph &iGraph);
 
-        Node *selectNode(const QList<Node *> &U, /*const QList<Node *> &iCurrentLevelNodes, */const QList<Node *> &V);
+        Node *selectNode(const QList<Node *> &U, const QList<Node *> &iCurrentLevelNodes, const QList<Node *> &V);
 
     private:
         QSet<Node *> mNodeSet;

@@ -69,7 +69,6 @@ class Node
 
         friend class Graph;
         friend class NodeTest;
-        friend class GraphTest;
 
         friend bool lessThan(const Node *iNode1, const Node *iNode2);
 };

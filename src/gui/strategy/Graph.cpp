@@ -91,11 +91,11 @@ Graph::coffmanGraham(quint32 iWidth)
     //  - S!=0, T!=0 and max(S) < max(T), or
     //  - S!=0, T!=0, max(S) = max(T), and S-{max(S)} < T-{max(T}).
 
-    QList<Node *> nodeList = mNodeSet.toList();
-    qSort(nodeList.begin(), nodeList.end(), lessThan);
+    QList<Node *> allNodes = mNodeSet.toList();
+    qSort(allNodes.begin(), allNodes.end(), lessThan);
     
     quint32 i = 1;
-    foreach (Node *node, nodeList) {
+    foreach (Node *node, allNodes) {
         if (mNodeSet.size() + 1 == node->label()) {
             node->setLabel(i++);
         }
@@ -114,19 +114,17 @@ Graph::coffmanGraham(quint32 iWidth)
     QList<QSet<Node *> *> levels;
     levels.append(new QSet<Node *>());
     
-    QList<Node *> U;
-//    QList<Node *> currentLevelNodes;
+    QList<Node *> unlabeledNodes;
+    QList<Node *> currentLevelNodes;
 
-    while (U.size() != nodeList.size()) {
-        // We choose u from U such that every vertex in {v | (u,v) from E} is in V\U
+    while (unlabeledNodes.size() != allNodes.size()) {
+        // We choose u from unlabeledNodes such that every vertex in {v | (u,v) from E} is in V\U
         // and label(u) is maximized
-        Node *u = selectNode(U, /*currentLevelNodes, */nodeList);
-        if (u == 0) {
-            qDebug() << "null";
-        }
+        Node *u = selectNode(unlabeledNodes, currentLevelNodes, allNodes);
+        
+        bool condition = true;
 
-        // if |Lk| < w... 
-        if (levels.at(k)->size() < iWidth) {
+        if (0 != u) {
             QList<QSet<Node *> *>::const_iterator level;
             QList<Node *> levelsKminus1;
             for (level = levels.constBegin(); level < levels.constEnd() - 1; ++level) {
@@ -134,44 +132,39 @@ Graph::coffmanGraham(quint32 iWidth)
             }
 
             // ...check if N+(u) is in L1 U L2 U ... U Lk-1 ...
-            bool condition = true;
             foreach (const Edge *edge, u->mOutEdgeSet) {
                 if (!levelsKminus1.contains(&edge->end())) {
                     condition = false;
                     break;
                 }
             }
+        }
 
-            // if not - create next level
-            if (!condition) {
-                k++;
-                levels.append(new QSet<Node *>());
-//                U.append(currentLevelNodes);
-//                currentLevelNodes.clear();
-            }
-        } else {
+        // if |Lk| >= w or there is some v : (u,v) from E is not in unlabeledNodes - create next level 
+        if (0 == u || currentLevelNodes.size() >= iWidth || !condition) {
             k++;
             levels.append(new QSet<Node *>());
-//            U.append(currentLevelNodes);
-//            currentLevelNodes.clear();
-        }   
+            unlabeledNodes.append(currentLevelNodes);
+            currentLevelNodes.clear();
+        }
 
-        // append node to current level
-        levels.at(k)->insert(u);
-        qDebug() << "id: " << u->id() << " level: " << k;
+        if (0 != u) {
+            // append node to current level
+            levels.at(k)->insert(u);
+            qDebug() << "id: " << u->id() << " level: " << k;
 
-        // remove node from U set
-//        currentLevelNodes.append(u);
-        U.append(u);
+            // remove node from unlabeledNodes set
+            currentLevelNodes.append(u);
+        }
     }
 }
 
 /*!
- * We choose u from U such that every vertex in {v | (u,v) from E} is in V\U
+ * We choose u from unlabeledNodes such that every vertex in {v | (u,v) from E} is in V\U
  * and label(u) is maximized
  */
 Node *
-Graph::selectNode(const QList<Node *> &iAlreadyLeveledNodes, /*const QList<Node *> &iCurrentLevelNodes, */const QList<Node *> &iAllNodes)
+Graph::selectNode(const QList<Node *> &iAlreadyLeveledNodes, const QList<Node *> &iCurrentLevelNodes, const QList<Node *> &iAllNodes)
 {
     // iAlreadyLeveledNodes should be already sorted
     
@@ -181,17 +174,17 @@ Graph::selectNode(const QList<Node *> &iAlreadyLeveledNodes, /*const QList<Node 
         unleveledNodes.removeOne(node);
 //        qDebug() << "already leveled: " << node->id();
     }
-//    foreach (Node *node, iCurrentLevelNodes) {
-//        unleveledNodes.removeOne(node);
+    foreach (Node *node, iCurrentLevelNodes) {
+        unleveledNodes.removeOne(node);
 //        qDebug() << "current level: " << node->id();
-//    }
+    }
     
     qint32 i = unleveledNodes.size() - 1;
 
     // so we start from the last element and move to the first
     while (i >= 0) {
 
-        // check that each vertex in {v | (u,v) from E} is in iAlreadyLeveledNodes
+        // check that each vertex in {v | (u,v) from E} is in AlreadyLeveledNodes
         bool condition = true;
         foreach (const Edge *edge, unleveledNodes.at(i)->mOutEdgeSet) {
             if (!iAlreadyLeveledNodes.contains(&edge->end())) {

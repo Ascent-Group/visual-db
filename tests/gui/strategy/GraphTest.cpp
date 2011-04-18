@@ -148,10 +148,6 @@ GraphTest::coffmanGrahamTest()
 //    QVERIFY(node12 < node13);
 
     graph.coffmanGraham(3);
-    
-    foreach (Node *node, graph.mNodeSet) {
-        qDebug() << node->id() << ":" <<  node->label();
-    }
 
     QVERIFY(0);
 }

@@ -51,7 +51,7 @@ class Graph
     private:
         Graph(const Graph &iGraph);
 
-        Node *selectNode(const QList<Node *>U, const QList<Node *>V);
+        Node *selectNode(const QList<Node *> &U, /*const QList<Node *> &iCurrentLevelNodes, */const QList<Node *> &V);
 
     private:
         QSet<Node *> mNodeSet;
@@ -59,10 +59,6 @@ class Graph
 
         friend class GraphTest;
 };
-
-void quicksort(QList<Node *> &iNodeList, quint32 iLeft, quint32 iRight);
-quint32 partition(QList<Node *> &iNodeList, quint32 iLeft, quint32 iRight);
-void swap(QList<Node *> &iNodeList, quint32 iI, quint32 iJ);
 
 #endif // GRAPH_H
 

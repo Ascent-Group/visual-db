@@ -92,16 +92,14 @@ Graph::coffmanGraham(quint32 iWidth)
     //  - S!=0, T!=0, max(S) = max(T), and S-{max(S)} < T-{max(T}).
 
     QList<Node *> nodeList = mNodeSet.toList();
-    quicksort(nodeList, 0, nodeList.size() - 1);
+    qSort(nodeList.begin(), nodeList.end(), lessThan);
     
     quint32 i = 1;
     foreach (Node *node, nodeList) {
         if (mNodeSet.size() + 1 == node->label()) {
             node->setLabel(i++);
-            qDebug() << node->id() << ":" << node->label();
         }
     }
-    return;
     
     // The second phase of algorithm fills the layers with vertices,
     // ensuring that no layer receives more than W vertices. We start with
@@ -116,51 +114,55 @@ Graph::coffmanGraham(quint32 iWidth)
     QList<QSet<Node *> *> levels;
     levels.append(new QSet<Node *>());
     
-    QList<Node *> U = nodeList;
+    QList<Node *> U;
+//    QList<Node *> currentLevelNodes;
 
-    while (!U.empty()) {
+    while (U.size() != nodeList.size()) {
         // We choose u from U such that every vertex in {v | (u,v) from E} is in V\U
         // and label(u) is maximized
-        Node *u = selectNode(U, nodeList);
+        Node *u = selectNode(U, /*currentLevelNodes, */nodeList);
         if (u == 0) {
             qDebug() << "null";
         }
-//        Q_ASSERT(u);
 
-        qDebug() << U.size();
-        if (U.size() <= 5)
-            abort();
         // if |Lk| < w... 
         if (levels.at(k)->size() < iWidth) {
-            if (levels.size() > 1) {
-                QList<QSet<Node *> *>::const_iterator level;
-                QList<Node *> levelsKminus1;
-                for (level = levels.constBegin(); level < levels.constEnd() - 1; ++level) {
-                    levelsKminus1.append((*level)->toList());
-                }
+            QList<QSet<Node *> *>::const_iterator level;
+            QList<Node *> levelsKminus1;
+            for (level = levels.constBegin(); level < levels.constEnd() - 1; ++level) {
+                levelsKminus1.append((*level)->toList());
+            }
 
-                // ...check if N+(u) is in L1 U L2 U ... U Lk-1 ...
-                bool condition = true;
-                foreach (const Edge *edge, u->mOutEdgeSet) {
-                    if (!levelsKminus1.contains(&edge->end())) {
-                        condition = false;
-                        break;
-                    }
-                }
-
-                // if not - create next level
-                if (!condition) {
-                    k++;
-                    levels.append(new QSet<Node *>());
+            // ...check if N+(u) is in L1 U L2 U ... U Lk-1 ...
+            bool condition = true;
+            foreach (const Edge *edge, u->mOutEdgeSet) {
+                if (!levelsKminus1.contains(&edge->end())) {
+                    condition = false;
+                    break;
                 }
             }
 
-            // append node to current level
-            levels.at(k)->insert(u);
-        }    
+            // if not - create next level
+            if (!condition) {
+                k++;
+                levels.append(new QSet<Node *>());
+//                U.append(currentLevelNodes);
+//                currentLevelNodes.clear();
+            }
+        } else {
+            k++;
+            levels.append(new QSet<Node *>());
+//            U.append(currentLevelNodes);
+//            currentLevelNodes.clear();
+        }   
+
+        // append node to current level
+        levels.at(k)->insert(u);
+        qDebug() << "id: " << u->id() << " level: " << k;
 
         // remove node from U set
-        U.removeOne(u);
+//        currentLevelNodes.append(u);
+        U.append(u);
     }
 }
 
@@ -169,27 +171,30 @@ Graph::coffmanGraham(quint32 iWidth)
  * and label(u) is maximized
  */
 Node *
-Graph::selectNode(const QList<Node *> U, const QList<Node *> V)
+Graph::selectNode(const QList<Node *> &iAlreadyLeveledNodes, /*const QList<Node *> &iCurrentLevelNodes, */const QList<Node *> &iAllNodes)
 {
-    Q_ASSERT(!U.empty());
-
-    // U should be already sorted
-//    QList<Node *>::const_iterator node = U.constEnd() - 1;
-    qint32 i = U.size() - 1;
+    // iAlreadyLeveledNodes should be already sorted
+    
+    // construct iAllNodes\iAlreadyLeveledNodes set
+    QList<Node *> unleveledNodes = iAllNodes;
+    foreach (Node *node, iAlreadyLeveledNodes) {
+        unleveledNodes.removeOne(node);
+//        qDebug() << "already leveled: " << node->id();
+    }
+//    foreach (Node *node, iCurrentLevelNodes) {
+//        unleveledNodes.removeOne(node);
+//        qDebug() << "current level: " << node->id();
+//    }
+    
+    qint32 i = unleveledNodes.size() - 1;
 
     // so we start from the last element and move to the first
     while (i >= 0) {
-        // construct V\U set
-        QList<Node *> vMinusU = V;
-        foreach (Node *node, U) {
-            vMinusU.removeOne(node);
-        }
-        qDebug() << vMinusU;
 
-        // check that each vertex in {v | (u,v) from E} is in V\U
+        // check that each vertex in {v | (u,v) from E} is in iAlreadyLeveledNodes
         bool condition = true;
-        foreach (const Edge *edge, U.at(i)->mInEdgeSet) {
-            if (vMinusU.contains(&edge->start())) {
+        foreach (const Edge *edge, unleveledNodes.at(i)->mOutEdgeSet) {
+            if (!iAlreadyLeveledNodes.contains(&edge->end())) {
                 condition = false;
                 break;
             }
@@ -197,7 +202,7 @@ Graph::selectNode(const QList<Node *> U, const QList<Node *> V)
         
         // if yes - return found node
         if (condition) {
-            return U.at(i);
+            return unleveledNodes.at(i);
         }
 
         // else try next node
@@ -207,37 +212,3 @@ Graph::selectNode(const QList<Node *> U, const QList<Node *> V)
     return 0;
 }
 
-void
-quicksort(QList<Node *> &iNodeList, quint32 iLeft, quint32 iRight)
-{
-    if (iLeft < iRight) {
-        quint32 pivot = partition(iNodeList, iLeft, iRight);
-        quicksort(iNodeList, iLeft, pivot - 1);
-        quicksort(iNodeList, pivot + 1, iRight);
-    }
-}
-
-quint32
-partition(QList<Node *> &iNodeList, quint32 iLeft, quint32 iRight)
-{
-    quint32 i = iLeft;
-
-    for (quint32 j = iLeft + 1; j <= iRight; ++j) {
-        if (*iNodeList.at(j) < *iNodeList.at(iLeft)) {
-            ++i;
-            swap(iNodeList, i, j);
-        }
-    }
-
-    swap(iNodeList, i, iLeft);
-
-    return i + 1;
-}
-
-void
-swap(QList<Node *> &iNodeList, quint32 iI, quint32 iJ)
-{
-    Node *tmp = iNodeList.at(iI);
-    iNodeList.insert(iI, iNodeList.at(iJ));
-    iNodeList.insert(iJ, tmp);
-}

@@ -150,7 +150,7 @@ GraphTest::coffmanGrahamTest()
     graph.coffmanGraham(3);
     
     foreach (Node *node, graph.mNodeSet) {
-        qDebug() << node->id() << node->label();
+        qDebug() << node->id() << ":" <<  node->label();
     }
 
     QVERIFY(0);

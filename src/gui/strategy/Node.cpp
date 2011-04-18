@@ -99,6 +99,12 @@ Node::operator<(const Node &iNode) const
     return false;
 }
 
+bool
+lessThan(const Node *iNode1, const Node *iNode2)
+{
+    return *iNode1 < *iNode2;
+}
+
 const Edge *
 Node::max() const
 {

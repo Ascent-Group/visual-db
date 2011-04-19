@@ -65,6 +65,21 @@ Graph::removeNode(Node &iNode)
     mNodeSet.remove(&iNode);
 }
 
+void
+Graph::draw()
+{
+    cycleRemoval();
+    QList<QList<Node *> *> levels = coffmanGraham(3);
+    crossingReduction(levels);
+    horizontalCoordinatsAssignment();
+}
+
+void
+Graph::cycleRemoval()
+{
+    
+}
+
 QList<QList<Node *> *>
 Graph::coffmanGraham(quint32 iWidth)
 {
@@ -127,7 +142,7 @@ Graph::coffmanGraham(quint32 iWidth)
         if (0 != u) {
             QList<QList<Node *> *>::const_iterator level;
             QList<Node *> levelsKminus1;
-            for (level = levels.constBegin(); level < levels.constEnd() - 1; ++level) {
+            for (level = levels.constBegin(); level != levels.constEnd() - 1; ++level) {
                 levelsKminus1.append(**level);
             }
 
@@ -140,7 +155,7 @@ Graph::coffmanGraham(quint32 iWidth)
             }
         }
 
-        // if |Lk| >= w or there is some v : (u,v) from E is not in unlabeledNodes - create next level 
+        // if |Lk| >= w or there is some v : (u,v) from E that is not in unlabeledNodes - create next level 
         if (0 == u || currentLevelNodes.size() >= iWidth || !condition) {
             k++;
             levels.append(new QList<Node *>());
@@ -165,10 +180,15 @@ Graph::coffmanGraham(quint32 iWidth)
 void
 Graph::crossingReduction(QList<QList<Node *> *> &iLevels)
 {
-//    QList<QList<Node *> *>::const_iterator level = iLevels.end() - 1;
-    foreach (QList<Node *> *level, iLevels) {
-        qSort(level->begin(), level->end(), lessThanMedian);
+    for (int i = iLevels.size() - 1; i >=0; --i) {
+        qSort(iLevels.at(i)->begin(), iLevels.at(i)->end(), lessThanMedian);
     }
+}
+
+void
+Graph::horizontalCoordinatsAssignment()
+{
+    
 }
 
 /*!

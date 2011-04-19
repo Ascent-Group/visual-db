@@ -65,7 +65,7 @@ Graph::removeNode(Node &iNode)
     mNodeSet.remove(&iNode);
 }
 
-void
+QList<QList<Node *> *>
 Graph::coffmanGraham(quint32 iWidth)
 {
     // initialize all nodes
@@ -92,7 +92,7 @@ Graph::coffmanGraham(quint32 iWidth)
     //  - S!=0, T!=0, max(S) = max(T), and S-{max(S)} < T-{max(T}).
 
     QList<Node *> allNodes = mNodeSet.toList();
-    qSort(allNodes.begin(), allNodes.end(), lessThan);
+    qSort(allNodes.begin(), allNodes.end(), lessThanLexicorgraphical);
     
     quint32 i = 1;
     foreach (Node *node, allNodes) {
@@ -111,8 +111,8 @@ Graph::coffmanGraham(quint32 iWidth)
     // or layher Lk bocomes full (|Lk|=W), then we proceed to the next layer Lk+1.
 
     quint32 k = 0;
-    QList<QSet<Node *> *> levels;
-    levels.append(new QSet<Node *>());
+    QList<QList<Node *> *> levels;
+    levels.append(new QList<Node *>());
     
     QList<Node *> unlabeledNodes;
     QList<Node *> currentLevelNodes;
@@ -125,10 +125,10 @@ Graph::coffmanGraham(quint32 iWidth)
         bool condition = true;
 
         if (0 != u) {
-            QList<QSet<Node *> *>::const_iterator level;
+            QList<QList<Node *> *>::const_iterator level;
             QList<Node *> levelsKminus1;
             for (level = levels.constBegin(); level < levels.constEnd() - 1; ++level) {
-                levelsKminus1.append((*level)->toList());
+                levelsKminus1.append(**level);
             }
 
             // ...check if N+(u) is in L1 U L2 U ... U Lk-1 ...
@@ -143,19 +143,31 @@ Graph::coffmanGraham(quint32 iWidth)
         // if |Lk| >= w or there is some v : (u,v) from E is not in unlabeledNodes - create next level 
         if (0 == u || currentLevelNodes.size() >= iWidth || !condition) {
             k++;
-            levels.append(new QSet<Node *>());
+            levels.append(new QList<Node *>());
             unlabeledNodes.append(currentLevelNodes);
             currentLevelNodes.clear();
         }
 
         if (0 != u) {
             // append node to current level
-            levels.at(k)->insert(u);
+            u->setLevel(k);
+            levels.at(k)->append(u);
             qDebug() << "id: " << u->id() << " level: " << k;
 
             // remove node from unlabeledNodes set
             currentLevelNodes.append(u);
         }
+    }
+
+    return levels;
+}
+
+void
+Graph::crossingReduction(QList<QList<Node *> *> &iLevels)
+{
+//    QList<QList<Node *> *>::const_iterator level = iLevels.end() - 1;
+    foreach (QList<Node *> *level, iLevels) {
+        qSort(level->begin(), level->end(), lessThanMedian);
     }
 }
 
@@ -168,15 +180,13 @@ Graph::selectNode(const QList<Node *> &iAlreadyLeveledNodes, const QList<Node *>
 {
     // iAlreadyLeveledNodes should be already sorted
     
-    // construct iAllNodes\iAlreadyLeveledNodes set
+    // construct unleveledNodes set
     QList<Node *> unleveledNodes = iAllNodes;
     foreach (Node *node, iAlreadyLeveledNodes) {
         unleveledNodes.removeOne(node);
-//        qDebug() << "already leveled: " << node->id();
     }
     foreach (Node *node, iCurrentLevelNodes) {
         unleveledNodes.removeOne(node);
-//        qDebug() << "current level: " << node->id();
     }
     
     qint32 i = unleveledNodes.size() - 1;

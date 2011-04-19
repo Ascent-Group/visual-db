@@ -32,12 +32,12 @@
 #include <QtDebug>
 
 Node::Node(quint32 iId)
-    : mId(iId), mLabel(0), mX(0), mY(0), mInEdgeSet(), mOutEdgeSet()
+    : mId(iId), mLabel(0), mLevel(0), mX(0), mY(0), mInEdgeSet(), mOutEdgeSet()
 {
 }
 
 Node::Node(const Node &iNode)
-    : mId(iNode.mLabel), mLabel(iNode.mLabel), mX(iNode.mX), mY(iNode.mY)
+    : mId(iNode.mLabel), mLabel(iNode.mLabel), mLevel(iNode.mLevel), mX(iNode.mX), mY(iNode.mY)
     , mInEdgeSet(iNode.mInEdgeSet), mOutEdgeSet(iNode.mOutEdgeSet)
 {
 }
@@ -71,6 +71,18 @@ Node::label() const
     return mLabel;
 }
 
+void
+Node::setLevel(quint32 iLevel)
+{
+    mLevel = iLevel;
+}
+
+quint32
+Node::level() const
+{
+    return mLevel;
+}
+
 bool
 Node::operator<(const Node &iNode) const
 {
@@ -99,10 +111,39 @@ Node::operator<(const Node &iNode) const
     return false;
 }
 
+//quint32
+//Node::barycenter()
+//{
+//    quint32 average = 0;
+//    
+//    foreach (Edge *edge, mOutEdgeSet) {
+//        average += edge->end().mX; 
+//    }
+//
+//    if (mOutEdgeSet.size() > 0) {
+//        average /= mOutEdgeSet.size();
+//    }
+//
+//    iNode.mX = average;
+//    return average;
+//}
+
+quint32
+Node::median() const
+{
+    return mOutEdgeSet.size() / 2;
+}
+
 bool
-lessThan(const Node *iNode1, const Node *iNode2)
+lessThanLexicorgraphical(const Node *iNode1, const Node *iNode2)
 {
     return *iNode1 < *iNode2;
+}
+
+bool
+lessThanMedian(const Node *iNode1, const Node *iNode2)
+{
+    return iNode1->median() < iNode2->median();
 }
 
 const Edge *

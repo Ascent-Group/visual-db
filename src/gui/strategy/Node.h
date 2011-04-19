@@ -49,6 +49,11 @@ class Node
         void setLabel(quint32 iLabel);
         quint32 label() const;
 
+        void setLevel(quint32 iLevel);
+        quint32 level() const;
+
+        quint32 median() const;
+
         bool operator<(const Node &iNode) const;
 
     private:
@@ -61,6 +66,7 @@ class Node
     private:
         quint32 mId;
         quint32 mLabel;
+        quint32 mLevel;
         quint32 mX;
         quint32 mY;
 
@@ -70,10 +76,12 @@ class Node
         friend class Graph;
         friend class NodeTest;
 
-        friend bool lessThan(const Node *iNode1, const Node *iNode2);
+        friend bool lessThanLexicorgraphical(const Node *iNode1, const Node *iNode2);
+        friend bool lessThanMedian(const Node *iNode1, const Node *iNode2);
 };
 
-bool lessThan(const Node *iNode1, const Node *iNode2);
+bool lessThanLexicorgraphical(const Node *iNode1, const Node *iNode2);
+bool lessThanMedian(const Node *iNode1, const Node *iNode2);
 
 #endif // NODE_H
 

@@ -149,7 +149,19 @@ GraphTest::coffmanGrahamTest()
 
     graph.coffmanGraham(3);
 
-    QVERIFY(0);
+    QVERIFY(0 == node13.level());
+    QVERIFY(1 == node12.level());
+    QVERIFY(1 == node11.level());
+    QVERIFY(2 == node10.level());
+    QVERIFY(2 == node9.level());
+    QVERIFY(3 == node8.level());
+    QVERIFY(2 == node7.level());
+    QVERIFY(0 == node6.level());
+    QVERIFY(3 == node5.level());
+    QVERIFY(4 == node4.level());
+    QVERIFY(4 == node3.level());
+    QVERIFY(0 == node2.level());
+    QVERIFY(5 == node1.level());
 }
 
 void

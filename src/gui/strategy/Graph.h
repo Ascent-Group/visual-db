@@ -46,7 +46,8 @@ class Graph
         void removeEdge(Edge &iEdge);
         void removeNode(Node &iNode);
 
-        void coffmanGraham(quint32 iWidth);
+        QList<QList<Node *> *> coffmanGraham(quint32 iWidth);
+        void crossingReduction(QList<QList<Node *> *> &iLevels);
 
     private:
         Graph(const Graph &iGraph);

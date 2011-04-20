@@ -42,7 +42,7 @@ Graph::~Graph()
 void
 Graph::addEdge(Edge &iEdge)
 {
-    mEdgeSet.insert(&iEdge);
+    mEdgeSet.append(&iEdge);
     iEdge.start().mOutEdgeSet.insert(&iEdge);
     iEdge.end().mInEdgeSet.insert(&iEdge);
 }
@@ -50,37 +50,95 @@ Graph::addEdge(Edge &iEdge)
 void
 Graph::addNode(Node &iNode)
 {
-    mNodeSet.insert(&iNode);
+    mNodeSet.append(&iNode);
 }
 
 void
 Graph::removeEdge(Edge &iEdge)
 {
-    mEdgeSet.remove(&iEdge);    
+    mEdgeSet.removeOne(&iEdge);    
 }
 
 void
 Graph::removeNode(Node &iNode)
 {
-    mNodeSet.remove(&iNode);
+    mNodeSet.removeOne(&iNode);
 }
 
 void
 Graph::draw()
 {
+    prepareForDrawing();
     cycleRemoval();
-    QList<QList<Node *> *> levels = coffmanGraham(3);
-    crossingReduction(levels);
+    coffmanGraham(3);
+    crossingReduction();
     horizontalCoordinatsAssignment();
+    restore();
+}
+
+void
+Graph::prepareForDrawing()
+{
+    mLevels.clear();
+    mRemovedEdges.clear();
 }
 
 void
 Graph::cycleRemoval()
 {
+    removeTwoCycles();
+
+    QList<Node *> sequenceLeft;
+    QList<Node *> sequenceRight;
+    Graph graph(*this);
+
+    foreach (Node *node, graph.mNodeSet) {
+        if (0 == node->mOutEdgeSet.size()) {
+            sequenceRight.append(node);
+            graph.mNodeSet.removeOne(node);
+        }
+    }
+
+    foreach (Node *node, graph.mNodeSet) {
+        if (0 == node->mInEdgeSet.size()) {
+            sequenceLeft.append(node);
+            graph.mNodeSet.removeOne(node);
+        }
+    }
+
+
+    qSort(graph.mNodeSet.begin(), graph.mNodeSet.end(), lessThanOutMinusInEdges);
+    if (graph.mNodeSet.size() > 0) {
+        for (qint32 i = graph.mNodeSet.size() - 1; i >= 0; --i) {
+            sequenceLeft.append(graph.mNodeSet.at(i));
+            graph.mNodeSet.removeOne(graph.mNodeSet.at(i));
+        }
+    }
+
+    sequenceLeft.append(sequenceRight);
     
+    foreach (Node *node, sequenceLeft) {
+        foreach (Edge *edge, node->mOutEdgeSet) {
+            if (sequenceLeft.indexOf(&edge->end()) < sequenceLeft.indexOf(node)) {
+                edge->revert();
+            }
+        }
+    }
 }
 
-QList<QList<Node *> *>
+void Graph::removeTwoCycles()
+{
+    foreach (Edge *edge1, mEdgeSet) {
+        foreach (Edge *edge2, mEdgeSet) {
+            if (edge1->start() == edge2->end() && edge1->end() == edge2->start()) {
+                mRemovedEdges.append(edge2);
+                mEdgeSet.removeOne(edge2);
+            }
+        }
+    }
+}
+
+void
 Graph::coffmanGraham(quint32 iWidth)
 {
     // initialize all nodes
@@ -106,7 +164,7 @@ Graph::coffmanGraham(quint32 iWidth)
     //  - S!=0, T!=0 and max(S) < max(T), or
     //  - S!=0, T!=0, max(S) = max(T), and S-{max(S)} < T-{max(T}).
 
-    QList<Node *> allNodes = mNodeSet.toList();
+    QList<Node *> allNodes = mNodeSet;
     qSort(allNodes.begin(), allNodes.end(), lessThanLexicorgraphical);
     
     quint32 i = 1;
@@ -126,8 +184,8 @@ Graph::coffmanGraham(quint32 iWidth)
     // or layher Lk bocomes full (|Lk|=W), then we proceed to the next layer Lk+1.
 
     quint32 k = 0;
-    QList<QList<Node *> *> levels;
-    levels.append(new QList<Node *>());
+    QList<QList<Node *> *> mLevels;
+    mLevels.append(new QList<Node *>());
     
     QList<Node *> unlabeledNodes;
     QList<Node *> currentLevelNodes;
@@ -142,7 +200,7 @@ Graph::coffmanGraham(quint32 iWidth)
         if (0 != u) {
             QList<QList<Node *> *>::const_iterator level;
             QList<Node *> levelsKminus1;
-            for (level = levels.constBegin(); level != levels.constEnd() - 1; ++level) {
+            for (level = mLevels.constBegin(); level != mLevels.constEnd() - 1; ++level) {
                 levelsKminus1.append(**level);
             }
 
@@ -158,7 +216,7 @@ Graph::coffmanGraham(quint32 iWidth)
         // if |Lk| >= w or there is some v : (u,v) from E that is not in unlabeledNodes - create next level 
         if (0 == u || currentLevelNodes.size() >= iWidth || !condition) {
             k++;
-            levels.append(new QList<Node *>());
+            mLevels.append(new QList<Node *>());
             unlabeledNodes.append(currentLevelNodes);
             currentLevelNodes.clear();
         }
@@ -166,22 +224,20 @@ Graph::coffmanGraham(quint32 iWidth)
         if (0 != u) {
             // append node to current level
             u->setLevel(k);
-            levels.at(k)->append(u);
+            mLevels.at(k)->append(u);
             qDebug() << "id: " << u->id() << " level: " << k;
 
-            // remove node from unlabeledNodes set
+            // removeOne node from unlabeledNodes set
             currentLevelNodes.append(u);
         }
     }
-
-    return levels;
 }
 
 void
-Graph::crossingReduction(QList<QList<Node *> *> &iLevels)
+Graph::crossingReduction()
 {
-    for (int i = iLevels.size() - 1; i >=0; --i) {
-        qSort(iLevels.at(i)->begin(), iLevels.at(i)->end(), lessThanMedian);
+    for (int i = mLevels.size() - 1; i >=0; --i) {
+        qSort(mLevels.at(i)->begin(), mLevels.at(i)->end(), lessThanMedian);
     }
 }
 
@@ -189,6 +245,19 @@ void
 Graph::horizontalCoordinatsAssignment()
 {
     
+}
+
+void
+Graph::restore()
+{
+    foreach (Edge *edge, mEdgeSet) {
+        // this function garantees unreverting only for reverted edges
+        edge->unrevert();
+    }
+
+    foreach (Edge *edge, mRemovedEdges) {
+        mEdgeSet.append(edge);
+    }
 }
 
 /*!

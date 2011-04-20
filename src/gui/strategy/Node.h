@@ -55,13 +55,14 @@ class Node
         quint32 median() const;
 
         bool operator<(const Node &iNode) const;
+        bool operator==(const Node &iNode) const;
 
     private:
 
 //        void addInEdge(const Edge &iEdge);
 //        void addOutEdge(const Edge &iEdge);
 
-        const Edge *max() const;
+        Edge *max() const;
 
     private:
         quint32 mId;
@@ -70,18 +71,20 @@ class Node
         quint32 mX;
         quint32 mY;
 
-        QSet<const Edge *> mInEdgeSet;
-        QSet<const Edge *> mOutEdgeSet;
+        QSet<Edge *> mInEdgeSet;
+        QSet<Edge *> mOutEdgeSet;
 
         friend class Graph;
         friend class NodeTest;
 
         friend bool lessThanLexicorgraphical(const Node *iNode1, const Node *iNode2);
         friend bool lessThanMedian(const Node *iNode1, const Node *iNode2);
+        friend bool lessThanOutMinusInEdges(const Node *iNode1, const Node *iNode2);
 };
 
 bool lessThanLexicorgraphical(const Node *iNode1, const Node *iNode2);
 bool lessThanMedian(const Node *iNode1, const Node *iNode2);
+bool lessThanOutMinusInEdges(const Node *iNode1, const Node *iNode2);
 
 #endif // NODE_H
 

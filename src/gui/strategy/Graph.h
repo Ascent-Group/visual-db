@@ -49,18 +49,24 @@ class Graph
         void draw();
 
     private:
-        Graph(const Graph &iGraph);
+//        Graph(const Graph &iGraph);
 
+        void prepareForDrawing();
         void cycleRemoval();
-        QList<QList<Node *> *> coffmanGraham(quint32 iWidth);
-        void crossingReduction(QList<QList<Node *> *> &iLevels);
+        void removeTwoCycles();
+        void coffmanGraham(quint32 iWidth);
+        void crossingReduction();
         void horizontalCoordinatsAssignment();
+        void restore();
 
         Node *selectNode(const QList<Node *> &U, const QList<Node *> &iCurrentLevelNodes, const QList<Node *> &V);
 
     private:
-        QSet<Node *> mNodeSet;
-        QSet<Edge *> mEdgeSet;
+        QList<Node *> mNodeSet;
+        QList<Edge *> mEdgeSet;
+        QList<QList<Node *> *> mLevels;
+//        QList<const Edge *> mFeedbackArcSet;
+        QList<Edge *> mRemovedEdges;
 
         friend class GraphTest;
 };

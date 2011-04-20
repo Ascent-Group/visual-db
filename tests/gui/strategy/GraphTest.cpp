@@ -134,7 +134,7 @@ GraphTest::coffmanGrahamTest()
     graph.addEdge(edge11_13);
     graph.addEdge(edge12_13);
 
-    QList<QList<Node *> *> levels = graph.coffmanGraham(3);
+    graph.coffmanGraham(3);
 
     QVERIFY(0 == node13.level());
     QVERIFY(1 == node12.level());
@@ -150,9 +150,9 @@ GraphTest::coffmanGrahamTest()
     QVERIFY(0 == node2.level());
     QVERIFY(5 == node1.level());
 
-    graph.crossingReduction(levels);
+    graph.crossingReduction();
 
-    foreach (QList<Node *> *level, levels) {
+    foreach (QList<Node *> *level, graph.mLevels) {
         foreach (Node *node, *level) {
             qDebug() << node->level() << " : " << node->id();
         }

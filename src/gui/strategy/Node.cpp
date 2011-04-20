@@ -111,22 +111,11 @@ Node::operator<(const Node &iNode) const
     return false;
 }
 
-//quint32
-//Node::barycenter()
-//{
-//    quint32 average = 0;
-//    
-//    foreach (Edge *edge, mOutEdgeSet) {
-//        average += edge->end().mX; 
-//    }
-//
-//    if (mOutEdgeSet.size() > 0) {
-//        average /= mOutEdgeSet.size();
-//    }
-//
-//    iNode.mX = average;
-//    return average;
-//}
+bool
+Node::operator==(const Node &iNode) const
+{
+    return id() == iNode.id();
+}
 
 quint32
 Node::median() const
@@ -146,13 +135,20 @@ lessThanMedian(const Node *iNode1, const Node *iNode2)
     return iNode1->median() < iNode2->median();
 }
 
-const Edge *
+bool
+lessThanOutMinusInEdges(const Node *iNode1, const Node *iNode2)
+{
+    return iNode1->mOutEdgeSet.size() - iNode1->mInEdgeSet.size() < 
+            iNode2->mOutEdgeSet.size() - iNode2->mInEdgeSet.size();
+}
+
+Edge *
 Node::max() const
 {
     Q_ASSERT(!mInEdgeSet.empty());
 
-    QSet<const Edge *>::const_iterator iter = mInEdgeSet.begin();
-    const Edge *max = *iter;
+    QSet<Edge *>::const_iterator iter = mInEdgeSet.begin();
+    Edge *max = *iter;
 
     for (iter = mInEdgeSet.begin() + 1; iter != mInEdgeSet.end(); ++iter) {
         if ((*iter)->start().id() > max->start().id()) {
@@ -163,14 +159,3 @@ Node::max() const
     return max;
 }
 
-//void
-//Node::addInEdge(const Edge &iEdge)
-//{
-//    mInEdgeSet.insert(&iEdge);
-//}
-//
-//void
-//Node::addOutEdge(const Edge &iEdge)
-//{
-//    mOutEdgeSet.insert(&iEdge);
-//}

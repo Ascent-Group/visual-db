@@ -45,13 +45,19 @@ class Edge
         void setWeight(qint32 iWeight);
         qint32 weight() const;
 
+        void revert();
+        void unrevert();
+
     private:
         Edge(const Edge &iEdge);
 
+        void swapNodes();
+
     private:
-        Node &mStart;
-        Node &mEnd;
+        Node *mStart;
+        Node *mEnd;
         qint32 mWeight;
+        bool mReverted;
 
         friend class EdgeTest;
 };

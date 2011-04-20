@@ -30,7 +30,7 @@
 #include <gui/strategy/Edge.h>
 
 Edge::Edge(Node &iStart, Node &iEnd, qint32 iWeight)
-    : mStart(iStart), mEnd(iEnd), mWeight(iWeight)
+    : mStart(&iStart), mEnd(&iEnd), mWeight(iWeight), mReverted(false)
 {
 }
 
@@ -41,13 +41,13 @@ Edge::~Edge()
 Node &
 Edge::start() const
 {
-    return mStart;
+    return *mStart;
 }
 
 Node &
 Edge::end() const
 {
-    return mEnd;
+    return *mEnd;
 }
 
 void
@@ -60,4 +60,28 @@ qint32
 Edge::weight() const
 {
     return mWeight;
+}
+
+void
+Edge::revert()
+{
+    mReverted = true;
+    swapNodes();
+}
+
+void
+Edge::unrevert()
+{
+    if (mReverted) {
+        mReverted = false;
+        swapNodes();
+    }
+}
+
+void
+Edge::swapNodes()
+{
+    Node *tmp = mStart;
+    mStart = mEnd;
+    mEnd = tmp;
 }

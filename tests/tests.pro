@@ -80,72 +80,74 @@ win32 {
 
 DEFINES -= QT_NO_DEBUG_OUTPUT QT_NO_WARNING_OUTPUT
 
-DEFINES += TEST_GUI
-DEFINES += TEST_GUI_STRATEGY
-DEFINES += TEST_GUI_BEHAVIOUR
-DEFINES += TEST_CONNECT
-DEFINES += TEST_CONTROL
-DEFINES += TEST_DBOBJECTS
-
+############
+### main ###
+############
 SOURCES = $$PWD/main.cpp \
           $$TOP_SRC_DIR/consts.cpp
 
 HEADERS = $$TOP_SRC_DIR/consts.h
 
-contains(DEFINES, TEST_GUI_STRATEGY) {
-    HEADERS += $$files($$PWD/gui/strategy/*.h) \
-               $$files($$TOP_SRC_DIR/gui/strategy/*.h)
+#########################
+### TEST_GUI_STRATEGY ###
+#########################
+HEADERS += $$files($$PWD/gui/strategy/*.h) \
+           $$files($$TOP_SRC_DIR/gui/strategy/*.h)
 
-    SOURCES += $$files($$PWD/gui/strategy/*.cpp) \
-               $$files($$TOP_SRC_DIR/gui/strategy/*.cpp)
-}
+SOURCES += $$files($$PWD/gui/strategy/*.cpp) \
+           $$files($$TOP_SRC_DIR/gui/strategy/*.cpp)
 
-contains(DEFINES, TEST_GUI_BEHAVIOUR) {
-    HEADERS += $$files($$PWD/gui/behaviour/*.h) \
-               $$files($$TOP_SRC_DIR/gui/behaviour/*.h)
+##########################
+### TEST_GUI_BEHAVIOUR ###
+##########################
+HEADERS += $$files($$PWD/gui/behaviour/*.h) \
+           $$files($$TOP_SRC_DIR/gui/behaviour/*.h)
 
-    SOURCES += $$files($$PWD/gui/behaviour/*.cpp) \
-               $$files($$TOP_SRC_DIR/gui/behaviour/*.cpp)
-}
+SOURCES += $$files($$PWD/gui/behaviour/*.cpp) \
+           $$files($$TOP_SRC_DIR/gui/behaviour/*.cpp)
 
-contains(DEFINES, TEST_GUI) {
-    HEADERS += $$files($$PWD/gui/*.h) \
-               $$files($$TOP_SRC_DIR/gui/*.h) \
-               $$files($$TOP_SRC_DIR/gui/graphicsitems/*.h)
+################
+### TEST_GUI ###
+################
+HEADERS += $$files($$PWD/gui/*.h) \
+           $$files($$TOP_SRC_DIR/gui/*.h) \
+           $$files($$TOP_SRC_DIR/gui/graphicsitems/*.h)
 
-    SOURCES += $$files($$PWD/gui/*.cpp) \
-               $$files($$TOP_SRC_DIR/gui/*.cpp) \
-               $$files($$TOP_SRC_DIR/gui/graphicsitems/*.cpp)
-}
+SOURCES += $$files($$PWD/gui/*.cpp) \
+           $$files($$TOP_SRC_DIR/gui/*.cpp) \
+           $$files($$TOP_SRC_DIR/gui/graphicsitems/*.cpp)
 
-contains(DEFINES, TEST_CONNECT) {
-    HEADERS += $$files($$PWD/connect/*.h) \
-               $$files($$TOP_SRC_DIR/connect/*.h)
+####################
+### TEST_CONNECT ###
+####################
+HEADERS += $$files($$PWD/connect/*.h) \
+           $$files($$TOP_SRC_DIR/connect/*.h)
 
-    SOURCES += $$files($$PWD/connect/*.cpp) \
-               $$files($$TOP_SRC_DIR/connect/*.cpp)
-}
+SOURCES += $$files($$PWD/connect/*.cpp) \
+           $$files($$TOP_SRC_DIR/connect/*.cpp)
 
-contains(DEFINES, TEST_CONTROL) {
-    HEADERS += $$files($$PWD/control/*.h) \
-               $$files($$TOP_SRC_DIR/control/*.h)
+####################
+### TEST_CONTROL ###
+####################
+HEADERS += $$files($$PWD/control/*.h) \
+           $$files($$TOP_SRC_DIR/control/*.h)
 
-    SOURCES += $$files($$PWD/control/*.cpp) \
-               $$files($$TOP_SRC_DIR/control/*.cpp)
-}
+SOURCES += $$files($$PWD/control/*.cpp) \
+           $$files($$TOP_SRC_DIR/control/*.cpp)
 
-contains(DEFINES, TEST_DBOBJECTS) {
-    HEADERS += $$files($$PWD/dbobjects/common/*.h) \
-               $$files($$PWD/dbobjects/mysql/*.h) \
-               $$files($$PWD/dbobjects/psql/*.h) \
-               $$files($$TOP_SRC_DIR/dbobjects/common/*.h) \
-               $$files($$TOP_SRC_DIR/dbobjects/mysql/*.h) \
-               $$files($$TOP_SRC_DIR/dbobjects/psql/*.h)
+######################
+### TEST_DBOBJECTS ###
+######################
+HEADERS += $$files($$PWD/dbobjects/common/*.h) \
+           $$files($$PWD/dbobjects/mysql/*.h) \
+           $$files($$PWD/dbobjects/psql/*.h) \
+           $$files($$TOP_SRC_DIR/dbobjects/common/*.h) \
+           $$files($$TOP_SRC_DIR/dbobjects/mysql/*.h) \
+           $$files($$TOP_SRC_DIR/dbobjects/psql/*.h)
 
-    SOURCES += $$files($$PWD/dbobjects/common/*.cpp) \
-               $$files($$PWD/dbobjects/mysql/*.cpp) \
-               $$files($$PWD/dbobjects/psql/*.cpp)
-}
+SOURCES += $$files($$PWD/dbobjects/common/*.cpp) \
+           $$files($$PWD/dbobjects/mysql/*.cpp) \
+           $$files($$PWD/dbobjects/psql/*.cpp)
 
 LIBS += -lcommon -lmysql -lpsql -lcommon
 #LIBS += -lcommon -lpsql -lfactory -lcommon -lmysql -lpsql -lfactory -lcommon -lpsql -lfactory -lmysql -lpsql

@@ -2,7 +2,10 @@
 
 QT += testlib sql network xml
 #CONFIG += object_with_source
+CONFIG += debug
 #CONFIG += release
+
+CONFIG(debug, debug|release):DEFINES += DEBUG
 
 # We need to override old TARGET and DESTDIR
 TARGET = tests

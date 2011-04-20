@@ -27,17 +27,152 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <control/Context.h>
+#include <control/Director.h>
 #include <control/DirectorTest.h>
+
+#include <QLabel>
+
+using namespace Control;
 
 void
 DirectorTest::initTestCase()
 {
+}
 
+void
+DirectorTest::init()
+{
+    mDirector = new Control::Director();
+
+    Q_CHECK_PTR(mDirector);
+
+    mDirector->initialize();
+}
+
+void
+DirectorTest::cleanup()
+{
+    delete mDirector;
+    mDirector = 0;
 }
 
 void
 DirectorTest::cleanupTestCase()
 {
 
+}
+
+void
+DirectorTest::addTest()
+{
+    int count = 0;
+    QCOMPARE(mDirector->mRegistry.size(), count);
+
+    QLabel *label1 = new QLabel();
+    QLabel *label2 = new QLabel();
+    Context *ctx = new Context();
+
+//    mDirector->add(label1, 0);
+//    QCOMPARE(mDirector->mRegistry.size(), 0);
+
+//    mDirector->add(0, ctx);
+//    QCOMPARE(mDirector->mRegistry.size(), 0);
+
+    mDirector->add(label1, ctx);
+    QCOMPARE(mDirector->mRegistry.size(), ++count);
+
+    mDirector->add(label1, ctx);
+    QCOMPARE(mDirector->mRegistry.size(), count);
+
+    mDirector->add(label2, ctx);
+    QCOMPARE(mDirector->mRegistry.size(), ++count);
+}
+
+void
+DirectorTest::removeWidgetTest()
+{
+    int count = 0;
+    QCOMPARE(mDirector->mRegistry.size(), count);
+
+    QLabel *label1 = new QLabel();
+    QLabel *label2 = new QLabel();
+    QLabel *label3 = 0;
+    Context *ctx = new Context();
+
+    mDirector->add(label1, ctx);
+    QCOMPARE(mDirector->mRegistry.size(), ++count);
+
+    mDirector->add(label2, ctx);
+    QCOMPARE(mDirector->mRegistry.size(), ++count);
+
+    mDirector->remove(label3);
+    QCOMPARE(mDirector->mRegistry.size(), count);
+
+    mDirector->remove(label1);
+    QCOMPARE(mDirector->mRegistry.size(), --count);
+
+    mDirector->remove(label1);
+    QCOMPARE(mDirector->mRegistry.size(), count);
+}
+
+void
+DirectorTest::removeContextTest()
+{
+    int count = 0;
+    QCOMPARE(mDirector->mRegistry.size(), count);
+
+    QLabel *label1 = new QLabel();
+    QLabel *label2 = new QLabel();
+    Context *ctx = new Context();
+    Context *uninitializedCtx = 0;
+
+    mDirector->add(label1, ctx);
+    QCOMPARE(mDirector->mRegistry.size(), ++count);
+
+    mDirector->add(label2, ctx);
+    QCOMPARE(mDirector->mRegistry.size(), ++count);
+
+    mDirector->remove(uninitializedCtx);
+    QCOMPARE(mDirector->mRegistry.size(), count);
+
+    mDirector->remove(ctx);
+    QCOMPARE(mDirector->mRegistry.size(), 0);
+}
+
+void
+DirectorTest::findContextTest()
+{
+    QVERIFY(0);
+}
+
+void
+DirectorTest::findWidgetsTest()
+{
+    QVERIFY(0);
+}
+
+void
+DirectorTest::findTreeTest()
+{
+    QVERIFY(0);
+}
+
+void
+DirectorTest::findSceneTest()
+{
+    QVERIFY(0);
+}
+
+void
+DirectorTest::showConnectionDialogTest()
+{
+    QVERIFY(0);
+}
+
+void
+DirectorTest::disconnectRequestedTest()
+{
+    QVERIFY(0);
 }
 

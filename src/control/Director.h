@@ -38,6 +38,10 @@
 
 #include <QtDebug>
 
+#if DEBUG
+class DirectorTest;
+#endif
+
 namespace Gui
 {
 class MainWindow;
@@ -133,8 +137,9 @@ class Director : public QObject
         void logMessageRequest(const QString &);
 
 
+    private:
 #if DEBUG
-        friend class DirectorTest;
+        friend class ::DirectorTest;
 #endif
 };
 

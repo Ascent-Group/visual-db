@@ -76,15 +76,15 @@ DatabaseManager::~DatabaseManager()
  *
  * \return true if everething is ok, false otherwise.
  */
-bool 
-DatabaseManager::indices(const Context &iContext, 
+bool
+DatabaseManager::indices(const Context &iContext,
         const DbObjects::Common::DbTablePtr &iDbTablePtr,
         QVector<DbObjects::Common::DbIndexPtr> oDbIndexPtrVector)
 {
     using namespace DbObjects::Common;
-    
+
     Database *db = findDatabase(&iContext);
-   
+
     Q_ASSERT(db);
 
     db->findTableIndices(iDbTablePtr, oDbIndexPtrVector);
@@ -234,9 +234,9 @@ DatabaseManager::add(const Control::Context *iContext, DbObjects::Common::Databa
         return true;
     }
 
-    // unlike director, whose map is many-to-one, we have one-one registry and if we got
-    // here, then it means we are trying to register several contexts for the same
-    // database, which is wrong.
+    // unlike director, whose map is many-to-one, we have one-to-one registry and if we
+    // got here, then it means we are trying to register several contexts for the same
+    // database (or several databases for the same context), which is wrong.
     Q_ASSERT(false);
     return false;
 }

@@ -35,6 +35,10 @@
 #include <dbobjects/common/Database.h>
 #include <dbobjects/common/DbObject.h>
 
+#if DEBUG
+class DatabaseManagerTest;
+#endif
+
 namespace DbObjects
 {
 namespace Common
@@ -94,7 +98,7 @@ class DatabaseManager
         friend class Director;
 
 #if DEBUG
-        friend class DatabaseManagerTest;
+        friend class ::DatabaseManagerTest;
 #endif
 };
 

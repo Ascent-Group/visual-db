@@ -27,17 +27,17 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef DIRECTORTEST_H
-#define DIRECTORTEST_H
+#ifndef DATABASEMANAGERTEST_H
+#define DATABASEMANAGERTEST_H
 
 #include <QtTest/QtTest>
 
 namespace Control
 {
-class Director;
+class DatabaseManager;
 }
 
-class DirectorTest : public QObject
+class DatabaseManagerTest : public QObject
 {
     Q_OBJECT
 
@@ -48,19 +48,20 @@ class DirectorTest : public QObject
         void init();
         void cleanup();
 
+        void indicesTest();
+        void establishConnectionTest();
+        void reloadDataTest();
         void addTest();
-        void removeWidgetTest();
         void removeContextTest();
+        void removeDatabaseTest();
         void findContextTest();
-        void findWidgetsTest();
-        void findTreeTest();
-        void findSceneTest();
-        void showConnectionDialogTest();
-        void disconnectRequestedTest();
+        void findDatabaseTest();
+        void lastErrorTest();
+        void newObjectsTest();
 
     private:
-        Control::Director *mDirector;
+        Control::DatabaseManager *mDbMgr;
 };
 
-#endif // DIRECTORTEST_H
+#endif // DATABASEMANAGERTEST_H
 

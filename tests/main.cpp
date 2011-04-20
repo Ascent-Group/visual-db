@@ -9,6 +9,7 @@
 // control
 #include <control/ConfigTest.h>
 #include <control/ContextTest.h>
+#include <control/DatabaseManagerTest.h>
 #include <control/DirectorTest.h>
 #include <control/SessionTest.h>
 
@@ -98,7 +99,7 @@ int main(int argc, char *argv[])
     REGISTER_TEST_SUITE(CONTROL, Config);
     REGISTER_TEST_SUITE(CONTROL, Context);
 //    REGISTER_TEST_SUITE(CONTROL, Converter);
-//    REGISTER_TEST_SUITE(CONTROL, DatabaseManager);
+    REGISTER_TEST_SUITE(CONTROL, DatabaseManager);
     REGISTER_TEST_SUITE(CONTROL, Director);
     REGISTER_TEST_SUITE(CONTROL, Session);
 

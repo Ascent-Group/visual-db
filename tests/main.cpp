@@ -1,24 +1,27 @@
-/* connect */
-#ifdef TEST_CONNECT
+#include <QMultiMap>
+
+// connect
 #include <connect/HostInfoTest.h>
 #include <connect/DbHostInfoTest.h>
 #include <connect/ProxyHostInfoTest.h>
 #include <connect/ConnectionInfoTest.h>
-#endif
 
-#ifdef TEST_CONTROL
-/* control */
+// control
 #include <control/ConfigTest.h>
 #include <control/ContextTest.h>
 #include <control/DirectorTest.h>
 #include <control/SessionTest.h>
-#endif
 
-/* gui/behaviour */
+// gui/strategy
+#include <gui/strategy/NodeTest.h>
+#include <gui/strategy/EdgeTest.h>
+#include <gui/strategy/GraphTest.h>
+
+// gui/behaviour
 #include <gui/behaviour/AddTableCommandTest.h>
 #include <gui/behaviour/MoveTableCommandTest.h>
 
-/* gui */
+// gui
 #include <gui/AppearancePageTest.h>
 #include <gui/ArrowItemTest.h>
 #include <gui/ColorsPageTest.h>
@@ -41,8 +44,7 @@
 #include <gui/TabWidgetTest.h>
 #include <gui/TreeWidgetTest.h>
 
-#if TEST_DBOBJECTS
-/* dbobjects */
+// dbobjects
 #include <dbobjects/common/DatabaseTest.h>
 #include <dbobjects/common/DbIndexTest.h>
 #include <dbobjects/common/DbLanguageTest.h>
@@ -60,19 +62,100 @@
 
 #include <common/DatabaseCreator.h>
 
-#endif
 
-const QString DBHOST = "localhost";
-const QString DBNAME = "music_db";
-const QString DBUSER = "music_user";
-const QString DBPASS = "qwe";
+const QString GUI_BEAHVIOUR = "behaviour";
+const QString CONNECT = "connect";
+const QString CONTROL = "control";
+const QString DBOBJECTS_COMMON = "common";
+const QString DBOBJECTS_PSQL = "psql";
+const QString DBOBJECTS_MYSQL = "mysql";
+const QString GUI = "gui";
+const QString GUI_STRATEGY = "strategy";
+
+typedef QPair<QString, QObject*> RegistryRecord;
+typedef QMultiMap<QString, RegistryRecord> Registry;
+
+#define REGISTER_TEST_SUITE(Module, Suite) \
+    do { \
+        QObject *o = new Suite##Test(); \
+        testSuites.insert(Module, qMakePair(QString(#Suite), o)); \
+    } while (0);
 
 /*!
  *
  */
 int main(int argc, char *argv[])
 {
-#if TEST_DBOBJECTS
+    Registry testSuites;
+
+    // connect
+    REGISTER_TEST_SUITE(CONNECT, ConnectionInfo);
+    REGISTER_TEST_SUITE(CONNECT, DbHostInfo);
+    REGISTER_TEST_SUITE(CONNECT, HostInfo);
+    REGISTER_TEST_SUITE(CONNECT, ProxyHostInfo);
+
+    // control
+    REGISTER_TEST_SUITE(CONTROL, Config);
+    REGISTER_TEST_SUITE(CONTROL, Context);
+//    REGISTER_TEST_SUITE(CONTROL, Converter);
+//    REGISTER_TEST_SUITE(CONTROL, DatabaseManager);
+    REGISTER_TEST_SUITE(CONTROL, Director);
+    REGISTER_TEST_SUITE(CONTROL, Session);
+
+    // dbobjects
+    // common
+    REGISTER_TEST_SUITE(DBOBJECTS_COMMON, Database);
+    REGISTER_TEST_SUITE(DBOBJECTS_COMMON, DbIndex);
+    REGISTER_TEST_SUITE(DBOBJECTS_COMMON, DbLanguage);
+    REGISTER_TEST_SUITE(DBOBJECTS_COMMON, DbObject);
+    REGISTER_TEST_SUITE(DBOBJECTS_COMMON, DbProcedure);
+    REGISTER_TEST_SUITE(DBOBJECTS_COMMON, DbRole);
+    REGISTER_TEST_SUITE(DBOBJECTS_COMMON, DbSchema);
+    REGISTER_TEST_SUITE(DBOBJECTS_COMMON, DbTable);
+    REGISTER_TEST_SUITE(DBOBJECTS_COMMON, DbTrigger);
+    REGISTER_TEST_SUITE(DBOBJECTS_COMMON, DbView);
+
+    // psql
+    REGISTER_TEST_SUITE(DBOBJECTS_PSQL, PsqlFactories);
+    REGISTER_TEST_SUITE(DBOBJECTS_PSQL, PsqlTools);
+
+    // mysql
+    REGISTER_TEST_SUITE(DBOBJECTS_MYSQL, MysqlFactories);
+    REGISTER_TEST_SUITE(DBOBJECTS_MYSQL, MysqlTools);
+
+    // gui
+    REGISTER_TEST_SUITE(GUI, AppearancePage);
+    REGISTER_TEST_SUITE(GUI, ArrowItem);
+    REGISTER_TEST_SUITE(GUI, ColorsPage);
+    REGISTER_TEST_SUITE(GUI, ControlWidget);
+    REGISTER_TEST_SUITE(GUI, DescriptionWidget);
+    REGISTER_TEST_SUITE(GUI, GraphicsItem);
+    REGISTER_TEST_SUITE(GUI, GraphicsScene);
+    REGISTER_TEST_SUITE(GUI, GraphicsView);
+    REGISTER_TEST_SUITE(GUI, Legend);
+    REGISTER_TEST_SUITE(GUI, LogPanel);
+    REGISTER_TEST_SUITE(GUI, MainWindow);
+    REGISTER_TEST_SUITE(GUI, OptionsDialog);
+    REGISTER_TEST_SUITE(GUI, PreferencesPage);
+    REGISTER_TEST_SUITE(GUI, SceneWidget);
+    REGISTER_TEST_SUITE(GUI, SelectColorWidget);
+    REGISTER_TEST_SUITE(GUI, SqlConnectionDialog);
+    REGISTER_TEST_SUITE(GUI, SqlWidget);
+    REGISTER_TEST_SUITE(GUI, TableItemGroup);
+    REGISTER_TEST_SUITE(GUI, TableItem);
+    REGISTER_TEST_SUITE(GUI, TabWidget);
+    REGISTER_TEST_SUITE(GUI, TreeWidget);
+
+    // behaviour
+    REGISTER_TEST_SUITE(GUI_BEAHVIOUR, AddTableCommand);
+    REGISTER_TEST_SUITE(GUI_BEAHVIOUR, MoveTableCommand);
+
+    // strategy
+    REGISTER_TEST_SUITE(GUI_STRATEGY, Edge);
+    REGISTER_TEST_SUITE(GUI_STRATEGY, Graph);
+    REGISTER_TEST_SUITE(GUI_STRATEGY, Node);
+
+    QSettings settings("./tests.ini", QSettings::IniFormat);
     /*!
      * We cannot pass the db driver to use for testing via argv because QTestLib needs/uses
      * argv (e.g. a name of a test to run) and they will be parsed by QApplication. Adding
@@ -80,10 +163,15 @@ int main(int argc, char *argv[])
      * find another way of specifying db driver. As a solution, we can use environment
      * variable for that.
      */
-    QString drv(getenv("VDB_DB_DRV"));
+    QString drv = settings.value("driver", "").toString();
+    QString dbHost = settings.value("dbhost", "").toString();
+    QString dbName = settings.value("dbname", "").toString();
+    QString dbUser = settings.value("dbuser", "").toString();
+    QString dbPass = settings.value("dbpass", "").toString();
+    
 
     if (drv.isEmpty()) {
-        qCritical("[ERROR] db driver not set!");
+        qCritical("[ERROR] Database driver is not set! In order to run tests you should set the VDB_DB_DRV variable. Available values are: [QPSQL, QMYSQL]");
         return -1;
     }
 
@@ -91,195 +179,65 @@ int main(int argc, char *argv[])
 
     Connect::DbHostInfo dbHostInfo;
     dbHostInfo.setDbDriver(drv);
-    dbHostInfo.setAddress(DBHOST);
-    dbHostInfo.setDbName(DBNAME);
-    dbHostInfo.setUser(DBUSER);
-    dbHostInfo.setPassword(DBPASS);
-
+    dbHostInfo.setAddress(dbHost);
+    dbHostInfo.setDbName(dbName);
+    dbHostInfo.setUser(dbUser);
+    dbHostInfo.setPassword(dbPass);
 
     if (!DatabaseCreator::connect(dbHostInfo)) {
         qDebug() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
-            .arg(DBNAME)
-            .arg(DBHOST)
-            .arg(DBUSER);
+            .arg(dbName)
+            .arg(dbHost)
+            .arg(dbUser);
 
-        return -1;
+        return -1/*QSqlError::ConnectionError*/;
     }
-#endif
 
     QApplication app(argc, argv);
 
-    // \todo Determine whether this should be set or not for tests
-//    app.setOrganizationName("Ascent Group");
-//    app.setOrganizationDomain("sourceforge.net");
-//    app.setApplicationName("VisualDB");
-//    app.setWindowIcon(QIcon(":/img/logo.png"));
+    QList<QObject *> tests;
+    // if no args were specified, then all tests should be executed
+    if (2 > argc) {
+        foreach (const QString &key, testSuites.uniqueKeys()) {
+            foreach (const RegistryRecord &pair, testSuites.values(key)) {
+                tests << pair.second;
+            }
+        }
+    // otherwise, search for those that should be executed
+    } else {
+        for (int i = 1; i < argc; ++i) {
+            bool singleTestFound = false;
+            QString testName(argv[i]);
 
-//    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL", "mainConnect");
-//    db.setHostName(DBHOST);
-//    db.setDatabaseName(DBNAME);
-//    db.setUserName(DBUSER);
-//
-//    if (!db.open()) {
-//        qDebug() << QString("Unable to establish connection with '%1@%2' on behalf of '%3'")
-//            .arg(DBNAME)
-//            .arg(DBHOST)
-//            .arg(DBUSER);
-//
-//        return QSqlError::ConnectionError;
-//    }
+            // try to find such test suite
+            foreach (const QString &key, testSuites.uniqueKeys()) {
+                foreach (const RegistryRecord &pair, testSuites.values(key)) {
+                    if (testName == pair.first) {
+                        tests << pair.second;
+                        singleTestFound = true;
+                    }
+                }
+            }
 
-#if TEST_GUI_BEHAVIOUR
-    /* gui/behaviour */
-    AddTableCommandTest addTableCommandTest;
-    QTest::qExec(&addTableCommandTest, argc, argv);
-
-    MoveTableCommandTest moveTableCommandTest;
-    QTest::qExec(&moveTableCommandTest, argc, argv);
-#endif // TEST_BEHAVIOUR
-
-#if TEST_CONNECT
-    /* connect */
-    HostInfoTest hostInfoTest;
-    QTest::qExec(&hostInfoTest, argc, argv);
-
-    DbHostInfoTest dbHostInfoTest;
-    QTest::qExec(&dbHostInfoTest, argc, argv);
-
-    ProxyHostInfoTest proxyHostInfoTest;
-    QTest::qExec(&proxyHostInfoTest, argc, argv);
-
-    ConnectionInfoTest connectionInfoTest;
-    QTest::qExec(&connectionInfoTest, argc, argv);
-#endif // TEST_CONNECT
-
-#if TEST_CONTROL
-    /* control*/
-    ConfigTest configTest;
-    QTest::qExec(&configTest, argc, argv);
-
-    ContextTest contextTest;
-    QTest::qExec(&contextTest, argc, argv);
-
-    DirectorTest directorTest;
-    QTest::qExec(&directorTest, argc, argv);
-
-    SessionTest sessionTest;
-    QTest::qExec(&sessionTest, argc, argv);
-#endif
-
-#if TEST_GUI
-    /* gui */
-    AppearancePageTest appearancePageTest;
-    QTest::qExec(&appearancePageTest, argc, argv);
-
-    ArrowItemTest arrowItemTest;
-    QTest::qExec(&arrowItemTest, argc, argv);
-
-    ColorsPageTest colorsPageTest;
-    QTest::qExec(&colorsPageTest, argc, argv);
-
-    ControlWidgetTest controlWidgetTest;
-    QTest::qExec(&controlWidgetTest, argc, argv);
-
-    DescriptionWidgetTest descriptionWidgetTest;
-    QTest::qExec(&descriptionWidgetTest, argc, argv);
-
-    GraphicsItemTest graphicsItemTest;
-    QTest::qExec(&graphicsItemTest, argc, argv);
-
-    GraphicsSceneTest graphicsSceneTest;
-    QTest::qExec(&graphicsSceneTest, argc, argv);
-
-    GraphicsViewTest graphicsViewTest;
-    QTest::qExec(&graphicsViewTest, argc, argv);
-
-    LegendTest legendTest;
-    QTest::qExec(&legendTest, argc, argv);
-
-    LogPanelTest logPanelTest;
-    QTest::qExec(&logPanelTest, argc, argv);
-
-    MainWindowTest mainWindowTest;
-    QTest::qExec(&mainWindowTest, argc, argv);
-
-    OptionsDialogTest optionsDialogTest;
-    QTest::qExec(&optionsDialogTest, argc, argv);
-
-    PreferencesPageTest preferencesPageTest;
-    QTest::qExec(&preferencesPageTest, argc, argv);
-
-    SceneWidgetTest sceneWidgetTest;
-    QTest::qExec(&sceneWidgetTest, argc, argv);
-
-    SelectColorWidgetTest selectColorWidgetTest;
-    QTest::qExec(&selectColorWidgetTest, argc, argv);
-
-    SqlConnectionDialogTest sqlConnectionDialogTest;
-    QTest::qExec(&sqlConnectionDialogTest, argc, argv);
-
-    SqlWidgetTest sqlWidgetTest;
-    QTest::qExec(&sqlWidgetTest, argc, argv);
-
-    TableItemGroupTest tableItemGroupTest;
-    QTest::qExec(&tableItemGroupTest, argc, argv);
-
-    TableItemTest tableItemTest;
-    QTest::qExec(&tableItemTest, argc, argv);
-
-    TabWidgetTest tabWidgetTest;
-    QTest::qExec(&tabWidgetTest, argc, argv);
-
-    TreeWidgetTest treeWidgetTest;
-    QTest::qExec(&treeWidgetTest, argc, argv);
-#endif // TEST_GUI
-
-#if TEST_DBOBJECTS
-    /* dbobjects */
-    DatabaseTest databaseTest;
-    QTest::qExec(&databaseTest, argc, argv);
-
-    DbIndexTest dbIndexTest;
-    QTest::qExec(&dbIndexTest, argc, argv);
-
-    DbLanguageTest dbLanguageTest;
-    QTest::qExec(&dbLanguageTest, argc, argv);
-
-    DbObjectTest dbObjectTest;
-    QTest::qExec(&dbObjectTest, argc, argv);
-
-    DbProcedureTest dbProcedureTest;
-    QTest::qExec(&dbProcedureTest, argc, argv);
-
-    DbRoleTest dbRoleTest;
-    QTest::qExec(&dbRoleTest, argc, argv);
-
-    DbSchemaTest dbSchemaTest;
-    QTest::qExec(&dbSchemaTest, argc, argv);
-
-    DbTableTest dbTableTest;
-    QTest::qExec(&dbTableTest, argc, argv);
-
-    DbTriggerTest dbTriggerTest;
-    QTest::qExec(&dbTriggerTest, argc, argv);
-
-    DbViewTest dbViewTest;
-    QTest::qExec(&dbViewTest, argc, argv);
-
-    if (drv.contains("MYSQL")) {
-        MysqlFactoriesTest mysqlFactoriesTest;
-        QTest::qExec(&mysqlFactoriesTest, argc, argv);
-
-        MysqlToolsTest mysqlToolsTest;
-        QTest::qExec(&mysqlToolsTest, argc, argv);
-    } else if (drv.contains("PSQL")) {
-        PsqlFactoriesTest psqlFactoriesTest;
-        QTest::qExec(&psqlFactoriesTest, argc, argv);
-
-        PsqlToolsTest psqlToolsTest;
-        QTest::qExec(&psqlToolsTest, argc, argv);
+            // if not found then treat this name as module name
+            if (!singleTestFound) {
+                foreach (const RegistryRecord &pair, testSuites.values(testName)) {
+                    tests << pair.second;
+                }
+            }
+        }
     }
-#endif // TEST_DBOBJECTS
+
+    foreach (QObject *test, tests) {
+        QTest::qExec(test/*, argc, argv*/);
+    }
+
+    // cleanup
+    foreach (const QString &key, testSuites.uniqueKeys()) {
+        foreach (const RegistryRecord &pair, testSuites.values(key)) {
+            delete pair.second;
+        }
+    }
 
     return 0;
 }

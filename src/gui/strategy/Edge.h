@@ -27,71 +27,40 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/LogPanel.h>
-#include <QDateTime>
-#include <QFileDialog>
-#include <QMessageBox>
+#ifndef EDGE_H
+#define EDGE_H
 
-#include <QtDebug>
+#include <QSet>
+#include <gui/strategy/Node.h>
 
-namespace Gui {
-
-/*!
- * Ctor
- */
-LogPanel::LogPanel(QWidget *iParent)
-    : QWidget(iParent)
+class Edge
 {
-    ui.setupUi(this);
-}
+    public:
+        Edge(Node &iStart, Node &iEnd, qint32 iWeight = 0);
+        ~Edge();
 
-/*!
- * Dtor
- */
-LogPanel::~LogPanel()
-{
-}
+        Node &start() const;
+        Node &end() const;
 
-/*!
- * \brief Saves current log to a file
- */
-void
-LogPanel::saveToFile()
-{
-    QString text = ui.mOutputEdit->toPlainText();
+        void setWeight(qint32 iWeight);
+        qint32 weight() const;
 
-    if (0 < text.trimmed().length()) {
-        QString fileName = QFileDialog::getSaveFileName(this);
+        void revert();
+        void unrevert();
 
-        if (fileName.isEmpty()) {
-            return;
-        }
+    private:
+        Edge(const Edge &iEdge);
 
-        QFile file(fileName);
+        void swapNodes();
 
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QMessageBox::critical(this, tr("Error"), tr("Unable to open file!"), tr("Ok"));
-            return;
-        }
+    private:
+        Node *mStart;
+        Node *mEnd;
+        qint32 mWeight;
+        bool mReverted;
 
-        file.write(text.toLocal8Bit());
+        friend class EdgeTest;
+};
 
-        file.close();
-    }
-}
-
-/*!
- * \brief Print given string in the log
- *
- * \param[in] iText - Log message
- */
-void
-LogPanel::print(const QString &iText)
-{
-    // \todo Add colors
-    QString formattedText = QString("[<i>%1</i>] %2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(iText);
-    ui.mOutputEdit->append(formattedText);
-}
-
-}
+#endif // EDGE_H
 

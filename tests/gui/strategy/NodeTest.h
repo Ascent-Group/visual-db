@@ -27,71 +27,26 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/LogPanel.h>
-#include <QDateTime>
-#include <QFileDialog>
-#include <QMessageBox>
+#ifndef NODETEST_H
+#define NODETEST_H
 
-#include <QtDebug>
+#include <QtTest/QtTest>
 
-namespace Gui {
-
-/*!
- * Ctor
- */
-LogPanel::LogPanel(QWidget *iParent)
-    : QWidget(iParent)
+class NodeTest : public QObject
 {
-    ui.setupUi(this);
-}
+    Q_OBJECT
 
-/*!
- * Dtor
- */
-LogPanel::~LogPanel()
-{
-}
+    private slots:
+        void initTestCase();
+        void cleanupTestCase();
 
-/*!
- * \brief Saves current log to a file
- */
-void
-LogPanel::saveToFile()
-{
-    QString text = ui.mOutputEdit->toPlainText();
+        void idTest();
+        void labelTest();
+        void maxTest();
+        void moveTest();
+        void operatorLessTest();
+        void setLabelTest();
+};
 
-    if (0 < text.trimmed().length()) {
-        QString fileName = QFileDialog::getSaveFileName(this);
-
-        if (fileName.isEmpty()) {
-            return;
-        }
-
-        QFile file(fileName);
-
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QMessageBox::critical(this, tr("Error"), tr("Unable to open file!"), tr("Ok"));
-            return;
-        }
-
-        file.write(text.toLocal8Bit());
-
-        file.close();
-    }
-}
-
-/*!
- * \brief Print given string in the log
- *
- * \param[in] iText - Log message
- */
-void
-LogPanel::print(const QString &iText)
-{
-    // \todo Add colors
-    QString formattedText = QString("[<i>%1</i>] %2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(iText);
-    ui.mOutputEdit->append(formattedText);
-}
-
-}
+#endif // NODETEST_H
 

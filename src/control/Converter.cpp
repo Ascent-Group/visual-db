@@ -37,21 +37,23 @@ Converter::Converter(DatabaseManager &iDbManager)
 }
 
 bool 
-Converter::toTableItem(const DbObjects::Common::DbTablePtr &iDbTablePtr, 
+Converter::toTableItem(const Context &iContext, const DbObjects::Common::DbTablePtr &iDbTablePtr, 
         Gui::GraphicsItems::TableItem &oTableItem)
 {
+    using namespace DbObjects::Common;
+    
     // create title item
     oTableItem.setTitleItem(new QGraphicsTextItem(iDbTablePtr.schemaName().toUpper() + "." + iDbTablePtr.name().toUpper()));
 
+    // convert all fields
     for (int i = 0; i < iDbTablePtr->columnsCount(); ++i) {
         oTableItem.addFieldItem(new QGraphicsTextItem(iDbTablePtr->columnName(i) + ": " + iDbTablePtr->columnType(i)));
     }
 
-    using namespace DbObjects::Common;
-    Database *dbInst = Database::instance();
+    // convert all indices
     QVector<DbObjects::Common::DbIndexPtr> indices;
-    
-    dbInst->findTableIndices(iDbTablePtr, indices);
+    mDbManager.indices(iContext, iDbTablePtr, indices);
+
     foreach (const DbIndexPtr &index, indices) {
         oTableItem.addIndexItem(new QGraphicsTextItem(index.name()));
     }
@@ -63,8 +65,6 @@ bool
 Converter::toDbTable(DbObjects::Common::DbTablePtr &oDbTablePtr, 
 	const Gui::GraphicsItems::TableItem &iTableItem)
 {
-    
-
 	return true;
 }
 

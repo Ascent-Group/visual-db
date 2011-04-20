@@ -68,6 +68,31 @@ DatabaseManager::~DatabaseManager()
 }
 
 /*!
+ * Receives vector of indices for given context and db table.
+ *
+ * \param[in] iContext - context we are dealing with
+ * \param[in] iDbTablePtr - we will find indices for this table.
+ * \param[out] oDbIndexPtrVector - here we will store all found indices.
+ *
+ * \return true if everething is ok, false otherwise.
+ */
+bool 
+DatabaseManager::indices(const Context &iContext, 
+        const DbObjects::Common::DbTablePtr &iDbTablePtr,
+        QVector<DbObjects::Common::DbIndexPtr> oDbIndexPtrVector)
+{
+    using namespace DbObjects::Common;
+    
+    Database *db = findDatabase(&iContext);
+   
+    Q_ASSERT(db);
+
+    db->findTableIndices(iDbTablePtr, oDbIndexPtrVector);
+
+    return true;
+}
+
+/*!
  * Establishes a connection and creates a context for it.
  *
  * \param[in] iInfo - Connection info

@@ -27,71 +27,61 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/LogPanel.h>
-#include <QDateTime>
-#include <QFileDialog>
-#include <QMessageBox>
+#include <gui/strategy/Edge.h>
 
-#include <QtDebug>
-
-namespace Gui {
-
-/*!
- * Ctor
- */
-LogPanel::LogPanel(QWidget *iParent)
-    : QWidget(iParent)
-{
-    ui.setupUi(this);
-}
-
-/*!
- * Dtor
- */
-LogPanel::~LogPanel()
+Edge::Edge(Node &iStart, Node &iEnd, qint32 iWeight)
+    : mStart(&iStart), mEnd(&iEnd), mWeight(iWeight), mReverted(false)
 {
 }
 
-/*!
- * \brief Saves current log to a file
- */
+Edge::~Edge()
+{
+}
+
+Node &
+Edge::start() const
+{
+    return *mStart;
+}
+
+Node &
+Edge::end() const
+{
+    return *mEnd;
+}
+
 void
-LogPanel::saveToFile()
+Edge::setWeight(qint32 iWeight)
 {
-    QString text = ui.mOutputEdit->toPlainText();
+    mWeight = iWeight;
+}
 
-    if (0 < text.trimmed().length()) {
-        QString fileName = QFileDialog::getSaveFileName(this);
+qint32
+Edge::weight() const
+{
+    return mWeight;
+}
 
-        if (fileName.isEmpty()) {
-            return;
-        }
+void
+Edge::revert()
+{
+    mReverted = true;
+    swapNodes();
+}
 
-        QFile file(fileName);
-
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QMessageBox::critical(this, tr("Error"), tr("Unable to open file!"), tr("Ok"));
-            return;
-        }
-
-        file.write(text.toLocal8Bit());
-
-        file.close();
+void
+Edge::unrevert()
+{
+    if (mReverted) {
+        mReverted = false;
+        swapNodes();
     }
 }
 
-/*!
- * \brief Print given string in the log
- *
- * \param[in] iText - Log message
- */
 void
-LogPanel::print(const QString &iText)
+Edge::swapNodes()
 {
-    // \todo Add colors
-    QString formattedText = QString("[<i>%1</i>] %2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(iText);
-    ui.mOutputEdit->append(formattedText);
+    Node *tmp = mStart;
+    mStart = mEnd;
+    mEnd = tmp;
 }
-
-}
-

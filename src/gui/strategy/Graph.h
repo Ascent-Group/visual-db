@@ -27,71 +27,49 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/LogPanel.h>
-#include <QDateTime>
-#include <QFileDialog>
-#include <QMessageBox>
+#ifndef GRAPH_H
+#define GRAPH_H
 
-#include <QtDebug>
+#include <gui/strategy/Node.h>
+#include <gui/strategy/Edge.h>
+#include <QSet>
 
-namespace Gui {
-
-/*!
- * Ctor
- */
-LogPanel::LogPanel(QWidget *iParent)
-    : QWidget(iParent)
+class Graph
 {
-    ui.setupUi(this);
-}
+    public:
+        Graph();
+        ~Graph();
 
-/*!
- * Dtor
- */
-LogPanel::~LogPanel()
-{
-}
+        void addEdge(Edge &iEdge);
+        void addNode(Node &iNode);
 
-/*!
- * \brief Saves current log to a file
- */
-void
-LogPanel::saveToFile()
-{
-    QString text = ui.mOutputEdit->toPlainText();
+        void removeEdge(Edge &iEdge);
+        void removeNode(Node &iNode);
 
-    if (0 < text.trimmed().length()) {
-        QString fileName = QFileDialog::getSaveFileName(this);
+        void draw();
 
-        if (fileName.isEmpty()) {
-            return;
-        }
+    private:
+//        Graph(const Graph &iGraph);
 
-        QFile file(fileName);
+        void prepareForDrawing();
+        void cycleRemoval();
+        void removeTwoCycles();
+        void coffmanGraham(quint32 iWidth);
+        void crossingReduction();
+        void horizontalCoordinatsAssignment();
+        void restore();
 
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QMessageBox::critical(this, tr("Error"), tr("Unable to open file!"), tr("Ok"));
-            return;
-        }
+        Node *selectNode(const QList<Node *> &U, const QList<Node *> &iCurrentLevelNodes, const QList<Node *> &V);
 
-        file.write(text.toLocal8Bit());
+    private:
+        QList<Node *> mNodeSet;
+        QList<Edge *> mEdgeSet;
+        QList<QList<Node *> *> mLevels;
+//        QList<const Edge *> mFeedbackArcSet;
+        QList<Edge *> mRemovedEdges;
 
-        file.close();
-    }
-}
+        friend class GraphTest;
+};
 
-/*!
- * \brief Print given string in the log
- *
- * \param[in] iText - Log message
- */
-void
-LogPanel::print(const QString &iText)
-{
-    // \todo Add colors
-    QString formattedText = QString("[<i>%1</i>] %2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(iText);
-    ui.mOutputEdit->append(formattedText);
-}
-
-}
+#endif // GRAPH_H
 

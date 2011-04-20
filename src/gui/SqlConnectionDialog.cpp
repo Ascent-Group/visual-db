@@ -213,7 +213,7 @@ void
 SqlConnectionDialog::initConnectionFields(int iIndex)
 {
     Connect::ConnectionInfo info;
-    if (0 >= iIndex && iIndex <= mConnectionInfos.size()) {
+    if (0 <= iIndex && iIndex <= mConnectionInfos.size()) {
         info = mConnectionInfos.value(iIndex);
     }
 

@@ -27,71 +27,56 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/LogPanel.h>
-#include <QDateTime>
-#include <QFileDialog>
-#include <QMessageBox>
+#include <gui/strategy/EdgeTest.h>
+#include <gui/strategy/Edge.h>
+#include <gui/strategy/Node.h>
 
-#include <QtDebug>
-
-namespace Gui {
-
-/*!
- * Ctor
- */
-LogPanel::LogPanel(QWidget *iParent)
-    : QWidget(iParent)
-{
-    ui.setupUi(this);
-}
-
-/*!
- * Dtor
- */
-LogPanel::~LogPanel()
-{
-}
-
-/*!
- * \brief Saves current log to a file
- */
 void
-LogPanel::saveToFile()
+EdgeTest::initTestCase()
 {
-    QString text = ui.mOutputEdit->toPlainText();
-
-    if (0 < text.trimmed().length()) {
-        QString fileName = QFileDialog::getSaveFileName(this);
-
-        if (fileName.isEmpty()) {
-            return;
-        }
-
-        QFile file(fileName);
-
-        if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            QMessageBox::critical(this, tr("Error"), tr("Unable to open file!"), tr("Ok"));
-            return;
-        }
-
-        file.write(text.toLocal8Bit());
-
-        file.close();
-    }
 }
 
-/*!
- * \brief Print given string in the log
- *
- * \param[in] iText - Log message
- */
 void
-LogPanel::print(const QString &iText)
+EdgeTest::cleanupTestCase()
 {
-    // \todo Add colors
-    QString formattedText = QString("[<i>%1</i>] %2").arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss")).arg(iText);
-    ui.mOutputEdit->append(formattedText);
 }
 
+void
+EdgeTest::endTest()
+{
+    Node start(1);
+    Node end(2);
+    Edge edge(start, end);
+    QVERIFY(&start == &edge.start());
+}
+
+void
+EdgeTest::setWeightTest()
+{
+    Node start(1);
+    Node end(2);
+    Edge edge1(start, end);
+    QVERIFY(0 == edge1.weight());
+
+    edge1.setWeight(1);
+    QVERIFY(1 == edge1.weight());
+
+    Edge edge2(start, end, 2);
+    QVERIFY(2 == edge2.weight());
+}
+
+void
+EdgeTest::startTest()
+{
+    Node start(1);
+    Node end(2);
+    Edge edge(start, end);
+    QVERIFY(&end == &edge.end());
+}
+
+void
+EdgeTest::weightTest()
+{
+    setWeightTest();
 }
 

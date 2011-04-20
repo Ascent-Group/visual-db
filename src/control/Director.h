@@ -132,6 +132,10 @@ class Director : public QObject
         /*! Used to print messages to log panel */
         void logMessageRequest(const QString &);
 
+
+#if DEBUG
+        friend class DirectorTest;
+#endif
 };
 
 QString connectionName(const Control::Context *iCtx);

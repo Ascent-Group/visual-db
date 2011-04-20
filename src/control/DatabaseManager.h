@@ -93,6 +93,9 @@ class DatabaseManager
 
         friend class Director;
 
+#if DEBUG
+        friend class DatabaseManagerTest;
+#endif
 };
 
 } // namespace Control

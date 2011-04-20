@@ -34,6 +34,12 @@ win32 {
             -L$$OUT_PWD/dbobjects/mysql
 }
 
+
+###
+# Detect build mode.
+###
+CONFIG(debug, debug|release):DEFINES += DEBUG
+
 LIBS += -lcommon -lpsql -lmysql -lcommon
 
 ## check dependencies

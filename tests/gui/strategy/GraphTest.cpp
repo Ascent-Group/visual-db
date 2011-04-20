@@ -149,7 +149,12 @@ GraphTest::coffmanGrahamTest()
     QVERIFY(4 == node3.level());
     QVERIFY(0 == node2.level());
     QVERIFY(5 == node1.level());
+}
 
+void
+GraphTest::crossingReductionTest()
+{
+    Graph graph;
     graph.crossingReduction();
 
     foreach (QList<Node *> *level, graph.mLevels) {

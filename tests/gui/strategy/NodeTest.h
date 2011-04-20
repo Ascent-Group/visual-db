@@ -42,10 +42,15 @@ class NodeTest : public QObject
 
         void idTest();
         void labelTest();
+        void setLabelTest();
         void maxTest();
+        void medianTest();
         void moveTest();
         void operatorLessTest();
-        void setLabelTest();
+        void operatorEqualTest();
+        void lessThanLexicorgraphicalTest();
+        void lessThanMedianTest();
+        void lessThanOutMinusInEdgesTest();
 };
 
 #endif // NODETEST_H

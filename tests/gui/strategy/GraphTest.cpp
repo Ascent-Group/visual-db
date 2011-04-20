@@ -134,22 +134,29 @@ GraphTest::coffmanGrahamTest()
     graph.addEdge(edge11_13);
     graph.addEdge(edge12_13);
 
-//    QVERIFY(!(node1 < node2));
-//    QVERIFY(node2 < node3);
-//    QVERIFY(!(node3 < node4));
-//    QVERIFY(node4 < node5);
-//    QVERIFY(node5 < node6);
-//    QVERIFY(!(node6 < node7));
-//    QVERIFY(node7 < node8);
-//    QVERIFY(node8 < node9);
-//    QVERIFY(node9 < node10);
-//    QVERIFY(node10 < node11);
-//    QVERIFY(node11 < node12);
-//    QVERIFY(node12 < node13);
+    QList<QList<Node *> *> levels = graph.coffmanGraham(3);
 
-    graph.coffmanGraham(3);
+    QVERIFY(0 == node13.level());
+    QVERIFY(1 == node12.level());
+    QVERIFY(1 == node11.level());
+    QVERIFY(2 == node10.level());
+    QVERIFY(2 == node9.level());
+    QVERIFY(3 == node8.level());
+    QVERIFY(2 == node7.level());
+    QVERIFY(0 == node6.level());
+    QVERIFY(3 == node5.level());
+    QVERIFY(4 == node4.level());
+    QVERIFY(4 == node3.level());
+    QVERIFY(0 == node2.level());
+    QVERIFY(5 == node1.level());
 
-    QVERIFY(0);
+    graph.crossingReduction(levels);
+
+    foreach (QList<Node *> *level, levels) {
+        foreach (Node *node, *level) {
+            qDebug() << node->level() << " : " << node->id();
+        }
+    }
 }
 
 void

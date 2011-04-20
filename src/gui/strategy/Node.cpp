@@ -120,24 +120,36 @@ Node::operator==(const Node &iNode) const
 quint32
 Node::median() const
 {
-    return mOutEdgeSet.size() / 2;
+    return (mOutEdgeSet.size() - 1) / 2;
 }
 
 bool
 lessThanLexicorgraphical(const Node *iNode1, const Node *iNode2)
 {
+    if (!iNode1 || !iNode2) {
+        return false;
+    }
+
     return *iNode1 < *iNode2;
 }
 
 bool
 lessThanMedian(const Node *iNode1, const Node *iNode2)
 {
+    if (!iNode1 || !iNode2) {
+        return false;
+    }
+
     return iNode1->median() < iNode2->median();
 }
 
 bool
 lessThanOutMinusInEdges(const Node *iNode1, const Node *iNode2)
 {
+    if (!iNode1 || !iNode2) {
+        return false;
+    }
+
     return iNode1->mOutEdgeSet.size() - iNode1->mInEdgeSet.size() < 
             iNode2->mOutEdgeSet.size() - iNode2->mInEdgeSet.size();
 }
@@ -145,7 +157,9 @@ lessThanOutMinusInEdges(const Node *iNode1, const Node *iNode2)
 Edge *
 Node::max() const
 {
-    Q_ASSERT(!mInEdgeSet.empty());
+    if (0 == mInEdgeSet.size()) {
+        return 0;
+    }
 
     QSet<Edge *>::const_iterator iter = mInEdgeSet.begin();
     Edge *max = *iter;

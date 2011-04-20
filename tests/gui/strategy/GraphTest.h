@@ -43,6 +43,7 @@ class GraphTest : public QObject
         void addEdgeTest();
         void addNodeTest();
         void coffmanGrahamTest();
+        void crossingReductionTest();
         void removeEdgeTest();
         void removeNodeTest();
         void selectNodeTest();

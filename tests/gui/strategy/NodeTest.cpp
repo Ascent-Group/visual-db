@@ -27,9 +27,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <QtDebug>
 #include <gui/strategy/NodeTest.h>
 #include <gui/strategy/Node.h>
 #include <gui/strategy/Edge.h>
+#include <gui/strategy/Graph.h>
 
 void
 NodeTest::initTestCase()
@@ -59,13 +61,23 @@ NodeTest::labelTest()
 }
 
 void
+NodeTest::setLabelTest()
+{
+    Node node(1);
+    node.setLabel(3);
+    QVERIFY(3 == node.label());
+}
+
+void
 NodeTest::maxTest()
 {
     Node node10(10);
     Node node1(1);
     Node node2(2);
     Node node7(7);
-    
+   
+    QVERIFY(0 == node1.max());
+
     Edge edge1_10(node1, node10);
     Edge edge2_10(node2, node10);
     Edge edge7_10(node7, node10);
@@ -76,6 +88,33 @@ NodeTest::maxTest()
 
     QVERIFY(0 != node10.max());
     QVERIFY(&edge7_10 == node10.max());
+}
+
+void
+NodeTest::medianTest()
+{
+    Node node1(1);
+    Node node2(2);
+    Node node3(3);
+
+    Edge edge1_2(node1, node2);
+    Edge edge1_3(node1, node3);
+
+    Graph graph;
+    graph.addNode(node1);
+    graph.addNode(node2);
+    graph.addNode(node3);
+    graph.addEdge(edge1_2);
+    graph.addEdge(edge1_3);
+
+    QVERIFY(0 == node1.median());
+
+    Node node4(4);
+    Edge edge1_4(node1, node4);
+    graph.addNode(node4);
+    graph.addEdge(edge1_4);
+
+    QVERIFY(1 == node1.median());
 }
 
 void
@@ -140,10 +179,89 @@ NodeTest::operatorLessTest()
 }
 
 void
-NodeTest::setLabelTest()
+NodeTest::operatorEqualTest()
 {
-    Node node(1);
-    node.setLabel(3);
-    QVERIFY(3 == node.label());
+    Node node1(1);
+    Node node2(1);
+
+    QVERIFY(node1 == node2);
+
+    Node node3(3);
+    Node node4(4);
+
+    QVERIFY(!(node3 == node4));
 }
 
+void
+NodeTest::lessThanLexicorgraphicalTest()
+{
+    operatorLessTest();
+}
+
+void
+NodeTest::lessThanMedianTest()
+{
+    // null pointers
+    QVERIFY(!lessThanMedian(0, 0));
+    
+    Node node1(1);
+    Node node2(2);
+    Node node3(3);
+    Node node4(4);
+    Node node5(5);
+
+    Edge edge1_2(node1, node2);
+    Edge edge1_3(node1, node3);
+    Edge edge5_2(node5, node2);
+    Edge edge5_3(node5, node3);
+    Edge edge5_4(node5, node4);
+
+    Graph graph;
+    graph.addNode(node1);
+    graph.addNode(node2);
+    graph.addNode(node3);
+    graph.addNode(node4);
+    graph.addNode(node5);
+    graph.addEdge(edge1_2);
+    graph.addEdge(edge1_3);
+    graph.addEdge(edge5_2);
+    graph.addEdge(edge5_3);
+    graph.addEdge(edge5_4);
+
+    // check node1 < node5 in with respect to medians
+    QVERIFY(lessThanMedian(&node1, &node5));
+}
+
+void
+NodeTest::lessThanOutMinusInEdgesTest()
+{
+    // null pointers
+    QVERIFY(!lessThanOutMinusInEdges(0, 0));
+
+    Node node1(1);
+    Node node2(2);
+    Node node3(3);
+    Node node4(4);
+
+    Edge edge1_2(node1, node2);
+    Edge edge1_3(node1, node3);
+    Edge edge2_4(node2, node4);
+    Edge edge3_4(node3, node4);
+
+    Graph graph;
+    graph.addNode(node1);
+    graph.addNode(node2);
+    graph.addNode(node3);
+    graph.addNode(node4);
+    graph.addEdge(edge1_2);
+    graph.addEdge(edge1_3);
+    graph.addEdge(edge2_4);
+    graph.addEdge(edge3_4);
+
+    // node2 < node1
+    QVERIFY(lessThanOutMinusInEdges(&node2, &node1));
+    // node3 < node1
+    QVERIFY(lessThanOutMinusInEdges(&node3, &node1));
+    // node4 < node3
+    QVERIFY(lessThanOutMinusInEdges(&node4, &node3));
+}

@@ -30,8 +30,6 @@
 #include <control/Config.h>
 #include <control/ConfigTest.h>
 
-using namespace Control;
-
 void
 ConfigTest::initTestCase()
 {
@@ -51,6 +49,8 @@ ConfigTest::languageTest()
     QLocale::Language maxLocale = QLocale::Shambala;
     QLocale::Language newLocale = QLocale::Korean;
 
+    using namespace Control;
+
     Config cfg;
 
     QVERIFY(cfg.language() >= minLocale);
@@ -67,6 +67,8 @@ ConfigTest::languageTest()
 void
 ConfigTest::sessionDirTest()
 {
+    using namespace Control;
+
     QString newSessionDir("/home/user/.sessions");
 
     Config cfg;
@@ -84,6 +86,8 @@ ConfigTest::sessionDirTest()
 void
 ConfigTest::newTabAutoSwitchTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     bool flag = !cfg.newTabAutoSwitch();
@@ -99,6 +103,8 @@ ConfigTest::newTabAutoSwitchTest()
 void
 ConfigTest::loadLastSessionTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     bool flag = !cfg.loadLastSession();
@@ -114,6 +120,8 @@ ConfigTest::loadLastSessionTest()
 void
 ConfigTest::savedSessionsNumberTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     // \note * 2 is not a magic number, we just need a new value
@@ -130,6 +138,8 @@ ConfigTest::savedSessionsNumberTest()
 void
 ConfigTest::showIndicesTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     bool flag = !cfg.showIndices();
@@ -145,6 +155,8 @@ ConfigTest::showIndicesTest()
 void
 ConfigTest::backgroundColorTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     QColor color("#0000ff");
@@ -160,6 +172,8 @@ ConfigTest::backgroundColorTest()
 void
 ConfigTest::tableColorTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     QColor color("#00ff00");
@@ -175,6 +189,8 @@ ConfigTest::tableColorTest()
 void
 ConfigTest::fontColorTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     QColor color("#ff0000");
@@ -190,6 +206,8 @@ ConfigTest::fontColorTest()
 void
 ConfigTest::arrowColorTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     QColor color("#ff00ff");
@@ -205,6 +223,8 @@ ConfigTest::arrowColorTest()
 void
 ConfigTest::borderColorTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     QColor color("#ff00ff");
@@ -220,6 +240,8 @@ ConfigTest::borderColorTest()
 void
 ConfigTest::alignToGridTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     bool flag = !cfg.alignToGrid();
@@ -235,6 +257,8 @@ ConfigTest::alignToGridTest()
 void
 ConfigTest::showGridTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     bool flag = !cfg.showGrid();
@@ -250,6 +274,8 @@ ConfigTest::showGridTest()
 void
 ConfigTest::divideIntoPagesTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     bool flag = !cfg.divideIntoPages();
@@ -265,6 +291,8 @@ ConfigTest::divideIntoPagesTest()
 void
 ConfigTest::savedSessionTest()
 {
+    using namespace Control;
+
     Config cfg;
 
     cfg.setSavedSessionsNumber(0);

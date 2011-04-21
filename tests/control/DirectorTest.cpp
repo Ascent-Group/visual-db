@@ -30,10 +30,10 @@
 #include <control/Context.h>
 #include <control/Director.h>
 #include <control/DirectorTest.h>
+#include <gui/TreeWidget.h>
+#include <gui/SceneWidget.h>
 
 #include <QLabel>
-
-using namespace Control;
 
 void
 DirectorTest::initTestCase()
@@ -66,6 +66,7 @@ DirectorTest::cleanupTestCase()
 void
 DirectorTest::addTest()
 {
+    using namespace Control;
     int count = 0;
     QCOMPARE(mDirector->mRegistry.size(), count);
 
@@ -92,6 +93,8 @@ DirectorTest::addTest()
 void
 DirectorTest::removeWidgetTest()
 {
+    using namespace Control;
+
     int count = 0;
     QCOMPARE(mDirector->mRegistry.size(), count);
 
@@ -112,13 +115,15 @@ DirectorTest::removeWidgetTest()
     mDirector->remove(label1);
     QCOMPARE(mDirector->mRegistry.size(), --count);
 
-    mDirector->remove(label1);
-    QCOMPARE(mDirector->mRegistry.size(), count);
+//    mDirector->remove(label1);
+//    QCOMPARE(mDirector->mRegistry.size(), count);
 }
 
 void
 DirectorTest::removeContextTest()
 {
+    using namespace Control;
+
     int count = 0;
     QCOMPARE(mDirector->mRegistry.size(), count);
 
@@ -143,25 +148,105 @@ DirectorTest::removeContextTest()
 void
 DirectorTest::findContextTest()
 {
-    QVERIFY(0);
+    using namespace Control;
+
+    int count = 0;
+    QCOMPARE(mDirector->mRegistry.size(), count);
+
+    Context *ctx1 = new Context();
+    Context *ctx2 = new Context();
+
+    QLabel *label1 = new QLabel();
+    QLabel *label2 = new QLabel();
+    QLabel *label3 = 0;
+    QLabel *label4 = new QLabel();
+
+    QCOMPARE(mDirector->add(label1, ctx1), true);
+    QCOMPARE(mDirector->mRegistry.size(), ++count);
+
+    QCOMPARE(mDirector->add(label2, ctx2), true);
+    QCOMPARE(mDirector->mRegistry.size(), ++count);
+
+    QCOMPARE(mDirector->findContext(label1), ctx1);
+    QCOMPARE(mDirector->findContext(label2), ctx2);
+    QCOMPARE(mDirector->findContext(label3), (Context *)0);
+    QCOMPARE(mDirector->findContext(label4), (Context *)0);
 }
 
 void
 DirectorTest::findWidgetsTest()
 {
-    QVERIFY(0);
+    using namespace Control;
+
+    QCOMPARE(mDirector->mRegistry.size(), 0);
+
+    Context *ctx1 = new Context();
+    Context *ctx2 = new Context();
+
+    QLabel *label1 = new QLabel();
+    QLabel *label2 = new QLabel();
+    QLabel *label3 = new QLabel();
+    QLabel *label4 = new QLabel();
+
+    QCOMPARE(mDirector->add(label1, ctx1), true);
+    QCOMPARE(mDirector->add(label2, ctx1), true);
+    QCOMPARE(mDirector->add(label3, ctx1), true);
+    QCOMPARE(mDirector->add(label4, ctx2), true);
+
+    QVector<QWidget*> widgets;
+
+    QCOMPARE(mDirector->findWidgets(ctx1, widgets), (quint32)3);
+    QCOMPARE(widgets.size(), 3);
+    QVERIFY(widgets.contains(label1));
+    QVERIFY(widgets.contains(label2));
+    QVERIFY(widgets.contains(label3));
+
+    widgets.clear();
+    QCOMPARE(mDirector->findWidgets(ctx2, widgets), (quint32)1);
+    QCOMPARE(widgets.size(), 1);
+    QVERIFY(widgets.contains(label4));
 }
 
 void
 DirectorTest::findTreeTest()
 {
-    QVERIFY(0);
+    using namespace Control;
+    using namespace Gui;
+
+    Context *ctx = new Context();
+
+    QLabel *label1 = new QLabel();
+    QLabel *label2 = new QLabel();
+    TreeWidget *tree = new TreeWidget();
+    QLabel *label4 = new QLabel();
+
+    QCOMPARE(mDirector->add(label1, ctx), true);
+    QCOMPARE(mDirector->add(label2, ctx), true);
+    QCOMPARE(mDirector->add(tree, ctx), true);
+    QCOMPARE(mDirector->add(label4, ctx), true);
+
+    QCOMPARE(mDirector->findTree(ctx), tree);
 }
 
 void
 DirectorTest::findSceneTest()
 {
-    QVERIFY(0);
+    using namespace Control;
+    using namespace Gui;
+
+    Context *ctx = new Context();
+
+    QLabel *label1 = new QLabel();
+    QLabel *label2 = new QLabel();
+    SceneWidget *scene = new SceneWidget();
+    QLabel *label4 = new QLabel();
+
+    QCOMPARE(mDirector->add(label1, ctx), true);
+    QCOMPARE(mDirector->add(label2, ctx), true);
+    QCOMPARE(mDirector->add(scene, ctx), true);
+    QCOMPARE(mDirector->add(label4, ctx), true);
+
+    QCOMPARE(mDirector->findScene(ctx), scene);
 }
 
 void

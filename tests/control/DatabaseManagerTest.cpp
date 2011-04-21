@@ -32,9 +32,6 @@
 #include <control/DatabaseManagerTest.h>
 #include <dbobjects/common/Database.h>
 
-using namespace Control;
-using namespace DbObjects::Common;
-
 void
 DatabaseManagerTest::initTestCase()
 {
@@ -66,24 +63,27 @@ DatabaseManagerTest::cleanup()
 void
 DatabaseManagerTest::indicesTest()
 {
-QVERIFY(0);
+    QVERIFY(0);
 }
 
 void
 DatabaseManagerTest::establishConnectionTest()
 {
-QVERIFY(0);
+    QVERIFY(0);
 }
 
 void
 DatabaseManagerTest::reloadDataTest()
 {
-QVERIFY(0);
+    QVERIFY(0);
 }
 
 void
 DatabaseManagerTest::addTest()
 {
+    using namespace Control;
+    using namespace DbObjects::Common;
+
     int count = 0;
     QCOMPARE(mDbMgr->mRegistry.size(), count);
 
@@ -113,6 +113,9 @@ DatabaseManagerTest::addTest()
 void
 DatabaseManagerTest::removeContextTest()
 {
+    using namespace Control;
+    using namespace DbObjects::Common;
+
     int count = 0;
     QCOMPARE(mDbMgr->mRegistry.size(), count);
 
@@ -132,8 +135,8 @@ DatabaseManagerTest::removeContextTest()
     QCOMPARE(mDbMgr->remove(ctx1), true);
     QCOMPARE(mDbMgr->mRegistry.size(), --count);
 
-    QCOMPARE(mDbMgr->remove(ctx1), false);
-    QCOMPARE(mDbMgr->mRegistry.size(), count);
+//    QCOMPARE(mDbMgr->remove(ctx1), false);
+//    QCOMPARE(mDbMgr->mRegistry.size(), count);
 
     QCOMPARE(mDbMgr->remove(ctx2), true);
     QCOMPARE(mDbMgr->mRegistry.size(), --count);
@@ -142,30 +145,106 @@ DatabaseManagerTest::removeContextTest()
 void
 DatabaseManagerTest::removeDatabaseTest()
 {
-QVERIFY(0);
+    using namespace Control;
+    using namespace DbObjects::Common;
+
+    int count = 0;
+    QCOMPARE(mDbMgr->mRegistry.size(), count);
+
+    Context *ctx1 = new Context();
+    Context *ctx2 = new Context();
+    Database *db1 = new Database(QSqlDatabase());
+    db1->setSqlDriver("QPSQL");
+    Database *db2 = new Database(QSqlDatabase());
+    db2->setSqlDriver("QPSQL");
+
+    QCOMPARE(mDbMgr->add(ctx1, db1), true);
+    QCOMPARE(mDbMgr->mRegistry.size(), ++count);
+
+    QCOMPARE(mDbMgr->add(ctx2, db2), true);
+    QCOMPARE(mDbMgr->mRegistry.size(), ++count);
+
+    QCOMPARE(mDbMgr->remove(db1), true);
+    QCOMPARE(mDbMgr->mRegistry.size(), --count);
+
+//    QCOMPARE(mDbMgr->remove(db1), false);
+//    QCOMPARE(mDbMgr->mRegistry.size(), count);
+
+    QCOMPARE(mDbMgr->remove(db2), true);
+    QCOMPARE(mDbMgr->mRegistry.size(), --count);
 }
 
 void
 DatabaseManagerTest::findContextTest()
 {
-QVERIFY(0);
+    using namespace Control;
+    using namespace DbObjects::Common;
+
+    int count = 0;
+    QCOMPARE(mDbMgr->mRegistry.size(), count);
+
+    Context *ctx1 = new Context();
+    Context *ctx2 = new Context();
+
+    Database *db1 = new Database(QSqlDatabase());
+    db1->setSqlDriver("QPSQL");
+    Database *db2 = new Database(QSqlDatabase());
+    db2->setSqlDriver("QPSQL");
+    Database *db3 = 0;
+    Database *db4 = new Database(QSqlDatabase());
+
+    QCOMPARE(mDbMgr->add(ctx1, db1), true);
+    QCOMPARE(mDbMgr->mRegistry.size(), ++count);
+
+    QCOMPARE(mDbMgr->add(ctx2, db2), true);
+    QCOMPARE(mDbMgr->mRegistry.size(), ++count);
+
+    QCOMPARE(mDbMgr->findContext(db1), ctx1);
+    QCOMPARE(mDbMgr->findContext(db2), ctx2);
+    QCOMPARE(mDbMgr->findContext(db3), (Context *)0);
+    QCOMPARE(mDbMgr->findContext(db4), (Context *)0);
 }
 
 void
 DatabaseManagerTest::findDatabaseTest()
 {
-QVERIFY(0);
+    using namespace Control;
+    using namespace DbObjects::Common;
+
+    int count = 0;
+    QCOMPARE(mDbMgr->mRegistry.size(), count);
+
+    Context *ctx1 = new Context();
+    Context *ctx2 = new Context();
+    Context *ctx3 = 0;
+    Context *ctx4 = new Context();
+
+    Database *db1 = new Database(QSqlDatabase());
+    db1->setSqlDriver("QPSQL");
+    Database *db2 = new Database(QSqlDatabase());
+    db2->setSqlDriver("QPSQL");
+
+    QCOMPARE(mDbMgr->add(ctx1, db1), true);
+    QCOMPARE(mDbMgr->mRegistry.size(), ++count);
+
+    QCOMPARE(mDbMgr->add(ctx2, db2), true);
+    QCOMPARE(mDbMgr->mRegistry.size(), ++count);
+
+    QCOMPARE(mDbMgr->findDatabase(ctx1), db1);
+    QCOMPARE(mDbMgr->findDatabase(ctx2), db2);
+    QCOMPARE(mDbMgr->findDatabase(ctx3), (Database *)0);
+    QCOMPARE(mDbMgr->findDatabase(ctx4), (Database *)0);
 }
 
 void
 DatabaseManagerTest::lastErrorTest()
 {
-QVERIFY(0);
+    QVERIFY(0);
 }
 
 void
 DatabaseManagerTest::newObjectsTest()
 {
-QVERIFY(0);
+    QVERIFY(0);
 }
 

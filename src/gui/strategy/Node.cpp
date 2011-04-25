@@ -37,7 +37,7 @@ Node::Node(quint32 iId)
 }
 
 Node::Node(const Node &iNode)
-    : mId(iNode.mLabel), mLabel(iNode.mLabel), mLevel(iNode.mLevel), mX(iNode.mX), mY(iNode.mY)
+    : mId(iNode.mId), mLabel(iNode.mLabel), mLevel(iNode.mLevel), mX(iNode.mX), mY(iNode.mY)
     , mInEdgeSet(iNode.mInEdgeSet), mOutEdgeSet(iNode.mOutEdgeSet)
 {
 }

@@ -53,6 +53,7 @@ class Graph
 
         void prepareForDrawing();
         void cycleRemoval();
+        Node *maxOutMinusInDegree();
         void removeTwoCycles();
         void coffmanGraham(quint32 iWidth);
         void crossingReduction();
@@ -65,7 +66,7 @@ class Graph
         QList<Node *> mNodeSet;
         QList<Edge *> mEdgeSet;
         QList<QList<Node *> *> mLevels;
-//        QList<const Edge *> mFeedbackArcSet;
+        QList<Edge *> mFeedbackArcSet;
         QList<Edge *> mRemovedEdges;
 
         friend class GraphTest;

@@ -40,10 +40,12 @@ class EdgeTest : public QObject
         void initTestCase();
         void cleanupTestCase();
 
-        void endTest();
+        void weightTest();
         void setWeightTest();
         void startTest();
-        void weightTest();
+        void endTest();
+        void revertTest();
+        void unrevertTest();
 };
 
 #endif // EDGETEST_H

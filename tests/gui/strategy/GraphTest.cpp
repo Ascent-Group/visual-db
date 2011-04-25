@@ -66,6 +66,110 @@ GraphTest::addNodeTest()
 }
 
 void
+GraphTest::removeEdgeTest()
+{
+    Node node1(1);
+    Node node2(2);
+    Node node3(3);
+    
+    Edge edge1_2(node1, node2);
+    Edge edge1_3(node1, node3);
+    
+    Graph graph;
+    graph.addEdge(edge1_2);
+    QVERIFY(1 == graph.mEdgeSet.size());
+
+    graph.removeEdge(edge1_3);
+    QVERIFY(1 == graph.mEdgeSet.size());
+
+    graph.removeEdge(edge1_2);
+    QVERIFY(0 == graph.mEdgeSet.size());
+}
+
+void
+GraphTest::prepareForDrawingTest()
+{
+    QVERIFY(0);
+}
+
+void
+GraphTest::cycleRemovalTest()
+{
+    Node node1(1);
+    Node node2(2);
+    Node node3(3);
+    Node node4(4);
+    Node node5(5);
+    Node node6(6);
+    Node node7(7);
+    Node node8(8);
+    Node node9(9);
+
+    Edge edge1_2(node1, node2);
+    Edge edge1_4(node1, node4);
+    Edge edge2_3(node2, node3);
+    Edge edge2_5(node2, node5);
+    Edge edge3_6(node3, node6);
+    Edge edge4_5(node4, node5);
+    Edge edge5_8(node5, node8);
+    Edge edge6_5(node6, node5);
+    Edge edge6_9(node6, node9);
+    Edge edge7_4(node7, node4);
+    Edge edge8_7(node8, node7);
+    Edge edge8_9(node8, node9);
+
+    Graph graph;
+    graph.addNode(node1);
+    graph.addNode(node2);
+    graph.addNode(node3);
+    graph.addNode(node4);
+    graph.addNode(node5);
+    graph.addNode(node6);
+    graph.addNode(node7);
+    graph.addNode(node8);
+    graph.addNode(node9);
+
+    graph.addEdge(edge1_2);
+    graph.addEdge(edge1_4);
+    graph.addEdge(edge2_3);
+    graph.addEdge(edge2_5);
+    graph.addEdge(edge3_6);
+    graph.addEdge(edge4_5);
+    graph.addEdge(edge5_8);
+    graph.addEdge(edge6_5);
+    graph.addEdge(edge6_9);
+    graph.addEdge(edge7_4);
+    graph.addEdge(edge8_7);
+    graph.addEdge(edge8_9);
+
+    graph.cycleRemoval();
+
+    QVERIFY(2 == graph.mFeedbackArcSet.size());
+}
+
+void
+GraphTest::removeTwoCyclesTest()
+{
+    Node node1(1);
+    Node node2(2);
+
+    Edge edge1_2(node1, node2);
+    Edge edge2_1(node2, node1);
+
+    Graph graph;
+    graph.addNode(node1);
+    graph.addNode(node2);
+    graph.addEdge(edge1_2);
+    graph.addEdge(edge2_1);
+
+    QVERIFY(2 == graph.mEdgeSet.size() && 0 == graph.mRemovedEdges.size());
+    
+    graph.removeTwoCycles();
+
+    QVERIFY(1 == graph.mEdgeSet.size() && 1 == graph.mRemovedEdges.size());
+}
+
+void
 GraphTest::coffmanGrahamTest()
 {
     Node node1(1);
@@ -165,24 +269,15 @@ GraphTest::crossingReductionTest()
 }
 
 void
-GraphTest::removeEdgeTest()
+GraphTest::horizontalCoordinatsAssignmentTest()
 {
-    Node node1(1);
-    Node node2(2);
-    Node node3(3);
-    
-    Edge edge1_2(node1, node2);
-    Edge edge1_3(node1, node3);
-    
-    Graph graph;
-    graph.addEdge(edge1_2);
-    QVERIFY(1 == graph.mEdgeSet.size());
+    QVERIFY(0);
+}
 
-    graph.removeEdge(edge1_3);
-    QVERIFY(1 == graph.mEdgeSet.size());
-
-    graph.removeEdge(edge1_2);
-    QVERIFY(0 == graph.mEdgeSet.size());
+void
+GraphTest::restoreTest()
+{
+    QVERIFY(0);
 }
 
 void

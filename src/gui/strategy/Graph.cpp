@@ -56,12 +56,21 @@ Graph::addNode(Node &iNode)
 void
 Graph::removeEdge(Edge &iEdge)
 {
-    mEdgeSet.removeOne(&iEdge);    
+    iEdge.start().mOutEdgeSet.remove(&iEdge);
+    iEdge.end().mInEdgeSet.remove(&iEdge);
+    mEdgeSet.removeOne(&iEdge);
 }
 
 void
 Graph::removeNode(Node &iNode)
 {
+    foreach (Edge *edge, iNode.mInEdgeSet) {
+        removeEdge(*edge);
+    }
+    foreach (Edge *edge, iNode.mOutEdgeSet) {
+        removeEdge(*edge);
+    }
+
     mNodeSet.removeOne(&iNode);
 }
 
@@ -81,6 +90,7 @@ Graph::prepareForDrawing()
 {
     mLevels.clear();
     mRemovedEdges.clear();
+    mFeedbackArcSet.clear();
 }
 
 void
@@ -95,46 +105,71 @@ Graph::cycleRemoval()
     foreach (Node *node, graph.mNodeSet) {
         if (0 == node->mOutEdgeSet.size()) {
             sequenceRight.append(node);
-            graph.mNodeSet.removeOne(node);
+            graph.removeNode(*node);
         }
     }
 
     foreach (Node *node, graph.mNodeSet) {
         if (0 == node->mInEdgeSet.size()) {
             sequenceLeft.append(node);
-            graph.mNodeSet.removeOne(node);
+            graph.removeNode(*node);
         }
     }
 
-
-    qSort(graph.mNodeSet.begin(), graph.mNodeSet.end(), lessThanOutMinusInEdges);
     if (graph.mNodeSet.size() > 0) {
         for (qint32 i = graph.mNodeSet.size() - 1; i >= 0; --i) {
-            sequenceLeft.append(graph.mNodeSet.at(i));
-            graph.mNodeSet.removeOne(graph.mNodeSet.at(i));
+            Node *node = graph.maxOutMinusInDegree();
+            sequenceLeft.append(node);
+            graph.removeNode(*node);
         }
     }
 
     sequenceLeft.append(sequenceRight);
     
     foreach (Node *node, sequenceLeft) {
+        qDebug() << "Node: " << node->id() << " out: " << node->mOutEdgeSet.size() << " in: " << node->mInEdgeSet.size();
         foreach (Edge *edge, node->mOutEdgeSet) {
             if (sequenceLeft.indexOf(&edge->end()) < sequenceLeft.indexOf(node)) {
+                qDebug() << "Edge: " << node->id() << ":" << edge->end().id();
                 edge->revert();
+                mFeedbackArcSet.append(edge);
             }
         }
     }
 }
 
+Node *
+Graph::maxOutMinusInDegree()
+{
+    if (mNodeSet.size() <= 0)
+        return 0;
+
+    Node *max = mNodeSet.at(0);
+
+    foreach (Node *node, mNodeSet) {
+//        qDebug() << node->id() << " out - in: " << node->mOutEdgeSet.size() - node->mInEdgeSet.size();
+        if (node->mOutEdgeSet.size() - node->mInEdgeSet.size() > 
+                max->mOutEdgeSet.size() - max->mInEdgeSet.size()) {
+            max = node;
+        }
+    }
+
+    return max;
+}
+
 void Graph::removeTwoCycles()
 {
-    foreach (Edge *edge1, mEdgeSet) {
-        foreach (Edge *edge2, mEdgeSet) {
-            if (edge1->start() == edge2->end() && edge1->end() == edge2->start()) {
-                mRemovedEdges.append(edge2);
-                mEdgeSet.removeOne(edge2);
+    for (qint32 i = 0; i < mEdgeSet.size() - 1; ++i) {
+        for (qint32 j = i + 1; j < mEdgeSet.size(); ++j) {
+            if (mEdgeSet.at(i)->start() == mEdgeSet.at(j)->end() && 
+                    mEdgeSet.at(i)->end() == mEdgeSet.at(j)->start()) {
+                mRemovedEdges.append(mEdgeSet.at(i));
             }
         }
+    }
+
+    foreach (Edge *edge, mRemovedEdges) {
+        mEdgeSet.removeOne(edge);
     }
 }
 
@@ -225,7 +260,7 @@ Graph::coffmanGraham(quint32 iWidth)
             // append node to current level
             u->setLevel(k);
             mLevels.at(k)->append(u);
-            qDebug() << "id: " << u->id() << " level: " << k;
+//            qDebug() << "id: " << u->id() << " level: " << k;
 
             // removeOne node from unlabeledNodes set
             currentLevelNodes.append(u);

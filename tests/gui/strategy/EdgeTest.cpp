@@ -80,3 +80,33 @@ EdgeTest::weightTest()
     setWeightTest();
 }
 
+void
+EdgeTest::revertTest()
+{
+    Node node1(1);
+    Node node2(2);
+
+    Edge edge1_2(node1, node2);
+    edge1_2.revert();
+
+    QVERIFY(node1 == edge1_2.end() && node2 == edge1_2.start());
+}
+
+void
+EdgeTest::unrevertTest()
+{
+    Node node1(1);
+    Node node2(2);
+    Node node3(3);
+
+    Edge edge1_2(node1, node2);
+    edge1_2.revert();
+    edge1_2.unrevert();
+    
+    QVERIFY(node1 == edge1_2.start() && node2 == edge1_2.end());
+
+    Edge edge1_3(node1, node3);
+    edge1_3.unrevert();
+
+    QVERIFY(node1 == edge1_3.start() && node3 == edge1_3.end());
+}

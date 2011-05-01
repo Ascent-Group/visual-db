@@ -34,21 +34,38 @@
 #include <gui/strategy/Edge.h>
 #include <QSet>
 
+typedef QMap<quint32, Node *> NodeContainer;
+typedef QMap<QString, Edge *> EdgeContainer;
+typedef QMap<quint32, Node *>::iterator NodeIter;
+typedef QMap<QString, Edge *>::iterator EdgeIter;
+
 class Graph
 {
     public:
         Graph();
         ~Graph();
 
-        void addEdge(Edge &iEdge);
-        void addNode(Node &iNode);
+        Node *addNode(quint32 iId);
+        Edge *addEdge(quint32 iStartId, quint32 iEndId);
 
-        void removeEdge(Edge &iEdge);
-        void removeNode(Node &iNode);
+        void removeNode(quint32 iId);
+        void removeEdge(quint32 iStartId, quint32 iEndId);
+
+        const Node *node(quint32 iId);
+        const Edge *edge(quint32 iStartId, quint32 iEndId);
+
+        quint32 nodeCount() const;
+        quint32 edgeCount() const;
 
         void draw();
 
     private:
+//        void addEdge(Edge &iEdge);
+//        void addNode(Node &iNode);
+
+        void removeEdge(Edge &iEdge);
+        void removeNode(Node &iNode);
+
 //        Graph(const Graph &iGraph);
 
         void prepareForDrawing();
@@ -63,11 +80,11 @@ class Graph
         Node *selectNode(const QList<Node *> &U, const QList<Node *> &iCurrentLevelNodes, const QList<Node *> &V);
 
     private:
-        QList<Node *> mNodeSet;
-        QList<Edge *> mEdgeSet;
+        NodeContainer mNodeSet;
+        EdgeContainer mEdgeSet;
         QList<QList<Node *> *> mLevels;
-        QList<Edge *> mFeedbackArcSet;
-        QList<Edge *> mRemovedEdges;
+        QSet<Edge *> mFeedbackArcSet;
+        QSet<Edge *> mRemovedEdges;
 
         friend class GraphTest;
 };

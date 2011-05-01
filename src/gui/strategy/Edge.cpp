@@ -38,6 +38,12 @@ Edge::~Edge()
 {
 }
 
+const QString
+Edge::key() const
+{
+    return QString::number(mStart->id()) + "_" + QString::number(mEnd->id());
+}
+
 Node &
 Edge::start() const
 {

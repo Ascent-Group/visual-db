@@ -39,18 +39,57 @@ Graph::~Graph()
 {
 }
 
-void
-Graph::addEdge(Edge &iEdge)
+Edge *
+Graph::addEdge(quint32 iStartId, quint32 iEndId)
 {
-    mEdgeSet.append(&iEdge);
-    iEdge.start().mOutEdgeSet.insert(&iEdge);
-    iEdge.end().mInEdgeSet.insert(&iEdge);
+//    NodeIter startIter = mNodeSet.find(iStartId);
+//    Node *start = *startIter;
+//    if (startIter == mNodeSet.end()) {
+//        start = new Node(iStartId);
+//    }
+//    addNode(*start);
+//
+//    NodeIter endIter = mNodeSet.find(iEndId);
+//    Node *end = *endIter;
+//    if (endIter == mNodeSet.end()) {
+//        end = new Node(iEndId);
+//    }
+//    addNode(*end);
+
+    Node *start = addNode(iStartId);
+    Node *end = addNode(iEndId);
+    EdgeIter edgeIter = mEdgeSet.find(QString::number(iStartId) + "_" + QString::number(iEndId));
+    Edge *edge = *edgeIter;
+    if (edgeIter == mEdgeSet.end()) {
+        edge = new Edge(*start, *end);
+        mEdgeSet.insert(edge->key(), edge);
+        edge->start().mOutEdgeSet.insert(edge);
+        edge->end().mInEdgeSet.insert(edge);
+    }
+
+    return edge;
+}
+
+Node *
+Graph::addNode(quint32 iId)
+{
+    NodeIter nodeIter = mNodeSet.find(iId);
+    Node *node = *nodeIter;
+    if (nodeIter == mNodeSet.end()) {
+        node = new Node(iId);
+        mNodeSet.insert(node->id(), node);
+    }
+
+    return node;
 }
 
 void
-Graph::addNode(Node &iNode)
+Graph::removeEdge(quint32 iStartId, quint32 iEndId)
 {
-    mNodeSet.append(&iNode);
+    Node nodeStart(iStartId);
+    Node nodeEnd(iEndId);
+    Edge edge(nodeStart, nodeEnd);
+    removeEdge(edge);
 }
 
 void
@@ -58,7 +97,14 @@ Graph::removeEdge(Edge &iEdge)
 {
     iEdge.start().mOutEdgeSet.remove(&iEdge);
     iEdge.end().mInEdgeSet.remove(&iEdge);
-    mEdgeSet.removeOne(&iEdge);
+    mEdgeSet.remove(iEdge.key());
+}
+
+void
+Graph::removeNode(quint32 iId)
+{
+    Node node(iId);
+    removeNode(node);
 }
 
 void
@@ -71,7 +117,41 @@ Graph::removeNode(Node &iNode)
         removeEdge(*edge);
     }
 
-    mNodeSet.removeOne(&iNode);
+    mNodeSet.remove(iNode.id());
+}
+
+const Node *
+Graph::node(quint32 iId)
+{
+    NodeIter iter = mNodeSet.find(iId);
+    if (iter != mNodeSet.end()) {
+        return *iter;
+    } else {
+        return 0;
+    }
+}
+
+const Edge *
+Graph::edge(quint32 iStartId, quint32 iEndId)
+{
+    EdgeIter iter = mEdgeSet.find(QString::number(iStartId) + "_" + QString::number(iEndId));
+    if (iter != mEdgeSet.end()) {
+        return *iter;
+    } else {
+        return 0;
+    }
+}
+
+quint32
+Graph::nodeCount() const
+{
+    return mNodeSet.size();
+}
+
+quint32
+Graph::edgeCount() const
+{
+    return mEdgeSet.size();
 }
 
 void
@@ -124,7 +204,7 @@ Graph::cycleRemoval()
         }
     }
 
-    sequenceLeft.append(sequenceRight);
+    sequenceLeft += sequenceRight;
     
     foreach (Node *node, sequenceLeft) {
         qDebug() << "Node: " << node->id() << " out: " << node->mOutEdgeSet.size() << " in: " << node->mInEdgeSet.size();
@@ -132,7 +212,7 @@ Graph::cycleRemoval()
             if (sequenceLeft.indexOf(&edge->end()) < sequenceLeft.indexOf(node)) {
                 qDebug() << "Edge: " << node->id() << ":" << edge->end().id();
                 edge->revert();
-                mFeedbackArcSet.append(edge);
+                mFeedbackArcSet.insert(edge);
             }
         }
     }
@@ -144,7 +224,7 @@ Graph::maxOutMinusInDegree()
     if (mNodeSet.size() <= 0)
         return 0;
 
-    Node *max = mNodeSet.at(0);
+    Node *max = *mNodeSet.begin();
 
     foreach (Node *node, mNodeSet) {
 //        qDebug() << node->id() << " out - in: " << node->mOutEdgeSet.size() - node->mInEdgeSet.size();
@@ -159,17 +239,25 @@ Graph::maxOutMinusInDegree()
 
 void Graph::removeTwoCycles()
 {
-    for (qint32 i = 0; i < mEdgeSet.size() - 1; ++i) {
-        for (qint32 j = i + 1; j < mEdgeSet.size(); ++j) {
-            if (mEdgeSet.at(i)->start() == mEdgeSet.at(j)->end() && 
-                    mEdgeSet.at(i)->end() == mEdgeSet.at(j)->start()) {
-                mRemovedEdges.append(mEdgeSet.at(i));
+//    for (qint32 i = 0; i < mEdgeSet.size() - 1; ++i) {
+//        for (qint32 j = i + 1; j < mEdgeSet.size(); ++j) {
+//            if (mEdgeSet.at(i)->start() == mEdgeSet.at(j)->end() && 
+//                    mEdgeSet.at(i)->end() == mEdgeSet.at(j)->start()) {
+//                mRemovedEdges.append(mEdgeSet.at(i));
+//            }
+//        }
+//    }
+
+    for (EdgeIter iter = mEdgeSet.begin(); iter != mEdgeSet.end() - 1; ++iter) {
+        for (EdgeIter iter2 = iter + 1; iter2 != mEdgeSet.end(); ++iter2) {
+            if ((*iter)->start() == (*iter2)->end() && (*iter)->end() == (*iter2)->start()) {
+                mRemovedEdges.insert(*iter);
             }
         }
     }
 
     foreach (Edge *edge, mRemovedEdges) {
-        mEdgeSet.removeOne(edge);
+        mEdgeSet.remove(edge->key());
     }
 }
 
@@ -199,7 +287,7 @@ Graph::coffmanGraham(quint32 iWidth)
     //  - S!=0, T!=0 and max(S) < max(T), or
     //  - S!=0, T!=0, max(S) = max(T), and S-{max(S)} < T-{max(T}).
 
-    QList<Node *> allNodes = mNodeSet;
+    QList<Node *> allNodes = mNodeSet.values();
     qSort(allNodes.begin(), allNodes.end(), lessThanLexicorgraphical);
     
     quint32 i = 1;
@@ -219,7 +307,7 @@ Graph::coffmanGraham(quint32 iWidth)
     // or layher Lk bocomes full (|Lk|=W), then we proceed to the next layer Lk+1.
 
     quint32 k = 0;
-    QList<QList<Node *> *> mLevels;
+//    QList<QList<Node *> *> mLevels;
     mLevels.append(new QList<Node *>());
     
     QList<Node *> unlabeledNodes;
@@ -291,7 +379,7 @@ Graph::restore()
     }
 
     foreach (Edge *edge, mRemovedEdges) {
-        mEdgeSet.append(edge);
+        mEdgeSet.insert(edge->key(), edge);
     }
 }
 

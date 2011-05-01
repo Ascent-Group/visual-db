@@ -45,45 +45,68 @@ GraphTest::cleanupTestCase()
 void
 GraphTest::addEdgeTest()
 {
-    Node node1(1);
-    Node node2(2);
-    Edge edge1_2(node1, node2);
     Graph graph;
-    graph.addEdge(edge1_2);
+    graph.addEdge(1, 2);
 
-    QVERIFY(&edge1_2 == *(graph.mEdgeSet.begin()));
-    QVERIFY(1 == graph.mEdgeSet.size());
+    QVERIFY(1 == graph.edgeCount());
+
+    // edges should be unique
+    graph.addEdge(1, 2);
+
+    QVERIFY(1 == graph.edgeCount());
 }
 
 void
 GraphTest::addNodeTest()
 {
-    Node node1(1);
     Graph graph;
+    graph.addNode(1);
+    
+    QVERIFY(1 == graph.nodeCount());
 
-    graph.addNode(node1);
-    QVERIFY(1 == graph.mNodeSet.size());
+    graph.addNode(1);
+
+    // nodes should be unique
+    QVERIFY(1 == graph.nodeCount());
 }
 
 void
 GraphTest::removeEdgeTest()
 {
-    Node node1(1);
-    Node node2(2);
-    Node node3(3);
-    
-    Edge edge1_2(node1, node2);
-    Edge edge1_3(node1, node3);
-    
     Graph graph;
-    graph.addEdge(edge1_2);
+    graph.addEdge(1, 2);
+    
     QVERIFY(1 == graph.mEdgeSet.size());
 
-    graph.removeEdge(edge1_3);
+    graph.removeEdge(1, 3);
+    
+    // test not presnted edge removing
     QVERIFY(1 == graph.mEdgeSet.size());
 
-    graph.removeEdge(edge1_2);
+    graph.removeEdge(1, 2);
+    
+    // test presented edge removing
     QVERIFY(0 == graph.mEdgeSet.size());
+}
+
+void
+GraphTest::removeNodeTest()
+{
+    Graph graph;
+
+    graph.addNode(1);
+
+    QVERIFY(1 == graph.nodeCount());
+
+    graph.removeNode(2);
+
+    // test not presented node removing
+    QVERIFY(1 == graph.nodeCount());
+
+    graph.removeNode(1);
+
+    // test presented node removing
+    QVERIFY(0 == graph.nodeCount());
 }
 
 void
@@ -95,52 +118,19 @@ GraphTest::prepareForDrawingTest()
 void
 GraphTest::cycleRemovalTest()
 {
-    Node node1(1);
-    Node node2(2);
-    Node node3(3);
-    Node node4(4);
-    Node node5(5);
-    Node node6(6);
-    Node node7(7);
-    Node node8(8);
-    Node node9(9);
-
-    Edge edge1_2(node1, node2);
-    Edge edge1_4(node1, node4);
-    Edge edge2_3(node2, node3);
-    Edge edge2_5(node2, node5);
-    Edge edge3_6(node3, node6);
-    Edge edge4_5(node4, node5);
-    Edge edge5_8(node5, node8);
-    Edge edge6_5(node6, node5);
-    Edge edge6_9(node6, node9);
-    Edge edge7_4(node7, node4);
-    Edge edge8_7(node8, node7);
-    Edge edge8_9(node8, node9);
-
     Graph graph;
-    graph.addNode(node1);
-    graph.addNode(node2);
-    graph.addNode(node3);
-    graph.addNode(node4);
-    graph.addNode(node5);
-    graph.addNode(node6);
-    graph.addNode(node7);
-    graph.addNode(node8);
-    graph.addNode(node9);
-
-    graph.addEdge(edge1_2);
-    graph.addEdge(edge1_4);
-    graph.addEdge(edge2_3);
-    graph.addEdge(edge2_5);
-    graph.addEdge(edge3_6);
-    graph.addEdge(edge4_5);
-    graph.addEdge(edge5_8);
-    graph.addEdge(edge6_5);
-    graph.addEdge(edge6_9);
-    graph.addEdge(edge7_4);
-    graph.addEdge(edge8_7);
-    graph.addEdge(edge8_9);
+    graph.addEdge(1, 2);
+    graph.addEdge(1, 4);
+    graph.addEdge(2, 3);
+    graph.addEdge(2, 5);
+    graph.addEdge(3, 6);
+    graph.addEdge(4, 5);
+    graph.addEdge(5, 8);
+    graph.addEdge(6, 5);
+    graph.addEdge(6, 9);
+    graph.addEdge(7, 4);
+    graph.addEdge(8, 7);
+    graph.addEdge(8, 9);
 
     graph.cycleRemoval();
 
@@ -150,109 +140,55 @@ GraphTest::cycleRemovalTest()
 void
 GraphTest::removeTwoCyclesTest()
 {
-    Node node1(1);
-    Node node2(2);
-
-    Edge edge1_2(node1, node2);
-    Edge edge2_1(node2, node1);
-
     Graph graph;
-    graph.addNode(node1);
-    graph.addNode(node2);
-    graph.addEdge(edge1_2);
-    graph.addEdge(edge2_1);
+    graph.addEdge(1, 2);
+    graph.addEdge(2, 1);
 
-    QVERIFY(2 == graph.mEdgeSet.size() && 0 == graph.mRemovedEdges.size());
+    QVERIFY(2 == graph.edgeCount() && 0 == graph.mRemovedEdges.size());
     
     graph.removeTwoCycles();
 
-    QVERIFY(1 == graph.mEdgeSet.size() && 1 == graph.mRemovedEdges.size());
+    QVERIFY(1 == graph.edgeCount() && 1 == graph.mRemovedEdges.size());
 }
 
 void
 GraphTest::coffmanGrahamTest()
 {
-    Node node1(1);
-    Node node2(2);
-    Node node3(3);
-    Node node4(4);
-    Node node5(5);
-    Node node6(6);
-    Node node7(7);
-    Node node8(8);
-    Node node9(9);
-    Node node10(10);
-    Node node11(11);
-    Node node12(12);
-    Node node13(13);
-
-    Edge edge1_3(node1, node3);
-    Edge edge1_4(node1, node4);
-    Edge edge3_5(node3, node5);
-    Edge edge3_8(node3, node8);
-    Edge edge3_10(node3, node10);
-    Edge edge4_6(node4, node6);
-    Edge edge4_7(node4, node7);
-    Edge edge4_8(node4, node8);
-    Edge edge4_9(node4, node9);
-    Edge edge5_9(node5, node9);
-    Edge edge7_11(node7, node11);
-    Edge edge8_10(node8, node10);
-    Edge edge9_12(node9, node12);
-    Edge edge10_11(node10, node11);
-    Edge edge10_12(node10, node12);
-    Edge edge11_13(node11, node13);
-    Edge edge12_13(node12, node13);
-
     Graph graph;
-
-    graph.addNode(node1);
-    graph.addNode(node2);
-    graph.addNode(node3);
-    graph.addNode(node4);
-    graph.addNode(node5);
-    graph.addNode(node6);
-    graph.addNode(node7);
-    graph.addNode(node8);
-    graph.addNode(node9);
-    graph.addNode(node10);
-    graph.addNode(node11);
-    graph.addNode(node12);
-    graph.addNode(node13);
-
-    graph.addEdge(edge1_3);
-    graph.addEdge(edge1_4);
-    graph.addEdge(edge3_10);
-    graph.addEdge(edge3_5);
-    graph.addEdge(edge3_8);
-    graph.addEdge(edge4_6);
-    graph.addEdge(edge4_7);
-    graph.addEdge(edge4_8);
-    graph.addEdge(edge4_9);
-    graph.addEdge(edge5_9);
-    graph.addEdge(edge7_11);
-    graph.addEdge(edge8_10);
-    graph.addEdge(edge9_12);
-    graph.addEdge(edge10_11);
-    graph.addEdge(edge10_12);
-    graph.addEdge(edge11_13);
-    graph.addEdge(edge12_13);
+    graph.addNode(2);
+    graph.addEdge(1, 3);
+    graph.addEdge(1, 4);
+    graph.addEdge(3, 10);
+    graph.addEdge(3, 5);
+    graph.addEdge(3, 8);
+    graph.addEdge(4, 6);
+    graph.addEdge(4, 7);
+    graph.addEdge(4, 8);
+    graph.addEdge(4, 9);
+    graph.addEdge(5, 9);
+    graph.addEdge(7, 11);
+    graph.addEdge(8, 10);
+    graph.addEdge(9, 12);
+    graph.addEdge(10, 11);
+    graph.addEdge(10, 12);
+    graph.addEdge(11, 13);
+    graph.addEdge(12, 13);
 
     graph.coffmanGraham(3);
 
-    QVERIFY(0 == node13.level());
-    QVERIFY(1 == node12.level());
-    QVERIFY(1 == node11.level());
-    QVERIFY(2 == node10.level());
-    QVERIFY(2 == node9.level());
-    QVERIFY(3 == node8.level());
-    QVERIFY(2 == node7.level());
-    QVERIFY(0 == node6.level());
-    QVERIFY(3 == node5.level());
-    QVERIFY(4 == node4.level());
-    QVERIFY(4 == node3.level());
-    QVERIFY(0 == node2.level());
-    QVERIFY(5 == node1.level());
+    QVERIFY(0 == graph.node(13)->level());
+    QVERIFY(1 == graph.node(12)->level());
+    QVERIFY(1 == graph.node(11)->level());
+    QVERIFY(2 == graph.node(10)->level());
+    QVERIFY(2 == graph.node(9)->level());
+    QVERIFY(3 == graph.node(8)->level());
+    QVERIFY(2 == graph.node(7)->level());
+    QVERIFY(0 == graph.node(6)->level());
+    QVERIFY(3 == graph.node(5)->level());
+    QVERIFY(4 == graph.node(4)->level());
+    QVERIFY(4 == graph.node(3)->level());
+    QVERIFY(0 == graph.node(2)->level());
+    QVERIFY(5 == graph.node(1)->level());
 }
 
 void
@@ -278,23 +214,6 @@ void
 GraphTest::restoreTest()
 {
     QVERIFY(0);
-}
-
-void
-GraphTest::removeNodeTest()
-{
-    Node node1(1);
-    Node node2(2);
-    Graph graph;
-
-    graph.addNode(node1);
-    QVERIFY(1 == graph.mNodeSet.size());
-
-    graph.removeNode(node2);
-    QVERIFY(1 == graph.mNodeSet.size());
-
-    graph.removeNode(node1);
-    QVERIFY(0 == graph.mNodeSet.size());
 }
 
 void

@@ -93,28 +93,15 @@ NodeTest::maxTest()
 void
 NodeTest::medianTest()
 {
-    Node node1(1);
-    Node node2(2);
-    Node node3(3);
-
-    Edge edge1_2(node1, node2);
-    Edge edge1_3(node1, node3);
-
     Graph graph;
-    graph.addNode(node1);
-    graph.addNode(node2);
-    graph.addNode(node3);
-    graph.addEdge(edge1_2);
-    graph.addEdge(edge1_3);
+    graph.addEdge(1, 2);
+    graph.addEdge(1, 3);
 
-    QVERIFY(0 == node1.median());
+    QVERIFY(0 == graph.node(1)->median());
 
-    Node node4(4);
-    Edge edge1_4(node1, node4);
-    graph.addNode(node4);
-    graph.addEdge(edge1_4);
+    graph.addEdge(1, 4);
 
-    QVERIFY(1 == node1.median());
+    QVERIFY(1 == graph.node(1)->median());
 }
 
 void
@@ -203,33 +190,16 @@ NodeTest::lessThanMedianTest()
 {
     // null pointers
     QVERIFY(!lessThanMedian(0, 0));
-    
-    Node node1(1);
-    Node node2(2);
-    Node node3(3);
-    Node node4(4);
-    Node node5(5);
-
-    Edge edge1_2(node1, node2);
-    Edge edge1_3(node1, node3);
-    Edge edge5_2(node5, node2);
-    Edge edge5_3(node5, node3);
-    Edge edge5_4(node5, node4);
 
     Graph graph;
-    graph.addNode(node1);
-    graph.addNode(node2);
-    graph.addNode(node3);
-    graph.addNode(node4);
-    graph.addNode(node5);
-    graph.addEdge(edge1_2);
-    graph.addEdge(edge1_3);
-    graph.addEdge(edge5_2);
-    graph.addEdge(edge5_3);
-    graph.addEdge(edge5_4);
+    graph.addEdge(1, 2);
+    graph.addEdge(1, 3);
+    graph.addEdge(5, 2);
+    graph.addEdge(5, 3);
+    graph.addEdge(5, 4);
 
     // check node1 < node5 in with respect to medians
-    QVERIFY(lessThanMedian(&node1, &node5));
+    QVERIFY(lessThanMedian(graph.node(1), graph.node(5)));
 }
 
 void
@@ -238,30 +208,16 @@ NodeTest::lessThanOutMinusInEdgesTest()
     // null pointers
     QVERIFY(!lessThanOutMinusInEdges(0, 0));
 
-    Node node1(1);
-    Node node2(2);
-    Node node3(3);
-    Node node4(4);
-
-    Edge edge1_2(node1, node2);
-    Edge edge1_3(node1, node3);
-    Edge edge2_4(node2, node4);
-    Edge edge3_4(node3, node4);
-
     Graph graph;
-    graph.addNode(node1);
-    graph.addNode(node2);
-    graph.addNode(node3);
-    graph.addNode(node4);
-    graph.addEdge(edge1_2);
-    graph.addEdge(edge1_3);
-    graph.addEdge(edge2_4);
-    graph.addEdge(edge3_4);
+    graph.addEdge(1, 2);
+    graph.addEdge(1, 3);
+    graph.addEdge(2, 4);
+    graph.addEdge(3, 4);
 
     // node2 < node1
-    QVERIFY(lessThanOutMinusInEdges(&node2, &node1));
+    QVERIFY(lessThanOutMinusInEdges(graph.node(2), graph.node(1)));
     // node3 < node1
-    QVERIFY(lessThanOutMinusInEdges(&node3, &node1));
+    QVERIFY(lessThanOutMinusInEdges(graph.node(3), graph.node(1)));
     // node4 < node3
-    QVERIFY(lessThanOutMinusInEdges(&node4, &node3));
+    QVERIFY(lessThanOutMinusInEdges(graph.node(4), graph.node(3)));
 }

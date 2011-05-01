@@ -39,6 +39,8 @@ class Edge
         Edge(Node &iStart, Node &iEnd, qint32 iWeight = 0);
         ~Edge();
 
+        const QString key() const;
+
         Node &start() const;
         Node &end() const;
 

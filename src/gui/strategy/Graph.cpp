@@ -35,6 +35,31 @@ Graph::Graph()
 {
 }
 
+Graph::Graph(const Graph &iGraph)
+{
+    foreach (Node *node, mNodeSet) {
+        delete node;
+    }
+    mNodeSet.clear();
+
+    foreach (Edge *edge, mEdgeSet) {
+        delete edge;
+    }
+    mEdgeSet.clear();
+    
+    mLevels.clear();
+    mRemovedEdges.clear();
+    mFeedbackArcSet.clear();
+
+    foreach (Node *node, iGraph.mNodeSet) {
+        addNode(node->id());
+    }
+
+    foreach (Edge *edge, iGraph.mEdgeSet) {
+        addEdge(edge->start().id(), edge->end().id());
+    }
+}
+
 Graph::~Graph()
 {
 }
@@ -176,23 +201,24 @@ Graph::prepareForDrawing()
 void
 Graph::cycleRemoval()
 {
-    removeTwoCycles();
 
     QList<Node *> sequenceLeft;
     QList<Node *> sequenceRight;
     Graph graph(*this);
+    
+    removeTwoCycles();
 
     foreach (Node *node, graph.mNodeSet) {
         if (0 == node->mOutEdgeSet.size()) {
             sequenceRight.append(node);
-            graph.removeNode(*node);
+            graph.removeNode(node->id());
         }
     }
 
     foreach (Node *node, graph.mNodeSet) {
         if (0 == node->mInEdgeSet.size()) {
             sequenceLeft.append(node);
-            graph.removeNode(*node);
+            graph.removeNode(node->id());
         }
     }
 
@@ -200,17 +226,15 @@ Graph::cycleRemoval()
         for (qint32 i = graph.mNodeSet.size() - 1; i >= 0; --i) {
             Node *node = graph.maxOutMinusInDegree();
             sequenceLeft.append(node);
-            graph.removeNode(*node);
+            graph.removeNode(node->id());
         }
     }
 
     sequenceLeft += sequenceRight;
     
     foreach (Node *node, sequenceLeft) {
-        qDebug() << "Node: " << node->id() << " out: " << node->mOutEdgeSet.size() << " in: " << node->mInEdgeSet.size();
         foreach (Edge *edge, node->mOutEdgeSet) {
             if (sequenceLeft.indexOf(&edge->end()) < sequenceLeft.indexOf(node)) {
-                qDebug() << "Edge: " << node->id() << ":" << edge->end().id();
                 edge->revert();
                 mFeedbackArcSet.insert(edge);
             }
@@ -227,7 +251,6 @@ Graph::maxOutMinusInDegree()
     Node *max = *mNodeSet.begin();
 
     foreach (Node *node, mNodeSet) {
-//        qDebug() << node->id() << " out - in: " << node->mOutEdgeSet.size() - node->mInEdgeSet.size();
         if (node->mOutEdgeSet.size() - node->mInEdgeSet.size() > 
                 max->mOutEdgeSet.size() - max->mInEdgeSet.size()) {
             max = node;
@@ -348,7 +371,6 @@ Graph::coffmanGraham(quint32 iWidth)
             // append node to current level
             u->setLevel(k);
             mLevels.at(k)->append(u);
-//            qDebug() << "id: " << u->id() << " level: " << k;
 
             // removeOne node from unlabeledNodes set
             currentLevelNodes.append(u);

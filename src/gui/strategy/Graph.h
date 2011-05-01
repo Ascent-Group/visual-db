@@ -43,6 +43,7 @@ class Graph
 {
     public:
         Graph();
+        Graph(const Graph &iGraph);
         ~Graph();
 
         Node *addNode(quint32 iId);
@@ -65,8 +66,6 @@ class Graph
 
         void removeEdge(Edge &iEdge);
         void removeNode(Node &iNode);
-
-//        Graph(const Graph &iGraph);
 
         void prepareForDrawing();
         void cycleRemoval();

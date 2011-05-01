@@ -40,6 +40,7 @@ class Edge
         ~Edge();
 
         const QString key() const;
+        static const QString key(quint32 iStartId, quint32 iEndId);
 
         Node &start() const;
         Node &end() const;
@@ -63,6 +64,8 @@ class Edge
 
         friend class EdgeTest;
 };
+
+QDebug operator<<(QDebug ioDbg, const Edge &iEdge);
 
 #endif // EDGE_H
 

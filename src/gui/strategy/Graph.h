@@ -61,11 +61,8 @@ class Graph
         void draw();
 
     private:
-//        void addEdge(Edge &iEdge);
-//        void addNode(Node &iNode);
-
-        void removeEdge(Edge &iEdge);
-        void removeNode(Node &iNode);
+        void removeNode(const Node *iNode);
+        void removeEdge(const Edge *iEdge);
 
         void prepareForDrawing();
         void cycleRemoval();
@@ -86,7 +83,10 @@ class Graph
         QSet<Edge *> mRemovedEdges;
 
         friend class GraphTest;
+        friend QDebug operator<<(QDebug ioDbg, const Graph &iGraph);
 };
+
+QDebug operator<<(QDebug ioDbg, const Graph &iGraph);
 
 #endif // GRAPH_H
 

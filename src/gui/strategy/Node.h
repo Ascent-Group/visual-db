@@ -31,7 +31,7 @@
 #define NODE_H
 
 #include <QtGlobal>
-#include <QSet>
+#include <QMap>
 
 class Edge;
 //#include <gui/strategy/Edge.h>
@@ -59,9 +59,6 @@ class Node
 
     private:
 
-//        void addInEdge(const Edge &iEdge);
-//        void addOutEdge(const Edge &iEdge);
-
         Edge *max() const;
 
     private:
@@ -71,8 +68,8 @@ class Node
         quint32 mX;
         quint32 mY;
 
-        QSet<Edge *> mInEdgeSet;
-        QSet<Edge *> mOutEdgeSet;
+        QMap<QString, Edge *> mInEdgeSet;
+        QMap<QString, Edge *> mOutEdgeSet;
 
         friend class Graph;
         friend class NodeTest;
@@ -81,6 +78,8 @@ class Node
         friend bool lessThanMedian(const Node *iNode1, const Node *iNode2);
         friend bool lessThanOutMinusInEdges(const Node *iNode1, const Node *iNode2);
 };
+
+QDebug operator<<(QDebug ioDbg, const Node &iNode);
 
 bool lessThanLexicorgraphical(const Node *iNode1, const Node *iNode2);
 bool lessThanMedian(const Node *iNode1, const Node *iNode2);

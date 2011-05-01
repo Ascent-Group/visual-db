@@ -82,9 +82,9 @@ NodeTest::maxTest()
     Edge edge2_10(node2, node10);
     Edge edge7_10(node7, node10);
 
-    node10.mInEdgeSet.insert(&edge1_10);
-    node10.mInEdgeSet.insert(&edge7_10);
-    node10.mInEdgeSet.insert(&edge2_10);
+    node10.mInEdgeSet.insert(edge1_10.key(), &edge1_10);
+    node10.mInEdgeSet.insert(edge7_10.key(), &edge7_10);
+    node10.mInEdgeSet.insert(edge2_10.key(), &edge2_10);
 
     QVERIFY(0 != node10.max());
     QVERIFY(&edge7_10 == node10.max());
@@ -128,9 +128,9 @@ NodeTest::operatorLessTest()
     Edge edge2_10(node2, node10);
     Edge edge7_10(node7, node10);
 
-    node10.mInEdgeSet.insert(&edge1_10);
-    node10.mInEdgeSet.insert(&edge7_10);
-    node10.mInEdgeSet.insert(&edge2_10);
+    node10.mInEdgeSet.insert(edge1_10.key(), &edge1_10);
+    node10.mInEdgeSet.insert(edge7_10.key(), &edge7_10);
+    node10.mInEdgeSet.insert(edge2_10.key(), &edge2_10);
 
     // {} < {1,2,7}
     QVERIFY(node9 < node10);
@@ -143,8 +143,8 @@ NodeTest::operatorLessTest()
     Edge edge3_11(node3, node11);
     Edge edge8_11(node8, node11);
     
-    node11.mInEdgeSet.insert(&edge3_11);
-    node11.mInEdgeSet.insert(&edge8_11);
+    node11.mInEdgeSet.insert(edge3_11.key(), &edge3_11);
+    node11.mInEdgeSet.insert(edge8_11.key(), &edge8_11);
 
     // {1,2,7} < {3,8}
     QVERIFY(node10 < node11);
@@ -156,9 +156,9 @@ NodeTest::operatorLessTest()
     Edge edge3_12(node3, node12);
     Edge edge7_12(node7, node12);
 
-    node12.mInEdgeSet.insert(&edge1_12);
-    node12.mInEdgeSet.insert(&edge3_12);
-    node12.mInEdgeSet.insert(&edge7_12);
+    node12.mInEdgeSet.insert(edge1_12.key(), &edge1_12);
+    node12.mInEdgeSet.insert(edge3_12.key(), &edge3_12);
+    node12.mInEdgeSet.insert(edge7_12.key(), &edge7_12);
 
     // {1,2,7} < {1,3,7}
     QVERIFY(node10 < node12);

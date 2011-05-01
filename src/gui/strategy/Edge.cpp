@@ -28,6 +28,7 @@
  */
 
 #include <gui/strategy/Edge.h>
+#include <QtDebug>
 
 Edge::Edge(Node &iStart, Node &iEnd, qint32 iWeight)
     : mStart(&iStart), mEnd(&iEnd), mWeight(iWeight), mReverted(false)
@@ -41,7 +42,13 @@ Edge::~Edge()
 const QString
 Edge::key() const
 {
-    return QString::number(mStart->id()) + "_" + QString::number(mEnd->id());
+    return key(mStart->id(), mEnd->id());
+}
+
+const QString
+Edge::key(quint32 iStart, quint32 iEnd)
+{
+    return QString::number(iStart) + "_" + QString::number(iEnd);
 }
 
 Node &
@@ -91,3 +98,11 @@ Edge::swapNodes()
     mStart = mEnd;
     mEnd = tmp;
 }
+
+QDebug 
+operator<<(QDebug ioDbg, const Edge &iEdge)
+{
+    ioDbg.nospace() << "Edge: [" << iEdge.start().id() << "->" << iEdge.end().id() << "]";
+    return ioDbg.space();
+}
+

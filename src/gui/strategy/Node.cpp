@@ -40,6 +40,15 @@ Node::Node(const Node &iNode)
     : mId(iNode.mId), mLabel(iNode.mLabel), mLevel(iNode.mLevel), mX(iNode.mX), mY(iNode.mY)
     , mInEdgeSet(iNode.mInEdgeSet), mOutEdgeSet(iNode.mOutEdgeSet)
 {
+//    mInEdgeSet.clear();
+//    foreach (Node *node, iNode.mInEdgeSet) {
+//        
+//    }
+//
+//    mOutEdgeSet.clear();
+//    foreach (Node *node, iNode.mOutEdgeSet) {
+//        
+//    }
 }
 
 Node::~Node()
@@ -101,8 +110,8 @@ Node::operator<(const Node &iNode) const
             Node nodeThis = *this;
             Node nodeOther = iNode;
             
-            nodeThis.mInEdgeSet.remove(nodeThis.max());
-            nodeOther.mInEdgeSet.remove(nodeOther.max());
+            nodeThis.mInEdgeSet.remove(nodeThis.max()->key());
+            nodeOther.mInEdgeSet.remove(nodeOther.max()->key());
 
             return nodeThis < nodeOther;
         }
@@ -121,6 +130,13 @@ quint32
 Node::median() const
 {
     return (mOutEdgeSet.size() - 1) / 2;
+}
+
+QDebug 
+operator<<(QDebug ioDbg, const Node &iNode)
+{
+    ioDbg.nospace() << "Node: [id: " << iNode.id() << "]";
+    return ioDbg.space();
 }
 
 bool
@@ -161,7 +177,7 @@ Node::max() const
         return 0;
     }
 
-    QSet<Edge *>::const_iterator iter = mInEdgeSet.begin();
+    QMap<QString, Edge *>::const_iterator iter = mInEdgeSet.begin();
     Edge *max = *iter;
 
     for (iter = mInEdgeSet.begin() + 1; iter != mInEdgeSet.end(); ++iter) {

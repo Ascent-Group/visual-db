@@ -125,8 +125,7 @@ class DbIndex : public DbObject
         bool mIsReady;
 
     protected:
-        // \todo pass by const ref
-        DbIndex(QString iName);
+        DbIndex(const QString &iName);
 };
 
 } // namespace Common

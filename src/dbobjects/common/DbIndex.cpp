@@ -42,7 +42,7 @@ namespace Common
 /*!
  * Ctor
  */
-DbIndex::DbIndex(QString iName)
+DbIndex::DbIndex(const QString &iName)
     : DbObject(iName),
       mTable(),
       mSchema(),

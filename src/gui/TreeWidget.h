@@ -33,6 +33,7 @@
 #include <QTreeWidget>
 #include <common.h>
 #include <common/DbObject.h>
+#include <control/ContextMenuManager.h>
 
 class QContextMenuEvent;
 class QMenu;
@@ -51,7 +52,7 @@ class TreeWidget : public QTreeWidget
     Q_OBJECT
 
     public:
-        TreeWidget(/*QMenu *, */QWidget *iParent = 0);
+        TreeWidget(QWidget *iParent = 0);
         ~TreeWidget();
 
         // it is highly recommended that we keep the same order as
@@ -81,8 +82,6 @@ class TreeWidget : public QTreeWidget
             ProcedureNode
         };
 
-        void setContextMenu(QMenu *);
-
         enum Columns {
             NameCol = 0,
             IdCol,
@@ -100,7 +99,6 @@ class TreeWidget : public QTreeWidget
         void itemDoubleClicked(QTreeWidgetItem *, int);
 
     private:
-        QMenu *mContextMenu;
         QTreeWidgetItem *mIndicesNode;
         QTreeWidgetItem *mLanguagesNode;
         QTreeWidgetItem *mRolesNode;
@@ -110,6 +108,11 @@ class TreeWidget : public QTreeWidget
         QTreeWidgetItem* findItem(QTreeWidgetItem *iParent, const QString &iValue, int iColumn) const;
         TreeWidget::Node nodeForItem(TreeWidget::Item type) const;
         QTreeWidgetItem* insertItem(QTreeWidgetItem *, const QString &, TreeWidget::Item, bool iDragEnabled = false);
+
+    signals:
+        // \todo This probable should be placed in an abstract type and should e inherited
+        // just like DataHolder
+        void contextMenuRequest(QContextMenuEvent *, Control::ContextMenuManager::MenuType);
 };
 
 }

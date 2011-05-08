@@ -65,7 +65,6 @@ namespace Gui {
  */
 MainWindow::MainWindow()
     : QMainWindow(),
-      mTreeItemMenu(0),
       mProgressBar(0),
       mUndoStack(0)
 {
@@ -75,7 +74,6 @@ MainWindow::MainWindow()
     createMenus();
 
     /*DO NOT DELETE ME ALEX*/
-//    ui.mTree->setContextMenu(mTreeItemMenu);
     createStatusBar();
 
 //    using namespace Connect;
@@ -111,7 +109,6 @@ MainWindow::MainWindow()
  */
 MainWindow::~MainWindow()
 {
-    delete mTreeItemMenu;
     // \todo remove progress bar
     delete mProgressBar;
     delete mUndoStack;
@@ -238,12 +235,6 @@ MainWindow::createMenus()
     setEnableForActions(false);
 
     updateSessionMenu();
-
-    // tree item menu
-    mTreeItemMenu = new QMenu();
-    mTreeItemMenu->addAction(ui.mAddTableAction);
-    mTreeItemMenu->addAction(ui.mDescribeObjectAction);
-    mTreeItemMenu->addAction(ui.mQueryDataAction);
 
 #if 0
     ui.mSceneWidget->setSchemeMenu(ui.mSchemeMenu);

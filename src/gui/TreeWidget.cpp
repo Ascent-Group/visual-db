@@ -42,9 +42,8 @@ static QTreeWidgetItem* createNode(QTreeWidgetItem *, const QString &, TreeWidge
 /*!
  * Constructor
  */
-TreeWidget::TreeWidget(/*QMenu *iMenu, */QWidget *iParent)
+TreeWidget::TreeWidget(QWidget *iParent)
     : QTreeWidget(iParent),
-      mContextMenu(0),
       mIndicesNode(0),
       mLanguagesNode(0),
       mRolesNode(0),
@@ -63,17 +62,6 @@ TreeWidget::TreeWidget(/*QMenu *iMenu, */QWidget *iParent)
  */
 TreeWidget::~TreeWidget()
 {
-}
-
-/*!
- * \brief Set context menu
- *
- * \param[in] iMenu - Context menu
- */
-void
-TreeWidget::setContextMenu(QMenu *iMenu)
-{
-    mContextMenu = iMenu;
 }
 
 /*!
@@ -128,7 +116,7 @@ TreeWidget::displayObjects(const Objects &iList)
                 break;
 
             case SchemaItem:
-                QApplication::processEvents();
+//                QApplication::processEvents();
                 // if schema item already exists, then just skip it.
                 // this may occur when schema's child comes earlier than the schema
                 // itself.
@@ -188,7 +176,10 @@ TreeWidget::displayObjects(const Objects &iList)
 void
 TreeWidget::contextMenuEvent(QContextMenuEvent *iEvent)
 {
-    mContextMenu->exec(iEvent->globalPos());
+    using namespace Control;
+    // find out what kind of context menu we want to show
+    ContextMenuManager::MenuType type = ContextMenuManager::MENU_UNKNOWN;
+    emit contextMenuRequest(iEvent, type);
 }
 
 /*!

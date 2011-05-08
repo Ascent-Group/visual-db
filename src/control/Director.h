@@ -31,6 +31,7 @@
 #define CONTROL_DIRECTOR_H
 
 #include <connect/ConnectionInfo.h>
+#include <control/ContextMenuManager.h>
 #include <control/DatabaseManager.h>
 #include <QObject>
 //#include <QSplashScreen>
@@ -57,7 +58,7 @@ class Context;
 /*!
  * \class Director
  * \headerfile control/Director.h
- * \brief Class that represents the environment of current execution.
+ * \brief Main entity that controls the whole workflow of the application.
  */
 class Director : public QObject
 {
@@ -89,6 +90,7 @@ class Director : public QObject
          * parameters of other modules, then they will definitely accpet const pointers.
          */
         QMap<QWidget *, Control::Context *> mRegistry;
+        Control::ContextMenuManager mMenuMgr;
         Control::DatabaseManager mDbMgr;
 
         bool add(QWidget *, Control::Context *);

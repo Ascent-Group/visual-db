@@ -38,7 +38,6 @@
 class QColorDialog;
 class QFileDialog;
 class QGraphicsItem;
-class QMenu;
 class QPrinter;
 class QProgressBar;
 class QTreeWidgetItem;
@@ -92,7 +91,6 @@ class MainWindow : public QMainWindow
 
         // These menus initially are not attached
         // to any gui element
-        QMenu *mTreeItemMenu;
 //        QMenu *mGroupMenu;
 
         QProgressBar *mProgressBar;
@@ -136,7 +134,7 @@ class MainWindow : public QMainWindow
 
         void treeTabCloseRequested(int);
         void treeTabChanged(int);
-        
+
         void tabChanged(int);
 
     signals:

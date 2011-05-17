@@ -210,13 +210,13 @@ DatabaseManager::add(const Control::Context *iContext, DbObjects::Common::Databa
         // if no factories/tools were created before - then create and put into registry
         switch (iDatabase->sqlDriver()) {
             case Database::PostgreSQL:
-                    factories = new Psql::Factories();
-                    tools = new Psql::Tools();
+                    factories = new(std::nothrow) Psql::Factories();
+                    tools = new(std::nothrow) Psql::Tools();
                     break;
 
             case Database::MySQL:
-                    factories = new Mysql::Factories();
-                    tools = new Mysql::Tools();
+                    factories = new(std::nothrow) Mysql::Factories();
+                    tools = new(std::nothrow) Mysql::Tools();
                     break;
 
             case Database::Oracle:

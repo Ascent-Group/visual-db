@@ -112,7 +112,7 @@ class TreeWidget : public QTreeWidget
     signals:
         // \todo This probable should be placed in an abstract type and should e inherited
         // just like DataHolder
-        void contextMenuRequest(QContextMenuEvent *, Control::ContextMenuManager::MenuType);
+        void contextMenuRequest(QContextMenuEvent *);
 };
 
 }

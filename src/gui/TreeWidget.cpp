@@ -55,6 +55,7 @@ TreeWidget::TreeWidget(QWidget *iParent)
     setHeaderHidden(true);
     setAnimated(true);
     setFont(QFont("Arial", 8));
+    setSelectionMode(QAbstractItemView::ExtendedSelection);
 }
 
 /*!
@@ -176,10 +177,7 @@ TreeWidget::displayObjects(const Objects &iList)
 void
 TreeWidget::contextMenuEvent(QContextMenuEvent *iEvent)
 {
-    using namespace Control;
-    // find out what kind of context menu we want to show
-    ContextMenuManager::MenuType type = ContextMenuManager::MENU_UNKNOWN;
-    emit contextMenuRequest(iEvent, type);
+    emit contextMenuRequest(iEvent);
 }
 
 /*!

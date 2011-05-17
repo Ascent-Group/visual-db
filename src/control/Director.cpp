@@ -217,7 +217,7 @@ Director::remove(QWidget *iWidget)
     // We should not get here (in theory). If we got here, then it means that we are
     // trying to unregister a widget that has never been registered, i.e. we missed its
     // registration and need to check the code.
-//    Q_ASSERT(false);
+    Q_ASSERT(false);
 
     return false;
 }
@@ -397,8 +397,8 @@ Director::showConnectionDialog(bool iLoadSession)
 
     // create tree for it and register it
     TreeWidget *tree = new TreeWidget();
-    connect(tree, SIGNAL(contextMenuRequest(QContextMenuEvent *, Control::ContextMenuManager::MenuType)),
-            &mMenuMgr, SLOT(contextMenuRequested(QContextMenuEvent *, Control::ContextMenuManager::MenuType)));
+    connect(tree, SIGNAL(contextMenuRequest(QContextMenuEvent *)),
+            &mMenuMgr, SLOT(contextMenuRequested(QContextMenuEvent *)));
     add(tree, ctx);
     mMainWindow->addTree(tree, tabTitle);
 

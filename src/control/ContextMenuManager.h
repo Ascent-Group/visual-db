@@ -59,13 +59,14 @@ class ContextMenuManager : public QObject
         ~ContextMenuManager();
 
     public slots:
-        void contextMenuRequested(QContextMenuEvent *, Control::ContextMenuManager::MenuType);
+        void contextMenuRequested(QContextMenuEvent *);
 
     private:
         QMap<MenuType, QMenu *> mMenus;
 
     private:
         void createMenus();
+        ContextMenuManager::MenuType treeItemType2MenuType(quint32 iType) const;
 };
 
 } // namespace Control

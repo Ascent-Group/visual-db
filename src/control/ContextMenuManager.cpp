@@ -28,9 +28,13 @@
  */
 
 #include <control/ContextMenuManager.h>
+#include <gui/TreeWidget.h>
+#include <gui/SceneWidget.h>
 #include <gui/TriAction.h>
 #include <QContextMenuEvent>
 #include <QMenu>
+
+#include <QtDebug>
 
 namespace Control
 {
@@ -68,12 +72,94 @@ ContextMenuManager::createMenus()
  * \todo Comment
  */
 void
-ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent,
-                                         Control::ContextMenuManager::MenuType iType)
+ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent)
 {
-    QMenu *menu = mMenus.value(iType);
-    Q_CHECK_PTR(menu);
-    menu->exec(iEvent->globalPos());
+    using namespace Gui;
+
+    TreeWidget *tree = 0;
+    SceneWidget *scene = 0;
+
+    QMenu *menu = 0;
+
+    if ((tree = dynamic_cast<TreeWidget*>(sender()))) {
+        // detect selected items
+        QList<QTreeWidgetItem *> items = tree->selectedItems();
+        // if a single item is selected, then get its type and show its menu
+        if (1 == items.size()) {
+            int itemType = items.first()->text(TreeWidget::IdCol).toUInt();
+            menu = mMenus.value(treeItemType2MenuType(itemType));
+        // in case several items are selected, then we need to get types of these items.
+        } else {
+            QSet<quint32> itemTypes;
+            foreach (QTreeWidgetItem *item, items) {
+                itemTypes.insert(item->text(TreeWidget::IdCol).toUInt());
+            }
+            // if only one type, then get its menu and show it
+            // \todo find intersection of menus
+            // otherwise, build an intersection menu out of these types' menus
+        }
+    } else if ((scene = dynamic_cast<SceneWidget*>(sender()))) {
+    } else {
+    }
+
+    if (menu) {
+        menu->exec(iEvent->globalPos());
+    }
+}
+
+/*!
+ *
+ */
+ContextMenuManager::MenuType
+ContextMenuManager::treeItemType2MenuType(quint32 iType) const
+{
+    using namespace Gui;
+
+    ContextMenuManager::MenuType menuType = MENU_UNKNOWN;
+
+    switch (iType) {
+        case TreeWidget::SchemaItem:
+            break;
+        case TreeWidget::TableItem:
+            menuType = ContextMenuManager::MENU_TREE_TABLE_ITEM;
+            break;
+        case TreeWidget::ViewItem:
+            break;
+        case TreeWidget::RoleItem:
+            break;
+        case TreeWidget::TriggerItem:
+            break;
+        case TreeWidget::LanguageItem:
+            break;
+        case TreeWidget::IndexItem:
+            break;
+        case TreeWidget::ProcedureItem:
+            break;
+        case TreeWidget::SchemaNode:
+            break;
+        case TreeWidget::TableNode:
+            break;
+        case TreeWidget::ViewNode:
+            break;
+        case TreeWidget::RoleNode:
+            break;
+        case TreeWidget::TriggerNode:
+            break;
+        case TreeWidget::LanguageNode:
+            break;
+        case TreeWidget::IndexNode:
+            break;
+        case TreeWidget::ProcedureNode:
+            break;
+        case TreeWidget::UnkItem:
+        case TreeWidget::UnkNode:
+        default:
+            break;
+
+    }
+
+    return menuType;
+
 }
 
 }

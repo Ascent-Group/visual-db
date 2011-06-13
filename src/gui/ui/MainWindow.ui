@@ -232,6 +232,11 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
        <property name="tabPosition">
         <enum>QTabWidget::West</enum>
        </property>

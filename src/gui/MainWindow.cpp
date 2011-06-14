@@ -503,7 +503,7 @@ MainWindow::addItem()
  * \todo move to director
  */
 void
-MainWindow::addItem(QTreeWidgetItem *iItem, int iColumn)
+MainWindow::addItem(Gui::TreeWidgetItem *iItem, int iColumn)
 {
 #if 0
     ui.mSceneWidget->showOnScene(iItem, iColumn, true);
@@ -523,7 +523,7 @@ MainWindow::drawFullDbScheme()
     int topLevelItemCount = ui.mTree->topLevelItemCount();
 
     for (int j = 0; j < topLevelItemCount; ++j) {
-        QTreeWidgetItem *topLevelItem = ui.mTree->topLevelItem(j);
+        Gui::TreeWidgetItem *topLevelItem = ui.mTree->topLevelItem(j);
 
         int childrenCount = topLevelItem->childCount();
 
@@ -533,7 +533,7 @@ MainWindow::drawFullDbScheme()
 
         // go through children items
         for (int i = 0; i < childrenCount; ++i) {
-            QTreeWidgetItem *childItem = topLevelItem->child(i);
+            Gui::TreeWidgetItem *childItem = topLevelItem->child(i);
 
             // if this is a schema item
             if (TreeWidget::SchemaItem == childItem->text(TreeWidget::IdCol).toInt()) {
@@ -610,7 +610,7 @@ MainWindow::describeObject()
 {
 #if 0
     // get selected item
-    QTreeWidgetItem *item = ui.mTree->currentItem();
+    Gui::TreeWidgetItem *item = ui.mTree->currentItem();
 
     // if no item is selected
     if (0 == item) {
@@ -750,7 +750,7 @@ MainWindow::queryData()
 {
 #if 0
     // get selected item
-    QTreeWidgetItem *item = ui.mTree->currentItem();
+    Gui::TreeWidgetItem *item = ui.mTree->currentItem();
 
     // if no item is selected
     if (0 == item) {

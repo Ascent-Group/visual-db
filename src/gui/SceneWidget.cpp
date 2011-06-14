@@ -142,7 +142,7 @@ SceneWidget::setTableMenu(QMenu *iMenu)
  * \param[in] iCol - Tree item column identifier
  */
 void
-SceneWidget::showOnScene(QTreeWidgetItem *iTreeItem, int iCol, bool iCenterOn)
+SceneWidget::showOnScene(Gui::TreeWidgetItem *iTreeItem, int iCol, bool iCenterOn)
 {
     QList<QGraphicsItem *> itemList = mScene->showOnScene(iTreeItem, iCol, QPoint(0, 0), iCenterOn);
     foreach (QGraphicsItem *item, itemList) {

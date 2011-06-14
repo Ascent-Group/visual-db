@@ -41,10 +41,11 @@ class QGraphicsItem;
 class QGridLayout;
 class QMenu;
 class QPrinter;
-class QTreeWidgetItem;
 class QUndoCommand;
 
 namespace Gui {
+
+class TreeWidgetItem;
 
 namespace GraphicsItems {
 
@@ -104,7 +105,7 @@ class SceneWidget : public QWidget
         void showControlWidget(bool);
         void showGrid(bool);
         void showLegend(bool);
-        void showOnScene(QTreeWidgetItem *, int, bool iCenterOn = false);
+        void showOnScene(Gui::TreeWidgetItem *, int, bool iCenterOn = false);
         void ungroupItems();
         void disableAnchorItems();
         void cleanSchemeScene();

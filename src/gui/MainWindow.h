@@ -40,7 +40,6 @@ class QFileDialog;
 class QGraphicsItem;
 class QPrinter;
 class QProgressBar;
-class QTreeWidgetItem;
 class QUndoCommand;
 class QUndoStack;
 
@@ -50,6 +49,7 @@ class GraphicsScene;
 class GraphicsView;
 class SceneWidget;
 class TreeWidget;
+class TreeWidgetItem;
 
 /*!
  * \class MainWindow
@@ -122,7 +122,7 @@ class MainWindow : public QMainWindow
         void describeObject();
         void drawFullDbScheme();
         void addItem();
-        void addItem(QTreeWidgetItem *, int);
+        void addItem(Gui::TreeWidgetItem *, int);
         void showDatabaseTree(bool);
         void closeDatabaseTree();
         void showDatabaseTree();

@@ -36,14 +36,15 @@
 
 namespace Gui {
 
-static void setBold(QTreeWidgetItem *, bool);
-static QTreeWidgetItem* createNode(QTreeWidgetItem *, const QString &, TreeWidget::Node);
+static void setBold(Gui::TreeWidgetItem *, bool);
+static Gui::TreeWidgetItem* createNode(Gui::TreeWidgetItem *, const QString &, TreeWidget::Node);
 
 /*!
  * Constructor
  */
 TreeWidget::TreeWidget(QWidget *iParent)
     : QTreeWidget(iParent),
+      Gui::ContextMenuHolder(this),
       mIndicesNode(0),
       mLanguagesNode(0),
       mRolesNode(0),
@@ -95,7 +96,7 @@ TreeWidget::displayObjects(const Objects &iList)
     using namespace DbObjects::Common;
 
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
-    QTreeWidgetItem *parentNode = 0;
+    Gui::TreeWidgetItem *parentNode = 0;
 
     foreach(const QString &name, iList.keys()) {
         QString parentName = iList.value(name).first;
@@ -134,7 +135,7 @@ TreeWidget::displayObjects(const Objects &iList)
             case TriggerItem:
             {
                 // find parent schema item
-                QTreeWidgetItem *schemaItem = findItem(mSchemasNode, parentName, TreeWidget::NameCol);
+                Gui::TreeWidgetItem *schemaItem = findItem(mSchemasNode, parentName, TreeWidget::NameCol);
                 // or create it with subnodes
                 if (!schemaItem) {
                     schemaItem = insertItem(mSchemasNode, parentName, TreeWidget::SchemaItem);
@@ -210,7 +211,7 @@ TreeWidget::startDrag(Qt::DropActions)
  * \param[in] iColumn - Column of the item
  */
 //void
-//TreeWidget::itemDoubleClicked(QTreeWidgetItem * /*iItem*/, int /*iColumn*/)
+//TreeWidget::itemDoubleClicked(Gui::TreeWidgetItem * /*iItem*/, int /*iColumn*/)
 //{
 //    emit itemDoubleClicked();
 //}
@@ -222,7 +223,7 @@ TreeWidget::startDrag(Qt::DropActions)
  * \param[in] iBold - True for bold font or false for normal one
  */
 static void
-setBold(QTreeWidgetItem *iItem, bool iBold)
+setBold(Gui::TreeWidgetItem *iItem, bool iBold)
 {
     QFont font = iItem->font(TreeWidget::NameCol);
     font.setBold(iBold);
@@ -239,10 +240,10 @@ setBold(QTreeWidgetItem *iItem, bool iBold)
  * \return Newly created tree widget node if its creation succeeded.
  * \return 0 - Otherwise.
  */
-static QTreeWidgetItem*
-createNode(QTreeWidgetItem *iParent, const QString &iName, TreeWidget::Node iType)
+static Gui::TreeWidgetItem*
+createNode(Gui::TreeWidgetItem *iParent, const QString &iName, TreeWidget::Node iType)
 {
-    QTreeWidgetItem *node = new(std::nothrow) QTreeWidgetItem(iParent);
+    Gui::TreeWidgetItem *node = new(std::nothrow) Gui::TreeWidgetItem(iParent);
 
     if (node) {
         node->setText(TreeWidget::NameCol, iName);
@@ -264,8 +265,8 @@ createNode(QTreeWidgetItem *iParent, const QString &iName, TreeWidget::Node iTyp
  * \return Desired tree widget item if found.
  * \return 0 - Otherwise.
  */
-QTreeWidgetItem*
-TreeWidget::findItem(QTreeWidgetItem *iParent, const QString &iValue, int iColumn) const
+Gui::TreeWidgetItem*
+TreeWidget::findItem(Gui::TreeWidgetItem *iParent, const QString &iValue, int iColumn) const
 {
     QList<QTreeWidgetItem*> items = findItems(iValue, Qt::MatchExactly | Qt::MatchRecursive, iColumn);
     QList<QTreeWidgetItem*>::iterator iter = items.begin();
@@ -278,7 +279,7 @@ TreeWidget::findItem(QTreeWidgetItem *iParent, const QString &iValue, int iColum
         ++iter;
     }
 
-    return item;
+    return dynamic_cast<Gui::TreeWidgetItem *>(item);
 }
 
 /*!
@@ -306,15 +307,15 @@ TreeWidget::nodeForItem(TreeWidget::Item iType) const
  *
  * \return Tree widget item that was created
  */
-QTreeWidgetItem*
-TreeWidget::insertItem(QTreeWidgetItem *iParentNode, const QString &iText, TreeWidget::Item iType, bool iDragEnabled)
+Gui::TreeWidgetItem*
+TreeWidget::insertItem(Gui::TreeWidgetItem *iParentNode, const QString &iText, TreeWidget::Item iType, bool iDragEnabled)
 {
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
     if (iDragEnabled) {
         flags |= Qt::ItemIsDragEnabled;
     }
 
-    QTreeWidgetItem *item = new(std::nothrow) QTreeWidgetItem(iParentNode);
+    Gui::TreeWidgetItem *item = new(std::nothrow) Gui::TreeWidgetItem(iParentNode);
 
     if (item) {
         item->setFlags(flags);

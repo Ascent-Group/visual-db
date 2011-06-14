@@ -177,7 +177,7 @@ GraphicsScene::setTableMenu(QMenu *iTableMenu)
  * \return List of added items
  */
 QList<QGraphicsItem *>
-GraphicsScene::showOnScene(QTreeWidgetItem *iTreeItem, int iCol, const QPoint &iPos, bool iCenterOn)
+GraphicsScene::showOnScene(Gui::TreeWidgetItem *iTreeItem, int iCol, const QPoint &iPos, bool iCenterOn)
 {
     QList<QGraphicsItem *> objectList;
 
@@ -200,7 +200,7 @@ GraphicsScene::showOnScene(QTreeWidgetItem *iTreeItem, int iCol, const QPoint &i
                         TreeWidget::ViewNode == iTreeItem->child(i)->text(TreeWidget::IdCol).toInt()) {
                     for (int j = 0; j < iTreeItem->child(i)->childCount(); ++j) {
                         QPoint pos(iPos.x() + j * SEEK_STEP, iPos.y() + j * SEEK_STEP);
-                        objectList << showOnScene(iTreeItem->child(i)->child(j), /*TreeWidget::NameCol*/iCol, pos, iCenterOn);
+                        objectList << showOnScene(dynamic_cast<Gui::TreeWidgetItem*>(iTreeItem->child(i)->child(j)), /*TreeWidget::NameCol*/iCol, pos, iCenterOn);
                     }
                 }
             }
@@ -211,13 +211,13 @@ GraphicsScene::showOnScene(QTreeWidgetItem *iTreeItem, int iCol, const QPoint &i
         using namespace Gui::GraphicsItems;
         
         if (TreeWidget::TableItem == objId) {
-            TableItem *table = newTableItem(iTreeItem->parent()->parent()->text(TreeWidget::NameCol),
+            TableItem *table = newTableItem(dynamic_cast<QTreeWidgetItem*>(iTreeItem)->parent()->parent()->text(TreeWidget::NameCol),
                     iTreeItem->text(TreeWidget::NameCol), mTableMenu, iPos);
             objectList.append(table);
         }
 
         if (TreeWidget::ViewItem == objId) {
-            ViewItem *view = newViewItem(iTreeItem->parent()->parent()->text(TreeWidget::NameCol),
+            ViewItem *view = newViewItem(dynamic_cast<QTreeWidgetItem*>(iTreeItem)->parent()->parent()->text(TreeWidget::NameCol),
                     iTreeItem->text(TreeWidget::NameCol), mTableMenu, iPos);
             objectList.append(view);
         }

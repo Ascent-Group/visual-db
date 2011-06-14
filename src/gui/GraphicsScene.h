@@ -44,9 +44,10 @@ class QMenu;
 class QKeyEvent;
 class QPoint;
 class QSlider;
-class QTreeWidgetItem;
 
 namespace Gui {
+
+class TreeWidgetItem;
 
 namespace GraphicsItems {
 
@@ -107,7 +108,7 @@ class GraphicsScene : public QGraphicsScene
         void itemColorChanged(Gui::GraphicsItems::GraphicsItem *, const QColor &, const QColor &);
 
     public slots:
-        QList<QGraphicsItem *> showOnScene(QTreeWidgetItem *, int, const QPoint &, bool iCenterOn = false);
+        QList<QGraphicsItem *> showOnScene(Gui::TreeWidgetItem *, int, const QPoint &, bool iCenterOn = false);
         void setFieldsTypesVisible();
         void setFieldsTypesInvisible();
         void setIndicesVisible(bool);

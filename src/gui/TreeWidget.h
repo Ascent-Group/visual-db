@@ -34,9 +34,8 @@
 #include <common.h>
 #include <common/DbObject.h>
 #include <control/ContextMenuManager.h>
-
-class QContextMenuEvent;
-class QMenu;
+#include <gui/ContextMenuHolder.h>
+#include <gui/TreeWidgetItem.h>
 
 using namespace DbObjects::Common;
 
@@ -47,7 +46,7 @@ namespace Gui {
  * \headerfile gui/TreeWidget.h
  * \brief Tree widget. Show all database objects on this tree.
  */
-class TreeWidget : public QTreeWidget
+class TreeWidget : public QTreeWidget, public Gui::ContextMenuHolder
 {
     Q_OBJECT
 
@@ -96,23 +95,23 @@ class TreeWidget : public QTreeWidget
     protected:
         void contextMenuEvent(QContextMenuEvent *);
         void startDrag(Qt::DropActions);
-        void itemDoubleClicked(QTreeWidgetItem *, int);
+        void itemDoubleClicked(Gui::TreeWidgetItem *, int);
 
     private:
-        QTreeWidgetItem *mIndicesNode;
-        QTreeWidgetItem *mLanguagesNode;
-        QTreeWidgetItem *mRolesNode;
-        QTreeWidgetItem *mSchemasNode;
+        Gui::TreeWidgetItem *mIndicesNode;
+        Gui::TreeWidgetItem *mLanguagesNode;
+        Gui::TreeWidgetItem *mRolesNode;
+        Gui::TreeWidgetItem *mSchemasNode;
 
     private:
-        QTreeWidgetItem* findItem(QTreeWidgetItem *iParent, const QString &iValue, int iColumn) const;
+        Gui::TreeWidgetItem* findItem(Gui::TreeWidgetItem *iParent, const QString &iValue, int iColumn) const;
         TreeWidget::Node nodeForItem(TreeWidget::Item type) const;
-        QTreeWidgetItem* insertItem(QTreeWidgetItem *, const QString &, TreeWidget::Item, bool iDragEnabled = false);
+        Gui::TreeWidgetItem* insertItem(Gui::TreeWidgetItem *, const QString &, TreeWidget::Item, bool iDragEnabled = false);
 
     signals:
-        // \todo This probable should be placed in an abstract type and should e inherited
-        // just like DataHolder
+        // \todo This probably should be placed in ContextMenuHolder
         void contextMenuRequest(QContextMenuEvent *);
+
 };
 
 }

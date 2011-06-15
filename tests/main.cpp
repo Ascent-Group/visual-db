@@ -26,6 +26,7 @@
 #include <gui/AppearancePageTest.h>
 #include <gui/ArrowItemTest.h>
 #include <gui/ColorsPageTest.h>
+#include <gui/ContextMenuHolderTest.h>
 #include <gui/ControlWidgetTest.h>
 #include <gui/DescriptionWidgetTest.h>
 #include <gui/GraphicsItemTest.h>
@@ -44,6 +45,7 @@
 #include <gui/TableItemTest.h>
 #include <gui/TabWidgetTest.h>
 #include <gui/TreeWidgetTest.h>
+#include <gui/TreeWidgetItemTest.h>
 
 // dbobjects
 #include <dbobjects/common/DatabaseTest.h>
@@ -128,6 +130,7 @@ int main(int argc, char *argv[])
     REGISTER_TEST_SUITE(GUI, AppearancePage);
     REGISTER_TEST_SUITE(GUI, ArrowItem);
     REGISTER_TEST_SUITE(GUI, ColorsPage);
+    REGISTER_TEST_SUITE(GUI, ContextMenuHolder);
     REGISTER_TEST_SUITE(GUI, ControlWidget);
     REGISTER_TEST_SUITE(GUI, DescriptionWidget);
     REGISTER_TEST_SUITE(GUI, GraphicsItem);
@@ -146,6 +149,7 @@ int main(int argc, char *argv[])
     REGISTER_TEST_SUITE(GUI, TableItem);
     REGISTER_TEST_SUITE(GUI, TabWidget);
     REGISTER_TEST_SUITE(GUI, TreeWidget);
+    REGISTER_TEST_SUITE(GUI, TreeWidgetItem);
 
     // behaviour
     REGISTER_TEST_SUITE(GUI_BEAHVIOUR, AddTableCommand);

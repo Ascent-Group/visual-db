@@ -244,6 +244,7 @@ static Gui::TreeWidgetItem*
 createNode(Gui::TreeWidgetItem *iParent, const QString &iName, TreeWidget::Node iType)
 {
     Gui::TreeWidgetItem *node = new(std::nothrow) Gui::TreeWidgetItem(iParent);
+    // \todo node->setContextMenu(...);
 
     if (node) {
         node->setText(TreeWidget::NameCol, iName);
@@ -316,6 +317,7 @@ TreeWidget::insertItem(Gui::TreeWidgetItem *iParentNode, const QString &iText, T
     }
 
     Gui::TreeWidgetItem *item = new(std::nothrow) Gui::TreeWidgetItem(iParentNode);
+    // \todo item->setContextMenu(...);
 
     if (item) {
         item->setFlags(flags);

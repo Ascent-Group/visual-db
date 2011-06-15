@@ -52,7 +52,11 @@ class ContextMenuManager : public QObject
         enum MenuType
         {
             MENU_UNKNOWN = 0,
-            MENU_TREE_TABLE_ITEM
+
+            MENU_TREE_WIDGET,
+            MENU_TREE_TABLE_ITEM,
+
+            MENU_SCENE_WIDGET
         };
 
         ContextMenuManager();
@@ -60,6 +64,8 @@ class ContextMenuManager : public QObject
 
     public slots:
         void contextMenuRequested(QContextMenuEvent *);
+
+        const QMenu* menu(Control::ContextMenuManager::MenuType) const;
 
     private:
         QMap<MenuType, QMenu *> mMenus;

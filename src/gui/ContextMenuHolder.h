@@ -64,14 +64,14 @@ class ContextMenuHolder/* : public QObject*/
         ContextMenuHolder(QObject *iObject);
         virtual ~ContextMenuHolder();
 
-        void setContextMenu(QMenu *iMenu);
-        QMenu* contextMenu() const;
+        void setContextMenu(const QMenu *iMenu);
+        const QMenu* contextMenu() const;
 
         /*! Subclass should declare this signal in their own header */
         virtual void contextMenuRequest(QContextMenuEvent *) = 0;
 
     private:
-        static QMenu *mMenu;
+        /*static */const QMenu *mMenu;
 
 };
 

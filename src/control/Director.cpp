@@ -392,11 +392,14 @@ Director::showConnectionDialog(bool iLoadSession)
 
     // create scene for it and register it
     SceneWidget *scene = new SceneWidget();
+    // \todo uncomment next line when scene starts inheriting ContextMenuHolder
+//    scene->setContextMenu(mMenuMgr.menu(ContextMenuManager::MENU_SCENE_WIDGET));
     add(scene, ctx);
     mMainWindow->addScene(scene, QString("Scene: %1").arg(tabTitle));
 
     // create tree for it and register it
     TreeWidget *tree = new TreeWidget();
+    tree->setContextMenu(mMenuMgr.menu(ContextMenuManager::MENU_TREE_WIDGET));
     connect(tree, SIGNAL(contextMenuRequest(QContextMenuEvent *)),
             &mMenuMgr, SLOT(contextMenuRequested(QContextMenuEvent *)));
     add(tree, ctx);
@@ -475,6 +478,7 @@ Director::reloadDataRequested()
         Objects objects;
 //        tree->clear();
         mDbMgr.newObjects(ctx, objects);
+        // \todo tree should have a view controller
         tree->displayObjects(objects);
 
         mMainWindow->setEnableForActions(true);

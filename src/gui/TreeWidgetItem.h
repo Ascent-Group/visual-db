@@ -66,7 +66,7 @@ class TreeWidgetItem : public QObject, public QTreeWidgetItem, public Gui::Conte
         virtual ~TreeWidgetItem();
 
     signals:
-        void contextMenuRequest(QContextMenuEvent *);
+        void contextMenuRequest(QContextMenuEvent *iEvent);
 
 };
 

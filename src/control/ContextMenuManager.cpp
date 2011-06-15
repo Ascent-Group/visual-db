@@ -44,7 +44,15 @@ namespace Control
  */
 ContextMenuManager::ContextMenuManager()
 {
-    createMenus();
+    try {
+        createMenus();
+
+        // \todo set context menu for tree widget items
+        // \todo set context menu for graphics items
+        // \todo determine how to set context menu for instance for table item and view
+        // node???
+    } catch (...) {
+    }
 }
 
 /*!
@@ -61,11 +69,21 @@ ContextMenuManager::~ContextMenuManager()
 void
 ContextMenuManager::createMenus()
 {
+    // Context menu for tree widget
+    QMenu *treeWidgetMenu = new QMenu();
+//    treeWidgetMenu->addAction(dynamic_cast<QAction*>(new Gui::TriAction("ttt", this)));
+    mMenus.insert(MENU_TREE_WIDGET, treeWidgetMenu);
+
+    // context menu for table item in tree widget
     QMenu *tableTreeItemMenu = new QMenu();
 //    tableTreeItemMenu->addAction(ui.mAddTableAction);
 //    tableTreeItemMenu->addAction(ui.mDescribeObjectAction);
 //    tableTreeItemMenu->addAction(ui.mQueryDataAction);
     mMenus.insert(MENU_TREE_TABLE_ITEM, tableTreeItemMenu);
+
+    // context menu for scene
+    QMenu *sceneWidgetMenu = new QMenu();
+    mMenus.insert(MENU_SCENE_WIDGET, sceneWidgetMenu);
 }
 
 /*!
@@ -79,15 +97,17 @@ ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent)
     TreeWidget *tree = 0;
     SceneWidget *scene = 0;
 
-    QMenu *menu = 0;
+    const QMenu *menu = 0;
 
     if ((tree = dynamic_cast<TreeWidget*>(sender()))) {
         // detect selected items
         QList<QTreeWidgetItem *> items = tree->selectedItems();
+        qDebug() << items.size();
         // if a single item is selected, then get its type and show its menu
-        if (1 == items.size()) {
-            int itemType = items.first()->text(TreeWidget::IdCol).toUInt();
-            menu = mMenus.value(treeItemType2MenuType(itemType));
+        if (0 == items.size()) {
+            menu = tree->contextMenu();
+//            int itemType = items.first()->text(TreeWidget::IdCol).toUInt();
+//            menu = mMenus.value(treeItemType2MenuType(itemType));
         // in case several items are selected, then we need to get types of these items.
         } else {
             QSet<quint32> itemTypes;
@@ -102,9 +122,22 @@ ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent)
     } else {
     }
 
+    qDebug() << "ContextMenuManager::contextMenuRequested> Menu = " << menu;
     if (menu) {
-        menu->exec(iEvent->globalPos());
+//        menu->exec(iEvent->globalPos());
+        const_cast<QMenu*>(menu)->exec(QCursor::pos());
     }
+}
+
+/*!
+ * \param[in] iType - Type of context menu to find
+ *
+ * \return Context menu of the given type
+ */
+const QMenu*
+ContextMenuManager::menu(Control::ContextMenuManager::MenuType iType) const
+{
+    return mMenus.value(iType);
 }
 
 /*!

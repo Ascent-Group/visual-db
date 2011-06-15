@@ -32,7 +32,7 @@
 
 namespace Gui {
 
-QMenu* ContextMenuHolder::mMenu = 0;
+//const QMenu* ContextMenuHolder::mMenu = 0;
 
 /*!
  * \param[in] iObject - Pointer to the object who implents this interface
@@ -56,7 +56,7 @@ ContextMenuHolder::~ContextMenuHolder()
  *
  */
 void
-ContextMenuHolder::setContextMenu(QMenu *iMenu)
+ContextMenuHolder::setContextMenu(const QMenu *iMenu)
 {
     mMenu = iMenu;
 }
@@ -64,7 +64,7 @@ ContextMenuHolder::setContextMenu(QMenu *iMenu)
 /*!
  *
  */
-QMenu*
+const QMenu*
 ContextMenuHolder::contextMenu() const
 {
     return mMenu;

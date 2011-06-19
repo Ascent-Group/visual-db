@@ -112,7 +112,7 @@ ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent)
         } else {
             QSet<quint32> itemTypes;
             foreach (QTreeWidgetItem *item, items) {
-                itemTypes.insert(item->text(TreeWidget::IdCol).toUInt());
+                itemTypes.insert(item->text(TreeWidget::TypeCol).toUInt());
             }
             // if only one type, then get its menu and show it
             // \todo find intersection of menus

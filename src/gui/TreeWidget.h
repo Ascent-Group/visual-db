@@ -83,12 +83,23 @@ class TreeWidget : public QTreeWidget, public Gui::ContextMenuHolder
 
         enum Columns {
             NameCol = 0,
-            IdCol,
+            TypeCol,
+            SchemaCol,
 
             ColumnsCount
         };
 
-        void displayObjects(const Objects &iList);
+        enum Mode {
+            UnknownMode = 0,
+            DefaultMode
+        };
+
+        void display(const QList<Gui::TreeWidgetItem*> &iItems);
+
+        Gui::TreeWidgetItem* findItem(Gui::TreeWidgetItem *iParent, const QString &iValue, int iColumn) const;
+        TreeWidget::Node nodeForItem(TreeWidget::Item type) const;
+
+
 //    signals:
 //        void itemDoubleClicked();
 
@@ -98,18 +109,14 @@ class TreeWidget : public QTreeWidget, public Gui::ContextMenuHolder
         void itemDoubleClicked(Gui::TreeWidgetItem *, int);
 
     private:
+        Mode mMode;
+
         Gui::TreeWidgetItem *mIndicesNode;
         Gui::TreeWidgetItem *mLanguagesNode;
         Gui::TreeWidgetItem *mRolesNode;
         Gui::TreeWidgetItem *mSchemasNode;
 
-    private:
-        Gui::TreeWidgetItem* findItem(Gui::TreeWidgetItem *iParent, const QString &iValue, int iColumn) const;
-        TreeWidget::Node nodeForItem(TreeWidget::Item type) const;
-        Gui::TreeWidgetItem* insertItem(Gui::TreeWidgetItem *, const QString &, TreeWidget::Item, bool iDragEnabled = false);
-
     signals:
-        // \todo This probably should be placed in ContextMenuHolder
         void contextMenuRequest(QContextMenuEvent *);
 
 };

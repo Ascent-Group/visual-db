@@ -32,12 +32,12 @@
 #include <QDebug>
 #include <QMenu>
 #include <QMessageBox>
+#include <QScopedPointer>
 #include <gui/TreeWidget.h>
+#include <gui/viewcontroller/TreeViewController.h>
+#include <gui/viewcontroller/TreeViewControllerFactory.h>
 
 namespace Gui {
-
-static void setBold(Gui::TreeWidgetItem *, bool);
-static Gui::TreeWidgetItem* createNode(Gui::TreeWidgetItem *, const QString &, TreeWidget::Node);
 
 /*!
  * Constructor
@@ -45,13 +45,15 @@ static Gui::TreeWidgetItem* createNode(Gui::TreeWidgetItem *, const QString &, T
 TreeWidget::TreeWidget(QWidget *iParent)
     : QTreeWidget(iParent),
       Gui::ContextMenuHolder(this),
+      mMode(UnknownMode),
       mIndicesNode(0),
       mLanguagesNode(0),
       mRolesNode(0),
       mSchemasNode(0)
 {
     setColumnCount(TreeWidget::ColumnsCount);
-    setColumnHidden(TreeWidget::IdCol, true);
+    setColumnHidden(TreeWidget::TypeCol, true);
+    setColumnHidden(TreeWidget::SchemaCol, true);
     setHeaderLabel(QString(""));
     setHeaderHidden(true);
     setAnimated(true);
@@ -67,107 +69,17 @@ TreeWidget::~TreeWidget()
 }
 
 /*!
- * Displays specified objects.
  *
- * \param[in] iList - A collection of objects which includes name, schema name and object
- * type.
- *
- * \note Maybe we should use TreeView and a standard model here
  */
 void
-TreeWidget::displayObjects(const Objects &iList)
+TreeWidget::display(const QList<Gui::TreeWidgetItem*> &iItems)
 {
-    clear();
-
-    // construct the tree skeleton
-    mIndicesNode = createNode(0, tr("Indices"), TreeWidget::IndexNode);
-    addTopLevelItem(mIndicesNode);
-
-    mLanguagesNode = createNode(0, tr("Languages"), TreeWidget::LanguageNode);
-    addTopLevelItem(mLanguagesNode);
-
-    mRolesNode = createNode(0, tr("Roles"), TreeWidget::RoleNode);
-    addTopLevelItem(mRolesNode);
-
-    mSchemasNode = createNode(0, tr("Schemas"), TreeWidget::SchemaNode);
-    addTopLevelItem(mSchemasNode);
-
-    // preparing is done, get to displaying
-    using namespace DbObjects::Common;
-
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled;
-    Gui::TreeWidgetItem *parentNode = 0;
-
-    foreach(const QString &name, iList.keys()) {
-        QString parentName = iList.value(name).first;
-        TreeWidget::Item type = static_cast<TreeWidget::Item>(iList.value(name).second);
-
-        parentNode = 0;
-
-        switch (type) {
-            case IndexItem:
-                parentNode = mIndicesNode;
-                break;
-
-            case LanguageItem:
-                parentNode = mLanguagesNode;
-                break;
-
-            case RoleItem:
-                parentNode = mRolesNode;
-                break;
-
-            case SchemaItem:
-//                QApplication::processEvents();
-                // if schema item already exists, then just skip it.
-                // this may occur when schema's child comes earlier than the schema
-                // itself.
-                if (findItem(mSchemasNode, name, TreeWidget::NameCol)) {
-                    continue;
-                } else {
-                    parentNode = mSchemasNode;
-                }
-                break;
-
-            case ViewItem:
-            case ProcedureItem:
-            case TableItem:
-            case TriggerItem:
-            {
-                // find parent schema item
-                Gui::TreeWidgetItem *schemaItem = findItem(mSchemasNode, parentName, TreeWidget::NameCol);
-                // or create it with subnodes
-                if (!schemaItem) {
-                    schemaItem = insertItem(mSchemasNode, parentName, TreeWidget::SchemaItem);
-                }
-
-                // find nested node for the given parentNode type
-                parentNode = findItem(schemaItem, QString::number((int)nodeForItem(type)), TreeWidget::IdCol);
-            }
-                break;
-
-            case UnkItem:
-            default:
-                qDebug() << "TreeWidget::displayObjects> Unknown object type: " << type;
-                continue;
-                break;
-        }
-
-        Q_ASSERT_X(0 != parentNode, "displayObjects", QString("name = %1, type = %2").arg(name).arg(type).toAscii().data());
-        if (parentNode) {
-            insertItem(parentNode, name, type, true);
-        }
-
+    // \fixme mMode is set here for now
+    mMode = DefaultMode;
+    QScopedPointer<TreeViewController> viewController(TreeViewControllerFactory::create(mMode));
+    if (!viewController.isNull()) {
+        viewController->buildTree(this, iItems);
     }
-
-    // todo sort the tree
-    QList<QTreeWidgetItem *> nodes = findItems("", Qt::MatchContains | Qt::MatchRecursive, TreeWidget::NameCol);
-    foreach (QTreeWidgetItem *node, nodes) {
-        if (node->text(TreeWidget::IdCol).toUInt() > TreeWidget::UnkNode) {
-            node->sortChildren(TreeWidget::NameCol, Qt::AscendingOrder);
-        }
-    }
-
 }
 
 /*!
@@ -217,45 +129,6 @@ TreeWidget::startDrag(Qt::DropActions)
 //}
 
 /*!
- * \brief Set font to bold
- *
- * \param[in] iItem - Tree item we need to change the boldness
- * \param[in] iBold - True for bold font or false for normal one
- */
-static void
-setBold(Gui::TreeWidgetItem *iItem, bool iBold)
-{
-    QFont font = iItem->font(TreeWidget::NameCol);
-    font.setBold(iBold);
-    iItem->setFont(TreeWidget::NameCol, font);
-}
-
-/*!
- * Creates a node for storing objects of specified type.
- *
- * \param[in] iParent - Parent item who will hold this node as a child.
- * \param[in] iName - Name of the node.
- * \param[in] iType - Type of a node that is going to be created.
- *
- * \return Newly created tree widget node if its creation succeeded.
- * \return 0 - Otherwise.
- */
-static Gui::TreeWidgetItem*
-createNode(Gui::TreeWidgetItem *iParent, const QString &iName, TreeWidget::Node iType)
-{
-    Gui::TreeWidgetItem *node = new(std::nothrow) Gui::TreeWidgetItem(iParent);
-    // \todo node->setContextMenu(...);
-
-    if (node) {
-        node->setText(TreeWidget::NameCol, iName);
-        node->setText(TreeWidget::IdCol, QString::number(iType));
-        setBold(node, true);
-    }
-
-    return node;
-}
-
-/*!
  * Finds the treewidget item with the specified text and whose parent is the one that we
  * said.
  *
@@ -298,43 +171,6 @@ TreeWidget::nodeForItem(TreeWidget::Item iType) const
     return static_cast<TreeWidget::Node>(TreeWidget::UnkNode + iType);
 }
 
-/*!
- * \brief Insert a child item for the given parent
- *
- * \param[in] iParentNode - Parent item we will populate.
- * \param[in] iText - Text to display by the new item.
- * \param[in] iType - Item type.
- * \param[in] iDrabEnabled - Indicates whether these items should be draggable or not.
- *
- * \return Tree widget item that was created
- */
-Gui::TreeWidgetItem*
-TreeWidget::insertItem(Gui::TreeWidgetItem *iParentNode, const QString &iText, TreeWidget::Item iType, bool iDragEnabled)
-{
-    Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
-    if (iDragEnabled) {
-        flags |= Qt::ItemIsDragEnabled;
-    }
-
-    Gui::TreeWidgetItem *item = new(std::nothrow) Gui::TreeWidgetItem(iParentNode);
-    // \todo item->setContextMenu(...);
-
-    if (item) {
-        item->setFlags(flags);
-        item->setText(TreeWidget::NameCol, iText);
-        item->setText(TreeWidget::IdCol, QString::number(iType));
-        item->setData(TreeWidget::NameCol, Qt::DisplayRole, iText);
-
-        if (TreeWidget::SchemaItem == iType) {
-            createNode(item, tr("Procedures"), TreeWidget::ProcedureNode);
-            createNode(item, tr("Tables"), TreeWidget::TableNode);
-            createNode(item, tr("Triggers"), TreeWidget::TriggerNode);
-            createNode(item, tr("Views"), TreeWidget::ViewNode);
-        }
-    }
-
-    return item;
-}
 
 }
 

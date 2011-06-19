@@ -27,54 +27,35 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef GUI_TREEWIDGETITEM_H
-#define GUI_TREEWIDGETITEM_H
+#ifndef DEFAULTCONTROLLER_H
+#define DEFAULTCONTROLLER_H
 
-//#include <common.h>
-//#include <common/DbObject.h>
-#include <gui/ContextMenuHolder.h>
+#include <gui/viewcontroller/TreeViewController.h>
 
-#include <QTreeWidgetItem>
-
-//using namespace DbObjects::Common;
-
-class QTreeWidget;
-
-namespace Gui
-{
+namespace Gui {
 
 /*!
- * \class TreeWidgetItem
- * \headerfile gui/TreeWidgetItem.h
- * \brief Defines custom tree widget item with a context menu.
+ * \class DefaultController
+ * \headerfile gui/viewcontroller/DefaultController.h
+ * \brief Default tree view controller
+ *
+ * Responsible for a tree of the following type
+ * +
+ * |_Users
+ * |_Schemas
+ *
+ * \todo comment
  */
-class TreeWidgetItem : public QObject, public QTreeWidgetItem, public Gui::ContextMenuHolder
+class DefaultController : public TreeViewController
 {
-    Q_OBJECT
-
     public:
-        /*! inerited from QTreeWidgetItem */
-        TreeWidgetItem(int iType = Type);
-        TreeWidgetItem(const QStringList &iStrings, int iType = Type);
-        TreeWidgetItem(QTreeWidget *iParent, int iType = Type);
-        TreeWidgetItem(QTreeWidget *iParent, const QStringList &iStrings, int iType = Type);
-        TreeWidgetItem(QTreeWidget *iParent, QTreeWidgetItem *iPreceding, int iType = Type);
-        TreeWidgetItem(QTreeWidgetItem *iParent, int iType = Type);
-        TreeWidgetItem(QTreeWidgetItem *iParent, const QStringList &iStrings, int iType = Type);
-        TreeWidgetItem(QTreeWidgetItem *iParent, QTreeWidgetItem *iPreceding, int iType = Type);
-        TreeWidgetItem(const QTreeWidgetItem &iOther);
+        DefaultController();
+        virtual ~DefaultController();
 
-        /*! Custom constructor */
-        TreeWidgetItem(const QString &iName, const QString &iSchemaName, int iType);
-
-        virtual ~TreeWidgetItem();
-
-    signals:
-        void contextMenuRequest(QContextMenuEvent *iEvent);
-
+        virtual void buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidgetItem*> &iItems);
 };
 
-} // namespace Gui
+}
 
-#endif // GUI_TREEWIDGETITEM_H
+#endif // DEFAULTCONTROLLER_H
 

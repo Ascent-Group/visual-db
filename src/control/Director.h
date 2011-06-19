@@ -32,6 +32,7 @@
 
 #include <connect/ConnectionInfo.h>
 #include <control/ContextMenuManager.h>
+#include <control/Converter.h>
 #include <control/DatabaseManager.h>
 #include <QObject>
 //#include <QSplashScreen>
@@ -92,6 +93,7 @@ class Director : public QObject
         QMap<QWidget *, Control::Context *> mRegistry;
         Control::ContextMenuManager mMenuMgr;
         Control::DatabaseManager mDbMgr;
+        Control::Converter mConverter;
 
         bool add(QWidget *, Control::Context *);
         bool remove(QWidget *);

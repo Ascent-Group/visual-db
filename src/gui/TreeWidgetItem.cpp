@@ -27,6 +27,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <gui/TreeWidget.h>
 #include <gui/TreeWidgetItem.h>
 #include <QStringList>
 #include <QTreeWidget>
@@ -93,6 +94,18 @@ TreeWidgetItem::TreeWidgetItem(const QTreeWidgetItem &iOther)
     : QTreeWidgetItem(iOther),
       Gui::ContextMenuHolder(dynamic_cast<QObject*>(this))
 {
+}
+
+/*!
+ * Custom constructor
+ */
+TreeWidgetItem::TreeWidgetItem(const QString &iName, const QString &iSchemaName, int iType)
+    : QTreeWidgetItem(/*iType*/),
+      Gui::ContextMenuHolder(dynamic_cast<QObject*>(this))
+{
+    setText(Gui::TreeWidget::TypeCol, QString::number(iType));
+    setText(Gui::TreeWidget::NameCol, iName);
+    setText(Gui::TreeWidget::SchemaCol, iSchemaName);
 }
 
 TreeWidgetItem::~TreeWidgetItem()

@@ -188,7 +188,7 @@ GraphicsScene::showOnScene(Gui::TreeWidgetItem *iTreeItem, int iCol, const QPoin
     }
 
     // get database object id
-    int objId = iTreeItem->text(TreeWidget::IdCol).toInt();
+    int objId = iTreeItem->text(TreeWidget::TypeCol).toInt();
 
     // if schema or table or view were double clicked
     if (TreeWidget::SchemaItem == objId || TreeWidget::TableItem == objId || TreeWidget::ViewItem == objId) {
@@ -196,8 +196,8 @@ GraphicsScene::showOnScene(Gui::TreeWidgetItem *iTreeItem, int iCol, const QPoin
         if (TreeWidget::SchemaItem == objId) {
             // add all its table children to the scene
             for (int i = 0; i < iTreeItem->childCount(); ++i) {
-                if (TreeWidget::TableNode == iTreeItem->child(i)->text(TreeWidget::IdCol).toInt() ||
-                        TreeWidget::ViewNode == iTreeItem->child(i)->text(TreeWidget::IdCol).toInt()) {
+                if (TreeWidget::TableNode == iTreeItem->child(i)->text(TreeWidget::TypeCol).toInt() ||
+                        TreeWidget::ViewNode == iTreeItem->child(i)->text(TreeWidget::TypeCol).toInt()) {
                     for (int j = 0; j < iTreeItem->child(i)->childCount(); ++j) {
                         QPoint pos(iPos.x() + j * SEEK_STEP, iPos.y() + j * SEEK_STEP);
                         objectList << showOnScene(dynamic_cast<Gui::TreeWidgetItem*>(iTreeItem->child(i)->child(j)), /*TreeWidget::NameCol*/iCol, pos, iCenterOn);

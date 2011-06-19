@@ -60,7 +60,8 @@ Director::Director(QObject *iParent)
       mBusyState(),
       mMainWindow(0),
       mRegistry(),
-      mDbMgr()
+      mDbMgr(),
+      mConverter(mDbMgr)
 {
 //    mSplashScreen.show();
 //    QTimer::singleShot(2000, &mSplashScreen, SLOT(close()));
@@ -478,8 +479,11 @@ Director::reloadDataRequested()
         Objects objects;
 //        tree->clear();
         mDbMgr.newObjects(ctx, objects);
+        QList<Gui::TreeWidgetItem*> items;
+        mConverter.toTreeWidgetItems(objects, items);
         // \todo tree should have a view controller
-        tree->displayObjects(objects);
+//        tree->displayObjects(items);
+        tree->display(items);
 
         mMainWindow->setEnableForActions(true);
     }

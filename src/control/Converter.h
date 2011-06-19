@@ -43,6 +43,11 @@
 #include <gui/graphicsitems/TableItem.h>
 #include <gui/graphicsitems/ViewItem.h>
 
+namespace Gui
+{
+class TreeWidgetItem;
+} // namespace Gui
+
 namespace DbObjects
 {
 
@@ -57,6 +62,8 @@ typedef DbObjectPtr<DbTable> DbTablePtr;
 
 namespace Control {
 
+class Director;
+
 /*!
  * \brief Auxiliary class that converts objects from one type to another.
  * \class Converter
@@ -66,7 +73,9 @@ class Converter {
     
     public:
         Converter(DatabaseManager &iDbManager);
-        
+
+        bool toTreeWidgetItems(const Objects &iObjects, QList<Gui::TreeWidgetItem*> &iItems);
+
         bool toTableItem(const Context &iContext, const DbObjects::Common::DbTablePtr &iDbTablePtr, 
                 Gui::GraphicsItems::TableItem &oTableItem);
         bool toDbTable(DbObjects::Common::DbTablePtr &oDbTablePtr, 
@@ -101,6 +110,8 @@ class Converter {
 
     private:
         DatabaseManager &mDbManager;
+
+    friend class Control::Director;
 };
 
 }

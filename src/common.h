@@ -32,6 +32,7 @@
 
 #include <QMultiHash>
 
+// < ObjName, <SchemaName, ObjType> >
 typedef QMultiHash<QString, QPair<QString, int> > Objects;
 
 #endif // COMMON_H

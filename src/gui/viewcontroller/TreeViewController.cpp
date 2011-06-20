@@ -29,7 +29,10 @@
 
 #include <gui/viewcontroller/TreeViewController.h>
 
-namespace Gui {
+namespace Gui
+{
+namespace ViewController
+{
 
 /*!
  * \brief Set font to bold
@@ -115,5 +118,6 @@ TreeViewController::insertItem(Gui::TreeWidgetItem *iParentNode, const QString &
     return item;
 }
 
+} // namespace ViewController
 } // namespace Gui
 

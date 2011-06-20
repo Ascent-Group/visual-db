@@ -60,6 +60,12 @@ namespace Gui
      * \brief Holds strategies that implement pretty items arrangement on the scene.
      */
     namespace Startegy { }
+
+    /*!
+     * \namespace ViewController
+     * \brief  Holds controller of view modes of widgets, such as tree widget or scene.
+     */
+    namespace ViewController { }
 }
 
 /*!

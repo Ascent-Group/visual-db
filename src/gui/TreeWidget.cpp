@@ -74,6 +74,7 @@ TreeWidget::~TreeWidget()
 void
 TreeWidget::display(const QList<Gui::TreeWidgetItem*> &iItems)
 {
+    using namespace Gui::ViewController;
     // \fixme mMode is set here for now
     mMode = DefaultMode;
     QScopedPointer<TreeViewController> viewController(TreeViewControllerFactory::create(mMode));

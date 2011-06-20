@@ -32,6 +32,8 @@
 
 namespace Gui
 {
+namespace ViewController
+{
 
 /*!
  *
@@ -39,7 +41,7 @@ namespace Gui
  *
  * \return View controller responsible for the given mode.
  */
-Gui::TreeViewController*
+Gui::ViewController::TreeViewController*
 TreeViewControllerFactory::create(Gui::TreeWidget::Mode iMode)
 {
     TreeViewController *controller = 0;
@@ -56,5 +58,6 @@ TreeViewControllerFactory::create(Gui::TreeWidget::Mode iMode)
     return controller;
 }
 
+} // namespace ViewController
 } // namespace Gui
 

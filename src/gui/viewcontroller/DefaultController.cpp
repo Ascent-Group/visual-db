@@ -32,7 +32,10 @@
 
 #include <QtDebug>
 
-namespace Gui {
+namespace Gui
+{
+namespace ViewController
+{
 
 /*!
  * Constructor
@@ -152,5 +155,6 @@ DefaultController::buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidget
 }
 
 
+} // namespace ViewController
 } // namespace Gui
 

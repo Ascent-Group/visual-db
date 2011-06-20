@@ -33,9 +33,13 @@
 #include <gui/TreeWidget.h>
 #include <QList>
 
-namespace Gui {
+namespace Gui
+{
 
 class TreeWidgetItem;
+
+namespace ViewController
+{
 
 /*!
  * \class TreeViewController
@@ -61,7 +65,8 @@ class TreeViewController
         Gui::TreeWidgetItem* insertItem(Gui::TreeWidgetItem *, const QString &, Gui::TreeWidget::Item, bool iDragEnabled = false);
 };
 
-}
+} // namespace ViewController
+} // namespace Gui
 
 #endif // TREEVIEWCONTROLLER_H
 

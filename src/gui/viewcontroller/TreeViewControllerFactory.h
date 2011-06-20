@@ -32,7 +32,10 @@
 
 #include <gui/TreeWidget.h>
 
-namespace Gui {
+namespace Gui
+{
+namespace ViewController
+{
 
 class TreeViewController;
 
@@ -47,6 +50,7 @@ class TreeViewControllerFactory
         static TreeViewController* create(Gui::TreeWidget::Mode iMode);
 };
 
+} // namespace ViewController
 } // namespace Gui
 
 #endif // TREEVIEWCONTROLLERFACTORY_H

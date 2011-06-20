@@ -32,17 +32,36 @@
 
 #include <gui/viewcontroller/TreeViewController.h>
 
-namespace Gui {
+namespace Gui
+{
+namespace ViewController
+{
 
 /*!
  * \class DefaultController
  * \headerfile gui/viewcontroller/DefaultController.h
  * \brief Default tree view controller
  *
- * Responsible for a tree of the following type
+ * Responsible for building a tree of the following type:
+ *
+ * <pre>
  * +
- * |_Users
+ * |_Roles
+ * |_Languages
  * |_Schemas
+ *   |_&lt;schema 1&gt;
+ *     |_Tables
+ *       |_&lt;table 1&gt;
+ *       |_...
+ *       |_&lt;table N&gt;
+ *     |_Triggers
+ *     |_Procedures
+ *     |_Views
+ *   |_&lt;schema 2&gt;
+ *   |_...
+ *   |_&lt;schema N&gt;
+ * |_Indices
+ * </pre>
  *
  * \todo comment
  */
@@ -55,7 +74,8 @@ class DefaultController : public TreeViewController
         virtual void buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidgetItem*> &iItems);
 };
 
-}
+} // namespace ViewController
+} // namespace Gui
 
 #endif // DEFAULTCONTROLLER_H
 

@@ -47,7 +47,7 @@ TreeWidgetItemTest::hierarchyTest()
 {
     Gui::TreeWidgetItem *item = new Gui::TreeWidgetItem();
 
-    QTreeWidgetItem superItem = dynamic_cast<QTreeWidgetItem*>(item);
+    QTreeWidgetItem *superItem = dynamic_cast<QTreeWidgetItem*>(item);
     if (superItem && dynamic_cast<QObject*>(superItem)) {
         QVERIFY(0 == dynamic_cast<QObject*>(item));
     } else {

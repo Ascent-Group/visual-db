@@ -27,31 +27,21 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/ContextMenuHolder.h>
-#include <gui/ContextMenuHolderTest.h>
+#ifndef DEFAULTCONTROLLERTEST_H
+#define DEFAULTCONTROLLERTEST_H
 
-void
-ContextMenuHolderTest::initTestCase()
+#include <QtTest/QtTest>
+
+class DefaultControllerTest : public QObject
 {
+    Q_OBJECT
 
-}
+    private slots:
+        void initTestCase();
+        void cleanupTestCase();
 
-void
-ContextMenuHolderTest::cleanupTestCase()
-{
+        void buildTreeTest();
+};
 
-}
-
-void
-ContextMenuHolderTest::hierarchyTest()
-{
-    CustomWidget *ctxMenuHolder = new CustomWidget();
-    QVERIFY(0 == dynamic_cast<QObject*>(ctxMenuHolder));
-}
-
-void
-ContextMenuHolderTest::contextMenuTest()
-{
-    QVERIFY(0);
-}
+#endif // DEFAULTCONTROLLERTEST_H
 

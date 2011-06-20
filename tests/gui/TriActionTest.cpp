@@ -27,30 +27,23 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/ContextMenuHolder.h>
-#include <gui/ContextMenuHolderTest.h>
+#include <gui/TriAction.h>
+#include <gui/TriActionTest.h>
 
 void
-ContextMenuHolderTest::initTestCase()
+TriActionTest::initTestCase()
 {
 
 }
 
 void
-ContextMenuHolderTest::cleanupTestCase()
+TriActionTest::cleanupTestCase()
 {
 
 }
 
 void
-ContextMenuHolderTest::hierarchyTest()
-{
-    CustomWidget *ctxMenuHolder = new CustomWidget();
-    QVERIFY(0 == dynamic_cast<QObject*>(ctxMenuHolder));
-}
-
-void
-ContextMenuHolderTest::contextMenuTest()
+TriActionTest::stateTest()
 {
     QVERIFY(0);
 }

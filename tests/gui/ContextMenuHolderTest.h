@@ -30,7 +30,9 @@
 #ifndef CONTEXTMENUHOLDERTEST_H
 #define CONTEXTMENUHOLDERTEST_H
 
+#include <gui/ContextMenuHolder.h>
 #include <QtTest/QtTest>
+#include <QLabel>
 
 class ContextMenuHolderTest : public QObject
 {
@@ -42,6 +44,20 @@ class ContextMenuHolderTest : public QObject
 
         void hierarchyTest();
         void contextMenuTest();
+};
+
+class CustomWidget : public QLabel, public Gui::ContextMenuHolder
+{
+    Q_OBJECT
+
+    public:
+        CustomWidget()
+            : QLabel(),
+              Gui::ContextMenuHolder(this)
+        {}
+
+    signals:
+        void contextMenuRequest(QContextMenuEvent*);
 };
 
 #endif // CONTEXTMENUHOLDERTEST_H

@@ -4,7 +4,6 @@ QT += testlib sql network xml
 #CONFIG += object_with_source
 CONFIG += debug
 #CONFIG += release
-
 CONFIG(debug, debug|release):DEFINES += DEBUG
 
 # We need to override old TARGET and DESTDIR
@@ -90,6 +89,15 @@ SOURCES = $$PWD/main.cpp \
           $$TOP_SRC_DIR/consts.cpp
 
 HEADERS = $$TOP_SRC_DIR/consts.h
+
+###############################
+### TEST_GUI_VIEWCONTROLLER ###
+###############################
+HEADERS += $$files($$PWD/gui/viewcontroller/*.h) \
+           $$files($$TOP_SRC_DIR/gui/viewcontroller/*.h)
+
+SOURCES += $$files($$PWD/gui/viewcontroller/*.cpp) \
+           $$files($$TOP_SRC_DIR/gui/viewcontroller/*.cpp)
 
 #########################
 ### TEST_GUI_STRATEGY ###

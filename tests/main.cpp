@@ -47,6 +47,12 @@
 #include <gui/TabWidgetTest.h>
 #include <gui/TreeWidgetTest.h>
 #include <gui/TreeWidgetItemTest.h>
+#include <gui/TriActionTest.h>
+
+// gui/viewcontroller
+#include <gui/viewcontroller/TreeViewControllerTest.h>
+#include <gui/viewcontroller/TreeViewControllerFactoryTest.h>
+#include <gui/viewcontroller/DefaultControllerTest.h>
 
 // dbobjects
 #include <dbobjects/common/DatabaseTest.h>
@@ -67,7 +73,7 @@
 #include <common/DatabaseCreator.h>
 
 
-const QString GUI_BEAHVIOUR = "behaviour";
+const QString GUI_BEHAVIOUR = "behaviour";
 const QString CONNECT = "connect";
 const QString CONTROL = "control";
 const QString DBOBJECTS_COMMON = "common";
@@ -75,6 +81,7 @@ const QString DBOBJECTS_PSQL = "psql";
 const QString DBOBJECTS_MYSQL = "mysql";
 const QString GUI = "gui";
 const QString GUI_STRATEGY = "strategy";
+const QString GUI_VIEW_CONTROLLER = "viewcontroller";
 
 typedef QPair<QString, QObject*> RegistryRecord;
 typedef QMultiMap<QString, RegistryRecord> Registry;
@@ -152,15 +159,21 @@ int main(int argc, char *argv[])
     REGISTER_TEST_SUITE(GUI, TabWidget);
     REGISTER_TEST_SUITE(GUI, TreeWidget);
     REGISTER_TEST_SUITE(GUI, TreeWidgetItem);
+    REGISTER_TEST_SUITE(GUI, TriAction);
 
     // behaviour
-    REGISTER_TEST_SUITE(GUI_BEAHVIOUR, AddTableCommand);
-    REGISTER_TEST_SUITE(GUI_BEAHVIOUR, MoveTableCommand);
+    REGISTER_TEST_SUITE(GUI_BEHAVIOUR, AddTableCommand);
+    REGISTER_TEST_SUITE(GUI_BEHAVIOUR, MoveTableCommand);
 
     // strategy
     REGISTER_TEST_SUITE(GUI_STRATEGY, Edge);
     REGISTER_TEST_SUITE(GUI_STRATEGY, Graph);
     REGISTER_TEST_SUITE(GUI_STRATEGY, Node);
+
+    // view controller
+    REGISTER_TEST_SUITE(GUI_VIEW_CONTROLLER, TreeViewController);
+    REGISTER_TEST_SUITE(GUI_VIEW_CONTROLLER, TreeViewControllerFactory);
+    REGISTER_TEST_SUITE(GUI_VIEW_CONTROLLER, DefaultController);
 
     QSettings settings("./tests.ini", QSettings::IniFormat);
     /*!

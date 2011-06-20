@@ -27,30 +27,29 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <gui/ContextMenuHolder.h>
-#include <gui/ContextMenuHolderTest.h>
+#include <gui/viewcontroller/TreeViewController.h>
+#include <gui/viewcontroller/TreeViewControllerTest.h>
 
 void
-ContextMenuHolderTest::initTestCase()
+TreeViewControllerTest::initTestCase()
 {
 
 }
 
 void
-ContextMenuHolderTest::cleanupTestCase()
+TreeViewControllerTest::cleanupTestCase()
 {
 
 }
 
 void
-ContextMenuHolderTest::hierarchyTest()
+TreeViewControllerTest::createNodeTest()
 {
-    CustomWidget *ctxMenuHolder = new CustomWidget();
-    QVERIFY(0 == dynamic_cast<QObject*>(ctxMenuHolder));
+    QVERIFY(0);
 }
 
 void
-ContextMenuHolderTest::contextMenuTest()
+TreeViewControllerTest::insertItemTest()
 {
     QVERIFY(0);
 }

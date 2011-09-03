@@ -60,6 +60,7 @@ Director::Director(QObject *iParent)
       mBusyState(),
       mMainWindow(0),
       mRegistry(),
+      mMenuMgr(this),
       mDbMgr(),
       mConverter(mDbMgr)
 {
@@ -149,8 +150,7 @@ Director::initialize()
 
         connect(mMainWindow, SIGNAL(tabChanged(Gui::SceneWidget *)), this, SLOT(tabChanged(Gui::SceneWidget *)));
 
-        connect(this, SIGNAL(logMessageRequest(const QString &)),
-                mMainWindow, SLOT(printMsg(const QString &)));
+        connect(this, SIGNAL(logMessageRequest(const QString &)), mMainWindow, SLOT(printMsg(const QString &)));
 
         // \fixme Set more adequate text
 //        mSplashScreen.showMessage("Loading something else...", Qt::AlignBottom | Qt::AlignLeft, Qt::cyan);
@@ -395,6 +395,8 @@ Director::showConnectionDialog(bool iLoadSession)
     SceneWidget *scene = new SceneWidget();
     // \todo uncomment next line when scene starts inheriting ContextMenuHolder
 //    scene->setContextMenu(mMenuMgr.menu(ContextMenuManager::MENU_SCENE_WIDGET));
+    connect(scene, SIGNAL(contextMenuRequest(QContextMenuEvent *)),
+            &mMenuMgr, SLOT(contextMenuRequested(QContextMenuEvent *)));
     add(scene, ctx);
     mMainWindow->addScene(scene, QString("Scene: %1").arg(tabTitle));
 
@@ -480,7 +482,7 @@ Director::reloadDataRequested()
 //        tree->clear();
         mDbMgr.newObjects(ctx, objects);
         QList<Gui::TreeWidgetItem*> items;
-        mConverter.toTreeWidgetItems(objects, items);
+        mConverter.toTreeWidgetItems(objects, items, &mMenuMgr);
         // \todo tree should have a view controller
 //        tree->displayObjects(items);
         tree->display(items);
@@ -639,6 +641,20 @@ void
 Director::tabChanged(Gui::SceneWidget *iScene)
 {
     mMainWindow->activateTree(findTree(findContext(iScene)));
+}
+
+/*!
+ * Slot. Handles expand all items action toggling.
+ *
+ * \param[in] iTree - Tree widget whose items are to be expanded/collapsed.
+ * \param[in] iFlag - Indicates whether to expand(true) or collapse(flase) items.
+ */
+void
+Director::expandAllTreeItems(Gui::TreeWidget *iTree, bool iFlag)
+{
+    if (iTree) {
+        iTree->setExpandAll(iFlag);
+    }
 }
 
 /*!

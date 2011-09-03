@@ -46,6 +46,7 @@ TreeWidget::TreeWidget(QWidget *iParent)
     : QTreeWidget(iParent),
       Gui::ContextMenuHolder(this),
       mMode(UnknownMode),
+      mAllItemExpanded(false),
       mIndicesNode(0),
       mLanguagesNode(0),
       mRolesNode(0),
@@ -59,6 +60,7 @@ TreeWidget::TreeWidget(QWidget *iParent)
     setAnimated(true);
     setFont(QFont("Arial", 8));
     setSelectionMode(QAbstractItemView::ExtendedSelection);
+    setContextMenuPolicy(Qt::DefaultContextMenu);
 }
 
 /*!
@@ -66,6 +68,15 @@ TreeWidget::TreeWidget(QWidget *iParent)
  */
 TreeWidget::~TreeWidget()
 {
+}
+
+/*!
+ *
+ */
+bool
+TreeWidget::allItemsExpanded() const
+{
+    return mAllItemExpanded;
 }
 
 /*!
@@ -172,6 +183,22 @@ TreeWidget::nodeForItem(TreeWidget::Item iType) const
     return static_cast<TreeWidget::Node>(TreeWidget::UnkNode + iType);
 }
 
+/*!
+ *
+ * \param[in] iFlag - Indicates whether all item should be expanded (true) or collapse
+ * (false).
+ */
+void
+TreeWidget::setExpandAll(bool iFlag)
+{
+    if (iFlag) {
+        expandAll();
+    } else {
+        collapseAll();
+    }
+
+    mAllItemExpanded = iFlag;
+}
 
 }
 

@@ -28,6 +28,7 @@
  */
 
 #include <control/ContextMenuManager.h>
+#include <control/Director.h>
 #include <gui/TreeWidget.h>
 #include <gui/SceneWidget.h>
 #include <gui/TriAction.h>
@@ -42,10 +43,10 @@ namespace Control
 /*!
  * Constructor
  */
-ContextMenuManager::ContextMenuManager()
+ContextMenuManager::ContextMenuManager(const Control::Director *iDirector)
 {
     try {
-        createMenus();
+        createMenus(iDirector);
 
         // \todo set context menu for tree widget items
         // \todo set context menu for graphics items
@@ -64,14 +65,21 @@ ContextMenuManager::~ContextMenuManager()
 }
 
 /*!
- *
+ * Creates context menus for all widgets and establishes all required signal/slot
+ * connections.
  */
 void
-ContextMenuManager::createMenus()
+ContextMenuManager::createMenus(const Control::Director *iDirector)
 {
     // Context menu for tree widget
     QMenu *treeWidgetMenu = new QMenu();
-//    treeWidgetMenu->addAction(dynamic_cast<QAction*>(new Gui::TriAction("ttt", this)));
+    QAction *expandAllAction = new QAction(tr("Expand/Collapse all"), treeWidgetMenu);
+    expandAllAction->setCheckable(true);
+    connect(expandAllAction, SIGNAL(toggled(bool)),
+            this, SLOT(expandAllActionToggled(bool)));
+    connect(this, SIGNAL(expandAllTreeItems(Gui::TreeWidget*, bool)),
+            iDirector, SLOT(expandAllTreeItems(Gui::TreeWidget*, bool)));
+    treeWidgetMenu->addAction(expandAllAction);
     mMenus.insert(MENU_TREE_WIDGET, treeWidgetMenu);
 
     // context menu for table item in tree widget
@@ -87,7 +95,9 @@ ContextMenuManager::createMenus()
 }
 
 /*!
- * \todo Comment
+ * Slot. Handles context menu request emitted by a child of ContextMenuHolder.
+ *
+ * \param[in] iEvent - Context menu event.
  */
 void
 ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent)
@@ -106,20 +116,22 @@ ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent)
         // if a single item is selected, then get its type and show its menu
         if (0 == items.size()) {
             menu = tree->contextMenu();
-//            int itemType = items.first()->text(TreeWidget::IdCol).toUInt();
-//            menu = mMenus.value(treeItemType2MenuType(itemType));
+            // \fixme expandAllAction is obtained by its index assuming that we added it first
+            menu->actions().at(0)->setChecked(tree->allItemsExpanded());
         // in case several items are selected, then we need to get types of these items.
+        } else if (1 == items.size()) {
+            menu = dynamic_cast<Gui::TreeWidgetItem*>(items.first())->contextMenu();
         } else {
             QSet<quint32> itemTypes;
             foreach (QTreeWidgetItem *item, items) {
                 itemTypes.insert(item->text(TreeWidget::TypeCol).toUInt());
             }
-            // if only one type, then get its menu and show it
             // \todo find intersection of menus
             // otherwise, build an intersection menu out of these types' menus
         }
     } else if ((scene = dynamic_cast<SceneWidget*>(sender()))) {
     } else {
+        qDebug() << "This widget is not supported by ContextMenuManager!";
     }
 
     qDebug() << "ContextMenuManager::contextMenuRequested> Menu = " << menu;
@@ -141,59 +153,19 @@ ContextMenuManager::menu(Control::ContextMenuManager::MenuType iType) const
 }
 
 /*!
- *
+ * Slot. Handles expanding/collapsing of tree items. Executed when expandAll action is
+ * toggled.
  */
-ContextMenuManager::MenuType
-ContextMenuManager::treeItemType2MenuType(quint32 iType) const
+void
+ContextMenuManager::expandAllActionToggled(bool iFlag)
 {
-    using namespace Gui;
+    QAction *action = dynamic_cast<QAction*>(sender());
+    QMenu *menu = dynamic_cast<QMenu*>(action->parentWidget());
+    QPoint point = menu->pos();
+    Gui::TreeWidget *tree = dynamic_cast<Gui::TreeWidget*>(qApp->widgetAt(point)->parent());
 
-    ContextMenuManager::MenuType menuType = MENU_UNKNOWN;
-
-    switch (iType) {
-        case TreeWidget::SchemaItem:
-            break;
-        case TreeWidget::TableItem:
-            menuType = ContextMenuManager::MENU_TREE_TABLE_ITEM;
-            break;
-        case TreeWidget::ViewItem:
-            break;
-        case TreeWidget::RoleItem:
-            break;
-        case TreeWidget::TriggerItem:
-            break;
-        case TreeWidget::LanguageItem:
-            break;
-        case TreeWidget::IndexItem:
-            break;
-        case TreeWidget::ProcedureItem:
-            break;
-        case TreeWidget::SchemaNode:
-            break;
-        case TreeWidget::TableNode:
-            break;
-        case TreeWidget::ViewNode:
-            break;
-        case TreeWidget::RoleNode:
-            break;
-        case TreeWidget::TriggerNode:
-            break;
-        case TreeWidget::LanguageNode:
-            break;
-        case TreeWidget::IndexNode:
-            break;
-        case TreeWidget::ProcedureNode:
-            break;
-        case TreeWidget::UnkItem:
-        case TreeWidget::UnkNode:
-        default:
-            break;
-
-    }
-
-    return menuType;
-
+    emit expandAllTreeItems(tree, iFlag);
 }
 
-}
+} // namespace
 

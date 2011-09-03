@@ -128,6 +128,8 @@ class Director : public QObject
 
         void tabChanged(Gui::SceneWidget *iScene);
 
+        void expandAllTreeItems(Gui::TreeWidget *, bool);
+
     signals:
         // signals for internal use
         /*! Used to signal the state machine that we can enter idle state. */
@@ -139,7 +141,6 @@ class Director : public QObject
         void requestProcessed();
         /*! Used to print messages to log panel */
         void logMessageRequest(const QString &);
-
 
     private:
 #if DEBUG

@@ -36,8 +36,15 @@
 class QContextMenuEvent;
 class QMenu;
 
+namespace Gui
+{
+class TreeWidget;
+}
+
 namespace Control
 {
+
+class Director;
 
 /*!
  * \class ContextMenuManager
@@ -59,7 +66,7 @@ class ContextMenuManager : public QObject
             MENU_SCENE_WIDGET
         };
 
-        ContextMenuManager();
+        ContextMenuManager(const Control::Director *iDirector);
         ~ContextMenuManager();
 
     public slots:
@@ -67,12 +74,16 @@ class ContextMenuManager : public QObject
 
         const QMenu* menu(Control::ContextMenuManager::MenuType) const;
 
+        void expandAllActionToggled(bool);
+
     private:
         QMap<MenuType, QMenu *> mMenus;
 
     private:
-        void createMenus();
-        ContextMenuManager::MenuType treeItemType2MenuType(quint32 iType) const;
+        void createMenus(const Control::Director *iDirector);
+
+    signals:
+        void expandAllTreeItems(Gui::TreeWidget *, bool);
 };
 
 } // namespace Control

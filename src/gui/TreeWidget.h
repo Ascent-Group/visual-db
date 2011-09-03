@@ -94,11 +94,14 @@ class TreeWidget : public QTreeWidget, public Gui::ContextMenuHolder
             DefaultMode
         };
 
+        bool allItemsExpanded() const;
+
         void display(const QList<Gui::TreeWidgetItem*> &iItems);
 
         Gui::TreeWidgetItem* findItem(Gui::TreeWidgetItem *iParent, const QString &iValue, int iColumn) const;
         TreeWidget::Node nodeForItem(TreeWidget::Item type) const;
 
+        void setExpandAll(bool);
 
 //    signals:
 //        void itemDoubleClicked();
@@ -110,6 +113,7 @@ class TreeWidget : public QTreeWidget, public Gui::ContextMenuHolder
 
     private:
         Mode mMode;
+        bool mAllItemExpanded;
 
         Gui::TreeWidgetItem *mIndicesNode;
         Gui::TreeWidgetItem *mLanguagesNode;

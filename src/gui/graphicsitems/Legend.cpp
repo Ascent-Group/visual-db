@@ -108,7 +108,10 @@ Legend::refresh()
 //}
 
 /*!
- * \override
+ * \param[in] iPainter - Painter that will be used to draw field image.
+ * \param[in] iIdx - Index of a field whose image is going to be drawn.
+ *
+ * \see GraphicsItem::paintFieldImage
  */
 void
 Legend::paintFieldImage(QPainter *iPainter, int iIdx)
@@ -141,7 +144,7 @@ Legend::paintFieldImage(QPainter *iPainter, int iIdx)
 }
 
 /*!
- *
+ * \see GraphicsItem::paintAnchor
  */
 void
 Legend::paintAnchor(QPainter *)
@@ -149,8 +152,18 @@ Legend::paintAnchor(QPainter *)
 
 }
 
-/*
+/*!
+ * \see GraphicsItem::paintAdditionalInfo
+ */
+void
+Legend::paintAdditionalInfo(QPainter*)
+{
+}
+
+/*!
+ * \param[in] iItem - Graphics item to convert to Legend.
  *
+ * \return Graphics item casted to Legend.
  */
 Legend *
 toLegend(QGraphicsItem *iItem)

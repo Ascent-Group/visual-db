@@ -68,12 +68,12 @@ class ViewItem : public DbObjectItem
 
         QString name() const;
         QString schemaName() const;
-        
+
         QDomElement toXml(QDomDocument &) const;
         // \todo add fromXml(...)
 
         void setFieldsTypesVisible(bool);
-        void setIndicesVisible(bool);
+//        void setIndicesVisible(bool);
 
     public:
         enum { Type = UserType + 8 };

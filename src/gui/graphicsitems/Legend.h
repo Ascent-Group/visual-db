@@ -57,7 +57,7 @@ class Legend : public GraphicsItem
     protected:
         virtual void paintFieldImage(QPainter *, int);
         virtual void paintAnchor(QPainter *);
-        virtual void paintAdditionalInfo(QPainter*) {};
+        virtual void paintAdditionalInfo(QPainter*);
 
     private:
         static const int DEFAULT_X = 335;

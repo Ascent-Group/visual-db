@@ -56,7 +56,7 @@ class TreeViewController
          * Virtual function for building the complete hierarchy for the given view mode.
          *
          * \param[in] iTree - Tree widget that is going to display items
-         * \param[in] iItem - List of tree widget items
+         * \param[in] iItems - List of tree widget items
          */
         virtual void buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidgetItem*> &iItems) = 0;
 

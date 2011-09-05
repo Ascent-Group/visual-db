@@ -94,14 +94,18 @@ TreeViewController::createNode(Gui::TreeWidgetItem *iParent, const QString &iNam
  * \param[in] iParentNode - Parent item we will populate.
  * \param[in] iText - Text to display by the new item.
  * \param[in] iType - Item type.
- * \param[in] iDrabEnabled - Indicates whether these items should be draggable or not.
+ * \param[in] iDragEnabled - Indicates whether these items should be draggable or not.
  *
  * \return Tree widget item that was created
  */
 Gui::TreeWidgetItem*
-TreeViewController::insertItem(Gui::TreeWidgetItem *iParentNode, const QString &iText, TreeWidget::Item iType, bool iDragEnabled)
+TreeViewController::insertItem(Gui::TreeWidgetItem *iParentNode,
+                               const QString &iText,
+                               TreeWidget::Item iType,
+                               bool iDragEnabled)
 {
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+
     if (iDragEnabled) {
         flags |= Qt::ItemIsDragEnabled;
     }

@@ -54,7 +54,11 @@ DefaultController::~DefaultController()
 }
 
 /*!
- * \todo comment
+ * Builds a tree with default item arrangement.
+ *
+ * \param[in] iTree - Tree that will display item hierarchy.
+ * \param[in] iItems - List of items to build the hierarchy from.
+ *
  * \see TreeViewController::buildTree
  */
 void

@@ -72,7 +72,9 @@ class TableItem : public DbObjectItem
         {
             FullName(const QString &, const QString &);
 
+            /*! Name of object's schema */
             QString mSchemaName;
+            /*! Name of object */
             QString mTableName;
         };
 

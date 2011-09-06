@@ -74,7 +74,7 @@ class Converter {
     public:
         Converter(DatabaseManager &iDbManager);
 
-        bool toTreeWidgetItems(const Objects &iObjects, QList<Gui::TreeWidgetItem*> &iItems);
+        bool toTreeWidgetItems(const Objects &iObjects, QList<Gui::TreeWidgetItem*> &iItems, const ContextMenuManager *iMenuMgr);
 
         bool toTableItem(const Context &iContext, const DbObjects::Common::DbTablePtr &iDbTablePtr, 
                 Gui::GraphicsItems::TableItem &oTableItem);

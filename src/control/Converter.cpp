@@ -49,13 +49,14 @@ Converter::~Converter()
  *
  */
 bool
-Converter::toTreeWidgetItems(const Objects &iObjects, QList<Gui::TreeWidgetItem*> &iItems)
+Converter::toTreeWidgetItems(const Objects &iObjects,
+                             QList<Gui::TreeWidgetItem*> &iItems,
+                             const ContextMenuManager *iMenuMgr)
 {
     using namespace Gui;
     using namespace Control;
 
     TreeWidgetItem *item;
-    ContextMenuManager menuMgr;
     const QMenu *menu = 0;
     QString parentName;
     TreeWidget::Item type;
@@ -75,7 +76,7 @@ Converter::toTreeWidgetItems(const Objects &iObjects, QList<Gui::TreeWidgetItem*
                 case TreeWidget::LanguageItem:
                 case TreeWidget::IndexItem:
                 case TreeWidget::ProcedureItem:
-                    menu = menuMgr.menu(ContextMenuManager::MENU_TREE_TABLE_ITEM);
+                    menu = iMenuMgr->menu(ContextMenuManager::MENU_TREE_TABLE_ITEM);
                     break;
                 default:
                     break;

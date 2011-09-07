@@ -83,8 +83,7 @@ ContextMenuManager::createMenus(const Control::Director *iDirector)
     }
 
 
-//    QMenu *treeViewItemMenu = createTreeViewItemMenu(iDirector);
-    QMenu *treeViewItemMenu = createTreeTableItemMenu(iDirector);
+    QMenu *treeViewItemMenu = createTreeViewItemMenu(iDirector);
     if (treeViewItemMenu) {
         mMenus.insert(MENU_TREE_VIEW_ITEM, treeViewItemMenu);
     }
@@ -118,8 +117,6 @@ ContextMenuManager::createTreeWidgetMenu(const Control::Director *iDirector)
         QAction *expandAllAction = new QAction(tr("Expand/Collapse all"), menu);
         expandAllAction->setCheckable(true);
 
-        QAction *Action = new QAction(tr("???"), menu);
-
         // connections
         connect(expandAllAction, SIGNAL(toggled(bool)),
                 this, SLOT(expandAllActionToggled(bool)));
@@ -137,8 +134,11 @@ ContextMenuManager::createTreeWidgetMenu(const Control::Director *iDirector)
 }
 
 /*!
- * \todo Implement
- * \todo Comment
+ * Construct a context menu for table items held by tree widget.
+ *
+ * \param[in] iDirector - Instance of director. Used for connections.
+ *
+ * \return Constructed menu or 0 in case of failure.
  */
 QMenu*
 ContextMenuManager::createTreeTableItemMenu(const Control::Director *iDirector)
@@ -146,9 +146,16 @@ ContextMenuManager::createTreeTableItemMenu(const Control::Director *iDirector)
     QMenu *menu = 0;
     try {
         menu = new QMenu();
+
+        // actions
         QAction *addAction = new QAction(tr("Add"), menu);
         QAction *describeAction = new QAction(tr("Describe"), menu);
         QAction *queryAction = new QAction(tr("Query"), menu);
+
+        // connections
+        connect(addAction, SIGNAL(triggered()), iDirector, SLOT(addTreeItemsToScene()));
+        connect(describeAction, SIGNAL(triggered()), iDirector, SLOT(describeItems()));
+        connect(queryAction, SIGNAL(triggered()), iDirector, SLOT(queryItems()));
 
         menu->addAction(addAction);
         menu->addAction(describeAction);
@@ -156,16 +163,24 @@ ContextMenuManager::createTreeTableItemMenu(const Control::Director *iDirector)
     } catch (...) {
         return 0;
     }
+
     return menu;
 }
 
 /*!
- * \todo Implement
- * \todo Comment
+ * Construct a context menu for view items held by tree widget.
+ *
+ * \param[in] iDirector - Instance of director. Used for connections.
+ *
+ * \return Constructed menu or 0 in case of failure.
  */
 QMenu*
 ContextMenuManager::createTreeViewItemMenu(const Control::Director *iDirector)
 {
+    // \note Since views behave almost just like tables, we can use
+    // createTreeTableItemMenu() function to create a context menu for view items and we
+    // won't have code duplication.
+    return createTreeTableItemMenu(iDirector);
 }
 
 /*!

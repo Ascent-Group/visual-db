@@ -190,7 +190,7 @@ MainWindow::activateTree(Gui::TreeWidget *iTree) const
  * Returns tree which is currently active. This function is used by director to determine
  * the current active context.
  *
- * \return Pointer to tree
+ * \return Pointer to tree which is currently on top.
  */
 Gui::TreeWidget*
 MainWindow::activeTree() const

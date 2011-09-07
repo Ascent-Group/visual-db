@@ -658,6 +658,46 @@ Director::expandAllTreeItems(Gui::TreeWidget *iTree, bool iFlag)
 }
 
 /*!
+ * Slot. Handles adding of tree widget items to a graphics scene. Executed when an
+ * addAction is triggered via context menu of a table items, or view items (or both).
+ *
+ * \todo Implement
+ */
+void
+Director::addItemsToScene()
+{
+    Gui::TreeWidget *tree = mMainWindow->activeTree();
+    // \todo get selected items
+    // \todo foreach selected item, add it to scene
+}
+
+/*!
+ * Slot. Handles describing of table items and/or view items. Executed when a
+ * describeAcition is triggered via context menu of table/view items.
+ *
+ * \todo Implement
+ */
+void
+Director::describeItems()
+{
+    Gui::TreeWidget *tree = mMainWindow->activeTree();
+    // \todo get selected items
+}
+
+/*!
+ * Slot. Handles running an SQL query for table/view items of tree widget. Executed when a
+ * queryAction is triggered via context menu of table/view items.
+ *
+ * \todo Implement
+ */
+void
+Director::queryItems()
+{
+    Gui::TreeWidget *tree = mMainWindow->activeTree();
+    // \todo get selected items
+}
+
+/*!
  * \note Global helper function
  * Construct a connection name for the given context
  *

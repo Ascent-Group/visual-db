@@ -128,7 +128,11 @@ class Director : public QObject
 
         void tabChanged(Gui::SceneWidget *iScene);
 
+        /*! Slots for handling context menu actions */
         void expandAllTreeItems(Gui::TreeWidget *, bool);
+        void addItemsToScene();
+        void describeItems();
+        void queryItems();
 
     signals:
         // signals for internal use

@@ -62,6 +62,7 @@ class ContextMenuManager : public QObject
 
             MENU_TREE_WIDGET,
             MENU_TREE_TABLE_ITEM,
+            MENU_TREE_VIEW_ITEM,
 
             MENU_SCENE_WIDGET
         };
@@ -81,6 +82,11 @@ class ContextMenuManager : public QObject
 
     private:
         void createMenus(const Control::Director *iDirector);
+        QMenu* createTreeWidgetMenu(const Control::Director *iDirector);
+        QMenu* createTreeTableItemMenu(const Control::Director *iDirector);
+        QMenu* createTreeViewItemMenu(const Control::Director *iDirector);
+        QMenu* createSceneWidgetMenu(const Control::Director *iDirector);
+
 
     signals:
         void expandAllTreeItems(Gui::TreeWidget *, bool);

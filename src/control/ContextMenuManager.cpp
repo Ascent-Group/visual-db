@@ -71,27 +71,110 @@ ContextMenuManager::~ContextMenuManager()
 void
 ContextMenuManager::createMenus(const Control::Director *iDirector)
 {
-    // Context menu for tree widget
-    QMenu *treeWidgetMenu = new QMenu();
-    QAction *expandAllAction = new QAction(tr("Expand/Collapse all"), treeWidgetMenu);
-    expandAllAction->setCheckable(true);
-    connect(expandAllAction, SIGNAL(toggled(bool)),
-            this, SLOT(expandAllActionToggled(bool)));
-    connect(this, SIGNAL(expandAllTreeItems(Gui::TreeWidget*, bool)),
-            iDirector, SLOT(expandAllTreeItems(Gui::TreeWidget*, bool)));
-    treeWidgetMenu->addAction(expandAllAction);
-    mMenus.insert(MENU_TREE_WIDGET, treeWidgetMenu);
+    QMenu *treeWidgetMenu = createTreeWidgetMenu(iDirector);
+    if (treeWidgetMenu) {
+        mMenus.insert(MENU_TREE_WIDGET, treeWidgetMenu);
+    }
 
-    // context menu for table item in tree widget
-    QMenu *tableTreeItemMenu = new QMenu();
-//    tableTreeItemMenu->addAction(ui.mAddTableAction);
-//    tableTreeItemMenu->addAction(ui.mDescribeObjectAction);
-//    tableTreeItemMenu->addAction(ui.mQueryDataAction);
-    mMenus.insert(MENU_TREE_TABLE_ITEM, tableTreeItemMenu);
 
-    // context menu for scene
-    QMenu *sceneWidgetMenu = new QMenu();
-    mMenus.insert(MENU_SCENE_WIDGET, sceneWidgetMenu);
+    QMenu *treeTableItemMenu = createTreeTableItemMenu(iDirector);
+    if (treeTableItemMenu) {
+        mMenus.insert(MENU_TREE_TABLE_ITEM, treeTableItemMenu);
+    }
+
+
+//    QMenu *treeViewItemMenu = createTreeViewItemMenu(iDirector);
+    QMenu *treeViewItemMenu = createTreeTableItemMenu(iDirector);
+    if (treeViewItemMenu) {
+        mMenus.insert(MENU_TREE_VIEW_ITEM, treeViewItemMenu);
+    }
+
+
+    QMenu *sceneWidgetMenu = createSceneWidgetMenu(iDirector);
+    if (sceneWidgetMenu) {
+        mMenus.insert(MENU_SCENE_WIDGET, sceneWidgetMenu);
+    }
+}
+
+/*!
+ * Creates a context menu applicable to tree widget.
+ *
+ * \param[in] iDirector - Instance of director. Used for connections.
+ *
+ * \return Construsted menu or 0 if an error occured.
+ *
+ * \todo Implement
+ */
+QMenu*
+ContextMenuManager::createTreeWidgetMenu(const Control::Director *iDirector)
+{
+    QMenu *menu = 0;
+
+    try
+    {
+        menu = new QMenu();
+
+        // actions
+        QAction *expandAllAction = new QAction(tr("Expand/Collapse all"), menu);
+        expandAllAction->setCheckable(true);
+
+        QAction *Action = new QAction(tr("???"), menu);
+
+        // connections
+        connect(expandAllAction, SIGNAL(toggled(bool)),
+                this, SLOT(expandAllActionToggled(bool)));
+        connect(this, SIGNAL(expandAllTreeItems(Gui::TreeWidget*, bool)),
+                iDirector, SLOT(expandAllTreeItems(Gui::TreeWidget*, bool)));
+
+        menu->addAction(expandAllAction);
+
+    } catch (...) {
+        // \fixme How to handle memory allocation failures?
+        return 0;
+    }
+
+    return menu;
+}
+
+/*!
+ * \todo Implement
+ * \todo Comment
+ */
+QMenu*
+ContextMenuManager::createTreeTableItemMenu(const Control::Director *iDirector)
+{
+    QMenu *menu = 0;
+    try {
+        menu = new QMenu();
+        QAction *addAction = new QAction(tr("Add"), menu);
+        QAction *describeAction = new QAction(tr("Describe"), menu);
+        QAction *queryAction = new QAction(tr("Query"), menu);
+
+        menu->addAction(addAction);
+        menu->addAction(describeAction);
+        menu->addAction(queryAction);
+    } catch (...) {
+        return 0;
+    }
+    return menu;
+}
+
+/*!
+ * \todo Implement
+ * \todo Comment
+ */
+QMenu*
+ContextMenuManager::createTreeViewItemMenu(const Control::Director *iDirector)
+{
+}
+
+/*!
+ * \todo Implement
+ * \todo Comment
+ */
+QMenu*
+ContextMenuManager::createSceneWidgetMenu(const Control::Director *iDirector)
+{
 }
 
 /*!

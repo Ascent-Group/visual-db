@@ -69,15 +69,18 @@ Converter::toTreeWidgetItems(const Objects &iObjects,
             switch (type) {
                 // \todo finish this switch when more menus appear
                 case TreeWidget::SchemaItem:
+                    break;
                 case TreeWidget::TableItem:
+                    menu = iMenuMgr->menu(ContextMenuManager::MENU_TREE_TABLE_ITEM);
+                    break;
                 case TreeWidget::ViewItem:
+                    menu = iMenuMgr->menu(ContextMenuManager::MENU_TREE_VIEW_ITEM);
+                    break;
                 case TreeWidget::RoleItem:
                 case TreeWidget::TriggerItem:
                 case TreeWidget::LanguageItem:
                 case TreeWidget::IndexItem:
                 case TreeWidget::ProcedureItem:
-                    menu = iMenuMgr->menu(ContextMenuManager::MENU_TREE_TABLE_ITEM);
-                    break;
                 default:
                     break;
             }

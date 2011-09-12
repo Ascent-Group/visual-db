@@ -50,7 +50,7 @@ Converter::~Converter()
  */
 bool
 Converter::toTreeWidgetItems(const Objects &iObjects,
-                             QList<Gui::TreeWidgetItem*> &iItems,
+                             QList<Gui::TreeWidgetItem*> &oItems,
                              const ContextMenuManager *iMenuMgr)
 {
     using namespace Gui;
@@ -62,6 +62,7 @@ Converter::toTreeWidgetItems(const Objects &iObjects,
     TreeWidget::Item type;
 
     foreach(const QString &name, iObjects.keys()) {
+        menu = 0;
         parentName = iObjects.value(name).first;
         type = static_cast<TreeWidget::Item>(iObjects.value(name).second);
 
@@ -87,7 +88,7 @@ Converter::toTreeWidgetItems(const Objects &iObjects,
 
             item->setContextMenu(menu);
             item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled);
-            iItems.push_back(item);
+            oItems.push_back(item);
         }
     }
 

@@ -33,6 +33,7 @@
 #include <QMap>
 #include <QObject>
 
+class QAction;
 class QContextMenuEvent;
 class QMenu;
 
@@ -56,15 +57,19 @@ class ContextMenuManager : public QObject
     Q_OBJECT
 
     public:
+        /*!
+         * \enum MenuTyp
+         * \brief Type of context menu.
+         */
         enum MenuType
         {
-            MENU_UNKNOWN = 0,
+            MENU_UNKNOWN = 0,       /*!< Undefined menu */
 
-            MENU_TREE_WIDGET,
-            MENU_TREE_TABLE_ITEM,
-            MENU_TREE_VIEW_ITEM,
+            MENU_TREE_WIDGET,       /*!< Menu for tree widget */
+            MENU_TREE_TABLE_ITEM,   /*!< Menu for table item held by widget */
+            MENU_TREE_VIEW_ITEM,    /*!< Menu for view item held by widget */
 
-            MENU_SCENE_WIDGET
+            MENU_SCENE_WIDGET       /*!< Menu for scene widget */
         };
 
         ContextMenuManager(const Control::Director *iDirector);
@@ -78,9 +83,15 @@ class ContextMenuManager : public QObject
         void expandAllActionToggled(bool);
 
     private:
+        QAction *mExpandAllAction;
+        QAction *mAddAction;
+        QAction *mDescribeAction;
+        QAction *mQueryAction;
+
         QMap<MenuType, QMenu *> mMenus;
 
     private:
+        void createActions(const Control::Director *iDirector);
         void createMenus(const Control::Director *iDirector);
         QMenu* createTreeWidgetMenu(const Control::Director *iDirector);
         QMenu* createTreeTableItemMenu(const Control::Director *iDirector);

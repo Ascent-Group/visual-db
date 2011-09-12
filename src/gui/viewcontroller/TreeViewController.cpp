@@ -100,8 +100,7 @@ TreeViewController::createNode(Gui::TreeWidgetItem *iParent, const QString &iNam
  */
 Gui::TreeWidgetItem*
 TreeViewController::insertItem(Gui::TreeWidgetItem *iParentNode,
-                               const QString &iText,
-                               TreeWidget::Item iType,
+                               Gui::TreeWidgetItem *iItem,
                                bool iDragEnabled)
 {
     Qt::ItemFlags flags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
@@ -110,16 +109,18 @@ TreeViewController::insertItem(Gui::TreeWidgetItem *iParentNode,
         flags |= Qt::ItemIsDragEnabled;
     }
 
-    Gui::TreeWidgetItem *item = new(std::nothrow) Gui::TreeWidgetItem(iParentNode);
+    iParentNode->addChild(iItem);
 
-    if (item) {
-        item->setFlags(flags);
-        item->setText(TreeWidget::NameCol, iText);
-        item->setText(TreeWidget::TypeCol, QString::number(iType));
-        item->setData(TreeWidget::NameCol, Qt::DisplayRole, iText);
-    }
+//    Gui::TreeWidgetItem *item = new(std::nothrow) Gui::TreeWidgetItem(iParentNode);
+//
+//    if (item) {
+//        item->setFlags(flags);
+//        item->setText(TreeWidget::NameCol, iText);
+//        item->setText(TreeWidget::TypeCol, QString::number(iType));
+//        item->setData(TreeWidget::NameCol, Qt::DisplayRole, iText);
+//    }
 
-    return item;
+    return iItem;
 }
 
 } // namespace ViewController

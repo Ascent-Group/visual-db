@@ -101,14 +101,19 @@ DefaultController::buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidget
                 break;
 
             case  TreeWidget::SchemaItem:
+                {
 //                QApplication::processEvents();
                 // if schema item already exists, then just skip it.
                 // this may occur when schema's child comes earlier than the schema
                 // itself.
-                if (iTree->findItem(schemasNode, name, TreeWidget::NameCol)) {
-                    continue;
-                } else {
-                    parentNode = schemasNode;
+
+                QTreeWidgetItem *old = iTree->findItem(schemasNode, name, TreeWidget::NameCol);
+
+                if (old) {
+                    item->addChildren(old->takeChildren());
+                    delete old;
+                }
+                parentNode = schemasNode;
                 }
                 break;
 
@@ -119,9 +124,15 @@ DefaultController::buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidget
             {
                 // find parent schema item
                 Gui::TreeWidgetItem *schemaItem = iTree->findItem(schemasNode, parentName, TreeWidget::NameCol);
-                // or create it with subnodes
+                // or create it with subnodes, but later we will replace it with an
+                // original schema item
                 if (!schemaItem) {
-                    schemaItem = insertItem(schemasNode, parentName, TreeWidget::SchemaItem);
+                    Gui::TreeWidgetItem *tempParent = new Gui::TreeWidgetItem();
+                    tempParent->setText(TreeWidget::NameCol, parentName);
+                    tempParent->setText(TreeWidget::TypeCol, QString::number(TreeWidget::SchemaNode));
+
+
+                    schemaItem = insertItem(schemasNode, tempParent);
 
                     createNode(schemaItem, QObject::tr("Procedures"), TreeWidget::ProcedureNode);
                     createNode(schemaItem, QObject::tr("Tables"), TreeWidget::TableNode);
@@ -143,7 +154,7 @@ DefaultController::buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidget
 
         Q_ASSERT_X(0 != parentNode, "DefaultController::buildTree", QString("name = %1, type = %2").arg(name).arg(type).toAscii().data());
         if (parentNode) {
-            insertItem(parentNode, name, type, true);
+            insertItem(parentNode, item, true);
         }
 
     }

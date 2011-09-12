@@ -62,7 +62,7 @@ class TreeViewController
 
     protected:
         Gui::TreeWidgetItem* createNode(Gui::TreeWidgetItem *, const QString &, Gui::TreeWidget::Node);
-        Gui::TreeWidgetItem* insertItem(Gui::TreeWidgetItem *, const QString &, Gui::TreeWidget::Item, bool iDragEnabled = false);
+        Gui::TreeWidgetItem* insertItem(Gui::TreeWidgetItem *, Gui::TreeWidgetItem *, bool iDragEnabled = false);
 };
 
 } // namespace ViewController

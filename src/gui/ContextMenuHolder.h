@@ -55,13 +55,20 @@ namespace Gui {
  *         void contextMenuRequest(QContextMenuEvent *);
  * };
  * </code>
+ *
+ * It is up to MyClass or its user to establish a signal/slot connection in order to
+ * handle the context menu request properly.
+ *
+ * <code>
+ *     connect(myClassObj, SIGNAL(contextMenuRequest(QContextMenuEvent *)),
+ *     ctxMenuMgr, SLOT(contextMenuRequested(QContextMenuEvent *)));
+ * </code>
  */
 class ContextMenuHolder/* : public QObject*/
 {
 //    Q_OBJECT
 
     public:
-        ContextMenuHolder(QObject *iObject);
         virtual ~ContextMenuHolder();
 
         void setContextMenu(const QMenu *iMenu);
@@ -69,6 +76,9 @@ class ContextMenuHolder/* : public QObject*/
 
         /*! Subclass should declare this signal in their own header */
         virtual void contextMenuRequest(QContextMenuEvent *) = 0;
+
+    protected:
+        ContextMenuHolder(QObject *iObject);
 
     private:
         /*static */const QMenu *mMenu;

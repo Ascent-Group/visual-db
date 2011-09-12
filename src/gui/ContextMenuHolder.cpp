@@ -40,12 +40,16 @@ namespace Gui {
  * \note Maybe iObject parameter will be used later.
  */
 ContextMenuHolder::ContextMenuHolder(QObject *iObject)
+    : mMenu(0)
 {
 
 }
 
 /*!
+ * Destructor
  *
+ * Context menu holder doesn't own the context menu but the context menu manager does and
+ * context menu manager will handle its destruction.
  */
 ContextMenuHolder::~ContextMenuHolder()
 {
@@ -53,6 +57,9 @@ ContextMenuHolder::~ContextMenuHolder()
 }
 
 /*!
+ * Set the context menu for the object.
+ *
+ * \param[in] iMenu - Context menu instance.
  *
  */
 void
@@ -63,6 +70,7 @@ ContextMenuHolder::setContextMenu(const QMenu *iMenu)
 
 /*!
  *
+ * \return Context menu associated with the object.
  */
 const QMenu*
 ContextMenuHolder::contextMenu() const

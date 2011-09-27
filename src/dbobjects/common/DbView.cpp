@@ -156,10 +156,10 @@ DbView::resetData()
 /*!
  * \return Database object type identifier
  */
-DbObject::Type
+ObjectType
 DbView::type() const
 {
-    return DbObject::ViewObject;
+    return ViewObject;
 }
 
 } // namespace Common

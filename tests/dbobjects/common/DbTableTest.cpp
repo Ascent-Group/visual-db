@@ -194,7 +194,7 @@ DbTableTest::loadDataTest()
 void
 DbTableTest::typeTest()
 {
-    QCOMPARE(mTable->type(), Common::DbObject::TableObject);
+    QCOMPARE(mTable->type(), TableObject);
 }
 
 void

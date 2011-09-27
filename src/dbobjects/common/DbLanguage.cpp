@@ -91,10 +91,10 @@ DbLanguage::resetData()
 /*!
  * \return Database object type
  */
-DbObject::Type
+ObjectType
 DbLanguage::type() const
 {
-    return DbObject::LanguageObject;
+    return LanguageObject;
 }
 
 } // namespace Common

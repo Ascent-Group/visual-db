@@ -125,7 +125,7 @@ DbTriggerTest::numArgsTest()
 void
 DbTriggerTest::typeTest()
 {
-    QCOMPARE(mTrigger->type(), Common::DbObject::TriggerObject);
+    QCOMPARE(mTrigger->type(), TriggerObject);
 }
 
 void

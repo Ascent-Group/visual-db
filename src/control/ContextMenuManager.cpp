@@ -102,25 +102,25 @@ ContextMenuManager::createMenus(const Control::Director *iDirector)
 
     QMenu *treeWidgetMenu = createTreeWidgetMenu(iDirector);
     if (treeWidgetMenu) {
-        mMenus.insert(MENU_TREE_WIDGET, treeWidgetMenu);
+        mMenus.insert(Tree, treeWidgetMenu);
     }
 
 
     QMenu *treeTableItemMenu = createTreeTableItemMenu(iDirector);
     if (treeTableItemMenu) {
-        mMenus.insert(MENU_TREE_TABLE_ITEM, treeTableItemMenu);
+        mMenus.insert(TreeItem | TableObject, treeTableItemMenu);
     }
 
 
     QMenu *treeViewItemMenu = createTreeViewItemMenu(iDirector);
     if (treeViewItemMenu) {
-        mMenus.insert(MENU_TREE_VIEW_ITEM, treeViewItemMenu);
+        mMenus.insert(TreeItem | ViewObject, treeViewItemMenu);
     }
 
 
     QMenu *sceneWidgetMenu = createSceneWidgetMenu(iDirector);
     if (sceneWidgetMenu) {
-        mMenus.insert(MENU_SCENE_WIDGET, sceneWidgetMenu);
+        mMenus.insert(Scene, sceneWidgetMenu);
     }
 }
 
@@ -226,7 +226,11 @@ ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent)
         } else {
             QSet<quint32> itemTypes;
             foreach (QTreeWidgetItem *item, items) {
-                itemTypes.insert(item->text(TreeWidget::TypeCol).toUInt());
+                quint32 type = item->text(TreeWidget::TypeCol).toUInt();
+
+                if (!itemTypes.contains(type)) {
+                    itemTypes.insert(type);
+                }
             }
 
             // \todo find intersection of menus
@@ -250,7 +254,7 @@ ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent)
  * \return Context menu of the given type
  */
 const QMenu*
-ContextMenuManager::menu(Control::ContextMenuManager::MenuType iType) const
+ContextMenuManager::menu(int iType) const
 {
     return mMenus.value(iType);
 }

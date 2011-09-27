@@ -57,28 +57,13 @@ class ContextMenuManager : public QObject
     Q_OBJECT
 
     public:
-        /*!
-         * \enum MenuTyp
-         * \brief Type of context menu.
-         */
-        enum MenuType
-        {
-            MENU_UNKNOWN = 0,       /*!< Undefined menu */
-
-            MENU_TREE_WIDGET,       /*!< Menu for tree widget */
-            MENU_TREE_TABLE_ITEM,   /*!< Menu for table item held by widget */
-            MENU_TREE_VIEW_ITEM,    /*!< Menu for view item held by widget */
-
-            MENU_SCENE_WIDGET       /*!< Menu for scene widget */
-        };
-
         ContextMenuManager(const Control::Director *iDirector);
         ~ContextMenuManager();
 
     public slots:
         void contextMenuRequested(QContextMenuEvent *);
 
-        const QMenu* menu(Control::ContextMenuManager::MenuType) const;
+        const QMenu* menu(int) const;
 
         void expandAllActionToggled(bool);
 
@@ -88,7 +73,7 @@ class ContextMenuManager : public QObject
         QAction *mDescribeAction;
         QAction *mQueryAction;
 
-        QMap<MenuType, QMenu *> mMenus;
+        QMap<int, QMenu *> mMenus;
 
     private:
         void createActions(const Control::Director *iDirector);

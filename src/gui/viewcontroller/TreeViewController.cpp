@@ -75,7 +75,7 @@ TreeViewController::~TreeViewController()
  * \return 0 - Otherwise.
  */
 Gui::TreeWidgetItem*
-TreeViewController::createNode(Gui::TreeWidgetItem *iParent, const QString &iName, TreeWidget::Node iType)
+TreeViewController::createNode(Gui::TreeWidgetItem *iParent, const QString &iName, int iType)
 {
     Gui::TreeWidgetItem *node = new(std::nothrow) Gui::TreeWidgetItem(iParent);
 

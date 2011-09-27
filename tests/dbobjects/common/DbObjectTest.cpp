@@ -112,35 +112,35 @@ DbObjectTest::typeTest()
 
     DbIndexPtr index(mDbInst, mFactories, "index");
     QVERIFY(0 != (obj = const_cast<DbIndex*>(index.get())));
-    QCOMPARE(obj->type(), DbObjects::Common::DbObject::IndexObject);
+    QCOMPARE(obj->type(), IndexObject);
 
     DbLanguagePtr language(mDbInst, mFactories, "language");
     QVERIFY(0 != (obj = const_cast<DbLanguage*>(language.get())));
-    QCOMPARE(obj->type(), DbObjects::Common::DbObject::LanguageObject);
+    QCOMPARE(obj->type(), LanguageObject);
 
     DbProcedurePtr procedure(mDbInst, mFactories, "procedure", "ns");
     QVERIFY(0 != (obj = const_cast<DbProcedure*>(procedure.get())));
-    QCOMPARE(obj->type(), DbObjects::Common::DbObject::ProcedureObject);
+    QCOMPARE(obj->type(), ProcedureObject);
 
     DbRolePtr role(mDbInst, mFactories, "role");
     QVERIFY(0 != (obj = const_cast<DbRole*>(role.get())));
-    QCOMPARE(obj->type(), DbObjects::Common::DbObject::RoleObject);
+    QCOMPARE(obj->type(), RoleObject);
 
     DbSchemaPtr schema(mDbInst, mFactories, "schema");
     QVERIFY(0 != (obj = const_cast<DbSchema*>(schema.get())));
-    QCOMPARE(obj->type(), DbObjects::Common::DbObject::SchemaObject);
+    QCOMPARE(obj->type(), SchemaObject);
 
     DbTablePtr table(mDbInst, mFactories, "table", "ns");
     QVERIFY(0 != (obj = const_cast<DbTable*>(table.get())));
-    QCOMPARE(obj->type(), DbObjects::Common::DbObject::TableObject);
+    QCOMPARE(obj->type(), TableObject);
 
     DbTriggerPtr trigger(mDbInst, mFactories, "trigger", "ns");
     QVERIFY(0 != (obj = const_cast<DbTrigger*>(trigger.get())));
-    QCOMPARE(obj->type(), DbObjects::Common::DbObject::TriggerObject);
+    QCOMPARE(obj->type(), TriggerObject);
 
     DbViewPtr view(mDbInst, mFactories, "view", "ns");
     QVERIFY(0 != (obj = const_cast<DbView*>(view.get())));
-    QCOMPARE(obj->type(), DbObjects::Common::DbObject::ViewObject);
+    QCOMPARE(obj->type(), ViewObject);
 }
 
 void

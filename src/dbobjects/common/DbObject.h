@@ -30,6 +30,7 @@
 #ifndef DBOBJECTS_COMMON_DBOBJECT_H
 #define DBOBJECTS_COMMON_DBOBJECT_H
 
+#include <common.h>
 #include <QString>
 
 namespace DbObjects
@@ -49,22 +50,6 @@ class DbObject
 {
     public:
 
-        /*!
-         * \enum Type
-         * Database object indentifiers
-         */
-        enum Type {
-            UnkObject = 0,      /*!< Unknown object */
-            SchemaObject,       /*!< Schema */
-            TableObject,        /*!< Table */
-            ViewObject,         /*!< View */
-            RoleObject,         /*!< Role */
-            TriggerObject,      /*!< Trigger */
-            LanguageObject,     /*!< Language */
-            IndexObject,        /*!< Index */
-            ProcedureObject,    /*!< Procedure */
-        };
-
         QString name() const;
         void setName(const QString &iName);
 
@@ -73,7 +58,7 @@ class DbObject
         void setDatabase(const DbObjects::Common::Database *iDatabase);
 
         /*! \see Descendants' implementation */
-        virtual DbObject::Type type() const = 0;
+        virtual ObjectType type() const = 0;
         virtual bool loadData();
         virtual void resetData();
 

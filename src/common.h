@@ -32,8 +32,66 @@
 
 #include <QMultiHash>
 
+
+/*!
+ * \enum DbObjectType
+ *
+ * Database object indentifiers.
+ * \fixme Come up with proper names for enum and its elements.
+ */
+enum ObjectType {
+    UnkObject = 0,      /*!< Unknown object */
+    SchemaObject,       /*!< Schema */
+    TableObject,        /*!< Table */
+    ViewObject,         /*!< View */
+    RoleObject,         /*!< Role */
+    TriggerObject,      /*!< Trigger */
+    LanguageObject,     /*!< Language */
+    IndexObject,        /*!< Index */
+    ProcedureObject     /*!< Procedure */
+};
+
+/*!
+ * \enum WidgetModifier
+ *
+ * Modifier based on a widget that displays db objects describing elements.
+ * \fixme Come up with proper names for enum and its elements.
+ */
+enum WidgetModifier {
+    Tree  = 0x010000,
+    Scene = 0x020000
+};
+
+/*!
+ * \enum ElementModifier
+ *
+ * Modifier based on a type of element. For example, TreeWidgetItem describing a table
+ * object will have a type of table object OR'd with Item modifier.
+ *
+ * \note This enum may be extended to contain modifiers for graphics items and/or groups
+ * of them, in case scene becomes capable of displaying different types of elements.
+ * \fixme Come up with proper names for enum and its elements.
+ */
+enum ElementModifier {
+    Item = 0x0100,
+    Node = 0x0200
+};
+
+/*!
+ * \enum ObjectTypeModifier
+ *
+ * Defined for convenience.
+ * \fixme Come up with proper names for enum and its elements.
+ */
+enum ObjectTypeModifier {
+    TreeItem = Tree | Item,
+    TreeNode = Tree | Node,
+    SceneItem = Scene | Item
+};
+
+
 // < ObjName, <SchemaName, ObjType> >
-typedef QMultiHash<QString, QPair<QString, int> > Objects;
+typedef QMultiHash<QString, QPair<QString, ObjectType> > Objects;
 
 #endif // COMMON_H
 

@@ -270,12 +270,12 @@ DbRole::resetData()
 /*!
  * \return Database object type
  *
- * \see DbObject::Type
+ * \see ObjectType
  */
-DbObject::Type
+ObjectType
 DbRole::type() const
 {
-    return DbObject::RoleObject;
+    return RoleObject;
 }
 
 } // namespace Common

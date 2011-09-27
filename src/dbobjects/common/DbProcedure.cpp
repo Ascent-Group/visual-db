@@ -65,10 +65,10 @@ DbProcedure::~DbProcedure()
 /*!
  * \return Database object type
  */
-DbObject::Type
+ObjectType
 DbProcedure::type() const
 {
-    return DbObject::ProcedureObject;
+    return ProcedureObject;
 }
 
 /*!

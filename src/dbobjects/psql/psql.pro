@@ -5,7 +5,7 @@ QT += sql
 
 
 DEPENDPATH += $$PWD
-INCLUDEPATH += $$PWD/..
+INCLUDEPATH += $$PWD/.. $$PWD/../..
 
 MOC_DIR = .moc
 OBJECTS_DIR = .obj

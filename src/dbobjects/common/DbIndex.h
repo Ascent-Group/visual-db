@@ -92,7 +92,7 @@ class DbIndex : public DbObject
 
         virtual void resetData();
 
-        virtual DbObject::Type type() const;
+        virtual ObjectType type() const;
 
     protected:
         /*! Table this index is assigned to */

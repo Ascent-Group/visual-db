@@ -67,40 +67,40 @@ DefaultController::buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidget
     using namespace Gui;
 
     // construct the tree skeleton
-    TreeWidgetItem *indicesNode = createNode(0, QObject::tr("Indices"), TreeWidget::IndexNode);
+    TreeWidgetItem *indicesNode = createNode(0, QObject::tr("Indices"), TreeNode | IndexObject);
     iTree->addTopLevelItem(indicesNode);
 
-    TreeWidgetItem *languagesNode = createNode(0, QObject::tr("Languages"), TreeWidget::LanguageNode);
+    TreeWidgetItem *languagesNode = createNode(0, QObject::tr("Languages"), TreeNode | LanguageObject);
     iTree->addTopLevelItem(languagesNode);
 
-    TreeWidgetItem *rolesNode = createNode(0, QObject::tr("Roles"), TreeWidget::RoleNode);
+    TreeWidgetItem *rolesNode = createNode(0, QObject::tr("Roles"), TreeNode | RoleObject);
     iTree->addTopLevelItem(rolesNode);
 
-    TreeWidgetItem *schemasNode = createNode(0, QObject::tr("Schemas"), TreeWidget::SchemaNode);
+    TreeWidgetItem *schemasNode = createNode(0, QObject::tr("Schemas"), TreeNode | SchemaObject);
     iTree->addTopLevelItem(schemasNode);
 
     Gui::TreeWidgetItem *parentNode = 0;
     foreach(Gui::TreeWidgetItem *item, iItems) {
         QString name = item->text(TreeWidget::NameCol);
         QString parentName = item->text(TreeWidget::SchemaCol);
-        TreeWidget::Item type = static_cast<TreeWidget::Item>(item->text(TreeWidget::TypeCol).toUInt());
+        int type = item->text(TreeWidget::TypeCol).toUInt();
 
         parentNode = 0;
 
         switch (type) {
-            case  TreeWidget::IndexItem:
+            case IndexObject:
                 parentNode = indicesNode;
                 break;
 
-            case  TreeWidget::LanguageItem:
+            case LanguageObject:
                 parentNode = languagesNode;
                 break;
 
-            case  TreeWidget::RoleItem:
+            case RoleObject:
                 parentNode = rolesNode;
                 break;
 
-            case  TreeWidget::SchemaItem:
+            case SchemaObject:
                 {
 //                QApplication::processEvents();
                 // if schema item already exists, then just skip it.
@@ -117,10 +117,10 @@ DefaultController::buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidget
                 }
                 break;
 
-            case  TreeWidget::ViewItem:
-            case  TreeWidget::ProcedureItem:
-            case  TreeWidget::TableItem:
-            case  TreeWidget::TriggerItem:
+            case ViewObject:
+            case ProcedureObject:
+            case TableObject:
+            case TriggerObject:
             {
                 // find parent schema item
                 Gui::TreeWidgetItem *schemaItem = iTree->findItem(schemasNode, parentName, TreeWidget::NameCol);
@@ -129,23 +129,22 @@ DefaultController::buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidget
                 if (!schemaItem) {
                     Gui::TreeWidgetItem *tempParent = new Gui::TreeWidgetItem();
                     tempParent->setText(TreeWidget::NameCol, parentName);
-                    tempParent->setText(TreeWidget::TypeCol, QString::number(TreeWidget::SchemaNode));
-
+                    tempParent->setText(TreeWidget::TypeCol, QString::number(TreeNode | SchemaObject));
 
                     schemaItem = insertItem(schemasNode, tempParent);
 
-                    createNode(schemaItem, QObject::tr("Procedures"), TreeWidget::ProcedureNode);
-                    createNode(schemaItem, QObject::tr("Tables"), TreeWidget::TableNode);
-                    createNode(schemaItem, QObject::tr("Triggers"), TreeWidget::TriggerNode);
-                    createNode(schemaItem, QObject::tr("Views"), TreeWidget::ViewNode);
+                    createNode(schemaItem, QObject::tr("Procedures"), TreeNode | ProcedureObject);
+                    createNode(schemaItem, QObject::tr("Tables"), TreeNode | TableObject);
+                    createNode(schemaItem, QObject::tr("Triggers"), TreeNode | TriggerObject);
+                    createNode(schemaItem, QObject::tr("Views"), TreeNode | ViewObject);
                 }
 
                 // find nested node for the given parentNode type
-                parentNode = iTree->findItem(schemaItem, QString::number((int)iTree->nodeForItem(type)), TreeWidget::TypeCol);
+                parentNode = iTree->findItem(schemaItem, QString::number(TreeNode | type), TreeWidget::TypeCol);
             }
                 break;
 
-            case  TreeWidget::UnkItem:
+            case UnkObject:
             default:
                 qDebug() << "TreeWidget::displayObjects> Unknown object type: " << type;
                 continue;

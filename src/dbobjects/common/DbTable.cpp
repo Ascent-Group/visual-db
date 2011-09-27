@@ -359,10 +359,10 @@ DbTable::getIndices(QVector<DbIndexPtr> &oIndicesList)
 /*!
  * \return Database object type identifier
  */
-DbObject::Type
+ObjectType
 DbTable::type() const
 {
-    return DbObject::TableObject;
+    return TableObject;
 }
 
 /*!

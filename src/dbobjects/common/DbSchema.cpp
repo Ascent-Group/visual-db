@@ -477,12 +477,12 @@ DbSchema::resetData()
 }
 
 /*!
- * \return DbObject::SchemaObject
+ * \return SchemaObject
  */
-DbObject::Type
+ObjectType
 DbSchema::type() const
 {
-    return DbObject::SchemaObject;
+    return SchemaObject;
 }
 
 /*!

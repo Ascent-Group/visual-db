@@ -278,7 +278,7 @@ DbSchemaTest::findViewTest()
 void
 DbSchemaTest::typeTest()
 {
-    QCOMPARE(mSchema->type(), DbObjects::Common::DbObject::SchemaObject);
+    QCOMPARE(mSchema->type(), SchemaObject);
 }
 
 void

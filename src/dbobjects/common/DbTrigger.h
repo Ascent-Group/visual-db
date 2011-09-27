@@ -83,7 +83,7 @@ class DbTrigger : public DbObject
         quint16 numArgs() const;
         void setNumArgs(const quint16 &iNum);
 
-        virtual DbObject::Type type() const;
+        virtual ObjectType type() const;
 
         virtual void resetData();
 

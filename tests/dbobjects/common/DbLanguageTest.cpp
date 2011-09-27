@@ -88,7 +88,7 @@ DbLanguageTest::loadDataTest()
 void
 DbLanguageTest::typeTest()
 {
-    QCOMPARE(mLanguage->type(), Common::DbObject::LanguageObject);
+    QCOMPARE(mLanguage->type(), LanguageObject);
 }
 
 void

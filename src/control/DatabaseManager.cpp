@@ -353,28 +353,28 @@ DatabaseManager::newObjects(const Control::Context *iCtx, Objects &oList) const
         QStringList rolesNames;
         db->rolesList(rolesNames);
         foreach (const QString &name, rolesNames) {
-            oList.insert(name, qMakePair(parentName, (int)DbObject::RoleObject));
+            oList.insert(name, qMakePair(parentName, RoleObject));
         }
 
         // languages
         QStringList languagesNames;
         db->languagesList(languagesNames);
         foreach (const QString &name, languagesNames) {
-            oList.insert(name, qMakePair(parentName, (int)DbObject::LanguageObject));
+            oList.insert(name, qMakePair(parentName, LanguageObject));
         }
 
         // indices
         QStringList indicesNames;
         db->indicesList(indicesNames);
         foreach (const QString &name, indicesNames) {
-            oList.insert(name, qMakePair(parentName, (int)DbObject::IndexObject));
+            oList.insert(name, qMakePair(parentName, IndexObject));
         }
 
         // schemas
         QStringList schemasNames;
         db->schemasList(schemasNames);
         foreach (const QString &name, schemasNames) {
-            oList.insert(name, qMakePair(parentName, (int)DbObject::SchemaObject));
+            oList.insert(name, qMakePair(parentName, SchemaObject));
         }
 
         // read schemas children
@@ -386,7 +386,7 @@ DatabaseManager::newObjects(const Control::Context *iCtx, Objects &oList) const
             // tables
             schema->tablesList(childrenNames);
             foreach (const QString &name, childrenNames) {
-                oList.insert(name, qMakePair(schemaName, (int)DbObject::TableObject));
+                oList.insert(name, qMakePair(schemaName, TableObject));
             }
 
             childrenNames.clear();
@@ -394,7 +394,7 @@ DatabaseManager::newObjects(const Control::Context *iCtx, Objects &oList) const
             // triggers
             schema->triggersList(childrenNames);
             foreach (const QString &name, childrenNames) {
-                oList.insert(name, qMakePair(schemaName, (int)DbObject::TriggerObject));
+                oList.insert(name, qMakePair(schemaName, TriggerObject));
             }
 
             childrenNames.clear();
@@ -402,7 +402,7 @@ DatabaseManager::newObjects(const Control::Context *iCtx, Objects &oList) const
             // views
             schema->viewsList(childrenNames);
             foreach (const QString &name, childrenNames) {
-                oList.insert(name, qMakePair(schemaName, (int)DbObject::ViewObject));
+                oList.insert(name, qMakePair(schemaName, ViewObject));
             }
 
             childrenNames.clear();
@@ -410,7 +410,7 @@ DatabaseManager::newObjects(const Control::Context *iCtx, Objects &oList) const
             // procs
             schema->proceduresList(childrenNames);
             foreach (const QString &name, childrenNames) {
-                oList.insert(name, qMakePair(schemaName, (int)DbObject::ProcedureObject));
+                oList.insert(name, qMakePair(schemaName, ProcedureObject));
             }
         }
     }

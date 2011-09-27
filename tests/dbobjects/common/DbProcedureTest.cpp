@@ -104,7 +104,7 @@ DbProcedureTest::loadDataTest()
 void
 DbProcedureTest::typeTest()
 {
-    QCOMPARE(mProcedure->type(), Common::DbObject::ProcedureObject);
+    QCOMPARE(mProcedure->type(), ProcedureObject);
 }
 
 void

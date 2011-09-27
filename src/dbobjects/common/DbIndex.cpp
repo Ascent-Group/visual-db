@@ -295,10 +295,10 @@ DbIndex::resetData()
 /*!
  * \return Database object type
  */
-DbObject::Type
+ObjectType
 DbIndex::type() const
 {
-    return DbObject::IndexObject;
+    return IndexObject;
 }
 
 } // namespace Common

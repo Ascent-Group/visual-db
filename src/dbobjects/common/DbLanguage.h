@@ -53,7 +53,7 @@ class DbLanguage : public DbObject
 
         virtual void resetData();
 
-        virtual DbObject::Type type() const;
+        virtual ObjectType type() const;
 
     protected:
         /*!

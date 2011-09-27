@@ -282,10 +282,10 @@ DbTrigger::setNumArgs(const quint16 &iNum)
 /*!
  * \return The database object type identifier
  */
-DbObject::Type
+ObjectType
 DbTrigger::type() const
 {
-    return DbObject::TriggerObject;
+    return TriggerObject;
 }
 
 /*!

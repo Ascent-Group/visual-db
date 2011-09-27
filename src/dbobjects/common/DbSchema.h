@@ -95,7 +95,7 @@ class DbSchema : public DbObject
         void readProcedures(Factories *iFactories, Tools *iTools);
         void readTriggers(Factories *iFactories, Tools *iTools);
 
-        virtual DbObject::Type type() const;
+        virtual ObjectType type() const;
 
         DbRolePtr owner() const;
         void setOwner(const DbRolePtr &);

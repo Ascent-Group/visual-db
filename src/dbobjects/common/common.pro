@@ -4,7 +4,7 @@ CONFIG += staticlib
 QT += sql
 
 DEPENDPATH += $$PWD
-INCLUDEPATH += $$PWD/..
+INCLUDEPATH += $$PWD/.. $$PWD/../..
 
 MOC_DIR = .moc
 

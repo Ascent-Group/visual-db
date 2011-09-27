@@ -71,7 +71,7 @@ class DbProcedure : public DbObject
         QString sourceCode() const;
         void setSourceCode(const QString &iText);
 
-        virtual DbObject::Type type() const;
+        virtual ObjectType type() const;
 
     protected:
         /*! Schema that holds this procedure */

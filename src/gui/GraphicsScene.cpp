@@ -191,13 +191,15 @@ GraphicsScene::showOnScene(Gui::TreeWidgetItem *iTreeItem, int iCol, const QPoin
     int objId = iTreeItem->text(TreeWidget::TypeCol).toInt();
 
     // if schema or table or view were double clicked
-    if (TreeWidget::SchemaItem == objId || TreeWidget::TableItem == objId || TreeWidget::ViewItem == objId) {
+    if ((TreeItem | SchemaObject) == objId
+        || (TreeItem | TableObject) == objId
+        || (TreeItem | ViewObject) == objId) {
         // check whether item is a schema item
-        if (TreeWidget::SchemaItem == objId) {
+        if ((TreeItem | SchemaObject) == objId) {
             // add all its table children to the scene
             for (int i = 0; i < iTreeItem->childCount(); ++i) {
-                if (TreeWidget::TableNode == iTreeItem->child(i)->text(TreeWidget::TypeCol).toInt() ||
-                        TreeWidget::ViewNode == iTreeItem->child(i)->text(TreeWidget::TypeCol).toInt()) {
+                if ((TreeNode | TableObject) == iTreeItem->child(i)->text(TreeWidget::TypeCol).toInt() ||
+                        (TreeNode | ViewObject) == iTreeItem->child(i)->text(TreeWidget::TypeCol).toInt()) {
                     for (int j = 0; j < iTreeItem->child(i)->childCount(); ++j) {
                         QPoint pos(iPos.x() + j * SEEK_STEP, iPos.y() + j * SEEK_STEP);
                         objectList << showOnScene(dynamic_cast<Gui::TreeWidgetItem*>(iTreeItem->child(i)->child(j)), /*TreeWidget::NameCol*/iCol, pos, iCenterOn);
@@ -210,13 +212,13 @@ GraphicsScene::showOnScene(Gui::TreeWidgetItem *iTreeItem, int iCol, const QPoin
 
         using namespace Gui::GraphicsItems;
         
-        if (TreeWidget::TableItem == objId) {
+        if ((TreeItem | TableObject) == objId) {
             TableItem *table = newTableItem(dynamic_cast<QTreeWidgetItem*>(iTreeItem)->parent()->parent()->text(TreeWidget::NameCol),
                     iTreeItem->text(TreeWidget::NameCol), mTableMenu, iPos);
             objectList.append(table);
         }
 
-        if (TreeWidget::ViewItem == objId) {
+        if ((TreeItem | ViewObject) == objId) {
             ViewItem *view = newViewItem(dynamic_cast<QTreeWidgetItem*>(iTreeItem)->parent()->parent()->text(TreeWidget::NameCol),
                     iTreeItem->text(TreeWidget::NameCol), mTableMenu, iPos);
             objectList.append(view);

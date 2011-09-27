@@ -80,7 +80,7 @@ class DbRole : public DbObject
         virtual void resetData();
         // virtual void save() = 0;
 
-        virtual DbObject::Type type() const;
+        virtual ObjectType type() const;
 
     protected:
         /*! Does role have superuser privileges? */

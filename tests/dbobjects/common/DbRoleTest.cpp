@@ -139,7 +139,7 @@ DbRoleTest::loadDataTest()
 void
 DbRoleTest::typeTest()
 {
-    QCOMPARE(mRole->type(), Common::DbObject::RoleObject);
+    QCOMPARE(mRole->type(), RoleObject);
 }
 
 void

@@ -54,33 +54,6 @@ class TreeWidget : public QTreeWidget, public Gui::ContextMenuHolder
         TreeWidget(QWidget *iParent = 0);
         ~TreeWidget();
 
-        // it is highly recommended that we keep the same order as
-        // in DbObject::Type enum (though we don't have to)
-        enum Item {
-            UnkItem = DbObject::UnkObject,
-            SchemaItem = DbObject::SchemaObject,
-            TableItem = DbObject::TableObject,
-            ViewItem = DbObject::ViewObject,
-            RoleItem = DbObject::RoleObject,
-            TriggerItem = DbObject::TriggerObject,
-            LanguageItem = DbObject::LanguageObject,
-            IndexItem = DbObject::IndexObject,
-            ProcedureItem = DbObject::ProcedureObject,
-        };
-
-        // Node's values MUST NOT intersect with Item's values
-        enum Node {
-            UnkNode = 100 + UnkItem,
-            SchemaNode,
-            TableNode,
-            ViewNode,
-            RoleNode,
-            TriggerNode,
-            LanguageNode,
-            IndexNode,
-            ProcedureNode
-        };
-
         enum Columns {
             NameCol = 0,
             TypeCol,
@@ -99,7 +72,6 @@ class TreeWidget : public QTreeWidget, public Gui::ContextMenuHolder
         void display(const QList<Gui::TreeWidgetItem*> &iItems);
 
         Gui::TreeWidgetItem* findItem(Gui::TreeWidgetItem *iParent, const QString &iValue, int iColumn) const;
-        TreeWidget::Node nodeForItem(TreeWidget::Item type) const;
 
         void setExpandAll(bool);
 

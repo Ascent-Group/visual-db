@@ -178,7 +178,7 @@ DbIndexTest::loadDataTest()
 void
 DbIndexTest::typeTest()
 {
-    QCOMPARE(mIndex->type(), Common::DbObject::IndexObject);
+    QCOMPARE(mIndex->type(), IndexObject);
 }
 
 void

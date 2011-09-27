@@ -61,7 +61,7 @@ class TreeViewController
         virtual void buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidgetItem*> &iItems) = 0;
 
     protected:
-        Gui::TreeWidgetItem* createNode(Gui::TreeWidgetItem *, const QString &, Gui::TreeWidget::Node);
+        Gui::TreeWidgetItem* createNode(Gui::TreeWidgetItem *, const QString &, int iType);
         Gui::TreeWidgetItem* insertItem(Gui::TreeWidgetItem *, Gui::TreeWidgetItem *, bool iDragEnabled = false);
 };
 

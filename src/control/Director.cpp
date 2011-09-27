@@ -402,7 +402,7 @@ Director::showConnectionDialog(bool iLoadSession)
 
     // create tree for it and register it
     TreeWidget *tree = new TreeWidget();
-    tree->setContextMenu(mMenuMgr.menu(ContextMenuManager::MENU_TREE_WIDGET));
+    tree->setContextMenu(mMenuMgr.menu(Tree));
     connect(tree, SIGNAL(contextMenuRequest(QContextMenuEvent *)),
             &mMenuMgr, SLOT(contextMenuRequested(QContextMenuEvent *)));
     add(tree, ctx);
@@ -664,11 +664,13 @@ Director::expandAllTreeItems(Gui::TreeWidget *iTree, bool iFlag)
  * \todo Implement
  */
 void
-Director::addItemsToScene()
+Director::addTreeItemsToScene()
 {
     Gui::TreeWidget *tree = mMainWindow->activeTree();
-    // \todo get selected items
-    // \todo foreach selected item, add it to scene
+    if (tree) {
+        // \todo get selected items
+        // \todo foreach selected item, add it to scene
+    }
 }
 
 /*!
@@ -681,7 +683,9 @@ void
 Director::describeItems()
 {
     Gui::TreeWidget *tree = mMainWindow->activeTree();
-    // \todo get selected items
+    if (tree) {
+        // \todo get selected items
+    }
 }
 
 /*!
@@ -694,7 +698,9 @@ void
 Director::queryItems()
 {
     Gui::TreeWidget *tree = mMainWindow->activeTree();
-    // \todo get selected items
+    if (tree) {
+        // \todo get selected items
+    }
 }
 
 /*!

@@ -120,6 +120,8 @@ TreeWidget::startDrag(Qt::DropActions)
     qDebug() << "startDrag: " << item->data(TreeWidget::NameCol, Qt::DisplayRole).toString();
 
     QMimeData *mimeData = new QMimeData;
+    // \todo Set time to correspond to a tree widget item, since there are not only tables
+    // or maybe set a general mime type.
     mimeData->setData("table/x-table", itemData);
 
     QDrag *drag = new QDrag(this);
@@ -166,21 +168,6 @@ TreeWidget::findItem(Gui::TreeWidgetItem *iParent, const QString &iValue, int iC
     }
 
     return dynamic_cast<Gui::TreeWidgetItem *>(item);
-}
-
-/*!
- * Converts tree widget item id into a corresponding node id.
- *
- * \fixme This function is a complete magic. I think I should fix it... later.
- *
- * \param[in] iType - Tree widget item id.
- *
- * \return Tree widget node id.
- */
-TreeWidget::Node
-TreeWidget::nodeForItem(TreeWidget::Item iType) const
-{
-    return static_cast<TreeWidget::Node>(TreeWidget::UnkNode + iType);
 }
 
 /*!

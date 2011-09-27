@@ -94,7 +94,7 @@ class DbTable : public Common::DbObject
 
         quint64 getIndices(QVector<DbIndexPtr> &iIndicesList);
 
-        virtual DbObject::Type type() const;
+        virtual ObjectType type() const;
 
         quint32 parentTables(QVector<DbTablePtr> &oList) const;
 

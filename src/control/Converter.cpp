@@ -57,36 +57,15 @@ Converter::toTreeWidgetItems(const Objects &iObjects,
     using namespace Control;
 
     TreeWidgetItem *item;
-    const QMenu *menu = 0;
     QString parentName;
-    TreeWidget::Item type;
+    ObjectType type;
 
     foreach(const QString &name, iObjects.keys()) {
-        menu = 0;
         parentName = iObjects.value(name).first;
-        type = static_cast<TreeWidget::Item>(iObjects.value(name).second);
+        type = iObjects.value(name).second;
 
         if ((item = new(std::nothrow) TreeWidgetItem(name, parentName, type))) {
-            switch (type) {
-                // \todo finish this switch when more menus appear
-                case TreeWidget::SchemaItem:
-                    break;
-                case TreeWidget::TableItem:
-                    menu = iMenuMgr->menu(ContextMenuManager::MENU_TREE_TABLE_ITEM);
-                    break;
-                case TreeWidget::ViewItem:
-                    menu = iMenuMgr->menu(ContextMenuManager::MENU_TREE_VIEW_ITEM);
-                    break;
-                case TreeWidget::RoleItem:
-                case TreeWidget::TriggerItem:
-                case TreeWidget::LanguageItem:
-                case TreeWidget::IndexItem:
-                case TreeWidget::ProcedureItem:
-                default:
-                    break;
-            }
-
-            item->setContextMenu(menu);
+            item->setContextMenu(iMenuMgr->menu(TreeItem | type));
             item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled);
             oItems.push_back(item);
         }

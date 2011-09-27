@@ -73,7 +73,7 @@ class DbView : public DbObject
 
         virtual void resetData();
 
-        virtual DbObject::Type type() const;
+        virtual ObjectType type() const;
 
     protected:
         /*! Schema containing this view */

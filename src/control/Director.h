@@ -130,7 +130,7 @@ class Director : public QObject
 
         /*! Slots for handling context menu actions */
         void expandAllTreeItems(Gui::TreeWidget *, bool);
-        void addItemsToScene();
+        void addTreeItemsToScene();
         void describeItems();
         void queryItems();
 

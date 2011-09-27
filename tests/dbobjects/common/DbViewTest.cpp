@@ -117,7 +117,7 @@ DbViewTest::loadDataTest()
 void
 DbViewTest::typeTest()
 {
-    QCOMPARE(mView->type(), Common::DbObject::ViewObject);
+    QCOMPARE(mView->type(), ViewObject);
 }
 
 void

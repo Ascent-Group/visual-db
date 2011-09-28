@@ -151,6 +151,9 @@ class DescriptionWidget : public QWidget
         DescriptionWidget(QWidget *iParent = 0);
         ~DescriptionWidget();
 
+        QString objectName() const;
+        QString schemaName() const;
+
         void describe(const DbObjects::Common::DbIndexPtr &iIndex);
         void describe(const DbObjects::Common::DbProcedurePtr &iProcedure);
         void describe(const DbObjects::Common::DbRolePtr &iRole);
@@ -161,6 +164,9 @@ class DescriptionWidget : public QWidget
 
     private:
         Ui::DescriptionWidget ui;
+
+        QString mObjectName;
+        QString mSchemaName;
 
         static const QString sCreateSchemaScript;
         static const QString sAddSchemaDecriptionScript;

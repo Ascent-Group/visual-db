@@ -51,7 +51,9 @@ const QString DescriptionWidget::sAddSchemaDecriptionScript = "\nCOMMENT ON SCHE
  * Ctor
  */
 DescriptionWidget::DescriptionWidget(QWidget *iParent)
-    : QWidget(iParent)
+    : QWidget(iParent),
+      mObjectName(),
+      mSchemaName()
 {
     ui.setupUi(this);
 }
@@ -61,6 +63,18 @@ DescriptionWidget::DescriptionWidget(QWidget *iParent)
  */
 DescriptionWidget::~DescriptionWidget()
 {
+}
+
+QString
+DescriptionWidget::objectName() const
+{
+    return mObjectName;
+}
+
+QString
+DescriptionWidget::schemaName() const
+{
+    return mSchemaName;
 }
 
 /*!
@@ -81,7 +95,8 @@ DescriptionWidget::describe(const DbSchemaPtr &iSchema)
     }
 
     // get the Schema data
-    QString name = iSchema->name();
+    mObjectName = iSchema->name();
+    mSchemaName = "";
     QString ownerName = iSchema->owner()->name();
     QString description = iSchema->description();
 
@@ -99,7 +114,7 @@ DescriptionWidget::describe(const DbSchemaPtr &iSchema)
 
     // fill table with Schema data
     QTableWidgetItem *nameItem = new QTableWidgetItem();
-    nameItem->setText(name);
+    nameItem->setText(mObjectName);
     ui.mTable->setItem(0, DescriptionWidget::SchemaNameCol, nameItem);
 
     QTableWidgetItem *ownerNameItem = new QTableWidgetItem();
@@ -113,7 +128,7 @@ DescriptionWidget::describe(const DbSchemaPtr &iSchema)
     // auto resize cells
     ui.mTable->resizeColumnsToContents();
 
-    QString body = sCreateSchemaScript.arg(name).arg(ownerName);
+    QString body = sCreateSchemaScript.arg(mObjectName).arg(ownerName);
 
     if (description.length() > 0) {
         body += sAddSchemaDecriptionScript.arg(description);
@@ -138,6 +153,9 @@ DescriptionWidget::describe(const DbTablePtr &iTable)
                 tr("Ok"));
         return;
     }
+
+    mObjectName = iTable->name();
+    mSchemaName = iTable->schema()->name();
 
     // get columns count
     quint16 columnsCount = iTable->columnsCount();
@@ -328,7 +346,8 @@ DescriptionWidget::describe(const DbRolePtr &iRole)
     ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
-    QString name = iRole->name();
+    mObjectName = iRole->name();
+    mSchemaName = "";
     quint64 id = iRole->id();
     bool superUser = iRole->isSuperUser();
     bool inherits = iRole->inheritsPrivileges();
@@ -342,7 +361,7 @@ DescriptionWidget::describe(const DbRolePtr &iRole)
 
     // fill role name
     QTableWidgetItem *nameItem = new QTableWidgetItem();
-    nameItem->setText(name);
+    nameItem->setText(mObjectName);
     ui.mTable->setItem(0, DescriptionWidget::RoleNameCol, nameItem);
 
     // fill role id
@@ -403,7 +422,7 @@ DescriptionWidget::describe(const DbRolePtr &iRole)
     ui.mTable->resizeRowsToContents();
 
     // generate body text
-    QString body = QString("CREATE ROLE %1 WITH ").arg(name);
+    QString body = QString("CREATE ROLE %1 WITH ").arg(mObjectName);
 
     body.append(QString("\n\t%1").arg( superUser ? "SUPERUSER" : "NOSUPERSUER"));
     body.append(QString("\n\t%1").arg( createDb ? "CREATEDB" : "NOCREATEDB"));
@@ -455,19 +474,19 @@ DescriptionWidget::describe(const DbViewPtr &iView)
     ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
-    QString name = iView->name();
-    QString schemaName = iView->schema()->name();
+    mObjectName = iView->name();
+    mSchemaName = iView->schema()->name();
     QString ownerName = iView->owner()->name();
     QString def = iView->definition();
 
     // fill view name
     QTableWidgetItem *nameItem = new QTableWidgetItem();
-    nameItem->setText(name);
+    nameItem->setText(mObjectName);
     ui.mTable->setItem(0, DescriptionWidget::ViewNameCol, nameItem);
 
     // fill schema name
     QTableWidgetItem *schemaNameItem = new QTableWidgetItem();
-    schemaNameItem->setText(schemaName);
+    schemaNameItem->setText(mSchemaName);
     ui.mTable->setItem(0, DescriptionWidget::ViewSchemaCol, schemaNameItem);
 
     // fill owner name
@@ -525,9 +544,9 @@ DescriptionWidget::describe(const DbIndexPtr &iIndex)
     ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
-    QString name = iIndex->name();
+    mObjectName = iIndex->name();
     QString tableName = iIndex->table()->name();
-    QString schemaName = iIndex->schema()->name();
+    mSchemaName = iIndex->schema()->name();
     quint16 colsCount = iIndex->columnsCount();
     QVector<qint16> colNums = iIndex->columnsNumbers();
     bool unique = iIndex->isUnique();
@@ -539,7 +558,7 @@ DescriptionWidget::describe(const DbIndexPtr &iIndex)
 
     // find table object
     using namespace DbObjects::Common;
-    DbSchemaPtr schema = Database::instance()->findSchema(schemaName);
+    DbSchemaPtr schema = Database::instance()->findSchema(mSchemaName);
     DbTablePtr table;
 
     if (schema.valid()) {
@@ -547,14 +566,14 @@ DescriptionWidget::describe(const DbIndexPtr &iIndex)
     }
 
 
-    // fill view name
+    // fill index name
     QTableWidgetItem *nameItem = new QTableWidgetItem();
-    nameItem->setText(name);
+    nameItem->setText(mObjectName);
     ui.mTable->setItem(0, DescriptionWidget::IndexNameCol, nameItem);
 
     // fill table name
     QTableWidgetItem *tableItem = new QTableWidgetItem();
-    tableItem->setText(QString("%1.%2").arg(schemaName).arg(tableName));
+    tableItem->setText(QString("%1.%2").arg(mSchemaName).arg(tableName));
     ui.mTable->setItem(0, DescriptionWidget::IndexTableCol, tableItem);
 
     // fill cols count
@@ -636,7 +655,7 @@ DescriptionWidget::describe(const DbIndexPtr &iIndex)
     }
 
     body.append(QString(" INDEX %1 ON %2\n{ ")
-                .arg(name)
+                .arg(mObjectName)
                 .arg(tableName));
 
     //colNames.replace(",", ",\n\t");
@@ -679,20 +698,20 @@ DescriptionWidget::describe(const DbProcedurePtr &iProcedure)
     ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
-    QString name = iProcedure->name();
-    QString schemaName = iProcedure->schema()->name();
+    mObjectName = iProcedure->name();
+    mSchemaName = iProcedure->schema()->name();
     QString ownerName = iProcedure->owner()->name();
     QString languageName = iProcedure->language()->name();
     QString sourceCode = iProcedure->sourceCode();
 
     // fill procedure name
     QTableWidgetItem *nameItem = new QTableWidgetItem();
-    nameItem->setText(name);
+    nameItem->setText(mObjectName);
     ui.mTable->setItem(0, DescriptionWidget::ProcedureNameCol, nameItem);
 
     // fill schema name
     QTableWidgetItem *schemaNameItem = new QTableWidgetItem();
-    schemaNameItem->setText(schemaName);
+    schemaNameItem->setText(mSchemaName);
     ui.mTable->setItem(0, DescriptionWidget::ProcedureSchemaCol, schemaNameItem);
 
     // fill owner name
@@ -751,7 +770,8 @@ DescriptionWidget::describe(const DbTriggerPtr &iTrigger)
     ui.mTable->setHorizontalHeaderLabels(labels);
 
     // read attributes
-    QString name = iTrigger->name();
+    mObjectName = iTrigger->name();
+    mSchemaName = "";
 
     QString tableName;
     if (iTrigger->table().valid()) {
@@ -774,7 +794,7 @@ DescriptionWidget::describe(const DbTriggerPtr &iTrigger)
 
     // fill name
     QTableWidgetItem *nameItem = new QTableWidgetItem();
-    nameItem->setText(name);
+    nameItem->setText(mObjectName);
     ui.mTable->setItem(0, DescriptionWidget::TriggerNameCol, nameItem);
 
     // fill table
@@ -828,7 +848,7 @@ DescriptionWidget::describe(const DbTriggerPtr &iTrigger)
     ui.mTable->setItem(0, DescriptionWidget::TriggerNumArgsCol, numArgsItem);
 
     QString body = QString("CREATE TRIGGER %1\nON %2 FOR EACH ROW\n")
-                   .arg(name)
+                   .arg(mObjectName)
                    .arg(tableName);
 
     body.append(QString("EXECUTE PROCEDURE %1(...);").arg(procName));
@@ -840,3 +860,4 @@ DescriptionWidget::describe(const DbTriggerPtr &iTrigger)
 }
 
 }
+

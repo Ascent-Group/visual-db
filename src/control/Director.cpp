@@ -37,6 +37,7 @@
 #include <gui/OptionsDialog.h>
 #include <gui/SceneWidget.h>
 #include <gui/SqlConnectionDialog.h>
+#include <gui/SqlWidget.h>
 #include <gui/TreeWidget.h>
 
 #include <QFileDialog>
@@ -483,8 +484,6 @@ Director::reloadDataRequested()
         mDbMgr.newObjects(ctx, objects);
         QList<Gui::TreeWidgetItem*> items;
         mConverter.toTreeWidgetItems(objects, items, &mMenuMgr);
-        // \todo tree should have a view controller
-//        tree->displayObjects(items);
         tree->display(items);
 
         mMainWindow->setEnableForActions(true);
@@ -668,8 +667,10 @@ Director::addTreeItemsToScene()
 {
     Gui::TreeWidget *tree = mMainWindow->activeTree();
     if (tree) {
-        // \todo get selected items
-        // \todo foreach selected item, add it to scene
+        QList<QTreeWidgetItem*> selected = tree->selectedItems();
+        foreach (const QTreeWidgetItem *item, selected) {
+            // \todo add item to scene
+        }
     }
 }
 
@@ -684,7 +685,11 @@ Director::describeItems()
 {
     Gui::TreeWidget *tree = mMainWindow->activeTree();
     if (tree) {
-        // \todo get selected items
+        QList<QTreeWidgetItem*> selected = tree->selectedItems();
+        foreach (const QTreeWidgetItem *item, selected) {
+            // \todo create decription widget via converter
+            // \todo pass the widget to main window
+        }
     }
 }
 
@@ -699,7 +704,24 @@ Director::queryItems()
 {
     Gui::TreeWidget *tree = mMainWindow->activeTree();
     if (tree) {
-        // \todo get selected items
+        QString title;
+        QList<QTreeWidgetItem*> selected = tree->selectedItems();
+        foreach (const QTreeWidgetItem *item, selected) {
+            // \todo Check if there is already query widget for the given item (and
+            // context)
+            // Ask MainWindow for a list of sql widgets that correspond the item's name
+            // if there is an a sql widget registered for the context, then no need to
+            // create a new one.
+            // otherwise, create an sql widget, give it to main window and then
+            // register add(sqlWidget, tree->context())
+            //Gui::SqlWidget *widget = new Gui::SqlWidget();
+            // \todo create sql query widget via converter
+            //title = QString("Description: %1").arg(item->text(Gui::TreeWidget::NameCol));
+            //mMainWindow->addTab(widget, title);
+            // \note if we add the same widget two times, then the second time we add it,
+            // it will replace the first tab and override the tab title. Proved by a
+            // sample app.
+        }
     }
 }
 

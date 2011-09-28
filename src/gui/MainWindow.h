@@ -73,7 +73,7 @@ class MainWindow : public QMainWindow
 
         Gui::TreeWidget* activeTree() const;
 
-
+        void addTab(QWidget *iWidget, const QString &iTabTitle) const;
 
         void setEnableForActions(bool iFlag);
 

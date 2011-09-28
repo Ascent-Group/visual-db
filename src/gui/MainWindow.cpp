@@ -201,6 +201,18 @@ MainWindow::activeTree() const
 }
 
 /*!
+ *
+ */
+void
+MainWindow::addTab(QWidget *iWidget, const QString &iTabTitle) const
+{
+    // \todo How to determine that such widget for some item already exists?
+    if (iWidget) {
+        ui.mTabWidget->addTab(iWidget, iTabTitle);
+    }
+}
+
+/*!
  * \brief Create actions
  */
 void MainWindow::createActions()

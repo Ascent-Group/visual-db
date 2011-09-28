@@ -687,6 +687,13 @@ Director::describeItems()
     if (tree) {
         QList<QTreeWidgetItem*> selected = tree->selectedItems();
         foreach (const QTreeWidgetItem *item, selected) {
+            // \todo Check if there is already query widget for the given item (and
+            // context)
+            QList<const QWidget *> widgets;
+            mMainWindow->tabs(item->text(Gui::TreeWidget::NameCol),
+                              item->text(Gui::TreeWidget::SchemaCol),
+                              widgets);
+
             // \todo create decription widget via converter
             // \todo pass the widget to main window
         }
@@ -704,23 +711,32 @@ Director::queryItems()
 {
     Gui::TreeWidget *tree = mMainWindow->activeTree();
     if (tree) {
+        Context *ctx = findContext(tree);
         QString title;
         QList<QTreeWidgetItem*> selected = tree->selectedItems();
         foreach (const QTreeWidgetItem *item, selected) {
-            // \todo Check if there is already query widget for the given item (and
-            // context)
-            // Ask MainWindow for a list of sql widgets that correspond the item's name
+
             // if there is an a sql widget registered for the context, then no need to
             // create a new one.
             // otherwise, create an sql widget, give it to main window and then
             // register add(sqlWidget, tree->context())
-            //Gui::SqlWidget *widget = new Gui::SqlWidget();
-            // \todo create sql query widget via converter
-            //title = QString("Description: %1").arg(item->text(Gui::TreeWidget::NameCol));
-            //mMainWindow->addTab(widget, title);
+            Gui::SqlWidget *widget = new(std::nothrow) Gui::SqlWidget();
+
+            if (widget && mConverter.toSqlWidget(*ctx, dynamic_cast<const Gui::TreeWidgetItem*>(item), *widget)) {
+                title = QString("Query: %1.%2")
+                    .arg(item->text(Gui::TreeWidget::SchemaCol))
+                    .arg(item->text(Gui::TreeWidget::NameCol));
+
+                mMainWindow->addTab(widget, title);
+
+                add(widget, ctx);
+
             // \note if we add the same widget two times, then the second time we add it,
             // it will replace the first tab and override the tab title. Proved by a
             // sample app.
+            } else {
+                delete widget;
+            }
         }
     }
 }

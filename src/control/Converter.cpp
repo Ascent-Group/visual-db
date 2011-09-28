@@ -128,6 +128,27 @@ Converter::toDbView(DbObjects::Common::DbViewPtr &oDbViewPtr,
 	return true;
 }
 
+/*!
+ * \todo Implement
+ */
+bool
+Converter::toSqlWidget(const Control::Context &iContext,
+                       const Gui::TreeWidgetItem *iItem,
+                       Gui::SqlWidget &oSqlWidget)
+{
+    return true;
+}
+
+/*!
+ * \todo Implement
+ */
+bool
+Converter::toDescriptionWidget(const Gui::TreeWidgetItem *iItem,
+        Gui::DescriptionWidget &oDescriptionWidget)
+{
+    return true;
+}
+
 bool 
 Converter::toDescriptionWidget(const DbObjects::Common::DbIndexPtr &iDbIndexPtr, 
 		Gui::DescriptionWidget &oDescriptionWidget)

@@ -40,6 +40,7 @@
 #include <dbobjects/common/DbTrigger.h>
 #include <dbobjects/common/DbView.h>
 #include <gui/DescriptionWidget.h>
+#include <gui/SqlWidget.h>
 #include <gui/graphicsitems/TableItem.h>
 #include <gui/graphicsitems/ViewItem.h>
 
@@ -85,6 +86,13 @@ class Converter {
                 Gui::GraphicsItems::ViewItem &oViewItem);
         bool toDbView(DbObjects::Common::DbViewPtr &oDbViewPtr, 
                 const Gui::GraphicsItems::ViewItem &iViewItem);
+
+        bool toSqlWidget(const Control::Context &iContext,
+                         const Gui::TreeWidgetItem *iItem,
+                         Gui::SqlWidget &oSqlWidget);
+
+        bool toDescriptionWidget(const Gui::TreeWidgetItem *iItem,
+                Gui::DescriptionWidget &oDescriptionWidget);
 
         bool toDescriptionWidget(const DbObjects::Common::DbIndexPtr &iDbIndexPtr, 
                 Gui::DescriptionWidget &oDescriptionWidget);

@@ -211,6 +211,9 @@ ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent)
     const SceneWidget *scene = 0;
 
     const QMenu *menu = 0;
+    // true if the menu was created inside this function and therefore needs delete right
+    // before we leave this function.
+    bool deleteMenu = false;
 
     if ((tree = dynamic_cast<TreeWidget*>(sender()))) {
         // detect selected items
@@ -225,16 +228,33 @@ ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent)
             menu = dynamic_cast<Gui::TreeWidgetItem*>(items.first())->contextMenu();
         } else {
             QSet<quint32> itemTypes;
+            quint32 type;
             foreach (QTreeWidgetItem *item, items) {
-                quint32 type = item->text(TreeWidget::TypeCol).toUInt();
-
-                if (!itemTypes.contains(type)) {
+                type = item->text(TreeWidget::TypeCol).toUInt();
+                if (mMenus.contains(type)) {
                     itemTypes.insert(type);
                 }
             }
 
-            // \todo find intersection of menus
-            // otherwise, build an intersection menu out of these types' menus
+            if (itemTypes.size()) {
+                QSet<QAction*> actions = mMenus.value(*itemTypes.begin())->actions().toSet();
+                itemTypes.erase(itemTypes.begin());
+
+                foreach (quint32 type, itemTypes) {
+                    if (mMenus.contains(type)) {
+                        actions = actions.intersect(mMenus.value(type)->actions().toSet());
+                    }
+                }
+
+                QMenu *intersectMenu = new QMenu();
+
+                foreach (QAction *action, actions) {
+                    intersectMenu->addAction(action);
+                }
+
+                menu = intersectMenu;
+                deleteMenu = true;
+            }
         }
     } else if ((scene = dynamic_cast<SceneWidget*>(sender()))) {
     } else {
@@ -242,9 +262,13 @@ ContextMenuManager::contextMenuRequested(QContextMenuEvent *iEvent)
     }
 
     qDebug() << "ContextMenuManager::contextMenuRequested> Menu = " << menu;
-    if (menu) {
+    if (menu && !menu->isEmpty()) {
 //        menu->exec(iEvent->globalPos());
         const_cast<QMenu*>(menu)->exec(QCursor::pos());
+    }
+
+    if (deleteMenu) {
+        delete menu;
     }
 }
 

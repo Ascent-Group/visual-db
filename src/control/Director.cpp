@@ -678,24 +678,30 @@ Director::addTreeItemsToScene()
  * Slot. Handles describing of table items and/or view items. Executed when a
  * describeAcition is triggered via context menu of table/view items.
  *
- * \todo Implement
  */
 void
 Director::describeItems()
 {
     Gui::TreeWidget *tree = mMainWindow->activeTree();
     if (tree) {
+        Control::Context *ctx = findContext(tree);
         QList<QTreeWidgetItem*> selected = tree->selectedItems();
+        QString title;
         foreach (const QTreeWidgetItem *item, selected) {
-            // \todo Check if there is already query widget for the given item (and
-            // context)
-            QList<const QWidget *> widgets;
-            mMainWindow->tabs(item->text(Gui::TreeWidget::NameCol),
-                              item->text(Gui::TreeWidget::SchemaCol),
-                              widgets);
+            Gui::DescriptionWidget *widget = new(std::nothrow) Gui::DescriptionWidget();
+            // \todo setup connections
 
-            // \todo create decription widget via converter
-            // \todo pass the widget to main window
+            if (widget && mConverter.toDescriptionWidget(*ctx, dynamic_cast<const Gui::TreeWidgetItem*>(item), *widget)) {
+                title = QString("Description: %1.%2")
+                    .arg(item->text(Gui::TreeWidget::SchemaCol))
+                    .arg(item->text(Gui::TreeWidget::NameCol));
+
+                mMainWindow->addTab(widget, title);
+
+                add(widget, ctx);
+            } else {
+                delete widget;
+            }
         }
     }
 }
@@ -704,7 +710,6 @@ Director::describeItems()
  * Slot. Handles running an SQL query for table/view items of tree widget. Executed when a
  * queryAction is triggered via context menu of table/view items.
  *
- * \todo Implement
  */
 void
 Director::queryItems()
@@ -715,12 +720,8 @@ Director::queryItems()
         QString title;
         QList<QTreeWidgetItem*> selected = tree->selectedItems();
         foreach (const QTreeWidgetItem *item, selected) {
-
-            // if there is an a sql widget registered for the context, then no need to
-            // create a new one.
-            // otherwise, create an sql widget, give it to main window and then
-            // register add(sqlWidget, tree->context())
             Gui::SqlWidget *widget = new(std::nothrow) Gui::SqlWidget();
+            // \todo setup connections
 
             if (widget && mConverter.toSqlWidget(*ctx, dynamic_cast<const Gui::TreeWidgetItem*>(item), *widget)) {
                 title = QString("Query: %1.%2")
@@ -731,9 +732,9 @@ Director::queryItems()
 
                 add(widget, ctx);
 
-            // \note if we add the same widget two times, then the second time we add it,
-            // it will replace the first tab and override the tab title. Proved by a
-            // sample app.
+                // \note if we add the same widget two times, then the second time we add it,
+                // it will replace the first tab and override the tab title. Proved by a
+                // sample app.
             } else {
                 delete widget;
             }

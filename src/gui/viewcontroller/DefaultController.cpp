@@ -88,19 +88,19 @@ DefaultController::buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidget
         parentNode = 0;
 
         switch (type) {
-            case IndexObject:
+            case TreeItem | IndexObject:
                 parentNode = indicesNode;
                 break;
 
-            case LanguageObject:
+            case TreeItem | LanguageObject:
                 parentNode = languagesNode;
                 break;
 
-            case RoleObject:
+            case TreeItem | RoleObject:
                 parentNode = rolesNode;
                 break;
 
-            case SchemaObject:
+            case TreeItem | SchemaObject:
                 {
 //                QApplication::processEvents();
                 // if schema item already exists, then just skip it.
@@ -117,10 +117,10 @@ DefaultController::buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidget
                 }
                 break;
 
-            case ViewObject:
-            case ProcedureObject:
-            case TableObject:
-            case TriggerObject:
+            case TreeItem | ViewObject:
+            case TreeItem | ProcedureObject:
+            case TreeItem | TableObject:
+            case TreeItem | TriggerObject:
             {
                 // find parent schema item
                 Gui::TreeWidgetItem *schemaItem = iTree->findItem(schemasNode, parentName, TreeWidget::NameCol);
@@ -140,11 +140,10 @@ DefaultController::buildTree(Gui::TreeWidget *iTree, const QList<Gui::TreeWidget
                 }
 
                 // find nested node for the given parentNode type
-                parentNode = iTree->findItem(schemaItem, QString::number(TreeNode | type), TreeWidget::TypeCol);
+                parentNode = iTree->findItem(schemaItem, QString::number(TreeNode | (type&0xff)), TreeWidget::TypeCol);
             }
                 break;
 
-            case UnkObject:
             default:
                 qDebug() << "TreeWidget::displayObjects> Unknown object type: " << type;
                 continue;

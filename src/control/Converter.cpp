@@ -58,14 +58,14 @@ Converter::toTreeWidgetItems(const Objects &iObjects,
 
     TreeWidgetItem *item;
     QString parentName;
-    ObjectType type;
+    int type;
 
     foreach(const QString &name, iObjects.keys()) {
         parentName = iObjects.value(name).first;
-        type = iObjects.value(name).second;
+        type = TreeItem | iObjects.value(name).second;
 
         if ((item = new(std::nothrow) TreeWidgetItem(name, parentName, type))) {
-            item->setContextMenu(iMenuMgr->menu(TreeItem | type));
+            item->setContextMenu(iMenuMgr->menu(type));
             item->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled);
             oItems.push_back(item);
         }
@@ -143,8 +143,9 @@ Converter::toSqlWidget(const Control::Context &iContext,
  * \todo Implement
  */
 bool
-Converter::toDescriptionWidget(const Gui::TreeWidgetItem *iItem,
-        Gui::DescriptionWidget &oDescriptionWidget)
+Converter::toDescriptionWidget(const Control::Context &iContext,
+                               const Gui::TreeWidgetItem *iItem,
+                               Gui::DescriptionWidget &oDescriptionWidget)
 {
     return true;
 }

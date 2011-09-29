@@ -91,8 +91,9 @@ class Converter {
                          const Gui::TreeWidgetItem *iItem,
                          Gui::SqlWidget &oSqlWidget);
 
-        bool toDescriptionWidget(const Gui::TreeWidgetItem *iItem,
-                Gui::DescriptionWidget &oDescriptionWidget);
+        bool toDescriptionWidget(const Control::Context &iContext,
+                                 const Gui::TreeWidgetItem *iItem,
+                                 Gui::DescriptionWidget &oDescriptionWidget);
 
         bool toDescriptionWidget(const DbObjects::Common::DbIndexPtr &iDbIndexPtr, 
                 Gui::DescriptionWidget &oDescriptionWidget);

@@ -136,6 +136,11 @@ Converter::toSqlWidget(const Control::Context &iContext,
                        const Gui::TreeWidgetItem *iItem,
                        Gui::SqlWidget &oSqlWidget)
 {
+    oSqlWidget.setDefaultQuery(
+            QString("SELECT t.* FROM %1.%2 t;")
+            .arg(iItem->text(Gui::TreeWidget::SchemaCol))
+            .arg(iItem->text(Gui::TreeWidget::NameCol)));
+
     return true;
 }
 
@@ -147,6 +152,8 @@ Converter::toDescriptionWidget(const Control::Context &iContext,
                                const Gui::TreeWidgetItem *iItem,
                                Gui::DescriptionWidget &oDescriptionWidget)
 {
+    // \todo Get Db*Ptr from iItem
+    // \todo call overloaded toDescptionWidget(obj);
     return true;
 }
 

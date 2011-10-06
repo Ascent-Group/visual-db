@@ -127,6 +127,7 @@ class Director : public QObject
         void treeTabChanged(Gui::TreeWidget *iTree);
 
         void tabChanged(Gui::SceneWidget *iScene);
+        void tabClosed(QWidget *iWidget);
 
         /*! Slots for handling context menu actions */
         void expandAllTreeItems(Gui::TreeWidget *, bool);

@@ -63,6 +63,14 @@ class TabWidget : public QTabWidget
 
     private slots:
         void closeTabButtonClicked();
+
+    signals:
+        /*!
+         * Signal. Used to let controlling entities know that a tab is closed and that the
+         * contained widget can be disposed.
+         */
+        void tabClosed(QWidget *iWidget);
+
 };
 
 }

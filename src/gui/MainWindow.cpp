@@ -102,6 +102,7 @@ MainWindow::MainWindow()
     connect(ui.mTreeTabWidget, SIGNAL(currentChanged(int)), this, SLOT(treeTabChanged(int)));
 
     connect(ui.mTabWidget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+    connect(ui.mTabWidget, SIGNAL(tabClosed(QWidget*)), this, SIGNAL(tabClosed(QWidget*)));
 }
 
 /*!

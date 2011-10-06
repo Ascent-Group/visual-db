@@ -150,6 +150,7 @@ Director::initialize()
         connect(mMainWindow, SIGNAL(treeTabChanged(Gui::TreeWidget *)), this, SLOT(treeTabChanged(Gui::TreeWidget *)));
 
         connect(mMainWindow, SIGNAL(tabChanged(Gui::SceneWidget *)), this, SLOT(tabChanged(Gui::SceneWidget *)));
+        connect(mMainWindow, SIGNAL(tabClosed(QWidget *)), this, SLOT(tabClosed(QWidget *)));
 
         connect(this, SIGNAL(logMessageRequest(const QString &)), mMainWindow, SLOT(printMsg(const QString &)));
 
@@ -640,6 +641,18 @@ void
 Director::tabChanged(Gui::SceneWidget *iScene)
 {
     mMainWindow->activateTree(findTree(findContext(iScene)));
+}
+
+/*!
+ * Slot. Handles closing of a tab in tab widget. When this occurs tab widget emits a
+ * signal which goes via MainWindow to Director.
+ *
+ * \param[in] iWidget - Widget that is going to be disposed.
+ */
+void
+Director::tabClosed(QWidget *iWidget)
+{
+    remove(iWidget);
 }
 
 /*!

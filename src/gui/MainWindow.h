@@ -151,6 +151,7 @@ class MainWindow : public QMainWindow
         void treeTabChanged(Gui::TreeWidget *iTree);
 
         void tabChanged(Gui::SceneWidget *iScene);
+        void tabClosed(QWidget *iWidget);
 };
 
 }

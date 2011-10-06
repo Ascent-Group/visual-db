@@ -28,6 +28,7 @@
  */
 
 #include <QToolButton>
+#include <gui/SceneWidget.h>
 #include <gui/TabWidget.h>
 
 namespace Gui {
@@ -79,17 +80,17 @@ TabWidget::setActiveTab(int iTabId)
 void
 TabWidget::closeTabButtonClicked()
 {
-    // get active tab id
-    int activeTabId = currentIndex();
 
     // lyuts: remember last tab index so we can switch to it back!!
-    // \todo check for the tab's widget, if it is a scene, then don't close it.
     // \todo another case to consider is when we are closing a tab someone (director)
     // should somehow destroy the embedded widget.
 
-    // if id is greater than 0 = we are closing any tab except grachics scheme
-    if (0 < activeTabId) {
+    QWidget *widget = currentWidget();
+    if (!dynamic_cast<Gui::SceneWidget*>(widget)) {
+        int activeTabId = currentIndex();
         removeTab(activeTabId);
+
+        emit tabClosed(widget);
     }
 }
 
